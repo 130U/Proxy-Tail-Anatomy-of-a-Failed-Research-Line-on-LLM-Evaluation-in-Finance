@@ -8,6 +8,7 @@
 
 ## 先读这些结果
 
+- **新题进展（2026-11-16）：** [绝对评分 TASK](TASK.md) 已进入文献门检查；[给 Fable 的阶段报告](research/absolute_scoring/PRECHECK_FOR_FABLE.md) 说明高度接近的先例、尚未确认的差别和执行前问题。新题尚未评分，以下数字属于此前的排序与成对比较实验。
 - [给Fable的一页结论](research/tail_screening/FABLE_ONE_PAGE.md) / [PDF](research/tail_screening/output/pdf/FABLE_ONE_PAGE.pdf)
 - [当前完整报告](research/tail_screening/FABLE_CURRENT_REPORT.md) / [6页PDF](research/tail_screening/output/pdf/FABLE_CURRENT_REPORT.pdf)
 - [全部交付材料入口](research/FABLE_DELIVERY_README.md)
