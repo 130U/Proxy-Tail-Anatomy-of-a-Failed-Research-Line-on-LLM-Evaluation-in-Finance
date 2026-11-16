@@ -8,7 +8,7 @@
 
 ## 先读这些结果
 
-- **新题进展（2026-11-16）：** 用户已选择按复现与压力测试执行 [绝对评分 TASK](TASK.md)。[冻结协议](research/absolute_scoring/protocol.md)采用 1,000 条、八轮、200 次主调用及 50 次同批对照；[运行进度](research/absolute_scoring/progress.md)记录实际完成情况。[此前给 Fable 的文献门报告](research/absolute_scoring/PRECHECK_FOR_FABLE.md)保留新颖性边界。下列旧数字属于此前的排序与成对比较实验。
+- **最新实验已完成（2026-11-16）：** [绝对评分 TASK](TASK.md) 的 1,000 条 × 八轮及两组同批对照全部执行，共 250 次评分调用、10,000 个原始分数。[给 Fable 的一页结论](research/absolute_scoring/FABLE_ONE_PAGE.md) · [完整报告](research/absolute_scoring/FABLE_REPORT.md) · [六面板图](research/absolute_scoring/results/stability.png) · [复算说明](research/absolute_scoring/REPRODUCE.md)。四次平均的 10% 双尾重合点估计约 90%–92%；**正式判定为无法判断**，因为第六、七轮正面边界同分 22 人超过预定 20 人门槛。原始分数、区间、失败原因及调度恢复细节全部保留。下列旧数字属于此前的排序与成对比较实验。
 - [给Fable的一页结论](research/tail_screening/FABLE_ONE_PAGE.md) / [PDF](research/tail_screening/output/pdf/FABLE_ONE_PAGE.pdf)
 - [当前完整报告](research/tail_screening/FABLE_CURRENT_REPORT.md) / [6页PDF](research/tail_screening/output/pdf/FABLE_CURRENT_REPORT.pdf)
 - [全部交付材料入口](research/FABLE_DELIVERY_README.md)

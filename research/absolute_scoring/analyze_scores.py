@@ -457,7 +457,7 @@ def write_table(path: Path, rows: list[dict]):
         writer.writerows(flattened)
 
 
-def draw_figure(rows: list[dict], output: Path, n: int):
+def draw_figure(rows: list[dict], output: Path, n: int, primary_gate_failed: bool = False):
     deps = Path(__file__).resolve().parents[3] / "tmp/tail_plot_deps"
     if deps.is_dir():
         sys.path.insert(0, str(deps))
@@ -472,10 +472,10 @@ def draw_figure(rows: list[dict], output: Path, n: int):
             ax = axes[ti, pi]
             selected = [row for row in rows if row["tail"] == tail and row["p"] == p]
             prediction = [next(row["prediction_overlap"] for row in selected if row["m"] == m) for m in MS]
-            ax.plot(range(3), prediction, color="#333333", linewidth=1.6, label="Fixed SB + Gaussian")
+            ax.plot(MS, prediction, color="#333333", linewidth=1.6, label="Fixed SB + Gaussian")
             for direction, shift in (("A_to_B", -0.045), ("B_to_A", 0.045)):
                 subset = [next(row for row in selected if row["m"] == m and row["direction"] == direction) for m in MS]
-                xs = np.arange(3) + shift
+                xs = np.asarray(MS, dtype=float) + shift
                 for x0, row in zip(xs, subset):
                     lo, hi = row["overlap_ci95"]
                     ax.vlines(x0, lo, hi, color=colors[direction], linewidth=1.3)
@@ -485,7 +485,7 @@ def draw_figure(rows: list[dict], output: Path, n: int):
                 ax.plot([], [], "o", color=colors[direction], label=direction.replace("_", " "))
             gated = sum(row["tie_gate_failed"] for row in selected)
             ax.set_title(f"{tail.capitalize()} {p:.0%} | tie-gated comparisons {gated}/6", fontsize=10)
-            ax.set_xticks(range(3), ["1", "2", "4"])
+            ax.set_xticks(MS, ["1", "2", "4"])
             ax.set_ylim(0, 1.03)
             ax.grid(alpha=.18)
             if pi == 0:
@@ -494,7 +494,10 @@ def draw_figure(rows: list[dict], output: Path, n: int):
                 ax.set_xlabel("Scores averaged in each panel (m)")
     handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.legend(handles[:3], labels[:3], loc="lower center", ncol=3, frameon=False, bbox_to_anchor=(.5, .005))
-    fig.suptitle(f"Absolute-score repeatability | N={n}, eight rounds\n95% paired-title bootstrap intervals; x = boundary ties exceed 20% of nominal head", fontsize=12)
+    title = f"Absolute-score repeatability | N={n}, eight rounds\n95% paired-title bootstrap intervals; x = boundary ties exceed 20% of nominal head"
+    if primary_gate_failed:
+        title += "\nOverall 10% resolution gate FAILED in single-round diagnostics; plotted results are descriptive."
+    fig.suptitle(title, fontsize=11)
     fig.tight_layout(rect=(0, .05, 1, .92))
     fig.savefig(output / "stability.png", dpi=180)
     fig.savefig(output / "stability.pdf")
@@ -550,7 +553,7 @@ def main():
     write_table(output / "boundaries.csv", boundaries)
     write_table(output / "asymmetry.csv", bootstrap["asymmetry"])
     if not args.no_figure:
-        draw_figure(rows, output, len(inputs.ids))
+        draw_figure(rows, output, len(inputs.ids), report["boundary_gate"]["failed_primary_p10"])
     print(json.dumps(clean_json({"output": str(output), "counts": inputs.counts,
                                  "r_mean": r, "tie_gate": report["boundary_gate"]}), ensure_ascii=False))
 
