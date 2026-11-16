@@ -1,0 +1,23 @@
+name: CPU and notebook checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install -e '.[test,data]'
+      - run: python -m finllm environment
+      - run: python -m pytest -q
+      - run: python scripts/validate_notebooks.py
+      - run: python -m finllm smoke --output runs/ci-smoke --device cpu

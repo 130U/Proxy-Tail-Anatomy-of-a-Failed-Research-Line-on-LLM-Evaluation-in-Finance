@@ -1,0 +1,22 @@
+{
+  "purpose": "Finite mathematical sanity checks, not empirical research findings",
+  "r1_comonotone_attainment_exact_cases": 1008,
+  "d1_stratified_miss_probability_exact_cases": 1024,
+  "p4_best_hoeffding_radius_C120_G1_alpha05": 0.1117238461854718,
+  "p4_min_equal_independent_clusters_for_radius_below_005": 600,
+  "zero_failure_iid_one_sided_95pct_upper_n120": 0.024655401055656334,
+  "zero_failure_iid_n_for_1pct_at_95pct": 299,
+  "zero_failure_iid_n_for_5pct_at_95pct": 59,
+  "N120_zero_discovery_audit_counts_alpha05": {
+    "0": 114,
+    "2": 76,
+    "5": 47,
+    "10": 28
+  },
+  "limitations": [
+    "R1 check verifies attainability on a finite grid; the universal upper bound is reviewed analytically.",
+    "D1 check enumerates sampling probabilities, not all possible audit or training mechanisms.",
+    "R2 LP was not run for this review; equivalence was reviewed analytically.",
+    "No original corpus, checkpoint, human annotation, or external paper was newly audited."
+  ]
+}

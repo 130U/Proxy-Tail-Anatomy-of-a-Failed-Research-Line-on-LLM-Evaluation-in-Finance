@@ -1,0 +1,57 @@
+"""Render the executed local study without inventing missing measurements."""
+import json
+from pathlib import Path
+
+
+def main():
+    base=Path('research/experiments/local_foundations')
+    r=json.loads((base/'results.json').read_text(encoding='utf-8'))
+    audit=json.loads((base/'audit_results.json').read_text(encoding='utf-8'))
+    parameters=sorted({x['parameter_count'] for x in r['results']})
+    contrast=[x['result']['paired_difference']['macro_f1'] for x in r['paired_main_contrast']]
+    # Narrative below is a snapshot of the frozen first experiment. Refuse to
+    # silently reuse its interpretation after a changed experiment.
+    if not (r['config']['steps']==250 and len(r['config']['seeds'])==3 and
+            all(x['estimate']==0 and x['lower']==0 and x['upper']==0 for x in contrast) and
+            all(x['metrics']['systems']['prediction']['macro_f1']['estimate']==1
+                for x in r['results'] if x['mode'] in ('original_ce','edited_ce','permissions')) and
+            all(v['estimate']==0 for x in r['results'] if x['mode'] in ('edited_ce','permissions')
+                for v in x['permission_violations'].values()) and
+            all(x['metrics']['systems']['prediction']['macro_f1']['estimate']<1
+                for x in r['results'] if x['mode']=='shuffled_permissions')):
+        raise ValueError('Changed experiment: review narrative before rendering a new report')
+    lines=['# 本地地基实验结果', '', '日期：2026-11-15。所有数字来源层级：**我们的实验（local_foundations）**。', '',
+           '## 实际执行与复现', '',
+           f"CPU；Python {r['python']}，PyTorch {r['torch']}，NumPy {r['numpy']}。四配置 × 三 seed 加一次确定性复跑，总用时 {r['elapsed_seconds']:.2f} 秒；显存 0，未测峰值 RAM。", '',
+           f"数据为 {r['train_families']} 个训练 family、{r['test_families']} 个后续季度测试 family；按 {r['inference_clusters']} 个公司整簇重采样；数据 SHA256 `{r['data_sha256']}`。", '',
+           f'模型参数量：{parameters}，随机初始化 mean embedding + MLP。训练词表仅来自训练 family 与预先定义的编辑。没有预训练、GPU、外部下载或私有数据。每配置250次全批量更新；相同seed初始权重相同。', '',
+           '```powershell', 'python -m unittest research.local.test_foundations research.local.test_audit -v',
+           'python -m research.local.audit','python -m research.local.ablation','python -m research.local.write_report','```','',
+           '## 四配置三 seed 消融', '',
+           '| Seed | 配置 | Macro-F1 [95% bootstrap CI] | INV违反率 [CI] | LBL违反率 [CI] | REL违反率 [CI] |',
+           '|---:|---|---|---|---|---|']
+    def fmt(m): return f"{m['estimate']:.4f} [{m['lower']:.4f}, {m['upper']:.4f}]"
+    for x in r['results']:
+        v=x['permission_violations']
+        lines.append(f"| {x['seed']} | {x['mode']} | {fmt(x['metrics']['systems']['prediction']['macro_f1'])} | {fmt(v['INV'])} | {fmt(v['LBL'])} | {fmt(v['REL'])} |")
+    lines += ['', 'INV：TV > 0.05；LBL：编辑前后预测标签不相同；REL：真实改标签的 log-odds 变化 < 0.5。UP 仅约束 metric 轴，未强加给 stance；FREE 不加约束。', '',
+              '**主要对照是 permissions − edited_ce**：三个 seed 的 macro-F1 差均为 0，配对 bootstrap 区间均为 [0,0]；完整分类别 P/R/F1、accuracy、配对结果与违反率区间见 `results.json`。这不证明总体差异严格为零：测试集饱和，重采样不能产生未观察到的错误。0 次违反的 bootstrap 区间也不是错误率的精确上置信界。', '',
+              '原始 CE 对某些无关追加不稳定，但加编辑 CE 已足以消除本例中观察到的违反；不能将收益归因于 permission 项。打乱配置有错误，不能独立证明正确许可有额外价值。尤其打乱后将REL分配给真值标签相同的INV/LBL对时，log-odds差恒为0，损失成为常数且梯度为0；它同时改变有效梯度组成，并非等强度的纯语义错配对照。下一版应预注册能分离许可语义与有效正则强度的对照。', '',
+              '这套语法中的显式 stance 动词使任务过易。**负结论：当前试验台不能支持“permission 损失有增益”，也不能作为新模型有效的证据。** 不依据此结果继续调测试集；下一轮应在冻结的新任务中加入隐式比较基准、否定作用域、holder/target 绑定，并预留未使用的模板/公司/时期。', '',
+              f"确定性检查：seed {r['determinism']['seed']}、{r['determinism']['mode']}，重训权重逐位相等：{r['determinism']['bitwise_equal']}。只覆盖本机这个设置，不保证旧24M或跨硬件逐位相等。", '',
+              '## 精确审计计算（数学输入，不是实际 EDGAR 规模）', '',
+              '| N | n | x | α | 精确 K_u | 平局有利时最小可能 m | 严格票差最小可能 m |', '|---:|---:|---:|---:|---:|---:|---:|']
+    for x in audit['audit_grid']:
+        lines.append(f"| {x['N']} | {x['n']} | {x['x']} | {x['alpha']} | {x['upper']} | {x['tie_favourable_min_m']} | {x['strict_margin_min_m']} |")
+    lines += ['', '最小分片数仅描述全票等极端票型下可能认证的门槛；不是实际模型会达到的认证覆盖率。有限总体抽样比例较高时，3N/n 近似明显过松。全查零错标时 K_u=0。', '',
+              '实现以整数二项式系数与有理数 α 比较，不依赖浮点 CDF 阈值。统计量以输入数的精确有理表示求和，并向外舍入binary64端点，同时保存分数端点；float输入按其二进制精确值解释。已对 N≤12 的全部 N,n,K 穷举覆盖率；对 m≤6 的三类投票穷举所有可达替换，与可达标签算法逐项核对。小域穷举是实现检查，全域结论依赖理论证明。', '',
+              '## 合成世界数据卡', '',
+              '公司×季度，整数货币会计恒等式（资产=负债+权益、收入=成本+利润）；公司价格含独立冲击与公告效应；作者立场是独立隐变量，不等同于营收方向。每个 family 保存文本、holder、target、单位/尺度、真实/记录时间、五类编辑及其真值。时间是相对 cutoff 的季度索引，非历史日期。', '',
+              '污染只对真实可得时间>0的文档将记录时间改为0。固定 seed 下字节一致；精确 k 与会计恒等式由测试检查。价格过程仅为模拟环境，不作投资推断。本次消融 k=0；污染机制在独立测试中验证，不混入评测任务。', '',
+              '文本仅三套模板、单位仅USD、未模拟真实报表重述/多币种/复杂比较基准。生成器是可控测试装置，不能估计自然文本解析错误率、真实污染率或真实投资表现。', '',
+              '## 门槛状态', '',
+              'WP0.5 核心机制已实现并测试，模板迁移未验证；WP0.2 离线 smoke 完成，真实/较难任务结论缺失；WP0.1 旧24M簇区间与三条真实基线未完成。**G0 不通过，G1 暂不决策。**']
+    (base/'report.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+
+
+if __name__=='__main__': main()

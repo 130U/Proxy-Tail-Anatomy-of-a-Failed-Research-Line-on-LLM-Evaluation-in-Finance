@@ -1,0 +1,198 @@
+{
+  "baseline_commit": "8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 4781,
+      "sha256": "31790978f518de204f9dd295682833f550f186d01884e4d51c1e649506ba8120",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/130U-FinLLM.pdf",
+      "bytes": 349664,
+      "sha256": "f9fa7121ae16adfd234c67185587d5a7a444819b9b9b691723a667b798279567",
+      "review": "all extracted text read; layout not audited"
+    },
+    {
+      "path": "docs/DATA_EXPANSION.md",
+      "bytes": 10708,
+      "sha256": "4bf4aee4c779f51e101daf8a4b6efd3fbdf369d96cec698e1a89351843e1f711",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/DATA_GUIDE.md",
+      "bytes": 7692,
+      "sha256": "408c5dd1ddf5a1db7e637ff18270b4824c974bd299bfc97a0d82831fb4917fca",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/DATA_IMPORT.md",
+      "bytes": 3832,
+      "sha256": "c0685901024c0eac391c1e2418ad22ba3d43ca1b0a20f84b78544d257f1266f2",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/DOMAIN_TRAINING.md",
+      "bytes": 7852,
+      "sha256": "214a1158d5ab954c84f3248f98668f0a18d76e4896ca6f26849047e2de9d6ab2",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/ENGINEERING.md",
+      "bytes": 4247,
+      "sha256": "398ce2915ee99c7bedaccb61085fb6d03efbc4a15b0ed21eda13a135419a2e0a",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/ENTITY_SFT_PILOT.md",
+      "bytes": 4658,
+      "sha256": "d6d4ff4d6931ad65f0eed88ae2b8754792d88bac48876a3a6fb9c73eed75b811",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/EXPANDED_CONTINUATION.md",
+      "bytes": 7244,
+      "sha256": "d74dd3a7e96be3a874f8c266ec2da80a9f844340fdfa7a3e08d2b31eab89629d",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/experiment-results.md",
+      "bytes": 3774,
+      "sha256": "635fc058c30a933b77326414b17be522b082cbd4b0aaa7536de570eab075450f",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/INTRO.zh-CN.md",
+      "bytes": 1002,
+      "sha256": "47688c160e800ae4ed653c043a2508630ea294b4f4dd1cf0c59b87d00945b74f",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/KAGGLE_LITE.md",
+      "bytes": 3553,
+      "sha256": "f3dce60f5912b43dbfce6aab61de00593aba2e233a280b5788ca29ab7b94c190",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/KAGGLE_TRANSFER.md",
+      "bytes": 4135,
+      "sha256": "b5ab6c024c84838b10cbb49c58dbc79031796ea9627ef8c4e4ffa0e4080b5d1e",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/MAINTENANCE.md",
+      "bytes": 5309,
+      "sha256": "35efcb756b17c800a90aa5d6822b76d3e560d5ab1594c0f0fc840c5ce1f728cb",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/MODEL_CARD.md",
+      "bytes": 4741,
+      "sha256": "c516b86d935ae7d5affacf5267e40707a46dfbe7a5232648b1ec4c2b1a20d1d1",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/NOTEBOOK_RUNTIME.md",
+      "bytes": 2631,
+      "sha256": "11ff1f501c07ad33b485e28f2b91241ac0842627d66e3755e9f00b99eb4058e1",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/PROJECT_OVERVIEW.md",
+      "bytes": 15304,
+      "sha256": "5d46f87e21270b16eb280bc3ebfb1f71fe32f47743356cf0531740b3f1c12e00",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/research/20261031-posttraining-plan.md",
+      "bytes": 9029,
+      "sha256": "1a971c569ecbca9943bccdee28281dabcb11978796300b30f3cb154f9fb4745d",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/research/corpus_sources_20261009.md",
+      "bytes": 12505,
+      "sha256": "68067cb9072ea5cd2a1777e65872214ce67fba1c8aae602718800951879c8678",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/research/DATA_DECISIONS.md",
+      "bytes": 4920,
+      "sha256": "362bdd7a36759fae75733ed71a6938bfe8c809c0f86a9e3dfe9ad924f709d331",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/research/expanded_corpus_sources_20261011.md",
+      "bytes": 10575,
+      "sha256": "a8272b8752ee9de5c3679ebdd21c17473b8056145ebdf9f79f3d6c84278c094b",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/research/stance_sources_20261009.md",
+      "bytes": 10107,
+      "sha256": "803b6e179eb405dcb9d533c688eb66e88bbcf5e85fee6254fe1f53d89191e1a9",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/REVIEW_WORKSPACE.md",
+      "bytes": 6172,
+      "sha256": "926db20df4fcf6f48282629426b270af12eb33788b744ad5e055b5b2def62a47",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/SEED_DATA.md",
+      "bytes": 7878,
+      "sha256": "c9fc3678dc33aa4220bc085f3dac93703943ac8ee971593097fd4de4318b1567",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "bytes": 5729,
+      "sha256": "d844d71bcb155f1dc0e474d7cb6c9e2b02aca229f0c47842fe61ffe72d63f312",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/T4_PILOT.md",
+      "bytes": 7690,
+      "sha256": "566a8f3e0148d7c60fe99f880879b185bf01cef13e1788daa0cced17fb9c8578",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/TASK_REVIEW.md",
+      "bytes": 4919,
+      "sha256": "5e955a33035210217f160a7ad9b72f8d2fd34db77c23651e474eaa9a2741f2ce",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/THIRD_PARTY_NOTICES.md",
+      "bytes": 1979,
+      "sha256": "ffda22e89c9b1444fcd05c3ac10bf0bdecced576b59ee804f236a79b9ec675ea",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/TRAINING_LEDGER.md",
+      "bytes": 5087,
+      "sha256": "57562fd630fe02a8862eb6cfae88f917339d0535712a7ce2ef83bd51aafce98d",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/TRAINING_SYSTEM.md",
+      "bytes": 6881,
+      "sha256": "2b17e38756b57f637558dcb33d4aca8522b75ab068a6da3d3ba1fe99dbb425da",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/TRIAL_GUIDE.md",
+      "bytes": 3371,
+      "sha256": "27a796deb50d2df5a7480f32866569e1ae96b4466a47d7ebafd993a90d64c1d6",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    },
+    {
+      "path": "docs/TRIAL_SPEC.md",
+      "bytes": 8731,
+      "sha256": "5ec16257f52fcd12fd118eb0ea563da8022431e0f6b3fdd9053577d5e65758c9",
+      "review": "full text read; repeated material assertions grouped in claims_audit.md"
+    }
+  ],
+  "count": 32
+}

@@ -1,0 +1,7 @@
+# Keep saved experiment and source bytes unchanged across platforms.
+* -text
+*.pdf binary
+*.png binary
+*.zip binary
+*.joblib binary
+*.pkl binary

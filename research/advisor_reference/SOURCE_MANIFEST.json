@@ -1,0 +1,62 @@
+{
+  "snapshot_date": "2026-11-16",
+  "role": "Original advisor materials supplied by user, preserved verbatim as historical evidence; not new user authorization or verified findings",
+  "source_directory": "C:\\Users\\theod\\OneDrive\\桌面\\Personal\\FinLLM-Certifiable-Package",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 3663,
+      "sha256": "738176c7bff320766dca80c682b1f78c1c233523a266591b9457e6e1d5b6925c"
+    },
+    {
+      "file": "AGENTS.md",
+      "bytes": 1779,
+      "sha256": "9d8e9a1705ba7499bb2743ef8b2e4de880bdce724996b6d96be2796602a1b29f"
+    },
+    {
+      "file": "00_CODEX_BRIEF.md",
+      "bytes": 9368,
+      "sha256": "fe70f07fd103fa08d7223a23e4ece158a01d0be8386525686f8607eb8664c8ae"
+    },
+    {
+      "file": "01_ADVISOR_MEMO.md",
+      "bytes": 17500,
+      "sha256": "2233e7e8211a2ee44ccad4bd098e1ded322f265b5ba4e68390c3677d2495f6bc"
+    },
+    {
+      "file": "02_PROJECT_SNAPSHOT.md",
+      "bytes": 7452,
+      "sha256": "0ccaf6787cfcbfe12df5fc70be0a93b82ae1e0c180a3edf64bbad7e9eb164d93"
+    },
+    {
+      "file": "03_LITERATURE_MAP.md",
+      "bytes": 14591,
+      "sha256": "f24a2e78a8c196d901bb4d4df488f5a2823614421d338f87dfff88613deede76"
+    },
+    {
+      "file": "04_THEORY_NOTES.md",
+      "bytes": 16305,
+      "sha256": "470a018e62746036ba48527078ed44a3a2285d3dc6ce3d76e5d98d7c72680163"
+    },
+    {
+      "file": "05_RESEARCH_QUESTIONS.md",
+      "bytes": 25670,
+      "sha256": "7cbe8969b74a12a50b5bcfc9099659a0159ef010d35fd1ada1686e2edd516eb0"
+    },
+    {
+      "file": "06_WORK_PACKAGES.md",
+      "bytes": 17834,
+      "sha256": "d27514ccd5be6f2840a127d332a0542b0203652e37d557f9721697dbca826790"
+    },
+    {
+      "file": "07_REPORTING_PROTOCOL.md",
+      "bytes": 4266,
+      "sha256": "5dd8c8f6c10946a9e0be8d446307134bc10fbc224531ac7b37cc9227e81f5507"
+    },
+    {
+      "file": "08_DECISION_LOG.md",
+      "bytes": 3388,
+      "sha256": "f30d94560423c6185eef2cf778f1712ab85d9dbcf16688c6abf0d84b46350a98"
+    }
+  ]
+}

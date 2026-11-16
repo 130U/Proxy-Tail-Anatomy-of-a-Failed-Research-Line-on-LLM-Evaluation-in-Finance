@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1600" viewBox="0 0 1920 1600" role="img" aria-labelledby="title"><title id="title">Training workflow</title>
+<rect x="0" y="0" width="1920" height="1600" fill="#f7f6f5"/>
+<text x="80" y="63" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">130U / TRAINING SYSTEM / PRIVATE MODEL</text>
+<text x="80" y="144" font-family="Arial, sans-serif" font-size="58" font-weight="700" fill="#191919">From personal research to financial judgment</text>
+<text x="82" y="195" font-family="Arial, sans-serif" font-size="24" fill="#666462">Private 2.4B financial language model | Data, supervision, training, and delivery</text>
+<text x="1480" y="164" font-family="Bahnschrift, sans-serif" font-size="106" fill="#191919">2.4B</text>
+<text x="1484" y="209" font-family="Consolas, sans-serif" font-size="19" fill="#666462">130U / FINANCIAL LLM</text>
+<polyline points="80,252 1840,252" fill="none" stroke="#191919" stroke-width="1.5"/>
+<text x="80" y="310" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">01 / DATA CONTRACT</text>
+<rect x="80" y="346" width="500" height="232" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="80" y="346" width="4" height="232" fill="#191919"/>
+<text x="106" y="380" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">SOURCES</text>
+<text x="106" y="428" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#191919">Personal material + language corpora</text>
+<text x="106" y="469" font-family="Arial, sans-serif" font-size="22" fill="#666462">Original views / human-reviewed public text</text>
+<text x="106" y="504" font-family="Arial, sans-serif" font-size="22" fill="#666462">General-language and financial documents</text>
+<text x="106" y="539" font-family="Arial, sans-serif" font-size="22" fill="#666462">Track author, reviewer, and availability</text>
+<rect x="710" y="346" width="500" height="232" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="710" y="346" width="4" height="232" fill="#191919"/>
+<text x="736" y="380" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">PROTOCOL</text>
+<text x="736" y="428" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#191919">Define the task and evidence scope</text>
+<text x="736" y="469" font-family="Arial, sans-serif" font-size="22" fill="#666462">task / target / holder / scope</text>
+<text x="736" y="504" font-family="Arial, sans-serif" font-size="22" fill="#666462">Separate stance, metric direction, judgment</text>
+<text x="736" y="539" font-family="Arial, sans-serif" font-size="22" fill="#666462">Group sources and derived views by family</text>
+<rect x="1340" y="346" width="500" height="232" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="1340" y="346" width="4" height="232" fill="#2200ff"/>
+<text x="1366" y="380" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">PARTITION</text>
+<text x="1366" y="428" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Split before generating views</text>
+<text x="1366" y="469" font-family="Arial, sans-serif" font-size="22" fill="#666462">32k gold allocation: 12k train + 20k holdout</text>
+<text x="1366" y="504" font-family="Arial, sans-serif" font-size="22" fill="#666462">Teacher supervision and edits: training only</text>
+<text x="1366" y="539" font-family="Arial, sans-serif" font-size="22" fill="#666462">Keep every family and its views together</text>
+<polyline points="580,457 710,457" fill="none" stroke="#191919" stroke-width="1.6"/>
+<polyline points="702.1017569429866,461.3148298474378 710,457 702.1017569429866,452.6851701525622" fill="none" stroke="#191919" stroke-width="1.6"/>
+<polyline points="1210,457 1340,457" fill="none" stroke="#191919" stroke-width="1.6"/>
+<polyline points="1332.1017569429866,461.3148298474378 1340,457 1332.1017569429866,452.6851701525622" fill="none" stroke="#191919" stroke-width="1.6"/>
+<text x="80" y="652" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">02 / TRAINING RAIL</text>
+<text x="710" y="652" font-family="Arial, sans-serif" font-size="21" fill="#666462">Exclude held-out text from corpus, vocabulary, and training</text>
+<polyline points="1590,578 1590,694 330,694 330,754" fill="none" stroke="#2200ff" stroke-width="2"/>
+<polyline points="325.6851701525622,746.1017569429866 330,754 334.3148298474378,746.1017569429866" fill="none" stroke="#2200ff" stroke-width="2"/>
+<text x="900" y="682" font-family="Arial, sans-serif" font-size="20" fill="#2200ff">Each stage uses its own data; A &gt; B &gt; C transfers model weights</text>
+<rect x="80" y="754" width="500" height="252" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="80" y="754" width="4" height="252" fill="#191919"/>
+<text x="106" y="788" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">A / BASE PRETRAINING</text>
+<text x="106" y="836" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Language foundation</text>
+<text x="106" y="877" font-family="Arial, sans-serif" font-size="22" fill="#666462">50B-token recipe / 65,536 vocabulary</text>
+<text x="106" y="912" font-family="Arial, sans-serif" font-size="22" fill="#666462">Random initialization: 28 layers / h 2,560</text>
+<text x="106" y="947" font-family="Arial, sans-serif" font-size="22" fill="#666462">Q20 / KV4 / SwiGLU / tied embedding</text>
+<rect x="710" y="754" width="500" height="252" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="710" y="754" width="4" height="252" fill="#2200ff"/>
+<text x="736" y="788" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">B / MIXED ADAPTATION</text>
+<text x="736" y="836" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Financial adaptation</text>
+<text x="736" y="877" font-family="Arial, sans-serif" font-size="22" fill="#666462">4.0B finance + 0.75B general retention</text>
+<text x="736" y="912" font-family="Arial, sans-serif" font-size="22" fill="#666462">0.20B reading QA + 0.05B stance / metrics</text>
+<text x="736" y="947" font-family="Arial, sans-serif" font-size="22" fill="#666462">Separate masks, sampling, and loss weights</text>
+<rect x="1340" y="754" width="500" height="252" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="1340" y="754" width="4" height="252" fill="#2200ff"/>
+<text x="1366" y="788" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">C / TASK TRAINING</text>
+<text x="1366" y="836" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Target-conditioned SFT</text>
+<text x="1366" y="877" font-family="Arial, sans-serif" font-size="22" fill="#666462">Condition on target, holder, and scope</text>
+<text x="1366" y="912" font-family="Arial, sans-serif" font-size="22" fill="#666462">Task prefixes separate stance and metrics</text>
+<text x="1366" y="947" font-family="Arial, sans-serif" font-size="22" fill="#666462">Axis-specific permissions and pair losses</text>
+<polyline points="580,878 710,878" fill="none" stroke="#2200ff" stroke-width="2"/>
+<polyline points="702.1017569429866,882.3148298474379 710,878 702.1017569429866,873.6851701525621" fill="none" stroke="#2200ff" stroke-width="2"/>
+<polyline points="1210,878 1340,878" fill="none" stroke="#2200ff" stroke-width="2"/>
+<polyline points="1332.1017569429866,882.3148298474379 1340,878 1332.1017569429866,873.6851701525621" fill="none" stroke="#2200ff" stroke-width="2"/>
+<text x="80" y="1095" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">03 / INDEPENDENT ACCEPTANCE</text>
+<text x="710" y="1095" font-family="Arial, sans-serif" font-size="21" fill="#666462">Development selects models; calibration, threshold, and test stay held out</text>
+<polyline points="1590,1006 1590,1135 242,1135 242,1188" fill="none" stroke="#2200ff" stroke-width="2"/>
+<polyline points="237.68517015256216,1180.1017569429866 242,1188 246.31482984743784,1180.1017569429866" fill="none" stroke="#2200ff" stroke-width="2"/>
+<rect x="80" y="1188" width="320" height="193" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="80" y="1188" width="4" height="193" fill="#191919"/>
+<text x="106" y="1222" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">4k DEV</text>
+<text x="106" y="1270" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Model selection</text>
+<text x="106" y="1311" font-family="Arial, sans-serif" font-size="22" fill="#666462">Select checkpoint</text>
+<text x="106" y="1346" font-family="Arial, sans-serif" font-size="17" fill="#666462">Matched budgets / error attribution</text>
+<polyline points="400,1284 440,1284" fill="none" stroke="#191919" stroke-width="1.6"/>
+<polyline points="432.10175694298664,1288.3148298474377 440,1284 432.10175694298664,1279.6851701525623" fill="none" stroke="#191919" stroke-width="1.6"/>
+<rect x="440" y="1188" width="320" height="193" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="440" y="1188" width="4" height="193" fill="#191919"/>
+<text x="466" y="1222" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">4k CALIBRATION</text>
+<text x="466" y="1270" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Calibration</text>
+<text x="466" y="1311" font-family="Arial, sans-serif" font-size="22" fill="#666462">Fit temperature per task</text>
+<text x="466" y="1346" font-family="Arial, sans-serif" font-size="18" fill="#666462">Keep all three class probabilities</text>
+<polyline points="760,1284 800,1284" fill="none" stroke="#191919" stroke-width="1.6"/>
+<polyline points="792.1017569429866,1288.3148298474377 800,1284 792.1017569429866,1279.6851701525623" fill="none" stroke="#191919" stroke-width="1.6"/>
+<rect x="800" y="1188" width="320" height="193" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="800" y="1188" width="4" height="193" fill="#191919"/>
+<text x="826" y="1222" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">4k THRESHOLD</text>
+<text x="826" y="1270" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Acceptance policy</text>
+<text x="826" y="1311" font-family="Arial, sans-serif" font-size="22" fill="#666462">Freeze accept / review rules</text>
+<text x="826" y="1346" font-family="Arial, sans-serif" font-size="22" fill="#666462">Measure risk and coverage</text>
+<polyline points="1120,1284 1160,1284" fill="none" stroke="#191919" stroke-width="1.6"/>
+<polyline points="1152.1017569429866,1288.3148298474377 1160,1284 1152.1017569429866,1279.6851701525623" fill="none" stroke="#191919" stroke-width="1.6"/>
+<rect x="1160" y="1188" width="320" height="193" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="1160" y="1188" width="4" height="193" fill="#191919"/>
+<text x="1186" y="1222" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">8k FINAL TEST</text>
+<text x="1186" y="1270" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Final evaluation</text>
+<text x="1186" y="1311" font-family="Arial, sans-serif" font-size="20" fill="#666462">8k natural + 3k family probes</text>
+<text x="1186" y="1346" font-family="Arial, sans-serif" font-size="17" fill="#666462">Probes are not independent samples</text>
+<polyline points="1480,1284 1520,1284" fill="none" stroke="#191919" stroke-width="1.6"/>
+<polyline points="1512.1017569429866,1288.3148298474377 1520,1284 1512.1017569429866,1279.6851701525623" fill="none" stroke="#191919" stroke-width="1.6"/>
+<rect x="1520" y="1188" width="320" height="193" fill="#ffffff" stroke="#d7d4d1" stroke-width="1"/>
+<rect x="1520" y="1188" width="4" height="193" fill="#2200ff"/>
+<text x="1546" y="1222" font-family="Consolas, sans-serif" font-size="19" fill="#2200ff">RELEASE</text>
+<text x="1546" y="1270" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#191919">Versioned delivery</text>
+<text x="1546" y="1311" font-family="Arial, sans-serif" font-size="22" fill="#666462">Model + vocabulary + rules</text>
+<text x="1546" y="1346" font-family="Arial, sans-serif" font-size="18" fill="#666462">Bind calibration and provenance</text>
+<polyline points="80,1440 1840,1440" fill="none" stroke="#191919" stroke-width="1.5"/>
+<text x="80" y="1485" font-family="Consolas, sans-serif" font-size="23" fill="#2200ff">TRIAL &gt; 2.4B</text>
+<text x="440" y="1485" font-family="Arial, sans-serif" font-size="24" fill="#191919">Reuse task and recovery contracts; rebuild vocabulary, weights, runtime, and calibration.</text>
+<text x="80" y="1536" font-family="Arial, sans-serif" font-size="21" fill="#666462">24M Trial exposes the training workflow and engineering practice; 2.4B serves personal financial research.</text>
+</svg>
