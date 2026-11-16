@@ -19,4 +19,8 @@ python research/absolute_scoring/analyze_scores.py
 
 再次评分需要按 [agent_task_template.txt](agent_task_template.txt) 在宿主中逐次创建全新上下文代理，固定 `gpt-6-sol`、`reasoning_effort=low`、`fork_turns=none`。脚本不会自行生成任何模型分数，也不调用付费 API。宿主没有暴露温度、随机种子和精确底层模型快照，因此可以完整复算已保存结果，但不能承诺新一轮生成逐分相同。
 
+本次实际使用的调用记录与格式校验帮助文件原样保存在 [execution/record_call.py](execution/record_call.py)。运行时它位于仓库相邻的 `proxy-tail-absolute-inputs/` 根目录，其相对路径按那个位置设计；仓库中的副本用于保留实际执行代码，不应直接在此位置运行。该文件只记录调用、保留原始字节和检查输出，不生成分数或创建评分代理。
+
 `interim_round1.json` 是首轮完成后保存的分值分辨率阶段结果，不是八轮重测结论。它的边界统计可由主分析的首轮 `boundary_diagnostics` 重新取得。13 项合成测试验证了并列、方向、完整分数组放行、配对重采样、输入完整性与高斯边界；插值误差仅为数值检验结果，不作为严格误差证书。
+
+`interim_m1.json` 和 `interim_m2.json` 分别是第五、六轮完成时保存的预定比较点估计，不含正式区间或公式判定；最终分析 `estimands` 中相应 m 的原始点估计应与它们一致。阶段结果没有反馈给评分代理，也没有用于更改提示或判定规则。
