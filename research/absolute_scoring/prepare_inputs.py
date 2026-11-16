@@ -12,7 +12,7 @@ PRIVATE = ROOT.parent / "proxy-tail-absolute-inputs"
 
 def write_csv(path, fields, rows):
     with path.open("x", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
+        w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         w.writeheader()
         w.writerows(rows)
 
