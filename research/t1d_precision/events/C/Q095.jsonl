@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e901-2abf-71f3-9137-2c18d14a8c5f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"166\",\"unit\":\"million dollars\",\"expression\":\"284 - 118\",\"low\":\"165\",\"high\":\"167\",\"reliable_digits\":\"2\",\"explanation\":\"Each balance has rounding uncertainty of 0.5 million dollars, so the increase is between 165 and 167 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":16966,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":305,"reasoning_output_tokens":238}}

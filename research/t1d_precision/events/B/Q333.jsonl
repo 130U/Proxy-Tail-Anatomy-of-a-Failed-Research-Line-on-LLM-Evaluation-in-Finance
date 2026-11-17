@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e887-c516-7ad0-9f17-4381b780031e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"940\",\"unit\":\"percent\",\"expression\":\"(156 - 15) / 15 * 100\",\"low\":\"903.2258064516129\",\"high\":\"979.3103448275862\",\"reliable_digits\":\"1\",\"explanation\":\"Each total can vary by 0.5, so the bounds use the smallest 2018 total with the largest 2017 total, and vice versa.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17162,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1037,"reasoning_output_tokens":945}}

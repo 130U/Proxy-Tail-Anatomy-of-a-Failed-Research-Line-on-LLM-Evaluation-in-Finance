@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e932-c6ba-7b82-8e93-6f688dc69ea0"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.54348411658\",\"unit\":\"percent\",\"expression\":\"(3087 / 55687) * 100\",\"low\":\"5.54253647587\",\"high\":\"5.54443177431\",\"reliable_digits\":\"3\",\"explanation\":\"CIB Markets net interest income divided by managed net interest income, allowing each displayed amount to vary by half a million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":23341,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":888,"reasoning_output_tokens":802}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e847-312f-73f3-91eb-9268f914ce4c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-20.47852620772258\",\"unit\":\"percent\",\"expression\":\"(27,885 - 35,066) / 35,066 * 100\",\"low\":\"-20.48108593672023\",\"high\":\"-20.47596640572643\",\"reliable_digits\":\"4\",\"explanation\":\"Allowing ±0.5 million for each reported figure gives these bounds, which both round to a 20.48% decrease at four significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17698,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":2069,"reasoning_output_tokens":1963}}

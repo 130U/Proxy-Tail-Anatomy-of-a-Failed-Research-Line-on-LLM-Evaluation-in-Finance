@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e931-fe96-7c80-bd60-ca6eca197f1f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-71\",\"unit\":\"million dollars\",\"expression\":\"63 - 134\",\"low\":\"-72\",\"high\":\"-70\",\"reliable_digits\":\"1\",\"explanation\":\"Unpaid restructuring liabilities decreased by $71 million during 2007, with rounding allowing a decrease of $70 million to $72 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21495,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":154,"reasoning_output_tokens":82}}

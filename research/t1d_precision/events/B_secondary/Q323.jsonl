@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e934-d08a-77a1-b1f0-63d6e55d699b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-3.6320333433\",\"unit\":\"percent\",\"expression\":\"(323.7 - 335.9) / 335.9 * 100\",\"low\":\"-3.6612591159\",\"high\":\"-3.6027988685\",\"reliable_digits\":\"1\",\"explanation\":\"Basic weighted average shares decreased; allowing each displayed share figure to vary by 0.05 million gives these bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22177,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":611,"reasoning_output_tokens":516}}

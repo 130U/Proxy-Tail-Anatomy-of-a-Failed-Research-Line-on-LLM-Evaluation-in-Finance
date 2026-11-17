@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90a-25e3-7c51-8e40-72a4643a5ecc"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"45.0485436893\",\"unit\":\"percent\",\"expression\":\"(1,160 / 2,575) * 100\",\"low\":\"45.0203843914\",\"high\":\"45.0767139250\",\"reliable_digits\":\"3\",\"explanation\":\"Payments after 2020 are $1,160 million of the $2,575 million total, with each figure rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17754,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1402,"reasoning_output_tokens":1309}}

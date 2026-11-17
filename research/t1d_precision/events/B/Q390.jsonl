@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e891-7934-75d0-9ac6-25f9a961047d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"16.6144200627\",\"unit\":\"percent\",\"expression\":\"(37.2 - 31.9) / 31.9 * 100\",\"low\":\"16.2754303599\",\"high\":\"16.9544740973\",\"reliable_digits\":\"1\",\"explanation\":\"Accrued interest liability increased; the bounds allow each reported liability to vary by 0.05 million due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17541,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":410,"reasoning_output_tokens":316}}

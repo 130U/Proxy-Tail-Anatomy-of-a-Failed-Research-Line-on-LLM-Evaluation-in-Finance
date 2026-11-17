@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e832-7955-72b1-968d-8461f4ec0d70"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"13.6058776346\",\"unit\":\"percent\",\"expression\":\"(434814 - 382739) / 382739 * 100\",\"low\":\"13.6055985859\",\"high\":\"13.6061566840\",\"reliable_digits\":\"5\",\"explanation\":\"Allowing ±0.5 million for each displayed commitment figure gives these bounds, both of which round to 13.606% at five significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17526,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1530,"reasoning_output_tokens":1433}}

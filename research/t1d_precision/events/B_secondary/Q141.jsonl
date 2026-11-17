@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e924-7fc2-7422-a4a0-0677362428b0"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"6.63\",\"unit\":\"USD per share\",\"expression\":\"37.79 - 31.16\",\"low\":\"6.62\",\"high\":\"6.64\",\"reliable_digits\":\"2\",\"explanation\":\"The high through March 2012 was $37.79, compared with the 2011 high of $31.16; rounding permits a difference between $6.62 and $6.64.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21903,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":345,"reasoning_output_tokens":252}}

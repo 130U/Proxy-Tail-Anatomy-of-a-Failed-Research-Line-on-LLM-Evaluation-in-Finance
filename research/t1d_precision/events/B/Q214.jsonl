@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e872-3bdf-7ee0-adeb-3b9b438cfb40"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.6515151515151515\",\"unit\":\"percent\",\"expression\":\"(27.1 - 26.4) / 26.4 * 100\",\"low\":\"2.268431001890359\",\"high\":\"3.036053130929791\",\"reliable_digits\":\"0\",\"explanation\":\"The euro impact increased, but the inputs’ rounding uncertainty prevents even one significant digit from being reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17057,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":643,"reasoning_output_tokens":550}}

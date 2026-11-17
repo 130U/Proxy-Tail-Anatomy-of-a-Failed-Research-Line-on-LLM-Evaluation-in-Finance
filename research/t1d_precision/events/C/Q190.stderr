@@ -1,0 +1,4 @@
+2026-11-17T08:34:11.004456Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)
+2026-11-17T08:34:13.678752Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 14.999817s)... turn_id=01a1e8a4-69ae-7df1-b835-de00b88e19dc retries=1 max_retries=5 sampling_error=exceeded retry limit, last status: 429 Too Many Requests
+2026-11-17T08:34:29.776769Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T08:34:29.777019Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (2/5 in 398ms)... turn_id=01a1e8a4-69ae-7df1-b835-de00b88e19dc retries=2 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof

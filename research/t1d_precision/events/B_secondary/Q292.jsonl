@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-3018-7c73-962e-6f532707c2d4"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.6390584133\",\"unit\":\"percent\",\"expression\":\"(5829 - 5735) / 5735 * 100\",\"low\":\"1.6214802546\",\"high\":\"1.6566396373\",\"reliable_digits\":\"1\",\"explanation\":\"Net revenue increased by $94 million; allowing each revenue figure to vary by $0.5 million gives the stated bounds and one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21909,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":943,"reasoning_output_tokens":847}}

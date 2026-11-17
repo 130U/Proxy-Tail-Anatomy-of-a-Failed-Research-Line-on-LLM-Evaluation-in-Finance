@@ -1,0 +1,7 @@
+{"type":"thread.started","thread_id":"01a1e8eb-d7ba-7651-ae70-2b750f143e9b"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-4079\",\"unit\":\"million dollars\",\"expression\":\"19201 - 23280\",\"low\":\"-4080\",\"high\":\"-4078\",\"reliable_digits\":\"3\",\"explanation\":\"Total level 3 financial assets decreased by $4,079 million, with rounding allowing a change between -$4,080 million and -$4,078 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17667,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":281,"reasoning_output_tokens":198}}

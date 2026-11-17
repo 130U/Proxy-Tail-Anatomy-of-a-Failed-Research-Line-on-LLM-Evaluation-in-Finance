@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91c-f9d9-7a01-8958-e4e30d82c6be"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-17.5214776632\",\"unit\":\"percent\",\"expression\":\"(19201 - 23280) / 23280 * 100\",\"low\":\"-17.5253950731\",\"high\":\"-17.5175583685\",\"reliable_digits\":\"3\",\"explanation\":\"The reported totals imply a 17.5% decrease, with bounds allowing each total to vary by 0.5 million due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22142,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":560,"reasoning_output_tokens":462}}

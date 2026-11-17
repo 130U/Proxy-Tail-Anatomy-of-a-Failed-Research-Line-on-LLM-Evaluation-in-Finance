@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90c-7994-7200-980f-1c21126f984d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"10.252696\",\"unit\":\"percent\",\"expression\":\"(6,850 - 6,213) / 6,213 * 100\",\"low\":\"10.2357769373\",\"high\":\"10.2696177062\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing each balance to vary by ±0.5 gives the stated bounds and two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17605,"cached_input_tokens":17408,"cache_write_input_tokens":0,"output_tokens":973,"reasoning_output_tokens":885}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a2-326b-78d1-8272-108c5dd4d2fe"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"10.4821802935\",\"unit\":\"percent\",\"expression\":\"(5.27 - 4.77) / 4.77 * 100\",\"low\":\"10.2617801047\",\"high\":\"10.7030430220\",\"reliable_digits\":\"1\",\"explanation\":\"Each fair value may vary by $0.005, giving the stated range and one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17392,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":566,"reasoning_output_tokens":476}}

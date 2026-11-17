@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f7-e161-7883-b549-2dd56075aab5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"22\",\"unit\":\"million dollars\",\"expression\":\"56 - 34\",\"low\":\"21\",\"high\":\"23\",\"reliable_digits\":\"1\",\"explanation\":\"Each spending figure is rounded to the nearest million, so the increase could range from $21 million to $23 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18378,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":208,"reasoning_output_tokens":143}}

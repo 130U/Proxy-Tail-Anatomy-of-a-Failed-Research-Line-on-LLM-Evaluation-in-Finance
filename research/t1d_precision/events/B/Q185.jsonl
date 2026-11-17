@@ -1,0 +1,7 @@
+{"type":"thread.started","thread_id":"01a1e84c-3aa1-7dd0-8468-20a93b5a32c2"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"65.27306967984934\",\"unit\":\"percent\",\"expression\":\"(1733 / 2655) * 100\",\"low\":\"65.24195066842403\",\"high\":\"65.30420041439066\",\"reliable_digits\":\"2\",\"explanation\":\"Each amount can vary by 0.5 million due to rounding; the resulting percentage is stable to two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17507,"cached_input_tokens":17280,"cache_write_input_tokens":0,"output_tokens":1378,"reasoning_output_tokens":1289}}

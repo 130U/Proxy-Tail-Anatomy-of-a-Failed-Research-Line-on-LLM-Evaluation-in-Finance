@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e918-9cf2-72f1-8ed2-f0e3bb2f67f5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.086134454\",\"unit\":\"ratio\",\"expression\":\"517 / 476\",\"low\":\"1.083945435\",\"high\":\"1.088328076\",\"reliable_digits\":\"2\",\"explanation\":\"The reported contributions combine U.S. and international pension plans; the bounds use $0.5 million rounding uncertainty for each amount.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18046,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":590,"reasoning_output_tokens":512}}

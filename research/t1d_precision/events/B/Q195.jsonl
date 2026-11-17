@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e86f-10d2-72f3-a7d9-4908c7547e41"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"49080\",\"unit\":\"million dollars\",\"expression\":\"49447 - 367\",\"low\":\"49079\",\"high\":\"49081\",\"reliable_digits\":\"4\",\"explanation\":\"Subtracting corporate stocks leaves 49,080 million dollars; rounding of both inputs permits uncertainty of up to 1 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17821,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":432,"reasoning_output_tokens":361}}

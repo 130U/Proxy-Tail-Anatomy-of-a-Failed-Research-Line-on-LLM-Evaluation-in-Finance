@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90d-60fc-71b1-b042-f824d806c11d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"91.8\",\"unit\":\"million U.S. dollars\",\"expression\":\"100.8 - 9.0\",\"low\":\"91.70\",\"high\":\"91.90\",\"reliable_digits\":\"2\",\"explanation\":\"Operating expenses decreased by this amount, partially offsetting the unfavorable revenue impact.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21643,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":302,"reasoning_output_tokens":233}}

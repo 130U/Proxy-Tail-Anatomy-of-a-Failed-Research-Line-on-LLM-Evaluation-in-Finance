@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e904-1547-74f2-a08c-8fdd41074c49"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.77618447\",\"unit\":\"percent\",\"expression\":\"(8959 - 8717) / 8717 * 100\",\"low\":\"2.76455406\",\"high\":\"2.78781621\",\"reliable_digits\":\"2\",\"explanation\":\"Total fuel cost increased from 2012 to 2013; allowing each cost to vary by $0.5 million gives these bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17995,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1074,"reasoning_output_tokens":983}}

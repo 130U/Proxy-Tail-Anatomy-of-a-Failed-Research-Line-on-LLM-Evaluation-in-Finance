@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e916-0523-73e1-b26c-48c4957e75d1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"940\",\"unit\":\"percent\",\"expression\":\"(156 - 15) / 15 * 100\",\"low\":\"903.2258064516\",\"high\":\"979.3103448276\",\"reliable_digits\":\"1\",\"explanation\":\"Each total may vary by 0.5, giving these bounds and supporting about one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17274,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":673,"reasoning_output_tokens":595}}

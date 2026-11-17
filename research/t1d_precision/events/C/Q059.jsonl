@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e899-8074-7571-822c-18431da3c985"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"60\",\"unit\":\"percent\",\"expression\":\"(24 - 15) / 15 * 100\",\"low\":\"51.6129032258\",\"high\":\"68.9655172414\",\"reliable_digits\":\"0\",\"explanation\":\"Each gain is rounded to the nearest million, giving a possible increase from 51.61% to 68.97%, so even the first significant digit is uncertain.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":16964,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":445,"reasoning_output_tokens":353}}

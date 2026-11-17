@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91d-3858-7672-9be8-6954828d701d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.6097560975609756\",\"unit\":\"ratio\",\"expression\":\"107 / (107 - 66)\",\"low\":\"2.5595238095238095\",\"high\":\"2.6625\",\"reliable_digits\":\"1\",\"explanation\":\"The implied tax liability is the $107 million regulatory liability minus its $66 million net-of-tax amount, with both figures rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21906,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":338,"reasoning_output_tokens":247}}

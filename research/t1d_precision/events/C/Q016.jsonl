@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e894-3fa4-7be2-825d-0a966c6a872d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"56.3\",\"unit\":\"million dollars\",\"expression\":\"10.6 + 11 + 11.2 + 11.6 + 11.9\",\"low\":\"55.6\",\"high\":\"57.0\",\"reliable_digits\":\"1\",\"explanation\":\"The five payments total $56.3 million, with combined rounding uncertainty of $0.7 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17776,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":332,"reasoning_output_tokens":247}}

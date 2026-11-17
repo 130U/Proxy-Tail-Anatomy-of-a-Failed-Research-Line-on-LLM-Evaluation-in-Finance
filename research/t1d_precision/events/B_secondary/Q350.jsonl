@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e936-b198-71e3-b5fa-6cca74857e66"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"86\",\"unit\":\"million dollars\",\"expression\":\"13 + 24 + 49\",\"low\":\"84.5\",\"high\":\"87.5\",\"reliable_digits\":\"1\",\"explanation\":\"The favorable variances were volume/weather, ANO decommissioning trust, and retail electric price, each rounded to the nearest million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21837,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":374,"reasoning_output_tokens":298}}

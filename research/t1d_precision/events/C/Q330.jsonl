@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e915-fd97-7621-82e3-5ca20084a036"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"34.3629343629\",\"unit\":\"percent\",\"expression\":\"(348 - 259) / 259 * 100\",\"low\":\"33.9113680154\",\"high\":\"34.8162475822\",\"reliable_digits\":\"1\",\"explanation\":\"Each fair value is rounded to the nearest $1 million, giving bounds from (347.5 - 259.5) / 259.5 * 100 to (348.5 - 258.5) / 258.5 * 100.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18287,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":524,"reasoning_output_tokens":408}}

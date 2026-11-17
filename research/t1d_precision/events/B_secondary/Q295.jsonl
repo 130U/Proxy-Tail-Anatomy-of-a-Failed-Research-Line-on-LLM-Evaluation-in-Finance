@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-99d9-7fb2-bf73-41fe8d129dd9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.4\",\"unit\":\"million dollars\",\"expression\":\"0.3 + 0.1\",\"low\":\"0.30\",\"high\":\"0.50\",\"reliable_digits\":\"0\",\"explanation\":\"Each component is rounded to the nearest 0.1 million, so their sum has rounding bounds of 0.30 to 0.50 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21989,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":241,"reasoning_output_tokens":159}}

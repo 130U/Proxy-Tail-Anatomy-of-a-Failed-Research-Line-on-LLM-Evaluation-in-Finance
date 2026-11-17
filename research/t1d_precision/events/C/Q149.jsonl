@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a0-e2db-7db1-acca-4620589bfa9c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"43.3333333333\",\"unit\":\"percent\",\"expression\":\"(30 - 17) / 30 * 100\",\"low\":\"40.6779661017\",\"high\":\"45.9016393443\",\"reliable_digits\":\"1\",\"explanation\":\"Equity declined from 30% to 17%, with each allocation uncertain by 0.5 percentage points due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17445,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":559,"reasoning_output_tokens":470}}

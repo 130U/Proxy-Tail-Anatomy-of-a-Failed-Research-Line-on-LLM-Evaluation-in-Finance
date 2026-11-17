@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82d-6c3c-73f1-8493-96a67fb04477"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"48\",\"unit\":\"percent\",\"expression\":\"24 / 50 * 100\",\"low\":\"48\",\"high\":\"48\",\"reliable_digits\":\"2\",\"explanation\":\"The remaining 24 million shares are 48% of the 50 million shares authorized for repurchase; both share counts are exact.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17276,"cached_input_tokens":8192,"cache_write_input_tokens":0,"output_tokens":384,"reasoning_output_tokens":314}}

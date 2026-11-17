@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e890-fbdb-7ae1-b39d-08c6f4487fd9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"11.3466334164589\",\"unit\":\"percent\",\"expression\":\"(802 - 711) / 802 * 100\",\"low\":\"11.2289457267623\",\"high\":\"11.4641744548287\",\"reliable_digits\":\"2\",\"explanation\":\"Development costs incurred decreased from 802 million to 711 million; rounding uncertainty of ±0.5 million leaves two significant digits reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17141,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":683,"reasoning_output_tokens":590}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e925-4388-7bb2-bb4d-04f27ba70ed5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"30.46875\",\"unit\":\"percent\",\"expression\":\"(3.9 / 12.8) * 100\",\"low\":\"29.9610894941634\",\"high\":\"30.9803921568627\",\"reliable_digits\":\"1\",\"explanation\":\"The exposure and unpaid principal balance each have rounding uncertainty of 0.05 billion, yielding the stated bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22363,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":275,"reasoning_output_tokens":189}}

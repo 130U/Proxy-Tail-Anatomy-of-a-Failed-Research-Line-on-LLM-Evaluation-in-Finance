@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e923-04c8-7222-a6ec-960257004b2f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"22.0064724919\",\"unit\":\"percent\",\"expression\":\"(1,088 / 4,944) * 100\",\"low\":\"21.9941348974\",\"high\":\"22.0188125822\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each amount to vary by 0.5 million gives these bounds, which consistently round to 22.0 percent.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21911,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":509,"reasoning_output_tokens":419}}

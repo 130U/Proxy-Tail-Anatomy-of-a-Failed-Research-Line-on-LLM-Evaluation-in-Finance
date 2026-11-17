@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91b-c922-72d2-8e1c-5e6c2465d58e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.4207746479\",\"unit\":\"percent\",\"expression\":\"(165 / 6816) * 100\",\"low\":\"2.4132619379\",\"high\":\"2.4282884601\",\"reliable_digits\":\"2\",\"explanation\":\"Inventory divided by working capital gives the percentage; allowing each amount to vary by 0.5 million leaves two significant digits reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22141,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":603,"reasoning_output_tokens":516}}

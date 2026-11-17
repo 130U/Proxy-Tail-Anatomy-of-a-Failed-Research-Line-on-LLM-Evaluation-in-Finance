@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e846-ec66-7f80-8125-c31cc38732cd"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.8\",\"unit\":\"billion dollars\",\"expression\":\"17.5 - 11.7\",\"low\":\"5.7\",\"high\":\"5.9\",\"reliable_digits\":\"1\",\"explanation\":\"Each reported amount can vary by 0.05 billion, so the calculated decline can vary by 0.1 billion.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18133,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":276,"reasoning_output_tokens":199}}

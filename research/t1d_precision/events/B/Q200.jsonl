@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e86f-99d8-7ee3-941b-9433d870130c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-3.4375\",\"unit\":\"percent\",\"expression\":\"(3.09 - 3.20) / 3.20 * 100\",\"low\":\"-3.74414976599064\",\"high\":\"-3.12989045383412\",\"reliable_digits\":\"0\",\"explanation\":\"Prices rounded to the nearest cent permit growth rates that round to either -3% or -4% at one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17889,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":844,"reasoning_output_tokens":747}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e883-89e7-7c32-bfd9-f249d4ff68bc"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-4.7\",\"unit\":\"US$ million\",\"expression\":\"11.2 - 15.9\",\"low\":\"-4.8\",\"high\":\"-4.6\",\"reliable_digits\":\"1\",\"explanation\":\"Asset impairment charges decreased by US$4.7 million from 2013 to 2014.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17515,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":262,"reasoning_output_tokens":187}}

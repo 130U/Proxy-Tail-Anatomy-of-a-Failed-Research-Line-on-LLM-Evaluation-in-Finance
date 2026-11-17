@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91f-af08-7df1-b76b-e63902229948"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"12.8525\",\"unit\":\"percent\",\"expression\":\"(857679 - 760000) / 760000 * 100\",\"low\":\"12.8523599656\",\"high\":\"12.8526400346\",\"reliable_digits\":\"4\",\"explanation\":\"Maturities increased by 12.8525%; allowing each displayed maturity to vary by 0.5 thousand leaves four significant digits reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22136,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":581,"reasoning_output_tokens":488}}

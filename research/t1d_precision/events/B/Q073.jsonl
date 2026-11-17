@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e838-98f5-7b42-aafa-5310de361cd5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-198\",\"unit\":\"thousand performance awards\",\"expression\":\"509 - 707\",\"low\":\"-198\",\"high\":\"-198\",\"reliable_digits\":\"3\",\"explanation\":\"Non-vested performance awards decreased by 198 thousand; counts are exact under the stated rules.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17663,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":278,"reasoning_output_tokens":212}}

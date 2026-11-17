@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f8-fc20-7343-b564-df560bf18d16"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"56.3\",\"unit\":\"million dollars\",\"expression\":\"10.6 + 11 + 11.2 + 11.6 + 11.9\",\"low\":\"55.6\",\"high\":\"57.0\",\"reliable_digits\":\"1\",\"explanation\":\"The five expected annual payments sum to $56.3 million, with rounding uncertainty of $0.7 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22250,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":203,"reasoning_output_tokens":116}}

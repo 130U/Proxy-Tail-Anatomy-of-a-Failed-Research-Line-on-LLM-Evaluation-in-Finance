@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a5-bea1-7752-93b3-56f4210fd765"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"17.3230248852\",\"unit\":\"percent\",\"expression\":\"(48.56 - 41.39) / 41.39 * 100\",\"low\":\"17.2967749728\",\"high\":\"17.3492811405\",\"reliable_digits\":\"3\",\"explanation\":\"Each cost can vary by $0.005, and all resulting growth rates round to 17.3% at three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17510,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1378,"reasoning_output_tokens":1282}}

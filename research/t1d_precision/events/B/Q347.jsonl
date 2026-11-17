@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e889-f1ac-7e03-b45d-d4ca098b3882"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"80.08474576271186\",\"unit\":\"percent\",\"expression\":\"(4250 - 2360) / 2360 * 100\",\"low\":\"80.02541834357128\",\"high\":\"80.14409832591651\",\"reliable_digits\":\"2\",\"explanation\":\"GFS growth compares 2016 with 2015 revenue, with rounding uncertainty of 0.5 million in each figure.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17412,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":932,"reasoning_output_tokens":837}}

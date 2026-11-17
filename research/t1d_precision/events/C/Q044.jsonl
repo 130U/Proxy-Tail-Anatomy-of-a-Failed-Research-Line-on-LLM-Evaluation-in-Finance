@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e897-c818-78f2-99b9-f488482f6042"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"4.8275862069\",\"unit\":\"percent\",\"expression\":\"(30.4 - 29.0) / 29.0 * 100\",\"low\":\"4.4750430293\",\"high\":\"5.1813471503\",\"reliable_digits\":\"1\",\"explanation\":\"Each amount has rounding uncertainty of $0.05 million, giving roughly 7% relative uncertainty in the percentage increase.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18018,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":863,"reasoning_output_tokens":770}}

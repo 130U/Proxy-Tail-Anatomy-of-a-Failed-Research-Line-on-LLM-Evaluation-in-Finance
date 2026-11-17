@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e908-5f4b-7ae1-8684-1cd2443c7ba9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"93.3012048193\",\"unit\":\"index points\",\"expression\":\"(88 / 83) * 88\",\"low\":\"91.6916167665\",\"high\":\"94.9363636364\",\"reliable_digits\":\"1\",\"explanation\":\"Assuming the 2008-to-2009 proportional increase repeats into 2010, the bounds are 87.5*87.5/83.5 and 88.5*88.5/82.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17813,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1561,"reasoning_output_tokens":1453}}

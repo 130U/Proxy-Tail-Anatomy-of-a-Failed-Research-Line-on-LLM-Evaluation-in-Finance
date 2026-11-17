@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90b-d539-79e0-a456-797adb1b1422"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"85.7142857142857\",\"unit\":\"percent\",\"expression\":\"(2.6 - 1.4) / 1.4 * 100\",\"low\":\"75.8620689655172\",\"high\":\"96.2962962962963\",\"reliable_digits\":\"0\",\"explanation\":\"Contributions rose from $1.4 million to $2.6 million; rounding permits growth between the stated bounds, so the first significant digit is not reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22065,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":283,"reasoning_output_tokens":178}}

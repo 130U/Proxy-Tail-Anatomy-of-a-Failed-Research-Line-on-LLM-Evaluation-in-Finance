@@ -1,0 +1,8 @@
+{"type":"thread.started","thread_id":"01a1e83a-09b2-7f32-bc70-a36a8355b376"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 5/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-1.3262717522\",\"unit\":\"percent\",\"expression\":\"(22171 - 22469) / 22469 * 100\",\"low\":\"-1.3306927168\",\"high\":\"-1.3218505908\",\"reliable_digits\":\"2\",\"explanation\":\"Operating expenses decreased; allowing $0.5 million rounding uncertainty in each annual total leaves two significant digits reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18402,"cached_input_tokens":17664,"cache_write_input_tokens":0,"output_tokens":1101,"reasoning_output_tokens":1010}}

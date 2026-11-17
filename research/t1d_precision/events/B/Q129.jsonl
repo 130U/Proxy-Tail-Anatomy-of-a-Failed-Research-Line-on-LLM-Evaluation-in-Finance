@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e842-ff23-7dd1-861b-ab3039da502a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"253\",\"unit\":\"million dollars\",\"expression\":\"487 - 234\",\"low\":\"252\",\"high\":\"254\",\"reliable_digits\":\"2\",\"explanation\":\"Free cash flow increased by $253 million, with rounding uncertainty of half a million dollars in each reported figure.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17561,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":259,"reasoning_output_tokens":196}}

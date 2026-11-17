@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e938-d2c2-7482-8837-cddce54210d0"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-85\",\"unit\":\"million dollars\",\"expression\":\"717 - 802\",\"low\":\"-86\",\"high\":\"-84\",\"reliable_digits\":\"1\",\"explanation\":\"Unfunded commitments included in equity investment balances decreased by $85 million from 2013 to 2014.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22217,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":340,"reasoning_output_tokens":273}}

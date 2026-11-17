@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91d-d45b-7dd1-8383-89e4da4c8af6"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"300\",\"unit\":\"million dollars\",\"expression\":\"368 - 68\",\"low\":\"299\",\"high\":\"301\",\"reliable_digits\":\"2\",\"explanation\":\"Net gains in 2009 exceeded those in 2008 by $300 million, with each reported figure rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22247,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":397,"reasoning_output_tokens":329}}

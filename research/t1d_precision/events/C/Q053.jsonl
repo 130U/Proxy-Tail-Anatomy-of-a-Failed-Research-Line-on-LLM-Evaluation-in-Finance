@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e898-d774-7aa2-88ab-be8bcf353995"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3.460369\",\"unit\":\"percent\",\"expression\":\"(4425 - 4277) / 4277 * 100\",\"low\":\"3.436587\",\"high\":\"3.484158\",\"reliable_digits\":\"2\",\"explanation\":\"Year-end unrecognized tax benefits increased; the bounds allow each displayed balance to vary by 0.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17888,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1410,"reasoning_output_tokens":1328}}

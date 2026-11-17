@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-1b34-70b1-8adf-0b0ba076aa1c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-55.43973941\",\"unit\":\"percent\",\"expression\":\"(684 - 1535) / 1535 * 100\",\"low\":\"-55.48681211\",\"high\":\"-55.39263604\",\"reliable_digits\":\"2\",\"explanation\":\"Each income may vary by $0.5 million, giving the stated bounds and two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17798,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":913,"reasoning_output_tokens":827}}

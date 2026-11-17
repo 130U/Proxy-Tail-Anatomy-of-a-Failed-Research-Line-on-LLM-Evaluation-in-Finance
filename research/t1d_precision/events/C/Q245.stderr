@@ -1,0 +1,3 @@
+2026-11-17T08:43:17.047815Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 260.9995893s)... turn_id=01a1e8ac-b227-7153-a8ed-669b3a2031ee retries=1 max_retries=5 sampling_error=exceeded retry limit, last status: 429 Too Many Requests
+2026-11-17T08:47:38.166280Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T08:47:38.166771Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (2/5 in 362ms)... turn_id=01a1e8ac-b227-7153-a8ed-669b3a2031ee retries=2 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof

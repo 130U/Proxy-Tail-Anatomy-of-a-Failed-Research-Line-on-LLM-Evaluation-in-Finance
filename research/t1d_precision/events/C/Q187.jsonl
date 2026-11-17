@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a4-524b-7bc0-b5ce-05167bca045b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"85.7142857142857\",\"unit\":\"percent\",\"expression\":\"(2.6 - 1.4) / 1.4 * 100\",\"low\":\"75.8620689655172\",\"high\":\"96.2962962962963\",\"reliable_digits\":\"0\",\"explanation\":\"Each contribution has rounding uncertainty of $0.05 million, producing a growth range too wide to establish even the first significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17591,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":655,"reasoning_output_tokens":557}}

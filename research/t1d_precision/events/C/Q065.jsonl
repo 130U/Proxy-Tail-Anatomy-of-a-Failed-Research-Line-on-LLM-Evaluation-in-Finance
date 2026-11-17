@@ -1,0 +1,8 @@
+{"type":"thread.started","thread_id":"01a1e899-dea3-7133-b2dc-aa1b502c0381"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 5/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"126.06735105\",\"unit\":\"percent\",\"expression\":\"(235.63 - 104.23) / 104.23 * 100\",\"low\":\"126.05171008\",\"high\":\"126.08299352\",\"reliable_digits\":\"4\",\"explanation\":\"This compares the final cumulative values, each rounded within $0.005; the document covers September 2008–December 2011, so a five-year comparison is unavailable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18897,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":476,"reasoning_output_tokens":374}}

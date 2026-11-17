@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e887-6102-79f0-b938-6ed0ba11067f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"150\",\"unit\":\"percent\",\"expression\":\"(10 - 4) / 4 * 100\",\"low\":\"111.1111111111\",\"high\":\"200\",\"reliable_digits\":\"0\",\"explanation\":\"Nearest-million rounding allows reserves of 3.5–4.5 million in 2005 and 9.5–10.5 million in 2006, leaving no significant digit reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17986,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":471,"reasoning_output_tokens":378}}

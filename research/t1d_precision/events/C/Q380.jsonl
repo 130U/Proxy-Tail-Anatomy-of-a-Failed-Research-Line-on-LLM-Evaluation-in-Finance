@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e918-fcda-7491-888a-de887a902878"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"not determinable\",\"unit\":\"percent\",\"expression\":\"\",\"low\":\"not determinable\",\"high\":\"not determinable\",\"reliable_digits\":\"0\",\"explanation\":\"The document gives balances for 2011 and 2012, but not for 2008 and 2009, so the requested percentage change cannot be calculated.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17983,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":434,"reasoning_output_tokens":360}}

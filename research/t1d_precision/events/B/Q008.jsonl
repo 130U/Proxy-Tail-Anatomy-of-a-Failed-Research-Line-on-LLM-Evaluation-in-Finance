@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82c-8985-7621-81e9-f9ef14ffd4fb"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"22\",\"unit\":\"million dollars\",\"expression\":\"56 - 34\",\"low\":\"21\",\"high\":\"23\",\"reliable_digits\":\"1\",\"explanation\":\"Acquisition-related capital spending increased by $22 million, with each input rounded to the nearest $1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18266,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":257,"reasoning_output_tokens":194}}

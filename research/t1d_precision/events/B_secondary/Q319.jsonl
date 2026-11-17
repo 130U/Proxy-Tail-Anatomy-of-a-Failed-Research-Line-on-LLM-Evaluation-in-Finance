@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e919-b9d2-7591-9a30-6b223ec12d6c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"44.5833333333333\",\"unit\":\"percent\",\"expression\":\"(1.2 * 1000 - 665) / (1.2 * 1000) * 100\",\"low\":\"42.1304347826087\",\"high\":\"46.84\",\"reliable_digits\":\"0\",\"explanation\":\"Rounding permits starting liabilities of 1.15–1.25 billion and ending liabilities of 664.5–665.5 million; the resulting decrease crosses the 45% threshold for rounding to one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22359,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":532,"reasoning_output_tokens":412}}

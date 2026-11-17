@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e87c-6f77-7cf2-953a-0073dcece1af"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"218.5\",\"unit\":\"US$ million\",\"expression\":\"(172 + 265) / 2\",\"low\":\"218\",\"high\":\"219\",\"reliable_digits\":\"2\",\"explanation\":\"The midpoint averages the 2005 exposures for +100bp and +200bp, each rounded to the nearest US$ million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17647,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":261,"reasoning_output_tokens":186}}

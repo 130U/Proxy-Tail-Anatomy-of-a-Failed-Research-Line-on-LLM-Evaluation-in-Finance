@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f4-3fba-7212-88e5-1388a0d1da45"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"45\",\"unit\":\"million dollars\",\"expression\":\"(43 + 47) / 2\",\"low\":\"44.5\",\"high\":\"45.5\",\"reliable_digits\":\"2\",\"explanation\":\"The average of the 2011 and 2012 year-end reserves is 45 million dollars, with rounding uncertainty of 0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17871,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":975,"reasoning_output_tokens":895}}

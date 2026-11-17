@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e89b-4de5-7571-bd4d-6788709d5546"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"51.221032\",\"unit\":\"percent\",\"expression\":\"(411.1 / 802.6) * 100\",\"low\":\"51.211612\",\"high\":\"51.230453\",\"reliable_digits\":\"3\",\"explanation\":\"Each total has rounding uncertainty of ±$0.05 million, giving bounds of (411.05 / 802.65) * 100 and (411.15 / 802.55) * 100.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17496,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":951,"reasoning_output_tokens":849}}

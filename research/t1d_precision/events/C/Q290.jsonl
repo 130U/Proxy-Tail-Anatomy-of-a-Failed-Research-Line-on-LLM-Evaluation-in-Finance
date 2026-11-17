@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8be-dc6b-79a2-8733-178d31d3018f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-49.8346196251\",\"unit\":\"percent\",\"expression\":\"(318.5 - 634.9) / 634.9 * 100\",\"low\":\"-49.8464446019\",\"high\":\"-49.8227927857\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each net sales figure to vary by $0.05 million gives these bounds, supporting a decrease of 49.8% to three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17725,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1303,"reasoning_output_tokens":1199}}

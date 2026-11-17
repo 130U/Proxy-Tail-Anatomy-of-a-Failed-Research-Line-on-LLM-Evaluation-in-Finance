@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91f-ff60-78b0-a2c2-569c619f43f9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"9.40450711318\",\"unit\":\"percent\",\"expression\":\"(8690 - 7943) / 7943 * 100\",\"low\":\"9.39132624158\",\"high\":\"9.41765816808\",\"reliable_digits\":\"2\",\"explanation\":\"Using the annual increase in total investments, rounding permits each displayed total to vary by 0.5, leaving two significant digits reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22080,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1011,"reasoning_output_tokens":918}}

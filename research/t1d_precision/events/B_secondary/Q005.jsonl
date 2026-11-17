@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91b-5048-7562-a290-2b82e22342ff"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"102.43204577968526\",\"unit\":\"percent\",\"expression\":\"(1415 - 699) / 699 * 100\",\"low\":\"102.215868477484\",\"high\":\"102.648532569792\",\"reliable_digits\":\"2\",\"explanation\":\"Free cash flow increased by $716 million; bounds allow each reported cash flow to vary by $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22224,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":504,"reasoning_output_tokens":415}}

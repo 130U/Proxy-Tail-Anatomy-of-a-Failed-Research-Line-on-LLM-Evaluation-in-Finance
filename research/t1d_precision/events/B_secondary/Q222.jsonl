@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92e-78cd-7cd2-a242-07f0e46fb1c3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"19.23076923076923\",\"unit\":\"percent\",\"expression\":\"(127.1 - 106.6) / 106.6 * 100\",\"low\":\"19.12798874824191\",\"high\":\"19.33364617550446\",\"reliable_digits\":\"2\",\"explanation\":\"The balance increased from $106.6 million to $127.1 million; rounding uncertainty leaves two significant digits reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22331,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":328,"reasoning_output_tokens":232}}

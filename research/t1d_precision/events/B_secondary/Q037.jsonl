@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fb-4a15-7783-b59f-c6d4d2c065c7"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"49.0775367739\",\"unit\":\"percent\",\"expression\":\"7874 / 16044 * 100\",\"low\":\"49.0728910218\",\"high\":\"49.0821828155\",\"reliable_digits\":\"3\",\"explanation\":\"Compensation and benefits divided by total liabilities gives the percentage; rounding permits each displayed amount to vary by 0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22170,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":997,"reasoning_output_tokens":911}}

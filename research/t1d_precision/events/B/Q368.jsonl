@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e88c-f24f-76b2-ab17-a8ed8a0109b8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-2.91845493562232\",\"unit\":\"percent\",\"expression\":\"(1131 - 1165) / 1165 * 100\",\"low\":\"-3.00300300300300\",\"high\":\"-2.83383426363246\",\"reliable_digits\":\"1\",\"explanation\":\"Cash flows decreased by about 2.92%; allowing each annual figure to vary by $0.5 million gives these bounds and one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17678,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":945,"reasoning_output_tokens":842}}

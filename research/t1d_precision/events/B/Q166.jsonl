@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e849-231e-7271-8b73-308385a75427"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-17\",\"unit\":\"million dollars\",\"expression\":\"190 - 207\",\"low\":\"-18\",\"high\":\"-16\",\"reliable_digits\":\"1\",\"explanation\":\"Buildings decreased by $17 million, with rounding allowing a decrease between $16 million and $18 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17421,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":220,"reasoning_output_tokens":155}}

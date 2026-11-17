@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92c-9f57-7be3-b559-369cc9a5e42c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"40\",\"unit\":\"percent\",\"expression\":\"(77 - 55) / 55 * 100\",\"low\":\"37.8378378378\",\"high\":\"42.2018348624\",\"reliable_digits\":\"1\",\"explanation\":\"The $77 million and $55 million liabilities each have rounding uncertainty of $0.5 million, leaving one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22078,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":274,"reasoning_output_tokens":190}}

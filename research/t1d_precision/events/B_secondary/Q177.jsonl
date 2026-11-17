@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a1e926-c7cd-75a0-b4f8-9f091d00490f"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"45.0485436893\",\"unit\":\"percent\",\"expression\":\"(1,160 / 2,575) * 100\",\"low\":\"45.0203843914\",\"high\":\"45.0767139250\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing each payment figure to vary by 0.5 million gives these bounds, which agree when rounded to two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22228,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":814,"reasoning_output_tokens":724}}

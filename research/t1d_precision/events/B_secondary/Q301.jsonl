@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e918-3d10-77c3-81d4-784935a35df4"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"18.725\",\"unit\":\"percent\",\"expression\":\"74.9 / 400.0 * 100\",\"low\":\"18.7101612298\",\"high\":\"18.7398424803\",\"reliable_digits\":\"3\",\"explanation\":\"The company repurchased $74.9 million of the $400.0 million outstanding at the end of 2005.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22128,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":286,"reasoning_output_tokens":202}}

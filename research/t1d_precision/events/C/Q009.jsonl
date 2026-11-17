@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e893-ce32-7932-8343-53033de756aa"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"7.6831162624\",\"unit\":\"percent\",\"expression\":\"(643 / 8369) * 100\",\"low\":\"7.6766831949\",\"high\":\"7.6895500986\",\"reliable_digits\":\"3\",\"explanation\":\"Currently due means 2003 capacity commitments; allowing both displayed amounts to vary by ±$0.5 million gives the bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18125,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1414,"reasoning_output_tokens":1327}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e919-6ec0-7cd2-bae2-5d2dfd445901"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"320\",\"unit\":\"dollars\",\"expression\":\"367 - 47\",\"low\":\"319\",\"high\":\"321\",\"reliable_digits\":\"2\",\"explanation\":\"Net environmental reserves equal gross reserves less ceded reserves.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22177,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":468,"reasoning_output_tokens":416}}

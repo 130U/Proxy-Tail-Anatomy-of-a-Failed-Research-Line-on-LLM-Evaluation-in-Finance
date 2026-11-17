@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e920-cb8b-7331-a343-25b8d4acc3bd"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2061\",\"unit\":\"million dollars\",\"expression\":\"2975 - 914\",\"low\":\"2060\",\"high\":\"2062\",\"reliable_digits\":\"3\",\"explanation\":\"Subtract the interest component from total capital lease obligations to obtain principal only.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22226,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":221,"reasoning_output_tokens":162}}

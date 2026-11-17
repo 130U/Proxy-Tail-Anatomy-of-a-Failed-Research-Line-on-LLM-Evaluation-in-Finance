@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e837-321b-7da2-9307-dcfb7cec981c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"126.06735105056126\",\"unit\":\"percent\",\"expression\":\"(235.63 - 104.23) / 104.23 * 100\",\"low\":\"126.05171007818871\",\"high\":\"126.08299352362677\",\"reliable_digits\":\"4\",\"explanation\":\"This compares the ending cumulative investment values; the document covers September 2008–December 2011, not five years.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17231,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1980,"reasoning_output_tokens":1883}}

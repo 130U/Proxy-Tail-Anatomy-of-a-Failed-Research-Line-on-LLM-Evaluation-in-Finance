@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e910-a379-7952-9b84-5fca54df182f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.84375\",\"unit\":\"ratio\",\"expression\":\"54 / 64\",\"low\":\"0.8294573643410853\",\"high\":\"0.8582677165354331\",\"reliable_digits\":\"0\",\"explanation\":\"The 2019-to-2018 ratio uses rounded amounts, and its possible range crosses the one-significant-digit rounding boundary of 0.85.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21419,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":540,"reasoning_output_tokens":452}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f0-4957-73e2-81fd-864653a85b74"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"41.4285714286\",\"unit\":\"percent\",\"expression\":\"(29.7 - 21.0) / 21.0 * 100\",\"low\":\"40.8551068884\",\"high\":\"42.0047732697\",\"reliable_digits\":\"1\",\"explanation\":\"Each figure can vary by 0.05, producing the stated bounds and supporting one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17549,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":363,"reasoning_output_tokens":273}}

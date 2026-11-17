@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e920-7199-7762-96d1-a829e1103b54"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-292\",\"unit\":\"million dollars\",\"expression\":\"265 - 557\",\"low\":\"-293\",\"high\":\"-291\",\"reliable_digits\":\"2\",\"explanation\":\"Adding the 2005 gain and 2004 loss under a +200bp rate change gives a combined earnings loss of $292 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22233,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":213,"reasoning_output_tokens":141}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82c-d47d-71c2-b5c0-007f8867f9fc"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"10.5630120272\",\"unit\":\"percent\",\"expression\":\"(63.43 - 57.37) / 57.37 * 100\",\"low\":\"10.5446623094\",\"high\":\"10.5813649438\",\"reliable_digits\":\"2\",\"explanation\":\"Assuming the latest annual comparison, 2016 to 2017, the bounds reflect rounding uncertainty of $0.005 in each fair value.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17516,"cached_input_tokens":8192,"cache_write_input_tokens":0,"output_tokens":1413,"reasoning_output_tokens":1314}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e841-c39f-7d12-8f51-6bd1b847211c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"446.6666666666667\",\"unit\":\"percent\",\"expression\":\"(164 - 30) / 30 * 100\",\"low\":\"436.0655737704918\",\"high\":\"457.6271186440678\",\"reliable_digits\":\"1\",\"explanation\":\"Allowing each maturity amount to vary by 0.5 million gives these bounds, with only the leading significant digit stable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17494,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":921,"reasoning_output_tokens":830}}

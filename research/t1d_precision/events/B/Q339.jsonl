@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e888-8a71-7f01-be3c-67ade2c4da11"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"44.8409009792\",\"unit\":\"percent\",\"expression\":\"(43319 / 96606) * 100\",\"low\":\"44.8401505075\",\"high\":\"44.8416518728\",\"reliable_digits\":\"4\",\"explanation\":\"Each reported amount can vary by 0.5 million, giving these percentage bounds and four reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18014,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1098,"reasoning_output_tokens":1014}}

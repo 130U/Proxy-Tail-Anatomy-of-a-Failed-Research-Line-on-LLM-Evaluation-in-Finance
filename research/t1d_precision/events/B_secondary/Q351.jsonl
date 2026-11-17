@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e936-d0a0-7600-a0bb-2c702fd6bb7d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0\",\"unit\":\"million dollars\",\"expression\":\"10 - 10\",\"low\":\"-1\",\"high\":\"1\",\"reliable_digits\":\"0\",\"explanation\":\"Asset retirement obligations were reported as $10 million in both 2006 and 2005; rounding permits a change between approximately -$1 million and $1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22574,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":175,"reasoning_output_tokens":99}}

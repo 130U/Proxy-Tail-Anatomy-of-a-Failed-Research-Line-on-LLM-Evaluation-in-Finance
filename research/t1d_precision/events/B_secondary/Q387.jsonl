@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e939-4abe-76c2-b38a-ba7d59de6e0c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21\",\"unit\":\"million dollars\",\"expression\":\"210 - (182 + 7)\",\"low\":\"19.5\",\"high\":\"22.5\",\"reliable_digits\":\"1\",\"explanation\":\"Subtract gross cash consideration, including the acquired cash, from the total transaction value.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21899,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":331,"reasoning_output_tokens":266}}

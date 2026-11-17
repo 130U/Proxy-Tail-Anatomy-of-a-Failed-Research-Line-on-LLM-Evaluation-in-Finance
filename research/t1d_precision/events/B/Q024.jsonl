@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82f-1587-7b70-a786-d50fa4bd4328"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"88.8337468983\",\"unit\":\"percent\",\"expression\":\"(1.074 / 1.209) * 100\",\"low\":\"88.7556841670\",\"high\":\"88.9118742242\",\"reliable_digits\":\"2\",\"explanation\":\"The 2006 pre-tax gain and proceeds were each rounded to the nearest $0.001 billion; their possible ratios agree to two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17702,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":944,"reasoning_output_tokens":850}}

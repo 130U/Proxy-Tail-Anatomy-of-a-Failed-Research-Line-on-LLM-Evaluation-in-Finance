@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e908-7746-7ed2-8d96-cfaf21bbf117"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-20.4785262077\",\"unit\":\"percent\",\"expression\":\"(27,885 - 35,066) / 35,066 * 100\",\"low\":\"-20.4810859367\",\"high\":\"-20.4759664057\",\"reliable_digits\":\"4\",\"explanation\":\"Net derivative liabilities decreased by approximately 20.48%, with bounds allowing each reported liability to vary by 0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22284,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":864,"reasoning_output_tokens":766}}

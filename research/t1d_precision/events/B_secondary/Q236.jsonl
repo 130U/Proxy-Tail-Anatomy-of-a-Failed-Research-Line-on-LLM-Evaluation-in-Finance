@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92f-2e05-7fb2-beb6-76005ef22d49"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-83.0974188177\",\"unit\":\"percent\",\"expression\":\"(1201 - 2199) / 1201 * 100\",\"low\":\"-83.2153269471\",\"high\":\"-82.9796088223\",\"reliable_digits\":\"2\",\"explanation\":\"The negative decline indicates that the operating loss increased; bounds allow each displayed loss to vary by 0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22429,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":577,"reasoning_output_tokens":484}}

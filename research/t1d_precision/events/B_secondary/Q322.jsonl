@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91a-054c-7f61-85ef-9bb4f838c39b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-44.5717403164\",\"unit\":\"percent\",\"expression\":\"(5,080 - 9,165) / 9,165 * 100\",\"low\":\"-44.5802193006\",\"high\":\"-44.5632604070\",\"reliable_digits\":\"3\",\"explanation\":\"Gain on land sales decreased by approximately 44.6%, with bounds allowing each displayed amount to vary by 0.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22526,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":549,"reasoning_output_tokens":451}}

@@ -1,0 +1,1 @@
+2026-11-17T11:15:18.465486Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)

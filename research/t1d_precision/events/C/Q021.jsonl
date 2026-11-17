@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f9-263a-7eb0-9a74-354b26e6f512"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"14.76810415\",\"unit\":\"percent\",\"expression\":\"(1410.5 - 1229.0) / 1229.0 * 100\",\"low\":\"14.75936699\",\"high\":\"14.77684202\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each operating cash figure to vary by $0.05 million gives these bounds, supporting three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18025,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":927,"reasoning_output_tokens":835}}

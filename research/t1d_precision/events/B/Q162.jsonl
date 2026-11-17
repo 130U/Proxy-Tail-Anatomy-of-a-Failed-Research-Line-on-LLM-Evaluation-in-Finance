@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e848-7181-7582-83a7-c34fbba3217c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-16.2264671402\",\"unit\":\"percent\",\"expression\":\"(24296 - 29002) / 29002 * 100\",\"low\":\"-16.2296353763\",\"high\":\"-16.2232987949\",\"reliable_digits\":\"3\",\"explanation\":\"Collateral posted decreased by about 16.2%; the bounds allow each reported amount to vary by 0.5 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17694,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1335,"reasoning_output_tokens":1240}}

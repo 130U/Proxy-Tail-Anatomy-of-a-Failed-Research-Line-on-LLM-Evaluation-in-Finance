@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e919-89a8-7e90-b00a-9ca99ff5cd4e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"92\",\"unit\":\"USD per share\",\"expression\":\"92 / 1\",\"low\":\"91.5\",\"high\":\"92.5\",\"reliable_digits\":\"2\",\"explanation\":\"The $92 million cost is rounded to the nearest million, while the count of 1 million shares is exact.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18373,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":334,"reasoning_output_tokens":265}}

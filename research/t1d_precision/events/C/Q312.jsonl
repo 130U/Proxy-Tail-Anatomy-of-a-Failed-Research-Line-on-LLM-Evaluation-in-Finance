@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8cf-a038-73d3-8322-07ac4f858cd9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-4.7\",\"unit\":\"US$ million\",\"expression\":\"11.2 - 15.9\",\"low\":\"-4.8\",\"high\":\"-4.6\",\"reliable_digits\":\"1\",\"explanation\":\"Charges decreased by US$4.7 million; rounding each charge by ±US$0.05 million gives the stated bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17627,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":304,"reasoning_output_tokens":223}}

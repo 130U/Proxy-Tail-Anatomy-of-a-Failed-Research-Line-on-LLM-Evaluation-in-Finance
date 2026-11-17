@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e880-7c4d-7ce0-a225-0cd117ae613d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"59.67741935483871\",\"unit\":\"percent\",\"expression\":\"(592 / 992) * 100\",\"low\":\"59.59697732997481\",\"high\":\"59.75794251134644\",\"reliable_digits\":\"2\",\"explanation\":\"Printing Papers accounted for $592 million of the $992 million total, with each amount rounded to the nearest $1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17820,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":582,"reasoning_output_tokens":494}}

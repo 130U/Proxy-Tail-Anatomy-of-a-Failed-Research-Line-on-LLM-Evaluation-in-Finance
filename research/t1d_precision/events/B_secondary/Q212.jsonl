@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92d-b8ba-74b0-bbda-431eaabbce18"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"19\",\"unit\":\"million dollars\",\"expression\":\"289 - 270\",\"low\":\"18\",\"high\":\"20\",\"reliable_digits\":\"1\",\"explanation\":\"Subtract the gain recorded in the third quarter from the total recognized gain; each displayed amount has rounding uncertainty of 0.5 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22187,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":331,"reasoning_output_tokens":262}}

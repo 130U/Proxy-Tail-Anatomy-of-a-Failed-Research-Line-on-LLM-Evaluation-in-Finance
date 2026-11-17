@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e888-6e86-7a43-b875-6b87aefbb62e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"41.42857142857143\",\"unit\":\"percent\",\"expression\":\"(29.7 - 21.0) / 21.0 * 100\",\"low\":\"40.85510688836105\",\"high\":\"42.00477326968974\",\"reliable_digits\":\"1\",\"explanation\":\"Each displayed addition has rounding uncertainty of ±0.05, yielding these bounds and one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17437,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":524,"reasoning_output_tokens":431}}

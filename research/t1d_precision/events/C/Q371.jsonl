@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f5-1f95-78d3-bc72-16c430ae7be1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21.86398\",\"unit\":\"USD per share\",\"expression\":\"(9 * 1000000) / 411636\",\"low\":\"20.64931\",\"high\":\"23.07864\",\"reliable_digits\":\"1\",\"explanation\":\"This calculates compensation expense per issued share; the actual average purchase price is not disclosed.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17570,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1086,"reasoning_output_tokens":1010}}

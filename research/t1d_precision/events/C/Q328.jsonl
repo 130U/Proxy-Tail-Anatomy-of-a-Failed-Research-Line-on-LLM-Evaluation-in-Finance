@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e915-b93e-7cb1-aa2d-1175a73b5cf3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"20\",\"unit\":\"million dollars\",\"expression\":\"24 - 4\",\"low\":\"19\",\"high\":\"21\",\"reliable_digits\":\"1\",\"explanation\":\"Each addition is rounded to the nearest million, so the difference can range from 19 to 21 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17227,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":240,"reasoning_output_tokens":176}}

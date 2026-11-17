@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e919-09ec-7d42-9bf1-ae048ee7c533"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"7.9506878685\",\"unit\":\"percent\",\"expression\":\"(559.7 - 515.2) / 559.7 * 100\",\"low\":\"7.9335298847\",\"high\":\"7.9678427869\",\"reliable_digits\":\"2\",\"explanation\":\"Each cash flow figure is uncertain by $0.05 million, giving approximately 0.22% relative uncertainty in the percentage decrease.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17616,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1130,"reasoning_output_tokens":1034}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f7-d11b-70a1-96ad-383a12b69f2a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"37.1\",\"unit\":\"millions\",\"expression\":\"41.9 - 4.8\",\"low\":\"37.0\",\"high\":\"37.2\",\"reliable_digits\":\"2\",\"explanation\":\"The range is the highest payment minus the lowest, with each figure subject to rounding of ±0.05 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17729,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":233,"reasoning_output_tokens":159}}

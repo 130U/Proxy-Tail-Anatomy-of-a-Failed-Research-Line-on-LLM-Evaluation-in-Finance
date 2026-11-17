@@ -1,0 +1,8 @@
+{"type":"thread.started","thread_id":"01a1e826-edc5-7701-9f71-2ca7981a9a23"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 5/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"96.4390976125519\",\"unit\":\"percent\",\"expression\":\"176038 / 182538 * 100\",\"low\":\"96.4385595367553\",\"high\":\"96.4396356912963\",\"reliable_digits\":\"4\",\"explanation\":\"Allowing each displayed amount to vary by 0.5 thousand dollars gives these bounds, which both round to 96.44 percent.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17328,"cached_input_tokens":17152,"cache_write_input_tokens":0,"output_tokens":3644,"reasoning_output_tokens":3553}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90a-262d-7183-acec-4cd61f39df2d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"39.02439024390244\",\"unit\":\"percent\",\"expression\":\"(57 - 41) / 41 * 100\",\"low\":\"36.14457831325301\",\"high\":\"41.97530864197531\",\"reliable_digits\":\"1\",\"explanation\":\"Loss magnitudes increased from 41 to 57 million; the rounding bounds give percentages that all round to 40% at one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22147,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":431,"reasoning_output_tokens":336}}

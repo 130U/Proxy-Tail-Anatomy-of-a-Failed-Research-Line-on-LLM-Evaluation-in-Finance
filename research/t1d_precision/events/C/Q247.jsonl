@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e910-ad42-7493-aab0-72fb1b5ae36e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.2994350282485876\",\"unit\":\"ratio\",\"expression\":\"5.3 / 17.7\",\"low\":\"0.2957746478873239\",\"high\":\"0.3031161473087819\",\"reliable_digits\":\"2\",\"explanation\":\"The bounds are 5.25 / 17.75 and 5.35 / 17.65, both rounding to 0.30 at two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18246,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1006,"reasoning_output_tokens":906}}

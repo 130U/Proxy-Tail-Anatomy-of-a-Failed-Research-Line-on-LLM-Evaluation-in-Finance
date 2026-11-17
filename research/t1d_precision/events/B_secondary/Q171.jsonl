@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e926-6b3d-7c90-84fe-60993ae399f5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"6.0\",\"unit\":\"million dollars\",\"expression\":\"7.2 - 1.2\",\"low\":\"5.90\",\"high\":\"6.10\",\"reliable_digits\":\"1\",\"explanation\":\"Subtracting accretion from the ending liability gives $6.0 million, with each displayed figure rounded to the nearest $0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22362,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":247,"reasoning_output_tokens":166}}

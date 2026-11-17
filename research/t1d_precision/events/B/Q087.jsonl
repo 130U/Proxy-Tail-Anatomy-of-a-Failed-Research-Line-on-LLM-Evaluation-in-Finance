@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e83b-3cec-7d92-a7ba-c4b667749e21"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2061\",\"unit\":\"million dollars\",\"expression\":\"2975 - 914\",\"low\":\"2060\",\"high\":\"2062\",\"reliable_digits\":\"3\",\"explanation\":\"Principal equals total capital lease obligations minus interest, with each displayed figure rounded to the nearest million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17640,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":286,"reasoning_output_tokens":221}}

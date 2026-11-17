@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e890-dade-73a0-ac84-3b3bdb0433cc"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21\",\"unit\":\"million dollars\",\"expression\":\"210 - (182 + 7)\",\"low\":\"19.5\",\"high\":\"22.5\",\"reliable_digits\":\"1\",\"explanation\":\"Subtracting gross cash consideration, including the cash netted out, from total transaction value gives the noncash portion.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17313,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":974,"reasoning_output_tokens":902}}

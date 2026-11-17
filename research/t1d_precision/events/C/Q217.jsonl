@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90d-c72d-7442-9606-804e2ff3816d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"4.1614869083\",\"unit\":\"percent\",\"expression\":\"(7532 / 180993) * 100\",\"low\":\"4.1611991591\",\"high\":\"4.1617746592\",\"reliable_digits\":\"4\",\"explanation\":\"The 2012 unrecognized tax benefit is divided by year-end gross liabilities, allowing each displayed amount to vary by 0.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17545,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1891,"reasoning_output_tokens":1801}}

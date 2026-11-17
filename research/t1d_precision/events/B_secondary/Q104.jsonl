@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e921-ec23-7370-bde1-2bbe9423ff3b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"38.6\",\"unit\":\"ratio\",\"expression\":\"19.3 / 0.5\",\"low\":\"35\",\"high\":\"43\",\"reliable_digits\":\"1\",\"explanation\":\"Dividing $19.3 million by $0.5 million gives 38.6, with rounding bounds of 19.25 / 0.55 and 19.35 / 0.45.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22349,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":260,"reasoning_output_tokens":171}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90a-f0e2-7461-9017-8e29ae5aad44"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"25.348782218\",\"unit\":\"percent\",\"expression\":\"(5301 - 4229) / 4229 * 100\",\"low\":\"25.322142097\",\"high\":\"25.375428639\",\"reliable_digits\":\"2\",\"explanation\":\"Revenue increased; allowing each displayed revenue to vary by 0.5 million dollars gives these bounds and two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17323,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":853,"reasoning_output_tokens":765}}

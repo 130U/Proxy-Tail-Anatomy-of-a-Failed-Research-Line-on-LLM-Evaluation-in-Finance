@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e924-b808-7432-b373-eafd74d6a394"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"13.4\",\"unit\":\"million dollars per year\",\"expression\":\"33.5 / 2.5\",\"low\":\"13.38\",\"high\":\"13.42\",\"reliable_digits\":\"3\",\"explanation\":\"Divide the rounded $33.5 million cost by the exact 2.5-year period.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22020,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":576,"reasoning_output_tokens":504}}

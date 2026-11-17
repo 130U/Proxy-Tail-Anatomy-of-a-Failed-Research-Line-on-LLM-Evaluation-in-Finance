@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e87c-f256-76f1-9f15-4364e733998a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"72.7104532839963\",\"unit\":\"percent\",\"expression\":\"78.6 / 108.1 * 100\",\"low\":\"72.6306056403144\",\"high\":\"72.7903748264692\",\"reliable_digits\":\"2\",\"explanation\":\"Each amount is rounded to the nearest $0.1 million, giving these bounds and two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17432,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":850,"reasoning_output_tokens":763}}

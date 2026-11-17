@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e88d-e5c3-7711-b2e2-b66d664558af"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-27.54716981132075\",\"unit\":\"percent\",\"expression\":\"(9.60 - 13.25) / 13.25 * 100\",\"low\":\"-27.61222180309317\",\"high\":\"-27.48206870517176\",\"reliable_digits\":\"1\",\"explanation\":\"Allowing ±$0.005 rounding in each fair value gives these bounds, which agree when rounded to one significant digit but not two.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17766,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1382,"reasoning_output_tokens":1279}}

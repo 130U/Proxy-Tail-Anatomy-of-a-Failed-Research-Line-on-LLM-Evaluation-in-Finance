@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fe-598d-7431-a54b-6ee32b0c3aff"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"63.0548302872\",\"unit\":\"percent\",\"expression\":\"(24.98 - 15.32) / 15.32 * 100\",\"low\":\"62.9690048940\",\"high\":\"63.1407117205\",\"reliable_digits\":\"2\",\"explanation\":\"Each price is rounded to the nearest $0.01; using opposite rounding extremes gives the bounds, supporting two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17941,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":610,"reasoning_output_tokens":516}}

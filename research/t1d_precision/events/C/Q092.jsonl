@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e900-a2ff-7423-ba10-1aba1083d774"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5675\",\"unit\":\"million dollars\",\"expression\":\"5,829 - 154\",\"low\":\"5674\",\"high\":\"5676\",\"reliable_digits\":\"3\",\"explanation\":\"Subtracting the pre-tax sale gain from 2015 net revenue gives $5,675 million, with rounding uncertainty of $1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17609,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":665,"reasoning_output_tokens":591}}

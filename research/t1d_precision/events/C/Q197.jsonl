@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a4-eb45-78e3-9eed-14cb360f4fe8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"40\",\"unit\":\"percent\",\"expression\":\"(77 - 55) / 55 * 100\",\"low\":\"37.8378378378\",\"high\":\"42.2018348624\",\"reliable_digits\":\"1\",\"explanation\":\"Each liability is rounded to the nearest million, giving bounds of (76.5 - 55.5) / 55.5 * 100 and (77.5 - 54.5) / 54.5 * 100, supporting one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17604,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":378,"reasoning_output_tokens":264}}

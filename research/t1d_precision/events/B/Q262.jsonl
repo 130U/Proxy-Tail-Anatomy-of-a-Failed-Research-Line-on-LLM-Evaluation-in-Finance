@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e87a-f58a-7202-835a-c72728216857"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.9\",\"unit\":\"million dollars\",\"expression\":\"8.8 - 2.9\",\"low\":\"5.8\",\"high\":\"6.0\",\"reliable_digits\":\"1\",\"explanation\":\"In 2014, environmental reserves exceeded remediation expenses by $5.9 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17629,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":352,"reasoning_output_tokens":284}}

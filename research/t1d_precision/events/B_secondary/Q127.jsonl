@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e905-8879-7fd2-a110-ef128c6bb3b2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-5.1140636751\",\"unit\":\"percent\",\"expression\":\"(378.5 - 398.9) / 398.9 * 100\",\"low\":\"-5.1384885324\",\"high\":\"-5.0896326940\",\"reliable_digits\":\"2\",\"explanation\":\"HQLA decreased from Q3 to Q4 2015; allowing each displayed balance to vary by 0.05 billion gives the stated bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22323,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1137,"reasoning_output_tokens":1034}}

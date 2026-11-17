@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8b1-3831-78c0-b203-dc2a57d1e047"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"86.95652173913043\",\"unit\":\"percent\",\"expression\":\"(20 / 23) * 100\",\"low\":\"82.97872340425532\",\"high\":\"91.11111111111111\",\"reliable_digits\":\"1\",\"explanation\":\"Interpreting this as the long-term AUS share, the inflows were $20 billion out of $23 billion, each rounded to the nearest billion.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17977,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1312,"reasoning_output_tokens":1218}}

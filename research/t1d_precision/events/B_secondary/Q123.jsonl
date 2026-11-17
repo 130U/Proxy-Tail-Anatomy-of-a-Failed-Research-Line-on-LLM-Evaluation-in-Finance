@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e923-4dc4-7aa2-8b9e-09815d6e34b6"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"446.6666666666667\",\"unit\":\"percent\",\"expression\":\"(164 - 30) / 30 * 100\",\"low\":\"436.0655737704918\",\"high\":\"457.6271186440678\",\"reliable_digits\":\"1\",\"explanation\":\"The maturity amount increased from $30 million to $164 million; bounds allow each amount to vary by $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22080,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":848,"reasoning_output_tokens":756}}

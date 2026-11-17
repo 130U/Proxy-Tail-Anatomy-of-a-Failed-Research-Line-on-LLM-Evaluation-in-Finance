@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e89e-0d68-7d43-aba7-688b3a7b2a3e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-1.9\",\"unit\":\"million shares\",\"expression\":\"326.5 - 328.4\",\"low\":\"-2.0\",\"high\":\"-1.8\",\"reliable_digits\":\"1\",\"explanation\":\"Each weighted average is rounded to 0.1 million, so the decrease of 1.9 million has a rounding uncertainty of 0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17724,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":349,"reasoning_output_tokens":263}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e893-b27e-76a0-b220-f9c2c9d3ab55"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"27.30119992\",\"unit\":\"percent\",\"expression\":\"(46984 / 172095) * 100\",\"low\":\"27.30083006\",\"high\":\"27.30156978\",\"reliable_digits\":\"4\",\"explanation\":\"Divide the 2012 non-U.S. dollar amount by the total; allowing each input to vary by 0.5 million gives these bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17597,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1364,"reasoning_output_tokens":1275}}

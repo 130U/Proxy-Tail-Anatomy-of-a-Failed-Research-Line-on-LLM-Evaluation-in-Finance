@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e902-4ab6-7900-9aba-4c7866b022d0"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-2.7963908388\",\"unit\":\"percent\",\"expression\":\"(109669 - 112824) / 112824 * 100\",\"low\":\"-2.7972647785\",\"high\":\"-2.7955168914\",\"reliable_digits\":\"3\",\"explanation\":\"Risk-weighted assets decreased; the bounds allow each displayed asset amount to vary by 0.5 million due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22387,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1128,"reasoning_output_tokens":1034}}

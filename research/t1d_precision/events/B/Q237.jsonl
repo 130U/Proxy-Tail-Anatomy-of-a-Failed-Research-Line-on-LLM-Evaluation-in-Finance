@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e876-a3b1-7ba0-9373-168351156269"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"18.7207488299532\",\"unit\":\"percent\",\"expression\":\"(4566 - 3846) / 3846 * 100\",\"low\":\"18.6923176914078\",\"high\":\"18.7491873618515\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each revenue figure to vary by 0.5 million, the entire growth interval rounds to 18.7% at three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17412,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1264,"reasoning_output_tokens":1165}}

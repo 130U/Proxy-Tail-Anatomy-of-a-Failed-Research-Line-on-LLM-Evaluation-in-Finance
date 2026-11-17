@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e919-bbc2-7953-a328-cd727ee74679"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"28\",\"unit\":\"million dollars\",\"expression\":\"210 - 182\",\"low\":\"27\",\"high\":\"29\",\"reliable_digits\":\"1\",\"explanation\":\"Subtract cash consideration from total transaction value; rounding each input by up to 0.5 million gives bounds of 27 to 29 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17425,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":523,"reasoning_output_tokens":453}}

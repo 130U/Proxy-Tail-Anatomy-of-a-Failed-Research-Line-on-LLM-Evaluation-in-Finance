@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e831-841b-7e83-b458-2a7714002862"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"49.0775367739\",\"unit\":\"percent\",\"expression\":\"7874 / 16044 * 100\",\"low\":\"49.0728910218\",\"high\":\"49.0821828155\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each displayed amount to vary by $0.5 million gives these bounds, both of which round to 49.1% at three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17584,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1376,"reasoning_output_tokens":1284}}

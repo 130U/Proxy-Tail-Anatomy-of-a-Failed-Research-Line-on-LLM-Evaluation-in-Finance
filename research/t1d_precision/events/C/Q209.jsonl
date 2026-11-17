@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90c-c481-71c2-ac0c-4c3447f0bb11"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-19298\",\"unit\":\"million USD\",\"expression\":\"59677 - 78975\",\"low\":\"-19299\",\"high\":\"-19297\",\"reliable_digits\":\"4\",\"explanation\":\"The table’s totals net of cash collateral correspond to balance-sheet receivables, and each has rounding uncertainty of $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17924,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1087,"reasoning_output_tokens":1010}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fd-5dbe-7a40-92d5-8f62eb060ef8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"51.171875\",\"unit\":\"percent\",\"expression\":\"(3.87 - 2.56) / 2.56 * 100\",\"low\":\"50.6822612086\",\"high\":\"51.6634050881\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing each rate to vary by 0.005 percentage points gives these bounds and approximately 1% relative uncertainty.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17634,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":565,"reasoning_output_tokens":474}}

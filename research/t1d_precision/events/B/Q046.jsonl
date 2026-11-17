@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e833-e6b5-7df1-a9a5-044e58938a1e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3.323699421965318\",\"unit\":\"percent\",\"expression\":\"23 / 692 * 100\",\"low\":\"3.249097472924188\",\"high\":\"3.398409255242228\",\"reliable_digits\":\"1\",\"explanation\":\"Relevant lease obligations were $23 million versus $692 million of debt due in 2007; allowing ±$0.5 million rounding for each leaves one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17975,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1055,"reasoning_output_tokens":959}}

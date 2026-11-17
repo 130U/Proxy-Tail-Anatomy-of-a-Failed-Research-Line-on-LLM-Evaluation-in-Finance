@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91c-425e-7f72-b666-8e614db79f0e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"35\",\"unit\":\"million dollars\",\"expression\":\"(32 + 38) / 2\",\"low\":\"34.5\",\"high\":\"35.5\",\"reliable_digits\":\"2\",\"explanation\":\"Averaging the two sensitivities gives $35 million, with rounding uncertainty of up to $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22579,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":389,"reasoning_output_tokens":315}}

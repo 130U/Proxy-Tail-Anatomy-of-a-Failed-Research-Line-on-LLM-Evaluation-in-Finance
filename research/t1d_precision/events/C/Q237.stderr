@@ -1,0 +1,2 @@
+2026-11-17T08:41:15.554950Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 80.9996749s)... turn_id=01a1e8aa-d652-7452-8404-89c825e72def retries=1 max_retries=5 sampling_error=exceeded retry limit, last status: 429 Too Many Requests
+2026-11-17T08:41:16.808358Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out

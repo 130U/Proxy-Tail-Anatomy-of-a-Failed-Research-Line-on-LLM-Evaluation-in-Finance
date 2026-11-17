@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e926-17a8-7870-a3c2-878cad07905c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"18.4210526315789\",\"unit\":\"percent\",\"expression\":\"(2.8 / 15.2) * 100\",\"low\":\"18.0327868852459\",\"high\":\"18.8118811881188\",\"reliable_digits\":\"1\",\"explanation\":\"In 2015, $2.8 million of the $15.2 million environmental reserves related to remediation of previously disposed sites.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22209,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":341,"reasoning_output_tokens":247}}

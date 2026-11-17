@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e918-241e-74d2-aa09-5b6aa78b4853"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"22.4637681159\",\"unit\":\"percent\",\"expression\":\"(169 - 138) / 138 * 100\",\"low\":\"21.6606498195\",\"high\":\"23.2727272727\",\"reliable_digits\":\"1\",\"explanation\":\"This uses the reported net asbestos reserve increases, which include assumed reinsurance but are not exclusive to it.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17701,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":697,"reasoning_output_tokens":613}}

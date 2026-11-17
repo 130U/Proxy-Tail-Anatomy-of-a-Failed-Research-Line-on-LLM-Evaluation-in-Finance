@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90c-ebd5-70b2-a3b6-3dd47591af09"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-53.0179918746\",\"unit\":\"percent\",\"expression\":\"(161.9 - 344.6) / 344.6 * 100\",\"low\":\"-53.0393152474\",\"high\":\"-52.9966623132\",\"reliable_digits\":\"3\",\"explanation\":\"Outstanding debt decreased, with rounding uncertainty of $0.05 million in each year's figure.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22243,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1060,"reasoning_output_tokens":970}}

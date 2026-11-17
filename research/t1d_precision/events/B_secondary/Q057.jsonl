@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91e-e1f2-7902-beda-3837a9a13087"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"33.7\",\"unit\":\"million dollars\",\"expression\":\"531.6 - 497.9\",\"low\":\"33.6\",\"high\":\"33.8\",\"reliable_digits\":\"2\",\"explanation\":\"Using the change in total net receivables, sales exceeded payments received by $33.7 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22066,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":482,"reasoning_output_tokens":410}}

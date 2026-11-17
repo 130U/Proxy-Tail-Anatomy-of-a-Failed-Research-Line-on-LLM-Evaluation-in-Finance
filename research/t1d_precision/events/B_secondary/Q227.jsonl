@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92e-b40f-7fd0-a659-ff23b86f4148"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"11.105188344\",\"unit\":\"percent\",\"expression\":\"(250.0 / 2251.2) * 100\",\"low\":\"11.1027207107\",\"high\":\"11.1076560869\",\"reliable_digits\":\"3\",\"explanation\":\"The $250.0 million floating rate notes represented this percentage of $2,251.2 million in total long-term debt.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22448,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":977,"reasoning_output_tokens":887}}

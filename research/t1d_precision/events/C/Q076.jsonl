@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fe-7d86-7d52-9e24-8b382aeec84a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.5974025974\",\"unit\":\"percent\",\"expression\":\"(77 - 75) / 77 * 100\",\"low\":\"1.3071895425\",\"high\":\"3.8709677419\",\"reliable_digits\":\"0\",\"explanation\":\"Each expense may vary by $0.5 million, leaving no reliable significant digit in the calculated percentage decline.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":16949,"cached_input_tokens":16768,"cache_write_input_tokens":0,"output_tokens":394,"reasoning_output_tokens":309}}

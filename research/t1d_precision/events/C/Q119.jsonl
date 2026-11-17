@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e904-1e37-7242-b999-14a5f181c0f9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-12.3287671233\",\"unit\":\"percent\",\"expression\":\"(2.56 - 2.92) / 2.92 * 100\",\"low\":\"-12.6495726496\",\"high\":\"-12.0068610635\",\"reliable_digits\":\"1\",\"explanation\":\"Each rate can vary by 0.005 percentage points due to rounding, giving this range and one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17634,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":571,"reasoning_output_tokens":475}}

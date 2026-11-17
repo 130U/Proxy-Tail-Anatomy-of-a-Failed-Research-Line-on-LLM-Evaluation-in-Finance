@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82e-d0e3-79f3-a7f1-d5e5a771596d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-13.6660320914\",\"unit\":\"percent\",\"expression\":\"(634.9 - 735.4) / 735.4 * 100\",\"low\":\"-13.6787001156\",\"high\":\"-13.6533623445\",\"reliable_digits\":\"3\",\"explanation\":\"Net sales decreased, with the bounds allowing each reported sales figure to vary by $0.05 million due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17613,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1355,"reasoning_output_tokens":1259}}

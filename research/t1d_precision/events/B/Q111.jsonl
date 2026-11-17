@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e83f-931b-7d43-8f4f-c4d388fefb99"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3081\",\"unit\":\"million dollars\",\"expression\":\"150 + 175 + 2756\",\"low\":\"3079.5\",\"high\":\"3082.5\",\"reliable_digits\":\"3\",\"explanation\":\"The three maturities sum to $3,081 million, with rounding uncertainty of $0.5 million each.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17748,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":348,"reasoning_output_tokens":273}}

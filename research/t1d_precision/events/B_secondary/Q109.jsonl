@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e903-7182-7573-bd35-12bae2a93a55"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-1.9\",\"unit\":\"million shares\",\"expression\":\"326.5 - 328.4\",\"low\":\"-2.0\",\"high\":\"-1.8\",\"reliable_digits\":\"1\",\"explanation\":\"Diluted weighted average shares decreased by 1.9 million, with rounding allowing a decrease between 1.8 and 2.0 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22198,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":278,"reasoning_output_tokens":194}}

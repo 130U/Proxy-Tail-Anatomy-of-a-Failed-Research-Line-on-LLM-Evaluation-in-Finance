@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e914-ecd7-7293-9acb-1d959d975305"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.8142857142857143\",\"unit\":\"ratio\",\"expression\":\"57 / 70\",\"low\":\"0.8014184397163121\",\"high\":\"0.8273381294964029\",\"reliable_digits\":\"1\",\"explanation\":\"The portion is $57 million divided by $70 million, with each figure subject to rounding of half a million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21701,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":350,"reasoning_output_tokens":265}}

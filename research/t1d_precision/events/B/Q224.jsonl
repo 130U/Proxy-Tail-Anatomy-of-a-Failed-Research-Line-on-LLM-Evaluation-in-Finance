@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e874-3860-7dd1-b537-27c9f975e15c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"undetermined\",\"unit\":\"percent\",\"expression\":\"\",\"low\":\"undetermined\",\"high\":\"undetermined\",\"reliable_digits\":\"0\",\"explanation\":\"The question is incomplete; please specify the asset category and year.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17430,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":446,"reasoning_output_tokens":395}}

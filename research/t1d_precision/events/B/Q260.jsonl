@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e87a-c916-7542-887a-0373a0ea3a4b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"87.8\",\"unit\":\"million dollars\",\"expression\":\"214.4 - 126.6\",\"low\":\"87.7\",\"high\":\"87.9\",\"reliable_digits\":\"2\",\"explanation\":\"Unrecognized tax benefits increased from $126.6 million at year-end 2007 to $214.4 million at year-end 2008.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17597,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":694,"reasoning_output_tokens":613}}

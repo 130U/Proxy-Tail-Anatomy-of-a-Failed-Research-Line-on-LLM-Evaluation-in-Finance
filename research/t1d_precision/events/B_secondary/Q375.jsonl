@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e938-9620-7843-b4b5-654a2c80a934"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.564102564102564\",\"unit\":\"percent\",\"expression\":\"(66000 - 64350) / 64350 * 100\",\"low\":\"2.564102564102564\",\"high\":\"2.564102564102564\",\"reliable_digits\":\"16\",\"explanation\":\"The contractual base rents are exact, so all 16 reported significant digits are reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22247,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":692,"reasoning_output_tokens":606}}

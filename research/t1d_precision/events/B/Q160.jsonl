@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e848-056e-7a70-aeef-b266eabebb85"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-65.0479416114\",\"unit\":\"percent\",\"expression\":\"(7327 - 20963) / 20963 * 100\",\"low\":\"-65.0511603501\",\"high\":\"-65.0447227191\",\"reliable_digits\":\"2\",\"explanation\":\"Liabilities decreased by approximately 65%; allowing each displayed liability to vary by 0.5 thousand leaves two significant digits consistently rounded across the range.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18613,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1843,"reasoning_output_tokens":1744}}

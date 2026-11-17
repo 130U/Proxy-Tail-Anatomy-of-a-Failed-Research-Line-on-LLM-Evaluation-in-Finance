@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91b-04d3-73e0-9ce8-3fe9a07d85d9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-4079\",\"unit\":\"million dollars\",\"expression\":\"19201 - 23280\",\"low\":\"-4080\",\"high\":\"-4078\",\"reliable_digits\":\"3\",\"explanation\":\"Total level 3 financial assets decreased by $4,079 million, with each reported total rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22141,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":264,"reasoning_output_tokens":191}}

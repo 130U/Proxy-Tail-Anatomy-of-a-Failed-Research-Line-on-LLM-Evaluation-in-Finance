@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8e1-fb5d-7c13-ade8-49b362fc4d9f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"307\",\"unit\":\"dollars\",\"expression\":\"169 + 138\",\"low\":\"306\",\"high\":\"308\",\"reliable_digits\":\"2\",\"explanation\":\"The stated increases for 2010 and 2009 total $307, with each amount subject to rounding uncertainty of $0.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17711,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":506,"reasoning_output_tokens":437}}

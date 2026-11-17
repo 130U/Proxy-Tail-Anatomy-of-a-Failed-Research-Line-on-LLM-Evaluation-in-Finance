@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e891-7aa3-7c51-9b43-ab10b6834d6a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"6\",\"unit\":\"million dollars\",\"expression\":\"10 - 4\",\"low\":\"5\",\"high\":\"7\",\"reliable_digits\":\"0\",\"explanation\":\"Each reserve is rounded to the nearest million dollars, allowing the increase to range from 5 to 7 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17987,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":206,"reasoning_output_tokens":141}}

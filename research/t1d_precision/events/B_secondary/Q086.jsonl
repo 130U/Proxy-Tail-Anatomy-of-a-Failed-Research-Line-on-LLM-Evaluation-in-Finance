@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e920-a63b-7a91-a008-1d23ed98b656"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"46.34146341463415\",\"unit\":\"percent\",\"expression\":\"(4.1 - 2.2) / 4.1 * 100\",\"low\":\"44.44444444444444\",\"high\":\"48.19277108433735\",\"reliable_digits\":\"0\",\"explanation\":\"The percentage decrease uses 2017 as the base; rounding uncertainty allows results that round differently even at one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22002,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":814,"reasoning_output_tokens":718}}

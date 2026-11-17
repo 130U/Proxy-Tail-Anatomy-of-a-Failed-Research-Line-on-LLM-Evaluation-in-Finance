@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e938-d498-7253-b5bf-f4c5934baf7f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"not determinable\",\"unit\":\"percent\",\"expression\":\"\",\"low\":\"not determinable\",\"high\":\"not determinable\",\"reliable_digits\":\"0\",\"explanation\":\"The document gives fair-value balances for 2011 and 2012, but no balances for 2008 or 2009.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22457,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":196,"reasoning_output_tokens":128}}

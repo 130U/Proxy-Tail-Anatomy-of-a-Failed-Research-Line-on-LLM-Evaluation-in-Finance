@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82f-a201-7672-b194-698dff52cb51"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.365853658536585\",\"unit\":\"percent\",\"expression\":\"(216 - 205) / 205 * 100\",\"low\":\"4.8661800486618\",\"high\":\"5.8679706601467\",\"reliable_digits\":\"0\",\"explanation\":\"Each rent figure has rounding uncertainty of $0.5 million, so the increase can round to either 5% or 6% at one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17950,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":496,"reasoning_output_tokens":398}}

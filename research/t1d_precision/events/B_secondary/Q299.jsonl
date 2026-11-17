@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e933-498b-7752-889a-14dddacf33a6"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"67.3076923076923\",\"unit\":\"percent\",\"expression\":\"(105 / 156) * 100\",\"low\":\"66.7731629392971\",\"high\":\"67.8456591639871\",\"reliable_digits\":\"1\",\"explanation\":\"Employee-related costs were $105 million of $156 million in total restructuring costs in 2010; bounds allow for rounding to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22147,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":453,"reasoning_output_tokens":361}}

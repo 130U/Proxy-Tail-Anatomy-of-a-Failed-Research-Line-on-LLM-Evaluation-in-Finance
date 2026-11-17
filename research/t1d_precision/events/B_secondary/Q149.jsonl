@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e925-0397-7e23-9a85-64eb6f42ce4f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"43.3333333333\",\"unit\":\"percent\",\"expression\":\"(30 - 17) / 30 * 100\",\"low\":\"40.6779661017\",\"high\":\"45.9016393443\",\"reliable_digits\":\"0\",\"explanation\":\"Each allocation may differ by 0.5 percentage points, producing bounds that do not round to the same one-significant-digit value.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21919,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":598,"reasoning_output_tokens":508}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92c-c7f3-7e41-972f-ee466b60820b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-3.4375\",\"unit\":\"percent\",\"expression\":\"(3.09 - 3.20) / 3.20 * 100\",\"low\":\"-3.74414976599064\",\"high\":\"-3.12989045383412\",\"reliable_digits\":\"0\",\"explanation\":\"Each price has rounding uncertainty of $0.005, producing a range that rounds to either -3% or -4% at one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22475,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":545,"reasoning_output_tokens":443}}

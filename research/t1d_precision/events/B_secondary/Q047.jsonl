@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91e-142a-7880-bc8b-da5b21630be8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-6.0632556854\",\"unit\":\"percent\",\"expression\":\"((856240 - 911507) / 911507) * 100\",\"low\":\"-6.0633620678\",\"high\":\"-6.0631493028\",\"reliable_digits\":\"4\",\"explanation\":\"Interpreting the question as the percentage change from 2013 to 2014, total assets decreased by approximately 6.063%.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22362,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1031,"reasoning_output_tokens":932}}

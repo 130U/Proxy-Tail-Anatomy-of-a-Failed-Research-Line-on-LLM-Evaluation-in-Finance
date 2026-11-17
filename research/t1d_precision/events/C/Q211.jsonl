@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90d-0097-7f72-af50-8b124bb40987"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2\",\"unit\":\"million dollars\",\"expression\":\"12 - 10\",\"low\":\"1\",\"high\":\"3\",\"reliable_digits\":\"0\",\"explanation\":\"Each figure may vary by 0.5 million, so the decrease may range from 1 to 3 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17596,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":176,"reasoning_output_tokens":111}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fa-b727-7782-93d5-da2948d207b2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"85929\",\"unit\":\"thousand dollars\",\"expression\":\"426932 - 341003\",\"low\":\"85928\",\"high\":\"85930\",\"reliable_digits\":\"4\",\"explanation\":\"Adoption increased retained earnings by the adjusted balance minus the previously reported balance; each balance has rounding uncertainty of 0.5 thousand dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17539,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":771,"reasoning_output_tokens":696}}

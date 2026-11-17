@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e921-0477-7ed1-8fa2-882dde812184"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5675\",\"unit\":\"million dollars\",\"expression\":\"5829 - 154\",\"low\":\"5674\",\"high\":\"5676\",\"reliable_digits\":\"3\",\"explanation\":\"Subtracting the displayed sale gain from 2015 net revenue gives $5,675 million, with rounding uncertainty of up to $1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22083,"cached_input_tokens":0,"cache_write_input_tokens":0,"output_tokens":337,"reasoning_output_tokens":263}}

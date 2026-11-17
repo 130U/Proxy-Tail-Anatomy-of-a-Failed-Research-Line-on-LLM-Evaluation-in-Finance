@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e88a-1a34-7270-9d04-fbda0e3ed496"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"25.92340951204447\",\"unit\":\"percent\",\"expression\":\"(203.87 - 161.90) / 161.90 * 100\",\"low\":\"25.91643247583459\",\"high\":\"25.93038697921492\",\"reliable_digits\":\"3\",\"explanation\":\"The 2015 annual total return is the percentage increase from 2014, allowing each displayed index value to vary by 0.005.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17132,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1897,"reasoning_output_tokens":1796}}

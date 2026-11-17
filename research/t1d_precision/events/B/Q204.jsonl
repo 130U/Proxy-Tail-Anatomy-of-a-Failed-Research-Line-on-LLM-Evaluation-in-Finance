@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e870-8f14-7212-8a0f-9946174d9dd6"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-10.8189929892\",\"unit\":\"percent\",\"expression\":\"(559.7 - 627.6) / 627.6 * 100\",\"low\":\"-10.8340635705\",\"high\":\"-10.8039200064\",\"reliable_digits\":\"3\",\"explanation\":\"Operating cash flow decreased; allowing each reported amount to vary by $0.05 million gives these bounds and supports three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17513,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":989,"reasoning_output_tokens":891}}

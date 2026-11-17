@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e907-c7d4-7603-ac22-7a6e187126e5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.8\",\"unit\":\"billion dollars\",\"expression\":\"17.5 - 11.7\",\"low\":\"5.7\",\"high\":\"5.9\",\"reliable_digits\":\"1\",\"explanation\":\"Each input is rounded to the nearest 0.1 billion, so the decline can range from 5.7 to 5.9 billion.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18245,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":273,"reasoning_output_tokens":191}}

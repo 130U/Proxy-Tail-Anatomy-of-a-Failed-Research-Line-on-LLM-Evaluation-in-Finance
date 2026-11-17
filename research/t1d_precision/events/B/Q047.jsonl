@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e833-f0e2-7c23-9e47-178528c31a41"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-6.0632556854\",\"unit\":\"percent\",\"expression\":\"(856240 - 911507) / 911507 * 100\",\"low\":\"-6.0633620678\",\"high\":\"-6.0631493028\",\"reliable_digits\":\"4\",\"explanation\":\"Interpreting this as the percentage change from 2013 to 2014, the bounds allow each reported total to vary by 0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17776,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":2171,"reasoning_output_tokens":2070}}

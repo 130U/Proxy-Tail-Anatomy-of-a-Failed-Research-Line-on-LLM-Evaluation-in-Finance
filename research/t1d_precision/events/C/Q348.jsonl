@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-53f5-7291-ae77-bfb0a5704ee0"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"25.92340951204447\",\"unit\":\"percent\",\"expression\":\"(203.87 - 161.90) / 161.90 * 100\",\"low\":\"25.9164324758\",\"high\":\"25.9303869792\",\"reliable_digits\":\"3\",\"explanation\":\"The 2015 annual return uses the increase from 2014, with each displayed index value uncertain by ±0.005.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17244,"cached_input_tokens":17024,"cache_write_input_tokens":0,"output_tokens":1300,"reasoning_output_tokens":1204}}

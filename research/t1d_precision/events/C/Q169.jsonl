@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e909-3012-78f2-a3ac-33a74c77c074"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1026\",\"unit\":\"miles\",\"expression\":\"176 + 850\",\"low\":\"1025\",\"high\":\"1027\",\"reliable_digits\":\"3\",\"explanation\":\"Each length is rounded to the nearest mile, so their sum has an uncertainty of 1 mile.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17673,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":312,"reasoning_output_tokens":248}}

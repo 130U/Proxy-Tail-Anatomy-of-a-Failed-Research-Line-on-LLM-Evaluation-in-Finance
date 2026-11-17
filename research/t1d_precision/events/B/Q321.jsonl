@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e884-d14d-79e1-ad7d-c322661366d7"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-22.58064516129032\",\"unit\":\"percent\",\"expression\":\"(24 - 31) / 31 * 100\",\"low\":\"-25.39682539682540\",\"high\":\"-19.67213114754098\",\"reliable_digits\":\"0\",\"explanation\":\"Each balance is rounded to the nearest billion, producing these bounds and leaving no significant digit reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17326,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":560,"reasoning_output_tokens":472}}
