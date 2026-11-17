@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e931-0024-7483-8cf6-427472fcd0ab"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-41\",\"unit\":\"million dollars\",\"expression\":\"78 - 119\",\"low\":\"-42\",\"high\":\"-40\",\"reliable_digits\":\"1\",\"explanation\":\"Research and development spending decreased by $41 million, with rounding allowing a decrease between $40 million and $42 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22164,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":159,"reasoning_output_tokens":91}}

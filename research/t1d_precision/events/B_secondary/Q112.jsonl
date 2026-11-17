@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e903-b691-7552-a1f0-a1df4a98c176"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.9708737864\",\"unit\":\"percent\",\"expression\":\"(270.4 - 267.8) / 267.8 * 100\",\"low\":\"0.9333582229\",\"high\":\"1.0084033613\",\"reliable_digits\":\"0\",\"explanation\":\"Net interest expense increased, but rounding allows a percentage change spanning different leading significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22127,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":602,"reasoning_output_tokens":516}}

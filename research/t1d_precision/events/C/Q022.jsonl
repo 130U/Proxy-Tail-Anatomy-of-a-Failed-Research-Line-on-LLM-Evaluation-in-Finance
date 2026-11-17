@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e894-ea1c-7a93-ba13-fad056513060"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-13.666032091\",\"unit\":\"percent\",\"expression\":\"(634.9 - 735.4) / 735.4 * 100\",\"low\":\"-13.678700116\",\"high\":\"-13.653362344\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each sales figure to vary by $0.05 million gives these bounds, with the decrease reliably reported as 13.7%.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17725,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":977,"reasoning_output_tokens":879}}

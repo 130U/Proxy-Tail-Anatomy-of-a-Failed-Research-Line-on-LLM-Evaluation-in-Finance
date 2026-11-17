@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90a-6267-7570-8f11-a0e6a30a1c0d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"421.4\",\"unit\":\"million dollars\",\"expression\":\"342.9 + 78.5\",\"low\":\"421.3\",\"high\":\"421.5\",\"reliable_digits\":\"3\",\"explanation\":\"The two outstanding short-term debt obligations sum to $421.4 million, with rounding uncertainty of ±$0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18713,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":382,"reasoning_output_tokens":305}}

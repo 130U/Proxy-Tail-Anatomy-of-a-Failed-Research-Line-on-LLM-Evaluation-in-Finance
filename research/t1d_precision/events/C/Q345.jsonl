@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-51d4-7131-a96e-731815649122"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"50\",\"unit\":\"percent\",\"expression\":\"(0.4 / 0.8) * 100\",\"low\":\"41.1764705882353\",\"high\":\"60\",\"reliable_digits\":\"0\",\"explanation\":\"Canceled contracts comprise $0.4 million of the $0.8 million balance; rounding permits percentages from (0.35/0.85)*100 to (0.45/0.75)*100.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17514,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":949,"reasoning_output_tokens":851}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e840-c379-7f50-8f80-574df18dcf00"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.0\",\"unit\":\"million dollars\",\"expression\":\"33.9 - 32.9\",\"low\":\"0.9\",\"high\":\"1.1\",\"reliable_digits\":\"0\",\"explanation\":\"Net expense increased by 1.0 million dollars; rounding permits 0.9–1.1 million, so the first significant digit is not reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17949,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":424,"reasoning_output_tokens":341}}

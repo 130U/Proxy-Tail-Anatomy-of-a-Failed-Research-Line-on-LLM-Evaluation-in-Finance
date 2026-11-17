@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e885-550f-72c2-8dff-00fa01ef9aec"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-3.6320333433\",\"unit\":\"percent\",\"expression\":\"(323.7 - 335.9) / 335.9 * 100\",\"low\":\"-3.6612591159\",\"high\":\"-3.6027988685\",\"reliable_digits\":\"1\",\"explanation\":\"Allowing each weighted average to vary by 0.05 million gives these bounds, which support one reliably rounded significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17591,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1329,"reasoning_output_tokens":1232}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e86d-eb36-7701-82cc-9ecbacb60392"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"327\",\"unit\":\"million dollars\",\"expression\":\"353 + 6 - 32\",\"low\":\"325.5\",\"high\":\"328.5\",\"reliable_digits\":\"2\",\"explanation\":\"Using the stated transaction-cost ceiling, reconstruction costs plus transaction costs minus deferred income tax benefits yield the net authorized amount.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17673,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":574,"reasoning_output_tokens":503}}

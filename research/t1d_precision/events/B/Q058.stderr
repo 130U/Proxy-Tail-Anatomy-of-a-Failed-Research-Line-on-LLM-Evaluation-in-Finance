@@ -1,0 +1,11 @@
+2026-11-17T06:33:57.777825Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 217ms)... turn_id=01a1e835-e421-7772-9167-1264e08f7bc7 retries=1 max_retries=5 sampling_error=stream disconnected before completion: IO error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+2026-11-17T06:33:58.998900Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:33:58.999169Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (2/5 in 436ms)... turn_id=01a1e835-e421-7772-9167-1264e08f7bc7 retries=2 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof
+2026-11-17T06:33:59.668624Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:33:59.668887Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (3/5 in 850ms)... turn_id=01a1e835-e421-7772-9167-1264e08f7bc7 retries=3 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof
+2026-11-17T06:34:00.738847Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:34:00.739112Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (4/5 in 1.574s)... turn_id=01a1e835-e421-7772-9167-1264e08f7bc7 retries=4 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof
+2026-11-17T06:34:02.542248Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:34:02.542441Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (5/5 in 3.226s)... turn_id=01a1e835-e421-7772-9167-1264e08f7bc7 retries=5 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof
+2026-11-17T06:34:05.860642Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:34:05.860960Z  WARN codex_core::client: falling back to HTTP

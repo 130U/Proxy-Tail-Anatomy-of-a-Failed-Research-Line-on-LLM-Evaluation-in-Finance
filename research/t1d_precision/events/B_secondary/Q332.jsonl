@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e935-7ce7-7b72-b7e2-b372ae1f20ac"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"150\",\"unit\":\"percent\",\"expression\":\"(10 - 4) / 4 * 100\",\"low\":\"111.111111111111\",\"high\":\"200\",\"reliable_digits\":\"0\",\"explanation\":\"The reserve increased from $4 million to $10 million; rounding permits an increase ranging from approximately 111.11% to 200%.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22572,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":227,"reasoning_output_tokens":145}}

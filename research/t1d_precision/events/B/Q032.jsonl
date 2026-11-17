@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e830-6304-7e72-983a-90137d82dc86"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-9.78520286396181\",\"unit\":\"percent\",\"expression\":\"(378 - 419) / 419 * 100\",\"low\":\"-10.0119189511323\",\"high\":\"-9.55794504181601\",\"reliable_digits\":\"1\",\"explanation\":\"Operating lease payments decrease from $419 million to $378 million, with bounds allowing rounding of ±$0.5 million for each figure.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17551,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1058,"reasoning_output_tokens":961}}

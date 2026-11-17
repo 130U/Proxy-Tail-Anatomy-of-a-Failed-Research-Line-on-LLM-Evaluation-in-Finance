@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f8-0cce-77e2-940e-597d5317ee0d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"27.3011999186\",\"unit\":\"percent\",\"expression\":\"46,984 / 172,095 * 100\",\"low\":\"27.3008300624\",\"high\":\"27.3015697771\",\"reliable_digits\":\"4\",\"explanation\":\"The bounds allow each displayed amount to vary by 0.5 million; both bounds round to 27.30 percent at four significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22071,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":607,"reasoning_output_tokens":516}}

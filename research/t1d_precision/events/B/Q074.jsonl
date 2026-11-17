@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e838-b73d-7ae0-987c-e20ef032ad7b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"51.2210316471\",\"unit\":\"percent\",\"expression\":\"411.1 / 802.6 * 100\",\"low\":\"51.2116115368\",\"high\":\"51.2304529313\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing ±0.05 million for each displayed total gives these bounds, which support three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17384,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1117,"reasoning_output_tokens":1034}}

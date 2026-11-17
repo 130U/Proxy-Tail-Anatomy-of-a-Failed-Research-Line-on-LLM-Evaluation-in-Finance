@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e83c-3400-71e3-913e-fe5ae3f56684"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"34.75539226\",\"unit\":\"percent\",\"expression\":\"(198.05 - 146.97) / 146.97 * 100\",\"low\":\"34.74740602\",\"high\":\"34.76337904\",\"reliable_digits\":\"2\",\"explanation\":\"ROI is the gain divided by the 2005 investment value; allowing each index value to vary by 0.005 yields bounds that round consistently to two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17158,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1928,"reasoning_output_tokens":1828}}

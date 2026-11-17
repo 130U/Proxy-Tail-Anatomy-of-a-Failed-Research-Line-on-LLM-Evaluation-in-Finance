@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e877-88b9-7d62-833f-297f1aa159bd"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"13.7847222222\",\"unit\":\"percent\",\"expression\":\"(3277 - 2880) / 2880 * 100\",\"low\":\"13.7476132616\",\"high\":\"13.8218440702\",\"reliable_digits\":\"2\",\"explanation\":\"Each cash-flow figure has rounding uncertainty of $0.5 million, giving these bounds and two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17564,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1003,"reasoning_output_tokens":914}}

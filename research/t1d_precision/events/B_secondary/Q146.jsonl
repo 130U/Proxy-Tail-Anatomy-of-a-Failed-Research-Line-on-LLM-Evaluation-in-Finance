@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e924-d1ab-7283-8f74-f53b2ab94628"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.222222222222222\",\"unit\":\"ratio\",\"expression\":\"160 / 72\",\"low\":\"2.2\",\"high\":\"2.244755244755245\",\"reliable_digits\":\"2\",\"explanation\":\"The ratio divides $160 million by $72 million, with rounding bounds of 159.5 / 72.5 and 160.5 / 71.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22091,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":251,"reasoning_output_tokens":162}}

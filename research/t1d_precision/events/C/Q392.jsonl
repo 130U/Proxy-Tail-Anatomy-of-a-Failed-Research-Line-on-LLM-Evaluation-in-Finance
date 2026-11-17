@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f7-4b13-7bc0-ace1-fa47ccd9e95c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"45\",\"unit\":\"million dollars\",\"expression\":\"(47 + 43) / 2\",\"low\":\"44.5\",\"high\":\"45.5\",\"reliable_digits\":\"2\",\"explanation\":\"The year-end reserves each have rounding uncertainty of 0.5 million, so their average is 45 million with the same uncertainty.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17871,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":537,"reasoning_output_tokens":460}}

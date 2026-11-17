@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e88e-6dc9-75f3-b942-f96211f36112"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"10.4\",\"unit\":\"times\",\"expression\":\"156 / 15\",\"low\":\"10.032258064516129\",\"high\":\"10.793103448275862\",\"reliable_digits\":\"1\",\"explanation\":\"The ratio is 2018 total tax expense divided by 2017 total tax expense; rounding permits bounds of 155.5/15.5 and 156.5/14.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17163,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":390,"reasoning_output_tokens":296}}

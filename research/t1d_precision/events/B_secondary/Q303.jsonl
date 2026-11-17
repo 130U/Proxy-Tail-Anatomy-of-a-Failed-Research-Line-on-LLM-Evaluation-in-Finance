@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e933-95a7-7682-92b2-8c411fc5aa36"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"448.5\",\"unit\":\"million dollars\",\"expression\":\"897 * 50 / 100\",\"low\":\"443.7675\",\"high\":\"453.2375\",\"reliable_digits\":\"1\",\"explanation\":\"Allowing for rounding, backlog ranges from 896.5 to 897.5 million dollars and the fixed-price share from 49.5 to 50.5 percent.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22252,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":378,"reasoning_output_tokens":290}}

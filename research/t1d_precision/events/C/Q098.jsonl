@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e89d-17d0-7501-ac3d-b77ad1304498"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3.815760\",\"unit\":\"percent\",\"expression\":\"(459.8 - 442.9) / 442.9 * 100\",\"low\":\"3.792753\",\"high\":\"3.838772\",\"reliable_digits\":\"2\",\"explanation\":\"Each cost can vary by $0.05 million, giving these bounds and supporting two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17859,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":953,"reasoning_output_tokens":870}}

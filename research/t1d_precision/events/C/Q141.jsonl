@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e89f-c5ac-7292-a4fc-b58a41c07baf"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21.2772785623\",\"unit\":\"percent\",\"expression\":\"(37.79 - 31.16) / 31.16 * 100\",\"low\":\"21.2417776352\",\"high\":\"21.3127908843\",\"reliable_digits\":\"2\",\"explanation\":\"The high rose from $31.16 in 2011 to $37.79 through March 2012, with each price subject to rounding of ±$0.005.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17429,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1484,"reasoning_output_tokens":1379}}

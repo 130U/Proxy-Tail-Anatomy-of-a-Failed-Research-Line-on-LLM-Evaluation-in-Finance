@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e911-feb2-76c2-a12e-353c6dbf657f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"11.2121833094259\",\"unit\":\"percent\",\"expression\":\"(222510 - 200077) / 200077 * 100\",\"low\":\"11.2116554835001\",\"high\":\"11.2127111379897\",\"reliable_digits\":\"4\",\"explanation\":\"Allowing each displayed balance to vary by 0.5 million gives these bounds and four reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22317,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1066,"reasoning_output_tokens":975}}

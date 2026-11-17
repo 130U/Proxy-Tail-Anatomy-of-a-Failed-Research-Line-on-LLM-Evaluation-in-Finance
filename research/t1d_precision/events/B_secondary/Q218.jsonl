@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92e-3de0-7af0-8f66-f332dcbc6479"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-10\",\"unit\":\"percent\",\"expression\":\"(99 - 110) / 110 * 100\",\"low\":\"-10.8597285068\",\"high\":\"-9.1324200913\",\"reliable_digits\":\"0\",\"explanation\":\"Allowing each balance to vary by $0.5 million gives these bounds, which do not preserve even one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22346,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":318,"reasoning_output_tokens":232}}

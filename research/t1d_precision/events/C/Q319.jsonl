@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8d8-a643-73d3-853f-5c4c8fa4c4b7"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"44.5833333333\",\"unit\":\"percent\",\"expression\":\"(1.2 * 1000 - 665) / (1.2 * 1000) * 100\",\"low\":\"42.1304347826\",\"high\":\"46.84\",\"reliable_digits\":\"1\",\"explanation\":\"The rounding bounds are $1,150–$1,250 million for 2012 and $664.5–$665.5 million for 2013, supporting about one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17885,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":742,"reasoning_output_tokens":629}}

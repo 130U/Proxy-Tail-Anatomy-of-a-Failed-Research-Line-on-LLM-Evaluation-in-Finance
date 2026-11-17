@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90e-f498-7d62-9384-a92903da71f2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.84375\",\"unit\":\"ratio\",\"expression\":\"54 / 64\",\"low\":\"0.8294573643410853\",\"high\":\"0.8582677165354331\",\"reliable_digits\":\"1\",\"explanation\":\"The 2019-to-2018 ratio allows each displayed expense to vary by $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":16945,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":581,"reasoning_output_tokens":502}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e911-96c9-7121-a008-9e9d56e9096a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.9\",\"unit\":\"million dollars\",\"expression\":\"8.8 - 2.9\",\"low\":\"5.8\",\"high\":\"6.0\",\"reliable_digits\":\"1\",\"explanation\":\"The 2014 reserves exceed remediation expenses by $5.9 million, with each input subject to rounding of ±$0.05 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17741,"cached_input_tokens":17536,"cache_write_input_tokens":0,"output_tokens":390,"reasoning_output_tokens":310}}

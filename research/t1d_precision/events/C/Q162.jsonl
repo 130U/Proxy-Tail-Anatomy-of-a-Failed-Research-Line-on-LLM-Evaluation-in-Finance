@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e908-a4a2-75c0-ba6a-33d3803385f2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-16.22646714\",\"unit\":\"percent\",\"expression\":\"(24296 - 29002) / 29002 * 100\",\"low\":\"-16.22963538\",\"high\":\"-16.22329879\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each displayed amount to vary by 0.5 million gives these bounds, supporting a decrease of 16.2% to three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17806,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1004,"reasoning_output_tokens":907}}

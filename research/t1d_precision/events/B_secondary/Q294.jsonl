@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e933-06cd-7372-8db5-55c34253ab93"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"59.6774193548\",\"unit\":\"percent\",\"expression\":\"(592 / 992) * 100\",\"low\":\"59.5969773300\",\"high\":\"59.7579425113\",\"reliable_digits\":\"2\",\"explanation\":\"Printing Papers spending was $592 million out of $992 million total; rounding allows each amount to vary by $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22406,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":423,"reasoning_output_tokens":336}}

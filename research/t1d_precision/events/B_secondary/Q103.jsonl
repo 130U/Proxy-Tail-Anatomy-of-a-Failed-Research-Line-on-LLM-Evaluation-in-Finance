@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e902-da6a-7a41-829c-8536dbf31d0b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"26.460317460317\",\"unit\":\"percent\",\"expression\":\"(79.67 - 63.00) / 63.00 * 100\",\"low\":\"26.442345845568\",\"high\":\"26.478291927931\",\"reliable_digits\":\"2\",\"explanation\":\"ROI is the percentage increase from 2008 to 2009; allowing each displayed value to vary by 0.005 gives these bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21668,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":691,"reasoning_output_tokens":593}}

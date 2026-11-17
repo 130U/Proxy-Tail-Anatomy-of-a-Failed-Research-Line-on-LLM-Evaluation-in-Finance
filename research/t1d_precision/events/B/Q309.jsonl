@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e883-4078-73e1-9c5a-bea0a25deb7e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"70\",\"unit\":\"million dollars\",\"expression\":\"34 + 23 + 13\",\"low\":\"68.5\",\"high\":\"71.5\",\"reliable_digits\":\"1\",\"explanation\":\"The three annual payments sum to $70 million, with rounding uncertainty of $0.5 million per payment.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18021,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":255,"reasoning_output_tokens":185}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e870-354f-79d0-8aee-69289bb1424d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-2.910314789150663\",\"unit\":\"percent\",\"expression\":\"(4904 - 5051) / 5051 * 100\",\"low\":\"-2.929822824903494\",\"high\":\"-2.890802890802891\",\"reliable_digits\":\"2\",\"explanation\":\"Net revenue decreased by approximately 2.9%, with bounds allowing each reported revenue to vary by $0.5 million due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17250,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1042,"reasoning_output_tokens":942}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f2-54bb-76e0-8949-fe7ad32b3123"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0\",\"unit\":\"million dollars\",\"expression\":\"10 - 10\",\"low\":\"-1\",\"high\":\"1\",\"reliable_digits\":\"0\",\"explanation\":\"Obligations were reported as $10 million in both 2005 and 2006; rounding permits a change between −$1 million and $1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18100,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":495,"reasoning_output_tokens":420}}

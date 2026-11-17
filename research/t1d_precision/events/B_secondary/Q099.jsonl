@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e921-7fb3-72f1-aed3-81c6782eb2d0"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-18.3086140851\",\"unit\":\"percent\",\"expression\":\"(58219 - 71267) / 71267 * 100\",\"low\":\"-18.3098887992\",\"high\":\"-18.3073393530\",\"reliable_digits\":\"4\",\"explanation\":\"The adjustments reduce common shareholders’ equity; bounds allow each displayed dollar amount to vary by half a million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22323,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":946,"reasoning_output_tokens":856}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e904-e7d9-7b83-9b5a-629615561b6c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-37.00062422\",\"unit\":\"percent\",\"expression\":\"(80.74 - 128.16) / 128.16 * 100\",\"low\":\"-37.00698319\",\"high\":\"-36.99426476\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each index figure to vary by 0.005 gives these bounds, which support reporting a return of -37.0%.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21790,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":577,"reasoning_output_tokens":480}}

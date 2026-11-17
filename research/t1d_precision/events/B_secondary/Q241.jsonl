@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e911-a833-7393-a62d-2a40372542de"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-1.69423155\",\"unit\":\"percent\",\"expression\":\"(243.7 - 247.9) / 247.9 * 100\",\"low\":\"-1.73422061\",\"high\":\"-1.65422635\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing each total to vary by 0.05 million gives these bounds, both of which round to a 1.7% decrease.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22332,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":555,"reasoning_output_tokens":457}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e849-207d-7e32-b184-85d5cf2b59c0"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"18.4210526316\",\"unit\":\"percent\",\"expression\":\"(2.8 / 15.2) * 100\",\"low\":\"18.0327868852\",\"high\":\"18.8118811881\",\"reliable_digits\":\"1\",\"explanation\":\"Reserves for remediation of previously disposed sites were $2.8 million out of $15.2 million total, with each figure rounded to the nearest $0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17623,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":449,"reasoning_output_tokens":349}}

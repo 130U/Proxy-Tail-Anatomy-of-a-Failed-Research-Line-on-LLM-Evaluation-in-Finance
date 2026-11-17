@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82e-2e39-7333-9b4d-0097183ddb4e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"35\",\"unit\":\"million dollars\",\"expression\":\"(32 + 38) / 2\",\"low\":\"34.5\",\"high\":\"35.5\",\"reliable_digits\":\"2\",\"explanation\":\"Averaging the two DVA sensitivities gives $35 million, with rounding bounds of $34.5 million to $35.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17993,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":472,"reasoning_output_tokens":392}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fc-9af4-7d42-aafd-1ec24ba1e014"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-2.0\",\"unit\":\"million dollars\",\"expression\":\"31.9 - 33.9\",\"low\":\"-2.10\",\"high\":\"-1.90\",\"reliable_digits\":\"1\",\"explanation\":\"Total share-based compensation expense net of tax decreased by $2.0 million from 2014 to 2015.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22535,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":236,"reasoning_output_tokens":158}}

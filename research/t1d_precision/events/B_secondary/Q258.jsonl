@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e930-be1c-74d1-8708-52b76484d977"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"51.89003436426117\",\"unit\":\"percent\",\"expression\":\"151 / 291 * 100\",\"low\":\"51.6295025728988\",\"high\":\"52.1514629948365\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing each reserve figure to vary by $0.5 million gives these bounds, which both round to 52% at two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22351,"cached_input_tokens":22144,"cache_write_input_tokens":0,"output_tokens":332,"reasoning_output_tokens":242}}

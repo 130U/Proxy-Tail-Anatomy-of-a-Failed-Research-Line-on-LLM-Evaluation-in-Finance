@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e871-c92b-7163-88c4-090c37dcadfb"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"20.1270928391\",\"unit\":\"percent\",\"expression\":\"(91,640 + 2,638 - 8,349) / 426,932 * 100\",\"low\":\"20.1267179238\",\"high\":\"20.1274677554\",\"reliable_digits\":\"5\",\"explanation\":\"The net adjustment is divided by adjusted retained earnings; allowing each amount to vary by 0.5 thousand yields bounds that both round to 20.127%.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17459,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":2480,"reasoning_output_tokens":2373}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92c-9a1c-76d0-aeda-5c7dbc84ded4"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"49080\",\"unit\":\"million dollars\",\"expression\":\"49447 - 367\",\"low\":\"49079\",\"high\":\"49081\",\"reliable_digits\":\"4\",\"explanation\":\"Subtracting corporate stocks amortized cost from total available-for-sale amortized cost gives $49,080 million, with each displayed input rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22407,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":193,"reasoning_output_tokens":116}}

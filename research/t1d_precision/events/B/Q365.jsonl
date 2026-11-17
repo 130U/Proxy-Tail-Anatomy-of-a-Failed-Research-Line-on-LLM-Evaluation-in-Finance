@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e88c-86e3-7663-8ce4-88f5a7618796"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"45\",\"unit\":\"million dollars\",\"expression\":\"(43 + 47) / 2\",\"low\":\"44.5\",\"high\":\"45.5\",\"reliable_digits\":\"2\",\"explanation\":\"The average uses the two year-end balances, each rounded to the nearest million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17759,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":715,"reasoning_output_tokens":648}}

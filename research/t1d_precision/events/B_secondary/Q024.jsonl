@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91c-b6b8-7b81-b1e4-2f8b365edf6d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"88.8337468983\",\"unit\":\"percent\",\"expression\":\"(1.074 / 1.209) * 100\",\"low\":\"88.7556841670\",\"high\":\"88.9118742242\",\"reliable_digits\":\"2\",\"explanation\":\"The pre-tax gain divided by proceeds gives the percentage; both figures are rounded to the nearest 0.001 billion.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22288,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":839,"reasoning_output_tokens":751}}

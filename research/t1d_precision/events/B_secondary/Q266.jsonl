@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e931-3447-7181-8da4-41ccbf3f9e70"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"not determinable\",\"unit\":\"shares\",\"expression\":\"\",\"low\":\"not determinable\",\"high\":\"not determinable\",\"reliable_digits\":\"0\",\"explanation\":\"The document gives authorized common shares and shares issued to employees, but does not state total common shares outstanding as of December 31, 2004.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22129,"cached_input_tokens":8320,"cache_write_input_tokens":0,"output_tokens":485,"reasoning_output_tokens":414}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e844-7e79-73a0-8aa5-94e056fb477c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"12.2041031036\",\"unit\":\"percent\",\"expression\":\"(426.6 - 380.2) / 380.2 * 100\",\"low\":\"12.1761998685\",\"high\":\"12.2320136788\",\"reliable_digits\":\"3\",\"explanation\":\"Each revenue has a rounding uncertainty of ±0.05 million, and the resulting growth-rate bounds both round to 12.2% at three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17257,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1014,"reasoning_output_tokens":913}}

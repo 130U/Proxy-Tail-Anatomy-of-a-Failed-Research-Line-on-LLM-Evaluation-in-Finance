@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8ff-f333-7443-a772-93543b9c6ee1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-1.3262717522\",\"unit\":\"percent\",\"expression\":\"(22171 - 22469) / 22469 * 100\",\"low\":\"-1.3306927168\",\"high\":\"-1.3218505908\",\"reliable_digits\":\"2\",\"explanation\":\"Operating expenses declined; allowing each displayed total to vary by $0.5 million leaves two significant digits reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22470,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":769,"reasoning_output_tokens":678}}

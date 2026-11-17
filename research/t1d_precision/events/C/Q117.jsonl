@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e903-f533-7ff2-9aca-045f783bc578"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.0\",\"unit\":\"million dollars\",\"expression\":\"33.9 - 32.9\",\"low\":\"0.9\",\"high\":\"1.1\",\"reliable_digits\":\"1\",\"explanation\":\"Net-of-tax expense increased by $1.0 million, with rounding uncertainty of ±$0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18061,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":353,"reasoning_output_tokens":279}}

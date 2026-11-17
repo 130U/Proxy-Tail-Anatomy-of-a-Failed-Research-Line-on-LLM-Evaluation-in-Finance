@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8d8-7ce0-7093-b45d-ec0742d75f92"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"70\",\"unit\":\"million dollars\",\"expression\":\"32 + 38\",\"low\":\"69\",\"high\":\"71\",\"reliable_digits\":\"1\",\"explanation\":\"The two annual sensitivities sum to $70 million; each rounded figure has uncertainty of $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18105,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":210,"reasoning_output_tokens":146}}

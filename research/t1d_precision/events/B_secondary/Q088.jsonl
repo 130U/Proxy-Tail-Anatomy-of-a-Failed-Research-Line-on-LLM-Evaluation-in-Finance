@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e900-e208-7051-9d1d-3b60904db7c2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.5625\",\"unit\":\"ratio\",\"expression\":\"2.5 / 1.6\",\"low\":\"1.484848484848485\",\"high\":\"1.645161290322581\",\"reliable_digits\":\"0\",\"explanation\":\"Rounding permits ratios from 2.45/1.65 to 2.55/1.55, whose values round differently at one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21957,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":576,"reasoning_output_tokens":485}}

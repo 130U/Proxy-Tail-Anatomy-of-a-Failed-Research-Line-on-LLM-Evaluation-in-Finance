@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91a-5271-7492-b36c-fcd5c97736d6"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"597\",\"unit\":\"dollars\",\"expression\":\"290 + 169 + 138\",\"low\":\"595.5\",\"high\":\"598.5\",\"reliable_digits\":\"2\",\"explanation\":\"The reported total net asbestos reserve increases for 2011, 2010 and 2009 sum to $597; the assumed reinsurance portion is not separately quantified.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22185,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":404,"reasoning_output_tokens":322}}

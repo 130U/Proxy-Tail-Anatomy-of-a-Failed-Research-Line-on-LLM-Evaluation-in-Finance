@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a0-07b2-70c3-b410-a3b229d10c64"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"93.3333333333\",\"unit\":\"percent\",\"expression\":\"(2.9 - 1.5) / 1.5 * 100\",\"low\":\"83.8709677419\",\"high\":\"103.4482758621\",\"reliable_digits\":\"0\",\"explanation\":\"The rounded yields permit growth from (2.85 - 1.55) / 1.55 * 100 to (2.95 - 1.45) / 1.45 * 100, leaving no significant digit reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17320,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":617,"reasoning_output_tokens":498}}

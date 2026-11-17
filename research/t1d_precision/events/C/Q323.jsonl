@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8e1-86d6-77a1-b507-6723053b0d0d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-3.6320333433\",\"unit\":\"percent\",\"expression\":\"(323.7 - 335.9) / 335.9 * 100\",\"low\":\"-3.6612591159\",\"high\":\"-3.6027988685\",\"reliable_digits\":\"2\",\"explanation\":\"Each figure can vary by 0.05 million, giving about 0.8% relative uncertainty in the percentage decrease.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17703,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1131,"reasoning_output_tokens":1034}}

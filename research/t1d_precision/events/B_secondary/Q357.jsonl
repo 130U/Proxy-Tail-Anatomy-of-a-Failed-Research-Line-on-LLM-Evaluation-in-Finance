@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e937-3d86-79d2-b1be-a8cb2aeee259"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"18\",\"unit\":\"million dollars\",\"expression\":\"134 - 116\",\"low\":\"17\",\"high\":\"19\",\"reliable_digits\":\"1\",\"explanation\":\"Unpaid restructuring liabilities increased by $18 million from the end of 2005 to the end of 2006.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21495,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":206,"reasoning_output_tokens":141}}

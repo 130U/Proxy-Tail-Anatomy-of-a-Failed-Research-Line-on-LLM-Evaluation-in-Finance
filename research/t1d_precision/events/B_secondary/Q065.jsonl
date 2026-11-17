@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91f-3958-7e43-9d09-c3cd9e4c412e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"126.067351\",\"unit\":\"percent\",\"expression\":\"(235.63 - 104.23) / 104.23 * 100\",\"low\":\"126.051710\",\"high\":\"126.082994\",\"reliable_digits\":\"4\",\"explanation\":\"DISCK’s ending investment value exceeded the S&P 500’s by this percentage, but the document covers September 2008–December 2011, not five years.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21817,"cached_input_tokens":21632,"cache_write_input_tokens":0,"output_tokens":1132,"reasoning_output_tokens":1034}}

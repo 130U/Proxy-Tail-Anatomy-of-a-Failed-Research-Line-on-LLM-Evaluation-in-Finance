@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e894-ef15-7121-a64d-c26e5c72e0be"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"88.8337468983\",\"unit\":\"percent\",\"expression\":\"(1.074 / 1.209) * 100\",\"low\":\"88.7556841670\",\"high\":\"88.9118742242\",\"reliable_digits\":\"2\",\"explanation\":\"Dividing the gain by proceeds gives the percentage; allowing each billion-dollar figure to vary by 0.0005 leaves two significant digits stable across the bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17814,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1130,"reasoning_output_tokens":1034}}

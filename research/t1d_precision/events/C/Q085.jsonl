@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e900-3c2d-74a2-8ca3-91751aff4053"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"70.4814\",\"unit\":\"percent\",\"expression\":\"(473.6 - 139.8) / 473.6 * 100\",\"low\":\"70.4677\",\"high\":\"70.4951\",\"reliable_digits\":\"3\",\"explanation\":\"Intangible assets equal total assets minus tangible assets; allowing each figure to vary by $0.05 million gives these bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17492,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1193,"reasoning_output_tokens":1105}}

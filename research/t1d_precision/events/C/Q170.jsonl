@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a3-080e-7443-bb47-8375760a9353"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.97619047619\",\"unit\":\"percent\",\"expression\":\"(17.3 - 16.8) / 16.8 * 100\",\"low\":\"2.37388724036\",\"high\":\"3.58208955224\",\"reliable_digits\":\"0\",\"explanation\":\"Each balance is rounded to the nearest $0.1 million, making even the first significant digit of the percentage increase unreliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17932,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":503,"reasoning_output_tokens":409}}

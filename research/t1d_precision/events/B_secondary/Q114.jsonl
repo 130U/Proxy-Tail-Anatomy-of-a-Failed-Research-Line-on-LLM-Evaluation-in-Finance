@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e922-b23d-7c81-a7c0-b13adfb6e869"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"15.384615384615385\",\"unit\":\"percent\",\"expression\":\"(2.6 - 2.2) / 2.6 * 100\",\"low\":\"11.764705882352941\",\"high\":\"18.867924528301887\",\"reliable_digits\":\"0\",\"explanation\":\"Tax equals the pretax gain minus the after-tax gain; the possible range does not yield a consistent result rounded to one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21758,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":562,"reasoning_output_tokens":463}}

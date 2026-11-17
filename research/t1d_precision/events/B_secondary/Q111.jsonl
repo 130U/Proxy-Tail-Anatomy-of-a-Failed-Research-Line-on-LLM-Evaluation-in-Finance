@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e922-6492-7da0-89a0-b958c0827606"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3081\",\"unit\":\"million dollars\",\"expression\":\"150 + 175 + 2,756\",\"low\":\"3079.5\",\"high\":\"3082.5\",\"reliable_digits\":\"3\",\"explanation\":\"The three nonzero maturities total $3,081 million, with each amount rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22334,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":393,"reasoning_output_tokens":318}}

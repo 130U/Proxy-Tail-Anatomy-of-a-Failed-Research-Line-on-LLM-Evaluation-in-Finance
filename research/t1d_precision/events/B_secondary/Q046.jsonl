@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fc-520d-79b1-a7dc-53d15383909c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3.323699422\",\"unit\":\"percent\",\"expression\":\"23 / 692 * 100\",\"low\":\"3.249097473\",\"high\":\"3.398409255\",\"reliable_digits\":\"1\",\"explanation\":\"The $23 million of specified lease obligations is divided by $692 million of total debt due in 2007, with each amount rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22561,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":448,"reasoning_output_tokens":361}}

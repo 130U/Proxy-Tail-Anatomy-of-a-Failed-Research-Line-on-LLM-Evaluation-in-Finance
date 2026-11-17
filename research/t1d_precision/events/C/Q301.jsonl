@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8c6-7cf7-74e3-b616-ef03ece81a6a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"18.725\",\"unit\":\"percent\",\"expression\":\"74.9 / 400.0 * 100\",\"low\":\"18.71016123\",\"high\":\"18.73984248\",\"reliable_digits\":\"3\",\"explanation\":\"The portion paid off equals principal repurchased during 2006 divided by principal outstanding at year-end 2005.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17654,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":772,"reasoning_output_tokens":692}}

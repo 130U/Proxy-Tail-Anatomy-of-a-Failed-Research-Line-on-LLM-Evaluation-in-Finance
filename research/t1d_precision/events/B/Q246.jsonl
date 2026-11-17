@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e878-7eae-7e00-86b5-3cb3b559716b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"32.8\",\"unit\":\"million dollars\",\"expression\":\"10.6 + 11 + 11.2\",\"low\":\"32.2\",\"high\":\"33.4\",\"reliable_digits\":\"1\",\"explanation\":\"The expected principal payments for 2017–2019 are summed, with bounds reflecting rounding to the displayed precision.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17663,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":284,"reasoning_output_tokens":207}}

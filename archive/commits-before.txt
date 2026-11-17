@@ -1,0 +1,114 @@
+e97b370694fa8769b8aa62813d0cad7b2f4c22f4 2026-11-17T09:08:58-05:00 LeOu
+Record T1g outcome in README: rule holds on TAT-QA, no consequence found
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+8c5b3a1747045d9f3f251a217519c5f2beaf54ab 2026-11-17T08:52:19-05:00 LeOu
+Complete T1g consequence audit and cross-dataset validation
+
+0c68d8aa8dff485af1ecc91bcb1090c883ef03fe 2026-11-17T08:31:38-05:00 LeOu
+T1g 预测，尚未计算实测
+
+ff30d61cf7fbe240a11efc79ebb9a7799ebc73f4 2026-11-17T08:20:17-05:00 LeOu
+Add T1g: where rounding precision has consequences; update map
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+dd72b35809a77f5bd80b4ce509bbb88bf8d036cc 2026-11-17T08:14:59-05:00 LeOu
+Update README after T1f novelty check: only candidate 1 remains
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+2e848a9d926052c37bdad86e6a7f6bdf101ac15e 2026-11-17T07:52:52-05:00 LeOu
+research: audit novelty of five FinQA claims (T1f)
+Document primary-source prior work, queries, reading scopes, and qualified novelty verdicts. Add full-test FINESSE overlap and answer/exe_ans filtering precedents. Preserve project README and paper draft.
+5fcbe690f3fcd12bc20a9ffaa851cf64df472a19 2026-11-17T07:34:01-05:00 LeOu
+Tighten colour meanings in README; rewrite T1f novelty check with known prior views
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+9f233c5e50a6f69fd59276f073bc3089676516b1 2026-11-17T07:27:09-05:00 LeOu
+Add exploration map to README, paper draft, and tasks T1d-T1f
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+67569c278bc3a60d289e3603a5c3f3e25d6c3729 2026-11-17T06:23:48-05:00 LeOu
+Complete T1D precision experiment and independent semantic review
+
+c3d2a91de562e23a46eeb6bef89527d285b0bef0 2026-11-17T00:27:37-05:00 LeOu
+Complete T1C matched blind-agent scoring audit
+
+3e6e626dc7b8a864c1e81ab563b1a353179afdd9 2026-11-16T23:10:33-05:00 LeOu
+Complete T1B context tightening audit with 139 certified surviving cases
+
+3b29bfe743677e2ac63fb0fe1afc8a16dfb104c0 2026-11-16T22:56:17-05:00 LeOu
+Complete T1A precision law, zero-parameter audit, and probability analysis
+
+76113b3baacb6929d87b8261d40b8854f3c1de4a 2026-11-16T22:46:30-05:00 LeOu
+Merge branch 'task/t1' into task/t1a
+
+7e1339a56898820541e3a61a56338bf9bf2c8def 2026-11-16T22:09:12-05:00 LeOu
+Add second batch: three parallel follow-ups to T1
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+de7b2bf714090acab1663a26bbbde1052033589b 2026-11-16T21:56:55-05:00 LeOu
+Tighten one-page T3 findings and model-dependence warning
+
+2e17509e54b6cbf68c61479e39307d4751b3004b 2026-11-16T21:56:01-05:00 LeOu
+Complete T3 composition experiment with 3360 scores and qualified decision
+
+30acb8dc6450ae1982b0270aafb18c74e6540bc7 2026-11-16T21:36:43-05:00 LeOu
+Audit FinQA input rounding sensitivity and record T1 continue decision
+
+ca0d1b7043017e34a730c804c7db3f7b87351e6a 2026-11-16T21:29:47-05:00 LeOu
+Record fresh v2 scorer task names
+
+58ac061a1c5418c4d6c700544afe07012d7b3cc6 2026-11-16T21:29:34-05:00 LeOu
+Blind atom identifiers before primary T3 run; retain superseded outputs
+
+bb7d3aaf06aa2054e5754d29968b93cdae286205 2026-11-16T21:25:47-05:00 LeOu
+Normalize frozen T3 input newlines before first scoring
+
+22092449bf56c18fbab074c970fc7d1bd0eb68cf 2026-11-16T21:25:35-05:00 LeOu
+Freeze T3 composition literature gate, materials and scoring protocol
+
+8b89b7dc407c3e980416a87ae9d3fc3d4f1dff56 2026-11-16T21:15:10-05:00 LeOu
+Add four parallel one-day tasks
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+df2757c5939ef5cb700c48de7df8b816cb2f4977 2026-11-16T10:56:16-05:00 LeOu
+Complete 1000-title absolute-score replication and Fable handoff
+
+1c87abd5cce84e4fd2e310a7004a20802f273d3a 2026-11-16T10:34:17-05:00 LeOu
+Finish same-batch controls and six main scoring rounds
+
+f2896199101979fc4403687cae0431e27c9c6683 2026-11-16T10:20:05-05:00 LeOu
+Record five complete rounds and prespecified single-score overlap
+
+4ea3342dfb4bf61dd10e86a13c2fef14c478917e 2026-11-16T10:03:21-05:00 LeOu
+Preserve three scoring rounds and first same-batch control
+
+82ede0ba45ec6cfa8de64d5682e525b5914f7ca3 2026-11-16T09:50:19-05:00 LeOu
+Save first two complete absolute-score rounds and resolution diagnostic
+
+71e8952aa27db3eb0f8bec8682b3e2a98fe72830 2026-11-16T09:40:46-05:00 LeOu
+Record start of authorized absolute-score replication
+
+27284af6090d9d2d3a9ca983a622eb2267f8338c 2026-11-16T09:38:43-05:00 LeOu
+Implement paired stability analysis and Gaussian benchmark
+
+38400c8642363922a65728d7b41c509555388391 2026-11-16T09:35:01-05:00 LeOu
+Use consistent newlines for frozen ID schedules
+
+0556ae2fadaf819f4bff7e5aa50251cdf62105c7 2026-11-16T09:34:51-05:00 LeOu
+Freeze absolute-score replication protocol and blind batch IDs
+
+ffbd9f54ee4abb24d9a089038816586c7b157c65 2026-11-16T09:29:25-05:00 LeOu
+Document literature gate for absolute-score stability task
+
+41886de0da24517d4e8afb4341c4c1d7953a6ec8 2026-11-16T08:55:06-05:00 LeOu
+Add task: test-retest stability of a model's own top list
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+
+67cf9d03f514795ea7caee821efa52290ebacb3b 2026-11-16T08:26:42-05:00 LeOu
+Import complete Proxy Tail research, raw experiments, and Fable deliverables
+
+56e3338684bf1ca890366f22927f74d1e0f61b66 2026-11-16T07:16:21-05:00 LeOu
+Start Proxy Tail: question, conjecture, first look, plan
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+

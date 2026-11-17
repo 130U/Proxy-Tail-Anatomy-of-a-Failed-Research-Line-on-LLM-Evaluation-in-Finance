@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e918-73c0-7173-a789-e31943560387"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"8.352941176470588\",\"unit\":\"percent\",\"expression\":\"(850 - 779) / 850 * 100\",\"low\":\"8.24014125956445\",\"high\":\"8.46560846560847\",\"reliable_digits\":\"1\",\"explanation\":\"Each borrowing figure has rounding uncertainty of 0.5, so the percentage decrease has one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22104,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":333,"reasoning_output_tokens":245}}

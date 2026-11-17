@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e916-8e24-7323-a2fa-68cfebb01b50"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"44.84090015\",\"unit\":\"percent\",\"expression\":\"(43319 / 96606) * 100\",\"low\":\"44.84015051\",\"high\":\"44.84164980\",\"reliable_digits\":\"4\",\"explanation\":\"The percentage uses 2013 net interest income divided by total net revenue, with each figure rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18126,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":835,"reasoning_output_tokens":752}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e86f-92bf-73f3-82e8-a4ef2d1d231a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-53.0179918746\",\"unit\":\"percent\",\"expression\":\"(161.9 - 344.6) / 344.6 * 100\",\"low\":\"-53.0393152474\",\"high\":\"-52.9966623132\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each debt figure to vary by $0.05 million gives these bounds, which both round to a 53.0% decrease.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17657,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1638,"reasoning_output_tokens":1537}}

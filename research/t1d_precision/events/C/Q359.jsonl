@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-f31d-7ab3-9497-3ef476ccd322"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"41.6666666667\",\"unit\":\"percent\",\"expression\":\"(1.7 - 1.2) / 1.2 * 100\",\"low\":\"32\",\"high\":\"52.1739130435\",\"reliable_digits\":\"0\",\"explanation\":\"Pretax losses increased from $1.2 million to $1.7 million; rounding uncertainty leaves no reliable significant digits in the percentage increase.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17929,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":399,"reasoning_output_tokens":306}}

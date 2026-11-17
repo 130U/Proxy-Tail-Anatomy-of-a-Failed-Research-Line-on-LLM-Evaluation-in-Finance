@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f9-cc51-7943-bc14-46b6b79aa153"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.633333333333333\",\"unit\":\"million dollars\",\"expression\":\"(1.0 + 2.3 + 4.6) / 3\",\"low\":\"2.583333333333333\",\"high\":\"2.683333333333333\",\"reliable_digits\":\"1\",\"explanation\":\"Each annual impairment is rounded to 0.1 million dollars, making the three-year average uncertain by 0.05 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17809,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":545,"reasoning_output_tokens":445}}

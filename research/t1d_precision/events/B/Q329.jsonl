@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e886-fa11-7200-b255-3e5168628cf3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"8.653846153846154\",\"unit\":\"percent\",\"expression\":\"(2.7 / 31.2) * 100\",\"low\":\"8.48\",\"high\":\"8.82825040128411\",\"reliable_digits\":\"1\",\"explanation\":\"Repayments divided by December 2018 carrying debt give this percentage; allowing each figure to vary by $0.05 billion leaves one stable leading digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17570,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1410,"reasoning_output_tokens":1315}}

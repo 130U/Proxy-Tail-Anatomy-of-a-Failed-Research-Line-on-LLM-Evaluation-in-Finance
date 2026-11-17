@@ -1,3 +1,5 @@
+> 历史草稿，已停止推进（2026-11-17）。原文保留供追溯，未完成的全测试集实验、待核引文及推断不视为已验证成果。最终结论见[项目复盘](../README.md)。
+
 # FinQA at Its Ceiling: Reference Errors, Conventions, and the Precision of Rounded Filings
 
 Draft v0 · 2026-11-17 · target: ACL short paper (4 pages)

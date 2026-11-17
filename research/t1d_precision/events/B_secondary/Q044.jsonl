@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91d-d261-74d1-a1f1-e0b697324285"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"4.827586206896552\",\"unit\":\"percent\",\"expression\":\"(30.4 - 29.0) / 29.0 * 100\",\"low\":\"4.475043029259897\",\"high\":\"5.181347150259067\",\"reliable_digits\":\"0\",\"explanation\":\"Allowing each interest figure to vary by 0.05 million gives these bounds, so even the first significant digit is uncertain.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22492,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":357,"reasoning_output_tokens":259}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e83d-33ad-7170-b851-9718e05291d4"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"8.63909589\",\"unit\":\"percent\",\"expression\":\"(572.93 - 527.37) / 527.37 * 100\",\"low\":\"8.63711780\",\"high\":\"8.64107402\",\"reliable_digits\":\"3\",\"explanation\":\"Each collateral amount has rounding uncertainty of 0.005 billion; the resulting range consistently rounds to 8.64% at three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17517,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1253,"reasoning_output_tokens":1158}}

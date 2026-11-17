@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91e-9bb5-74c3-a65d-461bbfb2168e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"16.9197396963\",\"unit\":\"percent\",\"expression\":\"1014 / 5993 * 100\",\"low\":\"16.9099858180\",\"high\":\"16.9294952023\",\"reliable_digits\":\"3\",\"explanation\":\"Scalable infrastructure and total capital expenditures each have rounding uncertainty of ±0.5 million, giving three reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22260,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":786,"reasoning_output_tokens":702}}

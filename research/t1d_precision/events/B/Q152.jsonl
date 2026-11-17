@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e846-966b-7610-bab2-f2f87b36afdb"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-35\",\"unit\":\"million dollars\",\"expression\":\"1136 - 1171\",\"low\":\"-36\",\"high\":\"-34\",\"reliable_digits\":\"1\",\"explanation\":\"Unrecognized tax benefits decreased by $35 million; rounding each balance to the nearest million gives a change between -$36 million and -$34 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17589,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":431,"reasoning_output_tokens":354}}

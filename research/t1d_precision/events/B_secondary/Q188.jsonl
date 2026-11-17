@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92c-25c6-7c92-bb83-f01e5048075d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"327\",\"unit\":\"million dollars\",\"expression\":\"353 + 6 - 32\",\"low\":\"325.5\",\"high\":\"328.5\",\"reliable_digits\":\"2\",\"explanation\":\"Reconstruction costs plus the stated maximum transaction costs, less deferred income tax benefits, total $327 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22259,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":384,"reasoning_output_tokens":315}}

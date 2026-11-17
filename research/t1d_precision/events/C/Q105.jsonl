@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e902-6300-76b1-aa5e-bf52c34aae73"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"7.01219512195122\",\"unit\":\"percent\",\"expression\":\"(35.1 - 32.8) / 32.8 * 100\",\"low\":\"6.69710806697108\",\"high\":\"7.32824427480916\",\"reliable_digits\":\"1\",\"explanation\":\"Each earnings figure can vary by $0.05 million, giving these bounds and one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18054,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":478,"reasoning_output_tokens":385}}

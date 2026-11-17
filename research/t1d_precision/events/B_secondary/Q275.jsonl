@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e931-c074-7393-996f-26f4dce45d95"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"72.710453284\",\"unit\":\"percent\",\"expression\":\"78.6 / 108.1 * 100\",\"low\":\"72.6306056403\",\"high\":\"72.7903748265\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing each monetary figure to vary by 0.05 million gives these bounds, which support two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22018,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":400,"reasoning_output_tokens":316}}

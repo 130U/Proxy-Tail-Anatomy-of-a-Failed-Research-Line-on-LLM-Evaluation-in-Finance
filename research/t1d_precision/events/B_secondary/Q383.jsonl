@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e939-0433-7541-a6c6-a92307e6cbc3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-4.3645960211\",\"unit\":\"percent\",\"expression\":\"(4711 - 4926) / 4926 * 100\",\"low\":\"-4.3844514361\",\"high\":\"-4.3447365760\",\"reliable_digits\":\"1\",\"explanation\":\"Each balance has rounding uncertainty of 0.5 million; the resulting growth rates round consistently to one significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22101,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":785,"reasoning_output_tokens":693}}

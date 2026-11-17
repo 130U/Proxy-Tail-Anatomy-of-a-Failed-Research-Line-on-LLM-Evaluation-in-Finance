@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91b-be21-76b3-b12d-5afb747247ca"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-11\",\"unit\":\"million dollars\",\"expression\":\"99 - 110\",\"low\":\"-12\",\"high\":\"-10\",\"reliable_digits\":\"1\",\"explanation\":\"The liability decreased by $11 million; rounding of each balance to the nearest million gives a change between -$12 million and -$10 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22345,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":190,"reasoning_output_tokens":116}}

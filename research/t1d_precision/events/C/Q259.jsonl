@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e911-35b5-7ac3-9522-d9bc07c0bf9b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"17.7514792899\",\"unit\":\"percent\",\"expression\":\"30 / 169 * 100\",\"low\":\"17.4041297935\",\"high\":\"18.1008902077\",\"reliable_digits\":\"1\",\"explanation\":\"The 2003 commitment is $30 million out of $169 million total, with each figure subject to rounding of ±$0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17502,"cached_input_tokens":17280,"cache_write_input_tokens":0,"output_tokens":509,"reasoning_output_tokens":421}}

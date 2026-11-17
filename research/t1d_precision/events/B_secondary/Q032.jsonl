@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91d-20aa-7f82-9872-ccb0818330f3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-9.78520286396\",\"unit\":\"percent\",\"expression\":\"(378 - 419) / 419 * 100\",\"low\":\"-10.01191895113\",\"high\":\"-9.55794504182\",\"reliable_digits\":\"1\",\"explanation\":\"Payments fall from $419 million to $378 million; allowing each figure to vary by $0.5 million gives the stated bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22137,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":399,"reasoning_output_tokens":306}}

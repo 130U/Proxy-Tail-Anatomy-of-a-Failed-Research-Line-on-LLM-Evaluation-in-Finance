@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e841-17fa-7e21-a3eb-50528cf26fc4"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"22.0064724919\",\"unit\":\"percent\",\"expression\":\"1088 / 4944 * 100\",\"low\":\"21.9941348974\",\"high\":\"22.0188125822\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each displayed amount to vary by 0.5 million gives these bounds, which support reporting 22.0% reliably.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17325,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1280,"reasoning_output_tokens":1193}}

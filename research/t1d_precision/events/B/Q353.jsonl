@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e88a-daf6-7cf3-a159-261ddb78c593"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.639058413252\",\"unit\":\"percent\",\"expression\":\"(5829 - 5735) / 5735 * 100\",\"low\":\"1.621480254555\",\"high\":\"1.656639637283\",\"reliable_digits\":\"1\",\"explanation\":\"Growth equals the revenue increase divided by 2014 revenue; allowing each total to vary by $0.5 million leaves one significant digit reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17478,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1573,"reasoning_output_tokens":1478}}

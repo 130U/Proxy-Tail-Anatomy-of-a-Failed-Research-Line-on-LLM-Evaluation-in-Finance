@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e83e-895e-72e3-a066-f86ebc330d02"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"26.46031746031746\",\"unit\":\"percent\",\"expression\":\"(79.67 - 63.00) / 63.00 * 100\",\"low\":\"26.4423458455678\",\"high\":\"26.4782919279308\",\"reliable_digits\":\"2\",\"explanation\":\"ROI equals the gain divided by the 2008 value; rounding uncertainty of 0.005 in each value leaves two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17082,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1038,"reasoning_output_tokens":938}}

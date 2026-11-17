@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e918-ed15-73a2-8444-86ae79726088"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"117.56\",\"unit\":\"percent\",\"expression\":\"(217.56 - 100) / 100 * 100\",\"low\":\"116.4726368159204\",\"high\":\"118.6582914572864\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing the displayed $100 investment and $217.56 ending value to vary by their rounding precision gives these bounds and two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21826,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":492,"reasoning_output_tokens":399}}

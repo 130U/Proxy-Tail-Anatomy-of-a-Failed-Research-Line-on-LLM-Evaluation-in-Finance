@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a1-9ab7-7a81-a9fe-b76d72cd9455"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-30.4347826087\",\"unit\":\"percent\",\"expression\":\"(1.6 - 2.3) / 2.3 * 100\",\"low\":\"-34.0425531915\",\"high\":\"-26.6666666667\",\"reliable_digits\":\"1\",\"explanation\":\"Compensation expense decreased from $2.3 million to $1.6 million, each rounded to the nearest $0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18713,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":616,"reasoning_output_tokens":516}}

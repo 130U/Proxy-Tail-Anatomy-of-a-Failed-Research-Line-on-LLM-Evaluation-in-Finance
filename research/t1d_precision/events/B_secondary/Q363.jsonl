@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e937-a268-78e0-95c1-61791722dd0c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"22.46376811594203\",\"unit\":\"percent\",\"expression\":\"(169-138)/138*100\",\"low\":\"21.6606498194946\",\"high\":\"23.2727272727273\",\"reliable_digits\":\"1\",\"explanation\":\"Using the stated net asbestos reserve increases, the percentage change is bounded by rounding intervals of 168.5–169.5 for 2010 and 137.5–138.5 for 2009.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22175,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":298,"reasoning_output_tokens":193}}

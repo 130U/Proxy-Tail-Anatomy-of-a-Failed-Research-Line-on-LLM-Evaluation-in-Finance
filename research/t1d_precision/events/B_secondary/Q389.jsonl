@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e939-62a5-73c1-b6f3-775774afd7cd"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"not determinable\",\"unit\":\"percent\",\"expression\":\"\",\"low\":\"not determinable\",\"high\":\"not determinable\",\"reliable_digits\":\"0\",\"explanation\":\"The document reports capitalized interest for 2017 and 2018, but does not report capital expenditures for those years.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22491,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":397,"reasoning_output_tokens":331}}

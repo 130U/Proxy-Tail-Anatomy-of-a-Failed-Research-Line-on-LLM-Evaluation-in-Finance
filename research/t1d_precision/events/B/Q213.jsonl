@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e872-0401-76d1-899e-dba251e43a7d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"N/A\",\"unit\":\"percent\",\"expression\":\"N/A\",\"low\":\"N/A\",\"high\":\"N/A\",\"reliable_digits\":\"0\",\"explanation\":\"The document provides no free cash flow figure for 2001, so the percentage change from 2001 to 2011 cannot be determined.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17638,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":476,"reasoning_output_tokens":406}}

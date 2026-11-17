@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e934-623c-7002-aa56-7777f942d156"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"190\",\"unit\":\"millions\",\"expression\":\"3,664 - 3,474\",\"low\":\"189\",\"high\":\"191\",\"reliable_digits\":\"2\",\"explanation\":\"The range is the highest chemical revenue, in 2014, minus the lowest, in 2016, with each rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22133,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":318,"reasoning_output_tokens":243}}

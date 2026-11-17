@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82f-4fcf-7131-b8a1-764a61182dd6"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"9.8\",\"unit\":\"billion dollars\",\"expression\":\"3.7 + 2.6 + 3.5\",\"low\":\"9.65\",\"high\":\"9.95\",\"reliable_digits\":\"1\",\"explanation\":\"Each annual figure is rounded to the nearest 0.1 billion dollars, giving the sum a rounding uncertainty of 0.15 billion dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17954,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":318,"reasoning_output_tokens":232}}

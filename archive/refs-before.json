@@ -1,0 +1,38 @@
+[
+  {
+    "ref": "origin/main",
+    "commit": "e97b370694fa8769b8aa62813d0cad7b2f4c22f4"
+  },
+  {
+    "ref": "task/t1",
+    "commit": "30acb8dc6450ae1982b0270aafb18c74e6540bc7"
+  },
+  {
+    "ref": "task/t1a",
+    "commit": "3b29bfe743677e2ac63fb0fe1afc8a16dfb104c0"
+  },
+  {
+    "ref": "task/t1b",
+    "commit": "3e6e626dc7b8a864c1e81ab563b1a353179afdd9"
+  },
+  {
+    "ref": "task/t1c",
+    "commit": "c3d2a91de562e23a46eeb6bef89527d285b0bef0"
+  },
+  {
+    "ref": "task/t1d",
+    "commit": "67569c278bc3a60d289e3603a5c3f3e25d6c3729"
+  },
+  {
+    "ref": "origin/task/t1f",
+    "commit": "2e848a9d926052c37bdad86e6a7f6bdf101ac15e"
+  },
+  {
+    "ref": "task/t3",
+    "commit": "de7b2bf714090acab1663a26bbbde1052033589b"
+  },
+  {
+    "ref": "8c5b3a1",
+    "commit": "8c5b3a1747045d9f3f251a217519c5f2beaf54ab"
+  }
+]

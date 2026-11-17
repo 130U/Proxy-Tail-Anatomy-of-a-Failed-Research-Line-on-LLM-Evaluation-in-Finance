@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e836-d68d-7c73-a76e-1057b8382001"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-23\",\"unit\":\"dollars\",\"expression\":\"-(23)\",\"low\":\"-23.5\",\"high\":\"-22.5\",\"reliable_digits\":\"2\",\"explanation\":\"The total cumulative effect shown as $(23) represents a decrease in net income.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18092,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":713,"reasoning_output_tokens":650}}

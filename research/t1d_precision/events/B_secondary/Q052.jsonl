@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fc-d288-79e0-9296-17b86d3483cd"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-20.4733727811\",\"unit\":\"percent\",\"expression\":\"(22,176 - 27,885) / 27,885 * 100\",\"low\":\"-20.4765917771\",\"high\":\"-20.4701536696\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each liability figure to vary by 0.5 million gives these bounds, which support three significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22177,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1747,"reasoning_output_tokens":1652}}

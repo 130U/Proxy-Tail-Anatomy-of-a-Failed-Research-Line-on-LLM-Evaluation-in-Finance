@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e926-9db0-7560-afcc-5afe4ce68b18"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"283\",\"unit\":\"million dollars\",\"expression\":\"78 + 119 + 86\",\"low\":\"281.5\",\"high\":\"284.5\",\"reliable_digits\":\"2\",\"explanation\":\"The three annual expenses total $283 million, with rounding uncertainty of up to $0.5 million per year.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22161,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":158,"reasoning_output_tokens":87}}

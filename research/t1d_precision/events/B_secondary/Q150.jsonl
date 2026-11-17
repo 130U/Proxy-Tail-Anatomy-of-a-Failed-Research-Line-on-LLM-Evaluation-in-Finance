@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e925-057b-7350-9405-1726b0c19483"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"17.8125\",\"unit\":\"percent\",\"expression\":\"57 / 320 * 100\",\"low\":\"17.6287051482\",\"high\":\"17.9968701095\",\"reliable_digits\":\"2\",\"explanation\":\"London Market reserves of 57 divided by total net reserves of 320 give this percentage, with rounding bounds of 56.5–57.5 and 319.5–320.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22170,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":396,"reasoning_output_tokens":300}}

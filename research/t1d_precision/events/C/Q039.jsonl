@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fa-c641-7662-93af-0f63def7f81d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2751\",\"unit\":\"million dollars\",\"expression\":\"78,467 - 75,716\",\"low\":\"2750\",\"high\":\"2752\",\"reliable_digits\":\"3\",\"explanation\":\"Each equity figure has rounding uncertainty of ±0.5 million dollars, giving the increase uncertainty of ±1 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17634,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":373,"reasoning_output_tokens":301}}

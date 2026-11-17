@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e893-516f-7f00-9d0a-f5f8d270a6a9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"102.43204578\",\"unit\":\"percent\",\"expression\":\"(1,415 - 699) / 699 * 100\",\"low\":\"102.21586848\",\"high\":\"102.64853257\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing each cash-flow figure to vary by 0.5 million gives these bounds and supports two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17750,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":722,"reasoning_output_tokens":636}}

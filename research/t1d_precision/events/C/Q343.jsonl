@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-1cc5-7cd0-8b3c-e6de6b3a98a5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-11\",\"unit\":\"million dollars\",\"expression\":\"99 - 110\",\"low\":\"-12\",\"high\":\"-10\",\"reliable_digits\":\"1\",\"explanation\":\"The year-end liability decreased by $11 million; rounding permits a decrease between $10 million and $12 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17871,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":224,"reasoning_output_tokens":157}}

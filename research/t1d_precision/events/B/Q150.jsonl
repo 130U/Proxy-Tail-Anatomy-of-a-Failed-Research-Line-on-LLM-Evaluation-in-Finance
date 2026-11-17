@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e846-4273-7443-ab4c-412f416bb0b2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"17.8125\",\"unit\":\"percent\",\"expression\":\"(57 / 320) * 100\",\"low\":\"17.62870514820593\",\"high\":\"17.99687010954617\",\"reliable_digits\":\"2\",\"explanation\":\"Dividing reported London Market reserves by total net reserves gives this percentage; allowing ±0.5 rounding in each figure yields bounds that both round to 18% at two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17584,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1131,"reasoning_output_tokens":1034}}

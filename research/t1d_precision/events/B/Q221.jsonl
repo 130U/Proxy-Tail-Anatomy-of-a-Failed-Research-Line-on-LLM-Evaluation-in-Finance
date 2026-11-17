@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e873-9c83-7522-bd71-4851c4a9c66f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"4.72972972972973\",\"unit\":\"percent\",\"expression\":\"(155 - 148) / 148 * 100\",\"low\":\"4.04040404040404\",\"high\":\"5.42372881355932\",\"reliable_digits\":\"0\",\"explanation\":\"Each payment figure has rounding uncertainty of ±$0.5 million, producing a growth range whose first significant digit is not reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17551,"cached_input_tokens":17408,"cache_write_input_tokens":0,"output_tokens":412,"reasoning_output_tokens":320}}

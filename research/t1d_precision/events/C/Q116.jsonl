@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e89e-65b0-7322-b0dc-c705ef0113ef"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"23.52941176470588\",\"unit\":\"percent\",\"expression\":\"(63 - 51) / 51 * 100\",\"low\":\"21.35922330097087\",\"high\":\"25.74257425742574\",\"reliable_digits\":\"1\",\"explanation\":\"Each average price has rounding uncertainty of $0.50, leaving about one significant digit reliable in the growth rate.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17813,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":549,"reasoning_output_tokens":460}}

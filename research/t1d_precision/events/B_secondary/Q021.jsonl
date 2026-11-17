@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91c-5326-7c63-aaa7-2feebc4934ab"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"14.7681041497152\",\"unit\":\"percent\",\"expression\":\"(1410.5 - 1229.0) / 1229.0 * 100\",\"low\":\"14.7593669907652\",\"high\":\"14.7768420196102\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each cash figure to vary by $0.05 million, the increase reliably rounds to 14.8%.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22499,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":902,"reasoning_output_tokens":802}}

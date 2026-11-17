@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e83f-50f3-7330-a0ac-bc2b5b0bb4f3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-1.9\",\"unit\":\"million shares\",\"expression\":\"326.5 - 328.4\",\"low\":\"-2.0\",\"high\":\"-1.8\",\"reliable_digits\":\"1\",\"explanation\":\"The shares decreased by 1.9 million; rounding each input to 0.1 million allows a decrease between 1.8 and 2.0 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17612,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":347,"reasoning_output_tokens":259}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e86e-b798-7053-a30b-35dda1418d11"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.255639097744361\",\"unit\":\"percent\",\"expression\":\"(136 - 133) / 133 * 100\",\"low\":\"1.498127340823970\",\"high\":\"3.018867924528302\",\"reliable_digits\":\"0\",\"explanation\":\"Each obligation is rounded to the nearest million, allowing a ±0.5 million variation that leaves no significant digit of the percentage change reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17744,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":361,"reasoning_output_tokens":267}}

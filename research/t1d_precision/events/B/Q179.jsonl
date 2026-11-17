@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e84b-0133-7350-b5c9-f228308e71c8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"12.30\",\"unit\":\"USD per share\",\"expression\":\"52.25 - 39.95\",\"low\":\"12.29\",\"high\":\"12.31\",\"reliable_digits\":\"3\",\"explanation\":\"Subtracting the low from the high gives the price difference; rounding to cents allows uncertainty of $0.01 in that difference.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17200,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":285,"reasoning_output_tokens":207}}

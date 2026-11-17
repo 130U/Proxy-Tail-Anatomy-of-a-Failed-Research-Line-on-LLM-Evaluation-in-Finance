@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e905-7eb9-7a73-a322-4cf3cd2c0b68"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"16.3461538462\",\"unit\":\"percent\",\"expression\":\"(104 - 87) / 104 * 100\",\"low\":\"15.4589371981\",\"high\":\"17.2248803828\",\"reliable_digits\":\"1\",\"explanation\":\"Hedges reduce the anticipated expense increase, with bounds calculated using $104 ± $0.5 million and $87 ± $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18002,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":521,"reasoning_output_tokens":428}}

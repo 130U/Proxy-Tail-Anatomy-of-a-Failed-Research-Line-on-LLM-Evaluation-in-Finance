@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e907-cd29-7772-8301-e28ebbb24325"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"33.26190637\",\"unit\":\"percent\",\"expression\":\"(265436 / 798018) * 100\",\"low\":\"33.26182288\",\"high\":\"33.26198987\",\"reliable_digits\":\"5\",\"explanation\":\"U.S. revenue divided by total revenue gives this percentage; rounding allows each input to vary by 0.5 thousand dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17808,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1026,"reasoning_output_tokens":941}}

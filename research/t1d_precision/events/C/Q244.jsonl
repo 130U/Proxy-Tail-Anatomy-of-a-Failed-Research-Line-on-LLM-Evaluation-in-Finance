@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8ac-7d11-7a60-b58b-262b63011caa"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"11.2121833094\",\"unit\":\"percent\",\"expression\":\"(222510 - 200077) / 200077 * 100\",\"low\":\"11.2116554835\",\"high\":\"11.2127111380\",\"reliable_digits\":\"4\",\"explanation\":\"Loans retained increased; allowing each reported amount to vary by 0.5 million gives these bounds and four reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17843,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1082,"reasoning_output_tokens":991}}

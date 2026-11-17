@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e914-9074-7781-8bed-493722acf180"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"448.5\",\"unit\":\"million dollars\",\"expression\":\"897 * 50 / 100\",\"low\":\"443.7675\",\"high\":\"453.2375\",\"reliable_digits\":\"2\",\"explanation\":\"Applying rounding bounds of 896.5–897.5 million dollars and 49.5–50.5 percent gives the stated range.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17778,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":802,"reasoning_output_tokens":721}}

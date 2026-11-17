@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fb-7b4a-7ff2-9082-7c9d00f6ebd7"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"30.263157894736842\",\"unit\":\"percent\",\"expression\":\"23 / 76 * 100\",\"low\":\"29.411764705882353\",\"high\":\"31.125827814569536\",\"reliable_digits\":\"1\",\"explanation\":\"The $23 million due in 2007 represents this share of the $76 million total of these lease obligations, with both figures rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18087,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1212,"reasoning_output_tokens":1119}}

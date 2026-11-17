@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92b-bfdb-76c0-96e3-02c03bda41c6"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"25.348782218\",\"unit\":\"percent\",\"expression\":\"(5301 - 4229) / 4229 * 100\",\"low\":\"25.322142097\",\"high\":\"25.375428638\",\"reliable_digits\":\"2\",\"explanation\":\"Each revenue has rounding uncertainty of half a million dollars; the resulting percentage range is stable to two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21797,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":754,"reasoning_output_tokens":669}}

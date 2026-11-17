@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90c-6cd6-7760-90cd-26769d7e1ba3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.255639097744361\",\"unit\":\"percent\",\"expression\":\"(136 - 133) / 133 * 100\",\"low\":\"1.498127340823970\",\"high\":\"3.018867924528302\",\"reliable_digits\":\"0\",\"explanation\":\"Allowing each obligation to vary by 0.5 million gives these bounds, so even the first significant digit is unreliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22330,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":250,"reasoning_output_tokens":159}}

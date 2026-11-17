@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e935-659d-74e2-bbf4-a1e786b6ee3a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"34.3629343629\",\"unit\":\"percent\",\"expression\":\"(348 - 259) / 259 * 100\",\"low\":\"33.9113680154\",\"high\":\"34.8162475822\",\"reliable_digits\":\"1\",\"explanation\":\"Fair value increased from $259 million to $348 million; rounding permits each value to vary by $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22761,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":337,"reasoning_output_tokens":249}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e837-bf6f-79c3-889a-3a4aed115f0e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"313.1147540983607\",\"unit\":\"percent\",\"expression\":\"(25.2 - 6.1) / 6.1 * 100\",\"low\":\"308.9430894308943\",\"high\":\"317.3553719008264\",\"reliable_digits\":\"1\",\"explanation\":\"Each annual total is rounded to the nearest 0.1 million, leaving one reliable significant digit in the percentage increase.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17985,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":509,"reasoning_output_tokens":413}}

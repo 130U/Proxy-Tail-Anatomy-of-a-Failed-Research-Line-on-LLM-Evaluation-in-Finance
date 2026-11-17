@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a0-d2db-7701-ac8d-ef29efa688a9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"70843\",\"unit\":\"million dollars\",\"expression\":\"1,341,016 - 1,270,173\",\"low\":\"70842\",\"high\":\"70844\",\"reliable_digits\":\"4\",\"explanation\":\"Each exposure is rounded to the nearest million, so the increase is uncertain by up to 1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17767,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":412,"reasoning_output_tokens":339}}

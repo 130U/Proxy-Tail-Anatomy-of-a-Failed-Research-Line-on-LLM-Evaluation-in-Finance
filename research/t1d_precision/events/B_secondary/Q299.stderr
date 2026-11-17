@@ -1,0 +1,2 @@
+2026-11-17T11:10:16.875224Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T11:10:16.875940Z  WARN codex_core::session::startup_prewarm: startup websocket prewarm setup failed: stream disconnected before completion: tls handshake eof

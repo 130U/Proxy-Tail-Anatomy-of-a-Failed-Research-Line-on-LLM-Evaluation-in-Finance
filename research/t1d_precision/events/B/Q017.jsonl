@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82e-2b7d-7cf1-91f7-97849c8c3f8a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.4383561643835616\",\"unit\":\"ratio\",\"expression\":\"21 / 14.6\",\"low\":\"1.3993174061433447\",\"high\":\"1.4776632302405498\",\"reliable_digits\":\"1\",\"explanation\":\"Benefits of $21 million and deferred compensation of $14.6 million have rounding uncertainties of $0.5 million and $0.05 million, respectively.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18028,"cached_input_tokens":0,"cache_write_input_tokens":0,"output_tokens":361,"reasoning_output_tokens":266}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8b5-b5ef-7512-bdbf-5fbc041edb0e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-41\",\"unit\":\"million USD\",\"expression\":\"78 - 119\",\"low\":\"-42\",\"high\":\"-40\",\"reliable_digits\":\"1\",\"explanation\":\"R&D spending decreased by $41 million, with a rounding uncertainty of $1 million in the change.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17690,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":234,"reasoning_output_tokens":169}}

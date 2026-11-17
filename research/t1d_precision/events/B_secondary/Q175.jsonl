@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90a-6de4-7d62-acae-f89580682cdf"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-5.9585307022\",\"unit\":\"percent\",\"expression\":\"(355173 - 377677) / 377677 * 100\",\"low\":\"-5.9587875899\",\"high\":\"-5.9582738137\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each liability total to vary by 0.5 million gives these bounds, which consistently round to -5.96 percent.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22034,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1130,"reasoning_output_tokens":1034}}

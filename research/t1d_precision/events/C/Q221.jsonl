@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a8-b53c-7652-bdf8-1eb87372701d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"4.7297297297\",\"unit\":\"percent\",\"expression\":\"(155 - 148) / 148 * 100\",\"low\":\"4.0404040404\",\"high\":\"5.4237288136\",\"reliable_digits\":\"0\",\"explanation\":\"Each payment is rounded to the nearest million, giving a growth range wide enough that the first significant digit is unreliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17663,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":552,"reasoning_output_tokens":466}}

@@ -1,0 +1,8 @@
+{"type":"thread.started","thread_id":"01a1e83a-4624-7b52-af62-b9ce4316936c"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 5/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-9.027777777777778\",\"unit\":\"percent\",\"expression\":\"(26.2 - 28.8) / 28.8 * 100\",\"low\":\"-9.358752166377816\",\"high\":\"-8.695652173913043\",\"reliable_digits\":\"1\",\"explanation\":\"Interpreting the question as the change from 2014 to 2015, each volatility factor is rounded to 0.1 percentage point.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17521,"cached_input_tokens":17280,"cache_write_input_tokens":0,"output_tokens":890,"reasoning_output_tokens":785}}

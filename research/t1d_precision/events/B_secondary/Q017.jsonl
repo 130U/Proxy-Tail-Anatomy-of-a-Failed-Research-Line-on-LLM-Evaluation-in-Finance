@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91c-192a-7c20-ad95-916944fbb5b5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.43835616438356\",\"unit\":\"ratio\",\"expression\":\"21 / 14.6\",\"low\":\"1.39931740614334\",\"high\":\"1.47766323024055\",\"reliable_digits\":\"1\",\"explanation\":\"Rounding allows benefits of 20.5–21.5 million and deferred compensation of 14.55–14.65 million, making one significant digit reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22614,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":318,"reasoning_output_tokens":224}}

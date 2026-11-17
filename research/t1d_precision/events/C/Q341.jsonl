@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-0635-78f3-92e8-56e6bb9ff289"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"704\",\"unit\":\"million dollars\",\"expression\":\"581 + 123\",\"low\":\"703\",\"high\":\"705\",\"reliable_digits\":\"2\",\"explanation\":\"Adding the 2007 and 2006 pretax gains gives $704 million, with each figure subject to rounding of ±$0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17834,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":303,"reasoning_output_tokens":231}}

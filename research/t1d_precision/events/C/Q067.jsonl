@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8fd-8693-7c71-a603-a0765ef3a273"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"11.0294117647\",\"unit\":\"percent\",\"expression\":\"(151 - 136) / 136 * 100\",\"low\":\"10.2564102564\",\"high\":\"11.8081180812\",\"reliable_digits\":\"1\",\"explanation\":\"Each reserve is rounded to the nearest million, so the bounds use (150.5 - 136.5) / 136.5 * 100 and (151.5 - 135.5) / 135.5 * 100.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17874,"cached_input_tokens":17664,"cache_write_input_tokens":0,"output_tokens":448,"reasoning_output_tokens":334}}

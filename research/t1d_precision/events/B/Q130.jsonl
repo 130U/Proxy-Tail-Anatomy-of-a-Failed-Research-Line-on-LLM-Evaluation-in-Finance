@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e843-2c89-7a32-8178-03a27620038f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-9.2\",\"unit\":\"million dollars\",\"expression\":\"0.2 - 9.4\",\"low\":\"-9.3\",\"high\":\"-9.1\",\"reliable_digits\":\"1\",\"explanation\":\"Impairment charges decreased by $9.2 million from 2006 to the 2007 predecessor period.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17257,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":274,"reasoning_output_tokens":197}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e914-9853-7100-b00d-3ba3dc580c8d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"290395\",\"unit\":\"million dollars\",\"expression\":\"(318063 + 110457) - (60224 + 77901)\",\"low\":\"290393\",\"high\":\"290397\",\"reliable_digits\":\"4\",\"explanation\":\"Total equity is trading assets minus trading liabilities; rounding allows a deviation of 2 million dollars, leaving four significant digits stable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21763,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":531,"reasoning_output_tokens":449}}

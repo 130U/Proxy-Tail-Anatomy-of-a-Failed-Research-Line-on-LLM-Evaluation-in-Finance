@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8cf-6bf9-7862-afee-36f88db5c1e1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.6\",\"unit\":\"million dollars\",\"expression\":\"3.4 + 2.2\",\"low\":\"5.5\",\"high\":\"5.7\",\"reliable_digits\":\"1\",\"explanation\":\"The 2011 and 2010 capitalized amounts total $5.6 million, with each input uncertain by $0.05 million due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18724,"cached_input_tokens":18560,"cache_write_input_tokens":0,"output_tokens":294,"reasoning_output_tokens":211}}

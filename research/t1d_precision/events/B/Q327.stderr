@@ -1,0 +1,5 @@
+2026-11-17T08:01:09.159627Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)
+2026-11-17T08:01:11.614278Z  WARN codex_core::session::startup_prewarm: startup websocket prewarm setup failed: workspace routing discovery failed
+2026-11-17T08:01:12.150638Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+2026-11-17T08:01:12.255651Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 191ms)... turn_id=01a1e886-3224-7fe3-84b8-f41a43676d9e retries=1 max_retries=5 sampling_error=workspace routing discovery failed
+2026-11-17T08:01:12.880795Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (2/5 in 374ms)... turn_id=01a1e886-3224-7fe3-84b8-f41a43676d9e retries=2 max_retries=5 sampling_error=workspace routing discovery failed

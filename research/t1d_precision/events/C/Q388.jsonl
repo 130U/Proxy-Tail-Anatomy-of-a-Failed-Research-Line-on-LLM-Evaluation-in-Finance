@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8f6-efe4-72d1-97ab-95c779dc87b1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"11.3466334165\",\"unit\":\"percent\",\"expression\":\"(802 - 711) / 802 * 100\",\"low\":\"11.2289457268\",\"high\":\"11.4641744548\",\"reliable_digits\":\"2\",\"explanation\":\"Development costs decreased from 802 million to 711 million; allowing each figure to vary by 0.5 million gives these bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17253,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":727,"reasoning_output_tokens":637}}

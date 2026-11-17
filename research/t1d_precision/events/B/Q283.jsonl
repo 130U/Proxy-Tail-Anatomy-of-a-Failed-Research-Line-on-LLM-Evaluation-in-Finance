@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e87e-90a2-7972-8da3-4c3eddba04f2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-29.9065420560748\",\"unit\":\"percent\",\"expression\":\"(75 - 107) / 107 * 100\",\"low\":\"-30.6976744186047\",\"high\":\"-29.1079812206573\",\"reliable_digits\":\"1\",\"explanation\":\"Rental expense decreased from $107 million to $75 million, with each figure rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18024,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":462,"reasoning_output_tokens":372}}

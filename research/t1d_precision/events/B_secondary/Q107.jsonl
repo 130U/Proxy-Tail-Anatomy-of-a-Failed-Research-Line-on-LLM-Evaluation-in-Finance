@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e922-2fcd-7503-86ec-1ad332590e2b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-36\",\"unit\":\"million dollars\",\"expression\":\"74 - 110\",\"low\":\"-37\",\"high\":\"-35\",\"reliable_digits\":\"1\",\"explanation\":\"Claims decreased by $36 million, with each displayed balance rounded to the nearest million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21977,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":224,"reasoning_output_tokens":162}}

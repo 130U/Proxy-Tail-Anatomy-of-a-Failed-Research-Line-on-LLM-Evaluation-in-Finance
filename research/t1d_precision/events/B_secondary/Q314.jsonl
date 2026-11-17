@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e934-3577-7622-9c8c-3ca2d192f20e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.1359955492\",\"unit\":\"percent\",\"expression\":\"242 / 177947 * 100\",\"low\":\"0.1357141854\",\"high\":\"0.1362769147\",\"reliable_digits\":\"3\",\"explanation\":\"Interest and penalties are divided by reported unrecognized tax benefits, with each displayed amount allowing rounding uncertainty of 0.5.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22029,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":971,"reasoning_output_tokens":887}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8c6-1b2d-7351-829f-a795e2eee659"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3.2218642373\",\"unit\":\"times\",\"expression\":\"(2.9 * 1000) / 900.1\",\"low\":\"3.1661389768\",\"high\":\"3.2775956891\",\"reliable_digits\":\"1\",\"explanation\":\"Debt issuance ranges from 2,850 to 2,950 million and debt reductions from 900.05 to 900.15 million, giving these ratio bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17856,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":921,"reasoning_output_tokens":822}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e886-c1ba-72f3-bdc0-b76ac0042db0"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"20\",\"unit\":\"million dollars\",\"expression\":\"24 - 4\",\"low\":\"19\",\"high\":\"21\",\"reliable_digits\":\"1\",\"explanation\":\"Prior-year additions minus current-year additions equal $20 million; rounding permits a range of $19 million to $21 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17115,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":233,"reasoning_output_tokens":167}}

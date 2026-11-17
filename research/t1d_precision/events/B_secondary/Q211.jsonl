@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90e-3930-7470-8acb-d1d47021de67"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2\",\"unit\":\"million dollars\",\"expression\":\"12 - 10\",\"low\":\"1\",\"high\":\"3\",\"reliable_digits\":\"0\",\"explanation\":\"The decrease from 2017 to 2018 is $2 million, with rounding allowing a decrease between $1 million and $3 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22070,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":160,"reasoning_output_tokens":90}}

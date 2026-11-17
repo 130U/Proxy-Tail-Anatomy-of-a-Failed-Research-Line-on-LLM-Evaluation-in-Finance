@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8aa-c99f-7081-b3a8-89460bd1643b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3.8043478261\",\"unit\":\"percent\",\"expression\":\"(736 - 708) / 736 * 100\",\"low\":\"3.6709721278\",\"high\":\"3.9375424304\",\"reliable_digits\":\"1\",\"explanation\":\"Each amount has rounding uncertainty of $0.5 million, giving bounds of 27 / 735.5 * 100 and 29 / 736.5 * 100 and one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17482,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":758,"reasoning_output_tokens":653}}

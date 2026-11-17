@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91f-b281-7060-b61c-84adef3b8867"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"11.3466334164589\",\"unit\":\"percent\",\"expression\":\"(802 - 711) / 802 * 100\",\"low\":\"11.2289457267623\",\"high\":\"11.4641744548287\",\"reliable_digits\":\"2\",\"explanation\":\"Development costs incurred decreased from 802 million in 2003 to 711 million in 2004, with each figure rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21727,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":784,"reasoning_output_tokens":688}}

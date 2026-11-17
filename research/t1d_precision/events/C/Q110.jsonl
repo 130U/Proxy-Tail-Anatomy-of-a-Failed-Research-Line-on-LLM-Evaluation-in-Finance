@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e89e-1239-7c53-b5da-69133317accb"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"80.472848\",\"unit\":\"percent\",\"expression\":\"(22.366 - 12.393) / 12.393 * 100\",\"low\":\"80.461532\",\"high\":\"80.484164\",\"reliable_digits\":\"3\",\"explanation\":\"Each balance has rounding uncertainty of 0.0005 billion dollars, giving these bounds and three reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18311,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1104,"reasoning_output_tokens":1018}}

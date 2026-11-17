@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e845-6ead-7ec0-b7a6-a6bd9f688876"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"13.4\",\"unit\":\"million dollars per year\",\"expression\":\"33.5 / 2.5\",\"low\":\"13.38\",\"high\":\"13.42\",\"reliable_digits\":\"3\",\"explanation\":\"The rounded compensation cost is divided by the 2.5-year period, treating years as exact as instructed.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17434,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":947,"reasoning_output_tokens":872}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e82f-0198-7db0-88c1-9c84acfd93f7"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.633333333333333\",\"unit\":\"million dollars\",\"expression\":\"(4.6 + 2.3 + 1.0) / 3\",\"low\":\"2.583333333333333\",\"high\":\"2.683333333333333\",\"reliable_digits\":\"1\",\"explanation\":\"Each annual figure has rounding uncertainty of 0.05 million, leaving only one significant digit reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17697,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":438,"reasoning_output_tokens":345}}

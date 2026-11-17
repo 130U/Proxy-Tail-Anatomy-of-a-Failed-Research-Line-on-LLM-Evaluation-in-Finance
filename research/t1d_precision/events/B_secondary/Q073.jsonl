@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8ff-40dc-7031-9442-f4212f917584"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-198\",\"unit\":\"thousand shares\",\"expression\":\"509 - 707\",\"low\":\"-198\",\"high\":\"-198\",\"reliable_digits\":\"3\",\"explanation\":\"Non-vested performance awards decreased by 198 thousand shares, with counts treated as exact.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22249,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":273,"reasoning_output_tokens":209}}

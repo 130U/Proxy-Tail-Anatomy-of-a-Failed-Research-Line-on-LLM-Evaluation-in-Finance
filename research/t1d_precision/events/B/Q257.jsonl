@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e87a-4126-7481-9c4c-a40d8506a35a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"14.5552560647\",\"unit\":\"percent\",\"expression\":\"(4.25 - 3.71) / 3.71 * 100\",\"low\":\"14.2664872140\",\"high\":\"14.8448043185\",\"reliable_digits\":\"1\",\"explanation\":\"Annual dividends increased from $3.71 to $4.25 per share, with each rounded total allowing uncertainty of $0.005.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17180,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":905,"reasoning_output_tokens":808}}

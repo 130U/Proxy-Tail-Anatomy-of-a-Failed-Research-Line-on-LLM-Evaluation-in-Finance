@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e898-39ea-79f1-92eb-41cb99615235"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"15.6526548673\",\"unit\":\"percent\",\"expression\":\"849 / 5424 * 100\",\"low\":\"15.6419946539\",\"high\":\"15.6633170462\",\"reliable_digits\":\"3\",\"explanation\":\"Labor deemed claims are $849 million of $5,424 million total; allowing ±$0.5 million for each figure gives the stated bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17961,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1333,"reasoning_output_tokens":1244}}

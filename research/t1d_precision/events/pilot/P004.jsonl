@@ -1,0 +1,8 @@
+{"type":"thread.started","thread_id":"01a1e826-eda7-7420-8901-ce3bc6c6ce6d"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 5/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"92.0279313355\",\"unit\":\"percent\",\"expression\":\"(3163 / 3437) * 100\",\"low\":\"92\",\"high\":\"92.0558707988\",\"reliable_digits\":\"3\",\"explanation\":\"Each debt figure has rounding uncertainty of ±$0.5 million, giving bounds of (3162.5/3437.5)*100 and (3163.5/3436.5)*100.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18100,"cached_input_tokens":17408,"cache_write_input_tokens":0,"output_tokens":813,"reasoning_output_tokens":713}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e904-1252-7fb2-a504-4c837f5e656f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"1.6390584133\",\"unit\":\"percent\",\"expression\":\"(5829 - 5735) / 5735 * 100\",\"low\":\"1.6214802546\",\"high\":\"1.6566396373\",\"reliable_digits\":\"1\",\"explanation\":\"Allowing each revenue figure to vary by $0.5 million gives these bounds, which support one reliably rounded significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21900,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":711,"reasoning_output_tokens":620}}

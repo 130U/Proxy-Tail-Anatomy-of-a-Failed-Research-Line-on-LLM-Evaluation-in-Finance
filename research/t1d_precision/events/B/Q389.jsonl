@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e891-0ac9-7163-85d1-ab8b8b9a5209"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"4.827586206896552\",\"unit\":\"percent\",\"expression\":\"(30.4 - 29.0) / 29.0 * 100\",\"low\":\"4.475043029259897\",\"high\":\"5.181347150259067\",\"reliable_digits\":\"0\",\"explanation\":\"This calculation assumes the question refers to capitalized interest; the document does not report capital expenditures for 2017 and 2018.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17905,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1253,"reasoning_output_tokens":1154}}

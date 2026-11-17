@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e922-c75b-7a30-b826-3d6f40ae0cff"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"23.5294117647\",\"unit\":\"percent\",\"expression\":\"(63 - 51) / 51 * 100\",\"low\":\"21.3592233010\",\"high\":\"25.7425742574\",\"reliable_digits\":\"1\",\"explanation\":\"The displayed per-share prices of $63 and $51 each have rounding uncertainty of $0.50.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22287,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":422,"reasoning_output_tokens":338}}

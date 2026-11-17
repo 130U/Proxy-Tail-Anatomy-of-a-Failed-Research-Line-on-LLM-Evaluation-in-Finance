@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e828-994a-7bb2-989e-e6dcf76b152a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"9291.2\",\"unit\":\"million dollars\",\"expression\":\"20,086 - (134,935 * 8 / 100)\",\"low\":\"9290.66\",\"high\":\"9291.74\",\"reliable_digits\":\"4\",\"explanation\":\"Using December 2013 capital and risk-weighted assets, each rounded to the nearest million, the exact 8% target implies uncertainty of ±0.54 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17903,"cached_input_tokens":8192,"cache_write_input_tokens":0,"output_tokens":932,"reasoning_output_tokens":837}}

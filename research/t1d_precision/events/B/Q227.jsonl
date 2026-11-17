@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e874-afbd-7db1-8f33-69b6f912deca"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0\",\"unit\":\"percent\",\"expression\":\"(250.0 - 250.0) / 250.0 * 100\",\"low\":\"-0.0399920016\",\"high\":\"0.0400080016\",\"reliable_digits\":\"0\",\"explanation\":\"The floating-rate exchange replaced $250.0 million of old principal with $250.0 million due in 2010, implying zero principal increase at the displayed precision.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17862,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1521,"reasoning_output_tokens":1422}}

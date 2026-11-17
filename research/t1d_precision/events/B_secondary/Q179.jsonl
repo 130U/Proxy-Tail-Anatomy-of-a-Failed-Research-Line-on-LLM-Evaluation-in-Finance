@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92b-9283-7a60-873e-0bc040ab7f4a"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"12.30\",\"unit\":\"dollars per share\",\"expression\":\"52.25 - 39.95\",\"low\":\"12.29\",\"high\":\"12.31\",\"reliable_digits\":\"3\",\"explanation\":\"The second-quarter 2001 high minus the low gives the spread, with each price rounded to the nearest cent.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21786,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":184,"reasoning_output_tokens":108}}

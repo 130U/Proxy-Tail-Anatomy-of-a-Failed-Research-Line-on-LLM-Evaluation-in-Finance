@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e896-91b1-7b03-aa8e-b065f2b2e8ce"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"50685\",\"unit\":\"million dollars\",\"expression\":\"51,052 - 367\",\"low\":\"50684\",\"high\":\"50686\",\"reliable_digits\":\"4\",\"explanation\":\"Subtracting the fair value of corporate stocks and other securities gives $50,685 million, with rounding uncertainty of ±$1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17926,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":541,"reasoning_output_tokens":468}}

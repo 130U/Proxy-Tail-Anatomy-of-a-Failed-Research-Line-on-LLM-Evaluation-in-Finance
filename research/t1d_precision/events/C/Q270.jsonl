@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8b5-f669-7d32-8425-c872b01e7045"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"9.1\",\"unit\":\"million dollars\",\"expression\":\"705.4 - 696.3\",\"low\":\"9.0\",\"high\":\"9.2\",\"reliable_digits\":\"1\",\"explanation\":\"Net revenue increased by $9.1 million in 2016; rounding permits an increase between $9.0 million and $9.2 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17324,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":348,"reasoning_output_tokens":266}}

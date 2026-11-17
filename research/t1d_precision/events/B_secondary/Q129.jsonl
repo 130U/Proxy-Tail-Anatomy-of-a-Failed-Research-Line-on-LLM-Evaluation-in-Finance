@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e923-b609-7f12-86d6-7ebaad2950b9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"253\",\"unit\":\"million dollars\",\"expression\":\"487 - 234\",\"low\":\"252\",\"high\":\"254\",\"reliable_digits\":\"2\",\"explanation\":\"Free cash flow increased by $253 million; rounding of each displayed figure permits a change from $252 million to $254 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22147,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":159,"reasoning_output_tokens":92}}

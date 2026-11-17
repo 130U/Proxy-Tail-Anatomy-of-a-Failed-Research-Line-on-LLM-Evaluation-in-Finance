@@ -1,0 +1,8 @@
+{"type":"thread.started","thread_id":"01a1e885-c406-7ea2-aefa-820110be4132"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 5/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.402475749668\",\"unit\":\"ratio\",\"expression\":\"817388 / 2030900\",\"low\":\"0.402475404383\",\"high\":\"0.402476094952\",\"reliable_digits\":\"5\",\"explanation\":\"Debt divided by equity gives the ratio; allowing each reported amount to vary by 0.5 thousand leaves five significant digits reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17017,"cached_input_tokens":16896,"cache_write_input_tokens":0,"output_tokens":1636,"reasoning_output_tokens":1552}}

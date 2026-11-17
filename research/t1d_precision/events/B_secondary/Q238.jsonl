@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e911-3f8e-7781-a299-253ede68f432"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-3.383348043542218\",\"unit\":\"percent\",\"expression\":\"(328.4 - 339.9) / 339.9 * 100\",\"low\":\"-3.412266509781\",\"high\":\"-3.354421068118\",\"reliable_digits\":\"2\",\"explanation\":\"Diluted weighted average shares decreased by approximately 3.4%; allowing each displayed share figure to vary by 0.05 million gives the stated bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22178,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":854,"reasoning_output_tokens":750}}

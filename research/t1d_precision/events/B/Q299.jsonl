@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e881-9676-7123-bd7b-e272410a02b4"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"67.3076923076923\",\"unit\":\"percent\",\"expression\":\"(105 / 156) * 100\",\"low\":\"66.7731629392971\",\"high\":\"67.8456591639871\",\"reliable_digits\":\"1\",\"explanation\":\"Employee-related costs were $105 million of the $156 million total in 2010, with each figure rounded to the nearest million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17561,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":682,"reasoning_output_tokens":592}}

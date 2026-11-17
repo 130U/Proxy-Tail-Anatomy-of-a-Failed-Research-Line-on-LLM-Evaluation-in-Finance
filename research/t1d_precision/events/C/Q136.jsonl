@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e906-8c52-77c3-8f8d-f49dba228b7e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"26.9230769231\",\"unit\":\"percent\",\"expression\":\"(35 / 130) * 100\",\"low\":\"26.4367816092\",\"high\":\"27.4131274131\",\"reliable_digits\":\"1\",\"explanation\":\"Rounding allows euro exposure of 34.5–35.5 million and total exposure of 129.5–130.5 million, giving the stated bounds.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17618,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":571,"reasoning_output_tokens":477}}

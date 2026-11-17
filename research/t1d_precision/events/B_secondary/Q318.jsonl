@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e934-99e9-7281-a27d-327cd8fde2f8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"70\",\"unit\":\"million dollars\",\"expression\":\"32 + 38\",\"low\":\"69\",\"high\":\"71\",\"reliable_digits\":\"1\",\"explanation\":\"Adding the 2008 and 2007 DVA sensitivities gives $70 million, with rounding bounds of $69 million to $71 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22579,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":168,"reasoning_output_tokens":97}}

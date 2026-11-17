@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e90e-6a2d-7593-aa7a-d3379647972f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.6515151515\",\"unit\":\"percent\",\"expression\":\"(27.1 - 26.4) / 26.4 * 100\",\"low\":\"2.2684310019\",\"high\":\"3.0360531309\",\"reliable_digits\":\"0\",\"explanation\":\"Each euro figure has rounding uncertainty of 0.05, giving a percentage increase whose first significant digit is not reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21643,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":309,"reasoning_output_tokens":216}}

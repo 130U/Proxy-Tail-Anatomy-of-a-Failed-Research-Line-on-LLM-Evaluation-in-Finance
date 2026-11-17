@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e92f-c20d-7931-8e04-fbb61447b781"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-10\",\"unit\":\"percentage points\",\"expression\":\"50 - 60\",\"low\":\"-11\",\"high\":\"-9\",\"reliable_digits\":\"0\",\"explanation\":\"Hedging decreased by 10 percentage points; rounding permits a decrease between 9 and 11 percentage points.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22171,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":428,"reasoning_output_tokens":361}}

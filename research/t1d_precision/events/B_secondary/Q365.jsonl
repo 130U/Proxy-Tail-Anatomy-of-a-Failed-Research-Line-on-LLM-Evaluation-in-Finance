@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e937-a73c-7780-b407-cb05d5a99df8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"45\",\"unit\":\"million dollars\",\"expression\":\"(43 + 47) / 2\",\"low\":\"44.5\",\"high\":\"45.5\",\"reliable_digits\":\"1\",\"explanation\":\"The average year-end reserve is $45 million, with rounding uncertainty of $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22345,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":485,"reasoning_output_tokens":415}}

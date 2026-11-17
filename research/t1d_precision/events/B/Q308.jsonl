@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e883-26d0-7831-852a-7ec11118f3b7"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.6\",\"unit\":\"million dollars\",\"expression\":\"3.4 + 2.2\",\"low\":\"5.5\",\"high\":\"5.7\",\"reliable_digits\":\"1\",\"explanation\":\"The 2011 and 2010 capitalized amounts each have rounding uncertainty of 0.05 million dollars.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18612,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":261,"reasoning_output_tokens":187}}

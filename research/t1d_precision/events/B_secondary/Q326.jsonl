@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e934-f9c8-7152-bd58-140c4d1437d2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.4024757497\",\"unit\":\"ratio\",\"expression\":\"817388 / 2030900\",\"low\":\"0.40247540438\",\"high\":\"0.40247609495\",\"reliable_digits\":\"5\",\"explanation\":\"Total debt divided by stockholders’ equity, allowing each displayed amount to vary by 0.5 thousand, determines five reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21603,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":751,"reasoning_output_tokens":665}}

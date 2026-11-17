@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e905-8293-7152-bd43-6104e659aad6"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-2.828113382\",\"unit\":\"percent\",\"expression\":\"(377677 - 388669) / 388669 * 100\",\"low\":\"-2.828367032\",\"high\":\"-2.827859731\",\"reliable_digits\":\"4\",\"explanation\":\"Total financial liabilities decreased by about 2.828%, with bounds allowing each displayed total to vary by $0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17606,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1456,"reasoning_output_tokens":1364}}

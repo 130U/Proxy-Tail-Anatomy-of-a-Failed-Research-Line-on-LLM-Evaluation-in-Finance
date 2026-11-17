@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e901-38bd-7bd2-bd57-1b134e498fe9"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"34.75539226\",\"unit\":\"percent\",\"expression\":\"(198.05 - 146.97) / 146.97 * 100\",\"low\":\"34.74740602\",\"high\":\"34.76337904\",\"reliable_digits\":\"2\",\"explanation\":\"Allowing each investment value to vary by 0.005 gives these ROI bounds, which agree to two significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21744,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":1110,"reasoning_output_tokens":1020}}

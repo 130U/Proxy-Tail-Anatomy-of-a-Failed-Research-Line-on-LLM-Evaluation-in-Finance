@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e833-75bf-7123-9ebd-25366c1799d3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"33\",\"unit\":\"million USD\",\"expression\":\"119 - 86\",\"low\":\"32\",\"high\":\"34\",\"reliable_digits\":\"1\",\"explanation\":\"Research and development spending increased by $33 million; rounding of the two reported amounts allows an increase between $32 million and $34 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17578,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":398,"reasoning_output_tokens":329}}

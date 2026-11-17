@@ -1,0 +1,8 @@
+{"type":"thread.started","thread_id":"01a1e836-0fe7-7943-80a5-212c0b327f0b"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 5/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"60\",\"unit\":\"percent\",\"expression\":\"(24 - 15) / 15 * 100\",\"low\":\"51.61290322580645\",\"high\":\"68.96551724137931\",\"reliable_digits\":\"0\",\"explanation\":\"Allowing each gain to vary by 0.5 million gives this range, so even the first significant digit is not reliable.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":16852,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":380,"reasoning_output_tokens":294}}

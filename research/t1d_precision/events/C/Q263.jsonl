@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e911-9c9c-7df2-b6ff-0c3ce31dde2d"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"46.7980590667\",\"unit\":\"percent\",\"expression\":\"(50,079 - 26,643) / 50,079 * 100\",\"low\":\"46.7965294488\",\"high\":\"46.7995886540\",\"reliable_digits\":\"4\",\"explanation\":\"The reduction from 2011 to 2012 allows for rounding uncertainty of ±0.5 thousand in each amount.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17462,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1127,"reasoning_output_tokens":1034}}

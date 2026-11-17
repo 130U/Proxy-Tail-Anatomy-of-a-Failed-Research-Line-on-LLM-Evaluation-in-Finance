@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8ea-c0b6-7453-88f5-fe140ace9906"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-13048\",\"unit\":\"million dollars\",\"expression\":\"58,219 - 71,267\",\"low\":\"-13049\",\"high\":\"-13047\",\"reliable_digits\":\"4\",\"explanation\":\"The adjustments reduce equity by $13,048 million, with rounding of the two totals allowing a $1 million variation in either direction.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17842,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":415,"reasoning_output_tokens":337}}

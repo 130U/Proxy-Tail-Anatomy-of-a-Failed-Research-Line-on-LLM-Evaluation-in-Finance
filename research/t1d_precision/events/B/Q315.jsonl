@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e884-0999-7052-9c1a-3a0c3b3c0ff1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"47.88732394366197\",\"unit\":\"percent\",\"expression\":\"(10.5 - 7.1) / 7.1 * 100\",\"low\":\"46.15384615384615\",\"high\":\"49.64539007092199\",\"reliable_digits\":\"1\",\"explanation\":\"Recorded net losses increased from $7.1 million to $10.5 million, with each figure rounded to the nearest $0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18633,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":560,"reasoning_output_tokens":458}}

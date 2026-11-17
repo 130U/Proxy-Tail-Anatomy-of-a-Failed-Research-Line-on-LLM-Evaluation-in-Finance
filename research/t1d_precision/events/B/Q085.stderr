@@ -1,0 +1,14 @@
+2026-11-17T06:38:27.521549Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)
+2026-11-17T06:38:27.817603Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:38:27.818353Z  WARN codex_core::session::startup_prewarm: startup websocket prewarm setup failed: stream disconnected before completion: tls handshake eof
+2026-11-17T06:38:29.460670Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+2026-11-17T06:38:31.668039Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:38:31.668572Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 186ms)... turn_id=01a1e83a-6ba0-7ed1-af12-98e1fc9b18ab retries=1 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof
+2026-11-17T06:38:32.083969Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:38:32.084175Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (2/5 in 415ms)... turn_id=01a1e83a-6ba0-7ed1-af12-98e1fc9b18ab retries=2 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof
+2026-11-17T06:38:32.730356Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:38:32.730666Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (3/5 in 855ms)... turn_id=01a1e83a-6ba0-7ed1-af12-98e1fc9b18ab retries=3 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof
+2026-11-17T06:38:33.882352Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:38:33.882557Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (4/5 in 1.448s)... turn_id=01a1e83a-6ba0-7ed1-af12-98e1fc9b18ab retries=4 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof
+2026-11-17T06:38:35.628564Z ERROR codex_api::endpoint::responses_websocket: failed to connect to Responses WebSocket stage=Unknown
+2026-11-17T06:38:35.628777Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (5/5 in 3.282s)... turn_id=01a1e83a-6ba0-7ed1-af12-98e1fc9b18ab retries=5 max_retries=5 sampling_error=stream disconnected before completion: tls handshake eof

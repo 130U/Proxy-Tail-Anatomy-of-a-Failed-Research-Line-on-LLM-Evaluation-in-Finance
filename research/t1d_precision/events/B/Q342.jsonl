@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e889-28fc-7ce2-8273-42021ee953ba"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-55.43973941368078\",\"unit\":\"percent\",\"expression\":\"(684 - 1535) / 1535 * 100\",\"low\":\"-55.48681211331814\",\"high\":\"-55.39263603779733\",\"reliable_digits\":\"2\",\"explanation\":\"Bermuda net income declined; allowing each displayed income to vary by $0.5 million gives these bounds and two reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17686,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":945,"reasoning_output_tokens":846}}

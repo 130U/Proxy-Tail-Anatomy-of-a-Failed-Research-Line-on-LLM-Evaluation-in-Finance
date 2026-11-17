@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e91c-07ab-7030-954b-9181201c7d90"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"0.3384913\",\"unit\":\"percent\",\"expression\":\"(2075 - 2068) / 2068 * 100\",\"low\":\"0.2900652647\",\"high\":\"0.3869407497\",\"reliable_digits\":\"0\",\"explanation\":\"Treasury increased from 2,068 to 2,075 million dollars; rounding allows each balance to vary by 0.5 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21741,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":359,"reasoning_output_tokens":265}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e846-84a2-79c3-8d44-b4f5bf5332eb"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"46.4\",\"unit\":\"million dollars\",\"expression\":\"426.6 - 380.2\",\"low\":\"46.3\",\"high\":\"46.5\",\"reliable_digits\":\"2\",\"explanation\":\"Net revenue increased by $46.4 million, with each revenue figure rounded to the nearest $0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17256,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":451,"reasoning_output_tokens":376}}

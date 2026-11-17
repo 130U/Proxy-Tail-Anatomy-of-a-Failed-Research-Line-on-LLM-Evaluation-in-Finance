@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e931-e229-76c2-b3a7-720219ee48ea"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"7.2\",\"unit\":\"million dollars\",\"expression\":\"258.6 - 250.0 - 1.4\",\"low\":\"7.05\",\"high\":\"7.35\",\"reliable_digits\":\"1\",\"explanation\":\"Accrued interest equals the total redemption cost minus principal and the prepayment penalty.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22450,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":309,"reasoning_output_tokens":236}}

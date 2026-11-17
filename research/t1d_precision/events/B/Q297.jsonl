@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e880-ef14-7141-8811-5d0fbe749077"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3.221864237306966\",\"unit\":\"times\",\"expression\":\"(2.9 * 1000) / 900.1\",\"low\":\"3.166138976837194\",\"high\":\"3.277595689128382\",\"reliable_digits\":\"1\",\"explanation\":\"Dividing debt issuance, converted from billions to millions, by debt reductions gives the ratio; the displayed rounding supports one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17744,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1066,"reasoning_output_tokens":971}}

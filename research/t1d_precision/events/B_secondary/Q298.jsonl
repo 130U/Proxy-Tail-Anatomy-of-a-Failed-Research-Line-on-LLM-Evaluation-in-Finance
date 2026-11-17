@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e917-d301-7443-b834-d2896d2aaf11"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"2.163136548\",\"unit\":\"percent\",\"expression\":\"4.8 / 221.9 * 100\",\"low\":\"2.140121649\",\"high\":\"2.186161821\",\"reliable_digits\":\"1\",\"explanation\":\"Accrued interest was $4.8 million of the $221.9 million redemption amount, with each figure rounded to the nearest $0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":22429,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":859,"reasoning_output_tokens":767}}

@@ -1,0 +1,5 @@
+{"type":"thread.started","thread_id":"01a1e8a4-66de-7a51-a123-0a5da03d9d0d"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"88.9278464661\",\"unit\":\"percent\",\"expression\":\"4819 / 5419 * 100\",\"low\":\"88.9104160900\",\"high\":\"88.9452800591\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each displayed amount to vary by 0.5 thousand dollars gives these bounds, which support three reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17670,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":965,"reasoning_output_tokens":880}}

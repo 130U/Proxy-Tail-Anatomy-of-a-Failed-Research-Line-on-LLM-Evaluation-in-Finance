@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8ac-5508-7700-a39c-450a1bc9436c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-9.73138603865\",\"unit\":\"percent\",\"expression\":\"(230667 - 255534) / 255534 * 100\",\"low\":\"-9.73175833400\",\"high\":\"-9.73101374184\",\"reliable_digits\":\"4\",\"explanation\":\"Allowing each inventory figure to vary by 0.5 million gives these bounds and approximately four reliable significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17889,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1644,"reasoning_output_tokens":1552}}

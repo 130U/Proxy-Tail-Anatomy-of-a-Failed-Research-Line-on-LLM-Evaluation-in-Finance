@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e879-4395-75e3-9b97-311488f69b45"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"13.043478260869565\",\"unit\":\"percent\",\"expression\":\"3 / 23 * 100\",\"low\":\"10.638297872340425\",\"high\":\"15.555555555555556\",\"reliable_digits\":\"0\",\"explanation\":\"Interpreting the question as the liquidity-products share, inflows were $3 billion of $23 billion, each rounded to the nearest billion.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17865,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":2070,"reasoning_output_tokens":1980}}

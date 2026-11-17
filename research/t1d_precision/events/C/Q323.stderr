@@ -1,0 +1,2 @@
+2026-11-17T09:40:56.894848Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)
+2026-11-17T09:40:59.483673Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 572.9995565s)... turn_id=01a1e8e1-89c7-7be3-9742-25a7c2080a7e retries=1 max_retries=5 sampling_error=exceeded retry limit, last status: 429 Too Many Requests

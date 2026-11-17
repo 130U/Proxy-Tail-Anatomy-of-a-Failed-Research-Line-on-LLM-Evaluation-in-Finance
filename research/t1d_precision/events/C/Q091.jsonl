@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e89c-a084-7b10-b9a2-d1922f010645"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"34.75539226\",\"unit\":\"percent\",\"expression\":\"(198.05 - 146.97) / 146.97 * 100\",\"low\":\"34.74740602\",\"high\":\"34.76337904\",\"reliable_digits\":\"3\",\"explanation\":\"Allowing each displayed value to vary by ±0.005 gives the stated ROI bounds, including reinvested dividends.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17270,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1237,"reasoning_output_tokens":1147}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e915-a290-7c51-84d2-0066fe8a7494"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"190\",\"unit\":\"million dollars\",\"expression\":\"3,664 - 3,474\",\"low\":\"189\",\"high\":\"191\",\"reliable_digits\":\"2\",\"explanation\":\"The range is the 2014 maximum minus the 2016 minimum, with each revenue uncertain by 0.5 million due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17659,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":507,"reasoning_output_tokens":433}}

@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e907-7ed3-79e3-9385-5a5dec45c7ad"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-35\",\"unit\":\"million dollars\",\"expression\":\"1,136 - 1,171\",\"low\":\"-36\",\"high\":\"-34\",\"reliable_digits\":\"1\",\"explanation\":\"Unrecognized tax benefits decreased by $35 million; rounding permits a decrease between $34 million and $36 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17701,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":474,"reasoning_output_tokens":403}}

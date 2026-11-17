@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e903-00ab-7c71-8c37-1f1f0bcb3b05"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"3081\",\"unit\":\"million dollars\",\"expression\":\"150 + 175 + 2,756\",\"low\":\"3079.5\",\"high\":\"3082.5\",\"reliable_digits\":\"3\",\"explanation\":\"The three nonzero maturities sum to $3,081 million, with each rounded amount contributing up to $0.5 million of uncertainty.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17860,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":706,"reasoning_output_tokens":624}}

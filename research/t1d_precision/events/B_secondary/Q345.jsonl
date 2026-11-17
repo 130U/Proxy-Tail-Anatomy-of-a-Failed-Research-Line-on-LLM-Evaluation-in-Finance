@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e936-6349-7072-b21f-f93af4d30b6c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"50\",\"unit\":\"percent\",\"expression\":\"(0.4 / 0.8) * 100\",\"low\":\"41.176470588235294\",\"high\":\"60\",\"reliable_digits\":\"0\",\"explanation\":\"Canceled contracts comprise $0.4 million of the stated $0.8 million accrual balance, with bounds reflecting rounding to the nearest $0.1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21988,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":321,"reasoning_output_tokens":233}}

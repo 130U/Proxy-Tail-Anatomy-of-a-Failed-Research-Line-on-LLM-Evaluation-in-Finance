@@ -1,0 +1,1 @@
+2026-11-17T10:11:50.554106Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 15.9997996s)... turn_id=01a1e8fd-c537-7dc3-bbfb-fff168aa8739 retries=1 max_retries=5 sampling_error=exceeded retry limit, last status: 429 Too Many Requests

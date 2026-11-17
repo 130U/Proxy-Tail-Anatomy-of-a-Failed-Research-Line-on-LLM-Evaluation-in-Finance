@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e887-e1f5-7071-a759-5fc359540ae5"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-4079\",\"unit\":\"million dollars\",\"expression\":\"19,201 - 23,280\",\"low\":\"-4080\",\"high\":\"-4078\",\"reliable_digits\":\"3\",\"explanation\":\"Level 3 financial assets decreased by $4,079 million; rounding of each total allows the change to vary by $1 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17555,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":427,"reasoning_output_tokens":349}}

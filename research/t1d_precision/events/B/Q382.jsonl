@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e88f-990c-7d32-a746-3e4efa8541e3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"N/A\",\"unit\":\"million dollars\",\"expression\":\"N/A\",\"low\":\"N/A\",\"high\":\"N/A\",\"reliable_digits\":\"0\",\"explanation\":\"The document provides figures for 2004 and 2003, but none for the requested year, 2014.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":18116,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":462,"reasoning_output_tokens":396}}

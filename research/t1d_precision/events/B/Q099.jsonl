@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e83d-c4f0-7c01-9809-285f0c76fc7b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-18.3086140851\",\"unit\":\"percent\",\"expression\":\"(58219 - 71267) / 71267 * 100\",\"low\":\"-18.3098887992\",\"high\":\"-18.3073393530\",\"reliable_digits\":\"4\",\"explanation\":\"Equity decreases by about 18.31%, with bounds allowing each displayed total to vary by 0.5 million due to rounding.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17737,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":1938,"reasoning_output_tokens":1841}}

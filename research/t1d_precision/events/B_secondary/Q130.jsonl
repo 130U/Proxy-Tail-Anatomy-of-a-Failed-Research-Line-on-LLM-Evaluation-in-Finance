@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e906-02c3-7c00-9cb0-ace86c6cc700"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-9.2\",\"unit\":\"million dollars\",\"expression\":\"0.2 - 9.4\",\"low\":\"-9.3\",\"high\":\"-9.1\",\"reliable_digits\":\"1\",\"explanation\":\"Impairment charges decreased by $9.2 million, with each displayed charge subject to rounding of $0.05 million.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":21843,"cached_input_tokens":20096,"cache_write_input_tokens":0,"output_tokens":190,"reasoning_output_tokens":110}}

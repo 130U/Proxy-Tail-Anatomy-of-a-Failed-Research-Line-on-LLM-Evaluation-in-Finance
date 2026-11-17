@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e884-0995-79e3-8116-e7166453dc3c"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"320\",\"unit\":\"dollars\",\"expression\":\"367 - 47\",\"low\":\"319\",\"high\":\"321\",\"reliable_digits\":\"2\",\"explanation\":\"Interpreting the requested summary as net environmental reserves, subtract ceded reserves from total gross reserves.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17591,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":780,"reasoning_output_tokens":719}}

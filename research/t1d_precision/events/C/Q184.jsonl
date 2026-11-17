@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e8a3-640e-7823-a540-5c4ff8a25ab2"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-11.4035087719\",\"unit\":\"percent\",\"expression\":\"(101 - 114) / 114 * 100\",\"low\":\"-12.2270742358\",\"high\":\"-10.5726872247\",\"reliable_digits\":\"1\",\"explanation\":\"Interpreting 20011 as 2011, each displayed investment value has rounding uncertainty of ±0.5, yielding these bounds and one reliable significant digit.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":16945,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":466,"reasoning_output_tokens":367}}

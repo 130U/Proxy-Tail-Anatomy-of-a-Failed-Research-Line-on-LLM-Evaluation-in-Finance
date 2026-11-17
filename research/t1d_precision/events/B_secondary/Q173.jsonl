@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"01a1e926-6fec-7b82-bea6-ce16a7bd1d4b"}
+{"type":"turn.started"}
+{"type":"error","message":"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"error","message":"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"5.6770714782\",\"unit\":\"percent\",\"expression\":\"(687125 - 650212) / 650212 * 100\",\"low\":\"5.6769133168\",\"high\":\"5.6772296399\",\"reliable_digits\":\"4\",\"explanation\":\"Allowing each exposure to vary by 0.5 million gives these bounds, which agree to four significant digits.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":23355,"cached_input_tokens":22144,"cache_write_input_tokens":0,"output_tokens":835,"reasoning_output_tokens":746}}

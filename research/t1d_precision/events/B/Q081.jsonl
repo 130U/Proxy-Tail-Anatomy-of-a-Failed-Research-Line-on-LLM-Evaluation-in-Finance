@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a1e839-f300-76a1-9acd-dfc380982418"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"-292\",\"unit\":\"million dollars\",\"expression\":\"265 + (-557)\",\"low\":\"-293\",\"high\":\"-291\",\"reliable_digits\":\"2\",\"explanation\":\"A 2% increase corresponds to +200bp, producing a combined earnings loss of $292 million with up to $1 million of rounding uncertainty.\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":17647,"cached_input_tokens":15488,"cache_write_input_tokens":0,"output_tokens":307,"reasoning_output_tokens":232}}
