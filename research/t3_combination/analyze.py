@@ -333,7 +333,7 @@ def draw_figure(base, data, baseline, y, fits, table, cv, flat, ci):
     axes[1, 1].set(title="Same-sign combination", xlabel="Stronger single: directed deviation", ylabel="Pair: directed deviation", xlim=(0, 50), ylim=(0, 50))
     axes[1, 1].legend(frameon=False)
     axes[1, 2].axis("off")
-    keys = (("asymmetric_lambda", "Negative weight lambda"), ("asymmetric_w", "First-position weight w"),
+    keys = (("asymmetric_lambda", "Lambda (asymmetric-average fit)"), ("asymmetric_w", "First-position weight w"),
             ("prior_average_k", "Prior-average k (diagnostic)"), ("neutral_contraction", "Neutral contraction, points"),
             ("PN_order_positive_first_minus_negative_first", "PN order difference, points"))
     lines = ["Point estimate [95% bootstrap interval]", ""]
@@ -341,6 +341,7 @@ def draw_figure(base, data, baseline, y, fits, table, cv, flat, ci):
         lines.extend((label, f"  {flat[key]:.3f} [{ci[key][0]:.3f}, {ci[key][1]:.3f}]", ""))
     lines.append("30 hand-written atoms; 780 ordered pairs")
     lines.append("Intervals: atom-strata + shared score rounds")
+    lines.append("Lambda is conditional on the fitted model")
     axes[1, 2].text(0, 1, "\n".join(lines), va="top", fontsize=10)
     fig.suptitle("T3: How financial sentiment scores combine two facts", fontsize=15)
     for ext in ("png", "pdf"):
@@ -358,6 +359,8 @@ def write_report(base, result):
         full = result["full_fit"][model]["all"]
         held = cv[model]["all"]
         lines.append(f"| {model} | {full['rmse']:.3f} | {held['rmse']:.3f} | {full['mae']:.3f} | {held['mae']:.3f} |")
+    if cv["asymmetric"]["all"]["rmse"] > cv["additive"]["all"]["rmse"]:
+        lines += ["", "**解释警戒：估计 λ 的不对称平均模型，留出误差大于相加模型。λ 的区间排除 1 仅触发了预定筛查门，不能据此认定真实整合机制具有相应负面权重。后续应先排除模型误设；不能直接把该系数当作坏消息影响的倍数。**"]
     lines += ["", f"主区间为 {result['bootstrap_replicates']:,} 次分层原子权重＋共享评分轮次重采样的 percentile 95% 区间；其解释受固定手工题库限制。重复数和种子见 results.json。", "",
               f"- 负面合并权重 λ：{interval('asymmetric_lambda')}；第一条位置权重 w：{interval('asymmetric_w')}。",
               f"- 添加中性事实的方向性收缩：{interval('neutral_contraction')} 分；扣除中性实际基准后的相加残差：{interval('neutral_additive_adjusted')} 分。",
