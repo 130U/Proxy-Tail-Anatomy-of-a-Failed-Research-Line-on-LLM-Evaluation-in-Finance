@@ -1,13 +1,13 @@
-# Research records
+# Research Records
 
 One folder per stage or task. Folder names are kept from the working repository because the
 analysis code refers to them. The table gives the stage each folder belongs to; start with the
 "entry point" file of a stage, then follow its links to protocols and raw records.
 
-The stage letters match the [report](../report/proxy_tail_postmortem.pdf) and the route on the
+The stage letters match the [report](../report/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance.pdf) and the route on the
 [front page](../README.md).
 
-## Stage A — Certifiable FinLM (Nov 15–16)
+## Stage A — Certifiable Financial Language Models
 
 Nine rounds of theory, implementation and internal review on "certificates" for a small financial
 language model, organised as five research paths. Closed because every component was a standard
@@ -32,12 +32,12 @@ tool and the strongest simple baselines matched the elaborate designs.
 | [claims_audit.md](claims_audit.md), [claims_sources.json](claims_sources.json) | Audit of 46 public claims of the earlier 130U-FinLLM project |
 | [FABLE_HANDOFF.md](FABLE_HANDOFF.md), [REPRODUCE.md](REPRODUCE.md), [reproduce.py](reproduce.py), [reproduction_log.json](reproduction_log.json) | Handoff notes and the offline reproduction runner for Stage A |
 
-The Stage A workspace was created on 2026-11-15 from commit `8e4dd0b` of
+The Stage A workspace was created from commit `8e4dd0b` of
 [130U/130U-FinLLM](https://github.com/130U/130U-FinLLM). Its material treated the advisor's plan as a
 proposal to be checked, not as established results. The student worked offline after the first
 round, so no SEC data were downloaded. All scripts run offline and download nothing.
 
-## Stage B — Proxy tail (Nov 16)
+## Stage B — Proxy Tail: Tail Screening with a Cheap Model
 
 How wide must a cheap model's shortlist be to keep a fixed share of a reference model's top items?
 Closed because the law was already known and the reference LLM did not agree with itself in the tail.
@@ -51,7 +51,7 @@ Closed because the law was already known and the reference LLM did not agree wit
 | [private/agent_tail_pilot/](private/agent_tail_pilot/), [private/agent_tail_methods/](private/agent_tail_methods/) | Raw inputs and outputs of every agent ranking and pairwise run |
 | [private/real_baseline/](private/real_baseline/) | SEntFiN entity rows, fixed splits, saved lexical models and per-row predictions (shared with Stages A and C) |
 
-## Stage C — Absolute-score stability (Nov 16)
+## Stage C — Absolute-Score Stability
 
 Does one model agree with itself on its own top 10%? 1,000 headlines × 8 rounds, 10,000 scores.
 Formally inconclusive (tie gate breached).
@@ -59,14 +59,14 @@ Formally inconclusive (tie gate breached).
 **Entry point:** [absolute_scoring/FABLE_ONE_PAGE.md](absolute_scoring/FABLE_ONE_PAGE.md). Task brief:
 [../tasks/absolute_scoring.md](../tasks/absolute_scoring.md).
 
-## Stage D — Two one-day probes (Nov 16)
+## Stage D — Two Behavioural Probes
 
 | Folder | Task | Outcome |
 |---|---|---|
 | [t2_magnitude/](t2_magnitude/) | T2: does sentiment respond smoothly to the size of a number? | Stopped at the prior-art check; no scoring run. Entry: [FABLE_DECISION.md](t2_magnitude/FABLE_DECISION.md) |
 | [t3_combination/](t3_combination/) | T3: how does a model combine a good and a bad fact? | 3,360 scores; close to additive; no mechanism to pursue. Entry: [README.md](t3_combination/README.md) |
 
-## Stage E — Rounding precision in FinQA (Nov 16–17)
+## Stage E — Rounding Precision in FinQA
 
 Filings print rounded numbers; benchmarks treat them as exact. How many answers does the displayed
 precision fail to determine? Closed because the effect, although real, changes no official score.
@@ -84,7 +84,7 @@ precision fail to determine? Closed because the effect, although real, changes n
 T1e (extending to the full test set) was planned and not run; its brief is in
 [../tasks/T1e_full_test.md](../tasks/T1e_full_test.md).
 
-## Conventions in these records
+## Conventions in These Records
 
 - "Fable" is the AI advisor and "Theodore" is the author; the student agents wrote most documents
   for them.
@@ -92,4 +92,4 @@ T1e (extending to the full test set) was planned and not run; its brief is in
   were seen. Gates were never moved after the fact.
 - Numbers marked as AI review or AI adjudication come from AI models, not human annotators.
 - Some files record SHA-256 hashes of other files. They refer to the original (Chinese) bytes, which
-  are preserved under the tag `closeout-2026-11-17`.
+  are preserved under the repository's closeout tag (`closeout-2026-11-17`).

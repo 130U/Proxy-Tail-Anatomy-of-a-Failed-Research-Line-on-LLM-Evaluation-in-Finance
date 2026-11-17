@@ -122,7 +122,7 @@ The first column is research value: ⚪ means the step is finished and is not it
 | | Direction | Why it was closed |
 |---|---|---|
 | ⚪ | Nine rounds of "certifiable financial language models" | The certificate framework itself yields no interesting conclusions; the mathematics of the audit design is a combination of standard tools. Historical materials are in `research/` |
-| ⚪ | What does a cheap model miss in the tail | The widening law, copula modelling of cascades, and recall-constrained proxy screening all have prior work; the agent experiment was judged "inconclusive" under the pre-registered rules. Old homepage: [research/README_tail_screening_2026-11-16.md](README-2026-11-16-tail-screening.md) |
+| ⚪ | What does a cheap model miss in the tail | The widening law, copula modelling of cascades, and recall-constrained proxy screening all have prior work; the agent experiment was judged "inconclusive" under the pre-registered rules. Old homepage: [research/README_tail_screening_2026-11-16.md](README-tail-screening-stage.md) |
 | ⚪ | T2 Model response to the size of a number | Prior work exists |
 | ⚪ | T3 How models combine good and bad news | The conclusion is "combined additively"; there is no phenomenon to pursue further. Branch `task/t3` |
 | ⚪ | T4 Top-list overlap between cheap and expensive models | No longer needed after the tail direction was closed |

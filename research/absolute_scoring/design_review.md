@@ -1,6 +1,6 @@
 # Absolute-scoring experiment: pre-execution design review
 
-2026-11-16. Based on [the new TASK.md](https://github.com/130U/proxy-tail/blob/main/TASK.md) and the experimental conventions saved earlier. This page is an internal AI's independent analysis of the design; it is not an experimental result or Fable feedback. No new sample has been drawn yet, no final scoring prompt written, no scoring agent called and no existing result adjusted; the literature veto check is being done first by another research branch.
+2026-11-16. Based on [the new TASK.md](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/main/TASK.md) and the experimental conventions saved earlier. This page is an internal AI's independent analysis of the design; it is not an experimental result or Fable feedback. No new sample has been drawn yet, no final scoring prompt written, no scoring agent called and no existing result adjusted; the literature veto check is being done first by another research branch.
 
 ## Recommended minimal explicit version
 

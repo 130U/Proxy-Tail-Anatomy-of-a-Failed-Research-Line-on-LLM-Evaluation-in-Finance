@@ -81,7 +81,7 @@ The original advisor materials in advisor_reference are a historical background 
 | 2026-11-16 | P2/SE1–SE6 | [numeric/run_checks.py](numeric/run_checks.py) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
 | 2026-11-16 | P2/SE1–SE6 | [numeric/semantic_envelope.py](numeric/semantic_envelope.py) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
 | 2026-11-16 | P2/SE1–SE6 | [numeric/test_semantic_envelope.py](numeric/test_semantic_envelope.py) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
-| 2026-11-16 | Handoff | [package_handoff.py](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/package_handoff.py) | Local research material |
+| 2026-11-16 | Handoff | [package_handoff.py](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/closeout-2026-11-17/research/package_handoff.py) | Local research material |
 | 2026-11-16 | Consolidated technical manuscript | [paper/build_pdf.py](paper/build_pdf.py) | Conditional mathematics and comparison boundaries; not an acceptance of originality or of the real full chain |
 | 2026-11-16 | Consolidated technical manuscript | [paper/BUILD_PROTOCOL.md](paper/BUILD_PROTOCOL.md) | Conditional mathematics and comparison boundaries; not an acceptance of originality or of the real full chain |
 | 2026-11-16 | Consolidated technical manuscript | [paper/BUILD_RECORD.md](paper/BUILD_RECORD.md) | Record of the local PDF build, formulas and page-by-page layout checks |
@@ -180,7 +180,7 @@ The original advisor materials in advisor_reference are a historical background 
 | 2026-11-16 | Handoff | [reproduce.py](reproduce.py) | Local research material |
 | 2026-11-16 | Handoff | [reproduction_log.json](reproduction_log.json) | 125 integration unit tests, 10 source self-tests and 13 reproduction commands |
 | 2026-11-16 | Complete delivery entry point | [START_HERE.md](START_HERE.md) | Start-here guide for the complete delivery: reading order and file navigation |
-| 2026-11-16 | Handoff | [test_package_handoff.py](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/test_package_handoff.py) | Local research material |
+| 2026-11-16 | Handoff | [test_package_handoff.py](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/closeout-2026-11-17/research/test_package_handoff.py) | Local research material |
 | 2026-11-16 | WP0.3 | [theory/collective_metrics.md](theory/collective_metrics.md) | Proofs of the accuracy and macro-F1 envelopes under shared shards |
 | 2026-11-16 | WP0.3 | [theory/impact_audit.md](theory/impact_audit.md) | Proofs of IA1–IA8 and the cost separation for rectangle procedures |
 | 2026-11-16 | WP0.3 | [theory/independent_review.md](theory/independent_review.md) | Independent mathematical review and qualifications |
@@ -197,6 +197,6 @@ The original advisor materials in advisor_reference are a historical background 
 | 2026-11-16 | WP0.4 | [xbrl/record.md](xbrl/record.md) | Restricted offline example; no real timestamp certificate |
 | 2026-11-16 | WP0.4 | [xbrl/synthetic_fixture.xml](xbrl/synthetic_fixture.xml) | Restricted offline example; no real timestamp certificate |
 | 2026-11-16 | WP0.4 | [xbrl/test_parse_local.py](xbrl/test_parse_local.py) | Restricted offline example; no real timestamp certificate |
-| 2026-11-16 | Packaging | [FABLE_REVIEW_BUNDLE.md](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_REVIEW_BUNDLE.md) | Complete merged reading edition of all deliverable Markdown, with a numbered table of contents and source headings |
-| 2026-11-16 | Packaging | [HANDOFF_MANIFEST.json](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json) | File SHA256 values and the count and complete list of merged Markdown files; excludes the manifest itself |
-| 2026-11-16 | Packaging | [FABLE_HANDOFF_COMPLETE_2026-11-16.zip](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip) | Complete local archive of the existing research through round 9; no private data, weights or old ZIPs |
+| 2026-11-16 | Packaging | [FABLE_REVIEW_BUNDLE.md](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/closeout-2026-11-17/research/FABLE_REVIEW_BUNDLE.md) | Complete merged reading edition of all deliverable Markdown, with a numbered table of contents and source headings |
+| 2026-11-16 | Packaging | [HANDOFF_MANIFEST.json](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json) | File SHA256 values and the count and complete list of merged Markdown files; excludes the manifest itself |
+| 2026-11-16 | Packaging | [FABLE_HANDOFF_COMPLETE_2026-11-16.zip](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip) | Complete local archive of the existing research through round 9; no private data, weights or old ZIPs |

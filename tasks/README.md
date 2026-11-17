@@ -1,9 +1,9 @@
-# Task briefs
+# Task Briefs
 
 The advisor wrote one brief per task: the question, the data, the analysis, a decision rule fixed in
 advance (continue, stop, or inconclusive) and a prior-art step. The briefs are kept as issued, so
 words like "next", "continue" or "write the short paper" describe plans at the time, not the final
-state. The final state of each task is in the table and in the [report](../report/proxy_tail_postmortem.pdf).
+state. The final state of each task is in the table and in the [report](../report/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance.pdf).
 
 Stages A and B ran before this folder existed; their plans are in
 [`research/advisor_reference/`](../research/advisor_reference/) and

@@ -1,4 +1,4 @@
-# Reproducing the results
+# Reproducing the Results
 
 Every result can be recomputed from the saved model outputs. Recomputation calls no model, needs no
 API key and trains nothing. Calling the models again will not reproduce the outputs byte for byte.
@@ -7,7 +7,7 @@ Run commands from the repository root. The analysis was run with Python 3.12.14;
 packages and versions are in [`requirements-analysis.txt`](requirements-analysis.txt) (numpy, scipy,
 matplotlib). Some stages need more; each stage's own notes say what.
 
-## Where each stage's instructions are
+## Where Each Stage's Instructions Are
 
 | Stage | Instructions |
 |---|---|
@@ -17,7 +17,7 @@ matplotlib). Some stages need more; each stage's own notes say what.
 | D. T3 | [research/t3_combination/execution_notes.md](research/t3_combination/execution_notes.md) |
 | E. T1–T1g | Each `research/t1*/` folder; T1g: [research/t1g_consequence/RUN.md](research/t1g_consequence/RUN.md) |
 
-## Stage B quick start
+## Stage B Quick Start
 
 ```sh
 python research/tail_screening/review_measurements.py
@@ -38,7 +38,7 @@ The historical data-preparation script accepts
 `--source source_materials/130U-FinLLM/data/raw/candidates/sentfin/SEntFiN.csv` and refuses to
 overwrite existing samples or aggregates.
 
-## Stage A source audit
+## Stage A Source Audit
 
 ```sh
 python research/data/fomc_source_audit.py --self-test
@@ -47,7 +47,7 @@ python research/data/fomc_source_audit.py --source-root source_materials/source_
 
 The second command rewrites the derived audit JSON (its time fields will change).
 
-## Known limits
+## Known Limits
 
 - **Paths.** Some T1-series scripts default to sibling working directories that existed on the
   student's machine (for example `proxy-tail-t1a/`). Pass the documented `--t1-dir`-style arguments,

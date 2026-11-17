@@ -1,10 +1,10 @@
 # Report
 
-**[proxy_tail_postmortem.pdf](proxy_tail_postmortem.pdf)** — *Proxy Tail: Anatomy of a Failed
-Research Line on LLM Evaluation in Finance*, Letao (Theodore) Ouyang, November 2026. Ten pages in the
-ACL format: the route with the reasoning at each fork, a root-cause analysis, a hindsight audit of
-what each stage cost and what would have closed it sooner, five questions for next time, and what
-survived.
+**[Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance.pdf](Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance.pdf)** — *Proxy Tail: Anatomy of a Failed Research Line on LLM Evaluation in
+Finance*, by Letao (Theodore) Ouyang. Eleven pages in the ACL format: the research route with the
+reasoning at each fork, a root-cause analysis, the results that survive, the practical significance
+of the failure, a hindsight audit of what each stage cost and what would have closed it sooner, and
+five questions for the next project.
 
 ## Building
 

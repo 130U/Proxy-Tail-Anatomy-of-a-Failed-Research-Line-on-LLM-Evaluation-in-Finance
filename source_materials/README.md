@@ -1,4 +1,4 @@
-# Source materials
+# Source Materials
 
 Material from the earlier project that the Stage A reports and recomputations refer to. Virtual
 environments, account settings and unrelated personal files were not copied.
