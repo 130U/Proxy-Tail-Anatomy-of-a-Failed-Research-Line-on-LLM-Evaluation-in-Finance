@@ -37,7 +37,7 @@ def main():
             assert len({k for k, v in pairs}) == len(pairs), "duplicate ID"
             assert {k for k, v in pairs} == set(schedule[cid]["item_ids"]), "wrong IDs"
             assert all(type(v) is int and 0 <= v <= 100 for k, v in pairs), "invalid score"
-            row = dict(call_id=cid, agent_path=f"/root/t3_scoring_runner/{cid}", model="gpt-6-sol", reasoning_effort="low", fork_turns="none", **state["active"].pop(cid), completed_utc=now(), status="valid", score_count=len(pairs))
+            row = dict(call_id=cid, agent_path=f"/root/t3_scoring_runner/v2_{cid}", model="gpt-6-sol", reasoning_effort="low", fork_turns="none", **state["active"].pop(cid), completed_utc=now(), status="valid", score_count=len(pairs))
             with log_path.open("a", encoding="utf-8", newline="\n") as f:
                 f.write(json.dumps(row, ensure_ascii=False) + "\n")
             logs.append(row)
