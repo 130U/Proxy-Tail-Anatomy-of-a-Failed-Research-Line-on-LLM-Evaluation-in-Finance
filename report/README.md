@@ -11,7 +11,8 @@ survived.
 The source is in [`src/`](src/): `main.tex`, `references.bib`, and the official ACL style files
 `acl.sty` and `acl_natbib.bst` (from
 [acl-org/acl-style-files](https://github.com/acl-org/acl-style-files), commit `d5adc82`). The
-figures are drawn with TikZ inside `main.tex`; there are no image files.
+figures are drawn with TikZ inside `main.tex`. [`figures/`](figures/) holds PNG crops of Figures 1
+and 2 from the built PDF, used on the front page.
 
 With [Tectonic](https://tectonic-typesetting.github.io/):
 

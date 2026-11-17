@@ -16,40 +16,10 @@ Status: **closed on 2026-11-17.** Nothing here is ongoing work.
 
 ## The route
 
-Colours give the reason each stage was closed, not whether it was finished.
+![The route: five stages, the reason for each turn, and the T1 steps](report/figures/route.png)
 
-```mermaid
-flowchart TD
-    classDef std fill:#f1f1f1,stroke:#6e6e6e,color:#111
-    classDef prior fill:#f1ecf7,stroke:#764e9f,color:#111
-    classDef gate fill:#fbf3e0,stroke:#bf8000,color:#111
-    classDef conseq fill:#e5f2f4,stroke:#00768a,color:#111
-    classDef keep fill:#e6f3e9,stroke:#1a7f37,color:#111,stroke-width:3px
-    classDef end_ fill:#ffffff,stroke:#333,color:#111
-
-    A["<b>A. Certifiable FinLM</b> · Nov 15–16<br/>9 rounds, 5 research paths, proofs + one real baseline<br/>Closed: every component was a standard tool"]:::std
-    B["<b>B. Proxy tail</b> · Nov 16<br/>How wide must a cheap model's shortlist be?<br/>Closed: law already known; reference LLM unstable in the tail"]:::prior
-    C["<b>C. Absolute-score stability</b> · Nov 16<br/>1,000 headlines × 8 rounds, 10,000 scores<br/>Closed: inconclusive (tie gate 22 > 20)"]:::gate
-    D["<b>D. Two probes</b> · Nov 16<br/>T2 stopped at prior art; T3 additive, no mechanism"]:::prior
-    E["<b>E. Rounding precision in FinQA</b> · Nov 16–17<br/>196 / 1,147 test answers not pinned down by displayed precision"]:::conseq
-    E1["T1a law: zero-parameter rule, 5,337 / 5,337"]:::keep
-    E2["T1b kill test: survives, 123 questions (10.7%)"]:::keep
-    E3["T1c: no effect on official scores"]:::conseq
-    E4["T1d: models handle precision when asked (98.4%)"]:::conseq
-    E5["T1f: 4 of 5 claims had prior work"]:::prior
-    E6["T1g: no consequence; rule holds on TAT-QA"]:::conseq
-    Z["<b>Closeout</b> · Nov 17<br/>a verified note, no paper"]:::end_
-
-    A -->|"no consumer for a certificate;<br/>drop certificates and training"| B
-    B -->|"reference disagrees with itself;<br/>measure its stability first"| C
-    C -->|"a pass would only confirm a textbook formula;<br/>issue four one-day probes"| D
-    D -->|"T1 finds a countable effect in an hour"| E
-    E --> E1 & E2 & E3
-    E3 -->|"null on scores; ask a behavioural question"| E4
-    E4 -->|"draft paper; check novelty first"| E5
-    E5 -->|"only the rule remains; look for a consequence"| E6
-    E6 --> Z
-```
+Stages run top to bottom; the text beside each arrow is why we turned. Colours give the reason each
+box was closed, not whether it was finished. This is Figure 1 of the report.
 
 ## Why it failed, in one paragraph
 
@@ -71,6 +41,8 @@ official score. The reason is visible in the benchmark's definition: the gold an
 on the displayed numbers, and models read the same displayed numbers. Uncertainty about the
 *unrounded* truth is invisible to every score that shares that convention. Reading the scorer would
 have shown this before the first experiment.
+
+<p align="center"><img src="report/figures/consequence_chain.png" alt="The consequence chain for the rounding line: each link from the phenomenon to a consequence was tested and found broken" width="430"></p>
 
 ## Five questions to answer before the first experiment
 
