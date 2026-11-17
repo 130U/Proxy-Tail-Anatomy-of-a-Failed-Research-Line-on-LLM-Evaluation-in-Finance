@@ -30,20 +30,20 @@ def main():
               elapsed_seconds=time.perf_counter()-started,records=records,
               status='conditional_component_verified; real_model_and_timestamp_premises_unverified')
     (root/'results.json').write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
-    lines=['# 集体统计量包络：实际计算结果','',
-           '所有数值来源：我们的实验（构造票矩阵，非真实模型）。实际计算耗时 %.4f 秒。'%data['elapsed_seconds'],'',
-           '| 输入 | 方法 | 逐点accuracy | 集体accuracy | 逐点macro-F1 | 集体macro-F1 |','|---|---|---|---|---|---|']
+    lines=['# Collective statistic envelope: actual computation results','',
+           'Source of all numbers: our experiment (constructed vote matrices, not real models). Actual computation time %.4f seconds.'%data['elapsed_seconds'],'',
+           '| Input | Method | Per-point accuracy | Collective accuracy | Per-point macro-F1 | Collective macro-F1 |','|---|---|---|---|---|---|']
     def show(x):return '['+x['lower_exact']+', '+x['upper_exact']+']'
     for row in records:
         r=row['result']; independent=r['independent']; collective=r['collective']
         lines.append('| '+ ' | '.join([row['name'],row['method'],show(independent['accuracy']),show(collective['accuracy']),
                                        show(independent['macro_f1']),show(collective['macro_f1'])])+' |')
-    lines+=['','第一例证明共同受影响头约束可能严格收紧界；第二例证明逐类F1分别取极值只是外包络，不能宣称联合可达。',
-            'exact指在固定集合、选定头可自由改变所有输出这一放松模型内精确；不指真实训练过程能实现每个端点。',
-            '统计量包含固定的全部K类，零支持且零预测类贡献0，不能在每次扰动后动态删去类别。',
-            '实际部署须先另行证明可信核心和共享组件不受污染改变，再由有效审计确定影响头预算。这些输入前提没有在本实验中核实。',
-            '本轮不据此通过G0或G1，不声称集体投毒证书或macro-F1优化是新理论。',
-            '状态预算或子集预算耗尽时程序拒绝输出；当前实现的指数/组合复杂度限制了大规模使用。']
+    lines+=['','The first example shows that the jointly-affected-heads constraint can strictly tighten the bounds; the second shows that taking per-class F1 extremes separately gives only an outer envelope, and joint reachability cannot be claimed.',
+            '"exact" means exact within the relaxation model in which, for a fixed set, the selected heads can freely change all outputs; it does not mean the real training process can realize every endpoint.',
+            'The statistic includes all K fixed classes; a class with zero support and zero predictions contributes 0; classes must not be dropped dynamically after each perturbation.',
+            'An actual deployment must first prove separately that the trusted core and the shared components are not changed by contamination, and then set the affected-head budget from a valid audit. These input premises were not verified in this experiment.',
+            'This round does not pass G0 or G1 on this basis, and does not claim that the collective poisoning certificate or the macro-F1 optimization is new theory.',
+            'The program refuses to output when the state budget or the subset budget is exhausted; the exponential/combinatorial complexity of the current implementation limits large-scale use.']
     (root/'report.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     print(json.dumps(dict(status=data['status'],cases=len(cases),methods=2,
                           elapsed_seconds=data['elapsed_seconds'],report=str(root/'report.md'))))

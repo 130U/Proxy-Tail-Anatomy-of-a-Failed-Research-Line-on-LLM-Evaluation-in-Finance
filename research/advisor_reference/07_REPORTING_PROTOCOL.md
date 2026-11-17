@@ -1,174 +1,174 @@
-# 回报协议与模板
+# Reporting protocol and templates
 
-所有产出都放在仓库的 `research/` 目录下。Theodore 会把这些文件带回给导师。导师读完后给出下一轮的问题和优先级调整。
+All outputs go in the repository's `research/` directory. Theodore will bring these files back to the advisor. After reading them, the advisor gives the questions and priority adjustments for the next round.
 
-**来源层级标签**（每个数字都要标）：
+**Source-tier labels** (every number must be labeled):
 
-- `全文`：从论文正文读到；
-- `摘要`：只从摘要读到；
-- `二手`：来自综述、博客、新闻；
-- `导师记忆`：来自导师给的、未核实的引用；
-- `我们的实验`：注明实验编号。
+- `full text`: read in the body of the paper;
+- `abstract`: read only in the abstract;
+- `secondary`: from a survey, blog or news item;
+- `advisor memory`: from a citation given by the advisor that has not been verified;
+- `our experiment`: give the experiment ID.
 
 ---
 
-## 1. 文献题回答模板（`research/answers/Qxx.md`）
+## 1. Template for literature answers (`research/answers/Qxx.md`)
 
 ```markdown
-# Qxx：<题目简称>
+# Qxx: <short title of the question>
 
-日期：YYYY-MM-DD · 是否联网：是 / 否 · 检索截止：YYYY-MM
+Date: YYYY-MM-DD · Online: yes / no · Search cutoff: YYYY-MM
 
-## 1. 结论
-（不超过 5 句，直接回答问题）
+## 1. Conclusion
+(At most 5 sentences, answering the question directly)
 
-## 2. 证据
-| 工作 | 年份 / venue | 编号或 URL | 与本题相关的具体内容或数字 | 来源层级 |
+## 2. Evidence
+| Work | Year / venue | ID or URL | Specific content or numbers relevant to this question | Source tier |
 |---|---|---|---|---|
 
-## 3. 新颖性判断
-- 判断：已有人做 / 部分做 / 未见
-- 置信度：高 / 中 / 低
-- 检索关键词：
-- 与导师假设的关系：确认 / 推翻 / 修正（说明是哪条假设）
+## 3. Novelty judgment
+- Judgment: already done / partly done / not found
+- Confidence: high / medium / low
+- Search keywords:
+- Relation to the advisor's hypothesis: confirms / overturns / revises (state which hypothesis)
 
-## 4. 最小可行验证
-（一个定理陈述草稿，含全部假设；或一个 T4 上几小时内能完成的实验设计）
+## 4. Minimal viable check
+(A draft theorem statement with all assumptions; or an experiment design that can be completed within a few hours on a T4)
 
-## 5. 否决条件
-（什么发现会让我们放弃这个方向）
+## 5. Kill conditions
+(What finding would make us abandon this direction)
 
-## 6. 不确定之处
+## 6. Uncertainties
 ```
 
 ---
 
-## 2. 推导题模板（`research/theory/Txx.md` 或写进 `notes.tex`）
+## 2. Template for derivation questions (`research/theory/Txx.md` or written into `notes.tex`)
 
 ```markdown
-# Txx：<命题名>
+# Txx: <proposition name>
 
-状态：已证明 / 草稿 / 有反例 / 开放
+Status: proven / draft / has counterexample / open
 
-## 陈述
-（完整的假设列表 + 结论）
+## Statement
+(Complete list of assumptions + conclusion)
 
-## 证明
-（或反例）
+## Proof
+(Or counterexample)
 
-## 与导师草稿的差异
-（改了什么，为什么改）
+## Differences from the advisor's draft
+(What was changed, and why)
 
-## 数值例子
-（如果适用）
+## Numerical example
+(If applicable)
 
-## 依赖的文献结论
-| 结论 | 出处 | 来源层级 |
+## Literature results relied on
+| Result | Source | Source tier |
 |---|---|---|
 ```
 
 ---
 
-## 3. 实验记录模板（`research/experiments/<id>/record.md`）
+## 3. Template for experiment records (`research/experiments/<id>/record.md`)
 
 ```markdown
-# 实验 <id>：<一句话目的>
+# Experiment <id>: <one-sentence purpose>
 
-## 要检验的命题或问题
-（指向 Txx、Qxx 或 WPx.x）
+## Proposition or question to test
+(Points to Txx, Qxx or WPx.x)
 
-## 预算（开跑前填写）
-- 硬件：CPU / T4
-- 预计时间：
-- 预计显存：
-- 数据规模：
+## Budget (fill in before starting the run)
+- Hardware: CPU / T4
+- Estimated time:
+- Estimated GPU memory:
+- Data size:
 
-## 配置
-- commit：
-- config 文件：
-- seeds：
-- 数据版本与哈希：
-- 实际硬件与实际用时：
+## Configuration
+- commit:
+- config file:
+- seeds:
+- Data version and hash:
+- Actual hardware and actual time:
 
-## 结果
-| 配置 | 指标 | 点估计 | 95% 置信区间 | n |
+## Results
+| Configuration | Metric | Point estimate | 95% confidence interval | n |
 |---|---|---|---|---|
 
-## 证书检查器输出（如果适用）
-（原样粘贴 JSON）
+## Certificate checker output (if applicable)
+(Paste the JSON as is)
 
-## 结论
-（对照"要检验的命题"，结论是什么）
+## Conclusion
+(Measured against the "proposition to test", what is the conclusion)
 
-## 异常与限制
+## Anomalies and limitations
 ```
 
 ---
 
-## 4. 进展报告模板（`research/reports/YYYY-MM-DD-roundN.md`）
+## 4. Template for progress reports (`research/reports/YYYY-MM-DD-roundN.md`)
 
-这是 Theodore 最需要带回给导师的文件。请写得让导师**不需要打开其他文件**也能做决定。
+This is the file Theodore most needs to bring back to the advisor. Write it so that the advisor can make decisions **without opening any other file**.
 
 ```markdown
-# 第 N 轮进展报告
+# Round N progress report
 
-日期：YYYY-MM-DD · 分支：research/certifiable · 最新 commit：
+Date: YYYY-MM-DD · Branch: research/certifiable · Latest commit:
 
-## 1. 一段话总结
-（这一轮最重要的发现是什么）
+## 1. One-paragraph summary
+(What is the most important finding of this round)
 
-## 2. 完成了什么
-| 编号 | 产出文件 | 一句话结论 | 证据强度 |
+## 2. What was completed
+| ID | Output file | One-sentence conclusion | Strength of evidence |
 |---|---|---|---|
 
-## 3. 导师假设的状态
-| 假设 | 出处 | 状态 | 依据 |
+## 3. Status of the advisor's hypotheses
+| Hypothesis | Source | Status | Basis |
 |---|---|---|---|
-| P1 的可证明界未见于文献 | 01 §5.1 | 确认 / 推翻 / 未查 | Qxx |
-| 审计分辨率极限成立 | T1.4 | 已证明 / 有误 / 未做 | Txx |
+| The provable bound of P1 is not found in the literature | 01 §5.1 | confirmed / overturned / not checked | Qxx |
+| The audit resolution limit holds | T1.4 | proven / wrong / not done | Txx |
 | ... | | | |
 
-## 4. 决策门材料
-（如果本轮接近 G0 / G1，按 01 §8 的标准逐条给出材料）
+## 4. Decision gate materials
+(If this round is close to G0 / G1, give the materials item by item according to the criteria in 01 §8)
 
-## 5. 意外发现
-（与预期不同的结果，包括负结果）
+## 5. Unexpected findings
+(Results that differ from expectations, including negative results)
 
-## 6. 卡住的地方
+## 6. Where we are stuck
 
-## 7. 需要 PI 决定
-（需要 Theodore 提供或决定的事项；编号接 08_DECISION_LOG.md 的 O 系列）
+## 7. Needs PI decision
+(Items that Theodore needs to provide or decide; numbering continues the O series in 08_DECISION_LOG.md)
 
-## 8. 建议的下一步
-（你认为下一轮应该做什么，以及理由。导师会参考，但不一定采纳）
+## 8. Suggested next steps
+(What you think the next round should do, and why. The advisor will take it into account but may not adopt it)
 ```
 
 ---
 
-## 5. 索引（`research/INDEX.md`）
+## 5. Index (`research/INDEX.md`)
 
-每个产出一行：
+One line per output:
 
 ```markdown
-| 日期 | 编号 | 文件 | 一句话结论 |
+| Date | ID | File | One-sentence conclusion |
 |---|---|---|---|
-| 2026-11-20 | WP0.1 | experiments/wp0_1/record.md | 0.655 vs 0.609 的差距在 95% 区间内 |
+| 2026-11-20 | WP0.1 | experiments/wp0_1/record.md | The gap between 0.655 and 0.609 is within the 95% interval |
 ```
 
 ---
 
-## 6. 回传给导师时带什么
+## 6. What to bring when reporting back to the advisor
 
-**每一轮至少带：**
+**Every round, bring at least:**
 
-1. 最新的进展报告；
-2. 本轮新增或修改的所有 `answers/Qxx.md`；
-3. `research/INDEX.md`。
+1. The latest progress report;
+2. All `answers/Qxx.md` added or modified this round;
+3. `research/INDEX.md`.
 
-**按需带：**
+**Bring as needed:**
 
-- 推导题的产出（如果进展报告里提到"有反例"或"与草稿不同"，一定要带）；
-- `claims_audit.md`（第一次完成时带）；
-- 实验记录（如果结论与预期不同，一定要带）。
+- Outputs of derivation questions (always bring them if the progress report mentions "has counterexample" or "differs from the draft");
+- `claims_audit.md` (bring it the first time it is completed);
+- Experiment records (always bring them if a conclusion differs from expectations).
 
-**打包方式：** 把上述文件放进一个文件夹，或者合并成一个 Markdown 文件，交给导师即可。
+**How to package:** put the files above in one folder, or merge them into one Markdown file, and hand that to the advisor.

@@ -1,11 +1,11 @@
-# 给Fable的集中技术报告
+# Focused technical report for Fable
 
-最新补充请先读[第九轮报告](../reports/2026-11-16-round9.md)与[任意随机审计证明](../theory/randomized_audit.md)：固定层配额限制已放宽，并得到简单策略的匹配下界。以下第七轮PDF与源稿保留原历史版本，不包含第八/九轮新结果；不能仅据旧稿判断最新方法必要性。
+For the latest additions, first read the [round nine report](../reports/2026-11-16-round9.md) and the [proof for arbitrary randomized audits](../theory/randomized_audit.md): the fixed per-stratum quota restriction has been relaxed, and a matching lower bound for the simple strategy has been obtained. The round seven PDF and source manuscripts below keep their original historical versions and do not include the new round eight/nine results; the necessity of the latest method cannot be judged from the old manuscript alone.
 
-**后续第八轮补充请先读[最新研究判断](../reports/2026-11-16-round8.md)。** 它进一步比较最强固定总数门、简单组合和更广随机抽样，缩小了本稿候选贡献的适用范围。下列PDF及两份源稿保留第七轮被审版本，没有把后续结论默默合并进旧稿。
+**For the later round eight additions, first read the [latest research judgment](../reports/2026-11-16-round8.md).** It further compares the strongest fixed total-count gate, simple combinations and broader random sampling, and narrows the scope of this manuscript's candidate contribution. The PDF and the two source manuscripts below keep the round seven reviewed version; later conclusions were not silently merged into the old manuscript.
 
-先读中文[决策短笺](FABLE_DECISION_NOTE.md)，再读10页[英文PDF](output/pdf/audit_budgets_working_report.pdf)及[独立论文审查](../reports/paper_review.md)。完整五条路径在[比较入口](../paths/COMPARATIVE_ANALYSIS.md)。本地交付，尚未对外发送。
+First read the [decision note](FABLE_DECISION_NOTE.md) (written in Chinese at the time), then the 10-page [English PDF](output/pdf/audit_budgets_working_report.pdf) and the [independent paper review](../reports/paper_review.md). The complete five paths are at the [comparison entry point](../paths/COMPARATIVE_ANALYSIS.md). Delivered locally; not yet sent outside.
 
-核心问题是固定分层审计下，认证最终统计量、单个矩形计数盒和更一般计数区域的成本有何区别。稿件纳入了能削弱原主张的简单总污染数对照，并保留全20格中位改善0的负结果。它是可反驳、可复查的内部技术稿，不是已确认原创或完成真实证书的论文。
+The core question is how, under a fixed stratified audit, the costs differ between certifying the final statistic, a single rectangular count box, and more general count regions. The manuscript includes the simple total-contamination-count control that can weaken the original claim, and keeps the negative result of a median improvement of 0 over all 20 cells. It is a refutable, checkable internal technical manuscript, not a paper with confirmed originality or a completed real certificate.
 
-源稿为[manuscript.md](manuscript.md)及[manuscript.tex](manuscript.tex)。[构建记录](BUILD_RECORD.md)说明源稿一致性、10页视觉检查与本地复现；PDF采用原生MathML排版，LaTeX未编译。项目G0/G1仍保持未通过，详见[完整验收审计](../reports/completion_audit.md)。
+The source manuscripts are [manuscript.md](manuscript.md) and [manuscript.tex](manuscript.tex). The [build record](BUILD_RECORD.md) explains source-manuscript consistency, the 10-page visual inspection and local reproduction; the PDF uses native MathML typesetting, and the LaTeX was not compiled. The project's G0/G1 remain not passed; see the [full acceptance audit](../reports/completion_audit.md).

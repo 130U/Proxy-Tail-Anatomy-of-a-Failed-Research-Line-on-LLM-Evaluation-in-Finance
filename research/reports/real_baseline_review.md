@@ -1,100 +1,100 @@
-# 新 SEntFiN Phase 0：独立实施与证据审查
+# New SEntFiN Phase 0: independent review of implementation and evidence
 
-日期：2026-11-16。角色：内部 AI 反方审查员；不代表 Fable、导师或外部同行。全程离线，未联系任何外部人员。依据本地“学术研究-组织反方研究审查”技能及 reviewer 模板开展。
+Date: 2026-11-16. Role: internal AI adversarial reviewer; does not represent Fable, the advisor or outside peers. Fully offline; no outside person was contacted. Conducted according to the local skill "academic research - organize an adversarial research review" and its reviewer template.
 
-**结论：在所审查范围内，来源原任务的准备、训练和配对评估设计可以形成新的、范围受限的 Phase 0 基线证据。没有发现仍会改变本轮模型选择的 critical 实现错误；发现的 important 模型名称接口错误已修复并复测。这个判断不等于人工标签、完整事件独立性、历史可得性或旧 G0/G1 已通过。** 最终公开区间及归档复核见文末增量记录。
+**Conclusion: within the reviewed scope, the preparation, training and paired-evaluation design for the source's original task can form new, scope-limited Phase 0 baseline evidence. No critical implementation error was found that would still change this round's model selection. The important model-name interface error that was found has been fixed and retested. This judgment does not mean that the human labels, full event independence, historical availability or the old G0/G1 have passed.** For the final public interval and the archive review, see the incremental record at the end.
 
-## 审查范围与证据边界
+## Review scope and evidence boundaries
 
-实际读取了 [PROTOCOL](../real_baseline/PROTOCOL.md)、[DESIGN_REVIEW](../real_baseline/DESIGN_REVIEW.md)、prepare/train/bootstrap 三套代码及构造测试、[评估实现](../evaluation/evaluate.py)及测试、[打包代码](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/package_handoff.py)及测试，以及匿名 [准备清单](../real_baseline/aggregate_manifest.json)和[训练汇总](../experiments/real_baseline/baseline_summary.json)。也查阅了本机 threadpoolctl 实现，核对线程枚举 fallback 的行为。
+Files actually read: [PROTOCOL](../real_baseline/PROTOCOL.md), [DESIGN_REVIEW](../real_baseline/DESIGN_REVIEW.md), the three code sets prepare/train/bootstrap and their constructed tests, the [evaluation implementation](../evaluation/evaluate.py) and its tests, the [packaging code](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/package_handoff.py) and its tests, and the anonymized [preparation manifest](../real_baseline/aggregate_manifest.json) and [training summary](../experiments/real_baseline/baseline_summary.json). The threadpoolctl implementation on this machine was also consulted, to check the behavior of the thread-enumeration fallback.
 
-没有读取原始 CSV、`research/private/` 下的新闻文本、逐行标签、分区、预测或模型权重；没有人工重标标签，没有检查实际语义事件成员，没有重新训练真实模型。构造测试中的人工字符串与标签不属于真实私有语料。真实数据处理的字节验证和行级不变量由所审代码执行并记录；本审查独立检查代码、公开汇总的内部一致性及公开文件哈希，不能将其写成审查员逐条复核了真实数据。
+Not read: the raw CSV, and the news text, per-row labels, splits, predictions or model weights under `research/private/`. No labels were relabeled by hand, no actual semantic event membership was checked, and no real model was retrained. The artificial strings and labels in the constructed tests are not part of the real private corpus. Byte verification and row-level invariants for the real data processing were executed and recorded by the code under review. This review independently checked the code, the internal consistency of the public summaries and the public file hashes. It must not be described as the reviewer having re-checked the real data row by row.
 
-本轮协议按执行记录在真实准备/训练前写定。最终主比较为运行前 PROTOCOL 的 **char−word test macro-F1**；DESIGN_REVIEW 建议的“开发集赢家−majority”没有被采纳。保留不同意见是合理的，不能在结果出来后把两者混成同一个事先指定分析。求解器 `lbfgs` 在训练前代码/config 中固定，原协议文字未逐项展开这个字段；本地文件摘要和执行记录并非外部可信时间戳。
+According to the execution record, this round's protocol was written before the real preparation/training. The final main comparison is the pre-run PROTOCOL's **char−word test macro-F1**. The "development-set winner − majority" comparison suggested by DESIGN_REVIEW was not adopted. Keeping the disagreement on record is reasonable, but after the results are in, the two must not be merged into a single pre-specified analysis. The solver `lbfgs` was fixed in the code/config before training, although the original protocol text does not spell out this field. Local file digests and execution records are not externally trusted timestamps.
 
-## 逐项核验
+## Item-by-item verification
 
-| 项目 | 核验内容与结论 | 仍不能推出的结论 |
+| Item | What was verified and conclusion | Conclusions that still cannot be drawn |
 |---|---|---|
-| 标签与目标输入 | 三类保持 negative/neutral/positive；同标题多实体不同标签合法。两主模型共用目标前缀及有词边界的字面替换，raw `input_text` 不作为特征。 | 不证明目标实体语义绑定、上市证券身份或投资立场真值。 |
-| 严格解析与冲突 | AST 检查在 literal_eval 前拒绝重复原始键及规范化碰撞；跨行冲突键为规范标题＋规范实体，整键隔离；相同标签重复合并。 | 不证明来源标签正确或隔离后总体具有代表性。 |
-| 近重复完整性 | 同一全局 token 顺序下，prefix 长度为 `|X|−ceil(.8|X|)+1`；合格对有足够公共 token，最早公共 token 必在双方 prefix 中。再用整数 Jaccard 判定及完整传递闭包。 | 只覆盖定义的词法关系，不能覆盖全部同一事件或跨来源依赖。 |
-| 分组与分区 | 有效标题先于标签清理建图；隔离标题仍可作为桥，避免标签决定图拆分。组件内容摘要与 seed 决定分区，组身份不依赖 union-find 根序号。空 token 标题没有被全部合并。 | 不是时间划分、未见实体划分，也不是从未接触过的外部确认集。 |
-| 拟合与选择 | 词表、IDF、最大特征截断及 LR 只拟合 train；每系统三个 C 只用 dev 固定三类 macro-F1 选择，精确平局取小 C；全部系统完成选择后才 test predict；不做 train+dev refit。 | 三种特征各自开发选择仍不使 bootstrap 包含整个研究搜索过程的不确定性。 |
-| 输入与身份绑定 | 真实 CLI 强制 manifest；在任何 fit 前比较 prepared rows 的 SHA256 及类 schema。拒绝覆盖已有真实输出；新模型没有加载旧 checkpoint。 | 不能恢复旧 24M 权重或旧逐行分数。 |
-| 配对区间 | 显式三类名称，混淆矩阵方向正确；每次以相同 multinomial 组计数作用于两模型，先汇总行计数再算固定三类指标。缺失、重复、错组、错真值及错模型集合拒绝。 | 不是每组等权指标、精确有限样本证书、训练过程区间或漂移保证。 |
-| 私有边界 | 数据准备/训练路径限制在 private；模型、词表及逐行预测不进入 aggregate。打包排除任意大小写的 private 路径组件与文件符号链接。 | 本次检查不是对所有旧公共文稿作逐字隐私取证；最终归档只按实际成员及清单复核。 |
+| Labels and target input | The three classes stay negative/neutral/positive; different labels for multiple entities in the same headline are legitimate. The two main models share the target prefix and a word-boundary literal replacement; raw `input_text` is not used as a feature. | Does not prove the semantic binding of the target entity, the identity of a listed security, or the ground truth of an investment stance. |
+| Strict parsing and conflicts | The AST check rejects duplicate raw keys and normalization collisions before literal_eval. The key for cross-row conflicts is canonical headline + canonical entity, and the whole key is quarantined; duplicates with the same label are merged. | Does not prove that the source labels are correct or that the population after quarantine is representative. |
+| Near-duplicate completeness | Under one global token order, the prefix length is `|X|−ceil(.8|X|)+1`; a qualifying pair has enough common tokens, so its earliest common token must lie in both prefixes. Integer Jaccard decisions and the full transitive closure are then applied. | Covers only the defined lexical relation; cannot cover all same-event or cross-source dependence. |
+| Grouping and splits | The graph is built from valid headlines before label cleaning; quarantined headlines can still act as bridges, so labels do not decide how the graph is split. The component content digest and the seed decide the split, and group identity does not depend on union-find root indices. Headlines with empty tokens were not all merged together. | It is not a time split or an unseen-entity split, and not an outside confirmation set that was never touched. |
+| Fitting and selection | The vocabulary, IDF, max-feature truncation and LR are fit on train only. For each system the three C values are chosen only by fixed three-class macro-F1 on dev, with exact ties going to the smaller C. Test prediction happens only after all systems have finished selection. There is no train+dev refit. | Development selection done separately for the three feature types still does not make the bootstrap include the uncertainty of the whole research search process. |
+| Input and identity binding | The real CLI requires the manifest. Before any fit it compares the SHA256 of the prepared rows and the class schema. It refuses to overwrite existing real outputs, and the new models did not load the old checkpoint. | Cannot recover the old 24M weights or the old per-row scores. |
+| Paired interval | Explicit three-class names; confusion matrix in the correct orientation. Each replicate applies the same multinomial group counts to both models, sums the row counts first and then computes the fixed three-class metrics. Missing, duplicate, wrongly grouped, wrong-ground-truth and wrong-model-set inputs are rejected. | It is not an equal-weight-per-group metric, an exact finite-sample certificate, an interval over the training process or a guarantee against drift. |
+| Private boundary | Data preparation/training paths are restricted to private; models, vocabularies and per-row predictions do not enter the aggregate. Packaging excludes private path components in any letter case, and file symlinks. | This check is not a word-by-word privacy forensic review of all old public documents; the final archive was reviewed only against its actual members and the manifest. |
 
-## 问题、修补与保留意见
+## Issues, fixes and reservations
 
-### I01 — important，已关闭：训练输出与评估入口模型名不一致
+### I01 — important, closed: model names in the training output and the evaluation entry point did not match
 
-初版训练器联合预测使用 `word_tfidf_lr / char_tfidf_lr / entity_only_tfidf_lr`，而 bootstrap 入口要求 `word / char / entity_only`。两个模块的各自测试都可能通过，但真实评估将被 schema 检查拒绝。审查发现后立即通知主代理。
+The first version of the trainer's joint predictions used `word_tfidf_lr / char_tfidf_lr / entity_only_tfidf_lr`, while the bootstrap entry point required `word / char / entity_only`. Each module's own tests could pass, but the real evaluation would be rejected by the schema check. The review notified the main agent immediately after finding this.
 
-修复采用显式 `PREDICTION_KEYS` 映射：私有输入保持训练器长名称，公开展示用短名称；验证要求完整、唯一的长名称集合。新增测试直接引入训练器 `SYSTEMS`，并拒绝旧短名称输入。独立重跑 3 项 bootstrap 测试通过。此修复没有改动模型、C、分组、特征或已冻结的主比较，不构成测试分数驱动选择。
+The fix uses an explicit `PREDICTION_KEYS` mapping: the private input keeps the trainer's long names, and public display uses the short names. Validation requires a complete, unique set of long names. A new test imports the trainer's `SYSTEMS` directly and rejects input with the old short names. The 3 bootstrap tests were rerun independently and pass. This fix did not change the models, C, grouping, features or the frozen main comparison, and it does not amount to selection driven by test scores.
 
-### I02 — important，科学边界仍开放：词法簇不证明独立事件或历史可得性
+### I02 — important, scientific boundary still open: lexical clusters do not prove independent events or historical availability
 
-有 1,570 个测试词法簇和零跨区定义近重复边，只能证明当前算法的词法隔离。不同词法描述仍可能对应同一新闻事件；本轮全部语料参与构图及冲突清理，来源语料亦非首次接触的外部样本。因此名义 95% 区间只能按所述条件作近似解释。修补方式是保留这一限制；未来若提出事件独立、历史无前视或部署风险主张，必须另行建立事件/时间证据和对应设计。当前代码测试不能关闭这项科学门。
+Having 1,570 test lexical clusters and zero cross-split near-duplicate edges (as defined) only proves lexical separation under the current algorithm. Different lexical descriptions can still correspond to the same news event. In this round the whole corpus took part in graph construction and conflict cleaning, and the source corpus is not an outside sample touched for the first time. So the nominal 95% interval can only be interpreted approximately, under the stated conditions. The remedy is to keep this limitation on record. If claims of event independence, historical no-look-ahead or deployment risk are made in the future, event/time evidence and a corresponding design must be established separately. The current code tests cannot close this scientific gate.
 
-### I03 — important，科学边界仍开放：标签与简单模型比较不足以证明语言模型必要性
+### I03 — important, scientific boundary still open: labels and comparisons of simple models are not enough to prove that a language model is necessary
 
-测试 entity-only macro-F1 为 0.533588，说明在该划分上实体身份和标签先验具备预测性。它是替代解释的诊断，不能将它与主模型 F1 的比值称为“解释了多少百分比的性能”：macro-F1 不是可加贡献分解，两者也是不同拟合模型。主模型的目标字面匹配不是语义解析审计。
+The test entity-only macro-F1 is 0.533588, which shows that on this split entity identity and the label prior are predictive. It is a diagnostic for an alternative explanation. Its ratio to the main model's F1 cannot be described as "explaining some percentage of the performance": macro-F1 is not an additive contribution decomposition, and the two are different fitted models. The main model's literal matching of the target is not an audit of semantic parsing.
 
-本轮没有人工重标、完整事件审查、FinBERT 或零样本 LLM 对照；不能称完成原导师三基线要求、证明某类模型普遍优劣或证明必须从零预训练语言模型。当前关闭的是“有一个可检查的新来源任务基线”，并非旧 G0/G1、金融投资标签金标准或研究新颖性。
+This round had no human relabeling, no full event review, and no FinBERT or zero-shot LLM control. It cannot be said to complete the original advisor's three-baseline requirement, to prove that some class of models is generally better or worse, or to prove that a language model must be pretrained from scratch. What is closed now is "there is a checkable baseline on a new source task". The old G0/G1, a gold standard for financial investment labels, and research novelty are not closed.
 
-### M01 — minor，说明缺口已补：聚合流水账的分母必须保留
+### M01 — minor, documentation gap filled: the denominators in the aggregate ledger must be kept
 
-准备汇总的 13 是异常源行，7 是冲突标题—实体键，73 是合并的额外实体出现次数。它们不能直接相加，也不能把 7 写成冲突源行数。PREPARE_README 已明确此点。当前主 manifest 未给完整展开实体出现数与冲突实体出现数，故仅由该表不能完整核销所有清理步骤；如补充，应保留原始运行身份与哈希，不静默改写训练已绑定的 manifest。
+In the preparation summary, 13 is the number of anomalous source rows, 7 is the number of conflicting headline–entity keys, and 73 is the number of extra entity occurrences that were merged. They cannot be added directly, and 7 cannot be written as the number of conflicting source rows. PREPARE_README now states this explicitly. The current main manifest does not give the fully expanded number of entity occurrences or the number of conflicting entity occurrences, so all cleaning steps cannot be fully reconciled from that table alone. If this is supplemented, the original run identity and hashes should be kept, and the manifest that training is bound to should not be silently rewritten.
 
-作者随后增补 [PREPARATION_ACCOUNTING](../real_baseline/PREPARATION_ACCOUNTING.md)，保留原 manifest 与训练输入不变，分别给出 `10,753=13+10,740` 源行和 `14,371=14+73+14,284` 成功解析实体出现核销。已独立阅读并检查这些等式及分区计数一致性；补计数来自作者对固定源 CSV 的只读核算，本审查员没有重新读取源行。说明缺口关闭，不升级为对原始标签语义的独立复核。
+The author then added [PREPARATION_ACCOUNTING](../real_baseline/PREPARATION_ACCOUNTING.md). It keeps the original manifest and training inputs unchanged and gives the reconciliations `10,753=13+10,740` for source rows and `14,371=14+73+14,284` for successfully parsed entity occurrences. These equations and the consistency of the split counts were read and checked independently. The supplementary counts come from the author's read-only accounting of the fixed source CSV; this reviewer did not re-read the source rows. The documentation gap is closed. This is not promoted to an independent review of the semantics of the original labels.
 
-### M02 — minor，两个实体匹配计数口径不同
+### M02 — minor: the two entity-match counts use different definitions
 
-prepare 的原始 substring 未匹配数为 19；训练使用有词边界、大小写不敏感的 literal marker，未匹配为 train 81、dev 10、test 21，共 112。这不是算术矛盾。报告应保留各自定义，不能说全部语义实体绑定已成功，也不能用 19 代替模型实际 marker 未匹配数。
+In prepare, the number of raw substring non-matches is 19. Training uses a case-insensitive literal marker with word boundaries, with non-matches of 81 in train, 10 in dev and 21 in test, 112 in total. This is not an arithmetic contradiction. Reports should keep each definition. They cannot say that all semantic entity bindings succeeded, and they cannot use 19 in place of the model's actual number of marker non-matches.
 
-## 线程修复与预算证据
+## Thread fix and budget evidence
 
-本机 threadpoolctl 的 Windows snapshot 枚举路径异常在构造测试阶段暴露。实现先尝试正常控制器，仅在 FileNotFoundError 且为 Windows 时，使用 context 内的 patch 让库走它自身的 Unicode 模块枚举 fallback。独立读取库源码确认返回 None 会进入该 fallback；退出 context 恢复 patch，没有改写 site-packages。失败不会被当成成功忽略。
+An exception in the Windows snapshot enumeration path of threadpoolctl on this machine surfaced during the constructed tests. The implementation first tries the normal controller. Only on FileNotFoundError and on Windows does it use a patch inside a context to make the library take its own Unicode module-enumeration fallback. Reading the library source independently confirmed that returning None leads to that fallback. Leaving the context restores the patch, and site-packages was not modified. A failure is not ignored as if it were a success.
 
-训练前后各有三个数值库报告配置线程数为 2，真实运行记录了此发现方式。其含义是库自报线程配置，不是实测 OS 峰值线程数或进程只存在两条线程。环境变量是进程内启动请求。实际训练及输出总耗时 13.809371 秒，9 个 LR 候选均没有收敛警告；峰值内存未测，不能据此宣称已验证 RAM≤2GB。
+Before and after training, three numerical libraries each reported a configured thread count of 2, and the real run recorded how this was found. It means the libraries' self-reported thread configuration. It is not a measured OS peak thread count, nor does it mean the process had only two threads. The environment variables are in-process startup requests. Actual training plus output took 13.809371 seconds in total, and none of the 9 LR candidates had a convergence warning. Peak memory was not measured, so no claim can be made on this basis that RAM≤2GB was verified.
 
-## 独立检查与结果算术
+## Independent checks and result arithmetic
 
-独立执行了 prepare 12、train 8、初版 bootstrap 2 项构造测试，共 22 项通过（0.825 秒）；另外 evaluation 8 与 package 1，共 9 项通过（0.348 秒）。接口修复后只重跑受影响的 bootstrap 3 项，全部通过。没有重复旧数学全套，也没有重新训练真实模型。
+Constructed tests run independently: 12 for prepare, 8 for train and 2 for the first-version bootstrap, 22 in total, all passing (0.825 seconds); in addition, 8 for evaluation and 1 for package, 9 in total, all passing (0.348 seconds). After the interface fix, only the 3 affected bootstrap tests were rerun, and all pass. The old full mathematical suite was not repeated, and no real model was retrained.
 
-另构造了三个不等大簇，穷举全部 27 种有放回组抽样并重复四次，以独立 Fraction 混淆矩阵公式手算 macro-F1、两模型配对差及分位数。与 evaluator 的点估计和区间一致；该 oracle 检查的是组加权与配对实现，不是实际语料上的覆盖率证明。
+In addition, three clusters of unequal size were constructed. All 27 group resamplings with replacement were enumerated and repeated four times, and macro-F1, the paired difference between the two models and the quantiles were computed by hand with an independent Fraction confusion-matrix formula. They agree with the evaluator's point estimates and intervals. This oracle checks the group weighting and the pairing implementation; it is not a proof of coverage on the actual corpus.
 
-由公开训练汇总的全部 21 份混淆矩阵独立重算 accuracy、macro-F1 及支持数，均与精确分数记录一致。三个 selected C 分别为 word 10、char 1、entity-only 0.1，均是列出的 dev 三候选精确最优。公开训练源码哈希、manifest 文件哈希和配置哈希均重新计算一致；数据摘要在准备及训练汇总间一致，实际私有字节没有由本审查员重读。
+Accuracy, macro-F1 and support were recomputed independently from all 21 confusion matrices in the public training summary, and all agree with the exact recorded scores. The three selected C values are 10 for word, 1 for char and 0.1 for entity-only; each is the exact best of the three listed dev candidates. The public training source hash, the manifest file hash and the configuration hash were recomputed and agree. The data digests agree between the preparation and training summaries; the actual private bytes were not re-read by this reviewer.
 
-| 系统 | 固定 C | Test macro-F1 | Test accuracy |
+| System | Fixed C | Test macro-F1 | Test accuracy |
 |---|---:|---:|---:|
 | majority | — | 0.181295 | 0.373517 |
 | word TF-IDF LR | 10 | 0.792016 | 0.794020 |
 | char TF-IDF LR | 1 | 0.754783 | 0.753678 |
 | entity-only TF-IDF LR | 0.1 | 0.533588 | 0.537257 |
 
-准备记录的保留实体行数为 14,284；train/dev/test 为 10,041/2,136/2,107，测试有 1,570 个词法簇。四系统在同一冻结测试行上报告；没有按测试结果改变主比较方向。字面任务上的强词语基线是后续研究必须解释和超过的参照，不自动产生理论创新。
+The preparation record gives 14,284 retained entity rows. Train/dev/test are 10,041/2,136/2,107, and the test set has 1,570 lexical clusters. The four systems are reported on the same frozen test rows, and the direction of the main comparison was not changed according to the test results. The strong word baseline on this literal task is a reference that later research must explain and beat. It does not automatically produce a theoretical innovation.
 
-## 最终增量复核
+## Final incremental review
 
-已读取 [bootstrap_summary](../experiments/real_baseline/bootstrap_summary.json)：2,107 行、1,570 个词法簇、10,000 次抽样、seed 130。主配对差为 **−0.0372334174**，名义 95% percentile 区间为 **[−0.0530594770, −0.0215595431]**，方向保留 char−word。四系统点估计均与训练汇总一致；没有用两个单模型 CI 的端点相减来代替配对 CI。
+Read [bootstrap_summary](../experiments/real_baseline/bootstrap_summary.json): 2,107 rows, 1,570 lexical clusters, 10,000 resamples, seed 130. The main paired difference is **−0.0372334174**, with a nominal 95% percentile interval of **[−0.0530594770, −0.0215595431]**, keeping the char−word direction. The point estimates of the four systems all agree with the training summary. The paired CI was not replaced by subtracting the endpoints of two single-model CIs.
 
-另阅读了 [实验报告](../experiments/real_baseline/report.md)、[第四轮进展](2026-11-16-round4.md)和[审查回应](../real_baseline/REVIEW_RESPONSE.md)。它们保留了主比较设计分歧、不同匹配口径、身份捷径诊断限制和旧 G0 未通过状态；未发现将本轮成绩直接冒充旧模型分数或历史投资证书的主张。
+Also read: the [experiment report](../experiments/real_baseline/report.md), the [round-4 progress report](2026-11-16-round4.md) and the [review response](../real_baseline/REVIEW_RESPONSE.md). They keep the design disagreement over the main comparison, the different matching definitions, the limits of the identity-shortcut diagnostic, and the old G0's failed status. No claim was found that passes this round's scores off as the old model's scores or as a historical investment certificate.
 
-独立检查了评估源码文件哈希，以及公开汇总间三条身份绑定：prepared rows 摘要、准备 manifest 摘要、联合测试预测摘要；全部一致。联合预测摘要为 `d18a8a43c8ee10c5ce248ae7d0e96207ce759cbdf238dc36436f911e7f10adab`。这里没有重新打开或重算真实逐行预测。真实 bootstrap 用时 2.306168 秒；其三次系统汇总复用固定预测，不是新增模型训练或重新选参。
+Independently checked: the file hash of the evaluation source, and three identity bindings across the public summaries (the prepared-rows digest, the preparation-manifest digest and the joint test-prediction digest); all agree. The joint prediction digest is `d18a8a43c8ee10c5ce248ae7d0e96207ce759cbdf238dc36436f911e7f10adab`. The real per-row predictions were not reopened or recomputed here. The real bootstrap took 2.306168 seconds. Its three system summaries reuse the fixed predictions; they are not new model training or re-tuning.
 
-最终解释可以写为：“在本次来源原任务的固定非时间词法组划分和预定分析下，word 的测试 macro-F1 高于 char；所给配对近似区间方向一致。”实体先验、来源测量误差、跨簇事件关联以及先前研究者接触仍是未排除的解释。I01 的工程问题已关闭；I02/I03 的科学门仍开放。
+The final interpretation can be written as: "Under this fixed, non-temporal lexical-group split of the source's original task and the pre-specified analysis, word has a higher test macro-F1 than char, and the paired approximate interval points in the same direction." Entity priors, source measurement error, event links across clusters and prior contact by researchers remain explanations that have not been ruled out. The engineering issue I01 is closed; the scientific gates I02/I03 remain open.
 
-归档边界：先检查实际工作树的 `package_handoff.files()`，当时 115 个候选公共文件的 private 路径成员及模型权重成员均为 0；构造私有目录排除测试已通过。随后独立检查本轮首次重建的第四轮 zip（不是沿用第三轮清单）：共 123 个成员，其中 122 个 payload 与 HANDOFF_MANIFEST 逐项一一对应，所有字节数与 SHA256 匹配，CRC 检查通过。没有 private 路径组件、模型权重后缀、CSV 或 JSONL 成员；本轮协议、回应、计数核销、审查及两个 aggregate 结果均在包中。先检查成员边界，再读取公共清单及公共成员做哈希；未打开私有产物。
+Archive boundary: first, `package_handoff.files()` was checked on the actual working tree. At that time, among 115 candidate public files, there were 0 members with private paths and 0 model-weight members, and the constructed test that excludes private directories had passed. Then the round-4 zip, rebuilt for the first time in this round (not reusing the round-3 manifest), was checked independently. It has 123 members in total, of which 122 payloads correspond one-to-one with HANDOFF_MANIFEST; all byte counts and SHA256 values match, and the CRC check passes. There are no private path components, model-weight suffixes, CSV or JSONL members. This round's protocol, response, count reconciliation, review and the two aggregate results are all in the package. The member boundary was checked first, and only then were the public manifest and public members read for hashing; no private output was opened.
 
-该检查快照 zip SHA256 为 `bc8fd9825043b11367430affed0dff52bb4ab835afe9dc313533d25b322a9c2b`。本段补记会由主代理再打入最终包，因此最终 zip 自身摘要必然不同，应以最终交付记录为准；不能在包内嵌入它自身的最终 SHA256。打包代码只更新第四轮索引、阅读次序和状态描述，其 private 排除逻辑保持不变。
+The SHA256 of the checked zip snapshot is `bc8fd9825043b11367430affed0dff52bb4ab835afe9dc313533d25b322a9c2b`. The main agent will pack this addendum into the final package, so the digest of the final zip itself will necessarily differ; the final delivery record should be taken as authoritative. A package cannot embed its own final SHA256. The packaging code only updates the round-4 index, the reading order and the status description; its private-exclusion logic is unchanged.
 
-### 审查快照 SHA256
+### SHA256 of the reviewed snapshot
 
-路径相对 `research/`。这些是本次审查的公开内容身份；打包入口摘要已更新至第四轮归档版本。
+Paths are relative to `research/`. These are the public content identities for this review; the digest of the packaging entry point has been updated to the round-4 archive version.
 
-| 文件 | SHA256 |
+| File | SHA256 |
 |---|---|
 | `real_baseline/PROTOCOL.md` | `9bc87c797f415c63c2f70cc59d0ae85ca53f58a0280ec57e24d4a15eb36dfda3` |
 | `real_baseline/DESIGN_REVIEW.md` | `377f6cd944a2c7777c481041df2fa029df79b778054d7aca8d04b29bd4758954` |

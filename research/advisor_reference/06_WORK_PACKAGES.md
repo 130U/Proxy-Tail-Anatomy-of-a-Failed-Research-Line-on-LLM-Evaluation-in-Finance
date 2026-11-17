@@ -1,380 +1,380 @@
-# 工作包（WP）
+# Work packages (WP)
 
-每个工作包包含：目标、输入、步骤、产出、验收标准、算力预算、依赖，以及一张 **Codex 任务卡**。任务卡是可以直接粘贴给 Codex 的提示词。
+Each work package contains: goal, inputs, steps, outputs, acceptance criteria, compute budget, dependencies, and a **Codex task card**. A task card is a prompt that can be pasted directly to Codex.
 
-所有工作都在 `research/certifiable` 分支或以它为基的分支上做。每个工作包一个 PR 草稿，**不合并**。
-
----
-
-## Phase 0：地基（不管选哪条主线都要做）
-
-### WP0.1 评测地基
-
-**目标：** 把现有结果重新量化，并建立今后所有比较都使用的评测协议。
-
-**输入：**
-
-- 仓库现有的评测代码（`src/finllm/evaluation.py`、`src/finllm/baselines.py`）；
-- `docs/experiment-results.md` 里的数字；
-- 公开数据 SEntFiN（如果确认私有数据来自它，见 `02_PROJECT_SNAPSHOT.md` 第 8 节第 5 条）。
-
-**步骤：**
-
-1. 写一个评测模块，支持以下功能：
-   - 按 sample family 或事件成簇的 bootstrap 置信区间，覆盖 accuracy、macro-F1、分类别 P / R / F1；
-   - 按时间切分；
-   - 事件级去重。
-2. **从已发表的数字重建不确定性。** 已知类平衡 SFT 每类的正确数（5 / 62 / 12）和每类被预测的数量（11 / 66 / 24）。枚举所有与之一致的 3×3 混淆矩阵，对每个矩阵计算 macro-F1 的 bootstrap 区间，报告区间的范围。这一步不需要私有数据。
-3. 在公开数据上构建三条基线：TF-IDF + 逻辑回归、FinBERT、一个开源小 LLM 的零样本（在 T4 上用 4-bit 量化，例如 Qwen3 系列中能放进 T4 的型号）。
-4. 写一个脚本，让 Theodore 可以在 Kaggle 或 Colab 上用私有数据运行同样的评测。
-
-**产出：** `research/experiments/wp0_1/`，内含：评测代码、重建区间的报告、基线结果表、给 Theodore 的运行说明。
-
-**验收标准：**
-
-- 每个指标都带 95% 置信区间。
-- 报告明确回答："0.655 对 0.609 的差距，在抽样误差之内吗？"
-- 基线和区间都能用一个命令复现。
-
-**算力预算：** CPU 为主；零样本 LLM 在 T4 上不超过 1 小时。
-
-**依赖：** 无。
-
-> **Codex 任务卡（WP0.1）：**
-> 读 `00_CODEX_BRIEF.md`、`01_ADVISOR_MEMO.md`、`02_PROJECT_SNAPSHOT.md`。在 `research/certifiable` 分支上完成 `06_WORK_PACKAGES.md` 的 WP0.1。先做第 2 步（从已发表数字重建 macro-F1 的不确定性），它不需要任何数据。所有输出放在 `research/experiments/wp0_1/`。按 `07_REPORTING_PROTOCOL.md` 第 3 节写实验记录。不要修改 README。
-
-### WP0.2 补做 permission 损失的消融
-
-**目标：** 回答"semantic permission 损失比同一批编辑样本上的普通交叉熵更好吗？"
-
-**步骤：**
-
-1. 核实仓库里是否实现了 permission 损失，以及是否有生成编辑样本对的代码。
-2. 如果没有现成的编辑对：在公开数据上，用规则生成三类编辑对：
-   - 目标替换（改标签或不加约束）；
-   - 无关改写（分布保持）；
-   - 同向证据追加（标签保持，置信度可以变）。
-   或者等 WP0.5 完成后，在合成世界上做。
-3. 对比四个配置：(a) 只用原始样本的交叉熵；(b) 原始样本 + 编辑样本的交叉熵；(c) (b) + permission 损失；(d) (b) + permission 损失，但打乱许可类型作为对照。每个配置跑 3 个 seed。
-4. 指标：任务指标（带置信区间），以及规范违反率（对每类编辑，统计违反 T2.1 规范的比例）。
-
-**验收标准：** 不论结果正负，都有带置信区间的结论。
-
-**算力预算：** 24M 模型在 T4 上每个配置每个 seed 不超过 1 小时；或者用更小的骨干在 CPU 上做。
-
-**依赖：** 公开数据，或 WP0.5。
-
-> **Codex 任务卡（WP0.2）：**
-> 读 00、01、02 和 `04_THEORY_NOTES.md` 的 T2.1。完成 WP0.2。先在代码里核实 permission 损失是否已实现，把结论写在实验记录开头。如果需要合成数据而 WP0.5 还没完成，就先实现第 2 步的规则编辑，在 SEntFiN 上做。不要修改 README。
-
-### WP0.3 形式化笔记
-
-**目标：** 把 `04_THEORY_NOTES.md` 的草稿写成严谨的 LaTeX 笔记。
-
-**范围：** T0、T1.1–T1.5、T2.1–T2.4、T3.1。
-
-**产出：** `research/theory/notes.tex` 及其编译出的 PDF。每个命题标明状态：已证明 / 草稿 / 有反例 / 开放。
-
-**验收标准：**
-
-- 每个命题都有完整的假设列表。
-- 已证明的命题有完整证明。
-- 发现导师草稿有错时，明确写出错在哪里，以及如何修正。
-
-**算力预算：** 无。
-
-**依赖：** 无。可以和文献题并行。
-
-> **Codex 任务卡（WP0.3）：**
-> 读 00、01 和 `04_THEORY_NOTES.md`。把 T0、T1.1–T1.5、T2.1–T2.4、T3.1 写成严谨的 LaTeX 笔记，放在 `research/theory/notes.tex`。优先做 T1.4（审计分辨率极限）和 T2.2（有序单调头），它们最短，也最关键。导师的草稿可能有错，请检查每个常数和每个不等式的方向。
-
-### WP0.4 XBRL 管线原型
-
-**目标：** 确认 SEC XBRL 数据能否同时提供两样东西：可以精确校验的监督，以及权威的机器时间戳。
-
-**步骤：**
-
-1. **先停一下。** 访问 SEC 需要在 User-Agent 里写联系方式。向 Theodore 要这个值（`08_DECISION_LOG.md` 的 O3）。拿到之前，只写代码和测试，不发请求。
-2. 下载一个季度的 Financial Statement Data Sets，以及（如果存在的话）Financial Statement and Notes Data Sets。核实其中包含哪些文件，是否包含 calculation 关系。
-3. 统计以下内容：
-   - calc 关系中能被自动校验的比例；
-   - 校验失败的比例和类型；
-   - `accepted` 字段的格式和精度；
-   - 修正申报（10-K/A 等）在数据中如何出现。
-4. 如果可行，取少量 inline XBRL 文件，测量文本与 fact 能对齐的比例。
-
-**产出：** `research/experiments/wp0_4/`，内含：管线代码、统计报告、数据字典。
-
-**验收标准：** 报告明确回答三个问题：(a) EDGAR 的时间戳能否作为"可信核心"？(b) 每年能提供多少可校验的监督？(c) 文本–数字对齐能覆盖多少文本？
-
-**算力预算：** CPU，下载量约几百 MB。
-
-**依赖：** O3。
-
-> **Codex 任务卡（WP0.4）：**
-> 读 00、01、02。完成 WP0.4。**在 Theodore 提供 SEC User-Agent 联系方式之前，不要向 sec.gov 发任何请求**，只写代码和单元测试（用本地的小样例文件）。不要自己编造邮箱，也不要使用任何你在别处看到的邮箱。
-
-### WP0.5 合成世界 v0
-
-**目标：** 一个真值完全已知的试验台，用来验证所有证书"成立且不空"。
-
-**设计要求：**
-
-1. **公司与会计：** N 家公司，季度财务报表，满足会计恒等式（资产 = 负债 + 权益，小计等于各项之和）。
-2. **价格过程：** 带公司特异冲击和公告效应的随机过程。
-3. **文本生成：** 模板化的新闻、公告、评论。每篇文档有：
-   - 时间戳；
-   - 作者（holder）；
-   - 目标（target）；
-   - 真实立场（作者的隐变量）；
-   - metric direction（由数字决定）；
-   - 文中出现的数字、单位和尺度。
-4. **污染植入：** 可以指定数量 k，生成"时间戳在 t 之前、内容透露 t 之后结果"的文档，并记录它们的 id。
-5. **编辑对生成：** 按 T2.1 的五种许可类型生成编辑对，每对附带真值关系。
-6. 所有生成过程都由 seed 决定，可以逐位复现。
-
-**产出：** `synth/` 目录（代码 + 测试）和一份数据卡。
-
-**验收标准：**
-
-- 单元测试检查会计恒等式在所有生成的报表里成立。
-- 植入的污染数量完全精确。
-- 同一个 seed 生成的数据逐位相同。
-
-**算力预算：** CPU。
-
-**依赖：** 无。
-
-> **Codex 任务卡（WP0.5）：**
-> 读 00、01 和 `04_THEORY_NOTES.md` 的 T1.1、T2.1。完成 WP0.5，代码放在 `synth/`。生成器必须完全由 seed 决定，并能精确植入 k 篇时间戳错标的文档。先写测试再写生成器。模板语言尽量多样，避免模型只学模板。
-
-### WP0.6 声明审计
-
-**目标：** 列出仓库里所有对外声明，并与公开证据逐条对照。
-
-**步骤：** 逐句阅读 README 和 `docs/` 下的所有文档。对每一条声明，归入下列一类：
-
-- 有公开证据（指向文件或数字）；
-- 只有设计，没有运行证据；
-- 无法核实。
-
-对后两类，给出建议的改写措辞。
-
-**产出：** `research/claims_audit.md`。
-
-**验收标准：** 覆盖 README 和全部 docs 文件；每条声明都有归类；2.4B 相关的声明单独成一节。**不修改任何原文件。**
-
-**算力预算：** 无。
-
-**依赖：** 无。
-
-> **Codex 任务卡（WP0.6）：**
-> 读 00、02。完成 WP0.6，输出 `research/claims_audit.md`。只写审计报告，不要修改 README 或任何 docs 文件。语气客观，不做评价性的形容。
+All work is done on the `research/certifiable` branch or on a branch based on it. One draft PR per work package, **not merged**.
 
 ---
 
-## Phase 1：两条主线的可行性（G0 通过后开始实验；理论部分可以提前做）
+## Phase 0: foundation (needed whichever main line is chosen)
 
-### WP1.1 P1 的数值可行性图
+### WP0.1 Evaluation foundation
 
-**目标：** 在不训练任何模型的情况下，回答"P1 的证书在现实参数下是否可能非空"。
+**Goal:** re-quantify the existing results and set up the evaluation protocol that all later comparisons use.
 
-**步骤：**
+**Inputs:**
 
-1. 实现以下计算：
-   - T1.2 的 DP 界（ε、μ 网格）；
-   - T1.4 的审计上界（超几何精确计算）；
-   - T1.3 的分片需求。
-2. 用真实数量填参数（来自 WP0.4 和 Q5）：EDGAR 每年的文档数；可信核心与可疑窗口的划分方案。
-3. 画出可行区域：横轴是可疑窗口大小 N，纵轴是审计量 n，等高线是所需分片数 m 和每片文档数。
+- the repository's existing evaluation code (`src/finllm/evaluation.py`, `src/finllm/baselines.py`);
+- the numbers in `docs/experiment-results.md`;
+- the public SEntFiN data (if it is confirmed that the private data comes from it; see item 5 of section 8 in `02_PROJECT_SNAPSHOT.md`).
 
-**产出：** `certify/feasibility.py` 和 `research/experiments/wp1_1/report.md`。
+**Steps:**
 
-**验收标准：** 报告给出明确结论："在 X 条件下非空；在 Y 条件下必然为空。"
+1. Write an evaluation module that supports:
+   - bootstrap confidence intervals clustered by sample family or event, covering accuracy, macro-F1 and per-class P / R / F1;
+   - splitting by time;
+   - event-level dedup.
+2. **Rebuild the uncertainty from the published numbers.** For class-balanced SFT, the number correct per class (5 / 62 / 12) and the number predicted per class (11 / 66 / 24) are known. Enumerate all 3×3 confusion matrices consistent with these, compute a bootstrap interval for macro-F1 for each matrix, and report the range of the intervals. This step needs no private data.
+3. Build three baselines on public data: TF-IDF + logistic regression, FinBERT, and zero-shot use of a small open-source LLM (4-bit quantized on a T4, for example a model in the Qwen3 series that fits on a T4).
+4. Write a script that lets Theodore run the same evaluation on the private data on Kaggle or Colab.
 
-**算力预算：** CPU，分钟级。
+**Outputs:** `research/experiments/wp0_1/`, containing: the evaluation code, a report on the rebuilt intervals, a table of baseline results, and run instructions for Theodore.
 
-**依赖：** WP0.4 有助于取真实数字，但可以先用假设值。
+**Acceptance criteria:**
 
-> **Codex 任务卡（WP1.1）：**
-> 读 01 的 5.1 节和 04 的 T1.2–T1.4。完成 WP1.1。审计上界用超几何精确计算，不要只用近似公式。如果 WP0.4 还没完成，先用可以调整的假设值，并在报告里标出来。
+- Every metric has a 95% confidence interval.
+- The report answers explicitly: "Is the gap between 0.655 and 0.609 within sampling error?"
+- Both the baselines and the intervals can be reproduced with one command.
 
-### WP1.2 Point-in-time 语料管线
+**Compute budget:** mainly CPU; the zero-shot LLM at most 1 hour on a T4.
 
-**目标：** 实现 T1.1 的"按记录可测"管线，并用测试作为构造性证书。
+**Dependencies:** none.
 
-**步骤：**
+> **Codex task card (WP0.1):**
+> Read `00_CODEX_BRIEF.md`, `01_ADVISOR_MEMO.md`, `02_PROJECT_SNAPSHOT.md`. On the `research/certifiable` branch, complete WP0.1 of `06_WORK_PACKAGES.md`. Do step 2 first (rebuilding the macro-F1 uncertainty from the published numbers); it needs no data at all. Put all output in `research/experiments/wp0_1/`. Write the experiment record following section 3 of `07_REPORTING_PROTOCOL.md`. Do not modify the README.
 
-1. 建一个文档库：每篇文档有 id、内容哈希、记录时间戳、来源、是否属于可信核心。
-2. 每个组件（tokenizer 训练、过滤、去重、数据采样、验证集划分、超参数选择）都显式接收截止日 t，并且只读取 τ ≤ t 的数据。
-3. 写测试：对任意 t，往数据库里加入 τ > t 的文档，所有组件的输出必须逐位不变。这个测试就是构造性证书的检查器。
+### WP0.2 The missing ablation of the permission loss
 
-**产出：** `pit/` 目录（代码 + 测试）。
+**Goal:** answer "is the semantic permission loss better than ordinary cross-entropy on the same batch of edited samples?"
 
-**验收标准：** 不变性测试覆盖所有组件。
+**Steps:**
 
-**算力预算：** CPU。
+1. Verify whether the permission loss is implemented in the repository, and whether there is code that generates edited sample pairs.
+2. If there are no ready-made edit pairs: on public data, generate three kinds of edit pairs with rules:
+   - target replacement (relabel or no constraint);
+   - irrelevant rewriting (distribution-preserving);
+   - appending evidence in the same direction (label-preserving; confidence may change).
+   Or do it in the synthetic world after WP0.5 is complete.
+3. Compare four configurations: (a) cross-entropy on original samples only; (b) cross-entropy on original + edited samples; (c) (b) + permission loss; (d) (b) + permission loss, but with the permission types shuffled as a control. Run 3 seeds per configuration.
+4. Metrics: task metrics (with confidence intervals), and specification violation rates (for each kind of edit, the fraction that violates the T2.1 specification).
 
-**依赖：** WP0.4 或 WP0.5 提供数据。
+**Acceptance criteria:** a conclusion with confidence intervals, whether the result is positive or negative.
 
-> **Codex 任务卡（WP1.2）：**
-> 读 04 的 T1.1。完成 WP1.2，代码放在 `pit/`。核心交付是不变性测试：加入任意 τ > t 的文档，所有组件的输出都必须逐位不变。先在合成世界（WP0.5）上实现。
+**Compute budget:** for the 24M model on a T4, at most 1 hour per configuration per seed; or use a smaller backbone on CPU.
 
-### WP1.3 分片聚合证书原型
+**Dependencies:** public data, or WP0.5.
 
-**目标：** 在合成世界上验证 T1.5 的证书链：证书成立，并测量它有多紧。
+> **Codex task card (WP0.2):**
+> Read 00, 01, 02 and T2.1 of `04_THEORY_NOTES.md`. Complete WP0.2. First verify in the code whether the permission loss is implemented, and write the conclusion at the start of the experiment record. If synthetic data is needed and WP0.5 is not yet complete, first implement the rule-based edits of step 2 and do it on SEntFiN. Do not modify the README.
 
-**步骤：**
+### WP0.3 Formal notes
 
-1. 在可信核心上训练一个小骨干（例如 4 层、d=256），或直接用 24M 架构的缩小版。
-2. 冻结骨干，在可疑窗口的 m 个分片上各训练一个线性头或小 MLP，用确定性算法训练（CPU）。
-3. 验证确定性：同一个分片重复训练，结果逐位相同。
-4. 植入 k 篇污染文档，计算 $[S_{\text{low}}, S_{\text{high}}]$；同时训练一个"无污染"版本作为真值，检查真值是否落在区间内。
-5. 扫描 m ∈ {11, 31, 101, 301} 和 k ∈ {0, 1, 3, 10, 30}，报告：区间宽度、被认证的预测所占比例、准确率代价。
-6. 可选：用 ILP 计算更紧的集体证书，与朴素界比较。
+**Goal:** turn the drafts in `04_THEORY_NOTES.md` into rigorous LaTeX notes.
 
-**产出：** `certify/partition.py` 和 `research/experiments/wp1_3/`。
+**Scope:** T0, T1.1–T1.5, T2.1–T2.4, T3.1.
 
-**验收标准：**
+**Outputs:** `research/theory/notes.tex` and the PDF compiled from it. Each proposition is labeled with a status: proven / draft / has counterexample / open.
 
-- 在所有设置下，真值都落在证书区间内。若有一次不在，说明有 bug 或定理有误，必须先查清。
-- 给出"区间宽度–m–k"的完整表格。
+**Acceptance criteria:**
 
-**算力预算：** 骨干训练在 T4 上不超过 2 小时，或在 CPU 上训练更小的骨干；分片头在 CPU 上训练。
+- Every proposition has a complete list of assumptions.
+- Proven propositions have complete proofs.
+- When an error is found in the advisor's draft, state clearly where the error is and how it is corrected.
 
-**依赖：** WP0.5、WP1.2。
+**Compute budget:** none.
 
-> **Codex 任务卡（WP1.3）：**
-> 读 01 的 5.1 节和 04 的 T1.3–T1.5。完成 WP1.3。最重要的检查是：真值统计量必须在所有设置下落在证书区间内。先在很小的规模（m=11，k=1）上把整条链路跑通，再扫描参数。
+**Dependencies:** none. Can run in parallel with the literature questions.
 
-### WP2.1 数字解析与无量纲特征
+> **Codex task card (WP0.3):**
+> Read 00, 01 and `04_THEORY_NOTES.md`. Write T0, T1.1–T1.5, T2.1–T2.4 and T3.1 as rigorous LaTeX notes in `research/theory/notes.tex`. Do T1.4 (the audit resolution limit) and T2.2 (the ordered monotone head) first; they are the shortest and the most critical. The advisor's drafts may contain errors; please check every constant and the direction of every inequality.
 
-**目标：** 实现 P2 的统计环节，并测量它的错误率。
+### WP0.4 XBRL pipeline prototype
 
-**步骤：**
+**Goal:** confirm whether SEC XBRL data can provide two things at once: supervision that can be verified exactly, and authoritative machine timestamps.
 
-1. 写一个规则解析器：从文本中抽取数值、单位、尺度、期间、比较基准。覆盖 Q32 列出的常见错误类型。
-2. 在合成世界上评估（真值已知）；如果 WP0.4 拿到了 inline XBRL，再在它上面评估（用 XBRL fact 作为真值）。
-3. 构造无量纲组：同单位数量的比、增长率、相对于参照量的占比。
-4. 给出解析错误率的精确置信上界（这就是统计环节的证书）。
+**Steps:**
 
-**产出：** `models/numeric/parse.py`、`models/numeric/pi_groups.py` 和评估报告。
+1. **Pause first.** Accessing the SEC requires contact information in the User-Agent. Ask Theodore for this value (O3 in `08_DECISION_LOG.md`). Until you have it, write only code and tests, and send no requests.
+2. Download one quarter of the Financial Statement Data Sets and (if it exists) the Financial Statement and Notes Data Sets. Verify which files they contain and whether calculation relations are included.
+3. Count the following:
+   - the fraction of calc relations that can be verified automatically;
+   - the fraction and types of verification failures;
+   - the format and precision of the `accepted` field;
+   - how amended filings (10-K/A etc.) appear in the data.
+4. If feasible, take a small number of inline XBRL files and measure the fraction of text that can be aligned with facts.
 
-**验收标准：** 报告每种错误类型的错误率，以及总体错误率的置信上界。
+**Outputs:** `research/experiments/wp0_4/`, containing: pipeline code, a statistics report, a data dictionary.
 
-**算力预算：** CPU。
+**Acceptance criteria:** the report answers three questions explicitly: (a) can EDGAR timestamps serve as the "trusted core"? (b) how much verifiable supervision can be provided per year? (c) how much text can text–number alignment cover?
 
-**依赖：** WP0.5；WP0.4 可选。
+**Compute budget:** CPU, a download of about a few hundred MB.
 
-> **Codex 任务卡（WP2.1）：**
-> 读 01 的 5.2 节和 04 的 T2.3。完成 WP2.1。先用规则方法，不要用 LLM 抽取；我们需要一个可审计、可测量错误率的解析器。
+**Dependencies:** O3.
 
-### WP2.2 有序单调头
+> **Codex task card (WP0.4):**
+> Read 00, 01, 02. Complete WP0.4. **Do not send any request to sec.gov until Theodore provides the SEC User-Agent contact information**; write only code and unit tests (with small local sample files). Do not make up an email address, and do not use any email address you have seen elsewhere.
 
-**目标：** 实现 T2.2，并验证证书。
+### WP0.5 Synthetic world v0
 
-**步骤：**
+**Goal:** a testbed whose ground truth is fully known, for verifying that every certificate "holds and is non-vacuous".
 
-1. 实现 Lipschitz 单调网络（Kitouni 等的权重归一化方式，ℓ1 / ℓ∞ 约束）。
-2. 实现累积链接输出层。
-3. 把它接到小 transformer 上：文本流里的数字替换为占位符；数值只经由无量纲特征进入单调头。
-4. 写检查器：
-   - (a) 架构层面：逐层检查权重范数满足约束，并据此计算 λ 的上界；
-   - (b) 数值层面：在网格上验证单调性和导数界，作为健全性检查，而不是证明。
+**Design requirements:**
 
-**产出：** `models/monotone/` 和 `certify/monotone_check.py`。
+1. **Companies and accounting:** N companies with quarterly financial statements that satisfy accounting identities (assets = liabilities + equity, subtotals equal the sum of their items).
+2. **Price process:** a stochastic process with company-specific shocks and announcement effects.
+3. **Text generation:** templated news, announcements and commentary. Each document has:
+   - a timestamp;
+   - an author (holder);
+   - a target;
+   - a true stance (a latent variable of the author);
+   - a metric direction (determined by the numbers);
+   - the numbers, units and scales that appear in the text.
+4. **Contamination planting:** a number k can be specified to generate documents "timestamped before t whose content reveals outcomes after t", recording their ids.
+5. **Edit-pair generation:** generate edit pairs according to the five permission types of T2.1, each pair with its ground-truth relation.
+6. All generation is determined by the seed and is bitwise reproducible.
 
-**验收标准：** 检查器 (a) 输出被证明的 λ 和 Greeks 上界；检查器 (b) 在 10⁵ 个随机点上没有发现违反。
+**Outputs:** a `synth/` directory (code + tests) and a data card.
 
-**算力预算：** CPU 或 T4，不超过 2 小时。
+**Acceptance criteria:**
 
-**依赖：** WP2.1。
+- Unit tests check that the accounting identities hold in all generated statements.
+- The number of planted contaminations is exactly right.
+- Data generated from the same seed is bitwise identical.
 
-> **Codex 任务卡（WP2.2）：**
-> 读 04 的 T2.2。完成 WP2.2。特别注意：文本上下文表示 c 绝不能依赖数值 g，否则单调性证书失效。请写一个测试专门检查这一点（改变 g，c 必须逐位不变）。
+**Compute budget:** CPU.
 
-### WP2.3 软约束 vs 硬约束
+**Dependencies:** none.
 
-**目标：** 在合成世界上比较三种配置，顺便回答"permission 损失有没有用"。
+> **Codex task card (WP0.5):**
+> Read 00, 01 and T1.1 and T2.1 of `04_THEORY_NOTES.md`. Complete WP0.5, with the code in `synth/`. The generator must be fully determined by the seed and must be able to plant exactly k documents with mislabeled timestamps. Write the tests before the generator. Make the template language as varied as possible, so that a model does not just learn the templates.
 
-**配置：**
+### WP0.6 Claims audit
 
-- (a) 无约束的 transformer；
-- (b) (a) + permission 软损失；
-- (c) 硬约束的单调头。
+**Goal:** list all external claims in the repository and compare each one with the public evidence.
 
-**指标：** 任务准确率（带置信区间）；在数值扰动和单位缩放下的规范违反率；Greeks 的经验最大值与被证明的上界。
+**Steps:** read the README and every document under `docs/` sentence by sentence. Put each claim into one of these categories:
 
-**验收标准：** 一张完整的对比表，以及一段结论。
+- has public evidence (point to a file or number);
+- design only, no run evidence;
+- cannot be verified.
 
-**算力预算：** T4，每个配置不超过 1 小时，3 个 seed。
+For the last two categories, give suggested rewording.
 
-**依赖：** WP0.2、WP2.2。
+**Outputs:** `research/claims_audit.md`.
 
-> **Codex 任务卡（WP2.3）：**
-> 完成 WP2.3。三个配置使用相同的数据、相同的骨干规模和相同的训练步数。报告必须包括：硬约束付出了多少准确率代价。
+**Acceptance criteria:** covers the README and all docs files; every claim is categorized; claims related to 2.4B get their own section. **Do not modify any original file.**
 
-### WP2.4 单位不变的验证
+**Compute budget:** none.
 
-**目标：** 验证 T2.3 在实际模型上精确成立，并展示无约束模型对单位变化有多敏感。
+**Dependencies:** none.
 
-**步骤：** 对合成世界和 XBRL 对齐的文本做单位变换（千元 ↔ 百万元，同币种内的缩放），比较两类模型：
-
-- P2 模型：输出应在浮点误差内不变；
-- 无约束基线：报告输出变化的分布。
-
-**验收标准：** P2 模型的最大输出变化不超过 1e-6；基线的变化分布有图有表。
-
-**算力预算：** CPU。
-
-**依赖：** WP2.2。
-
-> **Codex 任务卡（WP2.4）：**
-> 完成 WP2.4。如果 P2 模型的输出变化超过浮点误差，说明有数字绕过了无量纲通道。先找到那条泄漏路径，再报告。
+> **Codex task card (WP0.6):**
+> Read 00, 02. Complete WP0.6 and output `research/claims_audit.md`. Write only the audit report; do not modify the README or any docs file. Keep the tone objective and avoid evaluative adjectives.
 
 ---
 
-## 支线
+## Phase 1: feasibility of the two main lines (experiments start after G0 passes; the theory parts can be done earlier)
 
-### WP3.1 部署风险证书
+### WP1.1 Numerical feasibility map for P1
 
-**目标：** 实现 T3.1。
+**Goal:** without training any model, answer "can the P1 certificate be non-vacuous under realistic parameters?"
 
-**步骤：**
+**Steps:**
 
-1. 输入：校准后的逐条错误概率 p_i，以及簇划分。
-2. 计算"簇内同单调、簇间独立"下错误数的精确分布（逐簇卷积）。
-3. 输出：最坏情形的方差和 ES_β，并与簇内独立的情形对比。
-4. 在 WP0.1 的公开数据结果上演示。
+1. Implement the following computations:
+   - the DP bound of T1.2 (grid over ε and μ);
+   - the audit upper bound of T1.4 (exact hypergeometric computation);
+   - the shard requirement of T1.3.
+2. Fill in the parameters with real counts (from WP0.4 and Q5): the number of EDGAR documents per year; the scheme for splitting the trusted core and the suspect window.
+3. Plot the feasible region: the horizontal axis is the suspect window size N, the vertical axis is the audit size n, and the contours are the required number of shards m and documents per shard.
 
-**产出：** `certify/deployment_risk.py` 和一份演示报告。
+**Outputs:** `certify/feasibility.py` and `research/experiments/wp1_1/report.md`.
 
-**验收标准：** 对小规模情形，用暴力枚举所有耦合（或线性规划）交叉验证"同单调确实给出最大 ES"。
+**Acceptance criteria:** the report gives an explicit conclusion: "non-vacuous under condition X; necessarily vacuous under condition Y."
 
-**算力预算：** CPU。
+**Compute budget:** CPU, minutes.
 
-**依赖：** WP0.1；T3.1 的推导。
+**Dependencies:** WP0.4 helps to get real numbers, but assumed values can be used first.
 
-> **Codex 任务卡（WP3.1）：**
-> 读 04 的 T3.1。完成 WP3.1。先用一个线性规划，在小规模（每簇 3 个样本）上求最坏 ES，验证它等于同单调的结果。验证通过后再写通用实现。
+> **Codex task card (WP1.1):**
+> Read section 5.1 of 01 and T1.2–T1.4 of 04. Complete WP1.1. Compute the audit upper bound exactly with the hypergeometric distribution; do not use only the approximate formula. If WP0.4 is not yet complete, use adjustable assumed values first and mark them in the report.
+
+### WP1.2 Point-in-time corpus pipeline
+
+**Goal:** implement the "measurable by record" pipeline of T1.1, with tests serving as the constructive certificate.
+
+**Steps:**
+
+1. Build a document store: each document has an id, a content hash, a recorded timestamp, a source, and whether it belongs to the trusted core.
+2. Every component (tokenizer training, filtering, dedup, data sampling, validation split, hyperparameter selection) explicitly receives the cutoff t and reads only data with τ ≤ t.
+3. Write tests: for any t, after adding documents with τ > t to the store, the outputs of all components must be bitwise unchanged. This test is the checker of the constructive certificate.
+
+**Outputs:** a `pit/` directory (code + tests).
+
+**Acceptance criteria:** the invariance tests cover all components.
+
+**Compute budget:** CPU.
+
+**Dependencies:** WP0.4 or WP0.5 provides the data.
+
+> **Codex task card (WP1.2):**
+> Read T1.1 of 04. Complete WP1.2, with the code in `pit/`. The core deliverable is the invariance test: after adding any documents with τ > t, the outputs of all components must be bitwise unchanged. Implement it first on the synthetic world (WP0.5).
+
+### WP1.3 Shard-aggregation certificate prototype
+
+**Goal:** verify the certificate chain of T1.5 on the synthetic world: the certificate holds, and measure how tight it is.
+
+**Steps:**
+
+1. Train a small backbone on the trusted core (for example 4 layers, d=256), or directly use a scaled-down version of the 24M architecture.
+2. Freeze the backbone and train a linear head or small MLP on each of the m shards of the suspect window, with a deterministic algorithm (CPU).
+3. Verify determinism: repeated training on the same shard gives bitwise-identical results.
+4. Plant k contaminated documents and compute $[S_{\text{low}}, S_{\text{high}}]$; also train a "contamination-free" version as ground truth, and check whether the ground truth falls inside the interval.
+5. Scan m ∈ {11, 31, 101, 301} and k ∈ {0, 1, 3, 10, 30}, and report: interval width, the fraction of certified predictions, the accuracy cost.
+6. Optional: compute a tighter collective certificate with ILP and compare it with the naive bound.
+
+**Outputs:** `certify/partition.py` and `research/experiments/wp1_3/`.
+
+**Acceptance criteria:**
+
+- In all settings, the ground truth falls inside the certificate interval. If it ever does not, there is a bug or the theorem is wrong, and this must be resolved first.
+- Give a complete table of "interval width–m–k".
+
+**Compute budget:** backbone training at most 2 hours on a T4, or train a smaller backbone on CPU; shard heads trained on CPU.
+
+**Dependencies:** WP0.5, WP1.2.
+
+> **Codex task card (WP1.3):**
+> Read section 5.1 of 01 and T1.3–T1.5 of 04. Complete WP1.3. The most important check is that the ground-truth statistic must fall inside the certificate interval in all settings. First get the whole chain running at a very small scale (m=11, k=1), then scan the parameters.
+
+### WP2.1 Number parsing and dimensionless features
+
+**Goal:** implement the statistical link of P2 and measure its error rate.
+
+**Steps:**
+
+1. Write a rule-based parser that extracts values, units, scales, periods and comparison baselines from text. Cover the common error types listed in Q32.
+2. Evaluate on the synthetic world (ground truth known); if WP0.4 obtained inline XBRL, also evaluate on it (with XBRL facts as ground truth).
+3. Build dimensionless groups: ratios of quantities with the same unit, growth rates, shares relative to a reference quantity.
+4. Give an exact confidence upper bound on the parsing error rate (this is the certificate of the statistical link).
+
+**Outputs:** `models/numeric/parse.py`, `models/numeric/pi_groups.py` and an evaluation report.
+
+**Acceptance criteria:** report the error rate for each error type, and a confidence upper bound on the overall error rate.
+
+**Compute budget:** CPU.
+
+**Dependencies:** WP0.5; WP0.4 optional.
+
+> **Codex task card (WP2.1):**
+> Read section 5.2 of 01 and T2.3 of 04. Complete WP2.1. Use rule-based methods first, not LLM extraction; we need a parser that is auditable and whose error rate can be measured.
+
+### WP2.2 Ordered monotone head
+
+**Goal:** implement T2.2 and verify the certificates.
+
+**Steps:**
+
+1. Implement a Lipschitz monotone network (the weight normalization of Kitouni et al., with ℓ1 / ℓ∞ constraints).
+2. Implement a cumulative-link output layer.
+3. Attach it to a small transformer: numbers in the text stream are replaced by placeholders; values enter the monotone head only through dimensionless features.
+4. Write checkers:
+   - (a) architecture level: check layer by layer that the weight norms satisfy the constraints, and compute an upper bound on λ from them;
+   - (b) numerical level: verify monotonicity and the derivative bound on a grid, as a sanity check rather than a proof.
+
+**Outputs:** `models/monotone/` and `certify/monotone_check.py`.
+
+**Acceptance criteria:** checker (a) outputs the proven λ and the upper bounds on the Greeks; checker (b) finds no violation on 10⁵ random points.
+
+**Compute budget:** CPU or T4, at most 2 hours.
+
+**Dependencies:** WP2.1.
+
+> **Codex task card (WP2.2):**
+> Read T2.2 of 04. Complete WP2.2. Pay special attention: the text-context representation c must never depend on the value g, otherwise the monotonicity certificate fails. Write a test dedicated to checking this (when g changes, c must be bitwise unchanged).
+
+### WP2.3 Soft constraints vs. hard constraints
+
+**Goal:** compare three configurations on the synthetic world, and along the way answer "is the permission loss useful?"
+
+**Configurations:**
+
+- (a) an unconstrained transformer;
+- (b) (a) + the permission soft loss;
+- (c) the hard-constrained monotone head.
+
+**Metrics:** task accuracy (with confidence intervals); specification violation rates under numeric perturbation and unit scaling; the empirical maximum of the Greeks and the proven upper bound.
+
+**Acceptance criteria:** a complete comparison table and a paragraph of conclusions.
+
+**Compute budget:** T4, at most 1 hour per configuration, 3 seeds.
+
+**Dependencies:** WP0.2, WP2.2.
+
+> **Codex task card (WP2.3):**
+> Complete WP2.3. The three configurations use the same data, the same backbone size and the same number of training steps. The report must include how much accuracy the hard constraints cost.
+
+### WP2.4 Verification of unit invariance
+
+**Goal:** verify that T2.3 holds exactly on an actual model, and show how sensitive an unconstrained model is to unit changes.
+
+**Steps:** apply unit transformations (thousands of yuan ↔ millions of yuan, scaling within the same currency) to the synthetic world and to XBRL-aligned text, and compare two kinds of model:
+
+- P2 model: the output should be unchanged within floating-point error;
+- unconstrained baseline: report the distribution of output changes.
+
+**Acceptance criteria:** the maximum output change of the P2 model does not exceed 1e-6; the distribution of the baseline's changes is shown in a figure and a table.
+
+**Compute budget:** CPU.
+
+**Dependencies:** WP2.2.
+
+> **Codex task card (WP2.4):**
+> Complete WP2.4. If the output change of the P2 model exceeds floating-point error, some number is bypassing the dimensionless channel. Find that leakage path first, then report.
 
 ---
 
-## 依赖关系总览
+## Side line
 
-| 工作包 | 依赖 | 可以并行做的 |
+### WP3.1 Deployment-risk certificate
+
+**Goal:** implement T3.1.
+
+**Steps:**
+
+1. Input: calibrated per-item error probabilities p_i, and the cluster partition.
+2. Compute the exact distribution of the number of errors under "comonotone within clusters, independent across clusters" (cluster-by-cluster convolution).
+3. Output: the worst-case variance and ES_β, compared with the case of independence within clusters.
+4. Demonstrate on the public-data results of WP0.1.
+
+**Outputs:** `certify/deployment_risk.py` and a demonstration report.
+
+**Acceptance criteria:** for small cases, cross-check with brute-force enumeration of all couplings (or a linear program) that comonotonicity really gives the maximum ES.
+
+**Compute budget:** CPU.
+
+**Dependencies:** WP0.1; the derivation of T3.1.
+
+> **Codex task card (WP3.1):**
+> Read T3.1 of 04. Complete WP3.1. First use a linear program to find the worst-case ES at small scale (3 samples per cluster) and verify that it equals the comonotone result. Only after this check passes, write the general implementation.
+
+---
+
+## Overview of dependencies
+
+| Work package | Depends on | Can run in parallel with |
 |---|---|---|
-| WP0.1 | 无 | 全部 Phase 0 |
-| WP0.2 | 公开数据，或 WP0.5 | — |
-| WP0.3 | 无 | 全部 |
-| WP0.4 | O3（User-Agent） | — |
-| WP0.5 | 无 | 全部 |
-| WP0.6 | 无 | 全部 |
-| WP1.1 | WP0.4 可选 | WP1.2、WP2.1 |
+| WP0.1 | None | All of Phase 0 |
+| WP0.2 | Public data, or WP0.5 | — |
+| WP0.3 | None | All |
+| WP0.4 | O3 (User-Agent) | — |
+| WP0.5 | None | All |
+| WP0.6 | None | All |
+| WP1.1 | WP0.4 optional | WP1.2, WP2.1 |
 | WP1.2 | WP0.5 | WP2.1 |
-| WP1.3 | WP0.5、WP1.2 | WP2.x |
+| WP1.3 | WP0.5, WP1.2 | WP2.x |
 | WP2.1 | WP0.5 | WP1.x |
 | WP2.2 | WP2.1 | WP1.x |
-| WP2.3 | WP0.2、WP2.2 | WP1.3 |
+| WP2.3 | WP0.2, WP2.2 | WP1.3 |
 | WP2.4 | WP2.2 | WP1.3 |
-| WP3.1 | WP0.1 | 全部 |
+| WP3.1 | WP0.1 | All |

@@ -1,26 +1,26 @@
-# T1A：舍入盒中的定量规则与证明
+# T1A: quantitative rules and proofs in the rounding box
 
-日期：2026-11-16（America/New_York）。本文证明经典误差传播在本任务中的具体形式，不把消去误差、区间算术或均匀分布卷积当成新理论。经验输入只使用 T1 已保存的 `results/per_question.jsonl`；这里的定理不需要经验拟合。
+Date: 2026-11-16 (America/New_York). This document proves the specific form that classical error propagation takes in this task; it does not present cancellation error, interval arithmetic or the convolution of uniform distributions as new theory. The only empirical input is T1's saved `results/per_question.jsonl`; the theorems here need no empirical fitting.
 
-## 0. 对象、假设与判定口径
+## 0. Objects, assumptions and decision convention
 
-设显示中心为 $a,b$，末位显示单位为 $d_a,d_b$，半宽 $h_a=d_a/2,h_b=d_b/2$。独立舍入盒为
+Let the displayed centers be $a,b$, the displayed last-digit units $d_a,d_b$, and the half-widths $h_a=d_a/2,h_b=d_b/2$. The independent rounding box is
 
 \[
 A=a+u,\quad B=b+v,\qquad |u|\le h_a,\ |v|\le h_b.
 \tag{D1}
 \]
 
-这里“独立”在确定性部分表示任意 $u,v$ 的组合都允许；只有第 6 节才加入随机独立性。相同来源的重复引用必须共享同一变量，不能当两个独立误差；不同财务来源间的会计约束由 T1B 处理。
+"Independent" in the deterministic part means that every combination of $u,v$ is allowed; random independence is added only in Section 6. Repeated references to the same source must share one variable and cannot be treated as two independent errors; accounting constraints between different financial sources are handled by T1B.
 
-增长率 $G=B/A-1$，显示中心 $g=b/a-1$。以下精确式要求
+Growth rate $G=B/A-1$, displayed center $g=b/a-1$. The exact formulas below require
 
 \[
 |a|>h_a,\qquad g\ne0
 \tag{A1}
 \]
 
-以使分母不接触零、中心相对误差有定义。除专门标注外，**不要求 $a,b$ 同号**。记 $r=b/a=1+g$、
+so that the denominator does not touch zero and the relative error about the center is defined. Unless specifically noted, **$a,b$ are not required to have the same sign**. Write $r=b/a=1+g$,
 
 \[
 \eta=h_a/|a|<1,\quad
@@ -29,28 +29,28 @@ R_1=\frac{|a|h_b+|b|h_a}{a^2},\quad C=R_1/|g|.
 \tag{D2}
 \]
 
-闭区间端点用于算上下确界。只要值域**严格**越过接受边界，连续性给出靠近该端点的内部见证；不依赖“四舍五入遇到 5”的约定。恰好相切不能据此判为越界。
+Closed-interval endpoints are used to compute suprema and infima. As long as the range **strictly** crosses an acceptance boundary, continuity gives an interior witness near that endpoint; this does not depend on the convention for "rounding a 5". Exact tangency cannot be judged out of tolerance on this basis.
 
-本节通常比较中心带 $[g-\tau|g|,g+\tau|g|]$。实际 T1 使用 gold $y$ 的带 $[y-\tau|y|,y+\tau|y|]$，两者不同；第 3 节给精确转换。1% 是任务规定的审计容差，不是对 FinQA 官方五位小数判分规则的重新定义。
+This section usually compares against the center band $[g-\tau|g|,g+\tau|g|]$. The actual T1 uses the band of the gold $y$, $[y-\tau|y|,y+\tau|y|]$; the two differ, and Section 3 gives the exact conversion. 1% is the audit tolerance specified by the task, not a redefinition of FinQA's official five-decimal scoring rule.
 
-## 1. 增长率精确值域、一阶项与余项
+## 1. Exact range of the growth rate, first-order term and remainder
 
-### 命题 1：四角值域与精确最大误差
+### Proposition 1: four-corner range and exact maximum error
 
-在 $|a|>h_a$ 时，令
+When $|a|>h_a$, let
 
 \[
 q_{st}=\frac{b+t h_b}{a+s h_a}-1,\qquad s,t\in\{-1,1\}.
 \]
 
-则完整值域为
+Then the full range is
 
 \[
 [G_-,G_+]=[\min_{s,t}q_{st},\max_{s,t}q_{st}].
 \tag{T1}
 \]
 
-最大绝对误差和最大中心相对误差分别为
+The maximum absolute error and the maximum relative error about the center are, respectively,
 
 \[
 R_{\rm abs}:=\max|G-g|
@@ -63,18 +63,18 @@ R_{\rm rel}:=\max\frac{|G-g|}{|g|}
 \tag{T3}
 \]
 
-**证明。** 固定 $A\ne0$，$B/A$ 关于 $B$ 单调，故只需考虑 $B=b\pm h_b$。对每一固定 $B$，导数是 $-B/A^2$，在整个分母区间符号恒定（或恒零），故极值在两个分母端点。连续函数在连通矩形上的实值像也是区间，因此四角给出完整值域。另直接相减得
+**Proof.** For fixed $A\ne0$, $B/A$ is monotone in $B$, so only $B=b\pm h_b$ need be considered. For each fixed $B$, the derivative is $-B/A^2$, whose sign is constant (or identically zero) over the whole denominator interval, so the extrema are at the two denominator endpoints. The real image of a continuous function on a connected rectangle is also an interval, so the four corners give the full range. Direct subtraction also gives
 
 \[
 G-g=\frac{a v-b u}{a(a+u)}.
 \tag{I1}
 \]
 
-三角不等式和 $|a+u|\ge|a|-h_a$ 给出 T2 的上界。取 $u=-\operatorname{sgn}(a)h_a$，再选 $v\in\{-h_b,h_b\}$ 使 $av$ 与 $-bu$ 同号，即可同时达到分子上界与分母下界；若其中一项为零，任选相应符号即可。因此上界确实可达。除以 $|g|=|b-a|/|a|$ 得 T3。证毕。
+The triangle inequality and $|a+u|\ge|a|-h_a$ give the upper bound in T2. Take $u=-\operatorname{sgn}(a)h_a$, then choose $v\in\{-h_b,h_b\}$ so that $av$ and $-bu$ have the same sign; this attains the numerator upper bound and the denominator lower bound at the same time. If one of the terms is zero, either corresponding sign will do. So the upper bound is indeed attained. Dividing by $|g|=|b-a|/|a|$ gives T3. QED.
 
-特别地，半宽可以不等，$b$ 的区间也可以跨零；这些都不破坏 T1–T3。**最大误差的对称包络 $[g-R_{\rm abs},g+R_{\rm abs}]$ 一般不是完整值域**：两侧偏差通常不相等。
+In particular, the half-widths may differ, and the interval of $b$ may cross zero; neither breaks T1–T3. **The symmetric envelope of the maximum error, $[g-R_{\rm abs},g+R_{\rm abs}]$, is in general not the full range**: the deviations on the two sides are usually unequal.
 
-### 命题 2：完整的一阶展开及均匀余项
+### Proposition 2: full first-order expansion and uniform remainder
 
 \[
 G-g=L(u,v)+E(u,v),\qquad
@@ -82,7 +82,7 @@ E(u,v)=-\frac{u}{a+u}L(u,v).
 \tag{T4}
 \]
 
-因此
+Therefore
 
 \[
 |E(u,v)|\le\frac{\eta}{1-\eta}R_1,
@@ -91,7 +91,7 @@ R_{\rm rel}=C+\frac{C\eta}{1-\eta}.
 \tag{T5}
 \]
 
-更具体，逐点有
+More specifically, pointwise,
 
 \[
 \frac{|L(u,v)|}{1+\eta}\le|G-g|
@@ -99,13 +99,13 @@ R_{\rm rel}=C+\frac{C\eta}{1-\eta}.
 \tag{T6}
 \]
 
-**证明。** I1 等于 $L(u,v)/(1+u/a)$。减去 $L$ 即得 T4；再用 $|u/(a+u)|\le h_a/(|a|-h_a)$、$|L|\le R_1$ 得余项界。T3 的代数恒等式给第二个 T5。$1-\eta\le|1+u/a|\le1+\eta$ 给 T6。证毕。
+**Proof.** I1 equals $L(u,v)/(1+u/a)$. Subtracting $L$ gives T4; then $|u/(a+u)|\le h_a/(|a|-h_a)$ and $|L|\le R_1$ give the remainder bound. The algebraic identity of T3 gives the second part of T5. $1-\eta\le|1+u/a|\le1+\eta$ gives T6. QED.
 
-所以 $C$ 是一阶最坏相对半径，不是严格上界；非零舍入下，$C\le R_{\rm rel}$，差值有显式控制，不能无条件省略。
+So $C$ is the first-order worst-case relative radius, not a strict upper bound; with non-zero rounding, $C\le R_{\rm rel}$, and the difference is explicitly controlled but cannot be omitted unconditionally.
 
-### 同号正量的双侧精确界
+### Two-sided exact bounds for same-sign positive quantities
 
-若 $a>h_a$ 且 $b\ge h_b$，则
+If $a>h_a$ and $b\ge h_b$, then
 
 \[
 G_-=\frac{b-h_b}{a+h_a}-1,
@@ -118,19 +118,19 @@ g-G_-=\frac{a h_b+b h_a}{a(a+h_a)},
 \tag{T8}
 \]
 
-证明是 T1 中单调性：分子非负时随分母减小而增加；减去中心即可。两个都为负且各自舍入区间不跨零时，把 $A,B$ 同时乘以 (-1)，将中心替换为 $|a|,|b|$，T7–T8 继续成立。异号时用 T1；不能直接套 T7。
+The proof is the monotonicity in T1: with a non-negative numerator, the value increases as the denominator decreases; subtract the center. When both are negative and neither rounding interval crosses zero, multiply $A,B$ both by (-1) and replace the centers by $|a|,|b|$; T7–T8 continue to hold. For opposite signs use T1; T7 cannot be applied directly.
 
-## 2. “相差 100 个末位单位”究竟成立到什么程度
+## 2. How far "a difference of 100 last-digit units" actually holds
 
-### 等精度的精确版本
+### Exact version with equal precision
 
-若 $d_a=d_b=d>0$，定义
+If $d_a=d_b=d>0$, define
 
 \[
 \Delta=|b-a|/d.
 \]
 
-则由 T3 得
+Then T3 gives
 
 \[
 R_{\rm rel}=\frac{1+|r|}{2\Delta(1-\eta)},
@@ -138,7 +138,7 @@ R_{\rm rel}=\frac{1+|r|}{2\Delta(1-\eta)},
 \tag{T9}
 \]
 
-如果中心同号，$r=1+g>0$，则进一步有
+If the centers have the same sign, $r=1+g>0$, and further
 
 \[
 \boxed{R_{\rm rel}=\frac{1+g/2}{\Delta-|g|/2}},
@@ -150,9 +150,9 @@ R_{\rm rel}=\frac{1+|r|}{2\Delta(1-\eta)},
 \tag{T11}
 \]
 
-**证明。** 代入 $h_a=h_b=d/2$、$|r|=1+g$，再乘以正的 $\Delta-|g|/2$ 即可。证毕。
+**Proof.** Substitute $h_a=h_b=d/2$ and $|r|=1+g$, then multiply by the positive $\Delta-|g|/2$. QED.
 
-对于小增长率 $|g|\ll1$、足够小的分母相对舍入 $\eta\ll1$，T9 才近似 $1/\Delta$。同号时可精确量化相对近似偏差：
+Only for a small growth rate $|g|\ll1$ and a sufficiently small relative rounding of the denominator $\eta\ll1$ is T9 approximately $1/\Delta$. With the same sign, the relative approximation error can be quantified exactly:
 
 \[
 \left|\frac{R_{\rm rel}}{1/\Delta}-1\right|
@@ -161,18 +161,18 @@ R_{\rm rel}=\frac{1+|r|}{2\Delta(1-\eta)},
 \tag{T12}
 \]
 
-**“$\Delta<100$ 则必定不能达到 1%”不是无条件定理。** 例 $a=100,b=10,d=1$：$g=-0.9,\Delta=90$，但 T10 给 $R_{\rm rel}=0.55/89.55\approx0.6142\%<1\%$。反方向也会失败：$a=1000,b=1100,d=1$，$\Delta=100$，而 $R_{\rm rel}=1.05/99.95\approx1.0505\%>1\%$。T11 是中心带、同末位精度、同号情形的修正规则。
+**"If $\Delta<100$ then 1% can certainly not be met" is not an unconditional theorem.** Example $a=100,b=10,d=1$: $g=-0.9,\Delta=90$, but T10 gives $R_{\rm rel}=0.55/89.55\approx0.6142\%<1\%$. It also fails in the other direction: $a=1000,b=1100,d=1$, $\Delta=100$, while $R_{\rm rel}=1.05/99.95\approx1.0505\%>1\%$. T11 is the corrected rule for the case of the center band, equal last-digit precision and same sign.
 
-### 不等精度的版本
+### Version with unequal precision
 
-若末位单位不同，不存在唯一的“末位单位数”。在 $h_a+h_b>0$ 时，自然定义
+If the last-digit units differ, there is no unique "number of last-digit units". When $h_a+h_b>0$, the natural definitions are
 
 \[
 \Delta_{\rm eff}=\frac{|b-a|}{h_a+h_b},\qquad
 w=\frac{h_a}{h_a+h_b}.
 \]
 
-则
+Then
 
 \[
 C=\frac{1+(|r|-1)w}{\Delta_{\rm eff}},\qquad
@@ -180,45 +180,45 @@ R_{\rm rel}=\frac{1+(|r|-1)w}{\Delta_{\rm eff}(1-\eta)}.
 \tag{T13}
 \]
 
-同号时分子是 $1+gw$。证明是把 $h_b+|r|h_a$ 提取 $h_a+h_b$。若改用最大、最小或平均末位单位构造粗规则，必须写明，不能把不同定义的复现数混在一起。
+With the same sign, the numerator is $1+gw$. The proof factors $h_a+h_b$ out of $h_b+|r|h_a$. If a coarse rule is built from the largest, smallest or average last-digit unit instead, this must be stated, and replication counts under different definitions must not be mixed together.
 
-## 3. 从中心不确定度到 gold 接受区间
+## 3. From center uncertainty to the gold acceptance interval
 
-令最终答案 $Z=sG$，$s\ne0$ 是精确常数（例如百分比输出乘 100），中心 $z_0=sg$，gold 为 $y$。实际接受带
+Let the final answer be $Z=sG$, where $s\ne0$ is an exact constant (for example, multiplying by 100 for a percentage output), the center is $z_0=sg$, and the gold is $y$. The actual acceptance band is
 
 \[
 [\ell,u]=[y-\tau|y|,y+\tau|y|].
 \]
 
-T1 给出的精确判定是
+The exact decision given by T1 is
 
 \[
-\min(sG_-,sG_+)\ge\ell\quad\text{且}\quad
+\min(sG_-,sG_+)\ge\ell\quad\text{and}\quad
 \max(sG_-,sG_+)\le u.
 \tag{T14}
 \]
 
-中心-gold 偏移 $e=z_0-y$ 不应舍弃。一阶对称近似使用半径 $|s|R_1$，判为稳定的条件为
+The center-gold offset $e=z_0-y$ should not be dropped. The first-order symmetric approximation uses radius $|s|R_1$, and the condition for judging stable is
 
 \[
 |e|+|s|R_1\le\tau|y|.
 \tag{T15}
 \]
 
-将 $R_1$ 换成 $R_{\rm abs}$ 得**充分条件**，但一般不是必要条件，因为精确值域不对称。T14 才是精确必要充分条件。若中心本来就在接受带之外，已无须输入扰动；应单列为中心不兼容，不能归因于舍入。
+Replacing $R_1$ with $R_{\rm abs}$ gives a **sufficient condition**, but in general not a necessary one, because the exact range is asymmetric. Only T14 is the exact necessary and sufficient condition. If the center is already outside the acceptance band, no input perturbation is needed; it should be listed separately as center-incompatible and not attributed to rounding.
 
-若 $g=0$，中心相对误差没有定义；若 $y=0$，任务的相对接受带是单点。两者不能通过给分母添加任意小常数来修补。必须直接使用绝对值域与原接受带比较。若整个分母区间接触零，增长率通常无界或未定义，应标记域失败；T1–T15 不适用。
+If $g=0$, the relative error about the center is undefined; if $y=0$, the task's relative acceptance band is a single point. Neither can be patched by adding an arbitrarily small constant to the denominator. The absolute range must be compared directly with the original acceptance band. If the whole denominator interval touches zero, the growth rate is usually unbounded or undefined, and it should be marked as a domain failure; T1–T15 do not apply.
 
-## 4. 差值、比率与求和的一句话规则
+## 4. One-line rules for differences, ratios and sums
 
-下述式子都围绕显示中心；与 gold 比较还要按第 3 节加入偏移。
+The expressions below are all about the displayed center; comparison with the gold must also add the offset as in Section 3.
 
-- **差值** $D=B-A$，$b-a\ne0$：精确相对半径 $(h_a+h_b)/|b-a|$。差值至少为总半宽的 $1/\tau$ 倍；同末位单位时 $\Delta\ge1/\tau$。
-- **比率** $Q=B/A$，$b\ne0$、$|a|>h_a$：精确相对半径 $(h_b/|b|+h_a/|a|)/(1-h_a/|a|)$。输入相对半宽之和要小于容差，并补上分母的 $1/(1-\eta)$ 因子。
-- **求和** $S=\sum_i c_i X_i$，$s_0\ne0$：精确相对半径 $\sum_i|c_i|h_i/|s_0|$。总舍入半宽不得超过总和的 $\tau$；同号加总不发生消去放大，异号相消仍会放大。
-- **一般可微程序** $f$：一阶相对半径 $\sum_i|\partial_i f|h_i/|f(x)|$。传播每个独立来源的一阶敏感度；这本身不保证高阶余项小。
+- **Difference** $D=B-A$, $b-a\ne0$: exact relative radius $(h_a+h_b)/|b-a|$. The difference must be at least $1/\tau$ times the total half-width; with the same last-digit unit, $\Delta\ge1/\tau$.
+- **Ratio** $Q=B/A$, $b\ne0$, $|a|>h_a$: exact relative radius $(h_b/|b|+h_a/|a|)/(1-h_a/|a|)$. The sum of the inputs' relative half-widths must be smaller than the tolerance, with the denominator's $1/(1-\eta)$ factor added.
+- **Sum** $S=\sum_i c_i X_i$, $s_0\ne0$: exact relative radius $\sum_i|c_i|h_i/|s_0|$. The total rounding half-width must not exceed $\tau$ times the total; a same-sign sum has no cancellation amplification, while cancellation between opposite signs still amplifies.
+- **General differentiable program** $f$: first-order relative radius $\sum_i|\partial_i f|h_i/|f(x)|$. Propagate the first-order sensitivity of each independent source; this by itself does not guarantee that the higher-order remainder is small.
 
-**证明。** 差值误差 $v-u$ 的范围恰为 $[-(h_a+h_b),h_a+h_b]$，因而差值规则是等式。比率与增长率只差常数 1，绝对误差相同；把 T2 除以 $|b/a|$ 得比率规则。线性和的误差为 $\sum c_i\epsilon_i$，三角不等式上界 $\sum|c_i|h_i$，取 $\epsilon_i=\operatorname{sgn}(c_i)h_i$ 达到上界，反向取值达到下界。一般程序由多变量 Taylor 一阶项得到；若各输入方向二阶导数在盒内存在且有界，可用积分余项
+**Proof.** The range of the difference error $v-u$ is exactly $[-(h_a+h_b),h_a+h_b]$, so the difference rule is an equality. Ratio and growth rate differ only by the constant 1 and have the same absolute error; dividing T2 by $|b/a|$ gives the ratio rule. The error of a linear sum is $\sum c_i\epsilon_i$; the triangle inequality gives the upper bound $\sum|c_i|h_i$, attained at $\epsilon_i=\operatorname{sgn}(c_i)h_i$, and the opposite choice attains the lower bound. The general program follows from the first-order multivariate Taylor term; if the second derivatives in each input direction exist and are bounded within the box, the integral remainder gives
 
 \[
 |f(x+\epsilon)-f(x)-\nabla f(x)^T\epsilon|
@@ -226,17 +226,17 @@ T1 给出的精确判定是
 \tag{T16}
 \]
 
-证明 T16：沿线段令 $\phi(t)=f(x+t\epsilon)$，积分 Taylor 余项为 $\int_0^1(1-t)\epsilon^TH_f(x+t\epsilon)\epsilon\,dt$，取绝对值、逐项上界并用 $\int_0^1(1-t)dt=1/2$。若同一来源出现多次，必须先合并其导数系数再取绝对值；例如 $X-X$ 的真实误差为零。
+Proof of T16: along the segment let $\phi(t)=f(x+t\epsilon)$; the integral Taylor remainder is $\int_0^1(1-t)\epsilon^TH_f(x+t\epsilon)\epsilon\,dt$; take absolute values, bound term by term, and use $\int_0^1(1-t)dt=1/2$. If the same source appears several times, its derivative coefficients must be combined before taking absolute values; for example, the true error of $X-X$ is zero.
 
-## 5. 有效数字预算：精确陈述而不是“保证正确几位”
+## 5. Significant-digit budget: an exact statement, not "guaranteed correct digits"
 
-对非零显示中心写
+For non-zero displayed centers write
 
 \[
 |a|=m_a10^{e_a},\quad |b|=m_b10^{e_b},\qquad 1\le m_a,m_b<10.
 \]
 
-若分别显示 $k_a,k_b$ 位有效数字，含有意义的末尾零，则
+If they display $k_a,k_b$ significant digits respectively, counting meaningful trailing zeros, then
 
 \[
 d_a=10^{e_a-k_a+1},\quad d_b=10^{e_b-k_b+1},\quad
@@ -245,9 +245,9 @@ d_a=10^{e_a-k_a+1},\quad d_b=10^{e_b-k_b+1},\quad
 \tag{D3}
 \]
 
-### 命题 3：精确位数预算
+### Proposition 3: exact digit budget
 
-在 A1、$b\ne0$ 下，T3 等价于
+Under A1 and $b\ne0$, T3 is equivalent to
 
 \[
 \boxed{R_{\rm rel}
@@ -255,14 +255,14 @@ d_a=10^{e_a-k_a+1},\quad d_b=10^{e_b-k_b+1},\quad
 \tag{T17}
 \]
 
-因此达到中心相对容差 $\tau$ 的必要充分条件为
+So the necessary and sufficient condition for meeting the center relative tolerance $\tau$ is
 
 \[
 |r|(\epsilon_a+\epsilon_b)\le\tau|g|(1-\epsilon_a).
 \tag{T18}
 \]
 
-若两输入都显示 $k$ 位有效数字，保持 $a,b$ 的中心不变，统一增加/减少显示精度，则必要充分条件可写成
+If both inputs display $k$ significant digits, and the displayed precision is raised or lowered uniformly with the centers $a,b$ held fixed, the necessary and sufficient condition can be written as
 
 \[
 \boxed{
@@ -272,25 +272,25 @@ k\ge1+\log_{10}\!\left[
 \tag{T19}
 \]
 
-并要求 $10^{1-k}<2m_a$（分母不触零）。整数位数取右端向上取整，并至少为 1。
+together with the requirement $10^{1-k}<2m_a$ (the denominator does not touch zero). The integer number of digits is the right-hand side rounded up, and at least 1.
 
-**证明。** 在 T3 中代入 $h_a=|a|\epsilon_a,h_b=|b|\epsilon_b$ 得 T17。分母正，交叉相乘得 T18。令 $q=10^{1-k}$，T18 等价于
+**Proof.** Substituting $h_a=|a|\epsilon_a,h_b=|b|\epsilon_b$ into T3 gives T17. The denominator is positive; cross-multiplying gives T18. Let $q=10^{1-k}$; T18 is equivalent to
 
 \[
 q\{ |r|(m_a^{-1}+m_b^{-1})+\tau|g|m_a^{-1}\}\le2\tau|g|,
 \]
 
-取以 10 为底的对数并移项得 T19。证毕。
+and taking base-10 logarithms and rearranging gives T19. QED.
 
-为免把误差界与数值字符串的正确舍入混淆，定义“相对精度位预算”
+To avoid confusing an error bound with correct rounding of a numeric string, define the "relative precision digit budget"
 
 \[
 p:=-\log_{10}R_{\rm rel}.
 \]
 
-这是误差量级指标：$p\ge j$ 表示误差不超过 $10^{-j}$，**不是无条件保证输出前 $j$ 个十进制字符不变**；恰在舍入分界附近，任意小误差也能改掉末位。
+This is an error-magnitude indicator: $p\ge j$ means the error is at most $10^{-j}$; **it does not unconditionally guarantee that the first $j$ decimal characters of the output are unchanged**. Right next to a rounding boundary, an arbitrarily small error can change the last digit.
 
-同为 $k$ 位的 T17 给出精确表达
+For equal $k$ digits, T17 gives the exact expression
 
 \[
 p=k-1+\log_{10}|g|
@@ -299,17 +299,17 @@ p=k-1+\log_{10}|g|
 \tag{T20}
 \]
 
-所以任务中的 $k-\log_{10}(1/|g|)$ 是省略 mantissa 常数和分母余项的量级近似。小增长率、相近 mantissa 时，$p\approx k-1+\log_{10}(m_a|g|)$，因 $m_a\in[1,10)$，同样的 $k,g$ 可相差接近一位精度；“至少需要约 $\log_{10}(1/(|g|\tau))$ 位”也有同样的常数带。实际不等精度应使用 T18，不能用两者平均有效位数代替。
+So the task's $k-\log_{10}(1/|g|)$ is an order-of-magnitude approximation that omits the mantissa constant and the denominator remainder. For small growth rates and close mantissas, $p\approx k-1+\log_{10}(m_a|g|)$; since $m_a\in[1,10)$, the same $k,g$ can differ by nearly one digit of precision. "At least about $\log_{10}(1/(|g|\tau))$ digits are needed" has the same constant band. With actually unequal precision, T18 should be used; the average of the two significant-digit counts cannot stand in for it.
 
-## 6. 均匀舍入误差下的精确概率
+## 6. Exact probabilities under uniform rounding errors
 
-新增的概率假设是 $U\sim\operatorname{Unif}[-h_a,h_a]$、$V\sim\operatorname{Unif}[-h_b,h_b]$，两者独立。真实财报舍入误差未必满足它；这不是由最坏情形见证推导出的经验分布。
+The new probabilistic assumption is $U\sim\operatorname{Unif}[-h_a,h_a]$, $V\sim\operatorname{Unif}[-h_b,h_b]$, independent. Real filing rounding errors need not satisfy it; this is not an empirical distribution derived from worst-case witnesses.
 
-先把负分母统一成正分母：用 $a'=|a|$、$b'=\operatorname{sgn}(a)b$，并对两个扰动同样乘 $\operatorname{sgn}(a)$。对称均匀分布不变，$B/A$ 不变。以下省略撇号，故 $a>h_a$。
+First make a negative denominator positive: use $a'=|a|$, $b'=\operatorname{sgn}(a)b$, and multiply both perturbations by $\operatorname{sgn}(a)$ as well. The symmetric uniform distributions are unchanged, and $B/A$ is unchanged. The primes are dropped below, so $a>h_a$.
 
-### 引理 4：两个对称均匀变量的和
+### Lemma 4: sum of two symmetric uniform variables
 
-设 $X\sim\operatorname{Unif}[-p,p]$、$Y\sim\operatorname{Unif}[-q,q]$ 独立且 $p,q>0$。其和的 CDF 为
+Let $X\sim\operatorname{Unif}[-p,p]$ and $Y\sim\operatorname{Unif}[-q,q]$ be independent with $p,q>0$. The CDF of their sum is
 
 \[
 H(z;p,q)=\frac{(z+p+q)_+^2-(z+p-q)_+^2
@@ -317,11 +317,11 @@ H(z;p,q)=\frac{(z+p+q)_+^2-(z+p-q)_+^2
 \tag{T21}
 \]
 
-其中 $x_+=\max(x,0)$。
+where $x_+=\max(x,0)$.
 
-**证明。** 把变量平移至 $X'=X+p\in[0,2p]$、$Y'=Y+q\in[0,2q]$，概率等于矩形内 $X'+Y'\le w=z+p+q$ 的面积除以 $4pq$。在第一象限不受矩形限制时，该三角形面积为 $w_+^2/2$；减去超出 $X'>2p$ 与 $Y'>2q$ 的两个平移三角形，再加回双重扣除的角部面积，得到分子的一半。除以矩形面积即得 T21。证毕。
+**Proof.** Shift the variables to $X'=X+p\in[0,2p]$ and $Y'=Y+q\in[0,2q]$; the probability equals the area of $X'+Y'\le w=z+p+q$ inside the rectangle divided by $4pq$. Unrestricted by the rectangle in the first quadrant, this triangle has area $w_+^2/2$; subtract the two shifted triangles beyond $X'>2p$ and $Y'>2q$, then add back the doubly subtracted corner area, giving half of the numerator. Dividing by the rectangle's area gives T21. QED.
 
-数值实现宜用下列等价、避免大数相消的分段式。记 $M=\max(p,q),m=\min(p,q)$：
+A numerical implementation should use the following equivalent piecewise form, which avoids cancellation of large numbers. Write $M=\max(p,q),m=\min(p,q)$:
 
 \[
 H(z)=\begin{cases}
@@ -334,11 +334,11 @@ H(z)=\begin{cases}
 \tag{T22}
 \]
 
-若恰有一个半宽为零，使用另一个对称均匀量的 CDF；若两者都为零，使用零点的点质量 CDF。
+If exactly one half-width is zero, use the CDF of the other symmetric uniform variable; if both are zero, use the CDF of a point mass at zero.
 
-### 命题 5：增长率的闭式 CDF 与越界概率
+### Proposition 5: closed-form CDF of the growth rate and the out-of-tolerance probability
 
-对任意实数 $t$，
+For any real $t$,
 
 \[
 \boxed{F_G(t)=P(G\le t)
@@ -346,51 +346,51 @@ H(z)=\begin{cases}
 \tag{T23}
 \]
 
-**证明。** 因 $A>0$，事件 $G\le t$ 等价于
+**Proof.** Since $A>0$, the event $G\le t$ is equivalent to
 
 \[
 B\le(1+t)A
 \iff V-(1+t)U\le(1+t)a-b.
 \]
 
-变量 $-(1+t)U$ 是半宽 $|1+t|h_a$ 的对称均匀量，且仍与 $V$ 独立。代入引理 4，包含退化宽度的极限情形，得 T23。证毕。
+The variable $-(1+t)U$ is a symmetric uniform variable with half-width $|1+t|h_a$, and is still independent of $V$. Substituting into Lemma 4, including the limiting cases of degenerate widths, gives T23. QED.
 
-若未缩放增长率的接受带为 $[\ell,u]$，精确越界概率为
+If the acceptance band of the unscaled growth rate is $[\ell,u]$, the exact out-of-tolerance probability is
 
 \[
 P_{\rm out}=P(G<\ell)+P(G>u)=F_G(\ell^-)+1-F_G(u).
 \tag{T24}
 \]
 
-当 $h_b>0$，比率条件于任何分母都有连续分布，故 $F_G(\ell^-)=F_G(\ell)$。若 $h_b=0,b\ne0,h_a>0$，严格单调分母变换也给连续分布。若 $h_b=b=0$，则 $G=-1$ 恒定；若两个半宽都为零，也恒定。点质量必须直接判断是否在闭接受带内，不能把边界上的质量算成越界。
+When $h_b>0$, the ratio has a continuous distribution conditional on any denominator, so $F_G(\ell^-)=F_G(\ell)$. If $h_b=0,b\ne0,h_a>0$, the strictly monotone transformation of the denominator also gives a continuous distribution. If $h_b=b=0$, then $G=-1$ is constant; if both half-widths are zero, it is also constant. For a point mass one must directly check whether it lies in the closed acceptance band; mass on the boundary must not be counted as out of tolerance.
 
-对输出 $Z=sG$，先把 gold 带的两个端点分别除以 $s$，排序得到 $\ell,u$，再用 T24。这样精确保留 gold 偏移、负输出尺度以及不等输入精度。类似地，比率只需将 T23 中 $1+t$ 改为 $t$；双输入差值的 CDF 是 $H(t-(b-a);h_a,h_b)$。对任意多个题，期望越界题数为 $\sum_i P_{{\rm out},i}$，只靠期望线性性，**不要求各题之间独立**；只有每题内部的舍入假设需要明确。
+For the output $Z=sG$, first divide both endpoints of the gold band by $s$, sort to get $\ell,u$, then use T24. This exactly preserves the gold offset, negative output scales and unequal input precisions. Similarly, for a ratio just replace $1+t$ in T23 with $t$; the CDF of a two-input difference is $H(t-(b-a);h_a,h_b)$. Over any number of questions, the expected number of out-of-tolerance questions is $\sum_i P_{{\rm out},i}$; this relies only on linearity of expectation and **does not require independence between questions**; only the rounding assumption within each question needs to be explicit.
 
-## 7. Benford 预测能检验什么
+## 7. What the Benford prediction can test
 
-“首位数字服从 Benford”仅指定 $P(D=j)=\log_{10}(1+1/j)$，没有指定在 $[j,j+1)$ 内如何分布，也没有指定与增长率/显示位数的依赖。仅凭这个假设无法唯一推出越界率。
+"The leading digit follows Benford" only specifies $P(D=j)=\log_{10}(1+1/j)$; it specifies neither the distribution within $[j,j+1)$ nor the dependence on growth rate/displayed digits. This assumption alone cannot uniquely determine the out-of-tolerance rate.
 
-一个可复现的、额外假设明确的主模型是：独立抽取经验增长率 $g$ 边际和经验位数对 $(k_a,k_b)$ 联合分布；另取独立 $\log_{10}M_a\sim\operatorname{Unif}[0,1)$。归一化 $a=M_a$，令 $b=(1+g)M_a$，从 $b$ 自身的十进制指数与 $k_b$ 生成 $d_b$，从 $a,k_a$ 生成 $d_a$，再用 T3/T18 判断中心带稳定。这样不读取逐题 mantissa、不拟合阈值，并保持两输入之比一致。不应额外固定原题的 halfwidth 比例，因为它可能重新带入原题 mantissa/十进制跨界信息。
+A reproducible main model with explicit extra assumptions: independently draw from the empirical marginal of the growth rate $g$ and the empirical joint distribution of digit pairs $(k_a,k_b)$; independently take $\log_{10}M_a\sim\operatorname{Unif}[0,1)$. Normalize $a=M_a$, let $b=(1+g)M_a$, generate $d_b$ from $b$'s own decimal exponent and $k_b$, generate $d_a$ from $a,k_a$, and then use T3/T18 to decide center-band stability. This reads no per-question mantissa, fits no threshold, and keeps the ratio of the two inputs consistent. The half-width ratio of the original question should not additionally be held fixed, because it could bring back the original question's mantissa/decimal-boundary-crossing information.
 
-此模型比首位 Benford 强：使用完整 log-uniform mantissa，并假设其与经验增长率/位数独立。主模型独立抽取增长率与位数；保留经验 $(g,k_a,k_b)$ 联合分布作为敏感性分析。二者会给出不同结果，应明确区分。它检验的是这些分布假设下的条件总体预测，**不是脱离本数据的外部先验验证**。纯粹由 $(g,k_a,k_b)$ 不能还原每题的 gold 偏移，因此主模型自然预测中心带；与 gold 带实测比较时必须单列这一口径差异。$g=0,b=0$、分母跨零、同一来源共享等退化项需要明确分母和排除数。
+This model is stronger than leading-digit Benford: it uses a full log-uniform mantissa and assumes it is independent of the empirical growth rate/digit counts. The main model draws growth rate and digit counts independently; keeping the empirical joint distribution of $(g,k_a,k_b)$ is a sensitivity analysis. The two give different results and should be clearly distinguished. What it tests is the conditional population prediction under these distributional assumptions, **not an external a priori validation independent of this data**. $(g,k_a,k_b)$ alone cannot recover each question's gold offset, so the main model naturally predicts the center band; when compared with observations on the gold band, this difference in convention must be listed separately. Degenerate items such as $g=0,b=0$, denominators crossing zero and shared sources need explicit denominators and exclusion counts.
 
-### 分段积分的独立推导
+### Independent derivation of the piecewise integral
 
-限定 $r=1+g>0$、$g\ne0$、$k_a,k_b\ge1$。令 $M=a\in[1,10)$，则 $h_a=10^{1-k_a}/2\le1/2<M$。在不跨越 $rM=10^e$ 的子区间内，$h_b=10^{e-k_b+1}/2$ 是常数，而 T3 化为
+Restrict to $r=1+g>0$, $g\ne0$, $k_a,k_b\ge1$. Let $M=a\in[1,10)$; then $h_a=10^{1-k_a}/2\le1/2<M$. On a subinterval that does not cross $rM=10^e$, $h_b=10^{e-k_b+1}/2$ is constant, and T3 becomes
 
 \[
 R_{\rm rel}(M)=\frac{h_b+r h_a}{|g|(M-h_a)}.
 \]
 
-因此越界当且仅当
+So the question is out of tolerance if and only if
 
 \[
 M<h_a+\frac{h_b+r h_a}{\tau|g|}=:M_*.
 \tag{T25}
 \]
 
-对任一分段 $[L,U)$，令 $V=\min(U,\max(L,M_*))$。log-uniform 模型中该段的越界质量恰为 $\log_{10}(V/L)$，因为密度是 $1/(M\ln10)$。分段端点由 $1,10$、所有区间内的 $10^e/r$ 给出；再加入整数首位边界，就可以同时算首位内均匀模型：在首位 $j$ 内，每段的越界长度乘以 $\log_{10}(1+1/j)$。这正是 benford.py::mantissa_prediction 的分段积分，而非对观测标签的拟合。数值计算首位内部可变分布的识别区间时，浮点“空/满区间”判断的容差应明确，不应把浮点近似界称为符号认证界。
+For any segment $[L,U)$, let $V=\min(U,\max(L,M_*))$. Under the log-uniform model, the out-of-tolerance mass of the segment is exactly $\log_{10}(V/L)$, because the density is $1/(M\ln10)$. The segment endpoints are given by $1,10$ and all $10^e/r$ inside the interval; adding the integer leading-digit boundaries as well, one can also compute the within-leading-digit uniform model: within leading digit $j$, the out-of-tolerance length of each segment is multiplied by $\log_{10}(1+1/j)$. This is exactly the piecewise integral in benford.py::mantissa_prediction, not a fit to observed labels. When numerically computing the identification interval for a variable within-leading-digit distribution, the tolerance for floating-point "empty/full interval" decisions should be stated, and floating-point approximate bounds should not be called symbolically certified bounds.
 
-## 8. 本节结论的边界
+## 8. Limits of the conclusions in this document
 
-以上结论是舍入盒模型的定理；完整文档能否收窄盒、gold program 是否忠实题意、模型是否因此被判错，均不是这些公式能证明的事。经验 95% 一致率与 5 个百分点预测误差属于 T1A 的数据验收标准，不能由公式本身保证。概率期望与存在性最坏情形是不同研究量，应并列报告，不能相互替代。
+The conclusions above are theorems of the rounding-box model; whether the full document can narrow the box, whether the gold program is faithful to the question, and whether models are marked wrong because of it are not things these formulas can prove. The empirical 95% agreement rate and the 5-percentage-point prediction error are T1A's data acceptance criteria and cannot be guaranteed by the formulas themselves. The probabilistic expectation and the existential worst case are different quantities of study; they should be reported side by side and cannot substitute for each other.

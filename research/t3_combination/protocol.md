@@ -1,45 +1,45 @@
-# T3 评分前固定方案
+# T3 plan fixed before scoring
 
-2026-11-16（America/New_York）。研究问题：固定金融情绪提示下，单条事实得分怎样预测两条事实合并后的得分。不是正确性或投资收益检验。查重记录见 literature_integration.md、literature_sentiment.md；尚未确认同问题、同测量的重复。顺序效应和人工平均导致中性稀释均已有先例，不能作为首次发现。
+2026-11-16 (America/New_York). Research question: under a fixed financial-sentiment prompt, how do single-fact scores predict the score after two facts are combined? This is not a test of correctness or investment returns. The prior-art records are in literature_integration.md and literature_sentiment.md; no duplicate of the same question and measurement has been confirmed. Order effects and neutral dilution caused by human averaging both already have precedents and cannot be presented as first discoveries.
 
-主实验采用v2盲编号修订：首版在开始评分后发现P/N/Z编号暗示设计极性，已停止；b01–b04共120分原样保存在superseded_v1/，不进入主分析。主代理在决定修订时只查看完成数量，没有读取分数值。仅将原子ID随机改为I0001..I0030，种子2026111622，文本、顺序随机种子、模型与判定不变。新版在首个主实验分数之前再次提交冻结。不能把整个过程描述为从未修改过方案；这是有记录的探索性筛查修订，首版不作为独立复现。
+The main experiment uses the v2 blind-ID revision: after scoring of the first version began, it was found that the P/N/Z IDs hinted at the design polarity, and it was stopped; b01–b04, 120 scores in total, are kept as they are in superseded_v1/ and do not enter the main analysis. When deciding on the revision the main agent only looked at the number completed and did not read the score values. Only the atom IDs were randomly changed to I0001..I0030, seed 2026111622; the texts, the order-randomisation seed, the model and the decision rules are unchanged. The new version was committed and frozen again before the first main-experiment score. The whole process cannot be described as never having modified the plan; this is a documented revision of an exploratory screen, and the first version is not treated as an independent replication.
 
-## 材料与评分
+## Materials and scoring
 
-prepare.py 中预先写定同一虚构公司 Virello Industries 的 10 正面、10 负面、10 中性事实；原文全部自造，不使用 SEntFiN。事实覆盖不同经营维度、强弱分散。正负标签由文本设计事先指定，不以评分结果换题。事实无形式矛盾，但业务情境互动仍可能存在，是解释限制。
+prepare.py pre-specifies 10 positive, 10 negative and 10 neutral facts about the same fictional company, Virello Industries; all texts are self-made, and SEntFiN is not used. The facts cover different business dimensions with a spread of strengths. Positive/negative labels are specified in advance by the text design, and items are not swapped based on scores. The facts have no formal contradictions, but interactions in business context may still exist, which is a limitation on interpretation.
 
-单条 30×8=240 分；正负 100 对、正正及负负各45对、有方向事实×中性 200 对，每对两种顺序，每种四次，合计 780×4=3120 分。总计3360有效分数、88次全新评分会话。主连接符固定 `; `；不引入具有因果/时间含义的 `as`。
+Single items 30×8=240 scores; 100 positive-negative pairs, 45 pairs each of positive-positive and negative-negative, 200 pairs of directional fact × neutral; each pair in two orders, four times per order, giving 780×4=3120 scores in total. Overall 3360 valid scores and 88 fresh scoring sessions. The main connective is fixed as `; `; `as`, which carries causal/temporal meaning, is not introduced.
 
-逐字复用 absolute_scoring/prompt.txt 的五锚点、0–100整数、逐条独立评分提示。每批最多40条；单条阶段每轮30条，组合阶段每轮19批40条和尾批20条，不为凑满加入额外标题。每轮随机排列和分批，种子见 prepare.py；同一调用不重复同一item。全部八轮单条先完成，再做四轮组合。
+The scoring prompt from absolute_scoring/prompt.txt, with five anchors, 0–100 integers and independent scoring of each item, is reused verbatim. At most 40 items per batch; in the single-item stage each round has 30 items, in the combination stage each round has 19 batches of 40 items and a final batch of 20, and no extra headlines are added to fill batches. Each round is randomly permuted and batched, with seeds in prepare.py; no call repeats the same item. All eight single-item rounds are completed first, then the four combination rounds.
 
-评分配置固定 gpt-6-sol / low / fork_turns=none，与前轮绝对评分配置一致。按“用子代理执行并审查分析”技能选择标准判断模型并隔离上下文；评分者只接收本批文件，不接收假设、极性标签、文献或别人的分数。父调度者不打分。禁止付费API和训练。调用失败或无效格式可对原输入重试，记录原因；有效分数不重打、不改写。raw/ 保存原始JSON，calls.jsonl 保存调用记录，scores.csv 为可复算的展开表。未暴露模型精确快照、温度和内部状态，不能保证会话误差独立。
+The scoring configuration is fixed at gpt-6-sol / low / fork_turns=none, the same as the previous round's absolute-scoring configuration. The model was chosen and the context isolated according to the selection criteria of the skill "use subagents to execute and review analyses"; the scorer receives only the current batch file, not hypotheses, polarity labels, literature or other scorers' scores. The parent scheduler does not score. Paid APIs and training are prohibited. A failed call or invalid format may be retried on the original input, with the reason recorded; valid scores are not re-scored or rewritten. raw/ stores the raw JSON, calls.jsonl stores the call records, and scores.csv is the expanded table for recomputation. The exact model snapshot, temperature and internal state are not exposed, so independence of session errors cannot be guaranteed.
 
-## 固定分析
+## Fixed analysis
 
-令 d_i=八次单条均分−50，y_ab=四次组合均分−50。主模型为：
+Let d_i = eight-run single-item mean − 50, y_ab = four-run combination mean − 50. The main models are:
 
-1. 相加：clip(d_a+d_b,−50,50)，无拟合参数。
-2. 平均：w d_a+(1−w)d_b；w为第一位置权重。
-3. 负面加权平均：[w r_a d_a+(1−w)r_b d_b]/[w r_a+(1−w)r_b]，r_i=λ若预先标记N，否则1。
+1. Addition: clip(d_a+d_b,−50,50), no fitted parameters.
+2. Averaging: w d_a+(1−w)d_b; w is the first-position weight.
+3. Negativity-weighted average: [w r_a d_a+(1−w)r_b d_b]/[w r_a+(1−w)r_b], r_i=λ if pre-labelled N, otherwise 1.
 
-w范围[0.001,0.999]、λ范围[0.05,20]；数值优化触边须披露。λ只表示相对单条标定分数的额外组合权重；不是模型的总体负面偏见。同向N+N中λ抵消。中性标题代入实际单条基准，不强制为50，极性不符合预期也不删除。
+w ranges over [0.001,0.999] and λ over [0.05,20]; if the numerical optimisation hits a bound, this must be disclosed. λ only represents the extra combination weight relative to the single-item calibration score; it is not the model's overall negativity bias. In same-direction N+N, λ cancels. Neutral headlines use their actual single-item baselines, not forced to 50, and are not deleted if their polarity differs from expectation.
 
-另列一个解释性对照 clip(k(d_a+d_b),−50,50)，k∈[0.5,1]。该族对应等权信息与中性初始意见的平均：单条为v/(p+1)，双条为(v_a+v_b)/(p+2)，因此k=(p+1)/(p+2)。它提醒同向组合更极端不能排除带初始意见的平均。只作事先设定的诊断，不用来另选继续门。
+A separate interpretive control is listed: clip(k(d_a+d_b),−50,50), k∈[0.5,1]. This family corresponds to averaging equally weighted information with a neutral initial opinion: a single item gives v/(p+1), two items give (v_a+v_b)/(p+2), so k=(p+1)/(p+2). It is a reminder that same-direction combinations being more extreme cannot rule out averaging with an initial opinion. It is used only as a pre-specified diagnostic, not to choose a separate continue gate.
 
-报告总体和各组合类别的训练RMSE/MAE，以及逐原子留出的预测误差。每折排除所有含被留原子的组合，再预测这些组合；每个组合两次留出预测的平方/绝对损失取平均后汇总。保留被留原子的单条基准，故检验已标定事实的未见组合，不是未见文本泛化。
+Report the training RMSE/MAE overall and by combination category, and the prediction error with each atom held out. Each fold excludes all combinations containing the held-out atom and then predicts those combinations; the squared/absolute losses of each combination's two held-out predictions are averaged and then aggregated. The held-out atom's single-item baseline is kept, so this tests unseen combinations of calibrated facts, not generalisation to unseen text.
 
-报告λ、w和区间；中性稀释为sign(d_方向事实)×(单条均分−组合均分)，正数表示向50收缩；同时报告中性自身基准和相加预测。顺序主效应为100个PN对的“正面先−负面先”配对差，全部顺序的总体绝对差作描述。同向组合报告落在两单条之间、超过更强单条的比例与幅度。报告端点分数和相加饱和。
+Report λ, w and intervals; neutral dilution is sign(d_directional fact)×(single-item mean − combination mean), where a positive number means shrinkage towards 50; also report the neutral items' own baselines and the additive prediction. The main order effect is the paired difference "positive first − negative first" over the 100 PN pairs; the overall absolute difference across all orders is descriptive. For same-direction combinations report the fraction and magnitude lying between the two single items and exceeding the stronger single item. Report endpoint scores and additive saturation.
 
-1000次分层原子权重bootstrap（P/N/Z各10个有放回权重），一对的权重为两原子重数乘积；单条八轮和组合四轮各按整轮重采样，所有项目共享同一个轮次抽样，传播基准和组合重复误差。给percentile95%区间。此为30个手选原子的重采样敏感性，不能当作随机金融标题总体覆盖保证，四轮也不足以识别所有批次相关。数值重采样seed=2026111623。区间是逐项，非多重检验后的同时区间。
+1000 bootstrap replicates of stratified atom weights (10 weights with replacement each for P/N/Z); the weight of a pair is the product of the multiplicities of its two atoms; the eight single-item rounds and the four combination rounds are each resampled by whole round, with all items sharing the same round draw, propagating baseline and combination repeat error. Percentile 95% intervals are given. This is a resampling sensitivity for 30 hand-picked atoms and cannot be taken as a coverage guarantee for a population of random financial headlines; four rounds are also not enough to identify all batch correlations. Numerical resampling seed=2026111623. The intervals are per item, not simultaneous intervals after multiple-testing correction.
 
-## 判定门
+## Decision gates
 
-以下任一成立则“继续”后续机制验证，否则本轮“放弃/收束”，临界值照数字判定，不搬用旧任务并列门：
+If any of the following holds, "continue" to later mechanism validation; otherwise this round "drops / closes"; values at the threshold are decided by the numbers as they are, and the old task's tie gate is not borrowed:
 
-- λ的95%区间不包含1。
-- PN顺序平均差的绝对值至少2分，且95%区间不包含0。
-- 简单平均比相加的训练和留出RMSE均至少少2分，并且中性稀释平均量的95%区间下限大于0。
+- The 95% interval of λ does not contain 1.
+- The absolute value of the mean PN order difference is at least 2 points, and its 95% interval does not contain 0.
+- Simple averaging beats addition by at least 2 points in both training and held-out RMSE, and the lower bound of the 95% interval of the mean neutral dilution is greater than 0.
 
-2分是本轮事先选择的实用筛查阈值，不是原任务或文献规定。否决含义仅为这一固定小样本未达到继续门，不证明总体无效应。门通过也不保证新颖或能发表；顺序单独通过时须说明已有直接先例，后续贡献须另有机制或实际影响证据。
+2 points is a practical screening threshold chosen in advance for this round, not something specified by the original task or the literature. A rejection only means that this fixed small sample did not reach the continue gate; it does not prove that there is no effect in the population. Passing a gate also does not guarantee novelty or publishability; if order passes alone, it must be stated that a direct precedent exists, and any later contribution needs separate evidence of mechanism or practical impact.
 
-交付一页结论、一张结果图、原始分数与复算代码；文献与简短方案留作来源说明。无外联、无付费API、无训练；不扩大题目、不预设继续结论。
+Deliverables: a one-page summary, one result figure, raw scores and recomputation code; the literature and the short plan are kept as source documentation. No external contact, no paid APIs, no training; the topic is not expanded and no continue conclusion is presupposed.

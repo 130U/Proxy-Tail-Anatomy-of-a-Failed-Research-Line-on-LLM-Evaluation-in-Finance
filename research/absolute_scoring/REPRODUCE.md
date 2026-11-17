@@ -1,26 +1,26 @@
-# 复算绝对评分实验
+# Recomputing the absolute-scoring experiment
 
-这是用户在文献门之后授权继续的复现与压力测试。问题、范围和预先判断规则见 [protocol.md](protocol.md)，题目见 [TASK.md](../../tasks/absolute_scoring.md)。[progress.md](progress.md) 记录采集状态；不要把冻结的计划数量当成已完成数量。分析器要求所有预定原始文件到齐才计算正式结果。
+This is the replication and stress test that the user authorized to continue after the literature gate. The question, scope and pre-registered decision rules are in [protocol.md](protocol.md), and the task statement is in [TASK.md](../../tasks/absolute_scoring.md). [progress.md](progress.md) records the collection status; do not read the frozen planned counts as completed counts. The analyzer requires all pre-specified raw files to be present before it computes the formal results.
 
-在仓库根目录，使用 Python 3.12 及根目录 [requirements-analysis.txt](../../requirements-analysis.txt) 中记录的数值依赖，运行：
+From the repository root, using Python 3.12 and the numerical dependencies recorded in the root [requirements-analysis.txt](../../requirements-analysis.txt), run:
 
 ```powershell
 python research/absolute_scoring/test_analysis.py
 python research/absolute_scoring/analyze_scores.py
 ```
 
-本机实际 Python 为 `../130U-FinLLM/.venv/Scripts/python.exe`。绘图依赖在本机相邻 `../tmp/tail_plot_deps` 时程序会使用该目录；其他机器可在自己的环境安装所列版本，不依赖这个本机目录。最终分析默认执行 5,000 次标题配对 bootstrap，分别固定主分析和对照的种子。运行后输出到 `results/`：完整 JSON、方向性统计与边界数据 CSV，以及 `stability.png` / `stability.pdf` 六面板图。`--no-figure` 可只复算统计；不要把减少 bootstrap 次数的调试输出作为冻结协议的最终结果。
+The Python actually used on this machine is `../130U-FinLLM/.venv/Scripts/python.exe`. If the plotting dependencies are in the adjacent local directory `../tmp/tail_plot_deps`, the program uses that directory; other machines can install the listed versions in their own environment and do not depend on this local directory. The final analysis runs 5,000 headline-paired bootstrap draws by default, with separate fixed seeds for the main analysis and the controls. Outputs go to `results/`: the full JSON, CSVs of directional statistics and boundary data, and the six-panel figure `stability.png` / `stability.pdf`. `--no-figure` recomputes only the statistics. Do not use debugging output with fewer bootstrap draws as the final result of the frozen protocol.
 
-`raw_scores/{call_id}.json` 保存每次实际返回的原始 ID/整数分数。主调用 `r01_b01` 至 `r08_b25` 各含 40 个分数；对照 `c1_b01` 至 `c2_b25` 对应首轮完整批次的两次新调用。每轮 ID 覆盖、重复 JSON 键、分值范围和对照完整性均由分析器检查。`calls.jsonl` 记录配置、代理任务标识和时间；`schedule.csv` 冻结顺序，`batches.csv` 冻结批内 ID 及位置，`sample.csv` 保存来源 ID 和词法族对应关系，`control_ids.csv` 固定 100 个对照目标。
+`raw_scores/{call_id}.json` stores the raw ID/integer scores actually returned by each call. The main calls `r01_b01` to `r08_b25` each contain 40 scores; the controls `c1_b01` to `c2_b25` are the two new calls on the complete first-round batches. The analyzer checks each round's ID coverage, duplicate JSON keys, score range and control completeness. `calls.jsonl` records the configuration, agent task identifiers and times; `schedule.csv` freezes the order, `batches.csv` freezes the IDs and positions within each batch, `sample.csv` stores the mapping between source IDs and lexical families, and `control_ids.csv` fixes the 100 control targets.
 
-全部完成时主数据应为 8,000 个分数，对照伴随数据为 2,000 个分数。其中只有预定 100 个目标的 200 个对照分数进入主要控制比较；其余 1,800 个伴随分数保留但不扩充主样本。重复调用不会增加独立标题数。
+When everything is complete, the main data should have 8,000 scores and the companion control data 2,000 scores. Of these, only the 200 control scores of the 100 pre-specified targets enter the main control comparison; the other 1,800 companion scores are kept but do not enlarge the main sample. Repeated calls do not increase the number of independent headlines.
 
-重建输入使用 `prepare_inputs.py`、[prompt.txt](prompt.txt) 与已保存的来源测试划分。程序只使用 ID、词法族、来源 ID 和文本进行固定种子选择，不按已有标签或预测筛选；输出文本只写到仓库外相邻 `proxy-tail-absolute-inputs/`。程序拒绝覆盖已有样本和输入目录；新的完整复现实验应在新的副本中执行。输入原文没有随本轮提交，合成锚点则保存在提示中。
+Rebuilding the inputs uses `prepare_inputs.py`, [prompt.txt](prompt.txt) and the saved source test split. The program uses only IDs, lexical families, source IDs and text for the fixed-seed selection; it does not filter by existing labels or predictions. The output text is written only to the adjacent directory `proxy-tail-absolute-inputs/` outside the repository. The program refuses to overwrite an existing sample or input directory; a new full replication should be run in a fresh copy. The original input texts were not committed in this round; the synthetic anchors are saved in the prompt.
 
-再次评分需要按 [agent_task_template.txt](agent_task_template.txt) 在宿主中逐次创建全新上下文代理，固定 `gpt-6-sol`、`reasoning_effort=low`、`fork_turns=none`。脚本不会自行生成任何模型分数，也不调用付费 API。宿主没有暴露温度、随机种子和精确底层模型快照，因此可以完整复算已保存结果，但不能承诺新一轮生成逐分相同。
+Scoring again requires creating a fresh-context agent in the host for each call, following [agent_task_template.txt](agent_task_template.txt), with fixed `gpt-6-sol`, `reasoning_effort=low`, `fork_turns=none`. The scripts do not generate any model scores themselves and do not call a paid API. The host does not expose temperature, random seed or the exact underlying model snapshot, so the saved results can be fully recomputed, but we cannot promise that a new round of generation will give identical scores.
 
-本次实际使用的调用记录与格式校验帮助文件原样保存在 [execution/record_call.py](execution/record_call.py)。运行时它位于仓库相邻的 `proxy-tail-absolute-inputs/` 根目录，其相对路径按那个位置设计；仓库中的副本用于保留实际执行代码，不应直接在此位置运行。该文件只记录调用、保留原始字节和检查输出，不生成分数或创建评分代理。
+The call-recording and format-checking helper actually used in this run is saved unchanged in [execution/record_call.py](execution/record_call.py). At run time it sat at the root of the adjacent `proxy-tail-absolute-inputs/` directory, and its relative paths are designed for that location; the copy in the repository preserves the code that was actually run and should not be run directly from here. The file only records calls, keeps the raw bytes and checks outputs; it does not generate scores or create scoring agents.
 
-`interim_round1.json` 是首轮完成后保存的分值分辨率阶段结果，不是八轮重测结论。它的边界统计可由主分析的首轮 `boundary_diagnostics` 重新取得。13 项合成测试验证了并列、方向、完整分数组放行、配对重采样、输入完整性与高斯边界；插值误差仅为数值检验结果，不作为严格误差证书。
+`interim_round1.json` is the score-resolution stage result saved after the first round finished; it is not the eight-round retest conclusion. Its boundary statistics can be recovered from the first-round `boundary_diagnostics` of the main analysis. The 13 synthetic tests check ties, directions, pass-through at complete score groups, paired resampling, input completeness and the Gaussian boundaries; the interpolation error is only a numerical check result and is not a rigorous error certificate.
 
-`interim_m1.json` 和 `interim_m2.json` 分别是第五、六轮完成时保存的预定比较点估计，不含正式区间或公式判定；最终分析 `estimands` 中相应 m 的原始点估计应与它们一致。阶段结果没有反馈给评分代理，也没有用于更改提示或判定规则。
+`interim_m1.json` and `interim_m2.json` are the point estimates for the pre-specified comparisons saved when rounds five and six finished, respectively; they contain no formal intervals or formula verdicts. The raw point estimates for the corresponding m in the final analysis's `estimands` should match them. The stage results were not fed back to the scoring agents and were not used to change the prompt or the decision rules.

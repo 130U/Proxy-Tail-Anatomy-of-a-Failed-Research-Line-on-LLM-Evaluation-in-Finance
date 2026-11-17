@@ -1,202 +1,202 @@
-# 研究产出索引
+# Index of research outputs
 
-完整交付登记日期为2026-11-16；原始研究日期见各文件。先读[START_HERE.md](START_HERE.md)和[FABLE_FULL_REPORT.md](FABLE_FULL_REPORT.md)。下列索引逐文件登记已有研究；代码不是已验证的真实金融模型，项目G0/G1仍未通过。
+The complete delivery was registered on 2026-11-16; the original research dates are given in each file. Read [START_HERE.md](START_HERE.md) and [FABLE_FULL_REPORT.md](FABLE_FULL_REPORT.md) first. The index below registers the existing research file by file. The code is not a verified real financial model, and the project's G0/G1 have still not passed.
 
-advisor_reference中的原导师材料是注明来源和日期的历史背景快照，不是本次新增执行授权。当前交付仅在本地整理，未向外部发送。
+The original advisor materials in advisor_reference are a historical background snapshot with source and date noted; they are not a new authorization to execute anything. The current delivery is organized only locally and has not been sent externally.
 
-| 日期 | 编号 | 文件 | 结论或用途 |
+| Date | ID | File | Conclusion or use |
 |---|---|---|---|
-| 2026-11-16 | 交接 | [.gitignore](.gitignore) | 本地研究材料 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/00_CODEX_BRIEF.md](advisor_reference/00_CODEX_BRIEF.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/01_ADVISOR_MEMO.md](advisor_reference/01_ADVISOR_MEMO.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/02_PROJECT_SNAPSHOT.md](advisor_reference/02_PROJECT_SNAPSHOT.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/03_LITERATURE_MAP.md](advisor_reference/03_LITERATURE_MAP.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/04_THEORY_NOTES.md](advisor_reference/04_THEORY_NOTES.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/05_RESEARCH_QUESTIONS.md](advisor_reference/05_RESEARCH_QUESTIONS.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/06_WORK_PACKAGES.md](advisor_reference/06_WORK_PACKAGES.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/07_REPORTING_PROTOCOL.md](advisor_reference/07_REPORTING_PROTOCOL.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/08_DECISION_LOG.md](advisor_reference/08_DECISION_LOG.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/AGENTS.md](advisor_reference/AGENTS.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/ORIGIN.md](advisor_reference/ORIGIN.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/README.md](advisor_reference/README.md) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | 导师历史参考 | [advisor_reference/SOURCE_MANIFEST.json](advisor_reference/SOURCE_MANIFEST.json) | 原导师材料的来源/日期快照；背景参考，不构成新增执行授权 |
-| 2026-11-16 | Q03 | [answers/Q03.md](answers/Q03.md) | 重点文献题部分完成；子问题缺口见正文 |
-| 2026-11-16 | Q10 | [answers/Q10.md](answers/Q10.md) | 重点文献题部分完成；子问题缺口见正文 |
-| 2026-11-16 | Q13 | [answers/Q13.md](answers/Q13.md) | 重点文献题部分完成；子问题缺口见正文 |
-| 2026-11-16 | Q29 | [answers/Q29.md](answers/Q29.md) | 重点文献题部分完成；子问题缺口见正文 |
-| 2026-11-16 | Q30 | [answers/Q30.md](answers/Q30.md) | 重点文献题部分完成；子问题缺口见正文 |
-| 2026-11-16 | Q31 | [answers/Q31.md](answers/Q31.md) | 重点文献题部分完成；子问题缺口见正文 |
-| 2026-11-16 | Q32 | [answers/Q32.md](answers/Q32.md) | 重点文献题部分完成；子问题缺口见正文 |
-| 2026-11-16 | CM1–CM5 | [certificates/__init__.py](certificates/__init__.py) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [certificates/collective.py](certificates/collective.py) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [certificates/README.md](certificates/README.md) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [certificates/run_examples.py](certificates/run_examples.py) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [certificates/test_collective.py](certificates/test_collective.py) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | WP0.3 | [checks/record.md](checks/record.md) | 条件数学命题与健全性检查 |
-| 2026-11-16 | WP0.3 | [checks/results.json](checks/results.json) | 10万点数学检查与有限耦合枚举实际输出 |
-| 2026-11-16 | WP0.3 | [checks/theory_checks.py](checks/theory_checks.py) | 条件数学命题与健全性检查 |
-| 2026-11-16 | 交接 | [claims_audit.md](claims_audit.md) | 46项公开主张审计与文件覆盖 |
-| 2026-11-16 | 交接 | [claims_sources.json](claims_sources.json) | 审计来源文件哈希 |
-| 2026-11-16 | 来源核对 | [data/compute_budget.md](data/compute_budget.md) | 本地日期声明与元数据；不是历史版本证明 |
-| 2026-11-16 | 来源核对 | [data/fomc_source_audit.py](data/fomc_source_audit.py) | 本地日期声明与元数据；不是历史版本证明 |
-| 2026-11-16 | 来源核对 | [data/source_audit.json](data/source_audit.json) | 本地日期声明与元数据；不是历史版本证明 |
-| 2026-11-16 | 来源核对 | [data/source_audit.md](data/source_audit.md) | 10份保存FOMC来源日期核对，历史字节仍未知 |
-| 2026-11-16 | WP0.1 | [evaluation/evaluate.py](evaluation/evaluate.py) | 汇总重建/簇评测；真实三基线仍缺失 |
-| 2026-11-16 | WP0.1 | [evaluation/README.md](evaluation/README.md) | 汇总重建/簇评测；真实三基线仍缺失 |
-| 2026-11-16 | WP0.1 | [evaluation/reconstruct.py](evaluation/reconstruct.py) | 汇总重建/簇评测；真实三基线仍缺失 |
-| 2026-11-16 | WP0.1 | [evaluation/test_evaluate.py](evaluation/test_evaluate.py) | 汇总重建/簇评测；真实三基线仍缺失 |
-| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/audit_certificate.json](experiments/collective_metrics/audit_certificate.json) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/audit_example.json](experiments/collective_metrics/audit_example.json) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/constructed_inputs.json](experiments/collective_metrics/constructed_inputs.json) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/record.md](experiments/collective_metrics/record.md) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/report.md](experiments/collective_metrics/report.md) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/results.json](experiments/collective_metrics/results.json) | 共同分片统计量条件证书；构造输入非真实模型 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [experiments/local_foundations/audit_results.json](experiments/local_foundations/audit_results.json) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [experiments/local_foundations/record.md](experiments/local_foundations/record.md) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [experiments/local_foundations/report.md](experiments/local_foundations/report.md) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [experiments/local_foundations/results.json](experiments/local_foundations/results.json) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | 新WP0.1 | [experiments/real_baseline/baseline_summary.json](experiments/real_baseline/baseline_summary.json) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [experiments/real_baseline/bootstrap_summary.json](experiments/real_baseline/bootstrap_summary.json) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [experiments/real_baseline/report.md](experiments/real_baseline/report.md) | word/char真实简单基线与配对区间；非历史证书 |
-| 2026-11-16 | WP0.1 | [experiments/wp0_1/budget.md](experiments/wp0_1/budget.md) | 汇总重建/簇评测；真实三基线仍缺失 |
-| 2026-11-16 | WP0.1 | [experiments/wp0_1/reconstruction.json](experiments/wp0_1/reconstruction.json) | 汇总重建/簇评测；真实三基线仍缺失 |
-| 2026-11-16 | WP0.1 | [experiments/wp0_1/record.md](experiments/wp0_1/record.md) | 汇总重建/簇评测；真实三基线仍缺失 |
-| 2026-11-16 | 完整交付入口 | [FABLE_FULL_REPORT.md](FABLE_FULL_REPORT.md) | 截至第九轮的完整研究总报告、证据与未关闭问题 |
-| 2026-11-16 | 交接 | [FABLE_HANDOFF.md](FABLE_HANDOFF.md) | 阶段交接说明与需要导师复核的问题；先读新首读页和总报告 |
-| 2026-11-16 | 交接 | [literature/collective_review.md](literature/collective_review.md) | 本地研究材料 |
-| 2026-11-16 | 交接 | [literature/literature_review.md](literature/literature_review.md) | 17条一手证据台账与差异判断 |
-| 2026-11-16 | 交接 | [literature/local_review.md](literature/local_review.md) | 独立代码复核、修复与有限域检查 |
-| 2026-11-16 | 交接 | [literature/question_status.md](literature/question_status.md) | Q01–Q32完成状态与缺口 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [local/__init__.py](local/__init__.py) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [local/ablation.py](local/ablation.py) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [local/audit.py](local/audit.py) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [local/test_audit.py](local/test_audit.py) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [local/test_foundations.py](local/test_foundations.py) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [local/world.py](local/world.py) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | WP0.2/0.5/T1.4 | [local/write_report.py](local/write_report.py) | 合成世界、消融与精确审计计算 |
-| 2026-11-16 | P2/SE1–SE6 | [numeric/PROTOCOL.md](numeric/PROTOCOL.md) | 有限语义候选的严格数值包络；非真实解析证书 |
-| 2026-11-16 | P2/SE1–SE6 | [numeric/README.md](numeric/README.md) | 有限语义候选的严格数值包络；非真实解析证书 |
-| 2026-11-16 | P2/SE1–SE6 | [numeric/record.md](numeric/record.md) | 25格完整结果及七类构造反例，非自然覆盖率 |
-| 2026-11-16 | P2/SE1–SE6 | [numeric/results.json](numeric/results.json) | 有限语义候选的严格数值包络；非真实解析证书 |
-| 2026-11-16 | P2/SE1–SE6 | [numeric/run_checks.py](numeric/run_checks.py) | 有限语义候选的严格数值包络；非真实解析证书 |
-| 2026-11-16 | P2/SE1–SE6 | [numeric/semantic_envelope.py](numeric/semantic_envelope.py) | 有限语义候选的严格数值包络；非真实解析证书 |
-| 2026-11-16 | P2/SE1–SE6 | [numeric/test_semantic_envelope.py](numeric/test_semantic_envelope.py) | 有限语义候选的严格数值包络；非真实解析证书 |
-| 2026-11-16 | 交接 | [package_handoff.py](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/package_handoff.py) | 本地研究材料 |
-| 2026-11-16 | 集中技术稿 | [paper/build_pdf.py](paper/build_pdf.py) | 条件数学与比较边界；非原创性/真实整链验收 |
-| 2026-11-16 | 集中技术稿 | [paper/BUILD_PROTOCOL.md](paper/BUILD_PROTOCOL.md) | 条件数学与比较边界；非原创性/真实整链验收 |
-| 2026-11-16 | 集中技术稿 | [paper/BUILD_RECORD.md](paper/BUILD_RECORD.md) | 本地PDF构建、公式与逐页版面检查记录 |
-| 2026-11-16 | 集中技术稿 | [paper/BUILD_RESULT.json](paper/BUILD_RESULT.json) | 条件数学与比较边界；非原创性/真实整链验收 |
-| 2026-11-16 | 集中技术稿 | [paper/FABLE_DECISION_NOTE.md](paper/FABLE_DECISION_NOTE.md) | 给Fable的三个优先裁定问题，尚未发送 |
-| 2026-11-16 | 集中技术稿 | [paper/manuscript.md](paper/manuscript.md) | 英文内部技术稿；条件证明与最强简单替代 |
-| 2026-11-16 | 集中技术稿 | [paper/manuscript.tex](paper/manuscript.tex) | 与Markdown对应的LaTeX稿，未编译 |
-| 2026-11-16 | 集中技术稿 | [paper/output/pdf/audit_budgets_working_report.pdf](paper/output/pdf/audit_budgets_working_report.pdf) | 本地MathML排版的技术报告PDF，非投稿完成稿 |
-| 2026-11-16 | 集中技术稿 | [paper/README.md](paper/README.md) | 条件数学与比较边界；非原创性/真实整链验收 |
-| 2026-11-16 | 路径比较 | [paths/COMPARATIVE_ANALYSIS.md](paths/COMPARATIVE_ANALYSIS.md) | 五份路径比较、Top3条件建议与保留分歧 |
-| 2026-11-16 | 路径比较 | [paths/DECISION_CRITERIA.md](paths/DECISION_CRITERIA.md) | 下一轮可否决阈值及联合样本预算提案 |
-| 2026-11-16 | 路径比较 | [paths/INDEPENDENT_CHALLENGES.md](paths/INDEPENDENT_CHALLENGES.md) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | 路径比较 | [paths/PATH_01_audited_information_set.md](paths/PATH_01_audited_information_set.md) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | 路径比较 | [paths/PATH_02_numeric_sensitivity.md](paths/PATH_02_numeric_sensitivity.md) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | 路径比较 | [paths/PATH_03_audit_design_frontier.md](paths/PATH_03_audit_design_frontier.md) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | 路径比较 | [paths/PATH_04_dependence_robust_risk.md](paths/PATH_04_dependence_robust_risk.md) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | 路径比较 | [paths/PATH_05_proof_carrying_numeric_reasoning.md](paths/PATH_05_proof_carrying_numeric_reasoning.md) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | 路径比较 | [paths/PEER_REVIEW.md](paths/PEER_REVIEW.md) | 独立AI反方审查、数学核对与修订复核 |
-| 2026-11-16 | 路径比较 | [paths/review_checks.json](paths/review_checks.json) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | 路径比较 | [paths/review_checks.py](paths/review_checks.py) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | 路径比较 | [paths/REVIEW_RESPONSE.md](paths/REVIEW_RESPONSE.md) | 七项important回应与尚未关闭的科学门 |
-| 2026-11-16 | 路径比较 | [paths/SENIOR_REVIEW_REQUEST.md](paths/SENIOR_REVIEW_REQUEST.md) | 给用户指定资深助手的待发问题包 |
-| 2026-11-16 | 路径比较 | [paths/STUDY_CHARTER.md](paths/STUDY_CHARTER.md) | 离线候选分析与审查；非已确认原创/真实有效 |
-| 2026-11-16 | T1.1/WP1.2 | [pit/pipeline.py](pit/pipeline.py) | 给定日志的历史非干扰构造；不认证真时间 |
-| 2026-11-16 | T1.1/WP1.2 | [pit/PROTOCOL.md](pit/PROTOCOL.md) | 给定日志的历史非干扰构造；不认证真时间 |
-| 2026-11-16 | T1.1/WP1.2 | [pit/README.md](pit/README.md) | 给定日志的历史非干扰构造；不认证真时间 |
-| 2026-11-16 | T1.1/WP1.2 | [pit/record.md](pit/record.md) | 210次构造比较、3错标仍准入与实际时间记录 |
-| 2026-11-16 | T1.1/WP1.2 | [pit/results.json](pit/results.json) | 给定日志的历史非干扰构造；不认证真时间 |
-| 2026-11-16 | T1.1/WP1.2 | [pit/run_checks.py](pit/run_checks.py) | 给定日志的历史非干扰构造；不认证真时间 |
-| 2026-11-16 | T1.1/WP1.2 | [pit/seed_checks.py](pit/seed_checks.py) | 给定日志的历史非干扰构造；不认证真时间 |
-| 2026-11-16 | T1.1/WP1.2 | [pit/test_pipeline.py](pit/test_pipeline.py) | 给定日志的历史非干扰构造；不认证真时间 |
-| 2026-11-16 | T1.4/规划 | [planning/audit_frontier.py](planning/audit_frontier.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/budget.md](planning/budget.md) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/frontier_results.json](planning/frontier_results.json) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/impact_audit.py](planning/impact_audit.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/impact_budget.md](planning/impact_budget.md) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/impact_report.md](planning/impact_report.md) | 预定20格全表；全族中位收益0，未过提案门 |
-| 2026-11-16 | T1.4/规划 | [planning/localization_io_failure.json](planning/localization_io_failure.json) | Windows原子替换失败的真实快照与错误链 |
-| 2026-11-16 | T1.4/规划 | [planning/LOCALIZATION_PROTOCOL.md](planning/LOCALIZATION_PROTOCOL.md) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/localization_results.json](planning/localization_results.json) | 44个精确比较及4个仅解析界构造，人工输入 |
-| 2026-11-16 | T1.4/规划 | [planning/localization_table.md](planning/localization_table.md) | 完整48行表，不挑选有利比较器 |
-| 2026-11-16 | T1.4/规划 | [planning/pooled_scope_check.json](planning/pooled_scope_check.json) | 类外pooled随机配额的单个精确反方核对 |
-| 2026-11-16 | T1.4/规划 | [planning/RANDOMIZATION_PROTOCOL.md](planning/RANDOMIZATION_PROTOCOL.md) | 随机配额探索范围、非退化输出约定及预算 |
-| 2026-11-16 | T1.4/规划 | [planning/randomization_results.json](planning/randomization_results.json) | 32个同质人工构造的精确风险与最小审计量 |
-| 2026-11-16 | T1.4/规划 | [planning/randomization_table.md](planning/randomization_table.md) | 全部32格，保留合取族零新增收益 |
-| 2026-11-16 | T1.4/规划 | [planning/randomized_audit.py](planning/randomized_audit.py) | 精确风险、最小样本量与固定规模策略采样器 |
-| 2026-11-16 | T1.4/规划 | [planning/README.md](planning/README.md) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/record.md](planning/record.md) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/run_localization.py](planning/run_localization.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/run_randomization.py](planning/run_randomization.py) | 完整32格离线比较运行器与来源hash |
-| 2026-11-16 | T1.4/规划 | [planning/source_hashes.json](planning/source_hashes.json) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/test_audit_frontier.py](planning/test_audit_frontier.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/test_impact_audit.py](planning/test_impact_audit.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/test_randomized_audit.py](planning/test_randomized_audit.py) | 文档子集枚举、边界和采样构造测试 |
-| 2026-11-16 | T1.4/规划 | [planning/test_run_localization.py](planning/test_run_localization.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/test_threshold_design.py](planning/test_threshold_design.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/test_total_count_design.py](planning/test_total_count_design.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/threshold_design.py](planning/threshold_design.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/threshold_results.json](planning/threshold_results.json) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | T1.4/规划 | [planning/total_count_design.py](planning/total_count_design.py) | 固定零发现条件的最小审计量；非序贯有效 |
-| 2026-11-16 | 交接 | [README.md](README.md) | 本地研究材料 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/aggregate_manifest.json](real_baseline/aggregate_manifest.json) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/bootstrap_results.py](real_baseline/bootstrap_results.py) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/DESIGN_REVIEW.md](real_baseline/DESIGN_REVIEW.md) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/PREPARATION_ACCOUNTING.md](real_baseline/PREPARATION_ACCOUNTING.md) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/prepare.py](real_baseline/prepare.py) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/PREPARE_README.md](real_baseline/PREPARE_README.md) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/PROTOCOL.md](real_baseline/PROTOCOL.md) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/REVIEW_RESPONSE.md](real_baseline/REVIEW_RESPONSE.md) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/test_bootstrap_results.py](real_baseline/test_bootstrap_results.py) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/test_prepare.py](real_baseline/test_prepare.py) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/test_train_baselines.py](real_baseline/test_train_baselines.py) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 新WP0.1 | [real_baseline/train_baselines.py](real_baseline/train_baselines.py) | 来源原任务新基线；私有逐行产物不入包 |
-| 2026-11-16 | 交接 | [reports/2026-11-15-round1.md](reports/2026-11-15-round1.md) | 自足进展报告、修正和G0/G1状态 |
-| 2026-11-16 | 交接 | [reports/2026-11-15-round2.md](reports/2026-11-15-round2.md) | 集体统计量证书与本地原料盘点增量 |
-| 2026-11-16 | 交接 | [reports/2026-11-16-round3.md](reports/2026-11-16-round3.md) | 影响结构审计与真实日期来源核对进展 |
-| 2026-11-16 | 交接 | [reports/2026-11-16-round4.md](reports/2026-11-16-round4.md) | 真实来源实体情绪基线与独立审查闭环 |
-| 2026-11-16 | 交接 | [reports/2026-11-16-round5.md](reports/2026-11-16-round5.md) | 历史非干扰、可测性与来源准入的义务分离 |
-| 2026-11-16 | 交接 | [reports/2026-11-16-round6.md](reports/2026-11-16-round6.md) | P2语义集合、必要宽度、符号对照与选择风险 |
-| 2026-11-16 | 交接 | [reports/2026-11-16-round7.md](reports/2026-11-16-round7.md) | 集中技术稿、最强简单对照与论文级反方审查 |
-| 2026-11-16 | 交接 | [reports/2026-11-16-round8.md](reports/2026-11-16-round8.md) | 位置价值边界、强简单组合与随机配额替代 |
-| 2026-11-16 | 交接 | [reports/2026-11-16-round9.md](reports/2026-11-16-round9.md) | 任意随机审计的精确解、强简单对照及研究判断 |
-| 2026-11-16 | 交接 | [reports/completion_audit.md](reports/completion_audit.md) | 全部工作包、32题和G0/G1终态逐项验收 |
-| 2026-11-16 | 交接 | [reports/impact_review.md](reports/impact_review.md) | 新证明/优化器/日期绑定的独立复核与修复 |
-| 2026-11-16 | 交接 | [reports/local_data_inventory.md](reports/local_data_inventory.md) | 真实本地来源元数据与哈希核查，未复制原文 |
-| 2026-11-16 | 交接 | [reports/localization_review.md](reports/localization_review.md) | 新理论与全部结果的独立审查，保留程序类边界 |
-| 2026-11-16 | 交接 | [reports/localization_review_checks.py](reports/localization_review_checks.py) | 本地研究材料 |
-| 2026-11-16 | 交接 | [reports/numeric_envelope_review.md](reports/numeric_envelope_review.md) | 语义包络定理和有理检查器独立复核 |
-| 2026-11-16 | 交接 | [reports/paper_review.md](reports/paper_review.md) | 独立AI论文审查；原创性与现实性仍开放 |
-| 2026-11-16 | 交接 | [reports/paper_review_checks.py](reports/paper_review_checks.py) | 26个均衡设计及9261配额的独立精确核对 |
-| 2026-11-16 | 交接 | [reports/pit_review.md](reports/pit_review.md) | PNI1–PNI6与PIT代码独立审查、反例和修复 |
-| 2026-11-16 | 交接 | [reports/randomization_review.md](reports/randomization_review.md) | 独立AI数学及实现审查，709格与32行核对 |
-| 2026-11-16 | 交接 | [reports/randomization_review_checks.py](reports/randomization_review_checks.py) | 不导入作者内核的文档级穷举和整表复核 |
-| 2026-11-16 | 交接 | [reports/real_baseline_review.md](reports/real_baseline_review.md) | 独立实现/统计复核及修复记录 |
-| 2026-11-16 | 交接 | [REPRODUCE.md](REPRODUCE.md) | 本地复现指令和环境 |
-| 2026-11-16 | 交接 | [reproduce.py](reproduce.py) | 本地研究材料 |
-| 2026-11-16 | 交接 | [reproduction_log.json](reproduction_log.json) | 125项集成单元测试、10项来源自测及13条复现命令 |
-| 2026-11-16 | 完整交付入口 | [START_HERE.md](START_HERE.md) | 完整交付首读指引、阅读顺序与文件导航 |
-| 2026-11-16 | 交接 | [test_package_handoff.py](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/test_package_handoff.py) | 本地研究材料 |
-| 2026-11-16 | WP0.3 | [theory/collective_metrics.md](theory/collective_metrics.md) | 共同分片下accuracy与macro-F1包络证明 |
-| 2026-11-16 | WP0.3 | [theory/impact_audit.md](theory/impact_audit.md) | IA1–IA8证明及矩形程序成本分离 |
-| 2026-11-16 | WP0.3 | [theory/independent_review.md](theory/independent_review.md) | 独立数学复核与限定 |
-| 2026-11-16 | WP0.3 | [theory/localization_value.md](theory/localization_value.md) | LV1–LV5、常数sharp界、原尺度等价及简单基线 |
-| 2026-11-16 | WP0.3 | [theory/notes.md](theory/notes.md) | T0–T3完整假设、证明与反例 |
-| 2026-11-16 | WP0.3 | [theory/notes.tex](theory/notes.tex) | LaTeX理论稿，未编译PDF |
-| 2026-11-16 | WP0.3 | [theory/pit_noninterference.md](theory/pit_noninterference.md) | 六项条件命题、条件随机性及两世界识别下界 |
-| 2026-11-16 | WP0.3 | [theory/randomized_audit.md](theory/randomized_audit.md) | RA1–RA4、匹配下界、自适应/期望预算及公平渐近 |
-| 2026-11-16 | WP0.3 | [theory/semantic_envelopes.md](theory/semantic_envelopes.md) | SE1–SE6完整条件、证明与候选相对边界 |
-| 2026-11-16 | WP0.4 | [xbrl/budget.md](xbrl/budget.md) | 受限离线样例；无真实时间戳证书 |
-| 2026-11-16 | WP0.4 | [xbrl/example_result.json](xbrl/example_result.json) | 受限离线样例；无真实时间戳证书 |
-| 2026-11-16 | WP0.4 | [xbrl/parse_local.py](xbrl/parse_local.py) | 受限离线样例；无真实时间戳证书 |
-| 2026-11-16 | WP0.4 | [xbrl/README.md](xbrl/README.md) | 受限离线样例；无真实时间戳证书 |
-| 2026-11-16 | WP0.4 | [xbrl/record.md](xbrl/record.md) | 受限离线样例；无真实时间戳证书 |
-| 2026-11-16 | WP0.4 | [xbrl/synthetic_fixture.xml](xbrl/synthetic_fixture.xml) | 受限离线样例；无真实时间戳证书 |
-| 2026-11-16 | WP0.4 | [xbrl/test_parse_local.py](xbrl/test_parse_local.py) | 受限离线样例；无真实时间戳证书 |
-| 2026-11-16 | 打包 | [FABLE_REVIEW_BUNDLE.md](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_REVIEW_BUNDLE.md) | 全部可交付Markdown的完整合并阅读版，含编号目录与来源标题 |
-| 2026-11-16 | 打包 | [HANDOFF_MANIFEST.json](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json) | 文件SHA256及合并Markdown数量/完整列表，不含清单自身 |
-| 2026-11-16 | 打包 | [FABLE_HANDOFF_COMPLETE_2026-11-16.zip](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip) | 已有研究截至第九轮的完整本地归档；不含私有数据、权重或旧ZIP |
+| 2026-11-16 | Handoff | [.gitignore](.gitignore) | Local research material |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/00_CODEX_BRIEF.md](advisor_reference/00_CODEX_BRIEF.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/01_ADVISOR_MEMO.md](advisor_reference/01_ADVISOR_MEMO.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/02_PROJECT_SNAPSHOT.md](advisor_reference/02_PROJECT_SNAPSHOT.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/03_LITERATURE_MAP.md](advisor_reference/03_LITERATURE_MAP.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/04_THEORY_NOTES.md](advisor_reference/04_THEORY_NOTES.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/05_RESEARCH_QUESTIONS.md](advisor_reference/05_RESEARCH_QUESTIONS.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/06_WORK_PACKAGES.md](advisor_reference/06_WORK_PACKAGES.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/07_REPORTING_PROTOCOL.md](advisor_reference/07_REPORTING_PROTOCOL.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/08_DECISION_LOG.md](advisor_reference/08_DECISION_LOG.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/AGENTS.md](advisor_reference/AGENTS.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/ORIGIN.md](advisor_reference/ORIGIN.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/README.md](advisor_reference/README.md) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Advisor historical reference | [advisor_reference/SOURCE_MANIFEST.json](advisor_reference/SOURCE_MANIFEST.json) | Source/date snapshot of the original advisor materials; background reference, not a new authorization to execute anything |
+| 2026-11-16 | Q03 | [answers/Q03.md](answers/Q03.md) | Focused literature question partially done; sub-question gaps are in the full text |
+| 2026-11-16 | Q10 | [answers/Q10.md](answers/Q10.md) | Focused literature question partially done; sub-question gaps are in the full text |
+| 2026-11-16 | Q13 | [answers/Q13.md](answers/Q13.md) | Focused literature question partially done; sub-question gaps are in the full text |
+| 2026-11-16 | Q29 | [answers/Q29.md](answers/Q29.md) | Focused literature question partially done; sub-question gaps are in the full text |
+| 2026-11-16 | Q30 | [answers/Q30.md](answers/Q30.md) | Focused literature question partially done; sub-question gaps are in the full text |
+| 2026-11-16 | Q31 | [answers/Q31.md](answers/Q31.md) | Focused literature question partially done; sub-question gaps are in the full text |
+| 2026-11-16 | Q32 | [answers/Q32.md](answers/Q32.md) | Focused literature question partially done; sub-question gaps are in the full text |
+| 2026-11-16 | CM1–CM5 | [certificates/__init__.py](certificates/__init__.py) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [certificates/collective.py](certificates/collective.py) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [certificates/README.md](certificates/README.md) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [certificates/run_examples.py](certificates/run_examples.py) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [certificates/test_collective.py](certificates/test_collective.py) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | WP0.3 | [checks/record.md](checks/record.md) | Conditional mathematical propositions and sanity checks |
+| 2026-11-16 | WP0.3 | [checks/results.json](checks/results.json) | Actual output of the 100,000-point mathematical check and the finite coupling enumeration |
+| 2026-11-16 | WP0.3 | [checks/theory_checks.py](checks/theory_checks.py) | Conditional mathematical propositions and sanity checks |
+| 2026-11-16 | Handoff | [claims_audit.md](claims_audit.md) | Audit of 46 public claims and file coverage |
+| 2026-11-16 | Handoff | [claims_sources.json](claims_sources.json) | Hashes of the audited source files |
+| 2026-11-16 | Source check | [data/compute_budget.md](data/compute_budget.md) | Local date claims and metadata; not proof of historical versions |
+| 2026-11-16 | Source check | [data/fomc_source_audit.py](data/fomc_source_audit.py) | Local date claims and metadata; not proof of historical versions |
+| 2026-11-16 | Source check | [data/source_audit.json](data/source_audit.json) | Local date claims and metadata; not proof of historical versions |
+| 2026-11-16 | Source check | [data/source_audit.md](data/source_audit.md) | Date check of 10 saved FOMC sources; the historical bytes are still unknown |
+| 2026-11-16 | WP0.1 | [evaluation/evaluate.py](evaluation/evaluate.py) | Summary reconstruction/cluster evaluation; the three real baselines are still missing |
+| 2026-11-16 | WP0.1 | [evaluation/README.md](evaluation/README.md) | Summary reconstruction/cluster evaluation; the three real baselines are still missing |
+| 2026-11-16 | WP0.1 | [evaluation/reconstruct.py](evaluation/reconstruct.py) | Summary reconstruction/cluster evaluation; the three real baselines are still missing |
+| 2026-11-16 | WP0.1 | [evaluation/test_evaluate.py](evaluation/test_evaluate.py) | Summary reconstruction/cluster evaluation; the three real baselines are still missing |
+| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/audit_certificate.json](experiments/collective_metrics/audit_certificate.json) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/audit_example.json](experiments/collective_metrics/audit_example.json) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/constructed_inputs.json](experiments/collective_metrics/constructed_inputs.json) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/record.md](experiments/collective_metrics/record.md) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/report.md](experiments/collective_metrics/report.md) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | CM1–CM5 | [experiments/collective_metrics/results.json](experiments/collective_metrics/results.json) | Conditional certificates for shared-shard statistics; constructed inputs, not a real model |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [experiments/local_foundations/audit_results.json](experiments/local_foundations/audit_results.json) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [experiments/local_foundations/record.md](experiments/local_foundations/record.md) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [experiments/local_foundations/report.md](experiments/local_foundations/report.md) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [experiments/local_foundations/results.json](experiments/local_foundations/results.json) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | New WP0.1 | [experiments/real_baseline/baseline_summary.json](experiments/real_baseline/baseline_summary.json) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [experiments/real_baseline/bootstrap_summary.json](experiments/real_baseline/bootstrap_summary.json) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [experiments/real_baseline/report.md](experiments/real_baseline/report.md) | Real word/char simple baselines and paired interval; not a historical certificate |
+| 2026-11-16 | WP0.1 | [experiments/wp0_1/budget.md](experiments/wp0_1/budget.md) | Summary reconstruction/cluster evaluation; the three real baselines are still missing |
+| 2026-11-16 | WP0.1 | [experiments/wp0_1/reconstruction.json](experiments/wp0_1/reconstruction.json) | Summary reconstruction/cluster evaluation; the three real baselines are still missing |
+| 2026-11-16 | WP0.1 | [experiments/wp0_1/record.md](experiments/wp0_1/record.md) | Summary reconstruction/cluster evaluation; the three real baselines are still missing |
+| 2026-11-16 | Complete delivery entry point | [FABLE_FULL_REPORT.md](FABLE_FULL_REPORT.md) | Complete research report through round 9, with evidence and open questions |
+| 2026-11-16 | Handoff | [FABLE_HANDOFF.md](FABLE_HANDOFF.md) | Phase handoff note and questions for the advisor to review; read the new start page and the full report first |
+| 2026-11-16 | Handoff | [literature/collective_review.md](literature/collective_review.md) | Local research material |
+| 2026-11-16 | Handoff | [literature/literature_review.md](literature/literature_review.md) | Ledger of 17 primary evidence entries and judgments of differences |
+| 2026-11-16 | Handoff | [literature/local_review.md](literature/local_review.md) | Independent code review, fixes and finite-domain checks |
+| 2026-11-16 | Handoff | [literature/question_status.md](literature/question_status.md) | Completion status and gaps for Q01–Q32 |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [local/__init__.py](local/__init__.py) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [local/ablation.py](local/ablation.py) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [local/audit.py](local/audit.py) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [local/test_audit.py](local/test_audit.py) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [local/test_foundations.py](local/test_foundations.py) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [local/world.py](local/world.py) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | WP0.2/0.5/T1.4 | [local/write_report.py](local/write_report.py) | Synthetic world, ablation and exact audit computation |
+| 2026-11-16 | P2/SE1–SE6 | [numeric/PROTOCOL.md](numeric/PROTOCOL.md) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
+| 2026-11-16 | P2/SE1–SE6 | [numeric/README.md](numeric/README.md) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
+| 2026-11-16 | P2/SE1–SE6 | [numeric/record.md](numeric/record.md) | Complete results for 25 cells and seven classes of constructed counterexamples; not natural coverage rates |
+| 2026-11-16 | P2/SE1–SE6 | [numeric/results.json](numeric/results.json) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
+| 2026-11-16 | P2/SE1–SE6 | [numeric/run_checks.py](numeric/run_checks.py) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
+| 2026-11-16 | P2/SE1–SE6 | [numeric/semantic_envelope.py](numeric/semantic_envelope.py) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
+| 2026-11-16 | P2/SE1–SE6 | [numeric/test_semantic_envelope.py](numeric/test_semantic_envelope.py) | Strict numeric envelopes for finite semantic candidates; not a real parsing certificate |
+| 2026-11-16 | Handoff | [package_handoff.py](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/package_handoff.py) | Local research material |
+| 2026-11-16 | Consolidated technical manuscript | [paper/build_pdf.py](paper/build_pdf.py) | Conditional mathematics and comparison boundaries; not an acceptance of originality or of the real full chain |
+| 2026-11-16 | Consolidated technical manuscript | [paper/BUILD_PROTOCOL.md](paper/BUILD_PROTOCOL.md) | Conditional mathematics and comparison boundaries; not an acceptance of originality or of the real full chain |
+| 2026-11-16 | Consolidated technical manuscript | [paper/BUILD_RECORD.md](paper/BUILD_RECORD.md) | Record of the local PDF build, formulas and page-by-page layout checks |
+| 2026-11-16 | Consolidated technical manuscript | [paper/BUILD_RESULT.json](paper/BUILD_RESULT.json) | Conditional mathematics and comparison boundaries; not an acceptance of originality or of the real full chain |
+| 2026-11-16 | Consolidated technical manuscript | [paper/FABLE_DECISION_NOTE.md](paper/FABLE_DECISION_NOTE.md) | Three priority questions for Fable to decide; not yet sent |
+| 2026-11-16 | Consolidated technical manuscript | [paper/manuscript.md](paper/manuscript.md) | Internal English technical manuscript; conditional proofs and the strongest simple alternatives |
+| 2026-11-16 | Consolidated technical manuscript | [paper/manuscript.tex](paper/manuscript.tex) | LaTeX version corresponding to the Markdown; not compiled |
+| 2026-11-16 | Consolidated technical manuscript | [paper/output/pdf/audit_budgets_working_report.pdf](paper/output/pdf/audit_budgets_working_report.pdf) | Technical report PDF typeset locally from MathML; not a finished submission |
+| 2026-11-16 | Consolidated technical manuscript | [paper/README.md](paper/README.md) | Conditional mathematics and comparison boundaries; not an acceptance of originality or of the real full chain |
+| 2026-11-16 | Path comparison | [paths/COMPARATIVE_ANALYSIS.md](paths/COMPARATIVE_ANALYSIS.md) | Comparison of the five paths, conditional Top 3 recommendation and retained disagreements |
+| 2026-11-16 | Path comparison | [paths/DECISION_CRITERIA.md](paths/DECISION_CRITERIA.md) | Falsifiable thresholds for the next round and a joint sample budget proposal |
+| 2026-11-16 | Path comparison | [paths/INDEPENDENT_CHALLENGES.md](paths/INDEPENDENT_CHALLENGES.md) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | Path comparison | [paths/PATH_01_audited_information_set.md](paths/PATH_01_audited_information_set.md) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | Path comparison | [paths/PATH_02_numeric_sensitivity.md](paths/PATH_02_numeric_sensitivity.md) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | Path comparison | [paths/PATH_03_audit_design_frontier.md](paths/PATH_03_audit_design_frontier.md) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | Path comparison | [paths/PATH_04_dependence_robust_risk.md](paths/PATH_04_dependence_robust_risk.md) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | Path comparison | [paths/PATH_05_proof_carrying_numeric_reasoning.md](paths/PATH_05_proof_carrying_numeric_reasoning.md) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | Path comparison | [paths/PEER_REVIEW.md](paths/PEER_REVIEW.md) | Independent AI adversarial review, math checks and review of the revisions |
+| 2026-11-16 | Path comparison | [paths/review_checks.json](paths/review_checks.json) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | Path comparison | [paths/review_checks.py](paths/review_checks.py) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | Path comparison | [paths/REVIEW_RESPONSE.md](paths/REVIEW_RESPONSE.md) | Responses to the seven "important" items and the scientific gates not yet closed |
+| 2026-11-16 | Path comparison | [paths/SENIOR_REVIEW_REQUEST.md](paths/SENIOR_REVIEW_REQUEST.md) | Question package, not yet sent, for the senior assistant named by the user |
+| 2026-11-16 | Path comparison | [paths/STUDY_CHARTER.md](paths/STUDY_CHARTER.md) | Offline candidate analysis and review; not confirmed as original or valid in the real world |
+| 2026-11-16 | T1.1/WP1.2 | [pit/pipeline.py](pit/pipeline.py) | Historical non-interference construction for a given log; does not certify true times |
+| 2026-11-16 | T1.1/WP1.2 | [pit/PROTOCOL.md](pit/PROTOCOL.md) | Historical non-interference construction for a given log; does not certify true times |
+| 2026-11-16 | T1.1/WP1.2 | [pit/README.md](pit/README.md) | Historical non-interference construction for a given log; does not certify true times |
+| 2026-11-16 | T1.1/WP1.2 | [pit/record.md](pit/record.md) | 210 constructed comparisons, 3 mislabels still admitted, and actual timing records |
+| 2026-11-16 | T1.1/WP1.2 | [pit/results.json](pit/results.json) | Historical non-interference construction for a given log; does not certify true times |
+| 2026-11-16 | T1.1/WP1.2 | [pit/run_checks.py](pit/run_checks.py) | Historical non-interference construction for a given log; does not certify true times |
+| 2026-11-16 | T1.1/WP1.2 | [pit/seed_checks.py](pit/seed_checks.py) | Historical non-interference construction for a given log; does not certify true times |
+| 2026-11-16 | T1.1/WP1.2 | [pit/test_pipeline.py](pit/test_pipeline.py) | Historical non-interference construction for a given log; does not certify true times |
+| 2026-11-16 | T1.4/planning | [planning/audit_frontier.py](planning/audit_frontier.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/budget.md](planning/budget.md) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/frontier_results.json](planning/frontier_results.json) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/impact_audit.py](planning/impact_audit.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/impact_budget.md](planning/impact_budget.md) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/impact_report.md](planning/impact_report.md) | Pre-registered full 20-cell table; family-wide median gain 0, proposal gate failed |
+| 2026-11-16 | T1.4/planning | [planning/localization_io_failure.json](planning/localization_io_failure.json) | Actual snapshot and error chain of the Windows atomic-replace failure |
+| 2026-11-16 | T1.4/planning | [planning/LOCALIZATION_PROTOCOL.md](planning/LOCALIZATION_PROTOCOL.md) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/localization_results.json](planning/localization_results.json) | 44 exact comparisons and 4 constructions with analytic bounds only; hand-made inputs |
+| 2026-11-16 | T1.4/planning | [planning/localization_table.md](planning/localization_table.md) | Complete 48-row table; favorable comparators are not cherry-picked |
+| 2026-11-16 | T1.4/planning | [planning/pooled_scope_check.json](planning/pooled_scope_check.json) | A single exact adversarial check of out-of-class pooled random quotas |
+| 2026-11-16 | T1.4/planning | [planning/RANDOMIZATION_PROTOCOL.md](planning/RANDOMIZATION_PROTOCOL.md) | Scope of the random-quota exploration, the non-degenerate output convention and the budget |
+| 2026-11-16 | T1.4/planning | [planning/randomization_results.json](planning/randomization_results.json) | Exact risks and minimum audit sizes for 32 homogeneous hand-made constructions |
+| 2026-11-16 | T1.4/planning | [planning/randomization_table.md](planning/randomization_table.md) | All 32 cells; the zero additional gain for the conjunctive family is kept |
+| 2026-11-16 | T1.4/planning | [planning/randomized_audit.py](planning/randomized_audit.py) | Exact risk, minimum sample size and a fixed-size strategy sampler |
+| 2026-11-16 | T1.4/planning | [planning/README.md](planning/README.md) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/record.md](planning/record.md) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/run_localization.py](planning/run_localization.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/run_randomization.py](planning/run_randomization.py) | Offline comparison runner for the complete 32 cells, with source hashes |
+| 2026-11-16 | T1.4/planning | [planning/source_hashes.json](planning/source_hashes.json) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/test_audit_frontier.py](planning/test_audit_frontier.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/test_impact_audit.py](planning/test_impact_audit.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/test_randomized_audit.py](planning/test_randomized_audit.py) | Tests of document-subset enumeration, bounds and the sampling construction |
+| 2026-11-16 | T1.4/planning | [planning/test_run_localization.py](planning/test_run_localization.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/test_threshold_design.py](planning/test_threshold_design.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/test_total_count_design.py](planning/test_total_count_design.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/threshold_design.py](planning/threshold_design.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/threshold_results.json](planning/threshold_results.json) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | T1.4/planning | [planning/total_count_design.py](planning/total_count_design.py) | Minimum audit size under a fixed zero-finding condition; not sequentially valid |
+| 2026-11-16 | Handoff | [README.md](README.md) | Local research material |
+| 2026-11-16 | New WP0.1 | [real_baseline/aggregate_manifest.json](real_baseline/aggregate_manifest.json) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/bootstrap_results.py](real_baseline/bootstrap_results.py) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/DESIGN_REVIEW.md](real_baseline/DESIGN_REVIEW.md) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/PREPARATION_ACCOUNTING.md](real_baseline/PREPARATION_ACCOUNTING.md) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/prepare.py](real_baseline/prepare.py) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/PREPARE_README.md](real_baseline/PREPARE_README.md) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/PROTOCOL.md](real_baseline/PROTOCOL.md) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/REVIEW_RESPONSE.md](real_baseline/REVIEW_RESPONSE.md) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/test_bootstrap_results.py](real_baseline/test_bootstrap_results.py) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/test_prepare.py](real_baseline/test_prepare.py) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/test_train_baselines.py](real_baseline/test_train_baselines.py) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | New WP0.1 | [real_baseline/train_baselines.py](real_baseline/train_baselines.py) | New baseline on the source's original task; private row-level artifacts are not in the package |
+| 2026-11-16 | Handoff | [reports/2026-11-15-round1.md](reports/2026-11-15-round1.md) | Self-contained progress report, corrections and G0/G1 status |
+| 2026-11-16 | Handoff | [reports/2026-11-15-round2.md](reports/2026-11-15-round2.md) | Increment: collective-statistic certificates and the local raw-material inventory |
+| 2026-11-16 | Handoff | [reports/2026-11-16-round3.md](reports/2026-11-16-round3.md) | Progress on the impact-structure audit and on checking real source dates |
+| 2026-11-16 | Handoff | [reports/2026-11-16-round4.md](reports/2026-11-16-round4.md) | Real-source entity-sentiment baseline with a closed independent-review loop |
+| 2026-11-16 | Handoff | [reports/2026-11-16-round5.md](reports/2026-11-16-round5.md) | Separating the obligations of historical non-interference, measurability and source admission |
+| 2026-11-16 | Handoff | [reports/2026-11-16-round6.md](reports/2026-11-16-round6.md) | P2 semantic sets, necessary width, sign control and selection risk |
+| 2026-11-16 | Handoff | [reports/2026-11-16-round7.md](reports/2026-11-16-round7.md) | Consolidated technical manuscript, strongest simple controls and paper-level adversarial review |
+| 2026-11-16 | Handoff | [reports/2026-11-16-round8.md](reports/2026-11-16-round8.md) | Boundary of localization value, strong simple combinations and the random-quota alternative |
+| 2026-11-16 | Handoff | [reports/2026-11-16-round9.md](reports/2026-11-16-round9.md) | Exact solution for arbitrary randomized audits, strong simple controls and research judgment |
+| 2026-11-16 | Handoff | [reports/completion_audit.md](reports/completion_audit.md) | Item-by-item acceptance check of all work packages, the 32 questions and the G0/G1 final states |
+| 2026-11-16 | Handoff | [reports/impact_review.md](reports/impact_review.md) | Independent review and fixes of the new proofs, the optimizer and the date binding |
+| 2026-11-16 | Handoff | [reports/local_data_inventory.md](reports/local_data_inventory.md) | Metadata and hash check of real local sources; the source text was not copied |
+| 2026-11-16 | Handoff | [reports/localization_review.md](reports/localization_review.md) | Independent review of the new theory and all results; the procedure-class boundary is kept |
+| 2026-11-16 | Handoff | [reports/localization_review_checks.py](reports/localization_review_checks.py) | Local research material |
+| 2026-11-16 | Handoff | [reports/numeric_envelope_review.md](reports/numeric_envelope_review.md) | Independent review of the semantic envelope theorems and the rational checker |
+| 2026-11-16 | Handoff | [reports/paper_review.md](reports/paper_review.md) | Independent AI paper review; originality and realism are still open |
+| 2026-11-16 | Handoff | [reports/paper_review_checks.py](reports/paper_review_checks.py) | Independent exact check of 26 balanced designs and 9261 quotas |
+| 2026-11-16 | Handoff | [reports/pit_review.md](reports/pit_review.md) | Independent review of PNI1–PNI6 and the PIT code, counterexamples and fixes |
+| 2026-11-16 | Handoff | [reports/randomization_review.md](reports/randomization_review.md) | Independent AI review of the math and implementation; checks of 709 cells and 32 rows |
+| 2026-11-16 | Handoff | [reports/randomization_review_checks.py](reports/randomization_review_checks.py) | Document-level exhaustive enumeration and full-table check without importing the author's kernel |
+| 2026-11-16 | Handoff | [reports/real_baseline_review.md](reports/real_baseline_review.md) | Independent implementation/statistics review and fix record |
+| 2026-11-16 | Handoff | [REPRODUCE.md](REPRODUCE.md) | Local reproduction commands and environment |
+| 2026-11-16 | Handoff | [reproduce.py](reproduce.py) | Local research material |
+| 2026-11-16 | Handoff | [reproduction_log.json](reproduction_log.json) | 125 integration unit tests, 10 source self-tests and 13 reproduction commands |
+| 2026-11-16 | Complete delivery entry point | [START_HERE.md](START_HERE.md) | Start-here guide for the complete delivery: reading order and file navigation |
+| 2026-11-16 | Handoff | [test_package_handoff.py](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/test_package_handoff.py) | Local research material |
+| 2026-11-16 | WP0.3 | [theory/collective_metrics.md](theory/collective_metrics.md) | Proofs of the accuracy and macro-F1 envelopes under shared shards |
+| 2026-11-16 | WP0.3 | [theory/impact_audit.md](theory/impact_audit.md) | Proofs of IA1–IA8 and the cost separation for rectangle procedures |
+| 2026-11-16 | WP0.3 | [theory/independent_review.md](theory/independent_review.md) | Independent mathematical review and qualifications |
+| 2026-11-16 | WP0.3 | [theory/localization_value.md](theory/localization_value.md) | LV1–LV5, sharp constant bounds, equivalence at the original scale and simple baselines |
+| 2026-11-16 | WP0.3 | [theory/notes.md](theory/notes.md) | Complete assumptions, proofs and counterexamples for T0–T3 |
+| 2026-11-16 | WP0.3 | [theory/notes.tex](theory/notes.tex) | LaTeX theory draft; PDF not compiled |
+| 2026-11-16 | WP0.3 | [theory/pit_noninterference.md](theory/pit_noninterference.md) | Six conditional propositions, conditional randomness and a two-world identification lower bound |
+| 2026-11-16 | WP0.3 | [theory/randomized_audit.md](theory/randomized_audit.md) | RA1–RA4, matching lower bounds, adaptive/expected budgets and fair asymptotics |
+| 2026-11-16 | WP0.3 | [theory/semantic_envelopes.md](theory/semantic_envelopes.md) | Complete conditions and proofs for SE1–SE6, and candidate-relative boundaries |
+| 2026-11-16 | WP0.4 | [xbrl/budget.md](xbrl/budget.md) | Restricted offline example; no real timestamp certificate |
+| 2026-11-16 | WP0.4 | [xbrl/example_result.json](xbrl/example_result.json) | Restricted offline example; no real timestamp certificate |
+| 2026-11-16 | WP0.4 | [xbrl/parse_local.py](xbrl/parse_local.py) | Restricted offline example; no real timestamp certificate |
+| 2026-11-16 | WP0.4 | [xbrl/README.md](xbrl/README.md) | Restricted offline example; no real timestamp certificate |
+| 2026-11-16 | WP0.4 | [xbrl/record.md](xbrl/record.md) | Restricted offline example; no real timestamp certificate |
+| 2026-11-16 | WP0.4 | [xbrl/synthetic_fixture.xml](xbrl/synthetic_fixture.xml) | Restricted offline example; no real timestamp certificate |
+| 2026-11-16 | WP0.4 | [xbrl/test_parse_local.py](xbrl/test_parse_local.py) | Restricted offline example; no real timestamp certificate |
+| 2026-11-16 | Packaging | [FABLE_REVIEW_BUNDLE.md](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_REVIEW_BUNDLE.md) | Complete merged reading edition of all deliverable Markdown, with a numbered table of contents and source headings |
+| 2026-11-16 | Packaging | [HANDOFF_MANIFEST.json](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json) | File SHA256 values and the count and complete list of merged Markdown files; excludes the manifest itself |
+| 2026-11-16 | Packaging | [FABLE_HANDOFF_COMPLETE_2026-11-16.zip](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip) | Complete local archive of the existing research through round 9; no private data, weights or old ZIPs |

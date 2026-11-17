@@ -1,66 +1,66 @@
-# 真实 Phase 0：来源原任务的私有数据准备
+# Real Phase 0: private data preparation for the original source task
 
-本工具只准备 SEntFiN 原始**实体相关情绪**，标签顺序固定为 `negative, neutral, positive`，不改名为投资立场。它不加载旧模型、不训练、不联网。真实执行使用本轮 [预注册协议与预算](PROTOCOL.md)，已执行状态见末尾记录。
+This tool only prepares SEntFiN's original **entity-level sentiment**, with the label order fixed as `negative, neutral, positive`; the labels are not renamed as investment stances. It loads no old model, does no training and accesses no network. The real execution uses this round's [pre-registered protocol and budget](PROTOCOL.md); the executed status is recorded at the end.
 
-## 固定契约
+## Fixed contract
 
-输入是本地原始 CSV，表头顺序严格为 `S No.,Title,Decisions,Words`。先按有效标题构造全部词法连通簇，之后才读取标签决定保留或隔离；因此标签不参与相似度、组身份或切分。即使某条标签随后被隔离，其有效标题仍可连接近重复标题，避免因标签状态变化拆开相似度图。
+The input is the local original CSV, with header order strictly `S No.,Title,Decisions,Words`. All lexical connected clusters are first built from the valid headlines, and only after that are labels read to decide retention or quarantine; so labels play no part in similarity, group identity or the split. Even if a label is later quarantined, its valid headline can still connect near-duplicate headlines, so that changes in label status do not split the similarity graph.
 
-规范化为 Unicode NFKC、casefold、空白折叠，保留数字。标题相同的全部实体必须同簇；词法近重复采用 Unicode `\w+` token set、精确 Jaccard≥4/5，传递合并。全局 token 频率排序的安全 prefix 长度为 `|X|−ceil(.8|X|)+1`，候选对再用整数 `5*intersection≥4*union` 验证。若相似度达到门槛，最早公共 token 必须同时落在两集合 prefix 中，否则交集小于 `ceil(.8|X|)` 或 `ceil(.8|Y|)`，与 Jaccard 门槛矛盾。因此不是近似 MinHash；测试与完整 all-pairs 比较。空 token 标题不计算 0/0，不互相连边，只合并规范化完全相同者。
+Normalization is Unicode NFKC, casefold and whitespace folding, keeping digits. All entities of identical headlines must be in the same cluster; lexical near duplicates use Unicode `\w+` token sets with exact Jaccard≥4/5 and transitive merging. With tokens ordered by global frequency, the safe prefix length is `|X|−ceil(.8|X|)+1`, and candidate pairs are then verified with the integer test `5*intersection≥4*union`. If the similarity reaches the threshold, the earliest common token must fall in the prefixes of both sets; otherwise the intersection would be smaller than `ceil(.8|X|)` or `ceil(.8|Y|)`, contradicting the Jaccard threshold. So this is not approximate MinHash; the tests compare against a complete all-pairs computation. Headlines with empty token sets do not compute 0/0 and are not joined to each other; only those whose normalized forms are identical are merged.
 
-`Decisions` 先 `ast.parse(mode='eval')`，核查原始 Dict 键，拒绝原始／规范化重复实体键，然后 `ast.literal_eval`；禁止 `eval`。非字典、异常语法、空键、未知标签、重复键等整行隔离，不猜测修复。跨行同规范化标题、同规范化实体的不同标签全部隔离；同标题不同实体标签不同是合法多目标监督。相同标题＋实体＋标签仅保留一条样本，保留全部来源 ID，避免重复计权。近重复而非相同标题的不同标签保留，但必须同簇。重复来源 ID 的全部记录隔离。
+`Decisions` is first parsed with `ast.parse(mode='eval')`, the raw Dict keys are checked and raw/normalized duplicate entity keys are rejected, and then `ast.literal_eval` is applied; `eval` is forbidden. Non-dictionaries, anomalous syntax, empty keys, unknown labels, duplicate keys and so on quarantine the whole row, with no guessed repair. Different labels across rows for the same normalized headline and the same normalized entity are all quarantined; different labels for different entities in the same headline are legitimate multi-target supervision. Identical headline + entity + label keeps only one sample, keeping all source IDs, to avoid duplicate weighting. Different labels on near-duplicate but non-identical headlines are kept, but must be in the same cluster. All records with a duplicate source ID are quarantined.
 
-族 ID 为排序后完整规范化成员标题的 SHA256；split 使用固定 seed=130 的族 ID hash，整数边界为 70% train / 15% development / 15% test。比例是确定性 hash 分配的设计比例，实际样本比例不强制相等，不按标签或性能重新切分。任一分区为空，真实 CLI 拒绝输出，不换 seed。分区后检查 id 唯一、family 不跨 split、规范化标题跨 split 为 0、近重复边跨 split 为 0，并报告最大连通分量。
+The family ID is the SHA256 of the sorted complete normalized member headlines; the split uses a hash of the family ID with fixed seed=130, with integer boundaries 70% train / 15% development / 15% test. The proportions are the design proportions of a deterministic hash assignment; actual sample proportions are not forced to match, and there is no re-splitting by label or performance. If any partition is empty, the real CLI refuses to output and does not change the seed. After partitioning, it checks that ids are unique, that no family crosses splits, that 0 normalized headlines cross splits and that 0 near-duplicate edges cross splits, and reports the largest connected component.
 
-非字面出现的实体不删除，分别统计原始精确 substring 与规范化 substring 两种存在性；不因此声称实体身份或证券映射已经核验。这个 split **不是时间切分，也未完成语义事件去重**。词法簇只给定当前算法的隔离，不证明未来或事件独立性；下游训练向量器只能在 train 上拟合。
+Entities that do not appear literally are not deleted; presence is counted separately as an exact raw substring and as a normalized substring; this is not a claim that entity identity or the security mapping has been verified. This split **is not a time split and has not completed semantic event deduplication**. Lexical clusters give only the isolation of the current algorithm and do not prove future or event independence; downstream training vectorizers may be fitted only on train.
 
-## 私有 schema 与产物
+## Private schema and products
 
-所有行级产物只写 `research/private/<run-directory>/`，默认 `research/private/real_baseline/`。已有产物拒绝覆盖。原始旧仓库只读。
+All row-level products are written only to `research/private/<run-directory>/`, by default `research/private/real_baseline/`. Existing products are not overwritten. The original old repository is read-only.
 
-`rows.jsonl` 及 `train.jsonl`、`development.jsonl`、`test.jsonl` 每行包含：
+Each line of `rows.jsonl` and of `train.jsonl`, `development.jsonl`, `test.jsonl` contains:
 
-- `id`：规范化标题与实体的稳定样本 hash；`headline`、`target`：保留的来源文本与实体。
-- `label`、`label_id`：原任务标签及固定 0/1/2；`family_id`、`split`：词法簇与冻结分区。
-- `source_ids`：合并重复样本的全部原始来源编号。
-- `input_text`：`[ENTITY] target` 换行后 `[TITLE] headline`，保留目标字段。
-- `entity_literal_substring`、`entity_normalized_substring`：目标存在性诊断，不作为删除条件。
+- `id`: a stable sample hash of the normalized headline and entity; `headline`, `target`: the retained source text and entity.
+- `label`, `label_id`: the original task label and the fixed 0/1/2; `family_id`, `split`: the lexical cluster and the frozen partition.
+- `source_ids`: all original source numbers of the merged duplicate samples.
+- `input_text`: `[ENTITY] target`, a newline, then `[TITLE] headline`, keeping the target field.
+- `entity_literal_substring`, `entity_normalized_substring`: target-presence diagnostics, not used as deletion conditions.
 
-`quarantine.jsonl` 为私有异常明细，含固定 reason、行号及需要审核的源字段；不出现在公共报告。`aggregate_manifest.json` 可分享，只有总量、每类／每分区计数、冲突类型计数、最大簇、去重比较数量、隔离核验、输入及产物哈希，不包含逐条文本、标签、组成员或预测。
+`quarantine.jsonl` holds the private anomaly details, with a fixed reason, the line number and the source fields that need review; it does not appear in public reports. `aggregate_manifest.json` can be shared; it has only totals, per-class/per-partition counts, conflict-type counts, the largest cluster, the number of deduplication comparisons, quarantine checks, and input and product hashes; it contains no per-row text, labels, group members or predictions.
 
 ```powershell
 & '..\130U-FinLLM\.venv\Scripts\python.exe' -X utf8 -m unittest research.real_baseline.test_prepare -v
 & '..\130U-FinLLM\.venv\Scripts\python.exe' -X utf8 -m research.real_baseline.prepare --source '../130U-FinLLM/data/raw/candidates/sentfin/SEntFiN.csv'
 ```
 
-单元测试只使用人工 synthetic 例子，无真实新闻文本。公开准备代码不读取 SEntFiN 行后打印文本；CLI 仅打印聚合计数。本文不替代父任务的训练预注册，也不把原有许可记录解释为第三方出版方权利已经完全核实。
+The unit tests use only hand-made synthetic examples, with no real news text. The public preparation code does not print text after reading SEntFiN rows; the CLI prints only aggregate counts. This document does not replace the parent task's training pre-registration, and does not interpret the existing licence records as full verification of third-party publishers' rights.
 
-## 已执行：2026-11-16
+## Executed: 2026-11-16
 
-在父任务确认预注册与私有目录排除检查已完成后运行。12 项 synthetic 测试通过，最新一次用时约 0.020 秒；其中 prefix 筛选与全对 oracle 分别在 7-token 全部子集和固定随机集合／长度边界上逐边相等。这是实现检查，候选无漏边的全域理由仍是上面的前缀论证。
+Run after the parent task confirmed that the pre-registration and the private-directory exclusion check were complete. The 12 synthetic tests passed, the latest run taking about 0.020 seconds; among them, prefix filtering and the all-pairs oracle agree edge for edge on all subsets of 7 tokens and on fixed random sets / length boundaries. This is an implementation check; the global reason why candidates miss no edge is still the prefix argument above.
 
-真实准备运行 Python 3.12.14，0.766725 秒；未测峰值内存，GPU/网络请求/训练 token 均为 0。原始 CSV 的 SHA256 与预注册值一致，严格读取 10,753 行；原文件未修改。公开数值来自 [aggregate_manifest.json](aggregate_manifest.json)，所有逐行结果留在私有目录。
+The real preparation run used Python 3.12.14 and took 0.766725 seconds; peak memory not measured; GPU/network requests/training tokens all 0. The SHA256 of the original CSV matches the pre-registered value, and 10,753 rows were read strictly; the original file was not modified. The public numbers come from [aggregate_manifest.json](aggregate_manifest.json), and all per-row results stay in the private directory.
 
-| 项目 | 本轮观测 |
+| Item | Observed in this round |
 |---|---:|
-| 语法异常整行隔离 | 13 |
-| 同规范标题＋实体的异标签冲突键隔离 | 7 |
-| 相同标题＋实体＋标签合并的额外出现次数 | 73 |
-| 保留实体样本／词法簇 | 14,284／10,591 |
-| 保留但实体非原始字面 substring 的样本 | 19 |
-| 全输入规范化标题／词法连通分量 | 10,686／10,611 |
-| 精确 Jaccard 比较次数／满足阈值边数 | 40,488／77 |
-| 最大连通分量的规范化标题数／保留样本数 | 3／7 |
-| family／规范化标题／近重复边跨 split | 0／0／0 |
+| Whole rows quarantined for syntax anomalies | 13 |
+| Conflict keys (same normalized headline + entity, different labels) quarantined | 7 |
+| Extra occurrences merged for identical headline + entity + label | 73 |
+| Retained entity samples / lexical clusters | 14,284 / 10,591 |
+| Retained samples whose entity is not a raw literal substring | 19 |
+| Normalized headlines / lexical connected components in the full input | 10,686 / 10,611 |
+| Exact Jaccard comparisons / edges meeting the threshold | 40,488 / 77 |
+| Normalized headlines / retained samples in the largest connected component | 3 / 7 |
+| family / normalized headlines / near-duplicate edges crossing splits | 0 / 0 / 0 |
 
-13 是整行解析异常数，7 是冲突的实体—标题键数，不能相加后称为“20 个源文件行”。标签异常没有猜测修复；保留的不同实体可以合法拥有不同标签。
+13 is the number of whole-row parse anomalies and 7 is the number of conflicting entity–headline keys; they cannot be added and called "20 source file rows". Label anomalies were not repaired by guessing; different retained entities can legitimately have different labels.
 
-| split | 样本 | 词法簇 | negative | neutral | positive |
+| split | Samples | Lexical clusters | negative | neutral | positive |
 |---|---:|---:|---:|---:|---:|
 | train | 10,041 | 7,438 | 2,658 | 3,831 | 3,552 |
 | development | 2,136 | 1,583 | 572 | 838 | 726 |
 | test | 2,107 | 1,570 | 558 | 787 | 762 |
 
-三个分区均有三类支持，未出现巨连通簇；没有因这些结果重新选 seed 或改变分组。私有 `rows.jsonl` 的 SHA256 为 `8ab314ebd74680466f3a24055433f3a44d442107773607204cd3983122d87567`。准备源码 SHA256 为 `c7f56b29875b6e76b7d2201cb4de6bea329c97b3582523218424096af53af06c`；完整分区与隔离文件指纹在 aggregate manifest。后续训练器应先核验这些指纹，再使用独立冻结的实体标记转换；原始 `input_text` 不是已经做过 `TARGET_ENTITY` 替换的特征文本。
+All three partitions have support for all three classes, and no giant connected cluster appeared; the seed was not re-chosen and the grouping was not changed because of these results. The SHA256 of the private `rows.jsonl` is `8ab314ebd74680466f3a24055433f3a44d442107773607204cd3983122d87567`. The SHA256 of the preparation source is `c7f56b29875b6e76b7d2201cb4de6bea329c97b3582523218424096af53af06c`; the fingerprints of the full partition and quarantine files are in the aggregate manifest. The downstream trainer should first verify these fingerprints and then use an independently frozen entity-marking transformation; the raw `input_text` is not feature text that has already had the `TARGET_ENTITY` replacement applied.
 
-这些是真实来源原任务的数据准备结果，没有模型性能结论，不证明完整事件独立、历史无前视或本项目投资立场金标准已经成立。
+These are data preparation results for the original real-source task; there is no model-performance conclusion, and they do not prove complete event independence, absence of historical look-ahead, or that this project's investment-stance gold standard has been established.

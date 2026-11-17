@@ -186,7 +186,7 @@ def decision(summary, inference_complete):
     def passes(c):
         metrics = summary[c]['metrics']
         return metrics['width_accurate']['estimate'] >= .8 and metrics['onepct_accuracy']['estimate'] >= .9
-    classification = '模型本来就知道' if passes('B') else '教一句就会' if passes('C') else '教了也不会'
+    classification = 'the model already knows' if passes('B') else 'it learns from one sentence' if passes('C') else 'it does not learn even when taught'
     return {'status': 'classified', 'classification': classification, 'excluded_fraction': excluded,
             'B_meets_both_thresholds': passes('B'), 'C_meets_both_thresholds': passes('C'),
             'thresholds': {'width_accurate': .8, 'onepct_accuracy': .9},

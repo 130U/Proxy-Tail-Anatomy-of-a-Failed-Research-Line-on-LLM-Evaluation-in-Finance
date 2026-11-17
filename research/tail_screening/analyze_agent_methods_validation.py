@@ -174,38 +174,38 @@ def plot(result, output, stem, plt):
 
 def write_report(result, output, stem):
     n = result["n"]
-    lines = [f"# Sol四次排序聚合：{n}条新样本验证", "",
-             f"主结果：**{result['gate']['status']}**。仅针对已选中的 Sol＋每 panel 四次聚合分支；不表示两模型联合门通过。", "",
-             f"样本来自{result['sample']['selected_families']}个新词法族，与先前排除族的交集为{result['sample']['excluded_family_intersection_n']}；八份输入的ID与文本完全一致。排序指令规定最正面在前，整数Borda据此给较高分。词法族不保证完整事件独立。", "",
-             "两panel使用order1–4与order5–8；m=1、2、4前缀均保留，只有m=4用于主工作门。八份输出均严格校验ID恰好一次，U不补名次。", "",
-             "## 原始输出与精确聚合", "", "| 输出 | 已排序 | U | 组数 | 真同分组数 | 最大同分组 |", "|---|---:|---:|---:|---:|---:|"]
+    lines = [f"# Sol four-ranking aggregation: validation on {n} new samples", "",
+             f"Main result: **{result['gate']['status']}**. Applies only to the selected branch of Sol + four-run aggregation per panel; it does not mean the joint two-model gate passed.", "",
+             f"The sample comes from {result['sample']['selected_families']} new lexical families, with an intersection of {result['sample']['excluded_family_intersection_n']} with the previously excluded families; the IDs and texts of the eight inputs are identical. The ranking instruction puts the most positive first, and the integer Borda gives higher scores accordingly. Lexical families do not guarantee fully independent events.", "",
+             "The two panels use order1–4 and order5–8; the m=1, 2, 4 prefixes are all kept, and only m=4 is used for the main working gate. All eight outputs are strictly checked for each ID appearing exactly once, and U items are not filled in with ranks.", "",
+             "## Raw outputs and exact aggregation", "", "| Output | Ranked | U | Groups | True tie groups | Largest tie group |", "|---|---:|---:|---:|---:|---:|"]
     for name, s in result["raw_output_summaries"].items():
         lines.append(f"| {name} | {s['ranked']} | {s['unrankable']} | {s['groups']} | {s['tie_groups_size_gt_1']} | {s['largest_tie_group']} |")
-    lines += ["", "Borda使用两倍midrank之和计算整数分子；完全相同的整数分子保留同分。", "",
-              "## 主工作门的逐项数值", "", "| 方向 | 尾部 | p | 名义/A实际人数 | 90%所需/B放行人数 | 实际召回 | 同预算召回 | q90/p | A/B边界扩张 | 通过 |",
+    lines += ["", "Borda computes integer numerators from sums of twice the midrank; identical integer numerators are kept as ties.", "",
+              "## Item-by-item values for the main working gate", "", "| Direction | Tail | p | Nominal/A actual count | Needed for 90%/B pass-through count | Actual recall | Same-budget recall | q90/p | A/B boundary expansion | Passed |",
               "|---|---|---:|---:|---:|---:|---:|---:|---:|---|"]
     primary = result["prefix_analyses"]["m4"]
     for check in result["gate"]["checks"]:
         if not check["available"]:
-            lines.append(f"| {check['direction']} | {check['tail']} | {check['p']:.0%} | — | — | — | — | — | — | U导致不可计算 |")
+            lines.append(f"| {check['direction']} | {check['tail']} | {check['p']:.0%} | — | — | — | — | — | — | not computable because of U |")
             continue
         row = next(r for r in primary["comparisons"][check["direction"]][check["tail"]] if r["p"] == check["p"])
-        lines.append(f"| {check['direction']} | {check['tail']} | {check['p']:.0%} | {row['nominal_tail_n']}/{row['A_actual_tail_n']} | {row['required_recovered_A_n']}/{row['B_q90_selected_n']} | {row['actual_recall']:.3f} | {row['same_budget_recall']:.3f} | {row['q90_over_nominal_p']:.3f} | {row['A_tie_expansion_fraction']:.1%}/{row['same_budget_B_tie_expansion_fraction']:.1%} | {'是' if check['passed'] else '否'} |")
-    lines += ["", f"N={n}时，p=10%、20%的名义人数分别为floor(Np)={math.floor(n*.1)}、{math.floor(n*.2)}。主门的加宽倍数始终为B放行人数/(N×p)，没有改成B/floor(Np)；JSON另列B/A实际人数。90%要求ceil(0.9×A实际人数)，因此有限名单的实际召回会高于90%。同预算名单也各自包含完整边界组，双方实际人数可能不同。", "",
-              "工作阈值在两个方向、上下尾均要求：同预算召回≥80%、q90/p≤1.5、A和B的名义边界同分扩张≤20%，且无U。它是预设工作门，不是显著性检验。", "",
-              "## 前缀敏感性（非事后择优）", "", "| m | midrank Spearman | 主p范围内最小同预算召回 | 最大q90/p |", "|---:|---:|---:|---:|"]
+        lines.append(f"| {check['direction']} | {check['tail']} | {check['p']:.0%} | {row['nominal_tail_n']}/{row['A_actual_tail_n']} | {row['required_recovered_A_n']}/{row['B_q90_selected_n']} | {row['actual_recall']:.3f} | {row['same_budget_recall']:.3f} | {row['q90_over_nominal_p']:.3f} | {row['A_tie_expansion_fraction']:.1%}/{row['same_budget_B_tie_expansion_fraction']:.1%} | {'yes' if check['passed'] else 'no'} |")
+    lines += ["", f"With N={n}, the nominal counts for p=10% and 20% are floor(Np)={math.floor(n*.1)} and {math.floor(n*.2)}. The main gate's widening factor is always the B pass-through count/(N×p), not changed to B/floor(Np); the JSON lists the actual B/A counts separately. 90% requires ceil(0.9×A actual count), so the actual recall of a finite list will be above 90%. The same-budget lists also each include their complete boundary groups, so the two actual counts can differ.", "",
+              "The working thresholds require, in both directions and for both tails: same-budget recall ≥80%, q90/p≤1.5, nominal boundary-tie expansion of A and B ≤20%, and no U. This is a pre-set working gate, not a significance test.", "",
+              "## Prefix sensitivity (not post-hoc selection)", "", "| m | midrank Spearman | Minimum same-budget recall over the main p | Maximum q90/p |", "|---:|---:|---:|---:|"]
     for m in (1, 2, 4):
         comparisons = result["prefix_analyses"][f"m{m}"]["comparisons"]
         rows = [r for c in comparisons.values() if c["available"] for tail in ("upper", "lower") for r in c[tail] if r["p"] in GATE_P]
         rho = comparisons["panel1_to_panel2"].get("midrank_Spearman_auxiliary")
         if rows:
-            rho_text = f"{rho:.4f}" if rho is not None else "不可定义"
+            rho_text = f"{rho:.4f}" if rho is not None else "undefined"
             lines.append(f"| {m} | {rho_text} | {min(r['same_budget_recall'] for r in rows):.3f} | {max(r['q90_over_nominal_p'] for r in rows):.3f} |")
         else:
-            lines.append(f"| {m} | U导致不可计算 | — | — |")
-    lines += ["", "Spearman只作辅助。5%名单仅作诊断，重复调用不增加金融样本量，两个方向的变化不是置信区间；未做bootstrap、alpha拟合或尾部极限推断。", "",
-              f"[完整数值]({stem}.json) · [曲线]({stem}.png) · [PDF]({stem}.pdf)。原始盲输出位置：`{result['data_directory']}`。", "",
-              f"本次只读分析：CPU {result['execution']['CPU_seconds']:.3f}秒，wall {result['execution']['wall_seconds']:.3f}秒；未测峰值内存。无模型调用、训练、外部API或网络。", ""]
+            lines.append(f"| {m} | not computable because of U | — | — |")
+    lines += ["", "Spearman is auxiliary only. The 5% lists are diagnostic only; repeated calls do not increase the financial sample size, and the variation between the two directions is not a confidence interval; no bootstrap, alpha fitting or tail-limit inference was done.", "",
+              f"[Full numbers]({stem}.json) · [Curves]({stem}.png) · [PDF]({stem}.pdf). Location of the raw blind outputs: `{result['data_directory']}`.", "",
+              f"This read-only analysis: CPU {result['execution']['CPU_seconds']:.3f} s, wall {result['execution']['wall_seconds']:.3f} s; peak memory not measured. No model calls, training, external API or network.", ""]
     report_name = stem.removeprefix("validation_") + "_report.md"
     (output / report_name).write_text("\n".join(lines), encoding="utf-8")
 

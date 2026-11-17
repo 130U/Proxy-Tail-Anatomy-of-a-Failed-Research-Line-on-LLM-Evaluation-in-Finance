@@ -1,11 +1,11 @@
-# T1A 计算口径（执行前固定）
+# T1A computation conventions (fixed before execution)
 
-这是一项在已观察 T1 结果之后的复核与扩展，不是新的预注册确认性检验。
-输入仅为 T1 的 `results/per_question.jsonl`；不重新绑定来源、不改其排除规则。
+This is a review and extension done after the T1 results were observed, not a new pre-registered confirmatory test.
+The only input is T1's `results/per_question.jsonl`; sources are not rebound and its exclusion rules are not changed.
 
-- 主规则：在显示中心处对原程序共享输入变量求导，一阶半径为 `sum(abs(gradient_i)*halfwidth_i)`；加上中心到 gold 的偏移后与 `tau*abs(gold)` 比较。无拟合常数。
-- 简单增长率规则另报：`delta=abs(b-a)/(h_a+h_b)`，`delta < 1/tau` 预测越界；不以修正规则代替此规则的误判率。
-- 全部 analyzed 行均保留。与 T1 比较时只将 `certified_inside` 和 `witnessed_outside` 作为已判定标签，15 个 unresolved 单列。
-- 新值域以精确有理数运算：线性分式且每个变量分别至多一次、所有程序分母在盒内远离零时，由四角/多维角点取得精确极值；或由导数区间同号证明单调性取得精确极值。其余使用区间包络认证稳定、真实内部点认证越界，保留 unresolved。
-- 容差固定为 0.1%、0.5%、1%、2%、5%。对所有容差沿用相同 gold。严格越界才判 outside；闭区间中的边界不算越界。
-- 逐题输出一阶规则误判及简单 delta 规则误判，原因依据公式结构、精度不等、gold 偏移和余项识别；不调阈值使结果通过。
+- Main rule: differentiate the original program with respect to its shared input variables at the displayed center; the first-order radius is `sum(abs(gradient_i)*halfwidth_i)`; add the offset from the center to the gold and compare with `tau*abs(gold)`. No fitted constants.
+- The simple growth-rate rule is reported separately: `delta=abs(b-a)/(h_a+h_b)`, and `delta < 1/tau` predicts out of tolerance; the corrected rule does not replace this rule's misclassification rate.
+- All analyzed rows are kept. When comparing with T1, only `certified_inside` and `witnessed_outside` are treated as decided labels; the 15 unresolved items are listed separately.
+- New ranges use exact rational arithmetic: for linear-fractional functions of degree at most one in each variable separately, with all program denominators away from zero within the box, exact extrema are obtained at the four corners/multidimensional corners; or monotonicity is proven from sign-definite derivative intervals to obtain exact extrema. Otherwise, interval envelopes certify stability and real interior points certify out of tolerance, and unresolved is kept.
+- Tolerances are fixed at 0.1%, 0.5%, 1%, 2%, 5%. The same gold is used for all tolerances. Only strict crossing is judged outside; a boundary point in the closed interval does not count as out of tolerance.
+- Per-question output of first-order rule misclassifications and simple delta rule misclassifications, with reasons identified from formula structure, unequal precision, gold offset and the remainder; thresholds are not tuned to make results pass.

@@ -1,40 +1,40 @@
-# T2：模型对数字大小的响应曲线
+# T2: The model's response curve to the size of a number
 
-## 问题
+## Question
 
-标题里的数字从小变大，模型给的情绪分数怎样变化？它是单调的吗？是按对数增长的吗？在整数关口有没有跳变？同一个量换个单位写，分数变不变？
+As the number in a headline goes from small to large, how does the sentiment score the model gives change? Is it monotone? Does it grow logarithmically? Are there jumps at round-number thresholds? If the same quantity is written in a different unit, does the score change?
 
-## 做法
+## Method
 
-自造标题，不用真实数据。模板举例：
+Use self-made headlines, not real data. Example templates:
 
-- `{公司} quarterly profit rises {x}%`
-- `{公司} cuts {n} jobs`
-- `{公司} to pay ${v} fine`
+- `{company} quarterly profit rises {x}%`
+- `{company} cuts {n} jobs`
+- `{company} to pay ${v} fine`
 
-公司名用虚构名称，固定 5 个，轮换使用。
+Company names are fictitious; fix 5 of them and rotate.
 
-**实验 A，响应曲线。** 每个模板取 25 个数值，在对数尺度上均匀分布（例如 0.1% 到 500%）。上升和下降两个方向都做。
+**Experiment A, response curve.** For each template take 25 values, evenly spaced on a log scale (for example 0.1% to 500%). Do both directions, rises and falls.
 
-**实验 B，整数关口。** 在 10、50、100 附近加密取点，例如 9.5、9.9、10、10.1、10.5。
+**Experiment B, round-number thresholds.** Sample more densely near 10, 50 and 100, for example 9.5, 9.9, 10, 10.1, 10.5.
 
-**实验 C，单位。** 同一个金额写成 `$1,500 million`、`$1.5 billion`、`$1,500,000,000`。同一个比例写成 `0.5%` 和 `50 basis points`。
+**Experiment C, units.** Write the same amount as `$1,500 million`, `$1.5 billion` and `$1,500,000,000`. Write the same proportion as `0.5%` and `50 basis points`.
 
-每个条件重复 4 次以上，混在不相关的填充标题里打分，避免模型看出规律。
+Repeat each condition 4 or more times, and score them mixed in with unrelated filler headlines, so the model cannot see the pattern.
 
-## 分析
+## Analysis
 
-1. 画分数对 log(x) 的曲线，上升、下降各一条。检验单调性：相邻取点出现逆序的比例。
-2. 拟合三种形式并比较：对 x 线性、对 log x 线性、饱和曲线。报告哪一种最好以及残差。
-3. 关口处的跳变：10.1 与 9.9 的分数差，对比同样间距的非关口处。
-4. 单位不变性：同一个量三种写法的分数差，对比重测噪声的大小。
-5. 上升和下降是否对称：同样幅度的坏消息，分数偏离中性的距离是否比好消息更大。
+1. Plot the score against log(x), one curve for rises and one for falls. Test monotonicity: the share of adjacent sample points that are out of order.
+2. Fit and compare three forms: linear in x, linear in log x, and a saturating curve. Report which fits best and the residuals.
+3. Jumps at thresholds: the score difference between 10.1 and 9.9, compared with the same spacing away from thresholds.
+4. Unit invariance: the score differences among the three ways of writing the same quantity, compared with the size of the test-retest noise.
+5. Whether rises and falls are symmetric: for bad news of the same magnitude, does the score move further from neutral than for good news.
 
-## 判定
+## Decision
 
-- **继续：** 出现下面任意一条，且幅度超过重测噪声的两倍——系统性的不单调；清晰的关口跳变；单位写法造成的差异；上升与下降明显不对称。
-- **放弃：** 曲线光滑单调、对 log x 近似线性、单位不变、两边对称。这时写一页"模型对数字的响应是规矩的"，结束。
+- **Continue:** any one of the following appears with a size more than twice the test-retest noise: systematic non-monotonicity; a clear threshold jump; differences caused by how the unit is written; a clear asymmetry between rises and falls.
+- **Abandon:** the curve is smooth and monotone, approximately linear in log x, unit-invariant and symmetric on both sides. In that case write one page saying "the model's response to numbers is well behaved", and stop.
 
-## 先查
+## Check first
 
-检索 LLM 的数字敏感性、左位数效应、单位或量纲不变性、金融文本里的数值扰动测试，是否已有同样的响应曲线测量。
+Search for numeric sensitivity of LLMs, the left-digit effect, unit or dimensional invariance, and numeric perturbation tests on financial text, to see whether the same response-curve measurement already exists.

@@ -1,63 +1,63 @@
-# 03a｜从1220步通用模型进入金融领域训练
+# 03a | From the 1220-step general model to financial-domain training
 
-2026-10-30。入口：[03a_domain_pretrain.ipynb](https://colab.research.google.com/github/130U/130U-FinLLM/blob/main/notebooks/03a_domain_pretrain.ipynb)。
+2026-10-30. Entry point: [03a_domain_pretrain.ipynb](https://colab.research.google.com/github/130U/130U-FinLLM/blob/main/notebooks/03a_domain_pretrain.ipynb).
 
-**最新验收：本段已完成。**用户随后提供完整Colab输出，领域阶段74步／1,211,960有效tokens，金融验证loss 3.2375，通用保留子集3.9842→4.0574，最终备份输出为`verified: true`。详见[领域记录](../reports/colab_t4_domain_20261030.json)。下面保留入口设计与恢复说明；当前下一步是[接收人工审核进度](POST_DOMAIN_NEXT.md)，无需重做本段。
+**Latest acceptance: this stage is complete.** The user later provided the full Colab output: the domain stage ran 74 steps / 1,211,960 effective tokens, the financial validation loss was 3.2375, the general retention subset went 3.9842→4.0574, and the final backup output was `verified: true`. See the [domain record](../reports/colab_t4_domain_20261030.json). The entry design and the recovery notes are kept below. The current next step is to [take in the human-review progress](POST_DOMAIN_NEXT.md); there is no need to redo this stage.
 
-已完成的02d输出保存在[用户历史提交](https://github.com/130U/130U-FinLLM/blob/e14b85e5660c4bce175341ee4d9da2e3984a12b5/notebooks/02d_expanded_continue.ipynb)，读回记录见[1220步报告](../reports/colab_t4_expanded_continuation_20261030.json)。扩充阶段累计19,988,195个有效tokens；含seed路径累计24,903,136，不是独立语料大小。下一段先在Colab读回Drive文件并校验母检查点，GitHub保存输出不代替这项检查。
+The completed 02d output is saved in [the user's historical commit](https://github.com/130U/130U-FinLLM/blob/e14b85e5660c4bce175341ee4d9da2e3984a12b5/notebooks/02d_expanded_continue.ipynb), and the read-back record is in the [1220-step report](../reports/colab_t4_expanded_continuation_20261030.json). The expansion stage processed 19,988,195 effective tokens in total; including the seed path, the total is 24,903,136. This is not an independent corpus size. The next stage first reads the Drive files back in Colab and verifies the parent checkpoint; the outputs saved on GitHub do not replace this check.
 
-## 运行
+## Run
 
-1. 打开03a，保持T4，从第一格顺序运行，完成Drive挂载。无需重做01b／02c／02d。
-2. 准备单元格恢复已冻结的数据和8K词表，验证完整快照清单、1220步母检查点、匹配的实测报告及其原seed保留集after报告，并冻结母检查点。输出`parent_audit`应显示实际读到的哈希、步数和tokens。
-3. 测量原seed通用保留子集的before loss。首次只迁移模型权重，建立新的金融阶段AdamW与学习率调度，阶段步数从0计数。
-4. 运行第1步验证，再继续至本金融阶段累计74步。每10步保存并同步检查点；新阶段恢复优化器、scaler、随机状态和数据位置。
-5. 测量同一原seed保留子集的after loss，运行最后一格校验备份。保留金融验证loss、本段报告、`parent_audit`和最终`verified: true`输出。
+1. Open 03a, keep T4, run in order from the first cell, and complete the Drive mount. There is no need to redo 01b / 02c / 02d.
+2. The preparation cell restores the frozen data and the 8K vocabulary, verifies the complete snapshot manifest, the 1220-step parent checkpoint, the matching measured report and its "after" report on the original seed retention set, and freezes the parent checkpoint. The `parent_audit` output should show the hashes, step count and tokens actually read.
+3. Measure the "before" loss on the original seed general retention subset. The first run transfers only the model weights, sets up a new AdamW optimizer and learning-rate schedule for the financial stage, and counts stage steps from 0.
+4. Run a 1-step check, then continue to 74 steps in total for this financial stage. A checkpoint is saved and synced every 10 steps; within the new stage, resume restores the optimizer, scaler, random state and data position.
+5. Measure the "after" loss on the same original seed retention subset and run the last cell to verify the backup. Keep the financial validation loss, this stage's report, `parent_audit`, and the final `verified: true` output.
 
-用户已贴出T4、Drive挂载、母检查点SHA、训练和最终备份输出，构成本次云端执行证据；代理未独立下载Drive检查点。首个准备单元格承担实际云端核验；任何校验失败时保留输出和已有成果。
+The user has posted the T4, Drive mount, parent-checkpoint SHA, training and final backup outputs; these form the evidence of this cloud execution. The agent did not independently download the Drive checkpoints. The first preparation cell carries out the actual cloud verification; if any check fails, keep the output and the existing artifacts.
 
-## 本段预算
+## Budget for this stage
 
-| 项目 | 范围 |
+| Item | Amount |
 |---|---:|
-| 现有80/20金融／通用混合分片 | 1,215,545 tokens |
-| 其中金融来源位置 | 972,436 |
-| 其中通用来源位置 | 243,109 |
-| 金融验证分片 | 50,999 tokens |
-| batch／梯度累积／序列长度 | 4／8／512 |
-| 单步验证与累计停止目标 | 1／74 |
-| 满长度74步名义输入位置 | 1,212,416 |
-| 学习率／warmup／调度跨度 | 1e-4／5步／74步 |
+| Existing 80/20 finance / general mixed shards | 1,215,545 tokens |
+| of which finance-source positions | 972,436 |
+| of which general-source positions | 243,109 |
+| Financial validation shard | 50,999 tokens |
+| batch / gradient accumulation / sequence length | 4 / 8 / 512 |
+| Single-step check and cumulative stop target | 1 / 74 |
+| Nominal input positions for 74 full-length steps | 1,212,416 |
+| Learning rate / warmup / schedule span | 1e-4 / 5 steps / 74 steps |
 
-这是已有语料的一次无回放小段。实际有效tokens、padding、耗时和吞吐以新报告为准。按前次3221 tokens/秒做纯算术估算，训练约6分钟，云端核验、测量和备份耗时另计。混合分片是来源内容的重排，不能再次算作新增独立语料。
+This is one short no-replay pass over existing data. Actual effective tokens, padding, duration and throughput are those in the new report. A pure arithmetic estimate from the previous 3221 tokens/second gives about 6 minutes of training; cloud verification, measurement and backup take additional time. The mixed shards are a reordering of the source content and cannot be counted again as new independent corpus.
 
-原计划的100M通用／25M金融是更长累计处理预算，尚未完成。本段明确缩小到约1.21M位置以先验收金融阶段；后续延长或扩充材料需另作预算决定。若将现有混合池重复用于25M处理量，约为20.57遍，必须显式报告回放，不能称为25M独立金融语料。03a不会自动这样扩展。
+The originally planned 100M general / 25M finance is a longer cumulative processing budget and has not been completed. This stage is explicitly reduced to about 1.21M positions so that the financial stage can be accepted first; extending it later or adding material requires a separate budget decision. Reusing the existing mixed pool for 25M of processing would be about 20.57 passes; that replay would have to be reported explicitly and cannot be called 25M of independent financial corpus. 03a does not extend this way automatically.
 
-一遍数据限制同时在准备检查和每个微批次之前执行。即使AMP跳步消耗了数据，也不会为了凑齐74次成功更新而偷偷进入第二遍；空间不足时停止，保留上一完整检查点与原成果。
+The one-pass data limit is enforced both in the preparation check and before every micro-batch. Even if steps skipped by AMP consume data, the run does not quietly enter a second pass to reach 74 successful updates; when the data run out it stops and keeps the last complete checkpoint and the original artifacts.
 
-## 文件与恢复
+## Files and recovery
 
-Drive项目根目录为`MyDrive/130U-FinLLM`：
+The Drive project root is `MyDrive/130U-FinLLM`:
 
-| 内容 | 相对路径 |
+| Content | Relative path |
 |---|---|
-| 原1220步扩充成果 | `expansions/expansion_v1/run` |
-| 本金融阶段冻结的母检查点及来源报告 | `domains/domain_v1/parent` |
-| 本金融阶段前后保留集测量 | `domains/domain_v1/retention` |
-| 本金融阶段各次实测报告 | `domains/domain_v1/report_archive` |
-| 本金融阶段最终完整快照 | `domains/domain_v1/run` |
-| 本金融阶段自动检查点 | `live_checkpoints/domain_v1` |
+| Original 1220-step expansion artifacts | `expansions/expansion_v1/run` |
+| Parent checkpoint frozen for this financial stage, and its source reports | `domains/domain_v1/parent` |
+| Before/after retention-set measurements for this financial stage | `domains/domain_v1/retention` |
+| Measured reports for each run of this financial stage | `domains/domain_v1/report_archive` |
+| Final complete snapshot of this financial stage | `domains/domain_v1/run` |
+| Automatic checkpoints of this financial stage | `live_checkpoints/domain_v1` |
 
-本地热训练目录为`/content/130U-FinLLM/runs/domain_v1`。原seed、610步归档和1220步模型保留。首次跨阶段只迁移权重，所以母检查点原PyTorch版本与新阶段当前版本可以不同，双方身份均记录；同一`domain_v1`的后续精确恢复则绑定数据、词表、模型、训练语义和新运行时身份。
+The local hot training directory is `/content/130U-FinLLM/runs/domain_v1`. The original seed, the 610-step archive and the 1220-step model are kept. The first cross-stage run transfers only the weights, so the parent checkpoint's original PyTorch version may differ from the current version of the new stage; both identities are recorded. Later exact resumes within the same `domain_v1` are bound to the data, vocabulary, model, training semantics and the new runtime identity.
 
-断开后先确认原训练状态，再从03a第一格顺序恢复。已完成74步时复用匹配的原实测报告，不改写成零秒吞吐；失败的训练或测量不能显示完整备份。若环境或输入身份不匹配，保留错误信息，不绕过校验。
+After a disconnect, first confirm the state of the original training, then resume in order from the first cell of 03a. When 74 steps are already complete, the matching original measured report is reused and not rewritten as zero-second throughput; a failed training or measurement cannot show a complete backup. If the environment or input identity does not match, keep the error message and do not bypass the check.
 
-## 任务后训练的材料
+## Material for task post-training
 
-审核材料已扩为2000条，用户交付CSV并明确确认1993条标题标签，另7条待查。见[审核记录](../reports/human_headline_review_20261030.json)。资产映射、去重／事件分组和分区通过后，才能开展真实SFT、后续DPO偏好审核、校准和封存测试。语言建模loss不能当成资产看多／看空准确率。
+The review material has been expanded to 2000 rows. The user delivered the CSV and explicitly confirmed 1993 headline labels; another 7 are pending investigation. See the [review record](../reports/human_headline_review_20261030.json). Real SFT, later DPO preference review, calibration and sealed testing can begin only after asset mapping, deduplication / event grouping and partitioning have passed. Language-modeling loss cannot be taken as bullish/bearish accuracy on assets.
 
-仓库中的可运行Notebook保持无存储输出。需要保存执行内容时保存到个人Drive副本；本次已保存的02d完整证据仍保留在上述历史提交及本地归档。
+Runnable notebooks in the repository are kept with no stored outputs. To keep executed content, save it to a personal Drive copy; the full 02d evidence saved this time remains in the historical commit above and in the local archive.
 
-## 工程验证
+## Engineering verification
 
-完整274项本地测试通过（557.43秒），14本Notebook格式／语法／无输出检查和依赖检查通过。包含两个真实隔离Jupyter内核的03a执行、新领域优化器重置、带dropout的直接与分段续训数值对照、失败与中断恢复及完成后原测量保留；另对真实本地8K分片做了来源关联核对。详见[工程记录](../reports/domain_handoff_checks_20261030.json)。这些本地替代测试不等于用户Drive／T4实际验真。
+The full local suite of 274 tests passed (557.43 seconds); format / syntax / no-output checks of the 14 notebooks and the dependency check passed. This includes 03a execution in two real isolated Jupyter kernels, the optimizer reset for the new domain, a numerical comparison with dropout between direct and segmented continued training, recovery from failure and interruption, and preservation of the original measurements after completion. A source-linkage check was also run on the real local 8K shards. See the [engineering record](../reports/domain_handoff_checks_20261030.json). These local substitute tests are not the same as actual verification on the user's Drive / T4.

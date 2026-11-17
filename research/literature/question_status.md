@@ -1,40 +1,40 @@
-# Q01–Q32 覆盖与续研矩阵
+# Q01–Q32 coverage and follow-up research matrix
 
-日期：2026-11-15。完整 = 该题所有子问均有证据；部分 = 有一手证据但子问尚缺；未查 = 本轮没有足够检索，不表示无文献。**本轮没有任何题宣称完整系统综述。** 用户要求本地研究后已停止新增联网。
+Date: 2026-11-15. Complete = every subquestion of the question has evidence; partial = there is primary evidence but subquestions are still missing; not searched = this round did not search enough, which does not mean there is no literature. **No question in this round claims a complete systematic review.** New internet access stopped after the user asked for local research.
 
-| 题号 | 状态 | 本轮文件 / 台账 | 明确缺口及下一步 |
+| Question | Status | Files / ledger this round | Explicit gaps and next steps |
 |---|---|---|---|
-| Q01 | 部分背景 | literature_review.md L15–L16 | 未建所有模型成本表；≤50M 与最小经济学模型未查明 |
-| Q02 | 部分背景 | L01、L15；Q03.md | 尚无各泄漏通道效应量综述；现代筛选器、指令生成的严格隔离待查 |
-| Q03 | 部分完成 | ../answers/Q03.md | DP 小模型成本、unlearning/stability、LM poisoning 后续未排尽 |
-| Q04 | 未查 | — | 各检测器原假设、错误控制、anytime validity 全部待核实 |
-| Q05 | 未查 | — | SEC 不请求；各语料许可、可得时间、年度 token 数待核实 |
-| Q06 | 未查 | — | 两篇新闻新颖度原文及 prequential 差异待核实 |
-| Q07 | 未查 | — | Lipschitz transformer 文献、24M 认证半径及训练代价待核实 |
-| Q08 | 未查 | — | 形式化验证器、离散扰动集、CPU/T4 可行规模待核实 |
-| Q09 | 未查 | — | permission 损失的因果可识别性条件与最近先例待核实 |
-| Q10 | 部分完成 | ../answers/Q10.md | 特定金融文本组合未排尽；Liu 2020 等未全文核验 |
-| Q11 | 未查 | — | 匿名化金融效应量、绑定/别名误差与信息损失待核实 |
-| Q12 | 部分背景 | L11；Q10.md | 仅核验 xVal 主干依赖；FoNE/BitTokens/Number Token Loss 等未比较 |
-| Q13 | 部分完成 | ../answers/Q13.md | 金融会计与 numéraire 神经定价完整先例未查；VLM 相邻先例仅摘要 |
-| Q14 | 部分背景 | L12–L13；Q32.md | SEC 数据文件/accepted/calc/年度量许可未查；FinTagging/FinAuditing/FNXL 未核实 |
-| Q15 | 未查 | — | 文本硬会计约束、遮蔽报表 benchmark 待查 |
-| Q16 | 未查 | — | 金融合成世界先例及外部有效性设计待查 |
-| Q17 | 未查 | — | elicitable 目标、金融文本概率头及 proper scoring 待查 |
-| Q18 | 未查 | — | holder/target/条件/期限联合标注与 BL 映射待查 |
-| Q19 | 未查 | — | 漂移、成簇和小样本的保证分别待查；不编 n=101 等界 |
-| Q20 | 未查 | — | 同单调/ES 原始文献与机器学习部署风险接口待查；理论推导由主代理另交 |
-| Q21 | 未查 | — | 序贯 LM 似然比的原假设、e-process 与漂移有效性待查 |
-| Q22 | 未查 | — | TRM/HRM 及数值约束任务迁移待查 |
-| Q23 | 未查 | — | LLM-JEPA、多视图充分性与≤50M 结果待查 |
-| Q24 | 部分逻辑 | Q10.md、Q13.md | P2 从零训练非数学必要；跨领域实证比较未查 |
-| Q25 | 未查 | — | 所列金融模型底座、训练、奖励与极小模型迁移待查 |
-| Q26 | 未查 | — | binding 回路、金融 SAE、机制证书待查 |
-| Q27 | 未查 | — | Lean/数学 verifier、区间数值与金融 DSL 先例待查 |
-| Q28 | 未查 | — | LLM 非空泛化界、时间漂移与 T4 实施成本待查 |
-| Q29 | 部分完成 | ../answers/Q29.md | 加入 collective bagging 直接先例；文本认证准确率/后续未排尽 |
-| Q30 | 部分完成 | ../answers/Q30.md | 审计统计已有；源站修订时间机制及具体成本未查 |
-| Q31 | 部分完成 | ../answers/Q31.md | FOSD 先例已有；CORAL/CORN 与 stance 实证未完整核查 |
-| Q32 | 部分完成 | ../answers/Q32.md | 解析任务区分明确；没有真实元组准确率与最新工具排名 |
+| Q01 | Partial background | literature_review.md L15–L16 | No cost table for all models built; ≤50M and the smallest economics models not established |
+| Q02 | Partial background | L01, L15; Q03.md | No review yet of effect sizes for each leakage channel; strict isolation of modern filters and instruction generation still to be checked |
+| Q03 | Partly complete | ../answers/Q03.md | Cost of small DP models, unlearning/stability, LM poisoning follow-up work not exhausted |
+| Q04 | Not searched | — | Null hypotheses, error control and anytime validity of each detector all still to be verified |
+| Q05 | Not searched | — | SEC not requested; licences, availability times and annual token counts of each corpus still to be verified |
+| Q06 | Not searched | — | Original text of the two news-novelty papers and the prequential differences still to be verified |
+| Q07 | Not searched | — | Lipschitz transformer literature, certified radius at 24M and training cost still to be verified |
+| Q08 | Not searched | — | Formal verifiers, discrete perturbation sets, feasible scale on CPU/T4 still to be verified |
+| Q09 | Not searched | — | Causal identifiability conditions for the permission loss and the closest prior work still to be verified |
+| Q10 | Partly complete | ../answers/Q10.md | The specific financial-text combination not exhausted; Liu 2020 and others not verified in full text |
+| Q11 | Not searched | — | Financial effect sizes of anonymization, binding/alias errors and information loss still to be verified |
+| Q12 | Partial background | L11; Q10.md | Only the dependence of the xVal trunk verified; FoNE/BitTokens/Number Token Loss etc. not compared |
+| Q13 | Partly complete | ../answers/Q13.md | Complete prior work in financial accounting and numéraire neural pricing not searched; the adjacent VLM precedent read only at abstract level |
+| Q14 | Partial background | L12–L13; Q32.md | SEC data files/accepted/calc/annual-volume licences not searched; FinTagging/FinAuditing/FNXL not verified |
+| Q15 | Not searched | — | Hard accounting constraints on text and masked-statement benchmarks still to be searched |
+| Q16 | Not searched | — | Prior work on synthetic financial worlds and external-validity design still to be searched |
+| Q17 | Not searched | — | Elicitable targets, probability heads for financial text and proper scoring still to be searched |
+| Q18 | Not searched | — | Joint annotation of holder/target/condition/horizon and the BL mapping still to be searched |
+| Q19 | Not searched | — | Guarantees under drift, clustering and small samples each still to be searched; no bounds such as n=101 are made up |
+| Q20 | Not searched | — | Original literature on comonotonicity/ES and the interface to deployment risk in machine learning still to be searched; the theoretical derivation is delivered separately by the main agent |
+| Q21 | Not searched | — | Null hypotheses of sequential LM likelihood ratios, e-processes and validity under drift still to be searched |
+| Q22 | Not searched | — | TRM/HRM and transfer to numerically constrained tasks still to be searched |
+| Q23 | Not searched | — | LLM-JEPA, multi-view sufficiency and ≤50M results still to be searched |
+| Q24 | Partial logic | Q10.md, Q13.md | Training P2 from scratch is not mathematically necessary; cross-domain empirical comparison not searched |
+| Q25 | Not searched | — | Bases, training and rewards of the listed financial models and transfer to very small models still to be searched |
+| Q26 | Not searched | — | Binding circuits, financial SAEs and mechanistic certificates still to be searched |
+| Q27 | Not searched | — | Lean/mathematical verifiers, interval numerics and financial DSL prior work still to be searched |
+| Q28 | Not searched | — | Non-vacuous LLM generalization bounds, temporal drift and the implementation cost of T4 still to be searched |
+| Q29 | Partly complete | ../answers/Q29.md | Collective bagging added as direct prior work; certified accuracy on text and follow-up work not exhausted |
+| Q30 | Partly complete | ../answers/Q30.md | Audit statistics already exist; revision-time mechanisms of source sites and concrete costs not searched |
+| Q31 | Partly complete | ../answers/Q31.md | FOSD prior work exists; CORAL/CORN and stance empirics not fully checked |
+| Q32 | Partly complete | ../answers/Q32.md | The parsing tasks are clearly distinguished; no real tuple accuracy and no ranking of the latest tools |
 
-优先续研顺序：Q03/Q29 后续差异 → Q30/Q05 真实来源前提 → Q10/Q13/Q31 组合先例 → Q32 真实解析可行性 → 其余按 G1 需要安排。若联网边界未被用户改动，则仅做本地已存材料核验，不默认为允许恢复联网。
+Priority order for follow-up: follow-up differences for Q03/Q29 → real-source premises for Q30/Q05 → combination prior work for Q10/Q13/Q31 → feasibility of real parsing for Q32 → the rest as G1 requires. If the user has not changed the internet boundary, only verify locally saved materials; do not assume that resuming internet access is allowed.

@@ -1,16 +1,16 @@
-# 成对比较与多排序聚合：阶段记录
+# Pairwise comparison and multi-ranking aggregation: stage log
 
-**所有阶段已完成。第一阶段对比见[第一阶段报告](stage1_conclusion.md)。唯一通过的Sol四次聚合已完成[新128条确认](stage2_report.md)：八项中七项通过，负面10%一个方向召回78.6%略低于80%，按冻结规则不进入512条。[当前完整交付](FABLE_CURRENT_REPORT.md)保留改善、失败与独立复核。以下首批记录保留为执行历史。**
+**All stages are complete. The stage 1 comparison is in the [stage 1 report](stage1_conclusion.md). The only passing method, Sol four-run aggregation, has completed the [new 128-item confirmation](stage2_report.md): seven of eight items passed, and negative 10% recall in one direction was 78.6%, slightly below 80%, so under the frozen rules it does not move to 512 items. The [current full deliverable](FABLE_CURRENT_REPORT.md) keeps the improvement, the failure and the independent review. The first batch of records below is kept as execution history.**
 
-2026-11-16。本页记录执行过程中的阶段性事实；最终判断以完整第一阶段分析及后续独立样本结果为准。
+2026-11-16. This page records interim facts during execution; the final judgment rests on the complete stage 1 analysis and the later independent-sample results.
 
-第一阶段采用 32 条新样本、32 个不同词法族，与上一轮 128 族交集为 0。两模型共用8份排序排列和2个完整成对 panel；每panel逐对交换左右。496对整批首次未完成，正式实现改成4个124对批次，统计规则和通过条件不变。当前正在执行正式的32次成对调用和16次排序调用。
+Stage 1 uses 32 new samples from 32 distinct lexical families, with 0 intersection with the previous round's 128 families. The two models share 8 ranking permutations and 2 complete pairwise panels; within each panel left and right are swapped pair by pair. The first whole-batch attempt with 496 pairs did not complete, so the formal implementation was changed to 4 batches of 124 pairs, with the statistical rules and pass conditions unchanged. The formal 32 pairwise calls and 16 ranking calls are currently running.
 
-首个完成的换位对照仅含 panel1/batch01 的124对，尚不代表其余批次：
+The first completed swap comparison contains only the 124 pairs of panel1/batch01 and does not yet represent the other batches:
 
-| 模型 | 包含“偏好/同分”差异的换位不一致 | 两次明确选中相反项目 | 不可判断 |
+| Model | Swap inconsistencies, including preference/tie differences | Opposite items clearly chosen in the two runs | Inconclusive |
 |---|---:|---:|---:|
 | Luna | 67/124 | 45/124 | 0 |
 | Sol | 26/124 | 5/124 | 0 |
 
-这些是同一组配对的重复判断，不是124个独立金融事件；差异混合了位置、批内上下文和生成过程。当前不能据此宣布哪种聚合方法通过。所有正式输入/原始输出保存于 `research/private/agent_tail_methods/stage1_n32/`，统计代码为 `analyze_agent_methods.py`。最终报告会保留失败执行与所有结果，不只选择最有利组合。
+These are repeated judgments of the same set of pairs, not 124 independent financial events; the differences mix position, within-batch context and the generation process. At present this cannot be used to declare which aggregation method passes. All formal inputs/raw outputs are saved in `research/private/agent_tail_methods/stage1_n32/`, and the statistics code is `analyze_agent_methods.py`. The final report will keep the failed executions and all results, not only the most favorable combination.

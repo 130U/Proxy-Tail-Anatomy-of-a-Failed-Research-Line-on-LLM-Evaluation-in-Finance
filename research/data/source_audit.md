@@ -1,46 +1,46 @@
-# 本地真实来源审计：FOMC 日期证据与 SEntFiN 可用范围
+# Local real-source audit: FOMC date evidence and the usable scope of SEntFiN
 
-日期：2026-11-16（America/New_York）。执行者：内部 AI 研究助手。方式：完全离线、只读旧仓库；没有联网、下载、训练或向外投递材料。输出仅在新工作区 `research/data/`。
+Date: 2026-11-16 (America/New_York). Executed by: internal AI research assistant. Method: fully offline, read-only access to the old repository; no internet access, downloads, training or sending of materials outside. Output is only in the new workspace `research/data/`.
 
-## 结论
+## Conclusion
 
-**FOMC 的“清单发布日期”已经得到更直接的本地来源支持，但历史字节版本仍未获证。** 从 120 份原始记录按日期固定选出的 10 份中，当前保存的官方日历／历史索引在各自纪要链接旁明确声明的 Released 日期，均与 JSONL 和 source manifest 一致；相关纪要及索引快照哈希均匹配。10 份纪要页的 Last Update 也恰好一致，但它只作更新字段比较，不能独立替代发布证据。工具在所支持的机器日期入口中没有发现 datePublished/dateModified 等字段，不作页面任意脚本的穷尽性否定。
+**The FOMC "list publication date" now has more direct local source support, but the historical byte versions are still unproven.** Of the 10 records selected by date from the 120 raw records, in every case the Released date that the saved official calendar / historical index states explicitly next to the minutes link agrees with the JSONL and the source manifest; the hashes of the relevant minutes and index snapshots all match. The Last Update of the 10 minutes pages also happens to agree, but it is used only as a comparison of the update field and cannot independently replace publication evidence. Among the machine-readable date entry points it supports, the tool found no fields such as datePublished/dateModified; this is not an exhaustive negative claim about arbitrary page scripts.
 
-这些结果支持把它们作为**来源可追踪、日期声明得到复核的真实文本候选**，并不能把 2026 年保存的字节宣布为 2011–2025 年原样公开版本，不能产生零失败概率历史核心。定日选样不是随机审计，10/10 一致不等于总体错标率为零。
+These results support treating the documents as **real-text candidates whose sources are traceable and whose date claims have been reviewed**. They do not allow the bytes saved in 2026 to be declared the versions published as-is in 2011–2025, and they cannot produce a historical core with zero failure probability. Selecting the sample at fixed dates is not a random audit, and 10/10 agreement does not mean the population mislabelling rate is zero.
 
-**SEntFiN 可以作为新的本地私有 Phase 0“来源原任务：实体相关情绪”基线候选；它不能借此升级为已核验证券的投资立场数据。** 这是当前用户授权范围与已保存来源／批准记录的研究使用判断，不是新作的第三方出版方权利证明。作者 MIT 许可、私有研究边界、来源标签语义、项目人工确认和事件／时间隔离须分别保留。当前任务只审这些边界，没有读取原始 CSV、构造新分区或训练基线。
+**SEntFiN can serve as a new local private Phase 0 baseline candidate for its "source-native task: entity-level sentiment"; this does not upgrade it to investment-stance data on verified securities.** This is a research-use judgment based on the current scope of user authorization and the saved source / approval records, not a new proof of third-party publisher rights. The authors' MIT licence, the private research boundary, the semantics of the source labels, the project's human confirmation and event / time isolation must each be kept separate. The current task only reviews these boundaries; it did not read the raw CSV, construct new splits or train a baseline.
 
-## 输入范围、规则和执行记录
+## Input scope, rules and execution record
 
-所有下列旧文件相对路径都以 `<workspace>/130U-FinLLM` 为根。执行前检查旧仓库及各级祖先、涉及的 data/docs/runs 子目录，未发现适用的 AGENTS.md；导师包中的研究规范已另读，但未把其中训练／联网命令作为本轮操作指令。
+All old-file relative paths below are rooted at `<workspace>/130U-FinLLM`. Before execution, the old repository and all its ancestors, and the data/docs/runs subdirectories involved, were checked, and no applicable AGENTS.md was found; the research guidelines in the advisor package were read separately, but their training / internet commands were not taken as operating instructions for this round.
 
-FOMC 输入为 `data/raw/expansion_v1/corpora/finance_candidate.jsonl`、同目录 `manifest.json`、10 份选中纪要 HTML 和 8 份对应 discovery HTML 快照。JSONL 实际 120 条、6,977,681 字节，与 manifest 一致；其 SHA256 为 `5a9b357c4b979b5e85dc7622e28c5793068baeb67a48abbd218e81e7d8219a0a`。公布日期分布为 2011-02-16 至 2025-12-30；来源记录声明抓取时间为 `2026-10-11T10:39:20.795698+00:00`。这些数值来自本轮文件核验，不是外部实时查询。
+The FOMC inputs are `data/raw/expansion_v1/corpora/finance_candidate.jsonl`, `manifest.json` in the same directory, the 10 selected minutes HTML files, and the 8 corresponding discovery HTML snapshots. The JSONL actually has 120 records and 6,977,681 bytes, consistent with the manifest; its SHA256 is `5a9b357c4b979b5e85dc7622e28c5793068baeb67a48abbd218e81e7d8219a0a`. Publication dates range from 2011-02-16 to 2025-12-30; the source record states a crawl time of `2026-10-11T10:39:20.795698+00:00`. These values come from this round's file checks, not from an external live query.
 
-选样先按 `(published_at,text_sha256)` 排序，取零起始秩 `i*(N−1)//9, i=0,…,9`，覆盖首尾，不读标签、不按结果替换样本。它是跨日期结构检查，不是概率抽样设计。来源文件 SHA 和程序 SHA 均保存在 [source_audit.json](source_audit.json)，便于确认重跑对象。
+The sample is selected by first sorting by `(published_at,text_sha256)` and taking the zero-based ranks `i*(N−1)//9, i=0,…,9`, covering both ends, without reading labels and without replacing samples based on results. It is a cross-date structural check, not a probability sampling design. The source file SHAs and the program SHA are all saved in [source_audit.json](source_audit.json), so the objects of a rerun can be confirmed.
 
-程序为 [fomc_source_audit.py](fomc_source_audit.py)，只用 Python 标准库。它对每份纪要以字节计算 SHA256；正文 hash 按 JSONL 的 UTF-8 文本核验；纪要元数据与 admitted manifest 逐字段比对。公布日期通过**唯一目标纪要链接所在的局部段落或 minutes 容器**取得，禁止退回全页任意日期。容器内所有链接还必须属于同一纪要身份：仅接受官方域名的既知纪要 HTML/PDF 路径，8 位会议日期必须一致；同一日期出现在任意其他路径中不算身份匹配。重复目标链接、其他纪要、未知链接身份、未知容器、缺日期或多日期都会保留缺证／歧义状态，不猜测。解析使用 HTMLParser，不执行网页脚本；一个旧页需要 cp1252 回退，原始字节哈希不受解码选择影响。
+The program is [fomc_source_audit.py](fomc_source_audit.py), using only the Python standard library. It computes the SHA256 of each minutes document from its bytes; the full-text hash is checked against the UTF-8 text in the JSONL; the minutes metadata are compared field by field with the admitted manifest. The publication date is taken from **the local paragraph or minutes container that holds the unique target minutes link**; falling back to an arbitrary date anywhere on the page is forbidden. All links in the container must also belong to the same minutes identity: only known minutes HTML/PDF paths on the official domain are accepted, and the 8-digit meeting date must agree; the same date appearing in any other path does not count as an identity match. Duplicate target links, other minutes, unknown link identities, unknown containers, missing dates or multiple dates all keep a missing-evidence / ambiguous status, with no guessing. Parsing uses HTMLParser and does not execute page scripts; one old page needs a cp1252 fallback, and the hash of the raw bytes is unaffected by the choice of decoding.
 
-最终修复后运行环境 Python 3.12.14，审计用时 0.341598 秒，未测峰值内存；网络请求 0、训练 token 0。10 项测试用时约 0.005 秒，覆盖链接与日期绑定、同一容器混合纪要拒绝、同纪要 HTML/PDF 两种顺序、未知路径／外站／查询参数拒绝、禁止全页兜底、重复链接和多日期拒绝、发布／更新通道分开、旧字符编码。测试是构造样例上的实现检查，不是历史真实性证明。执行前估计与追加 discovery 快照读取原因见 [compute_budget.md](compute_budget.md)。
+After the final fix, the runtime was Python 3.12.14, the audit took 0.341598 seconds, and peak memory was not measured; 0 network requests, 0 training tokens. The 10 tests took about 0.005 seconds and cover: binding of links and dates, rejecting mixed minutes in the same container, the same minutes in both HTML/PDF orders, rejecting unknown paths / external sites / query parameters, forbidding whole-page fallback, rejecting duplicate links and multiple dates, keeping the publication / update channels separate, and old character encodings. The tests check the implementation on constructed examples; they do not prove historical authenticity. The pre-execution estimate and the reason for the additional reading of discovery snapshots are in [compute_budget.md](compute_budget.md).
 
-### 独立代码审查后的修复记录
+### Record of the fix after independent code review
 
-首次实现只检查“目标链接唯一＋局部容器只有一个 Released 日期”，审查者给出致命的接口反例：同一段落包含两份不同纪要 A、B，唯一日期实际关联 B，旧函数仍会把它交给 A。这不会由 manifest 或单一链接计数自动排除，不能只在报告里补一句限制。
+The first implementation only checked "the target link is unique + the local container has only one Released date". The reviewer gave a fatal interface counterexample: one paragraph contains two different minutes A and B, the single date actually belongs to B, and the old function would still assign it to A. This is not automatically ruled out by the manifest or by a single link count, and it cannot be handled by just adding a sentence about limitations to the report.
 
-现已在程序中增加容器内纪要身份一致性检查，并新增上述反例及同身份 HTML/PDF 正例。独立审查者与本作者分别核对当前固定样本：10 个局部容器均有两个链接，分别是同一会议日期的 HTML 与 PDF；前 7 个 HTML 在先，后 3 个 PDF 在先。新检查允许两种排列，拒绝不同纪要或无法确认身份的链接，不依赖链接文字或排列猜测日期归属。新 JSON 显式记录 `container_link_count` 与 `container_document_identity`，全部真实样本仍为日期一致；原抽样规则、原始文件及历史版本缺证结论均未改变。
+The program now includes a check that the minutes identity is consistent within a container, and the counterexample above plus a positive example with HTML/PDF of the same identity have been added. The independent reviewer and the author each checked the current fixed sample: each of the 10 local containers has two links, an HTML and a PDF for the same meeting date; in the first 7 the HTML comes first, in the last 3 the PDF comes first. The new check allows both orders, rejects links to different minutes or links whose identity cannot be confirmed, and does not rely on link text or order to guess which minutes a date belongs to. The new JSON explicitly records `container_link_count` and `container_document_identity`; all real samples still have consistent dates. The original sampling rule, the raw files and the conclusion that historical versions lack evidence are all unchanged.
 
-修复后程序 SHA256 为 `96577f6b877e02259cd6a138e7359f574fe0da722abec30b6ceb2777c55e2987`，对应 JSON 中相同字段。此次重跑替换的是新工作区的审计结果，没有修改旧仓库快照。本修复关闭已报告的多链接误配问题；受限 HTML 解析契约仍不等于完整网页语义证明。
+After the fix, the program SHA256 is `96577f6b877e02259cd6a138e7359f574fe0da722abec30b6ceb2777c55e2987`, matching the same field in the JSON. This rerun replaced the audit results in the new workspace and did not modify the old repository snapshot. The fix closes the reported multi-link mismatch problem; the restricted HTML parsing contract is still not a proof of complete page semantics.
 
 ```powershell
-# 在新 research 工作区根目录运行；工具仅向自己的 research/data/ 写 JSON。
+# Run from the root of the new research workspace; the tool writes JSON only to its own research/data/.
 & '..\130U-FinLLM\.venv\Scripts\python.exe' -X utf8 research/data/fomc_source_audit.py --self-test
 & '..\130U-FinLLM\.venv\Scripts\python.exe' -X utf8 research/data/fomc_source_audit.py --source-root '..\130U-FinLLM'
 ```
 
-## 固定样本结果
+## Fixed-sample results
 
-所有数字为本轮本地审计观察。每行均通过：JSONL/manifest 日期及链接一致、正文 hash 一致、纪要 HTML hash 一致、对应索引快照 hash 一致、链接旁 Released 日期一致、Last Update 比较一致。
+All numbers are observations from this round's local audit. Every row passes: JSONL/manifest dates and links agree, full-text hash agrees, minutes HTML hash agrees, corresponding index snapshot hash agrees, Released date next to the link agrees, and the Last Update comparison agrees.
 
-| 匿名编号 | 排序秩 | 会议日 | 索引声明发布日／manifest 日 | 会议至发布间隔（天） | 纪要页更新日 |
+| Anonymous ID | Sort rank | Meeting date | Publication date stated by index / manifest date | Days from meeting to publication | Minutes page update date |
 |---|---:|---|---|---:|---|
 | FOMC-A01 | 0 | 2011-01-26 | 2011-02-16 | 21 | 2011-02-16 |
 | FOMC-A02 | 13 | 2012-09-13 | 2012-10-04 | 21 | 2012-10-04 |
@@ -53,41 +53,41 @@ FOMC 输入为 `data/raw/expansion_v1/corpora/finance_candidate.jsonl`、同目�
 | FOMC-A09 | 105 | 2024-03-20 | 2024-04-10 | 21 | 2024-04-10 |
 | FOMC-A10 | 119 | 2025-12-10 | 2025-12-30 | 20 | 2025-12-30 |
 
-JSON 不包含标题、正文、URL 或逐条标签；编号为匿名审计编号。由于保留日期及哈希，这属于去掉直接文本标识的审计元数据，**不是承诺无法重新识别公开文档的隐私匿名化**。
+The JSON contains no titles, full text, URLs or per-item labels; the IDs are anonymous audit IDs. Because dates and hashes are kept, this is audit metadata with direct text identifiers removed, **not a privacy anonymization that promises the public documents cannot be re-identified**.
 
-## 对 P1 证书链究竟补了哪一环
+## Which link of the P1 certificate chain this actually adds
 
-1. **已增强：日期字段来源。** 本地已保存官方索引的纪要链接旁日期，可独立于 JSONL 字段重读并复核。正文 hash 和 HTML hash 把当前提取记录与保存快照连接起来，降低仅信 manifest 自述的程度。但两者仍来自同一 2026 年来源抓取过程，不是独立历史见证。
-2. **仍未知：历史内容版本。** 当前页面标有早年 Last Update 并不排除之后未标记修订、归档迁移或页面生成变化；hash 只证明当前两个保存对象一致。需要有时间定位的不可变归档／版本链才能强化“该时点可见的这些字节”，本轮没有取得它。
-3. **仍未知：日内可得性。** 本轮证据精度是日期。纪要正文提及某次政策声明在 2 p.m. 发布，可能描述会后声明，不能把该时刻误配给数周后的纪要。没有用正文中任意时间串填充纪要发布时间或时区。对日内统计量仍不够；采用次日才可用等保守规则也只是额外契约，须另行定义，不能倒写成已知真实时间。
-4. **仍未知：历史选择过程。** 2026 年根据当前索引和固定年份选取旧文本，不能自动保证该选择在过去可测。是否存活、修订、进入索引、选到哪些年份及用哪些预处理，都可能带入未来信息。当前审计样本按后来可见的发布日期排序选取，只用于诊断，不直接充当历史训练核心。
-5. **明确排除：会议日代替发布日。** 样本全部存在 20–21 天间隔，含跨年的会议／公开日，若用会议日训练或回测就可能前视。本轮没有检查任何模型是否实际遵守过滤规则。
+1. **Strengthened: the source of the date fields.** The dates next to the minutes links in the locally saved official indexes can be reread and reviewed independently of the JSONL fields. The full-text hash and the HTML hash connect the current extracted records to the saved snapshots, reducing reliance on the manifest's own claims. But both still come from the same 2026 source crawl; they are not independent historical witnesses.
+2. **Still unknown: historical content versions.** A current page marked with an early Last Update does not rule out later unmarked revisions, archive migrations or changes in page generation; the hash only proves that the two current saved objects agree. A time-stamped immutable archive / version chain is needed to strengthen "these bytes were visible at that point in time", and this round did not obtain one.
+3. **Still unknown: intraday availability.** The precision of this round's evidence is the date. The minutes text mentions that a policy statement was released at 2 p.m.; this may describe the post-meeting statement, and that time must not be wrongly assigned to minutes released weeks later. No arbitrary time string from the full text was used to fill in the release time or time zone of the minutes. This is still not enough for intraday statistics; adopting a conservative rule such as "available only on the next day" is also just an additional contract that must be defined separately, and cannot be written back as a known true time.
+4. **Still unknown: the historical selection process.** Selecting old texts in 2026 according to the current index and fixed years does not automatically guarantee that the selection was measurable in the past. Whether documents survived, were revised or entered the index, which years were selected, and which preprocessing was used can all bring in future information. The current audit sample was selected by sorting on publication dates visible later; it is used only for diagnosis and does not directly serve as a historical training core.
+5. **Explicitly ruled out: using the meeting date in place of the publication date.** Every sample has a gap of 20–21 days, including meeting / publication dates that span a year boundary; training or backtesting on the meeting date could introduce look-ahead. This round did not check whether any model actually followed the filtering rule.
 
-因此下一步真实文本准备可以使用这些来源记录，但 P1 的 `historical_byte_version_proven` 始终为 false；G0/G1 不因 10 个日期一致而自动通过。
+So the next step of real-text preparation can use these source records, but P1's `historical_byte_version_proven` is always false; G0/G1 do not pass automatically because 10 dates agree.
 
-## SEntFiN：权利、批准、语义和事件分别判定
+## SEntFiN: rights, approval, semantics and events judged separately
 
-仅依据本地文件，不打开其中的外部链接。已读文件及其 SHA256 位于 JSON 的 `rights_document_fingerprints`：
+Based only on local files; external links in them were not opened. The files read and their SHA256 are in `rights_document_fingerprints` in the JSON:
 
-| 旧仓库证据 | 它确实支持什么 | 它没有支持什么 |
+| Old-repository evidence | What it does support | What it does not support |
 |---|---|---|
-| `data/raw/candidates/sentfin/LICENSE`；`docs/research/stance_sources_20261009.md` | 作者仓库固定版本有 MIT 文本和归属；原任务是实体相关 positive/negative/neutral；本地研究候选及不公开原文的边界已有记录 | 出版方上游权利已独立核实；原情绪等于本项目投资方向；可靠逐条公开日期或证券标识齐全 |
-| `docs/POST_DOMAIN_NEXT.md`；`docs/TASK_REVIEW_NEXT.md` | 后续用户确认的标题立场材料已经存在，不能沿用早期“零人工确认”描述整个项目 | 此确认覆盖全量原始数据、证券身份、来源权利、事件独立性或 DPO 偏好 |
-| `docs/REVIEW_WORKSPACE.md` | 人工立场确认与资产核验分开；AI 草稿不能伪装人工真值；正式训练另有关卡 | 一个 `human_reviewed` 标志可同时通过所有来源和语义审核 |
-| `docs/ENTITY_SFT_PILOT.md`；`runs/task_pilot/entity_v1/task_manifest.json` | 项目已允许以字面实体为目标的私有探索；已有 pilot 为非时间、词法／来源分组划分；明确 `private_research_only` | 真实证券／价格预测能力，完整语义事件审核，最终独立测试或历史无泄漏证书 |
+| `data/raw/candidates/sentfin/LICENSE`; `docs/research/stance_sources_20261009.md` | The fixed version of the authors' repository has MIT text and attribution; the original task is entity-level positive/negative/neutral; the local research candidate and the boundary of not publishing the original text are already recorded | That upstream publisher rights have been independently verified; that the original sentiment equals this project's investment direction; that reliable per-item publication dates or security identifiers are complete |
+| `docs/POST_DOMAIN_NEXT.md`; `docs/TASK_REVIEW_NEXT.md` | Headline-stance materials later confirmed by the user already exist, so the early description "zero human confirmation" cannot be applied to the whole project | That this confirmation covers the full raw data, security identity, source rights, event independence or DPO preferences |
+| `docs/REVIEW_WORKSPACE.md` | Human stance confirmation is separate from asset verification; AI drafts cannot pose as human ground truth; formal training has its own gate | That a single `human_reviewed` flag can pass all source and semantic reviews at once |
+| `docs/ENTITY_SFT_PILOT.md`; `runs/task_pilot/entity_v1/task_manifest.json` | The project already allows private exploration targeting literal entities; the existing pilot uses a non-temporal, lexical / source-grouped split; `private_research_only` is explicit | Real security / price prediction ability, a complete semantic event review, a final independent test, or a historical no-leakage certificate |
 
-**新的私有 Phase 0 判断：可以在当前本地研究授权下，以原作者实体情绪任务建立基线准备方案，保留原始标签名和来源 provenance；不需要先把它们改成 bullish/bearish。** “原作者标签”是该既有数据集的监督定义，不是本项目新增人工批准，也不是 AI 提案。若任务要改为资产立场，仍必须沿用实际批准范围与未完成关卡，不能借“Phase 0”之名越过语义验收。旧文档中的 `formal_training_ready=false` 对相应派生候选仍成立，不能把来源原任务的允许探索解释为所有正式训练都已批准。
+**New private Phase 0 judgment: under the current local research authorization, a baseline preparation plan can be built on the original authors' entity-sentiment task, keeping the original label names and source provenance; they do not first need to be changed to bullish/bearish.** "Original-author labels" are the supervision definition of that existing dataset; they are not a new human approval by this project, nor an AI proposal. If the task is to be changed to asset stance, the actual approved scope and the unfinished gates must still be followed; the name "Phase 0" cannot be used to bypass semantic acceptance. The `formal_training_ready=false` in the old documents still holds for the corresponding derived candidates; the permitted exploration of the source-native task cannot be read as approval of all formal training.
 
-这个判断有以下具体边界：
+This judgment has the following specific boundaries:
 
-- **权利边界：** 使用现有原始材料、保留 LICENSE/归属、数据和逐行输出保持私有；不公开复制新闻正文或标签包。本地作者许可证据足以避免“完全无来源”的说法，但没有弥补出版方权利缺口，也不对未来公开／商业用途作承诺。
-- **语义边界：** 第一版目标必须叫 source-native 实体情绪。监管机构 neutral、过去涨跌、作者态度和投资方向可能不同，不能重命名掩盖。证券身份可作为单独缺失字段；字面实体基线不声称可交易证券已核验。
-- **标签处理边界：** 源文件的异常字面量不能用不透明猜测修复；建议冻结解析规则、隔离失败行并报告数量。这里没有重新读取源标签行，也未重新计算类别数或判定具体行的批准状态。
-- **事件与评测边界：** 一条标题的多实体、精确重复、词法近重复和同一事件须在切分前联合分组。已有词法分组不是完整事件金标；缺可靠逐条日期时不能叫时间外推。新基线要新建版本化划分，明确旧开发数据已经使用；旧成绩不可直接成为新的独立效果证据。
-- **从零起步边界：** 可以新建本地文本/线性基线，不需要旧 checkpoint；模型从头训练也不自动消除事件重复、预处理选择或来源时间风险。用户已要求从头构建；本轮任务范围为来源审计，尚未执行新的基线训练，只交付来源判断和下一步所需契约。
+- **Rights boundary:** use the existing raw materials, keep the LICENSE/attribution, and keep the data and per-row outputs private; do not publicly copy news text or label packages. The local evidence of the authors' licence is enough to avoid saying "no source at all", but it does not close the gap in publisher rights, and it makes no commitment about future public / commercial use.
+- **Semantic boundary:** the first-version target must be called source-native entity sentiment. A regulator's neutral, past price moves, the author's attitude and investment direction may differ, and cannot be hidden by renaming. Security identity can be a separate missing field; the literal-entity baseline does not claim that tradable securities have been verified.
+- **Label-handling boundary:** anomalous literals in the source file cannot be fixed by opaque guessing; we recommend freezing the parsing rules, isolating failed rows and reporting their number. The source label rows were not reread here, and neither the number of classes was recomputed nor the approval status of specific rows decided.
+- **Event and evaluation boundary:** multiple entities in one headline, exact duplicates, lexical near-duplicates and the same event must be grouped jointly before splitting. The existing lexical grouping is not a complete event gold standard; without reliable per-item dates, it cannot be called temporal extrapolation. The new baseline needs a new versioned split that states explicitly that the old development data have already been used; old scores cannot directly become new independent evidence of effectiveness.
+- **Start-from-scratch boundary:** a new local text/linear baseline can be built without old checkpoints; training a model from scratch also does not automatically remove event duplication, preprocessing choices or source-time risk. The user has asked to build from scratch; this round's task scope is the source audit, no new baseline training has been run, and only the source judgment and the contracts needed for the next step are delivered.
 
-## 实际接触范围与未做事项
+## Actual scope of contact and things not done
 
-没有读取原始 `SEntFiN.csv`、私有训练／评测 JSONL 或逐条人工审核表，也未输出整段新闻或 FOMC 正文。**一次初始 manifest 阅读发生范围例外：`candidate_manifest.json` 内嵌了局部解析失败的实体标签样例，工具结果显示了这些内容；没有把它们复制到交付文件。** 随后只读白名单汇总和范围文件，本报告不复述那些样例，也不声称完全没有接触任何逐条标签信息。检查器本身没有 SEntFiN 行读取接口。
+The raw `SEntFiN.csv`, the private training / evaluation JSONL and the per-item human review tables were not read, and no full news passages or FOMC full text were output. **One exception to the scope occurred during the initial reading of a manifest: `candidate_manifest.json` embeds examples of entity labels whose parsing partly failed, and the tool output displayed this content; it was not copied into any deliverable file.** After that only whitelisted summaries and scope files were read; this report does not repeat those examples, and does not claim that no per-item label information was ever seen. The checker itself has no interface for reading SEntFiN rows.
 
-未核验外部许可当前状态，未逐条裁定原始标签，未完成来源原任务的新基线，未证明自然文档／事件独立，未获取真实 XBRL 金标。已有公开来源记录与本轮数据检查足以让后续工作具体化，同时保留这些最弱环节，不把缺证自动写成已失败或已通过。
+The current status of the external licence was not verified, the raw labels were not adjudicated item by item, the new baseline for the source-native task was not completed, natural document / event independence was not proven, and no real XBRL gold standard was obtained. The existing public source records and this round's data checks are enough to make the follow-up work concrete, while keeping these weakest links visible and not automatically recording missing evidence as either failed or passed.

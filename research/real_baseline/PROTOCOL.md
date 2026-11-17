@@ -1,52 +1,52 @@
-# 新Phase 0真实基线：执行前协议与预算
+# New Phase 0 real baseline: pre-execution protocol and budget
 
-2026-11-16。状态：在本轮真实准备、训练及测试预测之前写定。用户要求从头构建并限制本地研究；本实验只使用已有文件与本地库，不下载权重，不联系外部。旧24M预测不能恢复，本实验形成**新的来源原任务证据**，不回填旧分数、不冒称原G0全部通过。
+2026-11-16. Status: written before this round's real preparation, training and test prediction. The user asked to build from scratch and to keep the research local; this experiment uses only existing files and local libraries, downloads no weights and contacts no one outside. The old 24M predictions cannot be recovered; this experiment forms **new evidence on the original source task**; it does not back-fill old scores and does not claim that the original G0 is fully passed.
 
-## 目标与身份
+## Goal and identity
 
-任务为SEntFiN原作者定义的**标题中指定实体相关情绪**。标签固定为negative、neutral、positive，索引依次0、1、2；它们不被重命名为证券投资立场。模型输入为标题与指定实体；同一标题多个实体可以有不同标签。主要问题是：在固定词法簇划分下，强字符与词语线性基线的差异有多大，实体身份本身解释了多少表观性能？这不是论文创新贡献，而是后续模型必要性判断的真实地基。
+The task is the **sentiment toward a specified entity in a headline**, as defined by the original SEntFiN authors. The labels are fixed as negative, neutral, positive, with indices 0, 1, 2 in that order; they are not renamed as investment stances on securities. The model input is the headline and the specified entity; several entities in the same headline can have different labels. The main question is: under a fixed lexical-cluster split, how large is the difference between strong character and word linear baselines, and how much of the apparent performance does entity identity by itself explain? This is not an innovative contribution for a paper; it is the real foundation for later judgments on whether a model is necessary.
 
-原始文件：旧仓库 `data/raw/candidates/sentfin/SEntFiN.csv`，已有盘点SHA256为 `570af7ba58f724f3fcc414dd5ba80da5b1a3b342134d76c6ebdf53a32c54a92f`，10753行；本轮准备时重新核验。源码、配置、数据与划分文件哈希分别保存。许可与任务范围见 [来源判断](../data/source_audit.md)，保持私有研究用途。
+Original file: `data/raw/candidates/sentfin/SEntFiN.csv` in the old repository; the existing inventory SHA256 is `570af7ba58f724f3fcc414dd5ba80da5b1a3b342134d76c6ebdf53a32c54a92f`, 10753 rows; re-verified during this round's preparation. Hashes of the source code, configuration, data and split files are saved separately. Licence and task scope are in the [source judgment](../data/source_audit.md); the use stays private research.
 
-## 数据规则
+## Data rules
 
-1. 只接受冻结列结构及可用Title/Decisions。先解析AST并拒绝重复字典键，再用literal_eval读取受限实体→标签字典；不使用eval，不猜测修复异常标签。空/非字符串实体、规范化实体碰撞或非法标签使该行隔离。异常原因和原始行仅留私有隔离文件，报告只给计数。
-2. 标题Unicode规范化、casefold与空白归一用于重复判断；同规范标题同规范实体的相同标签合并，同键冲突隔离。不同实体异标签保留。具体规范由prepare.py和哈希固定，不在看到模型分数后调整。
-3. 同标题各实体先绑定到同组；再把标题token集合Jaccard≥.8的所有对传递连接。相似度用整数比较，候选过滤必须等价于全对搜索，不能用未核验近似MinHash。空token集合不以0/0当相似，只有规范化完全相同才合并。
-4. 按稳定组身份和seed=130计算hash，70%/15%/15%划为train/development/test；无分数或标签驱动的重划分。记录样本/标题/组数、最大组与分布、重复/近重复跨边为0。此分组是词法簇，**不是已审语义事件，也不是时间划分**。
-5. 所有文本和逐行标签/划分/预测/训练权重只在 `research/private/real_baseline/`。该目录被gitignore和归档代码同时排除；公开交接仅代码、匿名汇总和哈希。根包重建时验收归档无private成员。
+1. Accept only the frozen column structure and usable Title/Decisions. First parse the AST and reject duplicate dictionary keys, then read the restricted entity→label dictionary with literal_eval; do not use eval, and do not guess repairs for anomalous labels. Empty/non-string entities, normalized entity collisions or illegal labels quarantine the row. Anomaly reasons and raw rows stay only in the private quarantine file; the report gives only counts.
+2. Unicode normalization, casefold and whitespace normalization of headlines are used for duplicate detection; identical labels for the same normalized headline and the same normalized entity are merged, and conflicts within the same key are quarantined. Different labels for different entities are kept. The exact normalization is fixed by prepare.py and its hash, and is not adjusted after seeing model scores.
+3. All entities of the same headline are first bound into the same group; then all pairs of headlines with token-set Jaccard≥.8 are connected transitively. Similarity uses integer comparison, and candidate filtering must be equivalent to all-pairs search; unverified approximate MinHash must not be used. Empty token sets are not treated as similar via 0/0; they are merged only if their normalized forms are identical.
+4. Compute a hash from the stable group identity and seed=130, and assign 70%/15%/15% to train/development/test; no re-splitting driven by scores or labels. Record sample/headline/group counts, the largest group and the distribution, and that duplicate/near-duplicate cross edges are 0. This grouping is lexical clusters, **not reviewed semantic events, and not a time split**.
+5. All text and per-row labels/splits/predictions/training weights live only in `research/private/real_baseline/`. This directory is excluded by both gitignore and the archiving code; the public handoff contains only code, anonymous summaries and hashes. When the root package is rebuilt, acceptance checks that the archive has no private members.
 
-全语料文本用于划分前去重，冲突标签用于数据清理；这些是明确的数据集构造操作，不声称完全未见测试资料或历史信息集可测。测试分数和逐条误差在模型/超参选择冻结前不使用；不把词法查重当消除全部事件泄漏。
+The text of the whole corpus is used for pre-split deduplication, and conflicting labels are used for data cleaning; these are explicit dataset-construction operations, and we do not claim that the test material is completely unseen or that the historical information set is measurable. Test scores and per-row errors are not used before model/hyperparameter selection is frozen; lexical duplicate detection is not treated as removing all event leakage.
 
-## 固定基线与选择
+## Fixed baselines and selection
 
-| 系统 | 特征/训练 | 用途 |
+| System | Features/training | Purpose |
 |---|---|---|
-| 多数类 | 仅train标签频数；平局按固定标签次序 | sanity基线 |
-| word LR | train-only TF-IDF，word(1,2)，最多50000特征；多类LR | 主比较基线 |
-| char LR | train-only TF-IDF，char_wb(3,5)，最多50000特征；多类LR | 主比较对象 |
-| entity-only LR | 只读目标实体，word(1,2)，最多50000特征；同LR选择 | 预先指定的身份捷径诊断，不充作语言理解成果 |
+| Majority class | Train label frequencies only; ties by the fixed label order | sanity baseline |
+| word LR | train-only TF-IDF, word(1,2), at most 50000 features; multiclass LR | Primary comparison baseline |
+| char LR | train-only TF-IDF, char_wb(3,5), at most 50000 features; multiclass LR | Primary comparison target |
+| entity-only LR | Reads only the target entity, word(1,2), at most 50000 features; same LR selection | Pre-specified identity-shortcut diagnostic, not presented as a language-understanding result |
 
-两主系统共用固定文本转换：保留原目标实体前缀；把标题中目标实体的大小写不敏感、整词边界字面匹配替换为 `TARGET_ENTITY`。无法字面匹配时保留标题并统计覆盖，不调用NER或模型补充别名。实体词法标记只是帮助同一规则基线绑定目标，不证明全部语义绑定正确。数据文件的原始input_text与实际特征转换分别记录，不能悄悄混用。
+The two primary systems share a fixed text transformation: keep the original target-entity prefix; replace case-insensitive, whole-word-boundary literal matches of the target entity in the headline with `TARGET_ENTITY`. When there is no literal match, keep the headline and count coverage, without calling NER or a model to add aliases. The entity lexical marker only helps the same rule-based baseline bind the target; it does not prove that all semantic binding is correct. The raw input_text in the data file and the actual feature transformation are recorded separately and must not be quietly mixed.
 
-LR的C候选固定{.1,1,10}，class_weight=balanced、max_iter=1000、tol=1e-4、random_state=130、CPU线程上限2。每系统只按development固定三类macro-F1选C，精确平局选择小C。TF-IDF词表、IDF仅train拟合；不在train+development重新拟合已选择系统。收敛警告与实际迭代数必须记录，不能静默忽略或看test后改求解器。
+The C candidates for LR are fixed at {.1,1,10}, with class_weight=balanced, max_iter=1000, tol=1e-4, random_state=130 and a CPU thread limit of 2. Each system selects C only by the fixed three-class macro-F1 on development, with exact ties going to the smaller C. The TF-IDF vocabulary and IDF are fitted on train only; the selected system is not refitted on train+development. Convergence warnings and actual iteration counts must be recorded; they must not be silently ignored, and the solver must not be changed after looking at test.
 
-词级分词固定为 `(?u)\b\w+\b`，保留单字符实体/数字；TF-IDF显式采用lowercase=True、norm=l2、use_idf=True、smooth_idf=True、sublinear_tf=False、min_df=1、max_df=1.0。此补充在真实准备/训练执行前确定。实体标记与源input_text的区别须在模型配置中记录。
+Word-level tokenization is fixed as `(?u)\b\w+\b`, keeping single-character entities/digits; TF-IDF explicitly uses lowercase=True, norm=l2, use_idf=True, smooth_idf=True, sublinear_tf=False, min_df=1, max_df=1.0. This addition was fixed before the real preparation/training was executed. The difference between the entity marking and the source input_text must be recorded in the model configuration.
 
-主比较事先指定为 **char−word 的test macro-F1配对差**，不是看test挑最好的系统再声称其CI有效。其他准确率、各类P/R/F1和entity-only比较为描述/诊断，明确未作多重比较修正。FinBERT/小LLM本地运行条件未具备，没有运行就不填表，也不能称三条本地简单基线替代了原导师三基线要求。
+The primary comparison is pre-specified as **the paired char−word difference in test macro-F1**; it is not picking the best system after looking at test and then claiming its CI is valid. Other accuracies, per-class P/R/F1 and the entity-only comparison are descriptive/diagnostic, explicitly without multiple-comparison correction. The conditions for running FinBERT/a small LLM locally are not in place; without running them the table is not filled in, and the three local simple baselines cannot be said to replace the advisor's original three-baseline requirement.
 
-## 评测与统计范围
+## Evaluation and statistical scope
 
-固定三类macro-F1（零分母贡献0）及accuracy，按同一词法组抽样的配对百分位bootstrap，10000次、seed130、名义95%。主estimand为实体样本行加权；多实体标题对其影响大于单实体标题，报告该选择，不误称组等权。使用同一抽样组索引计算两个固定预测器差值。
+Fixed three-class macro-F1 (zero denominators contribute 0) and accuracy, with a paired percentile bootstrap sampling the same lexical groups, 10000 replicates, seed 130, nominal 95%. The main estimand is weighted by entity-sample row; multi-entity headlines therefore have more influence than single-entity headlines; this choice is reported and not mislabelled as equal weight per group. The difference between the two fixed predictors is computed using the same sampled group indices.
 
-区间只描述固定训练/选择结果下的近似抽样不确定性；不是精确证书，不包含训练随机性、模型选择、未知事件依赖或时间漂移。词法组并不保证独立/代表性。CI包含0只能说此设计下未分辨差异，不能证明方法等效；不包含0也不能证明新架构必要或因果增益。
+The interval only describes the approximate sampling uncertainty given the fixed training/selection results; it is not an exact certificate and does not include training randomness, model selection, unknown event dependence or temporal drift. Lexical groups do not guarantee independence/representativeness. A CI that contains 0 only says that no difference was resolved under this design and cannot prove the methods equivalent; one that excludes 0 cannot prove that a new architecture is necessary or a causal gain.
 
-冻结test只执行最终所选系统；不根据test调C、改分组、重选seed、换特征或回填异常。若发现实现错误，记录失效结果和修复，不把重跑装作首次确认。
+The frozen test is run only for the finally selected systems; C is not tuned, groups are not changed, the seed is not re-chosen, features are not swapped and anomalies are not back-filled based on test. If an implementation error is found, record the invalid result and the fix, and do not present the rerun as the first confirmation.
 
-## 算力预算与执行顺序
+## Compute budget and execution order
 
-本地Python3.12.14、NumPy2.5.3、SciPy1.18.1、scikit-learn1.9.1；不使用GPU/API/外部模型。准备和查重预计≤2分钟，基线9次稀疏LR拟合与预测预计≤5分钟，bootstrap预计≤2分钟；总运行建议≤10分钟，RAM目标≤2GB。它们是执行前估计，实际用时/可用内存证据另存；超预算先记录哪一步，不通过挑子集改变冻结目标。
+Local Python 3.12.14, NumPy 2.5.3, SciPy 1.18.1, scikit-learn 1.9.1; no GPU/API/external models. Preparation and deduplication expected ≤2 minutes, the 9 sparse LR fits and predictions of the baselines expected ≤5 minutes, the bootstrap expected ≤2 minutes; total run suggested ≤10 minutes, RAM target ≤2GB. These are pre-execution estimates; evidence of actual time/available memory is saved separately; if the budget is exceeded, first record which step, and do not change the frozen target by picking a subset.
 
-顺序：包私有边界检查 → prepare与独立小域查重oracle → 检查汇总/划分身份 → train/dev选择冻结 → 一次test预测 → 配对bootstrap → 独立代码与证据审查 → 汇总报告。可以先跑纯构造单元测试；任何真实参数试跑都登记，不在test上试跑。
+Order: package private-boundary check → prepare and an independent small-domain deduplication oracle → check summaries/split identity → freeze the train/dev selection → one test prediction → paired bootstrap → independent code and evidence review → summary report. Pure construction unit tests can be run first; any trial run with real parameters is logged, and no trial run is done on test.
 
-停止/纠错条件：源hash不符；解析/冲突规则不确定；任何跨split同组；词表接触dev/test；私有产物进入归档；无训练类支持；不收敛且超预算；输出标签语义改变。遇此类问题先修相应环节，保留错误记录。不因准确率不够好停止报告；强简单基线胜出本身会影响后续模型必要性。
+Stop/fix conditions: source hash mismatch; uncertain parsing/conflict rules; any group crossing splits; the vocabulary touching dev/test; private products entering the archive; a class without training support; non-convergence beyond budget; a change in output label semantics. When such a problem occurs, fix the corresponding step first and keep the error record. Reporting is not stopped because accuracy is not good enough; a strong simple baseline winning would itself affect the later judgment on whether a model is necessary.

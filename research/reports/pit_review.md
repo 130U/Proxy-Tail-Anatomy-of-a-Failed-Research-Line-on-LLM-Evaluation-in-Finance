@@ -10,145 +10,145 @@ generator: internal independent reviewer; mathematical proof review quick-start 
 status: completed_with_external_scientific_gates_open
 ---
 
-# T1.1 / PIT 独立反方审查
+# T1.1 / PIT independent adversarial review
 
-日期：2026-11-16。是否联网：否。身份：内部独立审查代理，不是 Fable；没有收到或虚构 Fable 反馈。未读私有文本、标签或权重，未运行主线训练。G0 未通过。本报告只审查数学命题、有限原语实现与构造检查，不能作为金融实证证据。
+Date: 2026-11-16. Network access: no. Identity: internal independent review agent, not Fable; no Fable feedback was received or invented. No private text, labels or weights were read, and no main-line training was run. G0 has not passed. This report reviews only the mathematical propositions, the implementation of finite primitives and the constructive checks. It cannot serve as empirical financial evidence.
 
-## 1. 结论与审查范围
+## 1. Conclusion and review scope
 
-修复后 PNI1–PNI6 的条件数学命题通过本次独立纸笔核读；参考实现中本次发现的类型等值入口旁路已经复现、修复并复核。没有在所审范围内留下阻断该**有限构造原型**的未修实现问题。这不等于全程序无缺陷或全部输入已机器认证。
+After the fixes, the conditional mathematical propositions PNI1–PNI6 pass this independent pen-and-paper reading. The type-equality bypass at the entry point of the reference implementation, found during this review, has been reproduced, fixed and re-checked. Within the reviewed scope, no unfixed implementation issue remains that blocks this **finite constructive prototype**. This does not mean that the whole program is free of defects or that all inputs are machine-certified.
 
-本轮更重要的修正是区分四项义务：记录相对非干扰、给定信息模型中的可测性、真实版本的历史来源准入、清洁比较器统计量的可识别性。前两项不能自行证明后两项；事后固定的 checkpoint 可以被数学上当作常量，却不因此具有历史来源证书。原 WP1.2 的有限未来追加测试不能推出全部允许输入上的非干扰，时间戳筛选也不能证明时间戳真实。
+The more important correction in this round is to separate four obligations: non-interference relative to the records, measurability in a given information model, historical source admission of the real versions, and identifiability of the clean comparator statistic. The first two cannot by themselves prove the last two. A checkpoint fixed after the fact can be treated mathematically as a constant, but that does not give it a historical source certificate. The finite future-append tests of the original WP1.2 cannot imply non-interference over all permitted inputs, and timestamp filtering cannot prove that the timestamps are true.
 
-已独立阅读导师包 AGENTS、00、01、02、06 的 WP1.2、07，以及原 T1.1 与本轮 PROTOCOL。使用“学术研究-数学证明审查”的 quick-start 方法：规范化量词与输入域、检查因子化依赖、构造反例、记录修复与科学开放门；本单命题审查的台账集中在本文件。所有构造性数字均属数学见证或明确标注的有限程序检查，不借用文献权威。
+The advisor package files AGENTS, 00, 01, 02, WP1.2 of 06, and 07 were read independently, together with the original T1.1 and this round's PROTOCOL. The quick-start method of "academic research - mathematical proof review" was used: normalize the quantifiers and input domains, check the factorization dependencies, construct counterexamples, and record the fixes and the open scientific gates. The ledger for this single-proposition review is kept in this file. All constructive numbers are mathematical witnesses or explicitly labeled finite program checks; no authority is borrowed from the literature.
 
-## 2. 先于实现提出的攻击清单
+## 2. Attack list drawn up before implementation
 
-| 编号 | 最小攻击 | 必须成立的边界 |
+| ID | Minimal attack | Boundary that must hold |
 |---|---|---|
-| C1 | 旧文档在截止日后被同 ID 新版本覆盖 | 先按知识时间投影，再在可见版本中选版本；不能先取最新版本再过滤 |
-| C2 | 截止日后的 tombstone 删除旧文档 | 未来删除不得回溯改变旧快照；过去删除与未来重建另作版本事件 |
-| C3 | 正文不变，未来才修改 source、core、label、family、权重 | 每个会影响训练的字段共享完整版本的知识时间，或单独版本化 |
-| C4 | 两个旧重复簇被一条未来文档桥接 | 先投影再建立重复图；不能从全库簇删除未来节点后保留未来连通性 |
-| C5 | 当前 candidate grid、正则代价或验证集规则是未来选出的 | 配置、源码与选择规则本身须历史可测或外生；固定参数比较不能认证其来源 |
-| C6 | 使用全日志 hash、长度、future count、迭代顺序决定 seed/采样 | stable result 只依赖历史投影及冻结外生输入；操作性 envelope 不得回流 |
-| C7 | 未来 payload 非法，或未来 event ID 与历史重号 | 未来 payload 不应进入旧快照校验；头部合法输入域与可见冲突规则需明示 |
-| C8 | 手工构造或 dataclass.replace 伪造 Snapshot，或给它另一 cutoff | 核对构造入口与时间绑定；不能由类名推断已是合法历史快照 |
-| C9 | 空历史、空 train/dev、cutoff 相等、反序、并列版本、布尔时间 | 预先确定所有边界行为、规范排序与类型域 |
-| C10 | 删除污染用到未来真值，或记录时间被回填 | 删除选择的历史可测性与知识时钟可信性是额外前提；不得由正文旧推出 |
-| C11 | 同 seed / 同输出 hash 被当成全程序确定性或同输入证明 | 仅对明确稳定字节作保证；hash 的反向绑定不是无条件数学等价 |
+| C1 | An old document is overwritten after the cutoff by a new version with the same ID | Project by knowledge time first, then choose a version among the visible versions; do not take the latest version first and filter afterwards |
+| C2 | A tombstone after the cutoff deletes an old document | A future deletion must not retroactively change the old snapshot; a past deletion and a future re-creation are separate version events |
+| C3 | The full text is unchanged, but source, core, label, family or weight is modified only in the future | Every field that can affect training shares the knowledge time of the complete version, or is versioned separately |
+| C4 | Two old duplicate clusters are bridged by a future document | Project first, then build the duplicate graph; do not delete future nodes from whole-corpus clusters while keeping the connectivity the future created |
+| C5 | The current candidate grid, regularization cost or validation-set rule was chosen in the future | The configuration, source code and selection rules must themselves be historically measurable or exogenous; a comparison with fixed parameters cannot certify where they came from |
+| C6 | The full-log hash, length, future count or iteration order is used to determine the seed/sampling | The stable result depends only on the history projection and frozen exogenous inputs; the operational envelope must not flow back into it |
+| C7 | A future payload is invalid, or a future event ID duplicates a historical one | Future payloads should not enter the validation of the old snapshot; the valid input domain for headers and the rules for visible conflicts must be stated explicitly |
+| C8 | A Snapshot is forged by hand construction or dataclass.replace, or given a different cutoff | Check the construction entry point and the time binding; do not infer from the class name that it is already a valid historical snapshot |
+| C9 | Empty history, empty train/dev, equal cutoffs, reversed order, tied versions, boolean times | Fix all boundary behavior, the canonical ordering and the type domains in advance |
+| C10 | Contamination removal uses future ground truth, or the record time is backfilled | Historical measurability of the deletion choice and trustworthiness of the knowledge clock are additional premises; they cannot be inferred from the full text being old |
+| C11 | The same seed / same output hash is taken as proof of whole-program determinism or of identical inputs | Guarantees apply only to explicitly stable bytes; reverse binding through a hash is not an unconditional mathematical equivalence |
 
-## 3. 已发现的重要理论问题与修复要求
+## 3. Important theoretical issues found and required fixes
 
-### PIT-R1（S1）：随机性只与未来边际独立仍会泄漏
+### PIT-R1 (S1): randomness that is only marginally independent of the future can still leak
 
-原 T1.1 对随机性的概述为“Ω 独立于未来数据”。若用它进一步宣称随机性没有引入未来信息，这个条件不够。取历史比特 H 和未来比特 B 相互独立且均匀，令 Ω = H xor B。Ω 与 B 边际独立，但训练输出 θ = H xor Ω 恰为 B。该反例是精确数学见证，不是拟合实验。
+The original T1.1 summarized the randomness as "Ω is independent of future data". If this is used to claim further that the randomness introduces no future information, the condition is not enough. Take a historical bit H and a future bit B that are independent and uniform, and let Ω = H xor B. Ω is marginally independent of B, but the training output θ = H xor Ω is exactly B. This counterexample is an exact mathematical witness, not a fitting experiment.
 
-修复：把三个命题分开。可测复合给出 θ ∈ F_t ∨ σ(Ω)，不需要独立；同一固定 seed 下的路径非干扰也不需要独立；“随机性不额外提供未来信息”需给定历史的条件独立，独立于整个数据世界是更强且充分的条件。历史本来可以预测未来，所以不能声称 θ 与未来边际独立或不能正确预测未来。
+Fix: separate three propositions. Measurable composition gives θ ∈ F_t ∨ σ(Ω), which needs no independence. Path non-interference under one fixed seed needs no independence either. "The randomness provides no additional future information" needs conditional independence given the history; independence from the whole data world is a stronger, sufficient condition. The history can itself predict the future, so one cannot claim that θ is marginally independent of the future or that it cannot predict the future correctly.
 
-沟通与状态：已发给根代理与理论代理；已核读 notes.md 的第 39–43 行和 notes.tex 的相应段落，修复已传播。根代理增加 seed_checks.py，用 Fraction 对均匀独立历史/未来比特上的全部 16 个确定性布尔 seed 映射枚举：6 个通过边际独立，4 个通过给定历史的条件独立，差集恰为 XOR 与 XNOR。审查者独立运行得到同一结果。这是指定有限域的精确枚举，不推广为所有概率空间的计算证明。
+Communication and status: sent to the root agent and the theory agent. Lines 39–43 of notes.md and the corresponding paragraph of notes.tex were read and checked, and the fix has propagated. The root agent added seed_checks.py, which uses Fraction to enumerate all 16 deterministic boolean seed maps on uniform, independent historical/future bits: 6 pass marginal independence, 4 pass conditional independence given the history, and the difference is exactly XOR and XNOR. The reviewer ran it independently and got the same result. This is an exact enumeration on a specified finite domain and is not generalized into a computational proof for all probability spaces.
 
-### PIT-R2（S2）：集合论因子化不自动等于可测因子化
+### PIT-R2 (S2): set-theoretic factorization is not automatically measurable factorization
 
-“同一历史投影的 fiber 上输出相等”保证集合意义上存在 F = G ◦ H；在任意可测空间与任意预定快照 σ-代数上，它不自动保证 G 可测。修复可以采用有限/可数的规范字节域与离散 σ-代数、适当的商 σ-代数，或另外证明可测 section / 可测因子化条件。也可以把代数命题与随机可测命题严格分开。
+"The output is equal on each fiber of the same history projection" guarantees that F = G ◦ H exists in the set-theoretic sense. On an arbitrary measurable space with an arbitrary prescribed snapshot σ-algebra, it does not automatically guarantee that G is measurable. The fix can use a finite/countable canonical byte domain with the discrete σ-algebra, a suitable quotient σ-algebra, or a separate proof of a measurable-section / measurable-factorization condition. Alternatively, the algebraic proposition can be kept strictly separate from the stochastic measurability proposition.
 
-沟通与状态：已通知理论代理并核读新稿第 1、2 节。新稿采用可数规范字节/JSON 域与离散 σ-代数，并单独陈述一般空间需要的条件；CLOSED-VERIFIED。没有把限制悄悄传播为任意实数/任意可测空间上的结论。
+Communication and status: the theory agent was notified, and Sections 1 and 2 of the new draft were read and checked. The new draft uses a countable canonical byte/JSON domain with the discrete σ-algebra and states separately the conditions needed for general spaces; CLOSED-VERIFIED. The restricted result was not quietly passed on as a conclusion about arbitrary reals or arbitrary measurable spaces.
 
-### PIT-R3（S1，原 WP1.2 陈述）：有限未来追加测试不是全域证明
+### PIT-R3 (S1, statement in the original WP1.2): finite future-append tests are not a proof over the full domain
 
-有限测试集合总可以被一个仅在未测试输入上读取未来的程序通过。即便抽象地对所有合法单条未来追加都成立，要推到任意历史等价世界，还需合法历史投影可作为输入、有限扩展的逐步闭包或同 fiber 的扩展连通性。一般输入域中不能省略这些前提。
+Any finite test set can always be passed by a program that reads the future only on untested inputs. Even if the property held abstractly for every valid single future append, extending it to every history-equivalent world would also require that the valid history projection can itself be an input, step-by-step closure under finite extensions, or connectivity of extensions within the same fiber. These premises cannot be omitted on a general input domain.
 
-修复：纸笔证明明确全域条件；源码审查说明实现如何受这些条件约束；有限测试仅报告实际覆盖的输入和组件。PNI2 明确基日志与有限扩展可达条件，并给出物理末尾 append 反例；PNI3 以封闭输入的确定性组件归纳。PROTOCOL、README、runner 的 scope/limitations 均明确有限检查，CLOSED-WEAKENED。没有改写导师原文件使其看似一开始就有该限制。
+Fix: the pen-and-paper proof states the full-domain conditions explicitly; the source review explains how the implementation is constrained by these conditions; the finite tests report only the inputs and components actually covered. PNI2 states the base-log and finite-extension reachability conditions explicitly and gives a counterexample with a physical end-of-file append. PNI3 proceeds by induction over deterministic components with closed inputs. The scope/limitations sections of PROTOCOL, README and the runner all state that the checks are finite; CLOSED-WEAKENED. The advisor's original files were not rewritten to make it look as if they had this restriction from the start.
 
-### PIT-R4（科学开放门）：按记录非干扰不能认证真实历史
+### PIT-R4 (open scientific gate): non-interference with respect to records cannot certify real history
 
-若把未来文档写成 knowledge_time ≤ cutoff，正确的投影也会保留它。若可信核心、标签或配置的知识时间不真实，同样会泄漏。event time、会计期间、数据库 record time、公开 availability 与系统 knowledge time 是不同概念。
+If a future document is written with knowledge_time ≤ cutoff, a correct projection will keep it too. If the knowledge times of the trusted core, the labels or the configuration are not true, there is leakage as well. Event time, accounting period, database record time, public availability and system knowledge time are different concepts.
 
-修复：本轮结论限定为给定事件头与完整版本有效的记录非干扰；真实历史需独立的来源证据、版本完整性、时区与时钟约定、标签可得性、核心资格、配置制定时间以及必要的抽样审计。此项没有被构造测试消除，保持开放。
+Fix: this round's conclusion is restricted to record non-interference, valid for the given event headers and complete versions. Real history needs independent source evidence, version integrity, time-zone and clock conventions, label availability, core eligibility, the time at which the configuration was set, and any necessary sampling audit. This item was not eliminated by the constructive tests and remains open.
 
-### PIT-R5（S1，实现入口）：dataclass 等值校验允许类型伪造
+### PIT-R5 (S1, implementation entry point): dataclass equality validation allows type forgery
 
-首版 `_validate_snapshot` 重建合法快照后只比较 `rebuilt != snapshot`。Python 的 dataclass 比较使用普通字段等值；`False == 0`、`True == 1`。因此合法文档的 `label=0` 可以通过 `replace(doc, label=False)` 改成被原事件校验明确拒绝的布尔标签，`core=True` 可以改成整数 `1`；保持 `visible_history_bytes` 不变，`run_pipeline` 仍接受且 `snapshot.json` 的字节发生变化。`replace(snapshot, cutoff=True)` 对调用参数 `cutoff=1` 也通过了入口。
+The first version of `_validate_snapshot` rebuilt the valid snapshot and then only compared `rebuilt != snapshot`. Python dataclass comparison uses ordinary field equality, and `False == 0`, `True == 1`. So `label=0` in a valid document could be changed by `replace(doc, label=False)` into a boolean label that the original event validation explicitly rejects, and `core=True` could be changed to the integer `1`. With `visible_history_bytes` unchanged, `run_pipeline` still accepted the input, and the bytes of `snapshot.json` changed. `replace(snapshot, cutoff=True)` also passed the entry point for the call argument `cutoff=1`.
 
-修前复现：在一个 `knowledge_time=1`、`core=True`、`label=0` 的人工记录上构造以上三个输入，审查者运行三个输入均被接受。该记录为人工公开夹具，不含私有数据。它表明由同一规范历史字节输入的防伪校验并不严格，而非反驳可信构造入口的因子化数学命题。
+Reproduction before the fix: the three inputs above were constructed on a hand-made record with `knowledge_time=1`, `core=True`, `label=0`. When the reviewer ran them, all three were accepted. The record is a hand-made public fixture and contains no private data. This shows that the anti-forgery validation for inputs with the same canonical history bytes was not strict. It does not refute the mathematical factorization proposition for the trusted construction entry point.
 
-修复与复核：`pipeline.py:175` 的入口现在逐字段严格核对类型，核对不可变存储形式，并比较历史字节及文档规范序列化字节；`pipeline.py:207` 的 State 检查也补充类型核对。`test_pipeline.py:111` 新增布尔/整数旁路回归。审查者重跑最初三个攻击，分别得到 `snapshot cutoff must be an integer, not bool` 与两次 `Invalid document core/label type`；均被拒绝。CLOSED-VERIFIED。README 也记录了首轮缺口，未掩盖首次测试覆盖不足。
+Fix and re-check: the entry point at `pipeline.py:175` now checks types strictly field by field, checks the immutable storage form, and compares the history bytes and the canonical serialized bytes of the documents. The State check at `pipeline.py:207` also adds type checks. `test_pipeline.py:111` adds a regression test for the bool/int bypass. The reviewer reran the original three attacks and got `snapshot cutoff must be an integer, not bool` and, twice, `Invalid document core/label type`; all were rejected. CLOSED-VERIFIED. The README also records the gap in the first round and does not hide the insufficient coverage of the first tests.
 
-### PIT-R6（S1，解释范围；端点为 S2）：可测性不能替代真实来源准入
+### PIT-R6 (S1, scope of interpretation; S2 for the endpoints): measurability cannot replace the admission of real sources
 
-新稿首版 PNI6 的同观察双世界例子把错误知识时间解释成“不满足 PNI4 可测性前提”。这一步不成立：在仅包含这两个同日志世界的概率空间里，历史投影是常量，因而对任意信息 σ-代数可测。类似地，把某次事后 checkpoint 固定为常数也不能证明它当时可以由合规材料构建。
+The first version of PNI6 in the new draft interpreted the wrong knowledge time in the two-world, same-observation example as "the PNI4 measurability premise is not satisfied". This step does not hold. In a probability space that contains only these two worlds with the same log, the history projection is constant, and hence measurable with respect to any information σ-algebra. Similarly, fixing some after-the-fact checkpoint as a constant does not prove that it could have been built from compliant material at the time.
 
-修复：新稿 `pit_noninterference.md:140` 增加可测性与历史构造性的专门区分；第 174 行将双世界例子改成违反逐版本来源准入真实性，而不声称数学上必然不可测。清洁统计量的识别必要条件仍然成立：同观察可兼容清洁值 0 与 1，可靠闭区间就须同时包含二者。第 162 行也补上非空相容世界集合、有界统计量与闭区间输出，明确下/上确界端点的适用域。已核读修后命题、证明与例子，CLOSED-VERIFIED。未来的主报告仍须把 provenance 当成单独科学门。
+Fix: the new draft adds, at `pit_noninterference.md:140`, a dedicated distinction between measurability and historical constructibility. Line 174 changes the two-world example into a violation of the authenticity of per-version source admission, without claiming that it is necessarily non-measurable. The necessary condition for identifying the clean statistic still holds: if the same observation is compatible with clean values 0 and 1, a reliable closed interval must contain both. Line 162 also adds a non-empty set of compatible worlds, a bounded statistic and closed-interval output, and makes explicit the domain of validity for the infimum/supremum endpoints. The corrected proposition, proof and example were read and checked; CLOSED-VERIFIED. Future main reports must still treat provenance as a separate scientific gate.
 
-## 4. 实现与理论稿核读
+## 4. Reading of the implementation and the theory draft
 
-### 数学依赖与逐项判断
+### Mathematical dependencies and item-by-item assessment
 
-| 单元 | 定位 | 核查结果与必要条件 |
+| Unit | Location | Result and necessary conditions |
 |---|---|---|
-| PNI1 | theory/pit_noninterference.md:49 | fiber 常值与像空间上的唯一因子等价；可测性另用可数离散空间条件 |
-| PNI2 | 同文件:64 | 正向直接成立；反向依赖合法同基日志有限扩展可达，归纳包含零长度情形 |
-| PNI3 | 同文件:78 | 同初态、全输入封闭、确定性、有限阶段与固定序列化给逐阶段相等；不由“有 cutoff 参数”直接推出 |
-| PNI4 | 同文件:130 | 可测随机向量与可测函数复合；本身无需随机独立，也不认证来源 |
-| PNI5 | 同文件:148 | 给定历史的条件独立经历史可测变换保持；有界函数/单调类论证适用 |
-| PNI6 | 同文件:164 | 非空、有界相容值集合被闭区间包含，必包含其上下确界；双世界见证及随机覆盖的并集界范围已明确 |
+| PNI1 | theory/pit_noninterference.md:49 | Being constant on fibers is equivalent to a unique factor on the image space; measurability additionally uses the countable discrete-space condition |
+| PNI2 | Same file:64 | The forward direction holds directly; the reverse direction relies on reachability through finite extensions of a valid common base log, and the induction includes the zero-length case |
+| PNI3 | Same file:78 | Same initial state, closed inputs, determinism, finitely many stages and fixed serialization give stage-by-stage equality; this does not follow directly from "there is a cutoff parameter" |
+| PNI4 | Same file:130 | Composition of a measurable random vector with a measurable function; by itself it needs no independence of the randomness, and it does not certify provenance |
+| PNI5 | Same file:148 | Conditional independence given the history is preserved under historically measurable transformations; a bounded-function/monotone-class argument applies |
+| PNI6 | Same file:164 | A closed interval that contains a non-empty, bounded set of compatible values must contain its infimum and supremum; the scope of the two-world witness and of the union bound for random coverage is now explicit |
 
-依赖链：PNI1 的因子化语义 → PNI3 的有限复合构造；PNI2 独立澄清追加量词；PNI4 额外要求真实信息模型中的适应性；PNI5 进一步要求条件外生随机性；PNI6 单独限制未认证来源下的可识别性。未发现循环依赖。六项均按完整条件命题审查，未发现需隐藏补全的非平凡证明草图；未闭合草图数为零。上述为人可读纸笔审查，不是证明助手认证。
+Dependency chain: the factorization semantics of PNI1 → the finite composition construction of PNI3. PNI2 independently clarifies the quantifier over appends. PNI4 additionally requires adaptedness in the real information model. PNI5 further requires conditionally exogenous randomness. PNI6 separately limits identifiability under uncertified sources. No circular dependency was found. All six were reviewed as complete conditional propositions. No non-trivial proof sketch that would need hidden completion was found; the number of unclosed sketches is zero. The above is a human-readable pen-and-paper review, not certification by a proof assistant.
 
-### 实现检查与攻击覆盖
+### Implementation checks and attack coverage
 
-`canonical_history`（pipeline.py:114）是唯一读取完整日志的主流程组件：读取合法头后先按 knowledge_time 投影，随后才检验可见 body、hash、唯一 event ID 和完整状态；从同一规范顺序重放版本与 tombstone。未来 payload 不被读取，即使重复旧 event ID 或携带非法对象也不影响旧结果。可见冲突会确定拒绝；损坏未来头明确在承诺域外。
+`canonical_history` (pipeline.py:114) is the only main-flow component that reads the complete log. After reading the valid headers it first projects by knowledge_time, and only then validates the visible bodies, hashes, unique event IDs and complete state. It replays versions and tombstones in the same canonical order. Future payloads are not read; even if they repeat an old event ID or carry invalid objects, the old result is not affected. Visible conflicts are rejected deterministically. Corrupted future headers are explicitly outside the committed domain.
 
-过滤、去重、采样、划分、词表拟合与超参选择分别在 pipeline.py:224、236、277、285、297、310。所有后续调用只收到历史 State 与外生参数。未来重复桥不会参加历史建图；词表只用 train，开发未知词率及容量惩罚用 Fraction；空开发 token 明确选冻结首候选。输出从 pipeline.py:336 统一序列化，稳定十个产物没有全日志长度、未来计数、系统时钟或全日志 hash。历史 hash 是全部可见事件的摘要，理论历史等价也使用全部可见事件，二者一致。
+Filtering, deduplication, sampling, splitting, vocabulary fitting and hyperparameter selection are at pipeline.py:224, 236, 277, 285, 297 and 310 respectively. All later calls receive only the historical State and exogenous parameters. Future duplicate bridges do not take part in building the historical graph. The vocabulary uses only train. The development unknown-word rate and the capacity penalty use Fraction. With empty development tokens, the frozen first candidate is chosen explicitly. Outputs are serialized uniformly from pipeline.py:336, and the ten stable outputs contain no full-log length, future count, system clock or full-log hash. The history hash is a digest of all visible events, and the theoretical history equivalence also uses all visible events, so the two agree.
 
-六个阶段的声明范围是经主入口产生的状态复合。任意手工 State 不是独立认证对象，README 已明示；不能由 `historical_hash` 相同反推任意手工 State 真来自同一历史。固定配置、源码、Python/Unicode 环境与外部依赖仍是确定性运行前提，当前检查不涵盖任意跨版本运行、并发修改输入或第三方模型训练。
+The declared scope of the six stages is the composition of states produced through the main entry point. An arbitrary hand-made State is not an independently certified object, as the README states explicitly. One cannot infer from an identical `historical_hash` that an arbitrary hand-made State really comes from the same history. The fixed configuration, source code, Python/Unicode environment and external dependencies are still preconditions for deterministic runs. The current checks do not cover arbitrary cross-version runs, concurrent modification of inputs or third-party model training.
 
-### 实际检查记录
+### Record of checks actually run
 
-预算：沿用 PROTOCOL 的 CPU、无 GPU/无训练、至多一分钟构造预算。审查者没有重复主 runner 的整套案例，只独立重跑入口攻击、相关单元测试和精确 seed 枚举；另对既有结果做只读算术与 hash 核查。
+Budget: the PROTOCOL's budget was kept: CPU only, no GPU and no training, at most one minute for constructive checks. The reviewer did not repeat the main runner's full set of cases. Only the entry-point attacks, the relevant unit tests and the exact seed enumeration were rerun independently. In addition, read-only arithmetic and hash checks were done on the existing results.
 
-| 检查 | 来源层级与实际结果 | 严格范围 |
+| Check | Evidence level and actual result | Strict scope |
 |---|---|---|
-| `python -X utf8 -m unittest research.pit.test_pipeline -v` | 我们的有限构造检查；审查者独立运行 18 项全部通过，unittest 报告 0.120 秒 | 包含 72 次指定 cutoff/未来扩展组合，不是任意未来全集 |
-| 首版快照类型旁路 | 我们的有限构造检查；三个修前输入均接受，修后三个均 ValueError | 同一人工记录上布尔 cutoff、整数 core、布尔 label |
-| `research.pit.seed_checks.run_checks()` | 我们的有限精确枚举；16 个布尔 seed 函数、6 个边际独立、4 个条件独立，差集 XOR/XNOR | 固定独立均匀 H/B 世界、Fraction 算术 |
-| 主 runner 保存结果 | 我们的有限构造检查；只读重算确认 30 = 2 × 3 × 5 个基例、210 对比较、2,100 次完整产物字节比较，29 个基例有开发文档 | 没有把 hash 对比冒充字节比较；有些 `existing_future` 在最大 cutoff 无新增记录，210 是比较对数，不是 210 个不同非空追加 |
-| 错误时间见证 | 主 runner 的合成真值检查；三条错误时间记录被接纳，同时未来追加不变仍通过 | 直接说明记录非干扰不足以认证真实可得性；没有运行金融模型 |
-| 已有公开来源元数据汇总 | 复算已有固定非随机 10 条保存来源记录；截至 2015/2020/2025 年的声称发布日期计数为 3/6/10，已证明历史字节版本均为 0，本地声称采集时间≤cutoff 均为 0 | 只是历史版本证据缺口；不能据此推断这些内容当时没有公开，不是总体抽样审计或真实文本流水线 |
+| `python -X utf8 -m unittest research.pit.test_pipeline -v` | Our finite constructive check; run independently by the reviewer, all 18 pass, unittest reports 0.120 seconds | Includes 72 specified cutoff/future-extension combinations; not the set of all possible futures |
+| Snapshot type bypass in the first version | Our finite constructive check; all three inputs accepted before the fix, all three raise ValueError after the fix | Boolean cutoff, integer core and boolean label on the same hand-made record |
+| `research.pit.seed_checks.run_checks()` | Our finite exact enumeration; 16 boolean seed functions, 6 marginally independent, 4 conditionally independent, difference XOR/XNOR | Fixed world with independent uniform H/B; Fraction arithmetic |
+| Saved results of the main runner | Our finite constructive check; read-only recomputation confirms 30 = 2 × 3 × 5 base cases, 210 pairwise comparisons, 2,100 full-output byte comparisons, and development documents in 29 base cases | Hash comparisons are not passed off as byte comparisons; some `existing_future` cases add no records at the largest cutoff, so 210 is the number of compared pairs, not 210 distinct non-empty appends |
+| Wrong-time witness | Synthetic ground-truth check of the main runner; three records with wrong times are admitted, and the future-append invariance still passes | Shows directly that record non-interference is not enough to certify real availability; no financial model was run |
+| Summary of existing public source metadata | Recomputed on the existing fixed, non-random set of 10 saved source records; counts of claimed release dates up to 2015/2020/2025 are 3/6/10, proven historical byte versions are 0 in each case, and local acquisition times claimed ≤ cutoff are 0 in each case | Only a gap in the historical version evidence; it cannot be used to infer that the content was not public at the time; it is not a population sampling audit or a real text pipeline |
 
-主 runner 的 5 项 source_hash 与当前文件一致；旧 source_audit 的摘要及上述选定元数据计数也经审查者核对。审查未读取任何私有 headline/标签；仅复算已有公开来源审计元数据。完整项目测试另按下述增量核验区分，未冒称独立复跑。
+The 5 source_hash values of the main runner match the current files. The summary of the old source_audit and the selected metadata counts above were also checked by the reviewer. The review read no private headlines or labels; it only recomputed the existing public source-audit metadata. The full project tests are treated separately in the incremental verification below and are not passed off as an independent rerun.
 
-### 审查快照摘要
+### Digests of the reviewed snapshot
 
-以下 SHA-256 绑定本次核读快照，用于发现后续变更，不承担无条件密码学输入等价证明：
+The SHA-256 values below bind the snapshot read in this review. They are meant for detecting later changes and do not serve as an unconditional cryptographic proof of input equivalence:
 
-| 文件 | SHA-256 |
+| File | SHA-256 |
 |---|---|
 | theory/pit_noninterference.md | `1dfbf8d487decac60f1230cec27c01cd0ee1041b743cbbcbd6b926a3653e11e8` |
 | pit/pipeline.py | `b6902b9e68a00bde1b32c39e4d7688e6f81ea6aab48b78e43fd9621f0aba1847` |
 | pit/test_pipeline.py | `144e57fe38dd66ceef0730ac8023837b7d51244cf64ea4e5ad33d295bf91fd41` |
 | pit/run_checks.py | `4d2494b14f6dcec3442315a2b3bcb37a364f76596ea60b37bf55bd5ecafa6206` |
 | pit/seed_checks.py | `35177c39d0a62a165721d2285c195affc1b3b38fcd1d9ef9a33b51b41129d6d7` |
-| pit/results.json（集成后，仅耗时改变） | `bd129035930c9fe82b186ea0be2de9bb37b0f5667f13d2c801279cc7c78c70ed` |
+| pit/results.json (after integration; only the timing changed) | `bd129035930c9fe82b186ea0be2de9bb37b0f5667f13d2c801279cc7c78c70ed` |
 
-### 集成后的增量核验
+### Incremental verification after integration
 
-根代理完成非训练集成重跑后，审查者只读核对 `research/reproduction_log.json`：10 条命令全部返回 0，其中 unittest 报告 92 项通过、来源解析自测报告 10 项通过；命令表没有 `--train` 或 ablation。这里是运行记录核验，不是审查者再次执行这 102 项检查。
+After the root agent completed the non-training integration rerun, the reviewer checked `research/reproduction_log.json` read-only. All 10 commands return 0; unittest reports 92 passed, and the source-parsing self-test reports 10 passed. The command table contains no `--train` or ablation. This is a check of the run record, not a re-execution of these 102 checks by the reviewer.
 
-最新主 runner 耗时为 1.4966408000036608 秒。审查者将最新 results 字节中唯一的 `elapsed_seconds` 值替回首跑的 1.4680437999995775 后，恢复了首跑摘要 `ace287b0daf795d76f837d8abb0bf6ed7eec5241139ff574cf646ed44b9303c3`；五个源码摘要也全部仍匹配。因此本次增量仅为操作性耗时更新，原先的数值、比较对象和结论未变。该检查使用已有摘要作版本一致性证据，未声称密码学无碰撞定理。
+The latest main runner time is 1.4966408000036608 seconds. After the reviewer replaced the only `elapsed_seconds` value in the latest results bytes with the first run's 1.4680437999995775, the first run's digest `ace287b0daf795d76f837d8abb0bf6ed7eec5241139ff574cf646ed44b9303c3` was recovered, and the five source digests all still match. So this increment is only an operational timing update; the original numbers, comparison targets and conclusions are unchanged. This check uses existing digests as evidence of version consistency and does not claim a cryptographic collision-freeness theorem.
 
-已核读 [运行记录](../pit/record.md) 与 [第五轮进展报告](2026-11-16-round5.md)：它们保留有限检查、错误时间仍被接纳、来源证据缺口、可测性与真实准入分离，以及没有 Fable 反馈的边界。README 已把逐字节确定性限定于同一 Python/Unicode 运行环境。现有 permission 负结果的验收情况按 completion_audit 核对并在下节纠正措辞，不因本轮无训练而撤回之前的完成状态。
+The [run record](../pit/record.md) and the [round-5 progress report](2026-11-16-round5.md) were read and checked. They keep the stated limits: the checks are finite, wrong times are still admitted, there is a gap in the source evidence, measurability is separate from real admission, and there is no Fable feedback. The README now restricts byte-for-byte determinism to the same Python/Unicode runtime environment. The acceptance status of the existing permission negative result was checked against completion_audit, and its wording is corrected in the next section. The earlier completed status is not withdrawn just because this round did no training.
 
-## 5. 开放科学门
+## 5. Open scientific gates
 
-- G0 仍未通过：缺少旧 24M 的真实 family 成簇区间及导师指定的三条同测试集基线；本轮 PIT 原语不补足该项。WP0.2 规定允许的四配置、三 seed 合成 permission 负结果已验收为 complete；其科学问题和对照有效性仍为 partial。不能将后者误写成“permission 消融没有结果”，也不要求正增益才验收。详见 completion_audit 的 WP0.2 与 G0 各行。
-- 尚无真实来源的历史版本/时间戳证明，无真实可信核心证书。
-- 尚无完整 tokenizer、模型训练、分片训练、checkpoint 或模型选择流程的端到端认证；本轮有限词表原语不得代称这些组件已认证。
-- 新颖性未联网核查，不能由代码通过或内部数学审查推断新颖。
-- 没有真实金融数据上的非空回测证书；本轮也不据此作性能比较。
-- 没有 Lean 等证明助手的全域形式验证；Python 回归结果只能支持明确的有限输入。
-- Fable 待发包与内部协作应分开记录；本报告属于内部审查，不是外部评审意见。
+- G0 has still not passed: the real family-cluster intervals for the old 24M model and the three same-test-set baselines specified by the advisor are missing, and this round's PIT primitives do not fill that gap. The synthetic permission negative result with four configurations and three seeds, as allowed by WP0.2, has been accepted as complete; its scientific question and the validity of its control remain partial. The latter must not be misstated as "the permission ablation has no result", and a positive gain is not required for acceptance. See the WP0.2 and G0 rows of completion_audit.
+- There is still no proof of historical versions/timestamps for real sources, and no certificate for a real trusted core.
+- There is still no end-to-end certification of a complete tokenizer, model training, shard training, checkpoints or the model-selection process. This round's finite vocabulary primitive must not be presented as certification of these components.
+- Novelty has not been checked online. Novelty cannot be inferred from passing code or from an internal mathematical review.
+- There is no non-empty backtest certificate on real financial data, and this round makes no performance comparison on that basis.
+- There is no full-domain formal verification in a proof assistant such as Lean. Python regression results can support only explicit finite inputs.
+- The package waiting to be sent to Fable and the internal collaboration should be recorded separately. This report is an internal review, not an outside reviewer's opinion.
 
-## 6. 需要 PI 决定
+## 6. Needs a decision from the PI
 
-本次只做已授权的本地数学与构造检查，不需要新增决定。真实来源接入、后续实证与外部发送继续遵守当前项目约束，未在本次执行。
+This review did only authorized local mathematical and constructive checks, and no new decision is needed. Real-source access, later empirical work and sending materials outside continue to follow the current project constraints and were not done in this review.

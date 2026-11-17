@@ -1,72 +1,72 @@
-# 随机化审计设计：同质层占用阈值的精确 minimax 风险
+# Randomized audit designs: the exact minimax risk for homogeneous stratum-occupancy thresholds
 
-日期：2026-11-16。第9轮离线数学推导。本文只写有限总体审计的条件数学命题；不修改既有论文，不训练、不联网，不宣称已经排尽先例或得到真实金融证书。问题是：当坏性取决于被污染的层数时，允许随机选择审计哪些层，能否改进先固定每层审计量的设计？答案是可以，而且这个同质问题有精确解。
+Date: 2026-11-16. Offline mathematical derivation from round 9. This file states only conditional mathematical propositions about finite-population audits; it does not modify the existing paper, does no training, uses no internet access, and does not claim to have exhausted prior work or obtained a real financial certificate. The question is: when badness depends on the number of contaminated strata, can allowing a random choice of which strata to audit improve on designs that fix the audit size of each stratum in advance? The answer is yes, and this homogeneous problem has an exact solution.
 
 ## Claim and Status
 
-**非退化输出契约先于最优性。** 审计全零时，程序**必须**输出预先固定的区间 $I$；一旦发现污染，输出完整统计范围。区间本身不随抽样结果改变，也不允许全零后再随机弃权。若只要求“输出 $I$ 必须以全零为前提”，永不输出 $I$ 的零成本程序就有零错误出证概率，下面的非零 minimax 值不成立。
+**The non-degenerate output contract comes before optimality.** When the audit finds all zeros, the procedure **must** output the pre-fixed interval $I$; once contamination is found, it outputs the full range of the statistic. The interval itself does not change with the sampling result, and abstaining at random after all-zero findings is not allowed. If one only required "outputting $I$ must be conditional on all-zero findings", a zero-cost procedure that never outputs $I$ would have zero probability of an erroneous certificate, and the nonzero minimax value below would not hold.
 
-在这一契约及下述局部假设下，主命题 RA1 的候选公式成立。状态为 **PROVABLE AS STATED**，指本文件明确写出的命题；初始口头“zero-only”若只表达必要条件，则必须补上全零必出证的条件。证明由本地有限求和、组合恒等式和配对压缩组成。
+Under this contract and the local assumptions below, the candidate formula of the main proposition RA1 holds. The status is **PROVABLE AS STATED**, referring to the proposition as explicitly written in this file; if the initial verbal "zero-only" expresses only a necessary condition, the condition that all-zero findings must produce a certificate has to be added. The proof consists of local finite sums, combinatorial identities, and pairwise compression.
 
-Verification: Conditionally verified。条件是所声明的有限威胁族、真值审计与输出契约；纸笔证明不是 Lean 核验、模型实证或新颖性确认。内部独立复核结果另行记录。
+Verification: Conditionally verified. The conditions are the declared finite threat family, ground-truth audits, and the output contract; the pen-and-paper proof is not a Lean verification, an empirical model result, or a novelty confirmation. The results of an internal independent review are recorded separately.
 
 ## Invoked assumptions and notation
 
-本仓库没有检索到共享的 `assumptions.lock.md`；以下用本文件局部编号，避免静默改写旧固定配额假设。将来合并为多定理论文时，应统一登记两种设计类的差异。
+No shared `assumptions.lock.md` was found in this repository; the numbering below is local to this file, to avoid silently rewriting the earlier fixed-quota assumptions. When this is later merged into a multi-theorem paper, the differences between the two design classes should be registered together.
 
-- **RA-A1 有限同质总体。** $W=\bigsqcup_{h=1}^dW_h$，整数 $d,N\ge1$，每层 $|W_h|=N$，每审一篇的成本为1；总体、分层和全部可用辅助信息在随机化前固定。
-- **RA-A2 精确威胁族。** 整数 $1\le r\le d$，坏配置族恰为 $\mathcal H_r=\{C\subseteq W:|\{h:C\cap W_h\ne\varnothing\}|\ge r\}$。允许每个这样的配置，尤其任意 $r$ 层各放一篇的配置。若金融模型只能证明实际失败配置包含于这个族，则本文只对该保守威胁族最优，不自动对实际模型最优。
-- **RA-A3 固定真值与外生随机性。** $C$ 在审计随机数实现之前固定。设计可知道上述固定对象，但不知道 $C$；审计随机带与未知污染真值无额外关联。对手可以知道设计分布，不能看到抽样结果后再选 $C$。
-- **RA-A4 精确审计。** 被查询文档的污染真值被正确判定；未判定不能记为零发现。主定理先考虑非自适应地抽取恰 $m$ 篇互不相同的文档，其中整数 $0\le m\le dN$。抽样分布任意，不要求层内独立或固定层配额。
-- **RA-A5 固定输出。** 对每次运行，全零当且仅当报告预定 $I$，任何发现均报告完整范围。本文风险是对 $\mathcal H_r$ 的错误出证/漏检概率；若 $\mathcal H_r$ 仅为模型的外放松，则这个概率是实际错误出证的上界。
+- **RA-A1 Finite homogeneous population.** $W=\bigsqcup_{h=1}^dW_h$, integers $d,N\ge1$, each stratum $|W_h|=N$, and each audited document costs 1; the population, the strata, and all available auxiliary information are fixed before randomization.
+- **RA-A2 Exact threat family.** Integer $1\le r\le d$; the family of bad configurations is exactly $\mathcal H_r=\{C\subseteq W:|\{h:C\cap W_h\ne\varnothing\}|\ge r\}$. Every such configuration is allowed, in particular configurations with one document in each of any $r$ strata. If a financial model can only be shown to have its actual failure configurations contained in this family, then this file is optimal only for this conservative threat family, not automatically for the actual model.
+- **RA-A3 Fixed ground truth and exogenous randomness.** $C$ is fixed before the audit random numbers are realized. The design may know the fixed objects above but not $C$; the audit random tape has no additional association with the unknown contamination ground truth. The adversary may know the design distribution but cannot choose $C$ after seeing the sampling result.
+- **RA-A4 Exact audits.** The contamination ground truth of queried documents is determined correctly; undetermined cases cannot be recorded as zero findings. The main theorem first considers non-adaptively drawing exactly $m$ distinct documents, with integer $0\le m\le dN$. The sampling distribution is arbitrary; independence within strata or fixed stratum quotas are not required.
+- **RA-A5 Fixed output.** In every run, the pre-specified $I$ is reported if and only if all findings are zero, and any finding leads to reporting the full range. The risk in this file is the probability of an erroneous certificate/miss with respect to $\mathcal H_r$; if $\mathcal H_r$ is only an outer relaxation of the model, this probability is an upper bound on the actual probability of an erroneous certificate.
 
-记 $\mathcal P_m$ 为所有 $m$ 元子集 $A\subseteq W$ 上的概率分布。对设计 $\mu\in\mathcal P_m$ 定义
+Write $\mathcal P_m$ for the set of all probability distributions on $m$-element subsets $A\subseteq W$. For a design $\mu\in\mathcal P_m$ define
 
 $$
 R(\mu)=\max_{C\in\mathcal H_r}\Pr_{A\sim\mu}(A\cap C=\varnothing),\qquad
 V_{d,N,r}(m)=\inf_{\mu\in\mathcal P_m}R(\mu).
 $$
 
-所有集合有限，概率只来自审计随机化。下面构造达到下界的分布，所以无需先调用抽象 minimax 交换定理。写 $\binom ab=0$ 当整数 $a\ge0$ 且 $b<0$ 或 $b>a$；正常范围沿用组合数定义，绝不调用负上项组合数。对向量 $x$，$e_j(x)$ 为第 $j$ 个基本对称多项式，$e_0(x)=1$，$j<0$ 或 $j$ 大于向量长度时 $e_j(x)=0$。
+All sets are finite, and probability comes only from the audit randomization. Below we construct a distribution attaining the lower bound, so there is no need to invoke an abstract minimax exchange theorem first. Write $\binom ab=0$ when the integer $a\ge0$ and $b<0$ or $b>a$; in the normal range the usual definition of binomial coefficients applies, and binomial coefficients with a negative upper index are never used. For a vector $x$, $e_j(x)$ is the $j$-th elementary symmetric polynomial, $e_0(x)=1$, and $e_j(x)=0$ when $j<0$ or $j$ exceeds the length of the vector.
 
 ## Verification Target and Bottleneck
 
-核验目标是两个方向同时闭合：任意随机设计的最坏风险至少是某个明确常数，且存在一个设计对每个最小坏配置都达到同一常数。下界不能只针对均匀分层设计，上界也不能只对一个随机污染先验成立。
+The verification target is to close both directions simultaneously: the worst-case risk of every randomized design is at least an explicit constant, and some design attains this same constant for every minimal bad configuration. The lower bound must not be only for uniform stratified designs, and the upper bound must not hold only for one random contamination prior.
 
-关键代数步骤是：固定 $\sum_h n_h=m$，将两个内部配额向边界集中，不增 $e_r(1-n_1/N,\ldots,1-n_d/N)$。其系数非负来自基本对称多项式的逐项非负性，不需要独立训练样本、渐近近似或某个未核实的外部定理。后文给出完整压缩证明。
+The key algebraic step is: with $\sum_h n_h=m$ fixed, concentrating two interior quotas towards the boundary does not increase $e_r(1-n_1/N,\ldots,1-n_d/N)$. The nonnegativity of its coefficient comes from the termwise nonnegativity of elementary symmetric polynomials and does not need independent training samples, asymptotic approximations, or some unverified external theorem. The full compression proof is given below.
 
 ## Anchors and Borrowing
 
-与本地 [IA1–IA8](impact_audit.md) 和 [LV1–LV5](localization_value.md) 的关系：继承有限总体真值、影响外放松及全零出证语义，**改变**“事前固定各层配额”为任意文档子集分布。旧固定配额最优不能直接作为这个更大类的最优。
+Relation to the local [IA1–IA8](impact_audit.md) and [LV1–LV5](localization_value.md): this file inherits the finite-population ground truth, the outer relaxation of impact, and the all-zero certificate semantics, and **changes** "fixing per-stratum quotas in advance" to arbitrary distributions over document subsets. The earlier optimum over fixed quotas cannot be taken directly as the optimum of this larger class.
 
-本文证明在纸面上自足。使用的成熟工具是有限群平均、均匀有限比较分布、初等对称多项式分解，以及凸函数的有限 Jensen 不等式。需要的背景是有限概率与组合计数；比较分布下界、对称化、配对压缩和凸性均在本文件展开。它们不是原创性声明。未导入任何未经核验的具体论文定理，也未做本轮文献检索。
+The proofs in this file are self-contained on paper. The established tools used are finite group averaging, uniform finite comparison distributions, decomposition of elementary symmetric polynomials, and the finite Jensen inequality for convex functions. The background needed is finite probability and combinatorial counting; the comparison-distribution lower bound, symmetrization, pairwise compression, and convexity are all developed in this file. These are not claims of originality. No unverified specific theorem from a paper is imported, and no literature search was done in this round.
 
-## 1. RA1：恰定预算下的精确风险
+## 1. RA1: the exact risk for an exact budget
 
-若 $m<dN$，写 $q=\lfloor m/N\rfloor$、$t=m-qN$，于是 $0\le q\le d-1$、$0\le t<N$。则
+If $m<dN$, write $q=\lfloor m/N\rfloor$ and $t=m-qN$, so that $0\le q\le d-1$ and $0\le t<N$. Then
 
 $$
 V_{d,N,r}(m)=F(m)
 =\frac{\binom{d-q-1}{r}+(1-t/N)\binom{d-q-1}{r-1}}{\binom dr}.
 $$
 
-满普查时单独定义 $F(dN)=0$。一个达到最优的设计是：均匀随机选 $q$ 层普查；若 $t>0$，在其余层中均匀选一层，并在该层均匀无放回审计 $t$ 篇。各步骤联合决定一个恰 $m$ 元子集。$t=0$ 时无需真的选择“部分层”。最优设计可以不唯一。
+For a full census, define separately $F(dN)=0$. A design attaining the optimum is: choose $q$ strata uniformly at random and take a census of them; if $t>0$, choose one of the remaining strata uniformly at random and audit $t$ documents in it uniformly without replacement. These steps jointly determine a subset of exactly $m$ elements. When $t=0$, no "partial stratum" actually needs to be chosen. The optimal design need not be unique.
 
-### 最小坏配置与对称化
+### Minimal bad configurations and symmetrization
 
-令 $\mathcal M_r$ 为在恰 $r$ 个不同层中各含一篇的配置集合。其大小为 $\binom dr N^r$。任一坏 $C$ 都含某个 $M\in\mathcal M_r$，且 $\{A:A\cap C=\varnothing\}\subseteq\{A:A\cap M=\varnothing\}$。因此对每个设计，最大风险可限制到 $\mathcal M_r$。
+Let $\mathcal M_r$ be the set of configurations with one document in each of exactly $r$ distinct strata. Its size is $\binom dr N^r$. Every bad $C$ contains some $M\in\mathcal M_r$, and $\{A:A\cap C=\varnothing\}\subseteq\{A:A\cap M=\varnothing\}$. Hence, for every design, the maximum risk can be restricted to $\mathcal M_r$.
 
-考虑由任意层置换和各层内部文档置换构成的有限群 $G$。它保留成本与威胁族，并在 $\mathcal M_r$ 上传递。将任意设计 $\mu$ 对称化为先抽 $A\sim\mu$、再独立均匀取 $g\in G$、输出 $gA$。对固定坏 $C$，新风险为
+Consider the finite group $G$ generated by arbitrary permutations of strata and permutations of documents within each stratum. It preserves costs and the threat family, and acts transitively on $\mathcal M_r$. Symmetrize an arbitrary design $\mu$ as follows: first draw $A\sim\mu$, then independently take $g\in G$ uniformly, and output $gA$. For a fixed bad $C$, the new risk is
 
 $$
 \frac1{|G|}\sum_{g\in G}\Pr_{A\sim\mu}(A\cap g^{-1}C=\varnothing)\le R(\mu).
 $$
 
-所以对称化不增最坏风险。这是有限平均计算，不是默认真实污染随机或可交换；真实 $C$ 仍固定。
+So symmetrization does not increase the worst-case risk. This is a finite averaging computation; it does not assume that the true contamination is random or exchangeable; the true $C$ is still fixed.
 
-### 任意设计的下界
+### A lower bound for every design
 
-仅作为证明工具，均匀取 $M\in\mathcal M_r$。固定任一审计子集 $A$，写 $n_h=|A\cap W_h|$、$x_h=1-n_h/N$。给定 $M$ 占用的 $r$ 层，在每层均匀选的那篇避开 $A$ 的概率为 $x_h$；这些证明工具中的文档选择相互独立。因此
+Purely as a proof device, take $M\in\mathcal M_r$ uniformly. Fix any audit subset $A$, and write $n_h=|A\cap W_h|$ and $x_h=1-n_h/N$. Given the $r$ strata occupied by $M$, the probability that the document chosen uniformly in each stratum avoids $A$ is $x_h$; these document choices in the proof device are mutually independent. Hence
 
 $$
 \frac1{|\mathcal M_r|}\sum_{M\in\mathcal M_r}\mathbf1\{A\cap M=\varnothing\}
@@ -74,113 +74,113 @@ $$
 =\frac{e_r(x)}{\binom dr}.
 $$
 
-最大值不小于有限平均，交换两个有限求和给出对任意 $\mu$ 的下界
+The maximum is at least the finite average, and exchanging the two finite sums gives, for any $\mu$, the lower bound
 
 $$
 R(\mu)\ge\mathbb E_{A\sim\mu}\frac{e_r(1-n(A)/N)}{\binom dr}
 \ge\min_{\substack{0\le n_h\le N\\\sum_h n_h=m}}\frac{e_r(1-n/N)}{\binom dr}.
 $$
 
-该均匀比较分布不是关于实际语料的先验假设；它只证明总有至少一个固定坏配置达到这个平均风险。
+This uniform comparison distribution is not a prior assumption about the actual corpus; it only proves that there is always at least one fixed bad configuration attaining this average risk.
 
-### 压缩配额使下界闭合
+### Compressing quotas closes the lower bound
 
-在两个坐标 $a,b\in[0,1]$ 之外记剩余向量为 $z$。逐项区分一个乘积是否包含这两个坐标，得到恒等式
+Outside two coordinates $a,b\in[0,1]$, write the remaining vector as $z$. Distinguishing term by term whether a product contains these two coordinates gives the identity
 
 $$
 e_r(a,b,z)=e_r(z)+(a+b)e_{r-1}(z)+ab\,e_{r-2}(z).
 $$
 
-所有 $z$ 坐标非负，所以 $e_{r-2}(z)\ge0$；$r=1$ 时该系数按约定为0。若 $0<b\le a<1$，取 $\delta=\min(1-a,b)>0$，将 $(a,b)$ 换为 $(a+\delta,b-\delta)$。坐标和不变，仍在 $[0,1]$ 内，且
+All coordinates of $z$ are nonnegative, so $e_{r-2}(z)\ge0$; when $r=1$ this coefficient is 0 by convention. If $0<b\le a<1$, take $\delta=\min(1-a,b)>0$ and replace $(a,b)$ by $(a+\delta,b-\delta)$. The coordinate sum is unchanged, the coordinates stay in $[0,1]$, and
 
 $$
 (a+\delta)(b-\delta)-ab=\delta(b-a)-\delta^2\le0.
 $$
 
-所以 $e_r$ 不增。原坐标位于 $1/N$ 的整数网格，$\delta$ 也在该网格，故仍对应合法整数配额。至少一个内部坐标成为0或1。不断对两个内部坐标应用此操作，有限步后至多剩一个内部坐标；其余均为0或1。若一开始只有一个坐标，则不需要配对。
+So $e_r$ does not increase. The original coordinates lie on the integer grid of $1/N$, and so does $\delta$, so the result still corresponds to valid integer quotas. At least one interior coordinate becomes 0 or 1. Applying this operation repeatedly to two interior coordinates, after finitely many steps at most one interior coordinate remains, and the rest are all 0 or 1. If there is only one coordinate to begin with, no pairing is needed.
 
-固定 $\sum_hx_h=d-m/N$，终点必具有 $q$ 个0、$d-q-1$ 个1，以及一个 $1-t/N$；$t=0$ 时最后一个也是1。其 $e_r$ 值就是 RA1 分子。因为每个初始配额都可降到这种值，且该终点本身可行，这个值是全局最小，不只是局部驻点。满普查所有坐标为0，$r\ge1$ 时 $e_r=0$。
+With $\sum_hx_h=d-m/N$ fixed, the end point necessarily has $q$ zeros, $d-q-1$ ones, and one entry $1-t/N$; when $t=0$ the last one is also 1. Its $e_r$ value is exactly the numerator in RA1. Since every initial quota can be lowered to this value, and this end point is itself feasible, the value is the global minimum, not merely a local stationary point. In a full census all coordinates are 0, and $e_r=0$ when $r\ge1$.
 
-### 达到同一下界
+### Attaining the same lower bound
 
-从上述终点对应的固定审计子集开始，施加独立均匀层置换和层内置换，正是 RA1 所述的随机普查加一个部分层设计。对称化后的风险在所有 $M\in\mathcal M_r$ 上相同；其平均仍为已算出的 $F(m)$，所以每个最小坏配置的风险都等于 $F(m)$。任何更大坏配置的风险不更高。该设计最坏风险恰为 $F(m)$，与任意设计下界相合，证明 RA1。这里没有将“均匀平均达到”直接偷换为“每个真值达到”；这个升级依赖群传递性。
+Starting from the fixed audit subset corresponding to the end point above and applying independent uniform permutations of strata and within strata gives exactly the design described in RA1: a random census plus one partial stratum. After symmetrization, the risk is the same for all $M\in\mathcal M_r$; its average is still the computed $F(m)$, so the risk of every minimal bad configuration equals $F(m)$. The risk of any larger bad configuration is no higher. The worst-case risk of this design is exactly $F(m)$, matching the lower bound for every design, which proves RA1. Here "attained on the uniform average" is not silently swapped for "attained for every ground truth"; this upgrade relies on the transitivity of the group action.
 
-## 2. 边界情况与最小预算
+## 2. Boundary cases and the minimum budget
 
-当 $m=0$，Pascal 恒等式使 RA1 分子为 $\binom dr$，所以 $F(0)=1$。当 $m=dN$，所有非空坏配置都被发现，风险0；单列满普查避免出现 $\binom{-1}{r}$。
+When $m=0$, Pascal's identity makes the numerator of RA1 equal to $\binom dr$, so $F(0)=1$. When $m=dN$, every nonempty bad configuration is found and the risk is 0; listing the full census separately avoids $\binom{-1}{r}$.
 
-当 $r=1$，$e_1(x)=d-m/N$ 只由总预算决定，故 $F(m)=1-m/(dN)$。配对压缩在这个情形不严格，最优不唯一；例如全总体均匀无放回也达到该风险。不能据此宣称集中抽层总是严格更优。
+When $r=1$, $e_1(x)=d-m/N$ is determined by the total budget alone, so $F(m)=1-m/(dN)$. Pairwise compression is not strict in this case, and the optimum is not unique; for example, uniform sampling without replacement from the whole population also attains this risk. One cannot claim from this that concentrating on strata is always strictly better.
 
-当 $N=1$，$t=0$，RA1 化为 $F(m)=\binom{d-m}{r}/\binom dr$；层就是文档，没有额外的层内位置结构。当 $r=d$，$m<N$ 时 $F(m)=1-m/N$，普查任一层后风险0。更一般地，零风险首次可在 $m=N(d-r+1)$ 达到：之前 $q\le d-r$ 且 $t<N$，公式至少有一个正项；达到该预算时未普查层少于 $r$，任何坏配置必须碰到普查层。
+When $N=1$, $t=0$, and RA1 reduces to $F(m)=\binom{d-m}{r}/\binom dr$; strata are documents, and there is no additional within-stratum location structure. When $r=d$ and $m<N$, $F(m)=1-m/N$, and after a census of any one stratum the risk is 0. More generally, zero risk is first attained at $m=N(d-r+1)$: before that, $q\le d-r$ and $t<N$, and the formula has at least one positive term; at this budget fewer than $r$ strata are without a census, and every bad configuration must touch a census stratum.
 
-对固定 $0<\alpha<1$，该设计类的最小整数预算恰为
+For fixed $0<\alpha<1$, the minimum integer budget in this design class is exactly
 
 $$
 m_\alpha^*=\min\{m\in\{0,\ldots,dN\}:F(m)\le\alpha\}.
 $$
 
-$F$ 非增（下一节也给出精确斜率），所以可按整数预算单调反解。组合数与有理数足以处理有理 $\alpha$；不能用未经控制的浮点舍入决定等号边界。扫描或二分只是精确公式的求值，不是用有限测试替代其证明。
+$F$ is nonincreasing (the next section also gives exact slopes), so it can be inverted monotonically over integer budgets. Binomial coefficients and rationals suffice for rational $\alpha$; uncontrolled floating-point rounding must not decide the boundary of equality. A scan or bisection is only an evaluation of the exact formula, not a replacement of its proof by finite tests.
 
-## 3. RA2：至多预算与自适应全零路径
+## 3. RA2: at-most budgets and adaptive all-zero paths
 
-**非自适应硬上限。** 若允许 $|A|\le m$，但仍全零必出证，则 minimax 值仍为 $F(m)$。对任意此类设计，把不足 $m$ 的样本按预定规则补到 $m$ 个不同文档。补采样的漏检事件包含于原事件，故新风险不高于原风险；新设计风险又至少为 $F(m)$。所以每个原设计风险也至少为 $F(m)$，而 RA1 设计达到。
+**Non-adaptive hard cap.** If $|A|\le m$ is allowed, but all-zero findings must still produce a certificate, the minimax value is still $F(m)$. For any such design, pad samples with fewer than $m$ documents up to $m$ distinct documents by a pre-specified rule. The miss event of the padded sample is contained in the original event, so the new risk is no higher than the original; and the new design's risk is at least $F(m)$. So every original design's risk is also at least $F(m)$, and the RA1 design attains it.
 
-**有限自适应扩展的额外条件。** 选择下一篇、停止规则可以依赖已查询ID、其二元污染/非污染结果和外生随机带；不得通过审计获取关于其他文档真值的额外侧信道。预先固定的辅助信息可以使用，但 RA-A2 的威胁族须在条件于该信息后仍有效。每个真值及随机运行都查询不超过 $m$ 篇不同文档。任何已发现污染的路径均不报 $I$；未发现污染而停止的路径必须报 $I$。
+**Additional conditions for finite adaptive extensions.** The choice of the next document and the stopping rule may depend on the IDs already queried, their binary contaminated/uncontaminated results, and the exogenous random tape; no extra side channel about the ground truth of other documents may be obtained through the audit. Auxiliary information fixed in advance may be used, but the threat family of RA-A2 must remain valid conditional on that information. For every ground truth and random run, at most $m$ distinct documents are queried. No path on which contamination has been found reports $I$; a path that stops without finding contamination must report $I$.
 
-对固定随机带，令 $A_0$ 是向算法每次都返回“非污染”时它查询的反事实文档集合，即洁净世界 $C=\varnothing$ 的完整路径。它在未知 $C$ 之前由随机带确定，且 $|A_0|\le m$。对任意固定 $C$，有路径等价
+For a fixed random tape, let $A_0$ be the counterfactual set of documents the algorithm queries when every answer it receives is "uncontaminated", i.e. the full path in the clean world $C=\varnothing$. It is determined by the random tape before $C$ is known, and $|A_0|\le m$. For any fixed $C$, there is the path equivalence
 
 $$
-\{\text{算法报告 }I\}=\{A_0\cap C=\varnothing\}.
+\{\text{the algorithm reports }I\}=\{A_0\cap C=\varnothing\}.
 $$
 
-若右边成立，真实运行每步都与全零反事实相同，最后报告 $I$。若右边不成立，取全零路径中第一次属于 $C$ 的查询；之前的真实响应均为零，所以算法确实到达该查询并发现污染，之后按契约不再报 $I$。这证明两个方向，而不假设真实的阳性路径和反事实全零路径相同。
+If the right-hand side holds, the real run agrees with the all-zero counterfactual at every step and finally reports $I$. If the right-hand side fails, take the first query on the all-zero path that belongs to $C$; all real responses before it were zero, so the algorithm does reach this query and finds contamination, and by the contract it never reports $I$ afterwards. This proves both directions without assuming that the real positive path and the counterfactual all-zero path are the same.
 
-因此每个这种自适应程序的风险等于某个随机集合 $A_0$ 的漏检风险，应用至多预算结论得到下界 $F(m)$。非自适应最优程序也属于允许类，所以自适应二元查询在这个**硬上限、全零必出证**契约下不能改进 minimax 风险。该结论不覆盖可在非零发现后输出新的较窄区间的程序。
+Hence the risk of every such adaptive procedure equals the miss risk of some random set $A_0$, and applying the at-most-budget result gives the lower bound $F(m)$. The optimal non-adaptive procedure also belongs to the allowed class, so adaptive binary queries cannot improve the minimax risk under this **hard-cap, all-zero-must-certify** contract. This conclusion does not cover procedures that can output a new, narrower interval after non-zero findings.
 
-## 4. RA3：期望预算必须指明在哪个世界
+## 4. RA3: an expected budget must say in which world it is taken
 
-将 $F$ 在整数间作线性插值，定义于实数 $b\in[0,dN]$。在每块 $qN\le b\le(q+1)N$ 上，它的斜率为
+Interpolate $F$ linearly between integers, defining it for real $b\in[0,dN]$. On each block $qN\le b\le(q+1)N$, its slope is
 
 $$
 -\frac{\binom{d-q-1}{r-1}}{N\binom dr},\qquad q=0,\ldots,d-1.
 $$
 
-分子随 $q$ 非增，各斜率非正且逐块非降；块端点由 Pascal 恒等式连续衔接。所以 $F$ 为凸且非增的分段线性函数，包括后面的零平台。
+The numerator is nonincreasing in $q$, so the slopes are nonpositive and nondecreasing from block to block; the block endpoints join continuously by Pascal's identity. So $F$ is a convex, nonincreasing, piecewise linear function, including the zero plateau at the end.
 
-对非自适应随机样本量，若 $\mathbb E|A|\le b$，均匀最小坏集下界和逐预算 RA1 下界给出
+For a non-adaptive random sample size with $\mathbb E|A|\le b$, the lower bound from the uniform minimal bad set and the per-budget RA1 lower bound give
 
 $$
 R(\mu)\ge\mathbb E F(|A|)\ge F(\mathbb E|A|)\ge F(b).
 $$
 
-中间一步是有限取值随机变量对凸函数的 Jensen 不等式；可直接取 $F$ 在 $\mathbb E|A|$ 的任一支撑线，对所有整数取值相加得到。取 $\lfloor b\rfloor$ 与 $\lceil b\rceil$ 两种 RA1 最优设计，按使平均样本量为 $b$ 的权重独立随机混合，则每个最小坏配置的风险为两端 $F$ 值的同权平均，恰等于 $F(b)$。所以这个期望预算类的精确值是 $F(b)$；整数平均预算不会比同整数硬上限获得更低的 minimax 风险。
+The middle step is Jensen's inequality for a convex function of a random variable with finitely many values; one can take directly any supporting line of $F$ at $\mathbb E|A|$ and sum over all integer values. Taking the two RA1-optimal designs for $\lfloor b\rfloor$ and $\lceil b\rceil$ and mixing them independently at random, with weights that make the average sample size $b$, the risk of each minimal bad configuration is the same weighted average of the two endpoint values of $F$, which equals exactly $F(b)$. So the exact value of this expected-budget class is $F(b)$; an integer average budget cannot obtain a lower minimax risk than the hard cap at the same integer.
 
-对上一节的自适应算法，上式中的样本量应是全零路径长度 $|A_0|$。如果预算约束为**洁净世界** $\mathbb E_{C=\varnothing}|A_0|\le b$，同一下界成立且可达到。若要求每个真值世界的期望成本均不超过 $b$，它包含洁净世界约束；上述非自适应混合的成本与真值无关，又满足更强约束，所以最优值仍相同。
+For the adaptive algorithms of the previous section, the sample size in the formula above should be the all-zero path length $|A_0|$. If the budget constraint is on the **clean world**, $\mathbb E_{C=\varnothing}|A_0|\le b$, the same lower bound holds and is attainable. If the expected cost is required to be at most $b$ in every ground-truth world, this includes the clean-world constraint; the cost of the non-adaptive mixture above does not depend on the ground truth and satisfies the stronger constraint, so the optimum is still the same.
 
-只要求坏世界平均成本不够。反例：$d=r=1,N=2$，随机顺序查两篇，一旦发现污染就停止。每个单污染坏配置下，期望查询数为 $3/2$；两篇均污染时为1，因此所有坏世界的期望成本至多 $3/2$，但漏检概率为0。另一方面 $F(3/2)=1/4$。差别是洁净世界需要查询2篇，未满足洁净世界预算。不能把同一记号“expected budget”用于这两种约束而套同一公式。
+Requiring only the average cost in bad worlds is not enough. Counterexample: $d=r=1,N=2$; query the two documents in random order and stop as soon as contamination is found. Under each single-contamination bad configuration, the expected number of queries is $3/2$; when both documents are contaminated it is 1, so the expected cost in every bad world is at most $3/2$, yet the miss probability is 0. On the other hand, $F(3/2)=1/4$. The difference is that the clean world needs 2 queries, so the clean-world budget is not met. The same notation "expected budget" cannot be used for these two constraints with the same formula applied to both.
 
-## 5. RA4：升级后的最强固定总数门基线
+## 5. RA4: the upgraded strongest fixed total-count gate baseline
 
-公平比较还必须让总污染数门使用同样大的随机设计类。令 $M=dN$，总数门全零时报告 $|C|\le r-1$，否则报告全计数范围；它承诺的是真实总数覆盖，而不只是最终区间的有效性。允许任意恰 $m$ 篇不同文档的随机设计，需排除所有 $r$ 元文档集合，**不要求它们来自不同层**。
+A fair comparison must also let the total-contamination-count gate use an equally large class of randomized designs. Let $M=dN$; on all-zero findings the total-count gate reports $|C|\le r-1$, and otherwise the full count range; what it promises is coverage of the true total, not merely validity of the final interval. Allowing randomized designs over any exactly $m$ distinct documents, all $r$-element document sets must be ruled out, **without requiring them to come from different strata**.
 
-这个总数门的 minimax 风险为
+The minimax risk of this total-count gate is
 
 $$
 G(m)=\frac{\binom{M-m}{r}}{\binom Mr}
 =\frac{\binom{M-r}{m}}{\binom Mm}.
 $$
 
-证明：任意固定 $m$ 元审计集 $A$，对全体 $r$ 元坏集合均匀平均，避开 $A$ 的比例都是 $\binom{M-m}{r}/\binom Mr$；所以任何随机审计的最大风险至少为该值。全总体均匀无放回抽样 $m$ 篇使每个固定 $r$ 元坏集合的漏检都等于右侧组合数比；更大的坏集合漏检不更高。因此平均下界被达到。
+Proof: for any fixed $m$-element audit set $A$, averaging uniformly over all $r$-element bad sets, the fraction that avoids $A$ is always $\binom{M-m}{r}/\binom Mr$; so the maximum risk of any randomized audit is at least this value. Uniform sampling of $m$ documents without replacement from the whole population makes the miss probability of every fixed $r$-element bad set equal to the binomial ratio on the right; larger bad sets have no higher miss probability. Hence the average lower bound is attained.
 
-所以 pooled SRS 不仅是一个方便的基线，它在这个总数覆盖契约下已是任意随机恰定预算设计的最优。结构风险 $F(m)\le G(m)$，因为总数坏族包含层占用坏族；但这不证明优于一切简单审计方法。RA1 的随机普查设计本身就很简单。随机选择一个计数矩形并承诺它的覆盖，和全零报告固定最终区间 $I$，也属于不同输出契约，本文没有将二者混同。
+So pooled SRS is not just a convenient baseline: under this total-count coverage contract it is already optimal among all randomized exact-budget designs. The structural risk satisfies $F(m)\le G(m)$, because the total-count bad family contains the stratum-occupancy bad family; but this does not prove superiority over every simple audit method. The random-census design of RA1 is itself very simple. Choosing a count rectangle at random and promising its coverage, versus reporting a fixed final interval $I$ on all-zero findings, are also different output contracts, and this file does not conflate them.
 
-一个手算例为 $d=3,N=2,r=2,m=2$：均匀随机普查一层的风险为 $1/3$；全总体SRS的最强总数门风险为 $\binom42/\binom62=2/5$。这些是明确有限参数的解析值，不是真实语料或新实验。
+A hand-computed example is $d=3,N=2,r=2,m=2$: a uniformly random census of one stratum has risk $1/3$; the strongest total-count gate with SRS from the whole population has risk $\binom42/\binom62=2/5$. These are analytic values for explicit finite parameters, not a real corpus or a new experiment.
 
-## 6. 对旧固定配额结论的实质影响
+## 6. Substantive impact on the earlier fixed-quota conclusions
 
-旧 [LV4](localization_value.md) 的 sharp 路径取 $r=N^2,d=2r-1$。对固定各层配额，任何风险小于1的设计，其第 $r$ 小配额至少为1，故至少 $r$ 层各审一篇，直接法最优成本至少 $r=N^2$。
+The sharp path of the earlier [LV4](localization_value.md) takes $r=N^2,d=2r-1$. For fixed per-stratum quotas, any design with risk less than 1 has its $r$-th smallest quota at least 1, so at least $r$ strata each audit one document, and the optimal cost of the direct method is at least $r=N^2$.
 
-现在固定 $\alpha\in(0,1)$，取整数 $q_\alpha=\lceil\log(1/\alpha)/\log2\rceil$。当 $r\ge q_\alpha$，均匀随机普查 $q_\alpha$ 层的风险为
+Now fix $\alpha\in(0,1)$ and take the integer $q_\alpha=\lceil\log(1/\alpha)/\log2\rceil$. When $r\ge q_\alpha$, a uniformly random census of $q_\alpha$ strata has risk
 
 $$
 \frac{\binom{d-q_\alpha}{r}}{\binom dr}
@@ -188,93 +188,93 @@ $$
 \le 2^{-q_\alpha}\le\alpha.
 $$
 
-各分式非负且不大于 $1/2$；若某分子为0，风险就是0。成本至多 $q_\alpha N=O(N)$。因此在这条确定的有限问题序列上，允许随机选择层之后，旧固定配额直接法相对新设计的成本比例至少 $N/q_\alpha$，可无界增长。
+Each fraction is nonnegative and at most $1/2$; if some numerator is 0, the risk is 0. The cost is at most $q_\alpha N=O(N)$. Hence, on this well-defined sequence of finite problems, once random choice of strata is allowed, the cost ratio of the earlier fixed-quota direct method to the new design is at least $N/q_\alpha$ and can grow without bound.
 
-这不推翻旧定理，它揭示了旧设计类限制的代价：旧“相对强简单组合逼近两倍”的结果只在固定各层配额类内成立；不能带着同一个“最强”标签跨到任意随机设计类。$\alpha=1/20$ 时随机普查五层已给成本上界 $5N$，精确 RA1 允许最后一层部分抽样，可能更省。对同一更大设计类的总数门，应使用上一节的 $G(m)$，不是继续引用旧固定分层总数最优。
+This does not overturn the earlier theorem; it reveals the cost of the earlier restriction on the design class: the earlier result "approaching a factor of two against the strong simple combination" holds only within the class of fixed per-stratum quotas; the same "strongest" label cannot be carried over to the class of arbitrary randomized designs. With $\alpha=1/20$, a random census of five strata already gives the cost upper bound $5N$, and the exact RA1 allows partial sampling of the last stratum, which may save more. For the total-count gate in the same larger design class, the $G(m)$ of the previous section should be used, not the earlier optimum for fixed-stratification total counts.
 
-### 同一随机设计类中的渐近常数比较
+### Asymptotic constant comparison within the same randomized design class
 
-仍取 $r=N^2,d=2r-1$、$\alpha=1/20$，令 $m_I^*(N)$ 与 $m_K^*(N)$ 分别是由 $F,G$ 反解的最小整数预算。则
+Still take $r=N^2,d=2r-1$, $\alpha=1/20$, and let $m_I^*(N)$ and $m_K^*(N)$ be the minimum integer budgets obtained by inverting $F$ and $G$ respectively. Then
 
 $$
 \frac{m_I^*(N)}N\longrightarrow\frac{22}{5},\qquad
 \frac{m_K^*(N)}N\longrightarrow2\log20.
 $$
 
-对第一个极限，固定整数 $q$，写 $m=qN+t$、$t/N\to\theta\in[0,1]$。由有限个因子的极限，$F(qN)=\prod_{j<q}(d-r-j)/(d-j)\to2^{-q}$，且
+For the first limit, fix an integer $q$, write $m=qN+t$ with $t/N\to\theta\in[0,1]$. By the limit of finitely many factors, $F(qN)=\prod_{j<q}(d-r-j)/(d-j)\to2^{-q}$, and
 
 $$
 \frac{\binom{d-q-1}{r-1}}{\binom dr}
 =F(qN)\frac{r}{d-q}\longrightarrow2^{-q-1}.
 $$
 
-所以 $F(m)\to2^{-q}(1-\theta/2)$。在 $q=4$ 和 $q=5$ 的整层端点，极限分别为 $1/16>1/20$ 与 $1/32<1/20$，故充分大 $N$ 时最小预算落在第4个整层之后、第5个整层之前。在这块上 $F$ 对 $t$ 精确线性，解交点再向上取整造成的 $t/N$ 误差小于 $1/N$，故 $t/N\to(1/16-1/20)/(1/32)=2/5$。得到 $m_I^*/N\to22/5$。
+So $F(m)\to2^{-q}(1-\theta/2)$. At the whole-stratum endpoints $q=4$ and $q=5$, the limits are $1/16>1/20$ and $1/32<1/20$ respectively, so for sufficiently large $N$ the minimum budget lies after the 4th whole stratum and before the 5th. On this block $F$ is exactly linear in $t$, and solving for the crossing point and rounding up introduces an error in $t/N$ of less than $1/N$, so $t/N\to(1/16-1/20)/(1/32)=2/5$. This gives $m_I^*/N\to22/5$.
 
-对总数门，取 $m/N\to\lambda$，其中 $\lambda>0$ 有限，写 $M=dN$、$z_j=m/(M-j)$。充分大 $N$ 时所有 $z_j<1$，并有
+For the total-count gate, take $m/N\to\lambda$ with finite $\lambda>0$, write $M=dN$ and $z_j=m/(M-j)$. For sufficiently large $N$ all $z_j<1$, and
 
 $$
 G(m)=\prod_{j=0}^{r-1}(1-z_j),\qquad
 \frac{mr}{M}\le\sum_{j=0}^{r-1}z_j\le\frac{mr}{M-r+1}\longrightarrow\frac\lambda2.
 $$
 
-同时，$z_{\max}=m/(M-r+1)=O(N^{-2})$，且
+At the same time, $z_{\max}=m/(M-r+1)=O(N^{-2})$, and
 
 $$
 0\le-\log G(m)-\sum_{j=0}^{r-1}z_j
 \le\frac{r z_{\max}^2}{1-z_{\max}}\longrightarrow0.
 $$
 
-因此 $G(m)\to e^{-\lambda/2}$。在 $\lambda=2\log20$ 两侧任取固定正距离，极限风险分别严格高于、低于 $1/20$；$G$ 的单调性将最小整数预算夹在两者之间，得到第二个极限。于是同一任意随机抽样设计类内，结构信息相对总数覆盖门的预算节省趋于
+Hence $G(m)\to e^{-\lambda/2}$. Taking any fixed positive distance on either side of $\lambda=2\log20$, the limiting risks are strictly above and strictly below $1/20$ respectively; the monotonicity of $G$ squeezes the minimum integer budget between the two, which gives the second limit. Hence, within the same class of arbitrary randomized sampling designs, the budget saving from structural information relative to the total-count coverage gate tends to
 
 $$
 1-\frac{m_I^*(N)}{m_K^*(N)}\longrightarrow
 1-\frac{11}{5\log20}\approx26.56\%.
 $$
 
-这是一条确定参数序列的解析结论，未经新网格挑选，也不扩充既定计算计划。它是相对总数覆盖契约的常数差，不是对所有审计程序的阶数优势；两种最优本身都由简单抽样达到。
+This is an analytic conclusion for one well-defined parameter sequence; it was not selected from a new grid and does not extend the established computation plan. It is a constant gap relative to the total-count coverage contract, not an order-of-magnitude advantage over all audit procedures; both optima are themselves attained by simple sampling.
 
-## 7. 反例、接入边界与研究含义
+## 7. Counterexamples, integration boundaries, and research implications
 
-**对手看到抽样结果。** 在 $d=3,N=2,r=2,m=2$ 例中，程序随机普查一层。如果对手随后在其余两层各选一篇污染，漏检恒为1，而 RA1 值为 $1/3$。固定真值先于随机化是实质条件，不是修辞。
+**The adversary sees the sampling result.** In the example $d=3,N=2,r=2,m=2$, the procedure takes a random census of one stratum. If the adversary then picks one contaminated document in each of the other two strata, the miss probability is always 1, whereas the RA1 value is $1/3$. Fixing the ground truth before randomization is a substantive condition, not rhetoric.
 
-**全零后允许弃权。** 总是输出完整范围的零成本程序错误出证概率为0，所以在那种输出类里不能把 RA1 称为最小错误概率；必须另定成功率/接受率约束，再研究成本。本文没有暗中把这一约束省略。
+**Abstention allowed after all-zero findings.** The zero-cost procedure that always outputs the full range has probability 0 of an erroneous certificate, so in that output class RA1 cannot be called the minimum error probability; a success-rate/acceptance-rate constraint must be set separately before studying cost. This file does not silently omit that constraint.
 
-**从外放松到真实模型。** 真实依赖图可能只允许某些被影响头组合，或可实现的训练输出少于任意头改变的外放松。在这种情况下，RA-A2 的均匀最小坏集比较分布未必由真实失败情况支撑，RA1 的“最优”仅属于所声明的保守威胁族。实际错误出证仍可由它上界，但不能据此证明真实问题无法用更少审计完成。
+**From the outer relaxation to the real model.** A real dependency graph may allow only certain combinations of affected heads, or the realizable training outputs may be fewer than in the outer relaxation where any head can change arbitrarily. In that case the uniform minimal-bad-set comparison distribution of RA-A2 may not be supported by real failure cases, and the "optimality" of RA1 belongs only to the declared conservative threat family. It still upper-bounds the actual probability of an erroneous certificate, but one cannot use it to prove that the real problem cannot be solved with fewer audits.
 
-**真值与历史来源。** 本文假设抽中污染能正确识别。它不证明知识时间字段真实，不重建缺失历史版本，不从已固定模型的常量可测性推出历史训练合规，也不保证可疑文档有可核查的权威来源。有限采样概率只闭合证书链中的审计随机性一环。
+**Ground truth and historical sources.** This file assumes that sampled contamination is identified correctly. It does not prove that the knowledge-time field is authentic, does not reconstruct missing historical versions, does not infer compliance of historical training from the constant measurability of an already fixed model, and does not guarantee that suspicious documents have a verifiable authoritative source. The finite sampling probability closes only the audit-randomness link in the certificate chain.
 
-**适用范围。** 各层大小相同、单篇成本相同和占用阈值族的置换对称性支撑主解。异大小、异成本、不规则影响图、审计误判、未来依赖的侧信息、数据依赖修改区间、非零发现后继续给非平凡区间，都没有被本定理自动覆盖。有限总体频率保证不需要训练数据IID，但也不因此获得分布外语义或模型效用保证。
+**Scope.** The main solution rests on equal stratum sizes, equal per-document costs, and the permutation symmetry of the occupancy threshold family. Unequal sizes, unequal costs, irregular impact graphs, audit misjudgements, side information that depends on the future, data-dependent modification of the interval, and continuing to give non-trivial intervals after non-zero findings are not automatically covered by this theorem. The finite-population frequentist guarantee does not need IID training data, but it does not thereby obtain out-of-distribution semantics or model-utility guarantees either.
 
 ## Dependency Map
 
-RA1 依赖最小坏配置约简、均匀比较下界、配额压缩及对称达到；RA2 依赖 RA1 和全零路径等价；RA3 依赖 RA1、块斜率凸性与正确的期望成本世界；RA4 使用更大总数坏族的独立均匀比较分布。
+RA1 depends on the minimal-bad-configuration reduction, the uniform comparison lower bound, quota compression, and symmetric attainment; RA2 depends on RA1 and the all-zero path equivalence; RA3 depends on RA1, convexity from the block slopes, and the correct world for the expected cost; RA4 uses a separate uniform comparison distribution over the larger total-count bad family.
 
 ## Obligation Ledger
 
-- O1 最小坏配置约简 — CLOSED-LOCAL. Closed at: 第1节集合包含事件与每个坏配置含 $r$ 层各一篇。
-- O2 对称化不增最坏风险 — CLOSED-LOCAL. Closed at: 第1节对 $g^{-1}C$ 的有限群平均。
-- O3 任意设计下界 — CLOSED-LOCAL. Closed at: 第1节均匀最小坏集计数及有限和交换。
-- O4 整数配额压缩 — CLOSED-LOCAL. Closed at: 第1节 $e_r$ 双坐标分解、乘积变化及网格保持。
-- O5 所有固定真值上的达到性 — CLOSED-LOCAL. Closed at: 第1节群传递性使每个最小坏配置风险等于平均。
-- O6 边界与预算反解 — CLOSED-LOCAL. Closed at: 第2节逐项处理 $m=0,dN$、$r=1,d$、$N=1$。
-- O7 至多预算与自适应扩展 — CLOSED-LOCAL. Closed at: 第3节补采样及全零路径事件的双向证明。
-- O8 期望预算 — CLOSED-LOCAL. Closed at: 第4节斜率单调、有限凸平均、相邻预算混合；坏世界预算反例明确隔离。
-- O9 随机设计类的总数门基线 — CLOSED-LOCAL. Closed at: 第5节全体 $r$ 元集合平均与pooled SRS达到。
-- O10 旧固定设计类的可无界损失 — CLOSED-LOCAL. Closed at: 第6节固定配额 $N^2$ 下界和随机整层 $q_\alpha N$ 上界。
-- O11 随机设计类中的渐近常数比较 — CLOSED-LOCAL. Closed at: 第6节整层有限乘积极限、总数概率的对数余项控制及最小整数预算夹逼。
+- O1 Minimal-bad-configuration reduction — CLOSED-LOCAL. Closed at: Section 1, inclusion of events and every bad configuration containing one document in each of $r$ strata.
+- O2 Symmetrization does not increase worst-case risk — CLOSED-LOCAL. Closed at: Section 1, finite group average over $g^{-1}C$.
+- O3 Lower bound for every design — CLOSED-LOCAL. Closed at: Section 1, counting over uniform minimal bad sets and exchange of finite sums.
+- O4 Integer quota compression — CLOSED-LOCAL. Closed at: Section 1, two-coordinate decomposition of $e_r$, change in the product, and preservation of the grid.
+- O5 Attainment for every fixed ground truth — CLOSED-LOCAL. Closed at: Section 1, group transitivity makes the risk of every minimal bad configuration equal to the average.
+- O6 Boundaries and budget inversion — CLOSED-LOCAL. Closed at: Section 2, handling $m=0,dN$, $r=1,d$, and $N=1$ one by one.
+- O7 At-most budgets and adaptive extensions — CLOSED-LOCAL. Closed at: Section 3, padding and the two-direction proof of the all-zero path event.
+- O8 Expected budgets — CLOSED-LOCAL. Closed at: Section 4, monotone slopes, finite convex averaging, mixing adjacent budgets; the bad-world budget counterexample is explicitly isolated.
+- O9 Total-count gate baseline for the randomized design class — CLOSED-LOCAL. Closed at: Section 5, averaging over all $r$-element sets and attainment by pooled SRS.
+- O10 Unbounded loss of the earlier fixed design class — CLOSED-LOCAL. Closed at: Section 6, the $N^2$ lower bound for fixed quotas and the $q_\alpha N$ upper bound for random whole strata.
+- O11 Asymptotic constant comparison within the randomized design class — CLOSED-LOCAL. Closed at: Section 6, limits of finite products over whole strata, control of the log remainder for the total-count probability, and the squeeze on the minimum integer budget.
 
 ## Verification Checks
 
-| 检查项 | 结论 |
+| Check | Conclusion |
 |---|---|
-| 展开前定位 | 不适用：使用有限多项式恒等式，无局部近似 |
-| 范数/概率模式 | 风险始终是固定 $C$ 下审计随机性的漏检概率，再取有限最大值 |
-| 好事件记账 | 无遗漏高概率事件；全零就是计入风险的事件 |
-| 速率泄漏 | 主结论为精确公式；第6节显式给出固定 $\alpha$ 的比例下界 |
-| 量词升级 | 由均匀平均到每个固定最小坏集的升级明确使用群传递性 |
-| 引文身份 | 没有外部证明性引用；本地旧结果只用于比较设计类 |
-| 引用适用性 | 主定理自足；未调用未知文献定理 |
-| 边界/奇点 | 分母 $\binom dr,N$ 为正；满普查单列，$r=1,N=1,m=0$ 已处理 |
-| 忽略项闭合 | 不删余项，不用渐近替代有限风险；$O(N)$ 成本常数为固定 $q_\alpha$ |
+| Location before expansion | Not applicable: finite polynomial identities are used, with no local approximation |
+| Norm/probability mode | The risk is always the miss probability under audit randomness for fixed $C$, followed by a finite maximum |
+| Good-event bookkeeping | No high-probability event is omitted; all-zero findings are exactly the event counted in the risk |
+| Rate leakage | The main conclusion is an exact formula; Section 6 explicitly gives the ratio lower bound for fixed $\alpha$ |
+| Quantifier upgrade | The upgrade from the uniform average to every fixed minimal bad set explicitly uses group transitivity |
+| Citation identity | No external citations used as proof; earlier local results are used only to compare design classes |
+| Citation applicability | The main theorem is self-contained; no theorem from unknown literature is invoked |
+| Boundaries/singularities | The denominators $\binom dr,N$ are positive; the full census is listed separately; $r=1,N=1,m=0$ have been handled |
+| Closure of ignored terms | No remainder terms are dropped, and asymptotics are not substituted for finite risks; the constant in the $O(N)$ cost is the fixed $q_\alpha$ |
 
-11项证明义务均在本文给出本地闭合；没有把未知来源真值或实际模型威胁族真实性列为已证明事实。机械结构检查与独立审查是额外质量控制，不代替这些假设，也不等于外部导师 Fable 的反馈。
+All 11 proof obligations are closed locally in this file; the unknown source ground truth and the faithfulness of the actual model's threat family are not listed as proved facts. Mechanical structural checks and an independent review are additional quality control; they do not replace these assumptions and are not the same as feedback from the external advisor Fable.

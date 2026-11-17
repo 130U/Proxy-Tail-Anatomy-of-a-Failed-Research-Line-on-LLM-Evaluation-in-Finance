@@ -1,143 +1,143 @@
-# 路径 01：从真实内容版本审计到清洁模型统计量区间
+# Path 01: from auditing real content versions to an interval for the clean model's statistic
 
-日期：2026-11-15。性质：独立立项分析，待资深助手反方审阅；本文作者不是 Fable，也不代表其意见。全部基于本轮已保存的文献核验及本地证据，没有新增外联。本文不对其他路径排序。
+Date: 2026-11-15. Nature: an independent project analysis, awaiting adversarial review by the senior assistant; the author of this document is not Fable and does not represent Fable's views. Everything is based on the literature checks and local evidence saved in this round; no new outreach was made. This document does not rank the other paths.
 
-## 研究问题与目标量
+## Research question and target quantity
 
-这条路径研究的不是“小金融模型能否超过大模型”，而是：**在训练语料的历史可得时间仍有残余错误时，能否用实际审计记录，对一个明确定义的清洁比较器给出有用的、可执行的测试统计量区间？**
+What this path studies is not "can a small financial model beat a large model", but: **when the historical availability times of the training corpus still contain residual errors, can actual audit records give a useful, executable test-statistic interval for a clearly defined clean comparator?**
 
-固定历史截止日 t、观测训练语料 D、全部训练算法及随机性。每个内容版本 i 有记录时间 τ_i 和真实可得时间 τ_i*。污染集合 C_t={i:τ_i≤t<τ_i*}。清洁比较器 F_del 是从 D 中删除 C_t 后、保持其他规则和随机性不变重新训练的模型。它不是“市场上最好的当时模型”，也不自动等于“用当时全部可得信息训练”的模型。
+Fix the historical cutoff date t, the observed training corpus D, and the whole training algorithm and its randomness. Each content version i has a recorded time τ_i and a true availability time τ_i*. The contamination set is C_t={i:τ_i≤t<τ_i*}. The clean comparator F_del is the model retrained after deleting C_t from D, keeping the other rules and randomness unchanged. It is not "the best model on the market at the time", and it is not automatically equal to the model "trained on all information available at the time".
 
-主要目标量建议先定为固定 J 个、事前冻结的文本任务上的 accuracy 或固定类别集合的 macro-F1。后者采用零分母贡献 0；不能在污染改变预测后重新选择平均哪些类别。回测在这里意指历史信息集约束下的预测统计量；尚不进入交易收益、Sharpe 或回撤。输出为区间 [L,U]、覆盖率的随机性来源、全部前提、审计设计与文件身份，而非一个“无泄漏=true”布尔值。
+The main target quantity is proposed, for now, to be accuracy on a fixed set of J text tasks frozen in advance, or macro-F1 over a fixed set of classes. The latter uses a contribution of 0 for zero denominators; one cannot reselect which classes to average after contamination changes the predictions. Backtesting here means a prediction statistic under historical information-set constraints; it does not yet include trading returns, Sharpe, or drawdown. The output is an interval [L,U], the source of randomness for coverage, all premises, the audit design, and the file identities, rather than a Boolean "no leakage=true".
 
-成功需要两个分别验收的条件：数学上以≥1−α覆盖 S(F_del)；科学上该区间对目标问题足够窄且相较简单方案有意义。零错误标签、很高分类准确率或测试全部通过，不能替代这两个条件。
+Success needs two conditions accepted separately: mathematically, the interval covers S(F_del) with probability ≥1−α; scientifically, the interval is narrow enough for the target question and meaningful compared with simple alternatives. Zero error labels, very high classification accuracy, or all tests passing cannot replace these two conditions.
 
-还须把两个逻辑不同的主张分开：
+Two logically different claims must also be kept apart:
 
-| 主张 | 所需证据 | 当前允许名称 |
+| Claim | Evidence needed | Name currently allowed |
 |---|---|---|
-| 观测模型与“删除指定坏记录”比较器的统计量差异被包住 | 固定依赖图、局部影响、有效坏记录审计和安全包络 | 条件式删除鲁棒证书 |
-| 这个删除比较器确实是历史信息集可测的模型 | 再加内容版本真实性、历史选择/元数据、共享核心与全部训练依赖的历史证据 | 只有这些前提也建立后，才可称无前视证书 |
+| The statistic difference between the observed model and the "delete the specified bad records" comparator is enclosed | Fixed dependence graph, local influence, a valid audit of bad records, and a safe envelope | Conditional deletion-robustness certificate |
+| This deletion comparator really is a model measurable with respect to the historical information set | In addition, historical evidence on the authenticity of content versions, historical selection/metadata, the shared core, and all training dependencies | Only once these premises are also established may it be called a no-look-ahead certificate |
 
-第一项可以在第二项未解决时独立成立。**不能将第一项的成功命名为 certified look-ahead freedom**；这也正是完整旗舰与当前可执行组件之间的差距。
+The first can hold on its own while the second is unresolved. **Success on the first must not be named certified look-ahead freedom**; this is exactly the gap between the complete flagship and the components that can be executed now.
 
-## 已有方法与可能争取的增量
+## Existing methods and the increment that might be gained
 
-已经保存的全文核验表明：temporal non-interference 已有形式化；DPA 已有稳定分片、确定训练和投票间隔证书；Finite Aggregation 与 collective bagging 已有结构化/集体投毒认证；无放回审计及置信序列也是成熟统计方法。[文献台账 L01–L04、L08–L09](../literature/literature_review.md)、[Q03](../answers/Q03.md)、[Q29](../answers/Q29.md)。因此以下说法均不能作为当前贡献：首次定义无前视、首次把错误数换成投票稳健、首次取 union bound、首次计算超几何区间、首次做共同污染优化。
+The saved full-text checks show: temporal non-interference already has a formalization; DPA already has stable sharding, deterministic training, and vote-margin certificates; Finite Aggregation and collective bagging already have structured/collective poisoning certification; auditing without replacement and confidence sequences are also mature statistical methods. [Literature ledger L01–L04, L08–L09](../literature/literature_review.md), [Q03](../answers/Q03.md), [Q29](../answers/Q29.md). Therefore none of the following can be a current contribution: the first definition of no look-ahead, the first conversion of error counts into vote robustness, the first union bound, the first computation of a hypergeometric interval, the first optimization over common contamination.
 
-可争取的增量应缩窄为：**内容版本与历史选择规则的可信契约、审计错误到训练依赖图的传递、对实际关心的非可加统计量的可计算包络，以及真实来源上审计成本与区间宽度的关系。** 新意必须以现有方法不能直接提供的明确问题为单位，并通过文献差异核查成立。当前 CM1–CM5 和检查器使这个接口可复查，但其本身不足以宣称一个新理论方向已建立。
+The increment that might be gained should be narrowed to: **a trustworthy contract for content versions and historical selection rules, the propagation from audit errors to the training dependence graph, computable envelopes for the non-additive statistics that actually matter, and the relation between audit cost and interval width on real sources.** Novelty must be counted per explicit problem that existing methods cannot provide directly, and must be established by a check of differences from the literature. The current CM1–CM5 and the checker make this interface reviewable, but by themselves they are not enough to claim that a new theoretical direction has been established.
 
-一个比“金融应用 + 已知组件”更值得追问的对象是：相同审计预算下，利用不同来源/分片影响结构的证书，能否系统性支配仅使用总污染数的证书？若答案仅是实现层面的常数差，应按严谨应用或可复现负结果定位，而不是包装成新的学习理论。
+An object more worth pursuing than "financial application + known components" is: under the same audit budget, can certificates that use the influence structure of different sources/shards systematically dominate certificates that use only the total contamination count? If the answer is only a constant-factor difference at the implementation level, it should be positioned as a rigorous application or a reproducible negative result, rather than packaged as new learning theory.
 
-## 从零训练的必要性：条件必要，不是普遍必要
+## Necessity of training from scratch: conditionally necessary, not universally necessary
 
-P1 要求训练依赖的全部来源可追踪，包括 tokenizer、去重、选择规则、标签生成、超参数和共享特征。无法审计来源的通用预训练权重不能自动满足这个前提；从随机初始化构建一个小模型，确实是当前本地条件下更容易控制的实现路线。
+P1 requires that every source training depends on be traceable, including the tokenizer, deduplication, selection rules, label generation, hyperparameters, and shared features. General pretrained weights whose sources cannot be audited do not automatically satisfy this premise; building a small model from random initialization is indeed the implementation route that is easier to control under current local conditions.
 
-但“任何信息集证书都必须从零训练”是错误命题。一个已有、且全部来源确实通过同一历史契约的编码器也可以用；固定词法/字符特征甚至没有预训练历史。随机初始化本身也不防止用未来文本训练词表或用未来标签选超参数。这里真正必要的是**完整历史依赖控制**。
+But "every information-set certificate must train from scratch" is a false statement. An existing encoder whose sources really all pass the same historical contract can also be used; fixed lexical/character features do not even have a pretraining history. Random initialization by itself also does not prevent training the vocabulary on future text or choosing hyperparameters with future labels. What is really necessary here is **complete control of historical dependencies**.
 
-最强的反方解释是：模型只是已知投毒审计理论的昂贵载体，TF-IDF 或固定哈希特征的分片逻辑回归已经能展示全部证书。若真实文本任务并不要求语言表示，就应接受这种解释，先以简单模型完成证书；没有证据支持必须新增 transformer。若希望保留“小语言模型”作为论文核心，则需证明同一任务上语言表示提供可测量的用途，而不是用模型名称制造创新。
+The strongest opposing explanation is: the model is just an expensive carrier for known poisoning-audit theory, and sharded logistic regression on TF-IDF or fixed hashed features can already demonstrate the whole certificate. If the real text task does not require language representations, this explanation should be accepted, and the certificate completed first with a simple model; there is no evidence that a new transformer must be added. If one wants to keep "a small language model" as the core of the paper, one must show that language representations provide a measurable use on the same task, rather than creating innovation through the model's name.
 
-## 完整假设与候选命题
+## Full assumptions and candidate propositions
 
-以下条件不能隐含省略：
+The following conditions cannot be omitted implicitly:
 
-1. 内容版本、记录 ID、总体 W 与截止日冻结；真实可得时间的定义能被审计，而不是把抓取时间、会议日和发布日期混成一个字段。
-2. 共享核心及所有共享组件没有未来污染，并且选择/元数据机制本身历史可测。仅删掉未来内容不够：未来比特可以通过“保留哪篇旧文档”泄漏，反例见 [T1.1](../theory/notes.md)。
-3. 可疑边缘记录只作用于其固定片；不存在跨片标准化、全局早停、全局重加权或可疑边缘更新共享骨干。删除一篇影响最多一个头；若修改 ID 跨片则需要相应扩大预算。
-4. 每个头是本片数据、固定外生随机性及合格核心的确定函数；代码/运行环境身份可追踪。
-5. 审计在固定总体上按已规定的无放回随机设计执行；人工判错正确，或另有可验证误判模型。当前精确固定 n 区间不能任意停止后继续沿用。
-6. 测试样本、真标签、类别集合、目标量和分母冻结；预测时输入的历史可得性另经检查，测试标签不进入训练选择。
-7. 计算返回完整外包络；组合搜索未结束时不能把部分搜索极值当界；有理端点或向外舍入覆盖数值误差。
+1. Content versions, record IDs, the population W, and the cutoff date are frozen; the definition of true availability time can be audited, rather than mixing crawl time, meeting date, and publication date into one field.
+2. The shared core and all shared components have no future contamination, and the selection/metadata mechanism itself is historically measurable. Deleting future content alone is not enough: future bits can leak through "which old documents are kept"; see the counterexample in [T1.1](../theory/notes.md).
+3. Suspect periphery records act only on their fixed shard; there is no cross-shard normalization, global early stopping, global reweighting, or suspect periphery updating the shared backbone. Deleting one document affects at most one head; if a modified ID moves across shards, the budget must be enlarged accordingly.
+4. Each head is a deterministic function of its shard's data, fixed exogenous randomness, and the qualified core; the identity of the code/runtime environment is traceable.
+5. The audit is carried out on a fixed population using a specified random design without replacement; human error judgments are correct, or there is a separate verifiable misjudgment model. The current exact fixed-n interval cannot continue to be used after arbitrary stopping.
+6. Test samples, true labels, the class set, the target quantity, and the denominator are frozen; the historical availability of the inputs at prediction time is checked separately, and test labels do not enter training selection.
+7. The computation returns the complete outer envelope; while a combinatorial search has not finished, partial search extremes cannot be used as bounds; rational endpoints or outward rounding cover numerical error.
 
-**候选主定理 P1-A（现有组件的条件式组合，不列为原创）。** 假设以上条件成立。令 K*=|C_t∩W|，审计反演得到 P(K*≤K_u)≥1−α。对所有可影响至多 min(K_u,m) 个头的共同子集 B，求固定测试集 S 的安全包络并取外侧极值。则
+**Candidate main theorem P1-A (a conditional combination of existing components, not listed as original).** Assume the conditions above hold. Let K*=|C_t∩W|, and let audit inversion give P(K*≤K_u)≥1−α. For every common subset B that can affect at most min(K_u,m) heads, compute a safe envelope of the fixed test-set statistic S and take the outer extremes. Then
 
 \[
 \Pr\{S(F_{del})\in[L(K_u),U(K_u)]\}\ge1-\alpha.
 \]
 
-证明要点：在 K*≤K_u 事件上，未受影响片的整个计算相同；清洁预测向量属于证书优化允许的向量集合；区间对该集合逐一成立。Accuracy 与 macro-F1 都由同一事件导出，同时报告不另支付两份 α。包络对任意受影响头的跨点自由输出进行外放松，故精确求解该放松不等于精确描述真实重训练。
+Proof sketch: on the event K*≤K_u, the whole computation for unaffected shards is the same; the clean prediction vector belongs to the set of vectors allowed by the certificate optimization; the interval holds for each element of that set. Accuracy and macro-F1 are both derived from the same event, so reporting them together does not pay two separate α. The envelope is an outer relaxation that allows arbitrary cross-point outputs for any affected head, so solving that relaxation exactly is not the same as describing the real retraining exactly.
 
-**必须有的破坏性对照。** 故意让可疑边缘训练共享 tokenizer，再删除一篇会改变词表的文档。此时多个头可一起改变，K 篇→K 片的证明不成立。实验若仍输出相同种类“证书”，检查器的前提验证就是不完整的。类似地，应有修改 ID、跨片归一化和未来信息控制筛选的攻击用例。
+**A destructive control that is required.** Deliberately let the suspect periphery train a shared tokenizer, then delete one document that changes the vocabulary. Now several heads can change together, and the K documents→K shards proof fails. If the experiment still outputs the same kind of "certificate", the checker's premise verification is incomplete. Similarly, there should be attack cases with modified IDs, cross-shard normalization, and screening controlled by future information.
 
-## 现有代码实际支持到哪里
+## What the existing code actually supports
 
-- [理论笔记](../theory/notes.md) 与 [集体统计量推导](../theory/collective_metrics.md) 已给条件、反例和证明；[独立理论复查](../theory/independent_review.md) 未发现所列范围内的实质错误，但没有证明来源真实性。
-- `research/local/audit.py` 有精确超几何上界及有理计算；`research/certificates/collective.py` 有共同头集合的 accuracy、macro-F1 分量包络与小规模 exact DP；搜索超限拒绝出证。
-- [集体实验](../experiments/collective_metrics/report.md) 的人工四点例把逐点 `[0,1]` 缩成 accuracy `[1/4,3/4]`、macro-F1 `[1/5,11/15]`。这是验证算法会收紧的反例，**不是实际语言模型结果**。
-- [独立实现复查](../literature/collective_review.md) 重跑 7 项检查并另核对 112 个直接改票例子；[第二轮报告](../reports/2026-11-15-round2.md) 汇总 36 项集成测试。有限检查支持实现健全性，不替代全域证明或真实审计。
-- 还没有真实训练的分片预测矩阵、真实时间戳抽样审计、真实清洁重训练对照或实际历史语料上的非空证书。现有 G0/G1 状态不能因新增数学组件而跳过。
+- The [theory notes](../theory/notes.md) and the [derivation of collective statistics](../theory/collective_metrics.md) already give conditions, counterexamples, and proofs; the [independent theory review](../theory/independent_review.md) found no substantive error within the listed scope, but it did not prove source authenticity.
+- `research/local/audit.py` has an exact hypergeometric upper bound and rational computation; `research/certificates/collective.py` has accuracy and macro-F1 component envelopes for a shared head set, plus a small-scale exact DP; when the search exceeds its limit it refuses to issue a certificate.
+- The hand-made four-point example in the [collective experiment](../experiments/collective_metrics/report.md) shrinks the pointwise `[0,1]` to accuracy `[1/4,3/4]` and macro-F1 `[1/5,11/15]`. This is a counterexample showing that the algorithm can tighten the bound, **not a real language-model result**.
+- The [independent implementation review](../literature/collective_review.md) reran 7 checks and separately verified 112 direct vote-change examples; the [round 2 report](../reports/2026-11-15-round2.md) summarizes 36 integration tests. Finite checks support the soundness of the implementation; they do not replace a proof over the whole domain or a real audit.
+- There is not yet a really trained shard prediction matrix, a sampling audit of real timestamps, a real clean-retraining control, or a non-vacuous certificate on an actual historical corpus. The existing G0/G1 status cannot be skipped because mathematical components were added.
 
-## 本地真实数据：有原料，证书要素尚未齐全
+## Real local data: raw material exists, the certificate ingredients are not yet complete
 
-[本地盘点](../reports/local_data_inventory.md) 确认 120 份 FOMC 文本约 6.98 MB；120 个本地 HTML 快照与 manifest 哈希一致；每条都有来源、发布日期、抓取日期、文本与 HTML 哈希，且本地许可记录为公共领域、允许训练。另有 28,486 篇 Wikipedia 快照文本和 SEntFiN 原始候选。故从头训练新模型不依赖旧 checkpoint，也不是因为没有真实原文而只能模拟。
+The [local inventory](../reports/local_data_inventory.md) confirms 120 FOMC texts of about 6.98 MB; 120 local HTML snapshots match the manifest hashes; each has its source, publication date, crawl date, and text and HTML hashes, and the local license record marks it as public domain with training allowed. There are also 28,486 Wikipedia snapshot texts and the SEntFiN raw candidates. So training a new model from scratch does not depend on the old checkpoint, and simulation is not forced by a lack of real source text.
 
-但本地 FOMC 是 2026 年抓取的版本。显示 2011 年发布日期，不能证明同一字节在 2011 年已存在；会议日期也不是发布日。Wikipedia 没有逐篇历史发布时间，不宜未经修订历史核验就加入历史可信核心。SEntFiN 的旧衍生集明确是私有非时间 pilot，没有完善事件审计和历史时间；不能把现成 sentiment 当需要的作者 stance 真值。
+But the local FOMC files are versions crawled in 2026. Showing a 2011 publication date does not prove that the same bytes existed in 2011; the meeting date is also not the publication date. Wikipedia has no per-article historical publication time and should not be added to the historically trusted core without checking revision history. The old derived SEntFiN set is explicitly a private non-temporal pilot, with no proper event audit or historical times; ready-made sentiment cannot be taken as the needed author-stance ground truth.
 
-还有一个容易漏掉的缺口：FOMC 会议纪要提供真实金融语言，却不自动提供独立、足够规模且确实需要语言理解的任务标签。利率上/下/不变若能从固定数字机械提取，符号规则可能已经解决任务。可以研究上下文比较基准、主体归属或不同段落的立场，但那要求新标签规范和人工复核，不能为了尽快得到非空区间临时改成模板识别。
+There is another gap that is easy to miss: FOMC minutes provide real financial language, but do not automatically provide task labels that are independent, large enough, and actually require language understanding. If rate up/down/unchanged can be extracted mechanically from fixed numbers, a symbolic rule may already solve the task. One can study contextual comparison benchmarks, attribution to a subject, or stance across different paragraphs, but that requires a new labelling specification and human review; one cannot switch temporarily to template recognition to get a non-vacuous interval sooner.
 
-若只用本地保存文件，一条可诚实执行的边界是“条件于现有版本时间记录正确”的真实文本证书原型；它必须与“真实历史无泄漏已认证”分开。历史版本证据不足是当前完整旗舰的最弱环节之一。
+If only locally saved files are used, one honestly executable boundary is a real-text certificate prototype "conditional on the existing version-time records being correct"; it must be kept apart from "real historical no-leakage certified". Insufficient evidence on historical versions is one of the weakest links of the current complete flagship.
 
-## 三阶段最小验证与资源估计
+## Three-stage minimal validation and resource estimates
 
-下表全部为**前瞻估计，不是已跑出的性能或用时**。不假设当前有 GPU，任何 GPU 配额都先以本地 CPU 短跑估算；不绕过当前离线边界。
+Everything in the table below is a **forward-looking estimate, not performance or timing already measured**. No GPU is assumed to be available now; any GPU quota is first estimated from short local CPU runs; the current offline boundary is not bypassed.
 
-| 阶段 | 具体工作与验收输出 | 资源估计与停止规则 |
+| Stage | Concrete work and acceptance output | Resource estimate and stopping rule |
 |---|---|---|
-| A：冻结研究对象 | 对本地 120 份 FOMC 的来源/版本时间证据分级；抽取一个明确的文本任务并建立至少双人或独立复核的标签规范；划分单位为整份会议纪要/事件，先保留最终测试事件 | 文件核验 CPU 15 分钟以内；人工源证据与首批标签约 6–12 小时，需用先做的 10 份记录计时校准。无法判定内容版本日期的记录列为未知，不能默认干净 |
-| B：最小完整链 | 先训练固定词法特征+分片线性头；在小规模上冻结语料、模型、审计设计。用真实文本与可控注入验证覆盖；再对真实时间审计输入计算区间 | 首选 CPU；m∈{5,11,21}，头训练及小规模求解先限 30 分钟。若公共完整标签不足，先只报告构造性/条件式原型，不报“真实证书完成” |
-| C：检验语言模型必要性及真实非空性 | 新随机初始化 0.5–3M 参数小编码器；只在合格核心训练，再冻结，保持同一任务/审计设计与线性基线比较。最终给审计量—宽度—任务效用的三维表 | 首次 CPU 5–15 分钟吞吐试跑；完整训练拟限制单 T4 2–4 小时、显存≤16 GB，这些尚未验证。没有可用 GPU 或吞吐超限时缩到有实际作用的最小模型，不把未运行结果填入表 |
+| A: freeze the object of study | Grade the source/version-time evidence for the 120 local FOMC documents; extract one explicit text task and set up a labelling specification with at least two annotators or independent review; the split unit is a whole set of minutes/an event, and the final test events are held back first | File checks within 15 CPU minutes; manual source evidence and the first batch of labels about 6–12 hours, to be calibrated by timing the first 10 records. Records whose content-version date cannot be determined are listed as unknown and cannot be assumed clean |
+| B: minimal complete chain | First train fixed lexical features + sharded linear heads; freeze the corpus, model, and audit design at small scale. Verify coverage with real text and controlled injection; then compute intervals on real time-audit inputs | CPU preferred; m∈{5,11,21}, with head training and small-scale solving limited to 30 minutes at first. If public complete labels are insufficient, first report only a constructive/conditional prototype, not "real certificate completed" |
+| C: test language-model necessity and real non-vacuity | A new randomly initialized small encoder of 0.5–3M parameters; train only on the qualified core, then freeze, keep the same task/audit design, and compare with the linear baseline. Finally give a three-way table of audit size–width–task utility | First a 5–15 minute CPU throughput trial; full training is planned to be capped at 2–4 hours on a single T4 with ≤16 GB of GPU memory; these figures are not yet verified. With no usable GPU or throughput over the limit, shrink to the smallest model that still does useful work; do not fill unrun results into the table |
 
-真实标签量不以“200 行”之类方便数字作为充分标准：FOMC 只有 120 个文档单位，段落数不能当独立样本数。任务难度、事件覆盖和审计证据应先决定是否值得走到 C。如果复杂头只提升开发集表现而不能提高冻结测试上的有效证书，应停在简单方法。
+The amount of real labels is not judged sufficient by convenient numbers such as "200 rows": FOMC has only 120 document units, and the number of paragraphs cannot be taken as the number of independent samples. Task difficulty, event coverage, and audit evidence should first decide whether it is worth going to C. If a complex head only improves dev-set performance and cannot improve the valid certificate on the frozen test, stop at the simple method.
 
-## 下次小试的事前判定规则（提案，不是已冻结运行）
+## Ex ante decision rules for the next small trial (a proposal, not a frozen run)
 
-这些规则只用于决定是否继续投入本路径，与[共同判定提案](DECISION_CRITERIA.md)配套阅读。由于任务标签、历史截止日和判定版本时间的证据标准尚未选定，**当前没有一项新实验已经按下列阈值预注册**。需先完成阶段 A，把具体数据 ID、来源契约、任务、简单基线、代码身份和预算写进实验记录，再执行一次冻结的小试；不能看结果后挑最容易过关的目标。
+These rules are only for deciding whether to keep investing in this path; read them together with the [common decision proposal](DECISION_CRITERIA.md). Because the task labels, the historical cutoff date, and the evidence standard for deciding version times have not yet been chosen, **no new experiment has yet been pre-registered under the thresholds below**. Stage A must be completed first, writing the specific data IDs, source contract, task, simple baseline, code identity, and budget into the experiment record, and then one frozen small trial is run; one cannot pick the easiest target to pass after seeing the results.
 
-### 正确性与来源的硬门
+### Hard gates for correctness and sources
 
-1. 首个主指标固定为 **accuracy 的清洁比较器区间**，整体审计失败预算 α=0.05；若还有被概率化处理的核心/审计者误判环节，其预算计入这 0.05。尚属条件假设的来源不额外假定“零失败概率”，输出名称保留条件式删除鲁棒。
-2. 预定小规模穷举中的每个污染配置，在使用真实影响预算时，确定性包络必须包含全部允许清洁输出；出现一次不包含就停止并查错。统计反演则按完整抽样分布检验覆盖率≥0.95，**不要求每次抽样都覆盖，也不能以有限次零失败替代覆盖率证明**。非法 ID 迁移、共享组件变化和超限搜索必须拒绝认证或明确扩大威胁集合。
-3. 真实文档的审计状态必须包含“未判定”。缺少历史版本依据的记录不能记为干净；即使 120 份都看过，普查也只消除了抽样不确定性，不自动消除历史真值不可判定性。最终声称历史无前视前，还要单独通过历史版本与选择规则的证据门。
+1. The first main metric is fixed as **the clean-comparator interval for accuracy**, with an overall audit failure budget α=0.05; if there are also core/auditor misjudgment steps that are treated probabilistically, their budgets count within this 0.05. Sources that are still conditional assumptions are not additionally assumed to have "zero failure probability", and the output keeps the name conditional deletion robustness.
+2. For every contamination configuration in the pre-specified small-scale exhaustive check, when the real influence budget is used, the deterministic envelope must contain all allowed clean outputs; a single failure to contain stops the work for debugging. Statistical inversion is tested for coverage ≥0.95 over the complete sampling distribution; **every individual sample is not required to cover, and zero failures in finitely many trials cannot replace a proof of coverage**. Illegal ID migration, changes to shared components, and searches over the limit must refuse certification or explicitly enlarge the threat set.
+3. The audit status of real documents must include "undetermined". Records lacking a basis for the historical version cannot be recorded as clean; even if all 120 are examined, a census only removes sampling uncertainty and does not automatically remove the undecidability of the historical truth. Before finally claiming historical no-look-ahead, the evidence gate for historical versions and selection rules must also be passed separately.
 
-### 科学有用性的暂定门
+### Provisional gates for scientific usefulness
 
-任务冻结时必须说明为什么不被简单符号规则直接解决，并保留一个从未用于模型/阈值选择的事件测试集合。建议以 **至少 40 个不同会议/事件单位**作为此次科学用途小试的操作性最低规模；这是让 accuracy 的计数步长不大于 2.5 个百分点的设计约束，**不是独立性、统计功效或总体泛化保证，也不是证书成立的数学条件**。如果只能得到更小或仅含单一真实类别的测试集，允许做实现检查，不据此裁决语言模型是否有用。训练、开发、来源审计和测试的文档 ID 预算必须共同列出，不能各环节重复许诺本地 120 份数据。
+When the task is frozen, one must explain why it is not solved directly by a simple symbolic rule, and keep an event test set never used for model/threshold selection. **At least 40 distinct meeting/event units** is proposed as the operational minimum scale for this scientific-usefulness trial; this is a design constraint that keeps the counting step of accuracy no larger than 2.5 percentage points, **not a guarantee of independence, statistical power, or population generalization, and not a mathematical condition for the certificate to hold**. If only a smaller test set, or one with only a single real class, can be obtained, implementation checks are allowed, but no verdict on whether the language model is useful is drawn from it. The document-ID budgets for training, development, source audit, and testing must be listed together; the 120 local documents cannot be promised repeatedly to each step.
 
-在通过以上硬门后，主判据建议为：预先固定审计设计下，真实文本试验的 **U−L≤0.10**，并至少有一个预定的、污染预算≥1的完整设置达到该条件。预算≥1的检查用于排除只展示“没有允许改动”的平凡证书；它不能靠事后减少审计量、修改可信核心或挑票差最大的点来制造。若本次真实审计恰得 K_u=0，照实报告其证书，同时把“非零预算可用性”留待预定的压力验证，不改结果身份。
+After passing the hard gates above, the proposed main criterion is: under an audit design fixed in advance, the real-text trial has **U−L≤0.10**, and at least one pre-specified complete setting with contamination budget ≥1 meets this condition. The budget ≥1 check is to exclude trivial certificates that only show "no change is allowed"; it cannot be manufactured by reducing the audit size after the fact, modifying the trusted core, or picking the points with the largest vote margins. If this real audit happens to give K_u=0, report its certificate as it is, and leave "usability under a nonzero budget" to the pre-specified stress verification, without changing the identity of the result.
 
-区间窄还必须排除无用的常数模型。为此，事先用开发数据冻结常数预测器及其标签选择规则；令其同一固定测试集 accuracy 为 S_const。若要称有信息的任务结论，要求 **L>S_const**；这是固定测试集比较，不是总体显著性检验。同时冻结强简单的**核心-only 合格基线**，报告其分数 S_base、[L−S_base,U−S_base] 及总成本，不能只比区间宽度。若基线使用同样不确定的边缘，必须给它自己的清洁包络，不能把其观测分数当无污染真值。可把相对核心-only 下降 5 个百分点列为效用代价的讨论点，但**不以预先任意给定的 5 个百分点一票否决数学分支**；是否接受代价取决于冻结任务实际用途及证书提供的新信息。
+A narrow interval must also exclude a useless constant model. For this, freeze a constant predictor and its label-selection rule in advance using dev data; let its accuracy on the same fixed test set be S_const. To claim an informative task conclusion, require **L>S_const**; this is a fixed-test-set comparison, not a population significance test. Also freeze a strong simple **core-only qualified baseline**, and report its score S_base, [L−S_base,U−S_base], and the total cost; do not compare interval width alone. If the baseline uses the same uncertain periphery, it must be given its own clean envelope; its observed score cannot be treated as the contamination-free truth. A drop of 5 percentage points relative to core-only can be listed as a discussion point for utility cost, but **an arbitrarily pre-set 5 percentage points is not used as a one-vote veto of the mathematical branch**; whether the cost is acceptable depends on the actual use of the frozen task and the new information the certificate provides.
 
-0.10 的宽度允许最多 10 个百分点的清洁统计量不确定性，可用于部分粗粒度用途判断；它仍可能过宽，不能识别几个百分点的模型增益。类别失衡时“随机水平”并非可靠参照，故任务门使用冻结常数预测器的实际分数。0.10 选择为便于做一次有约束的小试，**不是数据已支持的阈值，也不是论文发表门槛**。如最终科学问题要求辨别 2 个百分点差异，就必须事前收紧目标；不能沿用 0.10 后声称解决了更细问题。
+A width of 0.10 allows up to 10 percentage points of uncertainty in the clean statistic, which can serve some coarse-grained judgments of usefulness; it may still be too wide, and cannot identify model gains of a few percentage points. Under class imbalance, the "random level" is not a reliable reference, so the task gate uses the actual score of the frozen constant predictor. 0.10 was chosen to make one constrained small trial convenient; **it is not a threshold supported by data, and not a publication threshold**. If the final scientific question requires distinguishing a 2-percentage-point difference, the target must be tightened in advance; one cannot keep 0.10 and then claim a finer question has been solved.
 
-同一冻结结果必须同时展示宽度门 {0.05,0.10,0.20}，并把相对核心-only 的效用代价放在 {0.02,0.05,0.10} 三个讨论刻度下，不重新训练或选择测试点来迎合某格。主判定仍为宽度 0.10 及 L>S_const；三个代价刻度不是新增否决门。若宽度只在最宽松一格成立，记为敏感而非通过主门。鲁棒预测比例另作诊断，**不设置替代 accuracy 宽度的强制比例门**，因为集体统计量可能在没有逐点稳定时仍有非平凡区间。
+The same frozen result must show the width gates {0.05,0.10,0.20} together, and place the utility cost relative to core-only at three discussion scales {0.02,0.05,0.10}, without retraining or choosing test points to suit any cell. The main decision is still width 0.10 and L>S_const; the three cost scales are not added veto gates. If the width holds only in the loosest cell, record it as sensitive, not as passing the main gate. The fraction of robust predictions is a separate diagnostic; **no mandatory fraction gate replacing the accuracy width is set**, because a collective statistic can still have a non-trivial interval when there is no pointwise stability.
 
-判定结果分开记录：硬门失败→停止出证；硬门通过但宽度/用途门失败→保留严谨负结果，不升级真实模型旗舰；所有提案门通过→允许继续更完整的来源、新颖性和实际预算验证，仍不等于 G1、总体泛化或投稿质量已通过。
+Decision outcomes are recorded separately: hard gate fails→stop issuing certificates; hard gates pass but the width/usefulness gate fails→keep a rigorous negative result and do not upgrade to a real-model flagship; all proposed gates pass→continuing to more complete source, novelty, and actual-budget verification is allowed, and this still does not mean G1, population generalization, or submission quality has passed.
 
-## 最强简单基线与替代解释
+## Strongest simple baselines and alternative explanations
 
-1. **仅可信核心模型。** 完全放弃可疑边缘，避免其审计成本。P1 必须证明接纳边缘在任务效用或数据成本上值得，否则复杂证书链没有实际设计必要性。
-2. **全量审计/直接删除。** 本地仅 120 份 FOMC，逐份审查可能比设计顺序审计更便宜。数据小到普查可行时，不能靠人为放大 N 来制造统计问题。
-3. **固定字符/词法特征 + 分片线性头。** 它有同一污染头预算，且消除了共享语言模型历史这一弱环节；应先跑，而不是当作辅助弱基线。
-4. **逐点 DPA 与集体 bagging 的同预算实现。** 只有相同语料、共享条件和目标量下的宽度/成本改善，才是有效比较。不能把本文 exact DP 与对手刻意使用的粗糙公式比较后称新理论更紧。
-5. **有界软评分聚合。** 若目标改成各头有界损失的平均，k 个头任意改变直接给至多 k/m 的偏移界。它评价的是另一个预先定义的统计量，不能与投票 macro-F1 混同；但若它已满足科学问题，就可能无需复杂离散认证。
+1. **Trusted-core-only model.** Give up the suspect periphery entirely and avoid its audit cost. P1 must show that admitting the periphery is worth it in task utility or data cost; otherwise the complex certificate chain has no practical design necessity.
+2. **Full audit/direct deletion.** Locally there are only 120 FOMC documents, and reviewing each one may be cheaper than designing a sequential audit. When the data are small enough for a census to be feasible, one cannot inflate N artificially to manufacture a statistics problem.
+3. **Fixed character/lexical features + sharded linear heads.** It has the same contaminated-head budget and removes the weak link of a shared language-model history; it should be run first, not treated as an auxiliary weak baseline.
+4. **Same-budget implementations of pointwise DPA and collective bagging.** Only width/cost improvements under the same corpus, sharing conditions, and target quantity are valid comparisons. One cannot compare this document's exact DP with a crude formula deliberately used for the competitor and then call the new theory tighter.
+5. **Bounded soft-score aggregation.** If the target is changed to the average of each head's bounded loss, arbitrary changes in k heads directly give a shift bound of at most k/m. It evaluates a different pre-defined statistic and must not be confused with voting macro-F1; but if it already answers the scientific question, complex discrete certification may not be needed.
 
-## 否决条件、负结果与最弱链环
+## Rejection conditions, negative results, and the weakest link
 
-真正的否决条件包括：目标真值不依赖语言且符号规则足够；历史内容版本无法建立可信条件而结论仍要求绝对历史性；少量核心不确定性就使所有头可变；真实非零审计发现让所有合理预算区间都接近平凡范围；已有工作覆盖相同差异；或“丢掉可疑边缘”在相同效用下更便宜。
+The real rejection conditions include: the target ground truth does not depend on language and a symbolic rule is enough; trustworthy conditions cannot be established for historical content versions while the conclusion still requires absolute historicity; a small amount of core uncertainty makes all heads variable; real nonzero audit findings make the interval under every reasonable budget close to the trivial range; prior work covers the same difference; or "drop the suspect periphery" is cheaper at the same utility.
 
-界松不必自动否决，但必须解释是否为不可避免的审计分辨率、模型票差小、集合放松过宽或来源真实性不足。把四者混为“模型太小”没有科学价值。有价值的负结果是：针对一个明确现实语料与预算，证明/复现哪条条件阻止证书，并给出能关闭它的最小条件或无法关闭的证据。
+A loose bound need not reject automatically, but one must explain whether it comes from unavoidable audit resolution, small model vote margins, too wide a set relaxation, or insufficient source authenticity. Lumping the four together as "the model is too small" has no scientific value. A valuable negative result is: for an explicit real corpus and budget, prove/reproduce which condition blocks the certificate, and give the minimal condition that could close it, or evidence that it cannot be closed.
 
-当前最弱环节是**历史版本可得性与合格任务数据的配套**，随后才是小语料下分片模型的任务效用。现有组合数、DP 与程序单元测试已经不是主要阻力。继续扩充检查器却不处理这两个弱环节，会重新变成“框架很多、核心问题没有证据”的项目。
+The current weakest link is **the pairing of historical-version availability with qualified task data**, followed by the task utility of sharded models on a small corpus. The existing combinatorics, DP, and program unit tests are no longer the main obstacle. Continuing to expand the checker without dealing with these two weak links would turn this back into a project with "many frameworks and no evidence on the core question".
 
-## 给资深助手的具体审查问题
+## Concrete review questions for the senior assistant
 
-- F_del 这一删除比较器是否就是论文需要解释的经济/统计对象？如果真正关心“当时最佳可用模型”，当前证书没有回答它。
-- 是否接受真实来源条件式证书作为中间成果，同时明确历史版本的外部假设？哪类结果足以升级为最终信息集结论？
-- 原始任务以 macro-F1 为中心是否有实质理由，还是仅继承旧情感任务？换目标量必须先重写研究问题，再比较方法。
-- 用共享核心+边缘小头是否过于削弱“语言模型被污染”的问题？若污染只影响线性头，审稿人可能认为回避了最困难部分。
-- 对小型 FOMC 集合，全量审查和核心-only 基线是否已使复杂统计审计不必要？若扩大到未核验来源，又是否破坏可信性？
-- 哪一条差异值得做新的定理：影响图下更紧统计量包络、审计成本下界，还是共享核心不确定性的传播？三者不能同时用工程计划代替研究选择。
+- Is the deletion comparator F_del exactly the economic/statistical object the paper needs to explain? If what really matters is "the best model available at the time", the current certificate does not answer it.
+- Is a conditional certificate on real sources acceptable as an intermediate result, with the external assumption about historical versions made explicit? What kind of result is enough to upgrade to the final information-set conclusion?
+- Is there a substantive reason for the original task to center on macro-F1, or is it only inherited from the old sentiment task? Changing the target quantity requires rewriting the research question first, then comparing methods.
+- Does using a shared core + small periphery heads weaken the "contaminated language model" question too much? If contamination affects only linear heads, reviewers may think the hardest part has been avoided.
+- For the small FOMC set, do full review and the core-only baseline already make complex statistical auditing unnecessary? And if it is extended to unverified sources, would that destroy trustworthiness?
+- Which difference is worth a new theorem: tighter statistic envelopes under an influence graph, lower bounds on audit cost, or the propagation of shared-core uncertainty? One cannot pursue all three at once with an engineering plan in place of a research choice.
 
-## 可行性结论与不确定性
+## Feasibility conclusion and uncertainty
 
-**数学与本地原型可行性：较高；完整真实历史证书可行性：条件式中等；发表级新颖性：未确定。** 这不是优先级排序。已有的证明和代码足以排除一些错误论证，也足以支持下一步真实小实验；尚不足以确认旗舰的科学问题与数据条件都已成立。最合理的下一步是先做 A 中的对象/来源门，而不是立刻扩模型或宣称“可认证金融语言模型已完成”。
+**Feasibility of the mathematics and the local prototype: fairly high; feasibility of a complete real historical certificate: conditional, moderate; publication-grade novelty: undetermined.** This is not a priority ranking. The existing proofs and code are enough to rule out some wrong arguments, and enough to support the next small real experiment; they are not yet enough to confirm that the flagship's scientific question and data conditions both hold. The most reasonable next step is to do the object/source gate in A first, rather than immediately scaling up the model or claiming "a certifiable financial language model is done".

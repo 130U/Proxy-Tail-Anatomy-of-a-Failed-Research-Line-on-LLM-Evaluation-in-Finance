@@ -1,59 +1,59 @@
-# 致 Fable：绝对评分新题的文献门报告
+# To Fable: literature gate report for the new absolute-scoring question
 
-后续决定：用户已选择“按复现与压力测试继续评分”，250 次评分现已全部完成。以下保留文献门阶段的原判断与当时零评分状态；最终结果见 [一页结论](FABLE_ONE_PAGE.md) 和 [完整报告](FABLE_REPORT.md)，执行依据见 [冻结协议](protocol.md)。
+Later decision: the user chose "continue scoring as a replication and stress test", and all 250 scoring calls have now been completed. The original judgment from the literature-gate stage and the zero-scoring status at that time are kept below. For the final results see the [one-page summary](FABLE_ONE_PAGE.md) and the [full report](FABLE_REPORT.md); the basis for execution is the [frozen protocol](protocol.md).
 
-2026-11-16。依据 [TASK.md 的固定版本](https://github.com/130U/proxy-tail/blob/41886de0da24517d4e8afb4341c4c1d7953a6ec8/TASK.md)。本轮由三个 AI 研究分支分别检查 LLM 文献、信度数学和执行设计；这是交给 Fable 的材料，不是 Fable 已给出的评审。
+2026-11-16. Based on [the fixed version of TASK.md](https://github.com/130U/proxy-tail/blob/41886de0da24517d4e8afb4341c4c1d7953a6ec8/TASK.md). In this round, three AI research branches separately checked the LLM literature, the reliability mathematics and the execution design. This is material for Fable, not a review that Fable has already given.
 
-**结论：新题的数学骨架与多项关键测量已有直接先例；尚未确认一篇论文完整做过本题的全部实验组合。建议先把这一发现交给 Fable，再决定是否投入约 200–250 次评分调用。** 当前没有证据支持把这套公式或“LLM 自己的头部名单不稳定”列为新贡献。若继续，合理定位是已知基准在特定评分协议上的复现与失效机制检验。
+**Conclusion: the mathematical skeleton of the new question and several key measurements already have direct prior work; we have not confirmed that any one paper has done the full combination of experiments in this question. We recommend handing this finding to Fable first, and only then deciding whether to spend about 200–250 scoring calls.** There is currently no evidence for listing this formula, or "an LLM's own top list is unstable", as a new contribution. If the work continues, the reasonable framing is a replication of a known baseline under a specific scoring protocol, plus a test of its failure mechanisms.
 
-这次交付的是执行前阶段结果：**新评分调用 0 次、新分数 0 条；未抽样、未冻结最终提示，未制作实验结果图。** 旧成对比较和排序聚合的结果仍是旧实验，不能当成本题的测量。本轮完成的是定向检索和关键原文核对，没有声称已完成半天或系统综述。
+This deliverable is a pre-execution result: **0 new scoring calls, 0 new scores; no sampling, no frozen final prompt, no experimental result figures.** The results of the earlier pairwise comparison and rank aggregation remain old experiments and cannot be used as measurements for this question. This round completed a targeted search and a check of the key original texts; it does not claim to have completed a half-day or systematic review.
 
-## 最接近的证据
+## Closest evidence
 
-| 核读来源 | 已经做了什么 | 尚未确认覆盖的部分 |
+| Source read closely | What it already did | Parts not yet confirmed as covered |
 | --- | --- | --- |
-| [Xie、Alanwar，Judged in Company，§3、§5.4、H.4、Tables 12/17](https://arxiv.org/html/2610.40241v1) | LLM 评分对批次的依赖；高斯相关到阈值翻转的公式；重复聚合收益；由主实验作出预测后，再用新增投票运行验证。也实际报告了概率均值，不能说它只做投票。 | 本题原始 0–100 整数均分、两组 m=1/2/4、固定 p 的双尾自我重合和放行倍数这一完整组合。 |
-| [Zhang、Yang，LLM-as-a-Judge Version Shift，§7、Appendix J](https://arxiv.org/html/2610.32986v1) | 同版本重复评分的 top-30% 名单变化，作为版本变化的比较基线。 | 从单次信度预测原始分均值的头部曲线。 |
-| [Wan、Brennan、Lee，2007，§1.1–1.2](https://education.uiowa.edu/sites/education.uiowa.edu/files/2022-10/casma-research-report-22.pdf) | 经典测量学中已经用 Spearman–Brown 调整后的信度作为二元正态相关，计算分类一致性。 | LLM 金融标题的这一具体实测。文中追溯的 1989 年原论文未取得全文，不冒充已读。 |
+| [Xie, Alanwar, Judged in Company, §3, §5.4, H.4, Tables 12/17](https://arxiv.org/html/2610.40241v1) | Dependence of LLM scoring on the batch; a formula from Gaussian correlation to threshold flips; the gain from repeated aggregation; a prediction made from the main experiment and then validated with additional voting runs. It also reports probability means, so we cannot say it only uses votes. | The full combination in this question: raw 0–100 integer means, two groups with m=1/2/4, two-tail self-overlap at fixed p, and widening factors. |
+| [Zhang, Yang, LLM-as-a-Judge Version Shift, §7, Appendix J](https://arxiv.org/html/2610.32986v1) | Changes in the top-30% list under repeated scoring with the same version, as a comparison baseline for version changes. | Predicting the top-list curve of raw-score means from single-score reliability. |
+| [Wan, Brennan, Lee, 2007, §1.1–1.2](https://education.uiowa.edu/sites/education.uiowa.edu/files/2022-10/casma-research-report-22.pdf) | Classical measurement theory already uses Spearman–Brown-adjusted reliability as a bivariate normal correlation to compute classification consistency. | This specific measurement on LLM scoring of financial headlines. We did not obtain the full text of the 1989 original paper it traces back to, and do not pretend to have read it. |
 
-更多相邻实证包括行为锚定评分、重复数值打分、改变批次后平均，以及按入选比例衡量 LLM 对人工头部候选人的召回。逐篇范围与原文链接见 [LLM 文献分析](literature_llm.md)；经典依据与完整推导见 [信度与数学分析](literature_reliability.md)。
+More adjacent empirical work includes behaviorally anchored scoring, repeated numeric scoring, averaging after changing batches, and measuring LLM recall of human top candidates by selection fraction. Paper-by-paper scope and links to the originals are in the [LLM literature analysis](literature_llm.md); the classical basis and the full derivation are in the [reliability and mathematical analysis](literature_reliability.md).
 
-## 为什么“换成头部名单”不足以成为新理论
+## Why "switching to top lists" is not enough to be a new theory
 
-以下是本次核对所作的数学推论，不是声称上表论文已经实施本题的全部实验。
+The following are mathematical consequences drawn during this check. They do not claim that the papers in the table above have carried out all experiments in this question.
 
-在平行测量模型 S_j=T+ε_j 下，误差与 T 不相关、各次误差方差相等且彼此不相关，两个不相交的 m 次均值相关为
+Under the parallel measurement model S_j=T+ε_j, with errors uncorrelated with T, equal error variances across rounds and errors mutually uncorrelated, the correlation between two disjoint m-round means is
 
 \[
 r_m=\frac{mr}{1+(m-1)r}.
 \]
 
-若两个标准化均值联合正态，就能从 r_m 积分得到阈值翻转率 F。对于边际入选比例同为 p 的两个集合，头部自我重合 H 满足
+If the two standardized means are jointly normal, the threshold flip rate F can be obtained by integration from r_m. For two sets with the same marginal selection fraction p, the top-list self-overlap H satisfies
 
 \[
 H=1-\frac{F}{2p}.
 \]
 
-第二个式子只是集合恒等式。把已有信度公式与高斯阈值模型换写成头部重合，不足以构成新定理。并列使两份名单大小不同时，也不能直接套用这个等大小公式。
+The second formula is only a set identity. Rewriting an existing reliability formula and a Gaussian threshold model as top-list overlap is not enough to make a new theorem. When ties make the two lists different in size, this equal-size formula also cannot be applied directly.
 
-## 即使继续，也必须保留的解释边界
+## Interpretation limits that must be kept even if the work continues
 
-**尺度问题。** 单轮做正态秩变换后的 r，与原始整数分均值对应的相关不是同一个对象。单调变换保留每轮排序，却可能改变跨轮均值的排序。因此本题公式可以作为固定、可证伪的基准，不能作为已满足假设下的必然预测。公式失配可能来自量表非线性、并列、协方差结构或联合分布；不能直接命名为新尾部规律。
+**Scale.** The r obtained after a normal-rank transformation of each single round is not the same object as the correlation that corresponds to raw integer score means. A monotone transformation preserves each round's ordering but can change the ordering of the cross-round means. So the formula in this question can serve as a fixed, falsifiable baseline, not as a necessary prediction under satisfied assumptions. A mismatch with the formula may come from scale nonlinearity, ties, the covariance structure or the joint distribution; it cannot be named directly as a new tail regularity.
 
-**研究问题的范围。** 同模型的自我重合测稳定性，不测正确性。两次都选错和两次都选对，可以有完全相同的自我重合。因此仅凭这项实验，还不能决定“重复问几遍”和“把网撒宽”哪个带来更高的真实召回或经济价值。这个预算选择需要额外的参考目标与成本定义，当前设计没有识别它。
+**Scope of the research question.** Same-model self-overlap measures stability, not correctness. Choosing wrongly both times and choosing correctly both times can give exactly the same self-overlap. So this experiment alone cannot decide whether "ask several times" or "cast a wider net" brings higher true recall or economic value. That budget choice needs an extra reference target and a definition of cost, and the current design does not identify it.
 
-**统计解释。** r 和均分名单来自相同八轮，这是不额外调参的内部检验，不是独立留出预测。同批与异批相关之差也不是已识别的“批次噪声百分比”。标题 bootstrap 应携带全部八轮评分；它不自动涵盖重新生成批次或共享上下文的全部不确定性。
+**Statistical interpretation.** r and the mean-score lists come from the same eight rounds. This is an internal test without extra tuning, not an independent held-out prediction. The difference between same-batch and different-batch correlations is also not an identified "percentage of batch noise". The headline bootstrap should carry all eight rounds of scores; it does not automatically cover all the uncertainty from regenerating batches or from shared context.
 
-**执行细节。** 100 个随机对照目标通常散布在接近全部 25 个批次中。若复用它们第一轮的完整 40 条上下文并额外重复两次，对照最多新增 50 次调用，总数约 250。新的并列门比较的是整个边界同分组与名义人数的 20%，不是额外扩张人数。新标题输入须保存在仓库之外。具体口径见 [执行设计分析](design_review.md)。
+**Execution details.** The 100 random control targets are usually spread over nearly all 25 batches. If their complete 40-item first-round contexts are reused and repeated twice more, the controls add at most 50 calls, for a total of about 250. The new ties gate compares the whole boundary tie group with 20% of the nominal count, not the number of extra items added. The new headline inputs must be stored outside the repository. The exact conventions are in the [execution design analysis](design_review.md).
 
-## 本阶段的决定与给 Fable 的具体问题
+## Decision at this stage and specific questions for Fable
 
-TASK 最后的要求是：查到有人专门做过头部名单及同样公式对照，就先告诉 Theodore，不继续跑。**目前证据尚不足以严格宣布“同一完整实验已经重复”，所以这里没有把题目判成文献 FAIL。** 暂不启动批量评分是基于高度接近先例的研究判断，优先让 Theodore 和 Fable 看到会改变投入价值的证据；不是工具、API 或权限障碍。
+The final requirement of the TASK is: if we find that someone has specifically done top lists together with the same formula comparison, tell Theodore first and do not continue running. **The current evidence is not yet enough to declare strictly that "the same full experiment has already been done", so the question is not judged a literature FAIL here.** Holding off on batch scoring is a research judgment based on very close prior work, so that Theodore and Fable see first the evidence that would change the value of the investment. It is not a tool, API or permission obstacle.
 
-我的建议是放弃“这套公式是新理论”的定位。是否继续原实验，应取决于是否接受它作为复现与压力测试，并在评分前明确剩余增量。可以直接交给 Fable 的问题是：
+My recommendation is to drop the framing "this formula is a new theory". Whether to continue the original experiment should depend on whether it is accepted as a replication and stress test, with the remaining increment stated clearly before scoring. Questions that can go directly to Fable:
 
-1. 在上述先例下，金融标题的双端、固定入选比例验证是否仍值得作为一个短实验？如果值得，贡献应限定为何种可证伪机制，而非换数据集？
-2. 原始分均值与秩正态信度的尺度差别是否属于故意要检验的基准误设？若是，是否接受“失配首先可能来自尺度”这一解释，而不把失配直接归为尾部异常？
-3. 当前目标是否只回答重测稳定性？若仍要回答重复与加宽的预算选择，需要另加何种独立参考，使稳定性与有效性能够区分？
+1. Given the prior work above, is the two-tail, fixed-selection-fraction validation on financial headlines still worth a short experiment? If so, to which falsifiable mechanism should the contribution be limited, rather than just a change of dataset?
+2. Is the scale difference between raw-score means and rank-normal reliability a baseline misspecification that we deliberately want to test? If so, do we accept the interpretation that "a mismatch may come first from scale", rather than attributing a mismatch directly to a tail anomaly?
+3. Is the current goal only to answer retest stability? If the budget choice between repetition and widening is still to be answered, what independent reference must be added so that stability and validity can be told apart?
 
-本报告没有要求 API 密钥、没有联系外部人员，也没有生成或替换评分数据。收到研究定位后的下一阶段才是冻结提示与规则、抽取新样本并完成八轮实测；本阶段不能报告重合率、达到 90% 所需次数或公式实测误差。
+This report did not request API keys, did not contact outside people, and did not generate or replace scoring data. Only after the research framing is received does the next stage start: freezing the prompt and rules, drawing the new sample and completing the eight measured rounds. At this stage we cannot report overlap rates, the number of repeats needed to reach 90%, or the measured error of the formula.

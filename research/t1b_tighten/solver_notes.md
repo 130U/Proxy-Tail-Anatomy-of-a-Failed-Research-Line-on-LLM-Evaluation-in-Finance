@@ -1,53 +1,53 @@
-# T1B 数值范围与证书
+# T1B numeric ranges and certificates
 
-`exact_solver.py` 的输入是有限有理数盒、齐次线性等式和 T1 程序。常量或零宽事实可以放入盒中，等式可以冗余。每个事实按中心和半宽转换为 `z ∈ [-1,1]`，避免货币单位造成浮点尺度问题；零宽事实对应 `z=0`。
+The inputs to `exact_solver.py` are a finite rational box, homogeneous linear equations and the T1 program. Constants or zero-width facts can be put in the box, and equations may be redundant. Each fact is converted by its center and half-width to `z ∈ [-1,1]`, which avoids floating-point scale problems caused by currency units; a zero-width fact corresponds to `z=0`.
 
-## 目标与求解
+## Objectives and solving
 
-先符号化程序；约分后分子、分母均为仿射函数时，分母常数的情形直接求解线性规划。否则先在整个盒上证明分母严格同号，把负分母同时取反，再采用 Charnes–Cooper 变量 `t=1/D(z)`、`y=t z`：`D(y,t)=1`，每条等式 `A z=b` 变成 `A y-bt=0`，每个界 `l≤z≤u` 变成 `lt≤y≤ut`。在变换前将分母按其盒界均值缩放，使 `t` 约为 1。分母正下界同时给出 `t` 和 `y` 的有限安全盒。
+The program is first made symbolic. When, after cancellation, the numerator and denominator are both affine and the denominator is constant, a linear program is solved directly. Otherwise, we first prove that the denominator has a strictly constant sign over the whole box, negate both parts if the denominator is negative, and then use the Charnes–Cooper variables `t=1/D(z)`, `y=t z`: `D(y,t)=1`, each equation `A z=b` becomes `A y-bt=0`, and each bound `l≤z≤u` becomes `lt≤y≤ut`. Before the transformation, the denominator is scaled by the mean of its box bounds so that `t` is about 1. The positive lower bound of the denominator also gives a finite safe box for `t` and `y`.
 
-[SciPy 的官方 linprog 文档](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html) 定义了线性等式、不等式、变量界和求解状态；代码只将 HiGHS 的输出用作候选。符号运算使用 [SymPy](https://docs.sympy.org/latest/modules/solvers/solvers.html)，但所有证书的判定最终由 Python `Fraction` 的精确有理数比较完成。
+[SciPy's official linprog documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html) defines linear equalities, inequalities, variable bounds and solver statuses; the code uses HiGHS output only as candidates. Symbolic computation uses [SymPy](https://docs.sympy.org/latest/modules/solvers/solvers.html), but every certificate decision is finally made by exact rational comparison with Python `Fraction`.
 
-## 为什么外包络可靠
+## Why the outer envelope is reliable
 
-考虑最小化 `cᵀv+c0`，约束 `Ev=b`、`Gv≤h`、`l≤v≤u`。取任意有理数向量 `α` 和逐项非正的 `β`，令
+Consider minimizing `cᵀv+c0` subject to `Ev=b`, `Gv≤h`, `l≤v≤u`. Take any rational vector `α` and an elementwise non-positive `β`, and let
 
-`r = c − Eᵀα − Gᵀβ`。
+`r = c − Eᵀα − Gᵀβ`.
 
-对每个可行点，严格有
+For every feasible point, strictly,
 
-`cᵀv+c0 ≥ c0 + bᵀα + hᵀβ + Σ min(rᵢlᵢ, rᵢuᵢ)`。
+`cᵀv+c0 ≥ c0 + bᵀα + hᵀβ + Σ min(rᵢlᵢ, rᵢuᵢ)`.
 
-右边就是保存的下界证书。浮点对偶乘子仅被有理数化；哪怕它们不是精确最优乘子、残差不为零，这一式也仍然成立。最大值通过最小化负目标求上界。没有把浮点目标直接四舍五入成“证明”。
+The right-hand side is the saved lower-bound certificate. The floating-point dual multipliers are only rationalized; even if they are not the exact optimal multipliers and the residual is not zero, this inequality still holds. The maximum is bounded above by minimizing the negated objective. A floating-point objective is never simply rounded into a "proof".
 
-浮点原解的活跃约束另用有理数行化简求解，重建候选点后逐项精确检查所有界、不等式和等式。若原始对偶候选留下非零差距，再在精确活跃约束上求解平稳性等式重建对偶乘子，检查符号后仍用上面的通用公式验证。若精确原解的目标等于证书界，记录 `range_exact=true`；否则区间仍然是可靠外包络，并明确不声称精确最优。
+The active constraints of the floating-point primal solution are solved separately by rational row reduction; after the candidate point is rebuilt, all bounds, inequalities and equations are checked exactly, item by item. If the primal and dual candidates leave a non-zero gap, the dual multipliers are rebuilt by solving the stationarity equations on the exact active constraints, their signs are checked, and they are still verified with the general formula above. If the objective at the exact primal solution equals the certificate bound, `range_exact=true` is recorded; otherwise the interval is still a reliable outer envelope, and exact optimality is explicitly not claimed.
 
-## 存在性与空集
+## Existence and empty sets
 
-越界结论必须有完整事实赋值：它严格处于每个非退化舍入区间内部，精确满足全部等式，并且原始程序的有理数执行结果在接受区间外。通过最大化公共内缩余量求可行内部点，再与端点作有理数凸组合。若可行域只接触舍入端点，不用该端点宣布越界。证书区间越界但没有严格内部见证时，结果为 `unresolved`。
+An out-of-tolerance conclusion requires a complete assignment of facts: it lies strictly inside every non-degenerate rounding interval, satisfies all equations exactly, and the rational execution result of the original program lies outside the acceptance interval. A feasible interior point is found by maximizing a common inward margin, and is then combined convexly with an endpoint in rationals. If the feasible region only touches rounding endpoints, that endpoint is not used to declare out of tolerance. When the certificate interval is out of tolerance but there is no strict interior witness, the result is `unresolved`.
 
-若无法重建可行点，解独立的第一阶段问题 `min t`，满足 `|Ez-b|≤t`、原始盒和 `0≤t≤max(1,max|b|)`。此问题总有显然可行点；只有其精确证书下界严格大于零，才返回 `infeasible`。空可行域绝不会被统计为“确定”。
+If a feasible point cannot be rebuilt, an independent phase-one problem `min t` is solved, subject to `|Ez-b|≤t`, the original box and `0≤t≤max(1,max|b|)`. This problem always has an obvious feasible point; `infeasible` is returned only when its exact certificate lower bound is strictly greater than zero. An empty feasible region is never counted as "determined".
 
-`verify_result` 无须再次调用优化器：它从问题与保存的对偶乘子重算全部界，核对精确原解和严格内部见证。`extrema` 保存最小/最大候选原始赋值及目标，允许边界；这些不是自动有效的舍入见证。若整段范围与 gold 接受区间不相交，汇总程序应单列 `reference_incompatible`，不能当成答案不唯一。
+`verify_result` needs no further optimizer call: it recomputes all bounds from the problem and the saved dual multipliers, and checks the exact primal solution and the strict interior witness. `extrema` saves the minimum/maximum candidate primal assignments and objectives, which may lie on the boundary; these are not automatically valid rounding witnesses. If the whole range does not intersect the gold acceptance interval, the summary program should list it separately as `reference_incompatible`; it cannot be treated as a non-unique answer.
 
-## 非线性程序与限制
+## Nonlinear programs and limitations
 
-真正非线性（例如两个不确定输入相乘）先分别以线性规划收紧程序所用坐标，再做有理数区间传播。这首先是外包络；另搜索可行线性目标端点及其内部凸组合来产生越界见证。如果能用两个精确可行赋值分别达到外包络的两端，则独立证明其为精确范围，并保存端点证书；否则不声称精确范围。若分母盒不能证明同号，也落入保守路径；区间跨零时可能没有有限外包络。符号约分之前还核查原始程序的定义域，避免将 `0/0` 约分为 `1` 后错误宣布确定。
+For a genuinely nonlinear program (for example the product of two uncertain inputs), the coordinates used by the program are first tightened separately by linear programming, and then rational interval propagation is applied. This is first of all an outer envelope; separately, feasible endpoints of linear objectives and their interior convex combinations are searched to produce out-of-tolerance witnesses. If two exactly feasible assignments attain the two ends of the outer envelope, this independently proves that it is the exact range, and the endpoint certificates are saved; otherwise no exact range is claimed. If the denominator box cannot be proven to have a constant sign, the program also falls into the conservative path; when the interval crosses zero there may be no finite outer envelope. Before symbolic cancellation, the domain of the original program is also checked, to avoid cancelling `0/0` to `1` and then wrongly declaring it determined.
 
-求解器证明的是**给定已核验语义约束后的数学命题**，不会证明候选加总关系在经济语义上真实成立。语义筛选、重复披露的同量判断与文档覆盖范围由逐题审计另行负责。
+What the solver proves is **a mathematical proposition given the verified semantic constraints**; it does not prove that a candidate sum relation really holds in economic semantics. Semantic screening, same-quantity judgments for duplicate disclosures and document coverage are the responsibility of the per-question audit.
 
-## 独立实现与管线复核记录
+## Independent implementation and pipeline review record
 
-求解器代理除实现数学内核外，还只读审查了 `prepare.py` 和 `run_audit.py`，以及 A/B 审查者提交的约束。
+Besides implementing the mathematical core, the solver agent also did a read-only review of `prepare.py` and `run_audit.py`, and of the constraints submitted by reviewers A/B.
 
-- 原始 196 个舍入盒重新求解并通过无优化器证书验证，全部找到严格内部越界见证；初次版本中 191 个仿射或线性分式精确范围、5 个非线性外包络。后续增加了非线性端点达到检验。
-- 单元检查涵盖闭式增长率范围、加总收紧、负分母、空集、只有边界可行、相关乘积的非精确包络、冗余等式、零宽事实、对偶残差、篡改证书/见证、单位缩放、原程序 `0/0` 定义域。测试中故意篡改不可行证书也被拒绝。
-- 发现并报告一个真实集成错误：`UNP/2009/page_35.pdf-1` 的 `4 pt` 单元格由审查者提供补充界，但旧表格解析器未识别 `pt`，来源链接触发缺失键。主代理补充了点数后缀解析和明确来源检查，复跑通过。
-- 单元格短横线未自动当成数值；审查者须显式提供其零值解释与界。表头中的年份、百分比合计、合同比例、负损失转正幅度均需语义处理，不能由数值接近自动决定。检查了 MSI 的 `−1/1000` 符号与单位变换、固定 100% 组成恒等式、成熟期加总与余额滚动关系。
-- 指出 PM 费用桥中的 “primarily due to” 不保证列项穷尽，B 审查者从主约束中删除该关系；类似的非穷尽叙述不能仅因显示中心恰好加总就作为恒等式。
-- 主代理进一步审查 CME 授信分解的 “including”，确认两个列示分项不保证穷尽总额度；该等式仅作为带明确额外假设的敏感性分析保留，不计入主结果。
-- 逐条确认求解成功不等于研究结论：空集不计为确定，语义无效或待确认记录不计保留，整段范围排除 gold 的题另列参考答案不相容。对保留题还应保存一个接受区间内的可行赋值，和区间外赋值配对；主管线负责该检查。
+- The original 196 rounding boxes were re-solved and passed optimizer-free certificate verification; strict interior out-of-tolerance witnesses were found for all of them. In the first version there were 191 affine or linear-fractional exact ranges and 5 nonlinear outer envelopes. A nonlinear endpoint-attainment check was added later.
+- The unit checks cover closed-form growth-rate ranges, sum tightening, negative denominators, empty sets, feasibility only on the boundary, non-exact envelopes of correlated products, redundant equations, zero-width facts, dual residuals, tampered certificates/witnesses, unit scaling, and the `0/0` domain of the original program. Deliberately tampered infeasibility certificates in the tests were also rejected.
+- One real integration error was found and reported: for the `4 pt` cell of `UNP/2009/page_35.pdf-1`, the reviewer supplied an additional bound, but the old table parser did not recognize `pt`, and the source link triggered a missing key. The main agent added parsing of the point suffix and an explicit source check, and the rerun passed.
+- Cell dashes were not automatically treated as numbers; reviewers had to provide their zero-value interpretation and bounds explicitly. Years in table headers, percentage totals, contractual ratios and negative losses converted to positive magnitudes all require semantic handling and cannot be decided automatically by numeric closeness. We checked MSI's `−1/1000` sign and unit transformation, the fixed 100% composition identity, maturity sums and balance roll-forward relations.
+- It was pointed out that "primarily due to" in PM's expense bridge does not guarantee that the listed items are exhaustive, and reviewer B removed that relation from the main constraints; similar non-exhaustive narratives cannot be used as identities just because the displayed centers happen to add up.
+- The main agent further reviewed "including" in CME's credit-facility decomposition and confirmed that the two listed items do not guarantee that they exhaust the total facility; that equation is kept only as a sensitivity analysis with an explicit additional assumption and is not counted in the main results.
+- Item-by-item confirmation that solving succeeded is not the same as a research conclusion: empty sets are not counted as determined, semantically invalid or pending records are not counted as retained, and questions whose whole range excludes gold are listed separately as reference-incompatible. For retained questions, a feasible assignment inside the acceptance interval should also be saved and paired with the outside assignment; the main pipeline is responsible for that check.
 
-这一记录不是对文档所有潜在语义约束的完备性证明。最终数量以主代理重新运行的 `results/summary.json` 和逐题证书为准。
+This record is not a proof of completeness with respect to all latent semantic constraints in the documents. The final counts are those in `results/summary.json` and the per-question certificates rerun by the main agent.
 
-主管线的磁盘独立重放还发现证书对变量插入顺序的依赖。已将变量名和对应盒统一按名称排序，并添加调换输入字典顺序后仍可验证的回归测试。修复后的最终产物从磁盘重新读取，通过与求解过程分离的有理数验证；不依赖同一进程中的集合迭代顺序。
+The main pipeline's independent replay from disk also found that the certificates depended on the order in which variables were inserted. Variable names and their boxes are now uniformly sorted by name, and a regression test was added that still verifies after the order of the input dictionary is swapped. After the fix, the final artifacts were re-read from disk and passed rational verification separate from the solving process; they do not depend on set iteration order within one process.

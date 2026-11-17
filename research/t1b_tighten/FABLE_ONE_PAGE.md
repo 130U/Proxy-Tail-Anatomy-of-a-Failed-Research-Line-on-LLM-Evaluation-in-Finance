@@ -1,25 +1,25 @@
-# T1B 一页结论：结论保留，比例从 17.09% 降至 12.12%
+# T1B one-page summary: the conclusion holds; the fraction falls from 17.09% to 12.12%
 
-**最终保留 139/1,147 = 12.12%，超过任务门槛 58 道。** 对每个保留题，都保存了两组严格位于舍入区间内部、精确满足全部已确认线性约束的有理数输入：一组结果在 gold 的 1% 容差内，另一组在外。这是存在性结论，不是模型通常答错的概率，也不是基准标注错误率。
+**Finally retained: 139/1,147 = 12.12%, above the task threshold of 58 questions.** For each retained question we saved two sets of rational inputs that lie strictly inside the rounding intervals and exactly satisfy all confirmed linear constraints: one gives a result inside the gold's 1% tolerance, the other outside. This is an existence result, not the probability that models usually answer wrongly, and not the benchmark's annotation error rate.
 
-范围经用户确认：FinQA 提供的完整表格与正文；不覆盖原始年报其他页面。只针对 T1 的 196 个 test 见证，不外推未审查题目的语义正确性。
+Scope confirmed by the user: the complete tables and text provided by FinQA; other pages of the original annual reports are not covered. Only T1's 196 test witnesses are covered; the semantic correctness of unreviewed questions is not extrapolated.
 
-|顺序归因（互斥）|题数|
+|Sequential attribution (mutually exclusive)|Questions|
 |---|---:|
-|仍有容差内外可行值|139|
-|重复披露使数值区间进入容差|1|
-|进一步加总使区间进入容差|0|
-|收紧后全区间与 gold 不相容|0|
-|其余题意、绑定或数量类型明确有问题|37|
-|其余语义无法确认，保守剔除|19|
-|合计|196|
+|Still has feasible values both inside and outside the tolerance|139|
+|Duplicate disclosures move the numeric interval inside the tolerance|1|
+|Further sum constraints move the interval inside the tolerance|0|
+|After tightening, the whole interval is incompatible with gold|0|
+|Of the rest, clear problems with question meaning, binding or quantity type|37|
+|Of the rest, semantics cannot be confirmed; conservatively removed|19|
+|Total|196|
 
-唯一由重复披露数值上收紧的 MSI/2008/page_69.pdf-2，本身也存在“损失下降/增长”的语义疑问；语义复核总计因此是 **37 明确问题 + 20 存疑**，不能再把它重复扣一次。CME/2010/page_69.pdf-2 只有额外假设列出的分项穷尽总授信额，才出现区间与 gold 不相容；原文“including”不足以支持这一假设，因此仅保存为敏感性分析，不进入主计数。
+The only question tightened numerically by duplicate disclosures, MSI/2008/page_69.pdf-2, also has a semantic doubt of its own ("decrease in loss" versus "growth"); the semantic review total is therefore **37 clear problems + 20 doubtful**, and that question must not be deducted a second time. CME/2010/page_69.pdf-2 becomes incompatible with gold only under the additional assumption that the listed components exhaust the total credit facilities; the original "including" is not enough to support this assumption, so it is kept only as a sensitivity analysis and does not enter the main count.
 
-**抽样复核：** 固定种子 20261116 抽取 40 题，27 通过、8 明确问题、5 存疑。明确错误为20%；把存疑也算入风险则为32.5%，超过四分之一。按保守口径执行修正：核查单位、年份、经济角色、精确值/舍入值、程序覆盖与分母方向；将全部196题逐条复核，剔除全部57个非通过题，并对原始1147题重跑T1，确认原196队列可重现。未静默修正gold，也未声称另外951题已通过语义审查。
+**Sample review:** with fixed seed 20261116, 40 questions were sampled: 27 passed, 8 had clear problems, 5 were doubtful. Clear errors are 20%; counting the doubtful ones as risk too, 32.5%, more than a quarter. The fix was carried out under the conservative convention: check units, years, economic roles, exact vs. rounded values, program coverage and denominator direction; review all 196 questions one by one, remove all 57 non-passing questions, and rerun T1 on the original 1147 questions to confirm that the original cohort of 196 is reproducible. gold was not silently corrected, and we do not claim that the other 951 questions passed semantic review.
 
-**计算与复核：** 21 条同事实追加披露，511 条已确认线性关系；3 题输入盒因重复披露变窄，9 题输出范围因加总进一步收窄。196/196 个最终范围达到精确极值，其余如有则使用已证明外包络。588 个阶段证书与 139 对内外见证独立重放通过。
+**Computation and review:** 21 additional disclosures of the same fact, 511 confirmed linear relations; for 3 questions the input box narrowed because of duplicate disclosures, and for 9 questions the output range narrowed further because of sums. 196/196 final ranges reach exact extrema; the rest, if any, use proven outer envelopes. 588 stage certificates and 139 inside/outside witness pairs passed independent replay.
 
-本次逐条语义复核由AI代理执行并交叉检查，**不是独立人类签字验收**。数学证明以列出的来源绑定、舍入模型及约束清单为条件；不声称穷尽文档所有可能的非线性语义约束。FinQA 可把显示数字本身定义为算术输入，故本结果仍不取代 T1C 的模型判分实验。
+This item-by-item semantic review was performed and cross-checked by AI agents and **is not an independent human sign-off**. The mathematical proofs are conditional on the listed source bindings, rounding model and constraint inventory; we do not claim to exhaust all possible nonlinear semantic constraints in the documents. FinQA can define the displayed numbers themselves as arithmetic inputs, so this result still does not replace T1C's model-scoring experiment.
 
-[瀑布图](results/waterfall.png) · [完整报告](REPORT.md) · [逐题摘要](results/question_summary.csv) · [40题复核](results/sample40_review.csv) · [逐题证书](results/per_question.jsonl)
+[Waterfall chart](results/waterfall.png) · [Full report](REPORT.md) · [Per-question summary](results/question_summary.csv) · [40-question review](results/sample40_review.csv) · [Per-question certificates](results/per_question.jsonl)

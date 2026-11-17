@@ -29,7 +29,7 @@ def percentage_point_change(summary):
     value = summary.get('estimate') if summary else None
     if value is None:
         return '—'
-    text = f'{100*value:+.1f} 个百分点'
+    text = f'{100*value:+.1f} percentage points'
     interval = summary.get('ci95')
     if interval is not None:
         text += f' [{100*interval[0]:+.1f}, {100*interval[1]:+.1f}]'
@@ -58,85 +58,85 @@ def require_complete(result):
 def render_one_page(result):
     require_complete(result)
     table = result['summary_table']
-    lines = ['| | 条件 A 不问 | 条件 B 问 | 条件 C 问并教 |', '|---|---:|---:|---:|']
+    lines = ['| | Condition A: not asked | Condition B: asked | Condition C: asked and taught |', '|---|---:|---:|---:|']
     rows = [
-        ('可打分的回答数', None, False),
-        ('声称位数的中位数', 'claimed_digits', False),
-        ('真实可信位数的中位数', 'true_digits', False),
-        ('多报一位以上的比例', 'overreported', True),
-        ('区间“准确”的比例', 'width_accurate', True),
-        ('区间“过窄”的比例', 'width_narrow', True),
-        ('1% 判断准确率', 'onepct_accuracy', True),
+        ('Scorable responses', None, False),
+        ('Median claimed digits', 'claimed_digits', False),
+        ('Median true reliable digits', 'true_digits', False),
+        ('Share over-reporting by more than one digit', 'overreported', True),
+        ('Share of intervals "accurate"', 'width_accurate', True),
+        ('Share of intervals "too narrow"', 'width_narrow', True),
+        ('1% judgment accuracy', 'onepct_accuracy', True),
     ]
     for label, metric, percent in rows:
         values = []
         for condition in ('A', 'B', 'C'):
             summary = table[condition]
             if metric is None:
-                values.append(f'{summary["scorable_n"]}/{summary["available_n"]}；{estimate(summary["scorable_fraction"], percent=True)}')
+                values.append(f'{summary["scorable_n"]}/{summary["available_n"]}; {estimate(summary["scorable_fraction"], percent=True)}')
             else:
                 values.append(estimate(summary['metrics'].get(metric), percent=percent))
         lines.append('| ' + ' | '.join([label, *values]) + ' |')
-    lines.extend(['', '表内方括号为固定 237 个页面簇、10,000 次 bootstrap 的 95% 区间；第一行同时给出可评分比例。A 的“声称位数”仅指字面打印位数。前轮16/12位对应144道同源同式增长题的分组中位数。', ''])
+    lines.extend(['', 'Brackets in the table are 95% intervals from 10,000 bootstrap draws over the fixed 237 page clusters; the first row also gives the scorable fraction. For A, "claimed digits" means only the literally printed digits. The previous round\'s 16/12 digits are the group medians for the 144 growth questions with the same source and the same formula.', ''])
 
     decision = result['precision_decision']
     if decision['status'] == 'classified':
-        lines.append(f'按执行前固定门槛（区间准确比例 ≥80%，且 1% 判断准确率 ≥90%），本轮归类为 **{decision["classification"]}**。')
+        lines.append(f'Under the threshold fixed before execution (interval-accurate share ≥80% and 1% judgment accuracy ≥90%), this round is classified as **{decision["classification"]}**.')
     else:
         exclusions = []
         for condition in ('A', 'B', 'C'):
             s = table[condition]
             if s['available_n'] and s['excluded_n'] / s['available_n'] > .1:
-                exclusions.append(f'{condition} 排除 {s["excluded_n"]}/{s["available_n"]}')
+                exclusions.append(f'{condition} excluded {s["excluded_n"]}/{s["available_n"]}')
         causes = {condition: table[condition]['exclusion_reasons'] for condition in ('A', 'B', 'C') if table[condition]['excluded_n']}
-        reasons = '；'.join(f'{condition}：' + '、'.join(f'{reason}={count}' for reason, count in sorted(values.items())) for condition, values in causes.items())
-        lines.append('触发任务预设例外：' + '；'.join(exclusions) + '，超过 10%；先报告排除原因，暂不强行套用三分类。' + reasons + '。')
+        reasons = '; '.join(f'{condition}: ' + ', '.join(f'{reason}={count}' for reason, count in sorted(values.items())) for condition, values in causes.items())
+        lines.append('Triggered the preset exception in the task: ' + '; '.join(exclusions) + ', above 10%; the exclusion reasons are reported first and the three-way classification is not forced for now. ' + reasons + '.')
     paired = result['paired_C_minus_B']['all_scorable']['all']
     metrics = paired['metrics']
     if paired['paired_scorable_n']:
-        lines.append(f'同题配对 C−B：区间准确比例 {percentage_point_change(metrics["width_accurate"])}；1% 判断准确率 {percentage_point_change(metrics["onepct_accuracy"])}。'
-                     f'其中 {paired["truth_transition"]["truth_changed"]["count"]}/{paired["paired_scorable_n"]} 题的真实 1% 状态随算式或来源改变；差异不能解释为精度意识的纯因果效应。')
+        lines.append(f'Same-question pairing C−B: interval-accurate share {percentage_point_change(metrics["width_accurate"])}; 1% judgment accuracy {percentage_point_change(metrics["onepct_accuracy"])}. '
+                     f'For {paired["truth_transition"]["truth_changed"]["count"]}/{paired["paired_scorable_n"]} questions the true 1% status changed with the formula or source; the difference cannot be read as a pure causal effect of precision awareness.')
     else:
-        lines.append('没有同题双方均可评分的回答，未估计 C−B 配对差。')
+        lines.append('No question has scorable responses on both sides; the paired C−B difference was not estimated.')
     if result['sample']['C_design'] == 'half':
         extra = result['sample'].get('extra_C_n', 0)
-        lines.append(f'C 使用执行前固定抽取的 98 对、196 题；额外 {extra} 条 C 回答保留但不进入主分析。')
+        lines.append(f'C uses the 98 pairs (196 questions) drawn and fixed before execution; the {extra} extra C responses are kept but do not enter the main analysis.')
 
     reviews = result['semantic_reviews']
     rb, rc = reviews['review_b'], reviews['review_c']
     stable = rb['second_invalid_or_uncertain']['control']
     witness = rb['second_invalid_or_uncertain']['witness']
     strict = rb['strict_valid_n']
-    lines.extend(['', f'语义复核主数字：**139 → {strict}**（两轮均 valid）；多数判 valid 为 {rb["majority_valid_n"]}。'
-                  f'196 道见证的两轮一致率 {estimate(rb["agreement"], percent=True)}，κ={kappa(rb["agreement"])}。'
-                  f'二轮 invalid/uncertain：稳定题 {stable["count"]}/{stable["n"]}（{estimate(stable, percent=True)}），'
-                  f'见证题 {witness["count"]}/{witness["n"]}（{estimate(witness, percent=True)}）。'])
+    lines.extend(['', f'Main semantic-review figure: **139 → {strict}** (valid in both rounds); valid by majority: {rb["majority_valid_n"]}. '
+                  f'Two-round agreement on the 196 witness questions {estimate(rb["agreement"], percent=True)}, κ={kappa(rb["agreement"])}. '
+                  f'Second-round invalid/uncertain: stable questions {stable["count"]}/{stable["n"]} ({estimate(stable, percent=True)}), '
+                  f'witness questions {witness["count"]}/{witness["n"]} ({estimate(witness, percent=True)}).'])
     ref = rc['reference_error_strict_fraction_of_all_reviewed']
     alt = rc['reasonable_alternative_strict_fraction_of_all_reviewed']
     ref_agreed = rc['reference_error_fraction_of_agreed_causes']
     alt_agreed = rc['reasonable_alternative_fraction_of_agreed_causes']
-    lines.append(f'T1C 的 68 个拒绝案例：两轮归因一致率 {estimate(rc["agreement"], percent=True)}，κ={kappa(rc["agreement"])}；'
-                 f'在 {ref_agreed["n"]} 个两轮归因一致案例中，“参考答案有问题” {ref_agreed["count"]}/{ref_agreed["n"]}（{estimate(ref_agreed, percent=True)}），'
-                 f'“合理口径差异” {alt_agreed["count"]}/{alt_agreed["n"]}（{estimate(alt_agreed, percent=True)}）；'
-                 f'两类严格计数占全部复核案例分别为 {ref["count"]}/{ref["n"]}、{alt["count"]}/{alt["n"]}。')
+    lines.append(f'The 68 T1C rejection cases: two-round attribution agreement {estimate(rc["agreement"], percent=True)}, κ={kappa(rc["agreement"])}; '
+                 f'among the {ref_agreed["n"]} cases where both rounds agree on the attribution, "reference error" {ref_agreed["count"]}/{ref_agreed["n"]} ({estimate(ref_agreed, percent=True)}), '
+                 f'"defensible alternative convention" {alt_agreed["count"]}/{alt_agreed["n"]} ({estimate(alt_agreed, percent=True)}); '
+                 f'as strict counts over all reviewed cases, the two categories are {ref["count"]}/{ref["n"]} and {alt["count"]}/{alt["n"]}.')
     blind_limits = sorted(set(rb.get('adjudication_origin_blinding_limitation_ids', []) + rc.get('adjudication_origin_blinding_limitation_ids', [])))
     if blind_limits:
-        lines.append(f'第三轮 {len(blind_limits)} 条理由因流程字样与实质论据无法安全拆开而保留，来源盲化有限；不影响“两轮均 valid”的主计数。')
+        lines.append(f'In round three, {len(blind_limits)} reasons were kept because process wording could not be safely separated from the substantive argument, so source blinding is limited; this does not affect the main count of "valid in both rounds".')
 
     secondary = result.get('secondary_B')
     if secondary and secondary.get('inference_complete'):
         ss = secondary['summary']
-        model = '、'.join(secondary.get('model_counts', {})) or '另一档模型'
-        effort = '、'.join(secondary.get('reasoning_effort_counts', {}))
+        model = ', '.join(secondary.get('model_counts', {})) or 'another model tier'
+        effort = ', '.join(secondary.get('reasoning_effort_counts', {}))
         source = model + (' / ' + effort if effort else '')
-        lines.extend(['', f'独立复跑 B（{source}）：{ss["scorable_n"]}/{ss["available_n"]} 可评分，'
-                      f'区间准确 {estimate(ss["metrics"]["width_accurate"], percent=True)}，'
-                      f'多报一位以上 {estimate(ss["metrics"]["overreported"], percent=True)}，'
-                      f'1% 判断准确率 {estimate(ss["metrics"]["onepct_accuracy"], percent=True)}；不混入主结论。'])
+        lines.extend(['', f'Independent rerun of B ({source}): {ss["scorable_n"]}/{ss["available_n"]} scorable, '
+                      f'interval accurate {estimate(ss["metrics"]["width_accurate"], percent=True)}, '
+                      f'over-reporting by more than one digit {estimate(ss["metrics"]["overreported"], percent=True)}, '
+                      f'1% judgment accuracy {estimate(ss["metrics"]["onepct_accuracy"], percent=True)}; not mixed into the main conclusion.'])
     elif secondary and secondary.get('status') != 'not_run':
-        lines.extend(['', f'另一档 B 未完成，仅保存 {secondary.get("available_n", 0)}/{secondary.get("expected_n", 392)} 条可分析回答，不作为完整复跑或纳入主结论。'])
+        lines.extend(['', f'The other-tier B run did not finish; only {secondary.get("available_n", 0)}/{secondary.get("expected_n", 392)} analyzable responses were saved, so it is not treated as a complete rerun or included in the main conclusion.'])
 
-    lines.extend(['', '解释边界：A 的打印位数不等于主动声明可信精度；B 已提醒数字经过舍入，测的是提醒后能否计算。真值均按各回答自身算式。FinQA 公开，训练暴露可能存在；没有区间标签不等于已排除污染。A 的精确服务版本未暴露，且 B/C 分时运行，跨条件比较保留服务条件限制。'])
+    lines.extend(['', 'Interpretation limits: A\'s printed digits are not the same as an active statement of reliable precision; B was already reminded that the numbers are rounded, so it measures whether the model can compute after the reminder. Every truth value follows the response\'s own formula. FinQA is public, so training exposure may exist; the absence of interval labels does not mean contamination has been ruled out. The exact service version for A was not exposed, and B/C ran at different times, so cross-condition comparisons keep the service-condition limitation.'])
     return '\n'.join(lines) + '\n'
 
 

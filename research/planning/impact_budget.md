@@ -1,25 +1,25 @@
-# 影响结构审计：执行前预算与固定比较
+# Influence-structure audit: pre-execution budget and fixed comparisons
 
-2026-11-16。本文件先于本轮新代码的数值执行写入。目的为P1路径03的固定分层零发现数学验证；没有新模型训练、真实审计或网络访问。文献新颖性未确认。
+2026-11-16. This file was written before the numeric execution of this round's new code. Purpose: fixed-stratification zero-finding mathematical verification for P1 path 03; no new model training, real audit or network access. Literature novelty is not confirmed.
 
-## 冻结的问题
+## Frozen question
 
-固定alpha=1/20、测试accuracy目标I=[9/10,1]，以文档影响结构定义坏污染集合。直接程序仅当各层均零发现时输出I，否则输出完整范围/弃权。比较基线要求它所报告的安全污染计数矩形本身同时覆盖；同样只在全零时报告。此类矩形精确风险是各越界层漏检概率的最大值，**不是Bonferroni之和**。不比较范围更广、仅保证最终I而不保证矩形的程序，因为后者已属于直接检验。
+Fix alpha=1/20 and the test accuracy target I=[9/10,1], and define the bad contamination sets by the document-influence structure. The direct procedure outputs I only when every stratum has zero findings, and otherwise outputs the full range/abstains. The comparison baseline requires that the safe contamination-count rectangle it reports is itself covered simultaneously; it likewise reports only on all zeros. The exact risk of such a rectangle is the maximum of the miss probabilities of the out-of-bound strata, **not the Bonferroni sum**. Procedures with wider scope that guarantee only the final I and not the rectangle are not compared, because they already belong to direct testing.
 
-一般精确检查限制为小有限总体，最大文档配置65,536，单次离散计数状态50,000，设计/矩形网格100,000；任一限制触发应拒绝出证。程序的有理端点、风险及费用均使用精确算术。
+General exact checks are limited to small finite populations: at most 65,536 document configurations, 50,000 discrete count states per run, and a design/rectangle grid of 100,000; triggering any limit must refuse to certify. The program's rational endpoints, risks and costs all use exact arithmetic.
 
-## 完整阈值结构族
+## Complete threshold structure family
 
-每层N篇文档仅影响对应头；h=2r−1头初始都给正确标签，任意r个头改变即可使一个非零比例的测试点错误。构造例使用一条固定测试点、标签0；I=[.9,1]要求该点不变。该输入为人工数学结构，不是实际分类器。
+Each stratum's N documents influence only the corresponding head; all h=2r−1 heads initially give the correct label, and changing any r heads makes a nonzero fraction of test points wrong. The constructed example uses one fixed test point with label 0; I=[.9,1] requires that point to stay unchanged. This input is a hand-made mathematical structure, not an actual classifier.
 
-固定完整网格：r∈{2,3,4,5,6}，N∈{2,5,10,20}，共20格；所有成功、无增益和失败格均报告。各层成本1。均衡设计先算最小整数n使((N−n)/N)^r≤alpha；矩形最优为r·ceil[N(1−alpha)]。直接全局最优通过排序对称性枚举长度r的非降配额，后h−r层取第r层配额；网格最大C(26,6)=230,230个元组。只称在所定义的固定、分层均匀抽样类中最优，不声称真实审计或一般自适应最优。
+Fixed complete grid: r∈{2,3,4,5,6}, N∈{2,5,10,20}, 20 cells in total; all success, no-gain and failure cells are reported. Cost 1 per stratum. The balanced design first computes the smallest integer n with ((N−n)/N)^r≤alpha; the rectangle optimum is r·ceil[N(1−alpha)]. The direct global optimum enumerates non-decreasing quotas of length r using sorting symmetry, with the last h−r strata taking the r-th stratum's quota; the largest grid has C(26,6)=230,230 tuples. Optimality is claimed only within the defined class of fixed, stratified uniform sampling, not for real audits or general adaptive designs.
 
-另留两个明确负对照：两层AND、N=20时直接最优应与最佳矩形相同；没有坏配置时无需审计；空污染配置已坏时不可通过任何零发现设计。具体小规模oracle和测试由实现记录。
+Two explicit negative controls are also kept: for a two-stratum AND with N=20, the direct optimum should equal the best rectangle; when there is no bad configuration no audit is needed; when the empty contamination configuration is already bad, no zero-finding design can pass. Specific small-scale oracles and tests are recorded by the implementation.
 
-## 算力与验收
+## Compute and acceptance
 
-- 本地CPU、Python标准库；GPU/显存/训练token均为0。
-- 阈值全网格预计30秒以内、RAM<256MB；一般检查与测试总上限60秒、RAM<512MB。它们为预算估计，实际用时另存记录。
-- 超时/超搜索限制先停止相应规模，不把未结束的内侧极值当安全界。小例仍可完成。
-- 定理正确性由推导与独立审查，有限穷举用于实现和反例检查，零失败不能替代全域证明。
-- 20%成本节省是上一轮提议的小试筛选线，不是论文标准。当前人工完美投票族无法单独通过真实数据、任务效用或新颖性门。
+- Local CPU, Python standard library; GPU/GPU memory/training tokens all 0.
+- The full threshold grid is expected to take under 30 seconds, RAM<256MB; general checks and tests at most 60 seconds in total, RAM<512MB. These are budget estimates; actual times are recorded separately.
+- On a timeout/search-limit hit, stop the corresponding scale first, and do not treat an unfinished inner extreme as a safe bound. Small examples can still be completed.
+- Theorem correctness rests on the derivation and the independent review; finite exhaustion is used for implementation and counterexample checks, and zero failures cannot replace a global proof.
+- The 20% cost saving is the pilot screening line proposed in the previous round, not a paper standard. The current hand-made perfect-vote family cannot on its own pass the real-data, task-utility or novelty gates.

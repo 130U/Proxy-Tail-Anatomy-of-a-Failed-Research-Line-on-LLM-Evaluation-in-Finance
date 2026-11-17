@@ -1,29 +1,29 @@
-# T1b：加上文档里的其他信息之后，结论还剩多少
+# T1b: How much of the conclusion remains after adding the other information in the document
 
-前提同 T1a。分支 `task/t1b`，目录 `research/t1b_tighten/`。
+Prerequisites as for T1a. Branch `task/t1b`, directory `research/t1b_tighten/`.
 
-## 问题
+## Question
 
-T1 假设每个输入只知道它自己的舍入区间。但文档里还有别的信息能把区间收窄：同一个量在别处以更高精度出现；表格里"合计 = 各项之和"的关系。把这些都用上之后，T1 在测试集上找到的 196 道"不被确定"的题还剩多少？
+T1 assumes that for each input only its own rounding interval is known. But the document contains other information that can narrow the intervals: the same quantity appearing elsewhere at higher precision; "total = sum of the items" relations in tables. After using all of this, how many of the 196 "undetermined" questions T1 found on the test set remain?
 
-这是 T1 结论的否决检验。
+This is a veto test of T1's conclusion.
 
-## 要做的事
+## What to do
 
-1. **重复披露。** 对 196 道题的每个输入，在整篇文档（表格和正文）里找同一个量的其他出现位置。单位统一后取各舍入区间的交集。T1 已确认的 35 对可以直接用，但要扩展到全部 196 道题。
-2. **加总关系。** 在每张表里自动找出满足"某一行约等于若干行之和"的关系（允许舍入造成的末位偏差）。每条关系给出一个线性约束。
-3. **可行域上的精确范围。** 输入的可行域是舍入盒与这些线性约束的交集，是一个多面体。在它上面求答案的最小值和最大值：线性目标用线性规划；比率和增长率是线性分式目标，用 Charnes–Cooper 变换化成线性规划。用有理数运算，或者对浮点解做事后验证，保证给出的范围是可靠的外包络。
-4. **人工复核。** 从 196 道题里随机抽 40 道，逐题核对：输入绑定对不对；这个量是否真的是舍入过的金额（而不是精确的计数、合同条款或定义值）；标准解法是否符合题意。记录每道题的判断和理由。
-5. **汇总。** 196 道里：仍不被确定的、被重复披露收窄到确定的、被加总关系收窄到确定的、复核后发现绑定或语义有问题的，各多少。
+1. **Duplicate disclosures.** For each input of the 196 questions, find other occurrences of the same quantity in the whole document (tables and text). After unifying units, take the intersection of the rounding intervals. The 35 pairs T1 already confirmed can be used directly, but extend this to all 196 questions.
+2. **Sum relations.** In each table, automatically find relations of the form "some row approximately equals the sum of several rows" (allowing last-digit deviations caused by rounding). Each relation gives one linear constraint.
+3. **Exact range on the feasible region.** The feasible region of the inputs is the intersection of the rounding box with these linear constraints, a polytope. Find the minimum and maximum of the answer over it: use linear programming for linear objectives; ratios and growth rates are linear-fractional objectives, which the Charnes–Cooper transformation turns into linear programs. Use rational arithmetic, or verify floating-point solutions after the fact, so that the range given is a reliable outer envelope.
+4. **Manual review.** Randomly draw 40 of the 196 questions and check each one: is the input binding correct; is the quantity really a rounded amount (rather than an exact count, a contract term or a defined value); does the gold solution match the question. Record the judgment and reason for each question.
+5. **Summary.** Of the 196: how many remain undetermined, how many are narrowed to determined by duplicate disclosures, how many are narrowed to determined by sum relations, and how many turn out in review to have binding or semantic problems.
 
-## 交付
+## Deliverables
 
-- 一张图：196 道题在每一步收紧之后剩余的数量（瀑布图）。
-- 一页结论。
-- 逐题记录、约束清单、代码。
+- One figure: the number of the 196 questions remaining after each tightening step (waterfall chart).
+- A one-page summary.
+- Per-question records, the list of constraints, code.
 
-## 判定
+## Decision
 
-- **结论保留：** 收紧并复核后，测试集里仍不被确定的题不少于全部 1,147 道的 5%（即不少于 58 道）。
-- **结论降级：** 少于 58 道。这时不再说"文档不能确定答案"，只保留"答案对取哪个出处敏感"这一条。
-- 人工复核的 40 道里如果有四分之一以上绑定或语义有问题，先修正 T1 的规则再重算，并写明。
+- **Conclusion kept:** after tightening and review, the undetermined questions in the test set are no fewer than 5% of all 1,147 questions (that is, at least 58).
+- **Conclusion downgraded:** fewer than 58. Then no longer say "the document cannot determine the answer"; keep only "the answer is sensitive to which source is used".
+- If more than a quarter of the 40 manually reviewed questions have binding or semantic problems, first fix T1's rules and recompute, and say so.

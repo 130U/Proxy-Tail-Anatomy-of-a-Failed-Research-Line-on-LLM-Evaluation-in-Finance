@@ -1,42 +1,42 @@
-# 决策日志与待 PI 决定的事项
+# Decision log and items awaiting the PI's decision
 
-## 已做的决定
+## Decisions already made
 
-| 编号 | 日期 | 决定 | 理由 | 谁定的 | 可逆吗 |
+| ID | Date | Decision | Reason | Who decided | Reversible? |
 |---|---|---|---|---|---|
-| D1 | 2026-11-15 | 本轮只优化 `130U/130U-FinLLM` | Theodore 要求 | Theodore | 是 |
-| D2 | 2026-11-15 | 不修改 theodoreoy.com | Theodore 要求 | Theodore | — |
-| D3 | 2026-11-15 | `130U/agent-evaluation-methodology` 留到以后 | Theodore 要求 | Theodore | 是 |
-| D4 | 2026-11-15 | 假设没有 GPU；贡献以理论为主，实验只做 T4 级别的最小验证 | Theodore 的约束 | Theodore | 是 |
-| D5 | 2026-11-15 | 新定位：可认证的金融语言模型（Certifiable FinLM） | 见 01 第 2 节的三个过滤器 | 导师建议；Theodore 随后要求按此方向打包交给 Codex | 是，G1 时复核 |
-| D6 | 2026-11-15 | 不追榜单分数，不做 R1 式推理蒸馏，不做 K 线 / 订单流模型，不做 alpha 挖掘 agent | 见 01 第 10 节 | 导师建议 | 是 |
-| D7 | 2026-11-15 | 两条主线（P1 信息集、P2 敏感度）并行做可行性，在 G1 选旗舰 | 两条都有新颖性假设，但都未核实 | 导师建议 | 是 |
-| D8 | 2026-11-15 | 旧的 24M Trial 保留，移到 `legacy/` 并如实标注，不删除 | 旧工程是新证书的前提条件；删除会损失可追溯性 | 导师建议 | 是 |
-| D9 | 2026-11-15 | 角色分工：Theodore 是 PI，导师定方向，Codex 是博士生 | Theodore 设定 | Theodore | 是 |
+| D1 | 2026-11-15 | This round works only on `130U/130U-FinLLM` | Theodore's request | Theodore | Yes |
+| D2 | 2026-11-15 | Do not modify theodoreoy.com | Theodore's request | Theodore | — |
+| D3 | 2026-11-15 | `130U/agent-evaluation-methodology` is left for later | Theodore's request | Theodore | Yes |
+| D4 | 2026-11-15 | Assume there is no GPU; the contribution is mainly theoretical, and experiments are only minimal T4-level checks | Theodore's constraint | Theodore | Yes |
+| D5 | 2026-11-15 | New positioning: a certifiable financial language model (Certifiable FinLM) | See the three filters in section 2 of 01 | Advisor's suggestion; Theodore then asked for it to be packaged in this direction for Codex | Yes, reviewed at G1 |
+| D6 | 2026-11-15 | Do not chase leaderboard scores, do not do R1-style reasoning distillation, do not build candlestick / order-flow models, do not build alpha-mining agents | See section 10 of 01 | Advisor's suggestion | Yes |
+| D7 | 2026-11-15 | Run feasibility on the two main lines (P1 information set, P2 sensitivity) in parallel, and choose the flagship at G1 | Both have novelty hypotheses, but neither has been verified | Advisor's suggestion | Yes |
+| D8 | 2026-11-15 | Keep the old 24M Trial: move it to `legacy/` and label it truthfully, do not delete it | The old engineering is a precondition for the new certificates; deleting it would lose traceability | Advisor's suggestion | Yes |
+| D9 | 2026-11-15 | Division of roles: Theodore is the PI, the advisor sets the direction, Codex is the PhD student | Set by Theodore | Theodore | Yes |
 
 ---
 
-## 需要 Theodore 决定或提供的事项
+## Items Theodore needs to decide or provide
 
-这些问题**不阻塞**大部分工作。Codex 遇到它们时，跳过相关步骤，继续做其他部分。
+These questions **do not block** most of the work. When Codex runs into them, it skips the related steps and continues with the other parts.
 
-| 编号 | 问题 | 为什么重要 | 影响的工作包 | 不回答时的默认做法 |
+| ID | Question | Why it matters | Work packages affected | Default if not answered |
 |---|---|---|---|---|
-| O1 | 2.4B 私有模型是否已经训练完成？如果完成了，有哪些可以公开的证据？ | 决定 README 里 2.4B 相关表述的措辞 | WP0.6、Phase 3 | 审计报告把它标为"只有设计" |
-| O2 | 私有 SFT 数据是否来自 SEntFiN？能否让 Codex 访问（不提交到公开仓库）？ | 决定 WP0.1、WP0.2 能否在原始数据上复现 | WP0.1、WP0.2 | 在公开的 SEntFiN 上重建 |
-| O3 | 访问 SEC EDGAR 时，User-Agent 里写什么联系方式？ | SEC 要求自动化访问声明联系方式；不能用未经同意的邮箱 | WP0.4、WP1.1 | 只写代码和测试，不发请求 |
-| O4 | 这个研究包能否放进公开仓库（例如 `research/` 目录）？ | 包里有对现有项目的坦率批评；放进去就公开了 | 全部 | 放在仓库外，让 Codex 读本地路径 |
-| O5 | 每周大约能投入多少时间？Colab 是免费版还是 Pro？ | 决定节奏和 T4 的可用时长 | 全部 | 按免费 Colab、每周 10 小时规划 |
-| O6 | 能否接受旗舰结果不再是"标题情感分类"？ | 新定位下，旧任务会降为演示用例 | Phase 2、3 | 默认接受 |
-| O7 | 目标发表形式是什么？arXiv 技术报告、ML workshop（如 FinNLP、ICAIF），还是金融学期刊？ | 决定写作风格和实验深度 | Phase 2、3 | arXiv 技术报告 |
-| O8 | 中文金融文本是否在范围内？ | 影响语料选择；EDGAR 只有英文 | WP0.4、WP1.2 | 只做英文 |
+| O1 | Has the private 2.4B model finished training? If so, what evidence can be made public? | Determines the wording of the 2.4B statements in the README | WP0.6, Phase 3 | The audit report labels it "design only" |
+| O2 | Does the private SFT data come from SEntFiN? Can Codex access it (without committing it to the public repository)? | Determines whether WP0.1 and WP0.2 can be reproduced on the original data | WP0.1, WP0.2 | Rebuild on the public SEntFiN |
+| O3 | What contact information goes in the User-Agent when accessing SEC EDGAR? | The SEC requires automated access to declare contact information; an email address used without consent is not allowed | WP0.4, WP1.1 | Write only code and tests; send no requests |
+| O4 | Can this research package go into the public repository (for example in the `research/` directory)? | The package contains candid criticism of the existing project; putting it in makes that public | All | Keep it outside the repository and let Codex read a local path |
+| O5 | Roughly how much time can be put in each week? Is Colab the free tier or Pro? | Determines the pace and the available T4 hours | All | Plan for free Colab and 10 hours per week |
+| O6 | Is it acceptable that the flagship result is no longer "headline sentiment classification"? | Under the new positioning, the old task becomes a demo use case | Phase 2, 3 | Accepted by default |
+| O7 | What is the target publication format? An arXiv technical report, an ML workshop (such as FinNLP or ICAIF), or a finance journal? | Determines the writing style and the depth of experiments | Phase 2, 3 | arXiv technical report |
+| O8 | Is Chinese financial text in scope? | Affects corpus choice; EDGAR is English only | WP0.4, WP1.2 | English only |
 
 ---
 
-## 待记录的决定（以后填写）
+## Decisions to be recorded (fill in later)
 
-| 编号 | 日期 | 决定 | 依据 |
+| ID | Date | Decision | Basis |
 |---|---|---|---|
-| G0 | | Phase 0 是否通过 | |
-| G1 | | 旗舰选 P1 还是 P2 | |
-| G2 | | Phase 2 中期是否缩小范围 | |
+| G0 | | Whether Phase 0 passes | |
+| G1 | | Whether the flagship is P1 or P2 | |
+| G2 | | Whether to narrow the scope mid-way through Phase 2 | |

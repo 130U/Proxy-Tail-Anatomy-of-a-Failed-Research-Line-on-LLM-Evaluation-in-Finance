@@ -1,76 +1,76 @@
-# 候选 4：判错的是同一批题
+# Candidate 4: the rejections fall on the same questions
 
-检索截止：2026-11-17。判定采用任务文件的三个「或者」标准，不把标准临时收窄成必须同时有原始测试集、最新模型、交集矩阵和大规模人工审计。
+Search cutoff: 2026-11-17. The verdict uses the three "or" criteria in the task file and does not narrow the criteria ad hoc to requiring, all at once, the original test set, the latest models, an intersection matrix and a large-scale human audit.
 
-**结论：已有人做过同样的事；建议 ⚪；把握高。** FINESSE-Bench 已报告完整 1,147 道 FinQA test 上 53 个模型的共同失败率；另有 FinQA 判错归因分类、金融派生基准修订前后对比及 CodeFinQA 逐题跨模型互补分析。具体的“四运行共同错误 63 题、Jaccard 0.89–0.93、55/68 归于基准侧”仍可构成新的实证结果，但不能再以“原始完整测试集上的跨模型共同判错”保留首次性。尚未找到把大多数共同错误独立人工归因于基准侧的同样强结论；这是剩余增量的边界。
+**Conclusion: someone has already done the same thing; suggested ⚪; confidence high.** FINESSE-Bench already reports the shared failure rate of 53 models on the full 1,147-question FinQA test set; there are also a classification of the causes of FinQA rejections, a before/after comparison of revisions to financial derived benchmarks, and a per-question cross-model complementarity analysis on CodeFinQA. The specific "63 questions wrong in all four runs, Jaccard 0.89–0.93, 55/68 attributed to the benchmark side" can still be a new empirical result, but being "the first cross-model shared rejection on the full original test set" can no longer be kept. No equally strong conclusion that independently attributes the majority of shared errors to the benchmark side by human review has been found yet; this is the boundary of the remaining increment.
 
-## 最接近的三项工作与原文短引
+## The three closest works and short quotations from the originals
 
-### 4A. FinanceReasoning（Tang 等，ACL 2025）
+### 4A. FinanceReasoning (Tang et al., ACL 2025)
 
-[正式论文](https://aclanthology.org/2025.acl-long.766/)；[正式PDF](https://aclanthology.org/2025.acl-long.766.pdf)；[正文与附录HTML](https://arxiv.org/html/2506.05828v1)。位置：§1、§2.1、Table 1、Appendix C.1（Tables 10–14）；正式版 Table 1 和引言在印刷 p.15722，Appendix A/C.1 在 p.15734。来源层级：**正文**。已直接下载正式PDF复核关键数字，并非只依据arXiv v1。
+[Formal paper](https://aclanthology.org/2025.acl-long.766/); [formal PDF](https://aclanthology.org/2025.acl-long.766.pdf); [full text and appendix HTML](https://arxiv.org/html/2506.05828v1). Location: §1, §2.1, Table 1, Appendix C.1 (Tables 10–14); in the formal version, Table 1 and the introduction are on printed p.15722, and Appendix A/C.1 on p.15734. Source level: **full text**. The formal PDF was downloaded directly to re-check the key numbers, not relying only on arXiv v1.
 
-> “are saturated due to annotation quality”
+> "are saturated due to annotation quality"
 
-其重标范围是 **CodeFinQA test 795**，不是原始 FinQA test 1,147；其余为 CodeTAT-QA test 288、FinCode test 47、FinanceMath validation 200。Table 1 的 CodeFinQA 修订为答案 55（6.92%）、消歧 58（7.30%），合计 113（14.21%）。四项修订合计 208/1,330≈15.6%，范围 9.72%–30%。**正式ACL版**引言（p.15722）及Appendix A（p.15734）仍把来源题数写成 1,420，与表中合计及 2,238−908=1,330 不一致；引用应以表格分母为准，不能照抄 1,420。这一不一致并未在正式版修正。
+Its re-annotation scope is **CodeFinQA test 795**, not the original FinQA test 1,147; the others are CodeTAT-QA test 288, FinCode test 47 and FinanceMath validation 200. In Table 1 the CodeFinQA revisions are 55 answers (6.92%) and 58 disambiguations (7.30%), 113 in total (14.21%). The four revisions together are 208/1,330≈15.6%, with a range of 9.72%–30%. The introduction (p.15722) and Appendix A (p.15734) of the **formal ACL version** still give the number of source questions as 1,420, which is inconsistent with the table total and with 2,238−908=1,330; citations should use the table's denominator and must not copy 1,420. This inconsistency was not corrected in the formal version.
 
-更新动作包括消歧、补充解题步骤及纠错；附录另区分不可解、表述歧义、步骤过简、错误答案、宽松判分。它比较两个 DeepSeek 模型修订前后准确率，但未见逐题共同判错矩阵。另同时改变判分约定，故分数增幅不能全归于标签修订。
+The update actions include disambiguation, adding solution steps and error correction; the appendix also distinguishes unsolvable, ambiguous wording, overly brief steps, wrong answers and lenient scoring. It compares the accuracy of two DeepSeek models before and after revision, but no per-question shared-rejection matrix was seen. It also changed the scoring convention at the same time, so the score increase cannot be attributed entirely to the label revision.
 
-**剩余新意判断：**细粒度错误原因及独立人工裁决可作增量审计；“标注质量限制旧金融基准”已明确提出，完整原始测试集的共同错误也已有下一项先例。
+**Judgement on remaining novelty:** fine-grained error causes and independent human adjudication can serve as an incremental audit; "annotation quality limits older financial benchmarks" has been stated explicitly, and shared errors on the full original test set also already have the precedent below.
 
-### 4B. FINESSE-Bench: A Hierarchical Benchmark Suite for Financial Domain Knowledge and Technical Analysis in Large Language Models（Stanishevskii 等，2026）
+### 4B. FINESSE-Bench: A Hierarchical Benchmark Suite for Financial Domain Knowledge and Technical Analysis in Large Language Models (Stanishevskii et al., 2026)
 
-[作者原文v2](https://arxiv.org/html/2605.15482v2)；[PDF](https://arxiv.org/pdf/2605.15482v2)；[作者数据](https://github.com/LimexAILab/FINESSE-Bench/blob/main/data/finqa/question.jsonl)。位置：§5.1–5.3、§7.4 Table 8（PDF p.16）；v2日期2026-05-21。来源层级：**正文及原始公开数据**。
+[Author's original v2](https://arxiv.org/html/2605.15482v2); [PDF](https://arxiv.org/pdf/2605.15482v2); [author's data](https://github.com/LimexAILab/FINESSE-Bench/blob/main/data/finqa/question.jsonl). Location: §5.1–5.3, §7.4 Table 8 (PDF p.16); v2 dated 2026-05-21. Source level: **full text and original public data**.
 
-> “the share of questions that no model solves (unanimous fail)”
+> "the share of questions that no model solves (unanimous fail)"
 
-Table 8：FinQA **53模型、1,147题，共同失败9.33%、共同成功22.41%、10%–90%模型答对的中间带24.15%**。本轮另将作者question.jsonl与官方FinQA test.json逐行比对：1,147条问题均同序匹配，作者参考答案全部等于原始qa.exe_ans的字符串；因此完整测试题目的对应已核实，不是仅凭数量推断。校验摘要见 [数据身份核验摘要](data_identity_check.json)。其格式经过转换，统一使用GPT-5.2裁判，不能把分数直接等同官方执行准确率。
+Table 8: FinQA, **53 models, 1,147 questions, unanimous failure 9.33%, unanimous success 22.41%, middle band where 10%–90% of models are correct 24.15%**. This round also compared the authors' question.jsonl line by line with the official FinQA test.json: all 1,147 questions match in the same order, and every author reference answer equals the string of the original qa.exe_ans; so the correspondence to the full test set has been verified, not inferred only from the count. The check summary is in the [data identity check summary](data_identity_check.json). Its format was converted and it uses GPT-5.2 as the judge throughout, so its scores cannot be equated directly with official execution accuracy.
 
-这直接满足“FinQA逐题跨模型比较、共同判错集合”标准。论文将该结果用于区分度与饱和分析，**并未证明9.33%是标签错误率**，也未提供多数共同错归于基准侧的人工因果审计。我们的Jaccard及具体归因仍有增量空间，但完整test、近期多厂商模型及共同失败现象本身已不是空白。
+This directly meets the criterion "per-question cross-model comparison on FinQA, shared rejection set". The paper uses this result for discrimination and saturation analysis; **it does not prove that 9.33% is the label error rate**, nor does it provide a human causal audit attributing most shared errors to the benchmark side. Our Jaccard and the specific attribution still leave room for an increment, but the full test set, recent multi-vendor models and the shared-failure phenomenon itself are no longer a gap.
 
-### 4C. Retrieval-Augmented Chain-of-Thought in Semi-structured Domains（Mavi、Saparov、Zhao，NLLP 2023）
+### 4C. Retrieval-Augmented Chain-of-Thought in Semi-structured Domains (Mavi, Saparov, Zhao, NLLP 2023)
 
-[正式论文](https://aclanthology.org/2023.nllp-1.18/)；[正式PDF](https://aclanthology.org/2023.nllp-1.18.pdf)；[正文与附录HTML](https://arxiv.org/html/2310.14435)。位置：Appendix D.2，Table 7；已下载正式PDF核实第9页即印刷 p.186。来源层级：**正文**。
+[Formal paper](https://aclanthology.org/2023.nllp-1.18/); [formal PDF](https://aclanthology.org/2023.nllp-1.18.pdf); [full text and appendix HTML](https://arxiv.org/html/2310.14435). Location: Appendix D.2, Table 7; the formal PDF was downloaded and page 9, i.e. printed p.186, was verified. Source level: **full text**.
 
-> “Error analysis of the incorrect examples on 40 samples from FinQA.”
+> "Error analysis of the incorrect examples on 40 samples from FinQA."
 
-40 道构建的验证样本中 30 道正确，余 10 道人工分类为算术 3、逻辑 2、标注 2、检索 3。因此已有明确的 FinQA 判错归因和数量（标注错误占此批错例 2/10）；样本小，且不是完整原始测试集。它满足任务的第二个先例标准，却不支持“多数剩余错误都来自基准”。我们的更强比例若获独立人工验证，属于结论强度上的增量。
+Of 40 constructed validation samples, 30 are correct; the remaining 10 were classified by hand as arithmetic 3, logic 2, annotation 2 and retrieval 3. So an explicit attribution of FinQA rejections with counts already exists (annotation errors are 2/10 of this batch of errors); the sample is small and is not the full original test set. It meets the task's second precedent criterion, but it does not support "most of the remaining errors come from the benchmark". If our stronger proportion is independently verified by humans, it is an increment in the strength of the conclusion.
 
-## 额外的直接相关工作
+## Additional directly related work
 
-### BizBench: A Quantitative Reasoning Benchmark for Business and Finance（Krumdick、Koncel-Kedziorski 等，ACL 2024；预印本 2023）
+### BizBench: A Quantitative Reasoning Benchmark for Business and Finance (Krumdick, Koncel-Kedziorski et al., ACL 2024; preprint 2023)
 
-[正式记录](https://aclanthology.org/2024.acl-long.452/)；[正式PDF](https://aclanthology.org/2024.acl-long.452.pdf)；[正文HTML](https://arxiv.org/html/2311.06602)。位置：§4.1（逐题互补段落在印刷 p.8315）、Appendix A.2、Appendix B Table 5。来源层级：**正文**。正式会议确为ACL2024，全文pp.8309–8332；书目按ACL记录，PDF和arXiv中两位共同一作排序不同。
+[Formal record](https://aclanthology.org/2024.acl-long.452/); [formal PDF](https://aclanthology.org/2024.acl-long.452.pdf); [full text HTML](https://arxiv.org/html/2311.06602). Location: §4.1 (the per-question complementarity paragraph is on printed p.8315), Appendix A.2, Appendix B Table 5. Source level: **full text**. The formal venue is indeed ACL 2024, full text pp.8309–8332; the bibliography follows the ACL record, and the order of the two co-first authors differs between the PDF and arXiv.
 
-> “Models pretrained on language-only versus code solve different sets of questions.”
+> "Models pretrained on language-only versus code solve different sets of questions."
 
-CodeFinQA 上，Llama-2-70B 答对 CodeLlama-34B 错题的 33%，反向为 25%，两者 oracle 组合达 68%。这已经是逐题跨模型错误重合/互补分析，只是对象是派生版本。其 50+25+25 个错输出还按抽取、公式、生成和问题歧义分类；类别允许重叠，不能把列相加当独立样本。正文讨论 gain/loss 正负号语义困难。A.2 将 FinQA 方程转 Python 并检查执行答案，不能据此断言审计了原始 answer/exe_ans 冲突率。
+On CodeFinQA, Llama-2-70B gets right 33% of the questions CodeLlama-34B gets wrong, 25% in the other direction, and the oracle combination of the two reaches 68%. This is already a per-question cross-model error overlap/complementarity analysis, only on a derived version. Its 50+25+25 wrong outputs are further classified by extraction, formula, generation and question ambiguity; categories may overlap, so the columns cannot be added as independent samples. The full text discusses difficulty with the sign semantics of gain/loss. A.2 converts FinQA equations to Python and checks the executed answers; one cannot conclude from this that it audited the conflict rate between the original answer and exe_ans.
 
-**剩余新意判断：**模型错误结构随时间的变化仍可比较，但近期模型共同失败也已有FINESSE先例；新增价值须落在更细的原因审计。
+**Judgement on remaining novelty:** changes in the structure of model errors over time can still be compared, but shared failures of recent models also already have the FINESSE precedent; added value must come from a finer audit of causes.
 
-### 其他已读论文
+### Other papers read
 
-- **FinQAPT（Singh、Kaur、Smiley，ICAIF 2024）**：[§4.5.1](https://arxiv.org/html/2410.13959)。来源层级：**正文**。它已经给出 FinQA 的问题、上下文、计算等错误分析及近似比例，并讨论百分比/数值口径和执行答案与给定答案差异。唯一短引为 “disparities between the execution answer and the provided answer”。这也是候选 5 的直接相关先例；未见两字段总不一致率或据此过滤的数据流程。
-- **Do Large Language Model Benchmarks Test Reliability?（Vendrow 等，2025；Platinum）**：[§2.1–2.2、Appendix B](https://arxiv.org/html/2502.03461)。来源层级：**正文**。15 个基准不含 FinQA。其清洗方法让多个模型作答并人工检查至少一模型出错的题，以区分错标签和不良题目。方法上高度接近；它也强调修复后仍存在模型失败，因此“多模型共同错”本身不能证明标签错。
-- **Confidently Wrong（Wang，2026，v2 2026-10-13）**：[§3、§5.2、§6](https://arxiv.org/html/2607.11414)。来源层级：**正文**。使用 FLARE 分发的 FinQA **训练集**和 TAT-QA；校验判分器时报告约 4%–6% 残余标签噪声及口径歧义，研究八次采样同答仍被判错。不是原始 test 跨模型共同错审计，也没有证明大部分剩余错误来自基准。
-- **Collaborative LLM Numerical Reasoning with Local Data Protection（Zhang 等，预印本 2025 / AAAI 2026）**：[Error Analysis / Table 4](https://arxiv.org/html/2504.00299v2)。来源层级：**正文**。搜索摘要容易令人误以为其 23.3% 标注错误/歧义率属于 FinQA；正文明确为 **MultiHiertt、Phi3、30 个错例**，故不拿它作为 FinQA 的直接证据。
+- **FinQAPT (Singh, Kaur, Smiley, ICAIF 2024)**: [§4.5.1](https://arxiv.org/html/2410.13959). Source level: **full text**. It already gives an error analysis of FinQA by question, context, calculation, etc., with approximate proportions, and discusses percentage/numeric conventions and differences between the execution answer and the given answer. The only short quotation is "disparities between the execution answer and the provided answer". This is also a directly relevant precedent for candidate 5; no overall inconsistency rate between the two fields, and no data pipeline filtering on it, was seen.
+- **Do Large Language Model Benchmarks Test Reliability? (Vendrow et al., 2025; Platinum)**: [§2.1–2.2, Appendix B](https://arxiv.org/html/2502.03461). Source level: **full text**. Its 15 benchmarks do not include FinQA. Its cleaning method has several models answer and then manually checks the questions where at least one model is wrong, to separate wrong labels from bad questions. Methodologically very close; it also stresses that model failures remain after repair, so "several models wrong together" alone cannot prove a label is wrong.
+- **Confidently Wrong (Wang, 2026, v2 2026-10-13)**: [§3, §5.2, §6](https://arxiv.org/html/2607.11414). Source level: **full text**. Uses the FinQA **training set** distributed by FLARE and TAT-QA; when validating the scorer it reports about 4%–6% residual label noise and convention ambiguity, and it studies cases where eight samples give the same answer and are still marked wrong. It is not an audit of cross-model shared errors on the original test set, and it does not prove that most remaining errors come from the benchmark.
+- **Collaborative LLM Numerical Reasoning with Local Data Protection (Zhang et al., preprint 2025 / AAAI 2026)**: [Error Analysis / Table 4](https://arxiv.org/html/2504.00299v2). Source level: **full text**. Search snippets easily give the impression that its 23.3% annotation-error/ambiguity rate refers to FinQA; the full text states clearly that it is **MultiHiertt, Phi3, 30 error cases**, so it is not used as direct evidence for FinQA.
 
-## 任务给定的相似观点逐项核实
+## Item-by-item check of the similar ideas given in the task
 
-| 给定说法 | 核查结果（均依据正文，例外明确列出） |
+| Given claim | Result of the check (all based on full text; exceptions are stated explicitly) |
 |---|---|
-| FinanceReasoning 修订四数据集 15.6%，9.72%–30% | 成立；准确范围、分母及非原始 FinQA test 见 4A。它明确谈标注质量与饱和，但不能扩大为“原始完整 FinQA 剩余错误主要归于基准”。 |
-| Northcutt 等 2021 十个测试集标签错误 | 成立。[§3 Table 1、§4–5、Appendix A](https://arxiv.org/html/2103.14749) 覆盖图像、文本、音频十数据集，平均至少3.3%；没有 FinQA。是一般方法和动机先例。 |
-| MMLU-Redux 与 Platinum 清洗工作 | 成立。[Gema 等 NAACL 2025 正式记录](https://aclanthology.org/2025.naacl-long.262/)；[§2–3、Appendix F 正文](https://arxiv.org/html/2406.04127) 重标5,700题，区分歧义、无正确选项、多正确答案、错误真值等。Platinum 的范围与方法见上。二者均非 FinQA 审计。 |
-| DocMath-Eval 对 FinQA 派生题筛选/重标 | 成立。[§3.2–3.3、附录](https://arxiv.org/html/2311.09805) 明确重标 FinQA、TAT-QA 等，删除错误或非数值题、增加尺度说明、改正题目、重写Python解及核验证据。未见按原始 FinQA 分母报告错误率。 |
-| BizBench 对 FinQA 派生题筛选/重标 | 部分成立；代码改写及执行结果验证成立，见上文BizBench段。论文并未完整人工重审所有数据（Limitations）。 |
-| FinanceMath 也对 FinQA 派生题清洗 | **不成立/原文未支持。** [§2.2–2.4](https://arxiv.org/html/2311.09797) 是专家依金融概念写新题或改教材/网络题，1,200题中674改编；没有将 FinQA 派生清洗作为构建步骤。 |
-| FinQA 专家约91%，暗示上限 | 数字为91.16%，成立；“因此存在约9%的标签噪声上限”不成立。[FinQA §4.3、Table 2](https://aclanthology.org/2021.emnlp-main.300.pdf) 是两名外部专家在随机200题的执行准确率均值，不能区分专家失误、标注错误和歧义。 |
+| FinanceReasoning revised four datasets, 15.6%, 9.72%–30% | Holds; the exact range, the denominator and the fact that it is not the original FinQA test set are in 4A. It explicitly discusses annotation quality and saturation, but this cannot be extended to "the remaining errors on the full original FinQA are mainly attributable to the benchmark". |
+| Northcutt et al. 2021, label errors in ten test sets | Holds. [§3 Table 1, §4–5, Appendix A](https://arxiv.org/html/2103.14749) cover ten image, text and audio datasets, with an average of at least 3.3%; no FinQA. It is a precedent for general method and motivation. |
+| MMLU-Redux and Platinum cleaning work | Holds. [Gema et al. NAACL 2025 formal record](https://aclanthology.org/2025.naacl-long.262/); [§2–3, Appendix F full text](https://arxiv.org/html/2406.04127) re-annotated 5,700 questions, distinguishing ambiguity, no correct option, multiple correct answers, wrong ground truth, etc. Platinum's scope and method are given above. Neither is a FinQA audit. |
+| DocMath-Eval screened/re-annotated FinQA-derived questions | Holds. [§3.2–3.3, appendix](https://arxiv.org/html/2311.09805) explicitly re-annotates FinQA, TAT-QA, etc.: it removes wrong or non-numeric questions, adds scale notes, corrects questions, rewrites Python solutions and verifies evidence. No error rate reported against the original FinQA denominator was seen. |
+| BizBench screened/re-annotated FinQA-derived questions | Partly holds; the code rewriting and validation of execution results hold, see the BizBench paragraph above. The paper did not fully re-review all data by hand (Limitations). |
+| FinanceMath also cleaned FinQA-derived questions | **Does not hold / not supported by the original.** [§2.2–2.4](https://arxiv.org/html/2311.09797) has experts write new questions based on financial concepts or adapt textbook/web questions, with 674 of 1,200 adapted; FinQA-derived cleaning is not a construction step. |
+| FinQA experts about 91%, implying a ceiling | The number is 91.16%, which holds; "so there is a ceiling of about 9% label noise" does not hold. [FinQA §4.3, Table 2](https://aclanthology.org/2021.emnlp-main.300.pdf) is the mean execution accuracy of two external experts on 200 random questions, and cannot separate expert mistakes, annotation errors and ambiguity. |
 
-## 高度相关但尚未取回正文的线索
+## Highly relevant leads whose full text has not yet been retrieved
 
-**李希等（2025），《基于正负例思维链的表格-文本混合金融数据自动问答方法》，《中文信息学报》39(7)。** [期刊页面](http://jcip.cipsc.org.cn/article/id/zwxxxb_3951)，[期刊PDF](https://jcip.cipsc.org.cn/cn/article/pdf/preview/zwxxxb_3951.pdf)。**本轮仅取得摘要索引及二手介绍**：[SinoMed](https://www.sinomed.ac.cn/article.do?ui=2025477889)、[二手线索](https://research.elamur.ai/free/en/papers/li-2025-positive-negative-chain/)。二手称作者构建 FinQA-fix，修订近20%答案并列七类错误，包括符号；这些数字尚未原文核实，不进入确定性判断。期刊 web 请求超时，shell HTTPS 连接重置、HTTP 返回网络错误 HTML。仍应优先人工取回全文，尤其核对修订分母、测试集范围和符号类别。即使此线索最终不成立，上述已读正文也足以判候选4为⚪。
+**Li Xi et al. (2025), "An automatic question-answering method for table-text hybrid financial data based on positive and negative chain-of-thought examples" (Chinese-language paper, title translated), *Journal of Chinese Information Processing* 39(7).** [Journal page](http://jcip.cipsc.org.cn/article/id/zwxxxb_3951), [journal PDF](https://jcip.cipsc.org.cn/cn/article/pdf/preview/zwxxxb_3951.pdf). **This round only obtained the abstract index and second-hand descriptions**: [SinoMed](https://www.sinomed.ac.cn/article.do?ui=2025477889), [second-hand lead](https://research.elamur.ai/free/en/papers/li-2025-positive-negative-chain/). The second-hand source says the authors built FinQA-fix, revised nearly 20% of the answers and listed seven error types, including sign; these numbers have not been verified against the original and do not enter any definite judgement. The journal web request timed out, the shell HTTPS connection was reset, and HTTP returned a network-error HTML page. The full text should still be retrieved manually as a priority, in particular to check the revision denominator, the test-set scope and the sign category. Even if this lead ultimately does not hold, the full texts already read are enough to judge candidate 4 as ⚪.
 
-## 对本项目的含义（本轮判断，不是文献事实）
+## Implications for this project (this round's judgement, not a literature fact)
 
-保留该结果作为动机与数据审计附件，主张应收窄为“在指定模型、提示和样本上，残余判错高度集中，并经审查归于若干参考或口径问题”。不能仅凭同错就推出模型没有共同弱点；现有392题分层样本、同提供商模型和AI裁判不足以外推完整测试集。是否还能独立支撑短文，要看全测试集、异厂商与人工复核后的新增发现；目前不宜单靠候选4担任新颖性中心。
+Keep this result as a motivation and data-audit attachment; the claim should be narrowed to "on the specified models, prompts and sample, the residual rejections are highly concentrated and, after review, are attributed to a number of reference or convention problems". Shared errors alone cannot be used to infer that the models have no common weakness; the existing 392-question stratified sample, same-provider models and AI judge are not enough to extrapolate to the full test set. Whether it can still independently support a short paper depends on new findings after the full test set, other vendors and human review; for now candidate 4 alone should not serve as the centre of novelty.

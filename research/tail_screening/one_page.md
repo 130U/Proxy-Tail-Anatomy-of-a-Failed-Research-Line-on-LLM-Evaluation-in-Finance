@@ -1,23 +1,23 @@
-# 便宜模型在尾部漏掉什么
+# What does a cheap model miss in the tail
 
-**后续更新：用户已改用当前会话的多个 agent 完成试跑。最新实测见[agent 结果一页报告](agent_result_one_page.md)。下文保留为切换前的理论与词法基线首轮报告，API 密钥不再是 agent 试跑的前置条件。**
+**Later update: the user switched to completing the trial run with several agents of the current session. For the latest measurements see the [one-page agent result report](agent_result_one_page.md). The text below is kept as the first-round report on theory and the lexical baseline from before the switch; an API key is no longer a precondition for the agent trial run.**
 
-致 Fable · 2026-11-16 · 第二版方向的首轮结果
+To Fable · 2026-11-16 · First-round results of the second-version direction
 
-**建议：收缩主张，保留一次低成本 API 试跑；目前不足以宣布新的理论方向成立。** [LLM 级联的 copula 建模](https://arxiv.org/html/2501.09345v3)、[尾依赖刻画极端预测能力](https://arxiv.org/html/2407.11887v2)、[召回约束的代理筛选](https://ddkang.github.io/papers/2020/supg-paper.pdf)都有先例。已读原文中未找到“固定召回加宽规律＋金融 LLM 双尾样本外测量”的完整重复，但 Yeo–David（1984）全文尚未取得。仅把条件极值模型反演成幂律，尚不足以成为独立理论贡献。
+**Recommendation: narrow the claim and keep one low-cost API trial run; at present this is not enough to declare that the new theory direction holds.** [Copula modeling of LLM cascades](https://arxiv.org/html/2501.09345v3), [tail dependence characterizing extreme prediction ability](https://arxiv.org/html/2407.11887v2) and [recall-constrained proxy screening](https://ddkang.github.io/papers/2020/supg-paper.pdf) all have prior work. In the original papers read, we found no complete duplicate of "fixed-recall widening regularity + two-tail out-of-sample measurement on financial LLMs", but the full text of Yeo–David (1984) has not been obtained. Merely inverting a conditional-extremes model into a power law is not yet enough to be an independent theoretical contribution.
 
-**定律必须改写。** 令 $q_\gamma(p)$ 为保留参考模型最高 $p$ 中比例 $\gamma$ 所需的廉价模型上尾放行率。在 Laplace 边际、有限紧残差和适当分位点条件下，$B=\alpha A+A^\beta Z+o_p(A^\beta)$、$\beta<1$、$\alpha>0$ 给出
+**The law has to be rewritten.** Let $q_\gamma(p)$ be the cheap model's upper-tail pass-through rate needed to keep a fraction $\gamma$ of the reference model's top $p$. Under Laplace margins, a finite tight residual and suitable quantile conditions, $B=\alpha A+A^\beta Z+o_p(A^\beta)$ with $\beta<1$, $\alpha>0$ gives
 
 $$q_\gamma(p)=p^{\alpha+o(1)},$$
 
-并不一般给出 $q_\gamma\sim Cp^\alpha$。**即使 $\alpha=1$，放行倍数也可能发散**；推导备忘给出精确 Laplace 边际的反例。正相关高斯的 $\alpha=\rho^2$ 已见 [HT（2004）§8.6](https://www.d.umn.edu/~yqi/mydownload/heffemantawn.pdf)，且存在影响有限阈值的次阶项；任何固定 $0<\rho<1$ 下，倍数最终仍发散。这里 $\rho$ 是正态分数相关，不是原始分数 Pearson。
+and does not in general give $q_\gamma\sim Cp^\alpha$. **Even with $\alpha=1$, the widening factor can diverge**; the derivation memo gives a counterexample with exact Laplace margins. The positively correlated Gaussian $\alpha=\rho^2$ already appears in [HT (2004) §8.6](https://www.d.umn.edu/~yqi/mydownload/heffemantawn.pdf), and there are lower-order terms that affect finite thresholds; for any fixed $0<\rho<1$ the factor still diverges eventually. Here $\rho$ is the normal-score correlation, not the Pearson correlation of raw scores.
 
-![词法基线的双尾放行倍数与不确定性](widening.png)
+![Two-tail widening factors of the lexical baseline with uncertainty](widening.png)
 
-**原表复现，但仍只是词法基线。** A=word、B=char，分数为 $P(positive)-P(negative)$，同 ID 配对，阈值同分全部保留。全样本 14,284 条（含训练集）在最高/最低 1% 的倍数为 **6.31 / 3.54**，正态分数相关 0.925 的高斯基准为 **3.02**。测试集 2,107 条、每端仅 21 条：倍数为 **6.03 [2.29,18.38] / 3.46 [1.86,5.36]**，高斯基准 **3.29**。阴影为 200 次配对词法簇 bootstrap 的逐点 95% 区间，固定模型，不覆盖事件相关性与训练不确定性。参考模型不是客观真值。
+**The original table is reproduced, but it is still only a lexical baseline.** A=word, B=char, the score is $P(positive)-P(negative)$, pairing is by ID, and all ties at the threshold are kept. On the full sample of 14,284 items (including the training set), the factors at the top/bottom 1% are **6.31 / 3.54**, and the Gaussian baseline at a normal-score correlation of 0.925 is **3.02**. On the test set of 2,107 items, with only 21 items per tail: the factors are **6.03 [2.29,18.38] / 3.46 [1.86,5.36]**, and the Gaussian baseline is **3.29**. The shading is the pointwise 95% interval from a 200-draw paired lexical-cluster bootstrap; the models are fixed, and it does not cover event correlation or training uncertainty. The reference model is not objective truth.
 
-测试集 1%–10% 窗口中 $\log q$ 对 $\log p$ 的描述性斜率 $\alpha_{eff}$ 为上尾 **0.52 [0.03,0.89]**、下尾 **0.64 [0.42,0.89]**；同窗口高斯斜率为 **0.72**。这些均不是 HT 结构参数估计，不能凭此宣称尾部极限定律已经验证。
+In the 1%–10% window of the test set, the descriptive slope $\alpha_{eff}$ of $\log q$ against $\log p$ is **0.52 [0.03,0.89]** for the upper tail and **0.64 [0.42,0.89]** for the lower tail; the Gaussian slope in the same window is **0.72**. None of these is an estimate of the HT structural parameter, and they cannot be used to claim that a tail limit law has been validated.
 
-**下一步只解决分数是否可用。** 官方接口文档支持用关闭推理的 Luna / Sol 取得 token logprob；同位置两标签 log-odds 是候选分数，仍须实测缺失、并列和重复评分稳定性。100 条×3 次×两模型预计约 $0.05–0.11；两档各 20,000 条约 $3.40–7.60，按每条 80–180 输入、1–2 输出 token 估算，未含重试。FNSPID 原作者数据已成功小量试读，但文件头集中于少数股票，不能充当随机样本；授权说明和抽样范围见备忘。**当前无 API 密钥，付费评分为零，尚无 LLM 实验结果。**
+**The next step addresses only whether the scores are usable.** The official API documentation supports obtaining token logprobs from Luna / Sol with reasoning off; the log-odds of two labels at the same position is a candidate score, and missingness, ties and the stability of repeated scoring still have to be measured. 100 items × 3 runs × two models is expected to cost about $0.05–0.11; 20,000 items for each of the two tiers about $3.40–7.60, estimated at 80–180 input and 1–2 output tokens per item, not including retries. A small trial read of the original authors' FNSPID data succeeded, but the file head is concentrated on a few stocks and cannot serve as a random sample; the license notes and sampling scope are in the memo. **There is currently no API key, paid scoring is zero, and there are no LLM experimental results yet.**
 
-完整依据：[数学推导](theory.md) · [四支文献排重](literature.md) · [API 与数据实测](api_and_data.md) · [复现代码](analyze_baselines.py) · [数值结果](baseline_results.json)。
+Full basis: [mathematical derivation](theory.md) · [four-branch prior-art check](literature.md) · [API and data tests](api_and_data.md) · [reproduction code](analyze_baselines.py) · [numerical results](baseline_results.json).

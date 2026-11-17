@@ -1,71 +1,71 @@
-# T1A 数学审查记录
+# T1A mathematical review record
 
-日期：2026-11-16（America/New_York）。审查对象为 PROOFS.md 与 Benford 分段积分；本记录使用“数学证明审查”技能的分单元、假设账本、反例检查与修正闭合方法。证明为单一 Markdown 文档，公式编号 D1–D3、I1、T1–T25；无跨附录引用，无未展开的证明草图，无需 LaTeX 索引器。数学编写与这里的代数/数值自审由同一子代理完成；Benford 实现由主代理编写，此处作独立审查。没有冒充外部专家复核。
+Date: 2026-11-16 (America/New_York). The objects of review are PROOFS.md and the Benford piecewise integral; this record uses the "mathematical proof review" skill's method of splitting into units, an assumption ledger, counterexample checks and closing out fixes. The proofs are a single Markdown document with formula labels D1–D3, I1, T1–T25; there are no cross-references to appendices, no unexpanded proof sketches, and no need for a LaTeX indexer. The mathematical writing and the algebraic/numerical self-review here were done by the same sub-agent; the Benford implementation was written by the main agent and is reviewed independently here. This does not pose as an external expert review.
 
-## 1. 依赖与假设账本
+## 1. Dependency and assumption ledger
 
-| 单元 | 依赖 | 必需假设 | 方法与状态 |
+| Unit | Depends on | Required assumptions | Method and status |
 |---|---|---|---|
-| T1–T3：四角值域、最大半径 | D1、I1 | 分母全盒不触零；相对式还需中心增长率非零；允许异号、不等宽 | 单调性、构造可达角点；**Verified / COMPLETE** |
-| T4–T8：一阶项、余项、双侧范围 | I1、T2 | 双侧简式额外要求两输入同号且相应分子区间不跨零 | 代数恒等式与均匀不等式；**Verified / COMPLETE** |
-| T9–T13：末位单位规则 | T3 | 同单位简式需同末位单位；T10–T12 需中心同号；有效单位需总半宽正 | 直接代入；**Verified / COMPLETE** |
-| T14–T15：gold 带 | T1–T3 | 精确输出尺度非零；gold 与显示中心分开 | 区间包含；**Verified / COMPLETE** |
-| 第 4 节与 T16：差比和、一般程序 | T2、线性误差 | 一般余项需二阶连续可微；共享来源先合并 | 线性极值、积分 Taylor；**Verified / COMPLETE** |
-| T17–T20：位数预算 | D3、T3 | 两中心非零；十进制位数与半末位宽对应；固定中心的精度反事实 | 精确代数重排；**Verified / COMPLETE** |
-| T21–T22：均匀卷积 | 独立均匀假设 | 非零宽度用主式；退化用均匀/点质量分支 | 矩形裁剪面积与容斥；**Verified / COMPLETE** |
-| T23–T24：增长率概率 | T21、正分母化 | 每题内独立均匀；接收带闭合；点质量分开 | 事件等价与 CDF；**Verified / COMPLETE** |
-| 第 7 节、T25：Benford 模型 | T3、T18 | 完整 log-uniform mantissa、额外独立性；同号、非零增长；位数至少 1 | 分段阈值精确积分；**Verified / COMPLETE** |
+| T1–T3: four-corner range, maximum radius | D1, I1 | Denominator does not touch zero on the whole box; the relative form also needs a non-zero center growth rate; opposite signs and unequal widths allowed | Monotonicity, construction of attainable corners; **Verified / COMPLETE** |
+| T4–T8: first-order term, remainder, two-sided range | I1, T2 | The two-sided simple form additionally requires both inputs to have the same sign and the corresponding numerator interval not to cross zero | Algebraic identities and uniform inequalities; **Verified / COMPLETE** |
+| T9–T13: last-digit unit rules | T3 | The same-unit simple form needs the same last-digit unit; T10–T12 need same-sign centers; the effective unit needs a positive total half-width | Direct substitution; **Verified / COMPLETE** |
+| T14–T15: gold band | T1–T3 | Exact output scale non-zero; gold and displayed center kept separate | Interval containment; **Verified / COMPLETE** |
+| Section 4 and T16: difference, ratio, sum, general programs | T2, linear error | The general remainder needs twice continuous differentiability; shared sources combined first | Linear extrema, integral Taylor; **Verified / COMPLETE** |
+| T17–T20: digit budget | D3, T3 | Both centers non-zero; decimal digits correspond to half-a-last-digit-unit widths; precision counterfactual with fixed centers | Exact algebraic rearrangement; **Verified / COMPLETE** |
+| T21–T22: uniform convolution | Independent uniform assumption | Main formula for non-zero widths; uniform/point-mass branches for degenerate cases | Rectangle clipping area and inclusion–exclusion; **Verified / COMPLETE** |
+| T23–T24: growth-rate probability | T21, making the denominator positive | Independent uniform within each question; closed acceptance band; point masses handled separately | Event equivalence and CDF; **Verified / COMPLETE** |
+| Section 7, T25: Benford model | T3, T18 | Full log-uniform mantissa, additional independence; same sign, non-zero growth; at least 1 digit | Exact integral of piecewise thresholds; **Verified / COMPLETE** |
 
-证明依赖是 D1 → I1/T1 → T2/T3 → 末位/位数/Benford；另一条 D1 + 独立均匀 → T21 → T23 → T24。没有环。所有公式内的常数、正负号、正分母条件与非严格/严格不等号均已逐项检查。这里的 Verified 指公式在列明假设下已核验，不指财务来源绑定或概率假设已由真实数据证实。
+The proof dependencies are D1 → I1/T1 → T2/T3 → last digit/digits/Benford; and separately D1 + independent uniform → T21 → T23 → T24. There are no cycles. All constants, signs, positive-denominator conditions and non-strict/strict inequalities in the formulas were checked item by item. Verified here means the formula has been checked under the listed assumptions; it does not mean that the financial source binding or the probabilistic assumptions have been confirmed by real data.
 
-## 2. 原主张的修正及闭合
+## 2. Corrections to the original claims and their closeout
 
-| 问题 | 级别 | 原主张为何不足 | 终态与证据 |
+| Issue | Severity | Why the original claim was insufficient | Final state and evidence |
 |---|---|---|---|
-| Δ=100 被当成无条件边界 | S1 | 同号大幅下降可能 Δ<100 仍稳定；正增长在 Δ=100 仍可越界 | **CLOSED-WEAKENED**：T10–T12 给精确式与近似条件；第 2 节两个有理反例 |
-| “k−log(1/g) 位有意义”未定义 | S1 | mantissa 常数可接近一位，负增长需绝对值；相对误差界不保证舍入字符 | **CLOSED-WEAKENED**：定义 p=−log10 R，T17–T20 给精确预算与语义限制 |
-| 忽略 gold 与中心偏移 | S1 | 对称中心带与 gold 带不是同一接受集合 | **CLOSED-VERIFIED**：T14 精确比较两端；T15 标明仅为一阶预测 |
-| 首位 Benford 不足以识别越界率 | S1 | 首位内部密度、与位数/增长率的相关性未指定 | **CLOSED-WEAKENED**：第 7 节明确附加假设；边际主模型与联合敏感性分开 |
-| 用 CDF 在退化点直接相减 | S2 | 若分布在接受下界有质量，F(lower) 会把等号错计越界 | **CLOSED-VERIFIED**：T24 用左极限；代码对常数输出直接判定 |
-| 首位内部识别界为浮点近似 | S2 | 区间空满判断与端点使用浮点运算，不是符号认证 | **已明确限制**：主代理移除了额外的空满判定容差，按逐段阈值直接比较；T25 后与 README 仍明确双精度数值限制 |
+| Δ=100 treated as an unconditional boundary | S1 | A large same-sign decline can be stable with Δ<100; positive growth can still be out of tolerance at Δ=100 | **CLOSED-WEAKENED**: T10–T12 give the exact formula and approximation conditions; two rational counterexamples in Section 2 |
+| "k−log(1/g) meaningful digits" undefined | S1 | The mantissa constant can approach one digit, negative growth needs an absolute value; a relative error bound does not guarantee the rounded characters | **CLOSED-WEAKENED**: define p=−log10 R; T17–T20 give the exact budget and semantic limits |
+| Offset between gold and center ignored | S1 | The symmetric center band and the gold band are not the same acceptance set | **CLOSED-VERIFIED**: T14 compares both ends exactly; T15 is marked as only a first-order prediction |
+| Leading-digit Benford insufficient to identify the out-of-tolerance rate | S1 | Density within the leading digit and correlation with digits/growth rate unspecified | **CLOSED-WEAKENED**: Section 7 makes the additional assumptions explicit; marginal main model and joint sensitivity kept separate |
+| CDF subtracted directly at degenerate points | S2 | If the distribution has mass at the lower acceptance bound, F(lower) wrongly counts equality as out of tolerance | **CLOSED-VERIFIED**: T24 uses the left limit; the code decides constant outputs directly |
+| Within-leading-digit identification bounds are floating-point approximations | S2 | Empty/full interval decisions and endpoints use floating-point arithmetic, not symbolic certification | **Limitation made explicit**: the main agent removed the extra empty/full decision tolerance and compares directly with the per-segment thresholds; after T25 and in the README, the double-precision numerical limitation is still stated explicitly |
 
-修正后没有仍开放的 S0/S1 数学问题。原来的粗规则仍可以作为零参数经验分类器，但“经验一致率高”不能升级为无条件定理。
+After the fixes, no S0/S1 mathematical issues remain open. The original coarse rule can still serve as a zero-parameter empirical classifier, but "high empirical agreement" cannot be upgraded to an unconditional theorem.
 
-## 3. 已执行的独立计算检查
+## 3. Independent computational checks performed
 
-环境：仓库相邻 130U-FinLLM/.venv/Scripts/python.exe，Python 标准库；固定种子 20261116。不读取或写入 T1 文件，不使用外部原始数据，不改阈值。
+Environment: 130U-FinLLM/.venv/Scripts/python.exe next to the repository, Python standard library; fixed seed 20261116. T1 files were neither read nor written, no external raw data was used, and thresholds were not changed.
 
-运行：
+Run:
 
 ~~~powershell
 & '../130U-FinLLM/.venv/Scripts/python.exe' research/t1a_law/theory_checks.py
 & '../130U-FinLLM/.venv/Scripts/python.exe' research/t1a_law/test_benford.py
 ~~~
 
-theory_checks.py 的 **7,974 项全部通过**：
+**All 7,974 items** of theory_checks.py pass:
 
-| 检查 | 次数 | 方法 |
+| Check | Count | Method |
 |---|---:|---|
-| T2 半径等于四角真实偏差最大值 | 2,000 | 精确 Fraction；正/负分母、正/负分子、异号、宽度不等 |
-| T4 恒等式、T5 余项、T6 双侧界 | 2,000 | 盒内有理扰动逐点比较 |
-| T23 CDF 与独立矩形裁剪面积 | 1,967 | CDF 容斥式对照独立多边形半平面裁剪及鞋带面积，精确分数相等 |
-| T19 位数不等式与 T3 半径条件等价 | 1,000 | 跨十进制指数、1–8 位与五种容差 |
-| T11 等末位阈值与四角半径条件等价 | 1,000 | 上升/下降、五种容差 |
-| 点质量、零半宽与闭接受边界 | 5 | 手算基准 |
-| Δ=100 两个方向的反例 | 2 | 精确有理比较 |
+| T2 radius equals the maximum true deviation over the four corners | 2,000 | Exact Fraction; positive/negative denominators, positive/negative numerators, opposite signs, unequal widths |
+| T4 identity, T5 remainder, T6 two-sided bound | 2,000 | Pointwise comparison with rational perturbations inside the box |
+| T23 CDF versus independent rectangle clipping area | 1,967 | CDF inclusion–exclusion formula against independent polygon half-plane clipping and shoelace area; exact fractions equal |
+| T19 digit inequality equivalent to the T3 radius condition | 1,000 | Across decimal exponents, 1–8 digits and five tolerances |
+| T11 equal-last-digit threshold equivalent to the four-corner radius condition | 1,000 | Rising/falling, five tolerances |
+| Point masses, zero half-widths and closed acceptance boundaries | 5 | Hand-computed benchmarks |
+| Counterexamples in both directions for Δ=100 | 2 | Exact rational comparison |
 
-Benford 独立积分检查：100 组正/负增长（保证同比量同号）、1–6 位、不等精度、五种容差；每组 32,768 个 log-mantissa 中点，总共 3,276,800 个合成点。直接在每点计算四角增长率，再与生产代码的解析分段积分比较：
+Independent Benford integral check: 100 settings with positive/negative growth (ensuring same-sign year-over-year quantities), 1–6 digits, unequal precision, five tolerances; 32,768 log-mantissa midpoints per setting, 3,276,800 synthetic points in total. The four-corner growth rate was computed directly at each point and compared with the production code's analytic piecewise integral:
 
-- 最大绝对误差：0.000021205411849356537（约 0.00212 个百分点）。
-- 预定离散误差容许界：3/32768 = 0.000091552734375。
-- 100 组全部通过；同时检查 log-uniform 与首位内均匀结果落在首位模型的数值区间内。
+- Maximum absolute error: 0.000021205411849356537 (about 0.00212 percentage points).
+- Pre-set discretization error tolerance: 3/32768 = 0.000091552734375.
+- All 100 settings pass; we also checked that the log-uniform and within-leading-digit uniform results fall inside the numerical interval of the leading-digit model.
 
-这组独立积分最初以内联同内容脚本执行，随后保存为 test_benford.py 供复现。数值检查是反例搜寻与实现核验；普遍数学结论依赖 PROOFS.md 中的完整证明，不由随机样本代替。
+This independent integral was first run as an inline script with the same content, and was then saved as test_benford.py for replication. The numerical checks are a counterexample search and implementation verification; the general mathematical conclusions rely on the complete proofs in PROOFS.md and are not replaced by random samples.
 
-## 4. 检查范围与未检查事项
+## 4. What was checked and what was not
 
-已检查：完整数学推导、关键退化情况、位数预算、不等宽度、gold 偏移、均匀误差闭式概率，以及 Benford 积分实现。
+Checked: the full mathematical derivation, key degenerate cases, the digit budget, unequal widths, the gold offset, the closed-form probability under uniform errors, and the Benford integral implementation.
 
-本记录未审查全部经验程序的来源绑定/类别判定、模型输出或 T1B 的全文约束；未验证真实财报舍入误差独立均匀或其 mantissa 服从 Benford。全体经验混淆表和期望比例仍须由项目的主运行与复算报告支持。
+This record did not review the source binding/category decisions of all empirical programs, model outputs, or T1B's full-text constraints; it did not verify that real filing rounding errors are independent and uniform or that their mantissas follow Benford. The full empirical confusion table and the expected fractions must still be supported by the project's main run and recomputation report.
 
-**修正后审查结论：CONVERGED。** 所有本记录列明的 S1 都已通过明确削弱原主张或补上精确条件闭合；没有以修正后的定理冒充任务最初那句无条件口号。
+**Review conclusion after fixes: CONVERGED.** Every S1 listed in this record was closed by explicitly weakening the original claim or adding exact conditions; the corrected theorem was not passed off as the task's original unconditional slogan.

@@ -1,76 +1,76 @@
-# 路径 03：影响结构驱动的审计成本—证书宽度前沿
+# Path 03: The audit-cost–certificate-width frontier driven by influence structure
 
-**2026-11-16第九轮补充：** [任意随机设计下的精确解](../theory/randomized_audit.md)已去掉固定配额限制，同质r-of-d、正确审计、真值事前固定、全零必发固定区间的条件下，简单随机整层加一部分层达到minimax下界。总数门也用同样的随机设计类，pooled SRS最优；[32格全表与审查](../reports/2026-11-16-round9.md)保留所有对照及合取族零新增收益。自适应硬上限和clean-world期望预算可扩展，不能偷换成坏世界期望成本。适用族外、新颖性、历史真值和从零训练必要性均未解决；不把精确条件数学等同于独立旗舰通过。
+**2026-11-16 round 9 addendum:** The [exact solution under arbitrary randomized designs](../theory/randomized_audit.md) removes the fixed-quota restriction. Under homogeneous r-of-d, correct audits, ground truth fixed in advance, and a fixed interval that is always issued when all findings are zero, simple random sampling of whole strata plus one partial stratum attains the minimax lower bound. The total-count gate also uses the same class of randomized designs, and pooled SRS is optimal for it; the [full 32-cell table and review](../reports/2026-11-16-round9.md) keeps all comparisons and the zero added gain of the conjunctive family. The adaptive hard cap and the clean-world expected budget can be extended, but must not be swapped in for the expected cost in a bad world. Outside the applicable family, novelty, historical ground truth, and the necessity of training from scratch are all unresolved; exact conditional mathematics is not treated as passing as an independent flagship.
 
-**2026-11-16第八轮补充：** [LV1–LV5及边界](../theory/localization_value.md)已给最强固定总数门算法、位置收益上界/无收益条件、sharp构造；[全部比较与审查](../reports/2026-11-16-round8.md)同时纳入min(Box,TotalK)及类外pooled随机抽样。固定配额sharp收益不等于所有可行审计的优势；现实固定配额约束未确立，是当前03选题的关键缺口。旧20格相对强简单组合中位0，没有借新构造追认门通过。
+**2026-11-16 round 8 addendum:** [LV1–LV5 and their boundaries](../theory/localization_value.md) give the strongest fixed total-count gate algorithm, an upper bound on location gain / conditions for no gain, and a sharp construction; [all comparisons and the review](../reports/2026-11-16-round8.md) also include min(Box,TotalK) and out-of-class pooled random sampling. A sharp gain under fixed quotas is not an advantage over all feasible audits; a real-world fixed-quota constraint has not been established, and this is the key gap in the current 03 topic. On the old 20 cells the median gain relative to the strong simple combination is 0; the new construction was not used to retroactively declare a gate passed.
 
-**2026-11-16第七轮补充：** [集中稿](../paper/manuscript.md)与[论文级反方审查](../reports/paper_review.md)加入更强简单对照。一般非矩形安全计数区域与直接法等价；均衡总污染数门已实现主例88对114和Ω(r)相对矩形分离，不能用它们证明位置建模必要。三层各20篇的38对48给出相对于固定总K≤1门的另外一个严格差异，但不是优于所有计数方法，更不是预定实验成功或原创性证据。后文原研究问题保留，下一步必须针对这些更强对照收窄。
+**2026-11-16 round 7 addendum:** The [consolidated draft](../paper/manuscript.md) and the [paper-level adversarial review](../reports/paper_review.md) add stronger simple comparisons. A general non-rectangular safe count region is equivalent to the direct method; the balanced total-contamination gate already achieves 88 vs 114 on the main example and an Ω(r) separation relative to the rectangle, so these cannot be used to show that location modeling is necessary. Three strata of 20 documents each give 38 vs 48, another strict difference relative to the fixed total K≤1 gate, but it does not beat all counting methods, much less count as success of a pre-registered experiment or as evidence of originality. The original research question below is kept; the next step must narrow it against these stronger comparisons.
 
-日期：2026-11-15。性质：独立立项分析，待资深助手审阅；本文不代表 Fable 或其他外部导师。定位：**P1 的数学分支，不是又一个独立旗舰**。全部离线，证据来自已保存的原论文核验与本地实验。本文件不先给路径排名。
+Date: 2026-11-15. Nature: an independent project-proposal analysis, pending review by the senior assistant; this document does not represent Fable or any other external advisor. Positioning: **a mathematical branch of P1, not another independent flagship**. Fully offline; evidence comes from saved verification of the original papers and from local experiments. This file does not rank paths up front.
 
-## 研究问题、目标量与它为什么可能有独立价值
+## Research question, target quantity, and why it might have independent value
 
-完整 P1 要求最终真实信息集证书；本路径只抽出其中一个可以严密研究的问题：**给定已冻结的训练影响结构、观测预测和目标统计量，为把证书区间压到指定宽度，最少需要花多少审计成本？不同来源、分片位置和审计顺序的信息能否系统性减少成本，而且保持有限样本或任意停止下的有效性？**
+The full P1 requires a certificate for the final true information set; this path extracts only one question from it that can be studied rigorously: **given a frozen training influence structure, observed predictions, and a target statistic, what is the minimum audit cost needed to shrink the certificate interval to a specified width? Can information about different sources, shard locations, and audit order systematically reduce the cost while keeping validity in finite samples or under arbitrary stopping?**
 
-原始“约 3N/n”只描述均匀固定样本量、零发现、小抽样比例时的污染总数上界尺度。它忽略了污染在哪些片、哪些片影响目标统计量、真实票差是否支持鲁棒性，以及一个来源是否更贵或更难判定。因此可以把目标从“估计 K 尽量准”改成“直接使一个具体模型结论达到预定精度”。
+The original "about 3N/n" only describes the scale of the upper bound on total contamination under a uniform fixed sample size, zero findings, and a small sampling fraction. It ignores which shards the contamination is in, which shards affect the target statistic, whether the true vote margins support robustness, and whether one source is more expensive or harder to judge. So the target can be changed from "estimate K as accurately as possible" to "directly bring one specific model conclusion to a pre-set precision".
 
-候选目标有两类，必须分开：
+There are two kinds of candidate target, and they must be kept apart:
 
-1. **固定设计条件前沿。** 预先选审计量 n 或分层 n_h；在指定观测结果（最简单是零发现）下，使区间宽度 W=U−L≤w 所需的最小确定成本 Σ_h c_h n_h。这不保证观察到零发现，也不是期望成本。
-2. **序贯决策前沿。** 审计者按已审记录选择下一个对象，使用同时有效的置信集合；在真实污染场景或明确先验下，研究达到 W≤w 的停止时间和成本分布。若称 minimax 或最优，需要明确对哪些污染配置取最坏值，以及不可能性的参照类。
+1. **Fixed-design conditional frontier.** Choose the audit size n or stratified n_h in advance; find the minimum deterministic cost Σ_h c_h n_h needed to make the interval width W=U−L≤w under a specified observed outcome (most simply, zero findings). This does not guarantee that zero findings will be observed, and it is not an expected cost.
+2. **Sequential decision frontier.** The auditor picks the next object based on the records audited so far, using simultaneously valid confidence sets; under real contamination scenarios or an explicit prior, study the distribution of stopping time and cost to reach W≤w. To call anything minimax or optimal, one must state over which contamination configurations the worst case is taken, and the reference class for impossibility.
 
-只有第二类允许合法“看到足够证据就停”。把第一类的固定 n 公式反复计算直到通过，属于覆盖率错误而不是算法改进。
+Only the second kind legitimately allows "stop once there is enough evidence". Recomputing the fixed-n formula of the first kind repeatedly until it passes is a coverage error, not an algorithmic improvement.
 
-## 已有方法与可争取的增量
+## Existing methods and the increment we could aim for
 
-已保存全文表明：Waudby-Smith–Ramdas 已构造无放回抽样的超几何置信序列；Shekhar 等已研究加权财务审计、辅助信息和 test martingale；DPA、Finite Aggregation、collective bagging 已有污染影响与共同预测的结构化优化。[文献台账 L02–L04、L08–L09](../literature/literature_review.md)、[Q30](../answers/Q30.md)。因此“第一次做序贯审计”“第一次利用风险权重”“第一次把置信区间接上确定性界”都没有当前证据支持。
+The saved full texts show that Waudby-Smith–Ramdas already constructed hypergeometric confidence sequences for sampling without replacement; Shekhar et al. already studied weighted financial audits, auxiliary information, and test martingales; DPA, Finite Aggregation, and collective bagging already have structured optimization of contamination influence and joint prediction. [Literature ledger L02–L04, L08–L09](../literature/literature_review.md), [Q30](../answers/Q30.md). So current evidence supports none of "the first sequential audit", "the first use of risk weights", or "the first to connect confidence intervals to deterministic bounds".
 
-现有 `minimum_zero_audit` 的精确整数反解，也只是成熟超几何反演的有用接口。它修复近似数值和边界，不自然升级为新的统计定理。可以争取的研究增量必须是更具体的对象，例如：
+The exact integer inversion in the existing `minimum_zero_audit` is also just a useful interface to mature hypergeometric inversion. It fixes approximate numerics and boundaries, and does not naturally upgrade into a new statistical theorem. Any research increment we could aim for must be about a more specific object, for example:
 
-- **影响图依赖的审计复杂度。** 相同污染数、相同总体大小，在不同文档→头→测试点结构下，需要审计的量能否相差一个明确阶数？能否同时给实现算法和相匹配下界？
-- **直接面向最终命题的审计。** 与先估总 K、再做最坏传播相比，直接测试“存在足以使目标统计量跑出区间的污染配置”，是否在不额外假设污染分布的情况下严格省样本？
-- **有效而可计算的自适应分层。** 层分配由已知成本/结构或已审结果改变时，如何保持覆盖，并避免遍历全部污染集合？现有置信序列可提供统计基础，贡献必须落在具体结构与计算保证上。
+- **Audit complexity that depends on the influence graph.** With the same contamination count and the same population size, can the amount that must be audited differ by an explicit order under different document → head → test-point structures? Can we give both an achieving algorithm and a matching lower bound?
+- **Audit aimed directly at the final claim.** Compared with first estimating the total K and then doing worst-case propagation, does directly testing "there exists a contamination configuration that is enough to push the target statistic out of the interval" strictly save samples without extra assumptions on the contamination distribution?
+- **Valid and computable adaptive stratification.** When stratum allocation changes with known costs/structure or with audited results, how do we keep coverage and avoid enumerating all contamination sets? Existing confidence sequences can provide the statistical basis; the contribution must lie in the specific structure and computational guarantees.
 
-这些目前是候选问题，不是已取得的原创结果。若已有审计文献只需把“报表误差”替换为“模型统计量影响”就完整解决，应承认这是迁移应用，放回 P1 附录而不是另造数学旗舰。
+These are currently candidate questions, not original results already obtained. If the existing audit literature solves them completely once "reporting error" is replaced with "influence on a model statistic", we should admit this is a transfer application and put it back in a P1 appendix rather than build a separate mathematical flagship.
 
-## 从零训练是否必要
+## Is training from scratch necessary?
 
-**本路径本身不需要从零训练，甚至不需要神经网络。** 它的输入是固定的影响映射、投票/分数和统计量定义；一个已训练且可追踪的模型、规则系统、分片线性分类器都可以提供输入。因此它不能用来论证“必须从零训练才有研究价值”。
+**This path itself does not need training from scratch, or even a neural network.** Its inputs are a fixed influence map, votes/scores, and a definition of the statistic; an already trained and traceable model, a rule system, or a sharded linear classifier can all provide them. So it cannot be used to argue that "training from scratch is necessary for research value".
 
-它与从零训练的关系是实验控制：为了在 P1 中清楚知道污染可能影响哪里，小模型和稳定分片训练较容易构造完整依赖图。但理论贡献若成立，应对更广泛的系统成立。反方还可能指出：既然系统可以由我们设计，就应先让共享组件不接触可疑来源、减少影响图复杂度，可能比优化审计更有效。这必须作为共同设计基线，而不是把复杂影响图当不可改变的自然事实。
+Its relation to training from scratch is experimental control: to know clearly in P1 where contamination could have influence, small models and stable sharded training make it easier to build a complete dependency graph. But if the theoretical contribution holds, it should hold for a wider class of systems. An opponent might also point out: since we can design the system, we should first keep shared components away from suspect sources and reduce the complexity of the influence graph, which may be more effective than optimizing the audit. This must be included as a co-design baseline, instead of treating a complex influence graph as an unchangeable fact of nature.
 
-## 假设、已成立起点与反例
+## Assumptions, established starting point, and counterexamples
 
-### 固定 n 的精确起点
+### Exact starting point for fixed n
 
-固定 N 个可疑版本，均匀无放回审计 n 个且发现零错标。α 预先固定，审计判定正确。若证书可以承受至多 B 篇污染，0≤B<N，则
+Fix N suspect versions, audit n of them uniformly without replacement, and find zero mislabels. α is fixed in advance and audit judgments are correct. If the certificate can tolerate at most B contaminated documents, 0≤B<N, then
 
 \[
 K_u(0)\le B\iff
 \frac{\binom{N-(B+1)}n}{\binom Nn}\le\alpha.
 \]
 
-右侧单调于 n，给精确最小整数样本量。对于逐点投票稳定性，B 可由各点票差半径的顺序统计量得到；但稳定预测比例不等于正确率，也不等于 macro-F1 区间宽度。若目标改成宽度 w，必须用实际包络函数重新定义可承受预算 B(w)。
+The right-hand side is monotone in n, which gives the exact minimum integer sample size. For pointwise vote stability, B can be obtained from order statistics of the per-point vote-margin radii; but the stable-prediction fraction is not accuracy, nor is it the macro-F1 interval width. If the target becomes a width w, the tolerable budget B(w) must be redefined using the actual envelope function.
 
-**反例与设计含义。** K=1 若可能落在共享骨干训练数据中，就能影响全部头；同样 K=1 若只在某一固定小片，影响被限制。总 K 相同并不代表相同审计价值。另一反例是最小编号类的平局优先：m=2、两个头都投 0，允许改一头仍稳健；因此没有平局语义的 m≥2K+1 门不是通用必要条件。
+**Counterexamples and design implications.** If K=1 can fall in the shared backbone's training data, it can affect all heads; the same K=1 confined to one fixed small shard has limited influence. The same total K does not mean the same audit value. Another counterexample is tie-breaking toward the lowest-numbered class: with m=2 and both heads voting 0, the prediction stays robust even if one head is allowed to change; so the gate m≥2K+1 without tie semantics is not a general necessary condition.
 
-所有方法还必须规定：版本时间的可判定真值、模型/测试样本在审计前冻结、固定 ID 或明确多头影响集合 H_i、分层和抽样概率如何确定、已审记录是否移出训练、人工漏报如何处理。未定义这些内容，就没有可反演的抽样分布。
+Every method must also specify: decidable ground truth for version time; the model/test samples frozen before the audit; fixed IDs or an explicit multi-head influence set H_i; how strata and sampling probabilities are determined; whether audited records are removed from training; and how human misses are handled. Without these, there is no sampling distribution to invert.
 
-## 候选命题 D1：直接校准最终区间的固定分层零发现检验
+## Candidate proposition D1: a fixed stratified zero-finding test that calibrates the final interval directly
 
-这是一个可完整证明的研究接口，用于说明希望比较什么；其证明是有限总体抽样与复合假设检验的直接应用，**不能单凭此命题声称原创**。
+This is a fully provable research interface, used to state what we want to compare; its proof is a direct application of finite-population sampling and composite hypothesis testing, and **originality cannot be claimed on the basis of this proposition alone**.
 
-**设定。** 在审计前固定互不相交的层 W_h，大小 N_h；各层独立均匀无放回抽 n_h 个对象。给定每篇文档可能影响的头集合 H_i，固定观测模型与目标统计量 S。对任意真实污染集合 C，令 B(C)=∪_{i∈C}H_i。用一个可靠的外包络 A(C) 表示当 B(C) 内头任意改变时，S 的全部可能取值。共享组件若可能变动，必须据实令相应 H_i 覆盖所有受影响头；不能为获得紧界而漏边。
+**Setup.** Before the audit, fix disjoint strata W_h of size N_h; in each stratum, independently draw n_h objects uniformly without replacement. Given the head set H_i that each document may influence, fix the observed model and the target statistic S. For any true contamination set C, let B(C)=∪_{i∈C}H_i. Let a reliable outer envelope A(C) denote all possible values of S when the heads in B(C) change arbitrarily. If shared components may change, the corresponding H_i must truthfully cover all affected heads; edges must not be dropped to get a tighter bound.
 
-在审计前固定拟报告区间 I=[ℓ,u]，并定义坏配置集合
+Before the audit, fix the interval to be reported, I=[ℓ,u], and define the set of bad configurations
 
 \[
 \mathcal H_I=\{C:A(C)\not\subseteq I\}.
 \]
 
-每层样本量是固定整数 0≤n_h≤N_h。若坏配置集合为空，其最大漏检概率约定为 0；此时该放松模型已经确定所有配置都落入 I，无需审计。所有实际污染影响仍须由 A(C) 包住；未建模的历史选择泄漏或共享状态变化不能通过这个检验被修复。
+Each stratum's sample size is a fixed integer 0≤n_h≤N_h. If the bad-configuration set is empty, its maximum miss probability is taken to be 0 by convention; the relaxed model has then already determined that all configurations fall in I, and no audit is needed. All actual contamination influence must still be enclosed by A(C); unmodeled historical selection leakage or changes in shared state cannot be repaired by this test.
 
-如果
+If
 
 \[
 \sup_{C\in\mathcal H_I}
@@ -78,110 +78,110 @@ K_u(0)\le B\iff
 {\binom{N_h}{n_h}}\le\alpha,
 \]
 
-则以下程序覆盖 S(F_del) 的概率至少 1−α：所有层审计均零发现时报告 I，否则报告统计量完整范围或明确弃权。
+then the following procedure covers S(F_del) with probability at least 1−α: report I when every stratum's audit has zero findings; otherwise report the full range of the statistic or explicitly abstain.
 
-**证明。** 固定真实污染集合 C*。如果 S(F_del)∉I，则外包络的可靠性意味着 C*∈H_I。程序在这种情况下失败的必要条件是所有抽样都漏掉 C*。由于层内均匀无放回、层间抽样独立，这一事件的概率恰为显示的乘积，且不超过坏配置的上确界 α。若 S(F_del)∈I，则零发现报告不会失败。对每个固定 C* 都成立，所以是频率学覆盖，而不是污染位置的先验概率。证毕。
+**Proof.** Fix the true contamination set C*. If S(F_del)∉I, the reliability of the outer envelope implies C*∈H_I. A necessary condition for the procedure to fail in this case is that every sample misses C*. Since sampling is uniform without replacement within strata and independent across strata, the probability of this event is exactly the displayed product, which is at most the supremum over bad configurations, α. If S(F_del)∈I, a zero-finding report cannot fail. This holds for every fixed C*, so it is frequentist coverage, not a prior probability over contamination locations. QED.
 
-**它与已有预算门的关系。** 单层且“坏配置”恰为 |C|≥B+1 时，漏检概率随污染数下降，上确界在 B+1 处取得，退化为既有精确门。若 H_I 利用分片位置与测试目标，直接校准可能比先给每层 α_h、再取各层 K_h 的矩形置信集合更紧，但需要实际证明/测量；不能假设永远严格占优。
+**Relation to the existing budget gate.** With a single stratum and "bad configurations" being exactly |C|≥B+1, the miss probability decreases with the contamination count, the supremum is attained at B+1, and this reduces to the existing exact gate. If H_I uses shard locations and the test target, direct calibration may be tighter than first giving each stratum α_h and then taking a rectangular confidence set over the per-stratum K_h, but this needs an actual proof/measurement; one cannot assume it always strictly dominates.
 
-**候选研究优化。** 在固定允许的区间族与成本 c_h 下，求最小 Σ_h c_h n_h，使上式成立且 |I|≤w。I、分层与 n_h 必须在抽样前确定。可能的贡献是这个复合坏集合的可计算刻画、最坏配置的结构，以及可证明近似优化或下界；目前尚未实现，也未排除已有风险限制审计能直接覆盖它。
+**Candidate research optimization.** Given a fixed admissible family of intervals and costs c_h, find the minimum Σ_h c_h n_h such that the inequality above holds and |I|≤w. I, the strata, and n_h must be fixed before sampling. Possible contributions are a computable characterization of this composite bad set, the structure of worst-case configurations, and provable approximate optimization or lower bounds; none of this is implemented yet, and we have not ruled out that existing risk-limiting audits cover it directly.
 
-**风险。** 如果在看到哪些记录抽中且未发现错误后，再挑一个更容易通过的 I，前述证明不自动有效。若审计漏判，零发现概率也不再等于组合数乘积。若抽取“最可疑的文档”却继续使用均匀公式，同样无效。
+**Risks.** If, after seeing which records were drawn and that no errors were found, one then picks an I that passes more easily, the proof above is not automatically valid. If the audit misses errors, the zero-finding probability no longer equals the product of binomial coefficients. Drawing "the most suspicious documents" while still using the uniform formula is equally invalid.
 
-## 候选命题 D2：有效置信集合向证书宽度的任意停止传递
+## Candidate proposition D2: passing valid confidence sets to certificate width under arbitrary stopping
 
-设真实污染配置 C* 固定，审计产生一个同时置信集合序列 G_t，满足
+Let the true contamination configuration C* be fixed, and let the audit produce a sequence of simultaneous confidence sets G_t satisfying
 
 \[
 \Pr\{\forall t,\ C^*\in G_t\}\ge1-\alpha.
 \]
 
-每个时刻计算 L_t=inf_{C∈G_t}inf A(C)、U_t=sup_{C∈G_t}sup A(C)。若 G_t 与 A(C) 的计算都可靠，则对任意数据依赖停止时刻 τ，以至少 1−α，S(F_del)∈[L_τ,U_τ]；证明是在同一个同时覆盖事件上逐时刻包含，再选择 τ。可以把停止规则设为 U_t−L_t≤w 或预算耗尽。
+At each time compute L_t=inf_{C∈G_t}inf A(C) and U_t=sup_{C∈G_t}sup A(C). If the computations of G_t and A(C) are both reliable, then for any data-dependent stopping time τ, with probability at least 1−α, S(F_del)∈[L_τ,U_τ]; the proof is containment at each time on the same simultaneous coverage event, followed by choosing τ. The stopping rule can be set to U_t−L_t≤w or budget exhaustion.
 
-这个传递本身很直接，**难点是构造在实际抽样策略下有效且可算的 G_t**。各层固定机制的置信序列可以给初步矩形集合；预测性选择下一层、非均匀抽样、基于模型影响的排序必须与相应鞅/置信序列定理的条件逐项匹配。现有本地代码没有一般非零发现的置信序列，也没有证明自适应影响优先抽样有效。
+This passing step is itself straightforward; **the hard part is constructing a G_t that is valid and computable under the actual sampling strategy**. Confidence sequences with a fixed mechanism per stratum can give an initial rectangular set; predictive choice of the next stratum, non-uniform sampling, and ordering based on model influence must each be matched, condition by condition, to the corresponding martingale/confidence-sequence theorem. The existing local code has no confidence sequence for general nonzero findings, and has not shown that adaptive influence-first sampling is valid.
 
-不应强制假设真实“最有害文档”更容易错标；这种关联若未知，只能作为提高效率的辅助信息，不能偷偷放进有效性。若对抗者恰把污染放在被低估区域，证书仍应覆盖。
+One should not impose the assumption that the truly "most harmful documents" are more likely to be mislabeled; if this association is unknown, it can only serve as auxiliary information to improve efficiency, and must not be smuggled into validity. If an adversary places contamination exactly in an underestimated region, the certificate should still cover.
 
-## 已有实现和实际数字
+## Existing implementation and actual numbers
 
-[审计规划记录](../planning/record.md) 与 `research/planning/audit_frontier.py` 已实现零发现固定样本量的精确最小 n；输入支持整数/Fraction，不用近似概率改变边界，并核对 n 通过、n−1 不通过。8 项本地测试覆盖小 N 的穷举、单调性、平局和非法输入。该模块**不是 anytime-valid 工具，也没有已实现 D1/D2 的一般版本**。
+The [audit planning record](../planning/record.md) and `research/planning/audit_frontier.py` implement the exact minimum n for a zero-finding fixed sample size; inputs support integers/Fraction, approximate probabilities are not used to shift boundaries, and the code checks that n passes and n−1 fails. 8 local tests cover exhaustive enumeration for small N, monotonicity, ties, and invalid inputs. This module **is not an anytime-valid tool, and it does not implement general versions of D1/D2**.
 
-现有人工设计例 N=1000、m=11，目标认证比例 1/3、1/2、2/3、1，所需零发现审计量分别为 393、527、777、950。[完整结果](../planning/frontier_results.json)。这些是手工票数与假设总体，不是真实 FOMC/EDGAR 观察。950 的例子说明零票差点要求排除 K=1，置信水平 95% 时需抽到总体的 95%；这是明确的设计代价，不能误读为实际必有零错误或审计成功概率为 95%。
+In the existing hand-designed example with N=1000 and m=11, target certified fractions of 1/3, 1/2, 2/3, and 1 need zero-finding audit sizes of 393, 527, 777, and 950 respectively. [Full results](../planning/frontier_results.json). These use hand-set vote counts and a hypothetical population, not real FOMC/EDGAR observations. The 950 example shows that a point with zero vote margin requires ruling out K=1, which at 95% confidence requires sampling 95% of the population; this is an explicit design cost, and must not be misread as meaning there must actually be zero errors or that the audit succeeds with probability 95%.
 
-`research/certificates/collective.py` 可作为宽度 oracle：给共同头集合，计算固定统计量包络；exact 模式的状态爆炸和子集枚举限制都已公开。[集体理论](../theory/collective_metrics.md) 已展示某些实际目标量对位置/联合约束有响应。下一步要把“总预算 k”改成“被审证据允许的影响集合”，不能只把现有例子的 N 扩大后画更多等高线就称深入研究。
+`research/certificates/collective.py` can serve as a width oracle: given a joint head set, it computes the envelope of a fixed statistic; the state explosion of exact mode and its subset-enumeration limits are documented. The [collective theory](../theory/collective_metrics.md) shows that some real target quantities respond to location/joint constraints. The next step is to replace "total budget k" with "the influence sets allowed by the audited evidence"; merely enlarging N in the existing example and drawing more contour lines does not count as deeper research.
 
-## 本地数据与成本可观察性
+## Local data and observability of cost
 
-[库存报告](../reports/local_data_inventory.md) 中的 120 份 FOMC 是可立即离线访问的真实来源；来源时间字段和 HTML 哈希足够构建审计任务清单，并计时“判定一个版本历史性需要多久”。但它们不自动提供时间戳错标真值：2026 年抓取页面的历史修订状态尚不确定。对无法从本地快照判定的记录，正确输出是未判定，不能计为审计无错。
+The 120 FOMC documents in the [inventory report](../reports/local_data_inventory.md) are a real source available offline right away; the source time fields and HTML hashes are enough to build an audit task list and to time "how long it takes to judge whether a version is historical". But they do not automatically provide ground truth for timestamp mislabels: the historical revision status of pages scraped in 2026 is still uncertain. For records that cannot be judged from the local snapshots, the correct output is undecided, which must not be counted as an error-free audit.
 
-现有 Wikipedia 没有逐篇 `published_at`，可以作为“证据贫乏来源”的真实对照，却不应假造真实错标标签。SEntFiN 的缺时间来源也一样。合成污染可以验证方法的统计覆盖与功效，但真实审计成本、来源缺失率和可判定比例必须从真实记录取得。
+The existing Wikipedia data has no per-article `published_at`; it can serve as a real comparison for an "evidence-poor source", but real mislabel labels must not be fabricated for it. The same applies to the SEntFiN sources that lack times. Synthetic contamination can validate the statistical coverage and power of a method, but real audit cost, source missingness rates, and decidable fractions must come from real records.
 
-这个路径的一个现实反对意见很强：只有 120 份 FOMC 时，普查可能最划算，分层/自适应算法节省不了多少人力。只有在明确的任务规模、判定成本异质性或复杂依赖图下，数学分支才可能有实际必要性。不能以假设的十万篇语料掩盖目前规模小的事实。
+One practical objection to this path is strong: with only 120 FOMC documents, a census may be cheapest, and stratified/adaptive algorithms cannot save much human effort. The mathematical branch can only be practically necessary under an explicit task scale, heterogeneous judgment costs, or a complex dependency graph. A hypothetical corpus of 100,000 documents must not be used to hide the fact that the current scale is small.
 
-## 三阶段最小验证与预算估计
+## Three-stage minimal validation and budget estimate
 
-以下全是**尚未执行的资源估计**；本路径不需要 GPU，不需要新语言模型训练。
+Everything below is **a resource estimate not yet executed**; this path needs no GPU and no new language-model training.
 
-| 阶段 | 实验设计与验收 | 估计预算 |
+| Stage | Experiment design and acceptance | Estimated budget |
 |---|---|---|
-| A：离线结构定理与小规模精确对照 | 固定 2–4 个来源层、可枚举文档影响图，比较总 K 门、分层 union-bound 门和 D1 直接坏配置门；覆盖所有污染配置，而非只随机测少数好例子 | CPU 30–60 分钟的有上限扫描；≤2 GB 内存目标。先从 N≤16 开始，超过预算给可验证外界/停止，不报告未完成内侧极值 |
-| B：一般发现与序贯有效性 | 从已保存原论文条件建立一个最小的无放回置信序列；先固定层机制，再研究只基于已审历史的层选择。对小 N 穷举随机抽样顺序，检查实际同时覆盖和所有停止规则 | CPU 数小时以内的有界网格；不训练。统计错误上界来自证明与穷举/精确递推，不能仅靠 Monte Carlo 零失败宣布精确有效 |
-| C：真实审计可行性与效率 | 在本地 FOMC 制定“可判定/污染/干净/未知”的版本审计规范；先计时 10 份，估计人工成本分布；随后冻结一个真实来源试验并记录所有无法判定项，评估方法是否真的优于普查/简单分层 | 人工计时与规范约 4–8 小时为初估；完整 120 份成本以 pilot 修正。CPU 预计远低于人工成本。若多数历史性无法在本地判定，报告真实可审计性失败，不填假标签 |
+| A: Offline structure theorem and small-scale exact comparison | Fix 2–4 source strata and an enumerable document influence graph; compare the total-K gate, the stratified union-bound gate, and the D1 direct bad-configuration gate; cover all contamination configurations, not just a few randomly tested good examples | Capped scan of 30–60 CPU minutes; target ≤2 GB memory. Start with N≤16; beyond the budget, give a verifiable outer bound / stop, and do not report unfinished inner extrema |
+| B: General findings and sequential validity | Build a minimal without-replacement confidence sequence from the conditions in the saved original papers; first fix the stratum mechanism, then study stratum selection based only on the audited history. For small N, enumerate random sampling orders exhaustively and check actual simultaneous coverage and all stopping rules | Bounded grid within a few CPU hours; no training. The statistical error upper bound comes from proofs and exhaustive enumeration / exact recursion; zero failures in Monte Carlo alone cannot be used to declare exact validity |
+| C: Real audit feasibility and efficiency | Write a version-audit specification for the local FOMC documents with "decidable/contaminated/clean/unknown"; first time 10 documents to estimate the human cost distribution; then freeze one real-source trial, record every undecidable item, and assess whether the method really beats a census / simple stratification | Initial estimate of about 4–8 hours for human timing and the specification; the cost for all 120 documents is corrected from the pilot. CPU cost expected to be far below human cost. If the historical status of most documents cannot be judged locally, report a failure of real auditability and do not fill in fake labels |
 
-阶段 A 的结果可以直接作为 P1 的数学附录；B 若仅复现现成序贯算法，也应诚实按复现归位。只有发现明确的影响结构相关新界/算法并经既有工作对照，才考虑单独投稿。C 不以“模型很准”为验收，而看来源审计真值、有效性和实际成本。
+Stage A results can go directly into a mathematical appendix of P1; if B only reproduces an off-the-shelf sequential algorithm, it should honestly be filed as a reproduction. Only if we find an explicit new bound/algorithm tied to influence structure, checked against prior work, should a separate submission be considered. C is not accepted on "the model is accurate", but on source-audit ground truth, validity, and actual cost.
 
-## 下次小试的事前判定规则（提案，不是已冻结运行）
+## Pre-specified decision rules for the next small trial (proposal, not a frozen run)
 
-本路径应先用一个可完整枚举的数学设计试验判断“复杂审计是否值得继续”，再谈真实成本；与[共同判定提案](DECISION_CRITERIA.md)配套阅读。以下规则尚未绑定具体输入网格、实现版本或运行身份；它们是待资深助手批评后冻结的提案，不是事后给现有结果补注册。
+This path should first use a fully enumerable mathematical design trial to judge "whether complex audits are worth continuing", and only then discuss real cost; read together with the [shared decision proposal](DECISION_CRITERIA.md). The rules below are not yet bound to a specific input grid, implementation version, or run identity; they are a proposal to be frozen after criticism from the senior assistant, not a retroactive registration for existing results.
 
-### 有效性硬门与比较契约
+### Hard validity gate and comparison contract
 
-1. 所有方法使用同一 α=0.05、同一固定统计量 S、同一来源层与影响图、同一模型预测、同一可见辅助信息和审计判错标准。主目标是**该统计量的区间宽度**，不能让新方法优化 accuracy 宽度，却让基线优化更困难的全预测稳定率。
-2. 主目标暂定为固定测试集 accuracy 宽度 **w=0.10**，与 PATH_01 保持相同统计对象和分辨率。四至八个测试点的完整穷举可另列 w=1/4 的实现压力测试；这仅适配小域离散分数，**不能用于代替主目标过门，也不宣称真实模型允许四分之一的误差**。主设计需确保测试点数量及票差结构允许 w=0.10 的非平凡比较；若只能要求每点全稳定，要明确其离散化原因。同一比较实例中的 w 必须完全相同。
-3. 数学有效性要对全部预定小规模污染配置成立：直接计算抽样事件概率或精确递推时，错误出证概率≤0.05；确定性统计包络在每个允许影响集合上都要覆盖。顺序方法还须证明覆盖其实际的下一层/下一记录选择机制，不能用固定 n 检验替代。未判定记录、超限求解和不支持的抽样机制不输出完整有效证书。
-4. 零发现规划仅比较**零发现条件下的固定审计成本**。程序尚未看到真实审计结果时不能将它称为“预期节省”。若后来做序贯比较，须独立冻结污染场景、随机抽样机制、最大预算和终止规则，报告未达目标、不可判定及预算耗尽的全部比例；不得只在成功出证的运行里计算平均成本。
+1. All methods use the same α=0.05, the same fixed statistic S, the same source strata and influence graph, the same model predictions, the same visible auxiliary information, and the same audit error criterion. The main target is **the interval width of this statistic**; the new method must not optimize accuracy width while the baseline optimizes the harder all-prediction stability rate.
+2. The main target is provisionally set to fixed-test-set accuracy width **w=0.10**, keeping the same statistical object and resolution as PATH_01. Full enumeration with four to eight test points can be listed separately as an implementation stress test with w=1/4; this only suits discrete scores on a small domain, **cannot be used in place of the main target to pass the gate, and does not claim that a real model allows an error of one quarter**. The main design must make sure that the number of test points and the vote-margin structure allow a nontrivial comparison at w=0.10; if one can only require full stability at every point, state the discretization reason explicitly. Within one comparison instance, w must be exactly the same.
+3. Mathematical validity must hold for all pre-specified small-scale contamination configurations: when sampling-event probabilities are computed directly or by exact recursion, the probability of issuing a wrong certificate is ≤0.05; the deterministic statistic envelope must cover on every admissible influence set. Sequential methods must also be shown to cover their actual next-stratum/next-record selection mechanism, which cannot be replaced by a fixed-n test. Undecided records, solves that exceed limits, and unsupported sampling mechanisms do not output a complete valid certificate.
+4. Zero-finding planning compares only **the fixed audit cost conditional on zero findings**. Before the procedure has seen real audit results, this must not be called an "expected saving". If a sequential comparison is done later, the contamination scenarios, random sampling mechanism, maximum budget, and termination rule must be frozen independently, and the full fractions of target not reached, undecidable, and budget exhausted must be reported; average cost must not be computed only over runs that successfully issued a certificate.
 
-### 预定义结构族与科学收益门
+### Pre-defined structure families and the scientific gain gate
 
-最低设计要求是事前完整定义三个有限参数族及其所有网格成员：**影响近似均匀的族、影响集中于少数头/来源的族、辅助风险分数与真实错标关联缺失或反向的族**。前两者检验结构是否有用，后者检验方法是否偷用了风险评分正确的假设。还需包含成本相同与分层成本不同的实例。具体 N、层大小、头数、所有票矩阵/目标量和网格权重应随实验记录冻结；“跑完后挑一个有优势的子族”不算完整预定族。
+The minimum design requirement is to define fully in advance three finite parameter families and all their grid members: **a family with roughly uniform influence, a family with influence concentrated on a few heads/sources, and a family in which the auxiliary risk score is unrelated or inversely related to true mislabels**. The first two test whether structure is useful; the last tests whether the method secretly relies on the assumption that the risk score is correct. Instances with equal costs and with stratum-specific costs must also be included. The specific N, stratum sizes, number of heads, all vote matrices/target quantities, and grid weights should be frozen with the experiment record; "picking an advantageous subfamily after running" does not count as a complete pre-specified family.
 
-固定设计的成本为 Σ_h c_h n_h。先用单位成本 c_h=1 比较审计篇数，再用事前指定的成本向量作敏感性，最后才用真实人工 pilot 的时间测量替换 c_h。每个实例的基线必须取**同一信息下预定义简单固定设计集合的最小合格成本**，至少含均匀 exact 门、预先分层的可枚举最优配额和可适用的普查方案；不是只挑一个差的均匀分配。若某实例对所有设计都不能达到目标宽度，应标成不可达，不用无穷或缺失成本制造节省。
+The cost of a fixed design is Σ_h c_h n_h. First compare numbers of audited documents with unit cost c_h=1, then run sensitivity analyses with cost vectors specified in advance, and only last replace c_h with time measurements from a real human pilot. The baseline for each instance must be **the minimum qualifying cost over a pre-defined set of simple fixed designs with the same information**, including at least the uniform exact gate, the enumerable optimal quota with pre-set strata, and the census option where applicable; not just one poor uniform allocation. If no design can reach the target width on an instance, mark it unreachable; do not create savings from infinite or missing costs.
 
-作为“是否值得升级投入这个数学分支”的主规则，建议：在至少一个**事前指定完整结构族**上，新方法对每个非平凡可比较实例的成本都不高于上述最强固定设计，且该族的**预先等权中位成本节省≥20%**；同时原样公开其余全部结构族的逐例值、最坏退化、无收益比例和不可达比例。还须给出该族为何出现节省的一般性结构条件或匹配下界，不能只有数值网格现象。中位数只是固定 benchmark 族的汇总，不是自然语料上的期望收益。基线成本为 0 的实例单独报告必须同为 0，不计算百分比。
+As the main rule for "is this mathematical branch worth more investment", we propose: on at least one **complete structure family specified in advance**, the new method's cost on every nontrivial comparable instance is no higher than the strongest fixed design above, and the family's **pre-specified equal-weight median cost saving is ≥20%**; at the same time, publish as-is the per-instance values, worst degradation, no-gain fraction, and unreachable fraction for all the other structure families. One must also give a general structural condition or a matching lower bound explaining why the saving appears in that family; a numeric grid phenomenon alone is not enough. The median is only a summary of a fixed benchmark family, not an expected gain on a natural corpus. Instances with baseline cost 0 are reported separately, the new method must also be 0 on them, and no percentage is computed for them.
 
-令节省 r=(C_base−C_new)/C_base。20% 不是统计显著性门，也不是理论普适常数；它是为了要求算法复杂度相较一个已有可靠工具产生足够可见的实践差异，避免把几个对象的偶然节省包装成新方向。当前真实人工成本还未知，因此它只能暂定。主规则应附 {10%,20%,30%} 阈值及成本向量的敏感性表；如果只在为它定制的一种成本比例下过门，应记为范围很窄，不作为一般优势。
+Let the saving be r=(C_base−C_new)/C_base. 20% is not a statistical significance gate, nor a universal theoretical constant; it is there to require that the extra algorithmic complexity produce a clearly visible practical difference relative to an existing reliable tool, so that chance savings on a few objects are not dressed up as a new direction. The real human cost is not yet known, so the threshold can only be provisional. The main rule should come with a sensitivity table over the thresholds {10%,20%,30%} and over cost vectors; if the gate is passed only under one cost ratio tailored for it, record that the scope is very narrow and do not treat it as a general advantage.
 
-“每个实例不退化”是保守的设计要求：新规划器可以把已知固定设计作为候选回退。但若为实现回退额外引入昂贵搜索，必须报告**规划耗时和审计成本两本账**；不能用减少 20% 审计篇数掩盖计算成本超过人工节省。在真实阶段，至少要把 10 份记录的人工计时、未知/无法判定比例和完整工时测量纳入比较。看完全部 120 份文档仍无法判定历史版本时，不能把“完成普查”记为零不确定性的成功基线。
+"No degradation on any instance" is a conservative design requirement: the new planner can include the known fixed designs as fallback candidates. But if the fallback requires an extra expensive search, **two separate accounts, planning time and audit cost,** must be reported; a 20% reduction in audited documents must not hide a compute cost that exceeds the human saving. In the real stage, at least the human timing for 10 records, the unknown/undecidable fraction, and full working-hour measurements must be included in the comparison. If historical versions still cannot be judged after reading all 120 documents, "census completed" must not be recorded as a successful baseline with zero uncertainty.
 
-若有效性硬门通过但未达到收益门，只表明**不升级为单独研究方向**，不否定 exact 审计规划工具或它作为 P1 附录的价值。若在一个族达到门，下一步仍是检查该族对应真实系统的程度与已有文献，而非直接宣布数学创新。序贯方案不能借固定零发现阶段的过门结果获得“更低预期成本”的结论；它需要新的、同成功定义的完整比较。
+If the hard validity gate passes but the gain gate is not reached, this only means **not upgrading to a separate research direction**; it does not negate the exact audit-planning tool or its value as a P1 appendix. If the gate is reached on one family, the next step is still to check how well that family corresponds to real systems and to the existing literature, not to announce a mathematical innovation directly. A sequential scheme cannot borrow the gate result from the fixed zero-finding stage to conclude "lower expected cost"; it needs a new, complete comparison with the same definition of success.
 
-## 最强简单基线与不能回避的替代方案
+## Strongest simple baselines and alternatives that cannot be avoided
 
-1. **全量审计。** 完全确定污染数及位置；在 120 文档规模是严肃基线，不是故意昂贵的上限。
-2. **固定均匀超几何。** 不加结构，使用已有 exact n_min；它简单、可解释且容易发现实现错误。
-3. **预先分层 + 固定 α_h。** 使用来源类型/成本的固定层；同时比较按大小分配、等成本分配和小规模离线最优配额。不能只选一个明显较差分配来显示自适应优势。
-4. **已知无放回置信序列。** 作为真正支持停止的统计基线；本路径必须在同一失败概率、同一信息可见性下比较。
-5. **系统设计替代审计。** 丢弃边缘、缩小核心、固定词法特征或调整分片影响图。如果这些措施用更小效用代价让审计需求消失，应该报告它们优于复杂审计，而不是固守现有系统。
+1. **Full audit.** Determines the contamination count and locations completely; at the scale of 120 documents this is a serious baseline, not a deliberately expensive upper limit.
+2. **Fixed uniform hypergeometric.** No structure, uses the existing exact n_min; it is simple, interpretable, and makes implementation errors easy to spot.
+3. **Pre-set strata + fixed α_h.** Uses fixed strata by source type/cost; compare allocation by size, equal-cost allocation, and the small-scale offline optimal quota together. One must not pick a clearly worse allocation just to show an adaptive advantage.
+4. **Known without-replacement confidence sequences.** The statistical baseline that genuinely supports stopping; this path must compare at the same failure probability and the same information visibility.
+5. **System design instead of audit.** Drop the periphery, shrink the core, fix lexical features, or adjust the shard influence graph. If these measures make the audit requirement disappear at a smaller utility cost, report that they beat complex auditing, instead of clinging to the existing system.
 
-模型影响优先抽样只是设计候选，不是天然强基线：若包含概率不处理正确，它可能省样本但失效。实验应展示相关性正确、无关和反向三种污染位置场景，避免只验证有利的辅助信息。
+Model-influence-first sampling is only a design candidate, not a naturally strong baseline: if inclusion probabilities are not handled correctly, it may save samples but lose validity. Experiments should show three contamination-location scenarios, where the correlation is correct, absent, and reversed, to avoid validating only favorable auxiliary information.
 
-## 否决条件、负结果价值与最弱环节
+## Kill conditions, value of negative results, and the weakest link
 
-否决这条路径作为“新数学论文”的条件：变化只是把现成风险限制审计变量重命名；没有结构相关的普遍改进或可解释下界；真实规模普查更便宜；为了省样本必须假设错误率与影响分数有未经支持的关系；或者得到的算法求解本身比审计更昂贵且无法给有用外界。
+Conditions that kill this path as a "new mathematics paper": the change is only a renaming of variables in off-the-shelf risk-limiting audits; there is no general structure-dependent improvement or interpretable lower bound; a census is cheaper at the real scale; saving samples requires assuming an unsupported relation between error rate and influence score; or solving the resulting algorithm is itself more expensive than auditing and cannot give a useful outer bound.
 
-仍有价值的负结果包括：某类影响图下任何有效零发现程序都必须接近普查；分片均匀化使复杂结构审计没有增益；非零发现时置信集合的矩形放松主导宽度；真实时间元数据使大部分记录无法被可靠判定。它们必须与限定的设计类、真实成本和证书目标一起报告，不能把规则之三重新命名为普遍审计下界。
+Negative results that still have value include: under some class of influence graphs, every valid zero-finding procedure must come close to a census; shard uniformization makes complex structured auditing yield no gain; with nonzero findings, the rectangular relaxation of the confidence set dominates the width; real time metadata makes most records impossible to judge reliably. They must be reported together with the restricted design class, the real cost, and the certificate target; the rule of three must not be renamed as a general audit lower bound.
 
-本路径的数学最弱环节是**能否提出一个已有审计文献未直接解决、且具有可证明结构收益的问题**；实证最弱环节是审计判定可靠性与真实人工成本。当前精确组合数计算已解决，不值得继续把主要精力放在近似常数修饰上。
+The mathematically weakest link of this path is **whether we can pose a problem that the existing audit literature has not directly solved and that has a provable structural gain**; the empirically weakest link is the reliability of audit judgments and the real human cost. The exact binomial-coefficient computation is already solved, and it is not worth spending more main effort on polishing approximate constants.
 
-## 给资深助手的技术审查问题
+## Technical review questions for the senior assistant
 
-- D1 的“坏污染配置”是否只是现有风险限制审计的标准复合原假设？若是，剩余可发表差异应严格限定在哪种影响图/目标量上？
-- 最合适的目标是稳定预测比例、accuracy 宽度还是 macro-F1 宽度？三者可能给不同最优审计分配，是否应先证明不可互相替代？
-- 若未知核心污染导致一个文档影响所有头，影响图方法是否退化到普查？有没有合理的核心审计/架构设计能避免退化，而非靠强假设排除？
-- 我们要追求固定预算的最坏宽度，还是在污染场景下的预期停止成本？选择后能否给对应的最优性/不可能性陈述，避免同时优化两个不兼容目标？
-- 自适应选择下一层时，具体哪一个已保存置信序列定理覆盖该抽样机制？如果没有，是否应先做固定设计而不是拼接无效公式？
-- 对本地 120 文档，是否值得超过普查的设计复杂度？若不值得，应把这条线作为 P1 的预算规划与负结果附录，而不单独投入旗舰资源。
+- Are the "bad contamination configurations" of D1 just the standard composite null hypothesis of existing risk-limiting audits? If so, to which influence graphs/target quantities should the remaining publishable difference be strictly restricted?
+- Is the most suitable target the stable-prediction fraction, accuracy width, or macro-F1 width? The three may give different optimal audit allocations; should we first prove that they cannot substitute for one another?
+- If unknown core contamination makes one document influence all heads, does the influence-graph method degenerate into a census? Is there a reasonable core audit / architecture design that avoids the degeneration, rather than ruling it out with strong assumptions?
+- Do we pursue worst-case width at a fixed budget, or expected stopping cost under contamination scenarios? Once chosen, can we give the corresponding optimality/impossibility statement, and avoid optimizing two incompatible targets at once?
+- When the next stratum is chosen adaptively, which saved confidence-sequence theorem, specifically, covers that sampling mechanism? If none does, should we do fixed designs first instead of stitching together invalid formulas?
+- For the 120 local documents, is design complexity beyond a census worth it? If not, this line should become a budget-planning and negative-result appendix of P1, without separate flagship resources.
 
-## 可行性等级与明确不确定性
+## Feasibility level and explicit uncertainty
 
-**固定设计数学与本地工具：高可行；影响图直接审计：中等，尚需算法及先例核验；一般自适应有效性与发表级增量：不确定。** 它最适合依附 P1：给完整证书设计可核验预算、识别何时继续训练没有意义。它没有从零训练的独立必要性，也不应被当作为了凑 Top 5 而拆出来的第二个旗舰。是否升级研究投入，应由具体结构收益与普查基线的比较决定。
+**Fixed-design mathematics and local tools: high feasibility; direct influence-graph audit: medium, still needs an algorithm and a prior-work check; general adaptive validity and a publication-level increment: uncertain.** It fits best attached to P1: giving a verifiable budget for the full certificate design and identifying when further training is pointless. It has no independent necessity for training from scratch, and should not be treated as a second flagship split off to fill a Top 5. Whether to upgrade the research investment should be decided by comparing the concrete structural gain against the census baseline.

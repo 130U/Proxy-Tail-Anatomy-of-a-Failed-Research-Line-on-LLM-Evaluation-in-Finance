@@ -1,30 +1,30 @@
-# T3：两条消息的组合评分
+# T3: combined scoring of two messages
 
-**预定判定：继续行为验证。** 完成 88 次调用、3,360 个有效分数：30 条单事实各 8 次，780 条有序组合各 4 次。
+**Pre-registered decision: continue behavioural validation.** Completed 88 calls and 3,360 valid scores: 30 single facts 8 times each, 780 ordered combinations 4 times each.
 
-| 模型 | 全样本 RMSE | 按原子留出 RMSE | 全样本 MAE | 留出 MAE |
+| Model | Full-sample RMSE | Leave-one-atom-out RMSE | Full-sample MAE | Held-out MAE |
 |---|---:|---:|---:|---:|
 | additive | 5.235 | 5.235 | 3.441 | 3.441 |
 | average | 12.144 | 12.144 | 10.191 | 10.191 |
 | asymmetric | 10.300 | 10.564 | 8.653 | 8.847 |
 | prior_average | 4.966 | 5.027 | 3.264 | 3.311 |
 
-**解释警戒：估计 λ 的不对称平均模型，留出误差大于相加模型。λ 的区间排除 1 仅触发了预定筛查门，不能据此认定真实整合机制具有相应负面权重。后续应先排除模型误设；不能直接把该系数当作坏消息影响的倍数。**
+**Interpretation warning: the asymmetric average model that estimates λ has a larger hold-out error than the additive model. The λ interval excluding 1 only triggers the pre-registered screening gate; it cannot be used to conclude that the real integration mechanism has a corresponding negative weight. Model misspecification should be ruled out first; the coefficient cannot be treated directly as a multiplier of the influence of bad news.**
 
-主区间为 1,000 次分层原子权重＋共享评分轮次重采样的 percentile 95% 区间；其解释受固定手工题库限制。重复数和种子见 results.json。
+The main intervals are percentile 95% intervals from 1,000 resamples of stratified atom weights + shared scoring rounds; their interpretation is limited by the fixed hand-made item bank. The number of replicates and the seeds are in results.json.
 
-- 负面合并权重 λ：2.691 [1.219, 5.304]；第一条位置权重 w：0.498 [0.487, 0.510]。
-- 添加中性事实的方向性收缩：1.036 [-0.030, 2.014] 分；扣除中性实际基准后的相加残差：1.036 [-0.030, 2.014] 分。
-- 正面在前减负面在前：-0.168 [-1.643, 1.160] 分。
-- 所有组合的顺序绝对差：1.458 [1.367, 2.654] 分。
-- 同向组合超过更强单条的比例：PP 73.3%，NN 64.4%；相应平均超出幅度 2.844、1.167 分。
-- 同向组合落在两条单分之间（含端点）的比例：PP 26.7%，NN 35.6%。
-- 相加预测触发端点截断的比例：8.5%；先验平均诊断 k：0.929 [0.853, 0.996]。
+- Negative combination weight λ: 2.691 [1.219, 5.304]; first-position weight w: 0.498 [0.487, 0.510].
+- Directional shrinkage from adding a neutral fact: 1.036 [-0.030, 2.014] points; additive residual after subtracting the actual neutral baseline: 1.036 [-0.030, 2.014] points.
+- Positive first minus negative first: -0.168 [-1.643, 1.160] points.
+- Absolute order difference over all combinations: 1.458 [1.367, 2.654] points.
+- Fraction of same-direction combinations beyond the stronger single item: PP 73.3%, NN 64.4%; corresponding mean excess 2.844, 1.167 points.
+- Fraction of same-direction combinations lying between the two single scores (endpoints included): PP 26.7%, NN 35.6%.
+- Fraction of additive predictions that hit endpoint truncation: 8.5%; prior-average diagnostic k: 0.929 [0.853, 0.996].
 
-判定门逐项结果：{"lambda_interval_excludes_one": true, "PN_order_at_least_two_and_interval_excludes_zero": false, "averaging_improves_full_and_cv_by_two_with_neutral_contraction": false}。优化边界：{"w": false, "lambda": false}。触及边界时保留二元判定，但 λ 或 w 的幅度尚未被充分识别。
+Gate-by-gate results: {"lambda_interval_excludes_one": true, "PN_order_at_least_two_and_interval_excludes_zero": false, "averaging_improves_full_and_cv_by_two_with_neutral_contraction": false}. Optimisation boundary: {"w": false, "lambda": false}. When a boundary is hit the binary decision is kept, but the magnitude of λ or w is not yet sufficiently identified.
 
-留出分析仍使用被留出原子的单条标定分数；每个组合的两个留出损失先取平均，不能把它们当两份独立观测。交叉验证没有 bootstrap 区间。只重采样评分轮次的固定题库敏感性区间另存 results.json。
+The hold-out analysis still uses the held-out atom's single-item calibration score; the two hold-out losses of each combination are averaged first and cannot be treated as two independent observations. Cross-validation has no bootstrap intervals. Sensitivity intervals for the fixed item bank, resampling only scoring rounds, are stored separately in results.json.
 
-本结果描述固定模型、提示和 0–100 量表的输出行为。λ 是单条基准之外的组合权重，不能解释为全部负面偏见；平均或稀释现象不能单独证明内部机制、金融正确性、经济损失或新颖性。
+These results describe the output behaviour of a fixed model, prompt and 0–100 scale. λ is a combination weight beyond the single-item baseline and cannot be interpreted as the whole negativity bias; averaging or dilution phenomena alone cannot prove an internal mechanism, financial correctness, economic loss or novelty.
 
-[图](combination.png) · [完整指标](results.json) · [原始分数](scores.csv) · [分析代码](analyze.py)
+[Figure](combination.png) · [Full metrics](results.json) · [Raw scores](scores.csv) · [Analysis code](analyze.py)

@@ -1,61 +1,61 @@
-# P2语义包络：数学构造运行记录
+# P2 semantic envelope: mathematical construction run record
 
-2026-11-16，第六轮。来源层级：**我们的数学构造检查**。没有自然文本解析、真实标签审计、模型训练或联网。执行前问题和预算见 [PROTOCOL](PROTOCOL.md)；[SE1–SE6](../theory/semantic_envelopes.md)给出条件、证明和反例；[README](README.md)给出严格数值算法。
+2026-11-16, round six. Source level: **our mathematical construction checks**. There was no natural-text parsing, real label audit, model training or network access. The pre-execution questions and budget are in [PROTOCOL](PROTOCOL.md); [SE1–SE6](../theory/semantic_envelopes.md) give the conditions, proofs and counterexamples; [README](README.md) gives the exact numeric algorithm.
 
-## 目标量与成立条件
+## Target quantity and conditions
 
-输入是有限语义候选，每个候选针对同一冻结目标和同一有序类别语义，具有完整的规范数值范围、固定仿射logit及阈值。目标是**该模型在全部给定候选上的概率输出范围**。它不等于真实类别概率，也不自动包含自然文本的正确解释。
+The input is a finite set of semantic candidates; each candidate refers to the same frozen target and the same ordered class semantics, and has a complete canonical numeric range, a fixed affine logit and thresholds. The target is **the range of this model's probability outputs over all the given candidates**. It is not the true class probability, and it does not automatically contain the correct interpretation of the natural text.
 
-对分支b及类别i，先计算精确的理论最小值m_bi和最大值M_bi，再取m_i=min_b m_bi、M_i=max_b M_bi。这个box是声明候选集的最小逐坐标包络；不同坐标极值通常不同时可达，box并不全在概率单纯形内。检查器用有理数分别包住真实极值，不把超越函数端点称为精确有理值。
+For branch b and class i, first compute the exact theoretical minimum m_bi and maximum M_bi, then take m_i=min_b m_bi and M_i=max_b M_bi. This box is the smallest coordinate-wise envelope of the declared candidate set; the extremes of different coordinates are usually not attainable simultaneously, and the box does not lie entirely in the probability simplex. The checker encloses the true extremes with rationals separately and does not call transcendental endpoints exact rational values.
 
-数值误差通过Taylor正项和几何尾界控制，负参数用倒数；没有用浮点exp或下一格舍入猜误差。每极值数值不确定宽度≤1e−12。若D=max_i(M_i−m_i)的计算上下界为[L_D,U_D]，门w的判断为：U_D≤w通过；L_D>w超宽；其他未定。预算不足则拒绝计算，不能冒称数学上超宽。
+Numeric error is controlled by positive Taylor terms and a geometric tail bound, with reciprocals for negative arguments; floating-point exp or next-step rounding is not used to guess the error. The numeric uncertainty width of each extreme is ≤1e−12. If the computed lower and upper bounds of D=max_i(M_i−m_i) are [L_D,U_D], the gate w is decided as follows: U_D≤w passes; L_D>w is too wide; everything else is undetermined. When the budget is insufficient the computation is refused; this must not be presented as mathematically too wide.
 
-## 运行身份与预算
+## Run identity and budget
 
-分支research/certifiable，base commit 8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254，新增源码仍未提交。默认精度1e−12，Taylor最多1,000项、单次参数绝对值≤50；只用标准库Fraction。执行前CPU总目标≤60秒；首次主运行0.694393秒，最新复跑时间、Python、平台和源码/协议hash在 [results.json](results.json)。无GPU/API/模型训练token，峰值内存未测。
+Branch research/certifiable, base commit 8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254; the new source code is still uncommitted. Default precision 1e−12, at most 1,000 Taylor terms, absolute value of a single argument ≤50; only standard-library Fraction is used. The pre-execution total CPU target was ≤60 seconds; the first main run took 0.694393 seconds; the latest rerun time, Python, platform and source/protocol hashes are in [results.json](results.json). No GPU/API/model-training tokens; peak memory not measured.
 
-检查点预算原为256，主runner执行前为独立算法核对扩大到500；独立审查另有自己的执行前预算。审查纠正了点数与坐标数混用：实现单测139个有理网格点，独立审查216个内部支持点（729坐标检查），合计355点。主runner不另加稠密网格，只运行冻结25格和最小反例。计数修订没有改变任何案例或数学结果。
+The check-point budget was originally 256 and was enlarged to 500 before the main runner was executed, for the independent-algorithm cross-check; the independent review had its own pre-execution budget. The review corrected a mix-up between point counts and coordinate counts: the implementation's unit tests use 139 rational grid points and the independent review 216 internal support points (729 coordinate checks), 355 points in total. The main runner adds no dense grid and only runs the frozen 25 cells and the minimal counterexamples. The count revision did not change any case or mathematical result.
 
-## 实际结果及最强反例
+## Actual results and strongest counterexamples
 
-下列小数只是显示值，严格端点和真极值上下界均以分数字符串保存在JSON中。所有系数为手选数学构造，没有学习得到的模型参数。
+The decimals below are display values only; the exact endpoints and the upper and lower bounds of the true extremes are all stored as fraction strings in the JSON. All coefficients are hand-picked mathematical constructions; there are no learned model parameters.
 
-| 构造 | 结果 | 含义 |
+| Construction | Result | Meaning |
 |---|---|---|
-| 阈值(−1,1)，η∈[−3,3] | 中间类范围约[0.101217,0.462117]；最大值在η=0，两端都只有约0.101217 | 中间类别不单调；只算两端会漏包 |
-| 两个精确分支η=−4或+4 | 首尾类各约[0.006693,0.952574]；中间类由对称性约0.040733，数值包络宽≤1e−12 | 数值半径为0不消除语义歧义；部分坐标仍可被识别 |
-| 把上述离散分支擅自并成η∈[−4,4] | 中间类上界变为约0.462117 | 凸化引入本来不可达的内部峰；保留分支结构更紧 |
-| 已知x=b∈[100,200] | g=x/b−1=0，输出是确定概率向量的数值外包络 | 共同依赖不能被当作两个独立区间 |
-| 丢弃x=b关系，仅保留相同边际区间 | g∈[−1/2,1]；斜率2时末类约[0.119203,0.731059] | 这是丢失已知关系的代价，不是原问题内禀歧义 |
-| x、b同时变换五个正有理尺度 | g及全部计算证书逐项相同 | 只认证元组单位缩放，未检验自然文本解析不变 |
-| 每分支q_high=σ(g±4)，选择器在0切换 | 输入距离2e−6，输出下降下界约0.964028；固定分支界只允许5e−7 | 每支单调且1/4-Lipschitz，仍不能认证动态选支系统 |
+| Thresholds (−1,1), η∈[−3,3] | Middle-class range about [0.101217,0.462117]; the maximum is at η=0, and both ends are only about 0.101217 | The middle class is not monotone; computing only the two ends misses part of the range |
+| Two exact branches η=−4 or +4 | First and last classes each about [0.006693,0.952574]; by symmetry the middle class is about 0.040733, numeric envelope width ≤1e−12 | A numeric radius of 0 does not remove semantic ambiguity; some coordinates can still be identified |
+| Merging the discrete branches above, without justification, into η∈[−4,4] | The middle-class upper bound becomes about 0.462117 | Convexification introduces an interior peak that was not attainable; keeping the branch structure is tighter |
+| Known x=b∈[100,200] | g=x/b−1=0; the output is a numeric outer envelope of a fixed probability vector | A shared dependence cannot be treated as two independent intervals |
+| Dropping the relation x=b and keeping only the same marginal intervals | g∈[−1/2,1]; with slope 2 the last class is about [0.119203,0.731059] | This is the cost of losing a known relation, not intrinsic ambiguity of the original problem |
+| Transforming x and b together by five positive rational scales | g and all computed certificates are identical item by item | Only unit scaling of tuples is certified; invariance of natural-text parsing is not tested |
+| Each branch q_high=σ(g±4), selector switches at 0 | Input distance 2e−6, lower bound on the output drop about 0.964028; the fixed-branch bound allows only 5e−7 | Each branch is monotone and 1/4-Lipschitz, yet a dynamic branch-selecting system still cannot be certified |
 
-单位尺度为1/1,000,000、1/1,000、1、1,000、1,000,000。没有把币种变化、时变汇率或未识别单位词纳入该保证。
+The unit scales are 1/1,000,000, 1/1,000, 1, 1,000 and 1,000,000. Currency changes, time-varying exchange rates and unrecognized unit words are not covered by this guarantee.
 
-符号示例直接使用给定差值候选：两个解释都满足x>b时，规则直接返回above；x=150而基准可为100或200时，可行标签为above/below，规则拒绝。这是sign(x−b)任务的完整oracle，不需要学习一个分类头；本轮没有在这些示例上训练并比较学习头。若要学习随机有序目标的概率，必须另给目标、真实标签与方向依据，本例不提供这些证据。
+The symbolic example uses the given difference candidates directly: when both interpretations satisfy x>b, the rule returns above directly; when x=150 and the base value can be 100 or 200, the feasible labels are above/below and the rule refuses. This is a complete oracle for the sign(x−b) task and needs no learned classification head; this round did not train a learned head on these examples or compare one. Learning the probability of a random ordered target would require a separately given target, true labels and a basis for the direction; this example provides none of that evidence.
 
-## 冻结25格的宽度门
+## Width gate on the frozen 25 cells
 
-全表采用r∈{0,0.1,0.5,1,2}、d∈{0,0.25,1,2,4}；每格两个分支g∈[−r,r]，η=g−d或g+d，阈值固定(−1,1)。这是25个等权人工候选问题，完整报告，不挑选成功格子。
+The full table uses r∈{0,0.1,0.5,1,2} and d∈{0,0.25,1,2,4}; each cell has two branches g∈[−r,r], η=g−d or g+d, with fixed thresholds (−1,1). These are 25 equally weighted hand-made candidate problems, reported in full, without picking successful cells.
 
-| 宽度门w | 已证通过 | 已证超宽 | 数值未定 | 人工任务接受比例 |
+| Width gate w | Proven pass | Proven too wide | Numerically undetermined | Acceptance fraction on the hand-made task |
 |---|---:|---:|---:|---:|
-| 0.05（敏感性） | 2 | 23 | 0 | 2/25 |
-| **0.10（预定主门）** | **3** | **22** | **0** | **3/25** |
-| 0.20（敏感性） | 5 | 20 | 0 | 5/25 |
+| 0.05 (sensitivity) | 2 | 23 | 0 | 2/25 |
+| **0.10 (pre-specified main gate)** | **3** | **22** | **0** | **3/25** |
+| 0.20 (sensitivity) | 5 | 20 | 0 | 5/25 |
 
-该表支持“在这份候选规范上，许多情形无法给窄概率box”。它**不是自然文本的接受率，不是路径02的真实50%接受率门验收，也不能据此否决整个P2方向**。SE3的最优接受质量结论相对于指定候选集合；如果候选多报，较宽区间可能只是保守解析器造成的。
+This table supports "under this candidate specification, many cases cannot be given a narrow probability box". It **is not an acceptance rate on natural text, is not the acceptance test of path 02's real 50% acceptance-rate gate, and cannot be used to reject the whole P2 direction**. The optimal-acceptance-mass conclusion of SE3 is relative to the specified candidate set; if candidates are over-reported, a wider interval may only be caused by a conservative parser.
 
-另用计算宽度区间的中点作为实现探针阈值，实际返回undetermined。这个探针只是验证三态边界，不作为预定科学主门或额外成功结果。
+In addition, the midpoint of a computed width interval was used as an implementation-probe threshold, and the actual return was undetermined. This probe only verifies the three-state boundary; it is not a pre-specified scientific main gate or an extra success.
 
-## 审查与误差账本
+## Review and error ledger
 
-实现单测14项通过，首次约0.099秒；独立审查另运行14项约0.103秒，并使用不同的有理缩放—平方余项算法交叉核对331项断言及729个支持点坐标包含。两个参考都不把libm数值当精确真值。有限检查支持实现分支，通用保证来自余项与极值证明。[完整审查](../reports/numeric_envelope_review.md)
+The implementation's 14 unit tests passed, first in about 0.099 seconds; the independent review ran another 14 tests in about 0.103 seconds and used a different rational scaling–squaring remainder algorithm to cross-check 331 assertions and the coordinate containment of 729 support points. Neither reference takes libm values as exact ground truth. The finite checks support the implementation branches; the general guarantee comes from the remainder and extremal proofs. [Full review](../reports/numeric_envelope_review.md)
 
-审查补齐了共同目标/schema契约、正基准与负x边界、minimax对手量词、审计α/n=0边界和几乎处处导数的定义域。只改正exp(0)上界文案中的严格不等号，不改变数值算法。width_gate消费本计算器生成且未被篡改的可信对象，不是对外来JSON证书的独立验签器。
+The review filled in the common target/schema contract, the boundaries of positive base values and negative x, the quantifiers of the minimax adversary, the α/n=0 boundary of the audit, and the domain of the almost-everywhere derivative. Only the strict inequality sign in the wording of the exp(0) upper bound was corrected; the numeric algorithm was not changed. width_gate consumes trusted, untampered objects produced by this calculator; it is not an independent verifier for foreign JSON certificates.
 
-解析覆盖风险仍没有被测量。若固定接受事件A，正确全语义元组覆盖事件C，则包络失效率P(E|A)≤P(Cᶜ|A)，通常不是等号。若仅知道无条件覆盖99%，接受器仍可能只接受那1%的失败集合，接受后风险达到100%。审计置信错误α与这个预测风险不是同一个量；同文档多个片段也不能充当多个独立审计单位。
+Parse-coverage risk has still not been measured. If the acceptance event A is fixed and C is the event that the correct full semantic tuple is covered, then the envelope failure rate satisfies P(E|A)≤P(Cᶜ|A), usually not with equality. If only unconditional coverage of 99% is known, the acceptor might still accept only that 1% failure set, so the post-acceptance risk reaches 100%. The audit confidence error α is not the same quantity as this prediction risk; several fragments of the same document also cannot act as several independent audit units.
 
-## 本轮能改变什么决定
+## What decisions this round can change
 
-现在有了P2/P05共用的严格数值接口和具体否决装置；不能再以“输入数值精确”“每支导数有界”替代语义覆盖或整体敏感度。它没有建立真实解析集合、自然任务必要性、校准概率或原创性。既有单位不变/单调头的基础原理仍不算新贡献。最值得Fable决定的是：下一步是否把语言模块的任务定义为可审计候选集抽取，并允许符号计算取代冗余学习头。
+There is now an exact numeric interface shared by P2/P05 and a concrete rejection device; "the input numbers are exact" or "each branch has a bounded derivative" can no longer substitute for semantic coverage or overall sensitivity. It has not established a real parse set, the necessity of a natural task, calibrated probabilities or originality. The basic principles of the existing unit-invariant/monotone head still do not count as a new contribution. The decision most worth Fable's attention: whether the next step should define the language module's task as auditable candidate-set extraction, and allow symbolic computation to replace a redundant learned head.

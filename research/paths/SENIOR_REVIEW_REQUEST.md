@@ -1,74 +1,74 @@
-# 给 Fable 的研究评审请求
+# Research review request for Fable
 
-**第九轮最新问题：** [公平随机审计比较与匹配下界](../reports/2026-11-16-round9.md)已消除上一轮人为固定层配额限制。在同质r-of-d族，简单随机整层策略精确最优；pooled也在总数门的任意随机设计类内精确最优。代表构造141对190，但合取族原单层普查已经足够。请优先判断这是否已有理论的直接推论，以及哪个真实证书任务还有不能被这些简单策略解决的结构。若不存在，应把03保留为P1工具，不凭人工收益升级旗舰。[内部独立审查](../reports/randomization_review.md)不是您的反馈；所有材料尚未发送。
+**Latest question from round 9:** [The fair randomized-audit comparison and matching lower bounds](../reports/2026-11-16-round9.md) have removed the artificial fixed per-stratum quota restriction of the previous round. On the homogeneous r-of-d family, the simple randomized whole-stratum policy is exactly optimal; pooled sampling is also exactly optimal within the class of arbitrary randomized designs for the total-count gate. The representative construction gives 141 vs 190, but on the conjunction family the original single-stratum census is already enough. Please judge first whether this is a direct corollary of existing theory, and which real certificate task still has structure that these simple policies cannot solve. If there is none, 03 should be kept as a P1 tool and should not be upgraded to the flagship on the basis of hand-made gains. The [internal independent review](../reports/randomization_review.md) is not your feedback; none of the material has been sent yet.
 
-**第八轮最新问题：** [新理论与48行完整对照](../reports/2026-11-16-round8.md)已证明固定配额类的位置价值边界，也发现更广pooled抽样可大幅降低某些构造成本。请先判断真实问题是否确有必须固定各层审计量的外生约束；若没有，就不应以固定配额sharp收益作为通用审计算法或旗舰创新的依据。原20格对min(Box,TotalK)仅5格改善且中位0；另一尺度的解析优势和类外反方均完整保留。[独立审查](../reports/localization_review.md)不是Fable意见，未替您决定研究方向。
+**Latest question from round 8:** [The new theory and the complete 48-row comparison](../reports/2026-11-16-round8.md) prove the boundary of the value of location for the fixed-quota class, and also find that broader pooled sampling can greatly reduce the cost of some constructions. Please first judge whether real problems really have an exogenous constraint that forces fixed audit sizes per stratum; if not, fixed-quota sharp gains should not be used as the basis for a general audit algorithm or a flagship innovation. On the original 20 cells, against min(Box,TotalK), only 5 cells improve and the median is 0; the analytic advantage at another scale and the out-of-class counterpoints are all kept in full. The [independent review](../reports/localization_review.md) is not Fable's opinion and has not decided the research direction for you.
 
-**第七轮优先更新：** 请先读[决策短笺](../paper/FABLE_DECISION_NOTE.md)和[集中技术稿](../paper/manuscript.md)。新的[内部AI论文审查](../reports/paper_review.md)发现：均衡总污染数门已达到88与Ω(r)矩形分离，而一般非矩形安全计数区域能完整复现直接法；所以位置建模的必要性不能由原主例证明。另有38对固定总数门48的探索解析比较。最需要您裁定的是：这些差异是否足以超出标准方法组合、是否保留从零训练硬门，以及下一项具有明确停止条件的窄任务。完整20格中位0及G0/G1未通过的状态没有改变。
+**Round 7 priority update:** Please first read the [decision note](../paper/FABLE_DECISION_NOTE.md) and the [consolidated technical draft](../paper/manuscript.md). The new [internal AI paper review](../reports/paper_review.md) found that the balanced total-contamination-count gate already attains 88 and an Ω(r) rectangular separation, and that a general non-rectangular safe count region fully reproduces the direct method; so the necessity of location modelling cannot be proved by the original main example. There is also an exploratory analytic comparison of 38 vs 48 for the fixed total-count gate. What most needs your ruling is: whether these differences are enough to go beyond a combination of standard methods, whether to keep the training-from-scratch hard gate, and the next narrow task with an explicit stopping condition. The median of 0 over the full 20 cells and the status of G0/G1 as not passed are unchanged.
 
-研究日期：2026-11-15；2026-11-16更新：用户确认指定的资深助手就是Fable。用途：供Fable审阅与讨论。**当前工具没有Fable直连能力，这是可由用户转交的待发材料，尚未送达或收到反馈。** 内部AI审查记录另列，不冒充您的意见。
+Research date: 2026-11-15; 2026-11-16 update: the user confirmed that the designated senior assistant is Fable. Purpose: for Fable's review and discussion. **The current tools have no direct connection to Fable; this is material for the user to forward, and it has not been delivered and no feedback has been received.** Internal AI review records are listed separately and do not pose as your opinion.
 
-可直接附言：**Fable，请以科研导师身份反驳并筛选这五份分析。先读COMPARATIVE_ANALYSIS，再读PEER_REVIEW/REVIEW_RESPONSE。请不要默认沿用我们或原方案的排序；重点判断下面八项疑问，并对每个方向给“继续／缩窄／支撑组件／停止”、一个最强理由，以及能改变判断的最小证明或实验。我们尤其需要您裁定从零训练硬门是否应修订，以及03的数学问题是否超出已有审计框架。**
+Cover note that can be used directly: **Fable, please rebut and screen these five analyses as a research advisor. Read COMPARATIVE_ANALYSIS first, then PEER_REVIEW/REVIEW_RESPONSE. Please do not adopt our ranking or the original plan's ranking by default; focus on judging the eight questions below, and for each direction give "continue / narrow / supporting component / stop", the single strongest reason, and the minimal proof or experiment that could change the judgment. We especially need your ruling on whether the training-from-scratch hard gate should be revised, and on whether 03's mathematical problem goes beyond existing audit frameworks.**
 
-## 我们希望您判断什么
+## What we would like you to judge
 
-项目要从普通小金融情感分类器，转向有实质数学或AI理论贡献的可认证金融语言模型。已有工作集中在条件式证明与离线检查器：精确无放回审计、共同分片污染下的accuracy/macro-F1包络、单位不变/有序单调头、已知边际下的依赖最坏风险。基础部件大多已有成熟先例；还没有证明组合新颖，也没有真实数据上的完整非空证书。
+The project is to move from an ordinary small financial sentiment classifier to a certifiable financial language model with a substantive contribution to mathematics or AI theory. Existing work centers on conditional proofs and offline checkers: exact auditing without replacement, accuracy/macro-F1 envelopes under shared shard contamination, unit-invariant/ordinal monotone heads, and worst-case dependence risk under known marginals. Most basic components have mature precedents; the combination has not been shown to be novel, and there is no complete non-vacuous certificate on real data.
 
-本地有120份FOMC会议纪要和对应HTML快照、约2.85万篇Wikipedia快照及SEntFiN候选数据。FOMC的抓取时间晚于其历史发布日期，尚无历史内容版本未修订的证明；数字/单位/比较基准金标和XBRL材料缺失。用户当前要求本地研究。研究包包含五条候选的独立分析，候选03是01的数学分支，不计为独立旗舰。
+Locally there are 120 FOMC minutes with matching HTML snapshots, about 28,500 Wikipedia snapshot articles, and SEntFiN candidate data. The FOMC crawl time is later than the historical publication dates, and there is no proof that the historical content versions were not revised; gold labels for numbers/units/comparison benchmarks and XBRL material are missing. The user currently requires local research. The research package contains independent analyses of five candidates; candidate 03 is a mathematical branch of 01 and is not counted as an independent flagship.
 
-**第3轮新增，请优先裁定：** [IA1–IA8](../theory/impact_audit.md) 已给出直接最终统计量检验相对“先认证整个安全计数矩形”的成本分离，并实现精确优化；比较使用矩形精确max风险，而非弱Bonferroni之和。人工结构单格88对114，完整20格中位节省0。我们认为这是额外中间置信集合承诺的代价，尚不能称新理论。请判断这个结果是否只是成熟联合检验/审计理论的直接实例，哪种真实影响结构或匹配下界才值得继续。另有10份保存官方索引的发布日期复核，但历史版本仍未知；不能因此升级完整P1结论。[第3轮记录](../reports/2026-11-16-round3.md) 与 [独立审查](../reports/impact_review.md) 已附入归档。
+**Added in round 3, please rule on this first:** [IA1–IA8](../theory/impact_audit.md) give a cost separation of the direct final-statistic test relative to "first certify the whole safe count rectangle", and implement exact optimization; the comparison uses the exact max risk of the rectangle, not a weak Bonferroni sum. The hand-made structure gives 88 vs 114 in a single cell; over the full 20 cells the median saving is 0. We think this is the cost of committing to an extra intermediate confidence set, and it cannot yet be called new theory. Please judge whether this result is just a direct instance of mature joint-testing/audit theory, and which real influence structure or matching lower bound would be worth pursuing. There is also a review of the publication dates of 10 documents against saved official indexes, but the historical versions are still unknown; the full P1 conclusion cannot be upgraded on this basis. The [round 3 record](../reports/2026-11-16-round3.md) and the [independent review](../reports/impact_review.md) are included in the archive.
 
-## 请优先攻击的具体疑问
+## Specific questions we ask you to attack first
 
-1. **选题必要性。** “必须从零训练”是否应该作为字面硬门？P2的结构证明可接已有冻结文本编码器；P3和审计规划本身不需要语言模型。若坚持这个门槛，是否应直接淘汰这些旗舰候选，而只保留为P1组件？
-2. **P1的真正增量。** DPA、集体投毒证书、有限总体抽样均已有。将审计上界接到固定统计量包络是容易的组合；什么额外结果才足以成为论文：紧的审计成本下界、利用污染影响结构的有效自适应审计，还是共同分片约束下的可算紧界？您认为哪一项最可能已被现有统计/鲁棒性文献覆盖？
-3. **历史性前提。** 删除真实晚到文档后，如果旧文档的保留/元数据由未来信息决定，比较器仍可能泄漏。我们是否应把结论严格限定为固定历史可测规则下的删除比较器，而放弃更宽的“恢复真实历史模型”说法？
-4. **可信核心。** 一个核心污染可改变全部头，不能当一篇边缘污染。仅有2026抓取的旧FOMC页面，能否支撑任何历史性强结论？如果不能，是否把历史认证暂定为否决项，仅推进理论负结果与条件证书？
-5. **P2的非平凡任务。** 完整数值和比较基准已知时，规则阈值足够。什么最小金融文本问题既需要语言绑定/隐含基准，又有合理且可证伪的数值单调规范？请特别指出stance中不能施加单调的情况。
-6. **解析环节。** 对理想解析的Greeks界很容易成立；真正瓶颈是数值、单位、期间和基准抽错。应优先研究集合值解析的稳健包络、接受子集上的错误率控制，还是有限数据下不可识别的下界？如何避免把总体解析准确率误当每条文本都被认证？
-7. **P3的可识别性。** 校准不提供逐点真实p_i，跨簇依赖也未知。有没有一个可估计、非空且与部署决策有关的边际/依赖歧义集合，使P3超出经典同单调公式的重述？如果没有，是否应停止把它当独立研究？
-8. **带计算轨迹的答案。** DSL执行正确不等于抽取与程序选择正确。若用规则抽取＋符号计算已达到同一可靠性，小模型还需证明什么才有研究价值？这条路径是否更适合作为P2的验证装置而非第五个研究方向？
+1. **Necessity of the topic.** Should "must train from scratch" be a literal hard gate? P2's structural proofs can sit on top of an existing frozen text encoder; P3 and audit planning themselves do not need a language model. If this threshold is kept, should these flagship candidates be eliminated directly and kept only as P1 components?
+2. **P1's real increment.** DPA, collective poisoning certificates, and finite-population sampling all exist. Connecting an audit upper bound to a fixed statistic envelope is an easy combination. What extra result would be enough for a paper: a tight lower bound on audit cost, an effective adaptive audit that uses the structure of contamination influence, or a computable tight bound under shared shard constraints? Which of these do you think is most likely already covered by existing statistics/robustness literature?
+3. **The historical premise.** After deleting real late-arriving documents, the comparator may still leak if the retention/metadata of old documents was decided by future information. Should we restrict the conclusion strictly to the deletion comparator under fixed historically measurable rules, and give up the broader claim of "recovering the real historical model"?
+4. **The trusted core.** One core contamination can change all heads and cannot be counted as one periphery contamination. With only old FOMC pages crawled in 2026, can any strong historical conclusion be supported? If not, should historical certification be provisionally made a rejection item, with only theoretical negative results and conditional certificates pursued?
+5. **A non-trivial task for P2.** When the complete values and comparison benchmarks are known, a rule threshold is enough. What minimal financial-text problem both needs language binding/implicit benchmarks and has a reasonable, falsifiable numeric monotonicity specification? Please point out in particular the cases in stance where monotonicity cannot be imposed.
+6. **The parsing step.** Greeks bounds under ideal parsing hold easily; the real bottleneck is mis-extraction of values, units, periods, and benchmarks. Should we prioritize robust envelopes for set-valued parsing, error-rate control on the accepted subset, or lower bounds for non-identifiability under finite data? How do we avoid mistaking population parsing accuracy for every text being certified?
+7. **Identifiability of P3.** Calibration does not provide the true pointwise p_i, and cross-cluster dependence is also unknown. Is there an estimable, non-vacuous ambiguity set over marginals/dependence that is relevant to deployment decisions and makes P3 more than a restatement of the classical comonotone formula? If not, should we stop treating it as independent research?
+8. **Answers with computation traces.** Correct DSL execution does not mean correct extraction and program selection. If rule-based extraction + symbolic computation already reaches the same reliability, what else would a small model need to show to have research value? Is this path better suited as a verification device for P2 than as a fifth research direction?
 
-## 希望收到的回应格式
+## Response format we hope to receive
 
-请给每条路径一个判断：继续 / 缩窄 / 仅作为支撑组件 / 停止。每项附最强反对理由、一个能改变判断的证据，以及您建议优先做的一个证明或实验。请不要为了保留原方案而强行认可新颖性；指出“这只是已有方法的直接推论”对我们非常有价值。
+Please give each path one verdict: continue / narrow / supporting component only / stop. For each, attach the strongest objection, one piece of evidence that could change the verdict, and the one proof or experiment you suggest doing first. Please do not endorse novelty just to keep the original plan; pointing out "this is only a direct corollary of existing methods" is very valuable to us.
 
-尤其请指出您与内部审查意见不同的地方。我们会逐项记录采纳、修正或有理由保留的异议，而不把共识当作证明。
+Please point out especially where you differ from the internal review. We will record item by item what we adopt, what we correct, and the objections we keep with reasons, and we will not treat consensus as proof.
 
-## 随附材料
+## Attached material
 
-- `PATH_01_audited_information_set.md`：审计驱动的信息集证书。
-- `PATH_02_numeric_sensitivity.md`：解析感知的数值敏感度。
-- `PATH_03_audit_design_frontier.md`：证书目标驱动的审计成本前沿。
-- `PATH_04_dependence_robust_risk.md`：边际和依赖不确定下的部署风险。
-- `PATH_05_proof_carrying_numeric_reasoning.md`：带可检查计算证据的数值文本推理。
-- `../theory/notes.md`、`../theory/collective_metrics.md`：已写证明与边界。
-- `../reports/local_data_inventory.md`：真实本地输入条件。
+- `PATH_01_audited_information_set.md`: audit-driven information-set certificates.
+- `PATH_02_numeric_sensitivity.md`: parsing-aware numeric sensitivity.
+- `PATH_03_audit_design_frontier.md`: an audit-cost frontier driven by the certificate target.
+- `PATH_04_dependence_robust_risk.md`: deployment risk under marginal and dependence uncertainty.
+- `PATH_05_proof_carrying_numeric_reasoning.md`: numeric text reasoning with checkable computation evidence.
+- `../theory/notes.md`, `../theory/collective_metrics.md`: written proofs and boundaries.
+- `../reports/local_data_inventory.md`: real local input conditions.
 
-原始语料、私有标签和模型权重不在这个评审包中。建议转交本文件和合并阅读版，或整个本地研究归档；收到Fable真实回应后，再逐项对照回应记录继续讨论。
+The raw corpus, private labels, and model weights are not in this review package. We suggest forwarding this file and the merged reading version, or the whole local research archive; after Fable's real response arrives, continue the discussion item by item against the response record.
 
-## 第四轮证据增量：新的真实来源任务基线
+## Round 4 evidence increment: a baseline on a new real-source task
 
-2026-11-16。此次已从本地 SEntFiN 原始来源重新准备数据并训练简单模型，任务是**标题中指定实体的来源情绪**，标签为 negative/neutral/positive。它不是证券投资立场，不是旧 24M checkpoint 或旧逐行结果的恢复。执行前 [协议](../real_baseline/PROTOCOL.md) 固定词法连通簇的非时间 hash 划分、train-only TF-IDF、各模型仅用 development 选择 C，以及唯一主比较 **char−word 的测试 macro-F1**；多数类与 entity-only 是诊断。原始文本、逐行标签/预测和权重不随公开包交付。
+2026-11-16. This time the data were re-prepared from the local SEntFiN raw source and simple models were trained. The task is **source sentiment toward a specified entity in a headline**, with labels negative/neutral/positive. It is not securities investment stance, and not a recovery of the old 24M checkpoint or the old row-level results. The pre-execution [protocol](../real_baseline/PROTOCOL.md) fixed a non-temporal hash split over lexical connected clusters, train-only TF-IDF, selection of C for each model using development data only, and the single main comparison, **char−word test macro-F1**; majority-class and entity-only are diagnostics. Raw text, row-level labels/predictions, and weights are not delivered with the public package.
 
-测试集为 2,107 个实体样本行、1,570 个词法簇。新训练 word TF-IDF+LR 的 macro-F1 为 **0.7920**，char TF-IDF+LR 为 **0.7548**；entity-only 为 **0.5336**。[聚合训练结果](../experiments/real_baseline/baseline_summary.json) 预定 char−word 差为 **−0.03723**，10,000 次相同簇抽样的配对 percentile bootstrap 名义95%区间约 **[−0.05306, −0.02156]**。[聚合重采样结果](../experiments/real_baseline/bootstrap_summary.json)
+The test set has 2,107 entity sample rows and 1,570 lexical clusters. The newly trained word TF-IDF+LR has macro-F1 **0.7920**, char TF-IDF+LR **0.7548**, and entity-only **0.5336**. [Aggregated training results](../experiments/real_baseline/baseline_summary.json) The pre-specified char−word difference is **−0.03723**, and the nominal 95% interval from a paired percentile bootstrap with 10,000 resamples of the same clusters is about **[−0.05306, −0.02156]**. [Aggregated resampling results](../experiments/real_baseline/bootstrap_summary.json)
 
-这个区间支持本次固定预测器、指定重采样解释下 word 优于 char 的比较；它**不是证书**。词法簇未经独立语义事件审定，不保证独立/代表性；区间条件于已完成的训练、开发选择和预测，不包含其全部随机性、未知跨簇依赖或时间漂移。entity-only 的分数说明实体身份值得单独诊断，不能把它除以完整模型分数来计算“身份解释比例”，也不能据此作因果分解。新任务与旧 0.6549 的标签、输入和划分不同，不能直接比较提升幅度。
+This interval supports the comparison that word is better than char, for these fixed predictors and under the specified resampling interpretation; it is **not a certificate**. The lexical clusters were not reviewed as independent semantic events and are not guaranteed to be independent/representative. The interval is conditional on the completed training, dev selection, and predictions, and does not include all their randomness, unknown cross-cluster dependence, or temporal drift. The entity-only score shows that entity identity deserves its own diagnosis; it cannot be divided by the full model's score to compute an "identity explanation ratio", nor used for a causal decomposition. The new task differs from the old 0.6549 in labels, inputs, and split, so the size of an improvement cannot be compared directly.
 
-这次取得了可复核的真实文本起点，同时加强了“复杂组件为何必要”的质疑：简单词法模型已经提供有竞争力的基线；我们尚未证明 LLM、小编码器或从零语言预训练不可替代。没有运行的 FinBERT/零样本 LLM 仍缺席，原 G0 与 G1 没有因此自动通过，原路径排序及既定门保持不变。
+This gives a reviewable real-text starting point, and at the same time strengthens the challenge of "why complex components are necessary": a simple lexical model already provides a competitive baseline, and we have not shown that an LLM, a small encoder, or language pretraining from scratch is irreplaceable. The FinBERT/zero-shot LLM runs that were not done are still missing; the original G0 and G1 do not pass automatically because of this, and the original path ranking and the established gates stay unchanged.
 
-**请 Fable 优先裁定以下修订提案：** 是否接受这份**全新任务、新训练、新证据**作为 G0 重建的起点或替代协议的一部分，而不是要求无法恢复的旧24M逐行结果？若接受，请明确旧门中哪些项目保留、哪些改写、还必须补哪些同任务强基线；若不接受，请指出最小可行替代。进一步，哪一种非冗余的金融文本任务及最小对照，才能证明语言绑定、语义解析或受约束学习提供了简单规则/词法方法没有的必要信息，并与拟议证书目标直接相连？我们希望先固定能否决复杂模型的证据标准，再投入新的编码器训练。
+**Please, Fable, rule first on the following revision proposal:** should this **brand-new task, new training, and new evidence** be accepted as the starting point of the G0 rebuild or as part of a replacement protocol, instead of requiring the old 24M row-level results, which cannot be recovered? If accepted, please state which items of the old gates are kept, which are rewritten, and which same-task strong baselines must still be added; if not accepted, please point out the minimal feasible alternative. Further, which non-redundant financial-text task and minimal controls could show that language binding, semantic parsing, or constrained learning provides necessary information that simple rules/lexical methods lack, and connects directly to the proposed certificate target? We would like to fix first the evidence standard that could reject complex models, before investing in new encoder training.
 
-**送达状态未变：没有向 Fable 发送材料，没有收到 Fable 反馈。** 本节是待转交的新增证据和具体问题，内部审查不替代您的决定。
+**Delivery status unchanged: no material has been sent to Fable, and no feedback has been received from Fable.** This section is new evidence and specific questions to be forwarded; the internal review does not replace your decision.
 
-## 第五轮需要先定清的证书对象
+## Round 5: the certificate object that must be settled first
 
-[第五轮](../reports/2026-11-16-round5.md)把历史因子化/版本重放写成PNI1–PNI6，并完成六组件PIT参考实现。有限未来追加检查全部通过，但已知3条错标时间全部被纳入；故记录非干扰不能替代真来源审计。另修正seed的条件独立要求；指出数学可测性也不等于实际历史可构造性，事后固定checkpoint作为常量可测不提供来源证明。[完整理论](../theory/pit_noninterference.md)、[独立审查](../reports/pit_review.md)。
+[Round 5](../reports/2026-11-16-round5.md) wrote historical factorization/version replay as PNI1–PNI6 and completed a six-component PIT reference implementation. The finite future-append checks all passed, but the 3 known mis-timed records were all included; so recorded non-interference cannot replace a real source audit. It also corrected the conditional-independence requirement for the seed, and pointed out that mathematical measurability is not the same as practical historical constructibility: a checkpoint fixed after the fact is measurable as a constant but provides no source proof. [Full theory](../theory/pit_noninterference.md), [independent review](../reports/pit_review.md).
 
-请Fable明确旗舰的目标对象：事前历史可构造的模型、逐版本来源准入，还是删除污染后的固定比较器统计量？我们可以为三者分别写假设并连接，但不能把一个结论换名成另一个。若现有离线来源不足以证明完整历史性，是否接受以“给定影响结构时的审计信息—统计量宽度界”为近期数学目标、真实历史性作为应用前提？这只是下一轮待审提案，未改变原G0/G1、原排序或已完成的permission负结果验收。
+Please, Fable, make explicit the flagship's target object: a model constructible historically ex ante, per-version source admission, or the fixed comparator statistic after deleting contamination? We can write assumptions for each of the three and connect them, but we cannot rename one conclusion as another. If the existing offline sources are not enough to prove complete historicity, would you accept "audit information–statistic width bounds given an influence structure" as the near-term mathematical target, with real historicity as an application premise? This is only a proposal for review in the next round; it does not change the original G0/G1, the original ranking, or the acceptance of the completed permission negative result.
 
-## 第六轮：P2是否应把核心移到语义集合
+## Round 6: should P2 move its core to semantic sets?
 
-[SE1–SE6](../theory/semantic_envelopes.md)及[严格数值检查器](../numeric/record.md)已将候选集合、必要区间宽度、符号方向oracle、动态分支切换与接受后解析风险分开。给定数值完全精确也可能有很宽的语义联合；反之，丢失x=b这类依赖造成的宽度只是抽象保守性，不是原文本内禀歧义。25个手选候选问题在0.10门下3个通过，不能当成自然文本覆盖率或实际P2门验收。
+[SE1–SE6](../theory/semantic_envelopes.md) and the [rigorous numeric checker](../numeric/record.md) have separated candidate sets, necessary interval width, the symbolic direction oracle, dynamic branch switching, and post-acceptance parsing risk. Even with fully exact values, the semantic union can be very wide; conversely, width caused by losing dependencies such as x=b is only abstraction conservatism, not ambiguity intrinsic to the source text. Of 25 hand-picked candidate questions, 3 pass under the 0.10 gate; this cannot be taken as natural-text coverage or as acceptance of the actual P2 gate.
 
-请判断：近期P2科学问题是否应是“哪些候选语义能被可靠保留或排除，以及由此产生的覆盖—风险—宽度边界”，并允许符号下游取代冗余学习头？若保留有序概率学习，哪一个有外生方向依据的随机目标使它必要？怎样区分候选多报造成的保守性和真实信息不足？这些问题先于新模型规模或训练预算；目前没有Fable反馈，也没有替导师采纳这一修订。
+Please judge: should P2's near-term scientific question be "which candidate semantics can be reliably kept or excluded, and the coverage–risk–width boundary that follows", with a symbolic downstream allowed to replace the redundant learned head? If ordinal probability learning is kept, which random target with an exogenous basis for its direction makes it necessary? How can conservatism caused by over-reporting candidates be distinguished from real lack of information? These questions come before any new model scale or training budget; there is currently no feedback from Fable, and this revision has not been adopted on the advisor's behalf.

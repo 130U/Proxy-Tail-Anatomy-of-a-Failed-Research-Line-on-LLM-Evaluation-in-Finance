@@ -1,28 +1,28 @@
-# 第一阶段稳定性比较与明确结论
+# Stage 1 stability comparison and explicit conclusion
 
-> 后续已完成：唯一通过的Sol四次聚合在[全新128条确认](stage2_report.md)中七项通过、一项略未通过，按原门不扩大到512条。下文保留第一阶段作出分支选择时的事实；最终交接见[当前完整报告](FABLE_CURRENT_REPORT.md)。
+> Completed later: the only passing method, Sol four-run aggregation, passed seven items and narrowly failed one in the [confirmation on 128 completely new items](stage2_report.md), so under the original gate it is not scaled up to 512 items. The text below keeps the facts as they stood when the stage 1 branch choice was made; the final handoff is the [current full report](FABLE_CURRENT_REPORT.md).
 
-2026-11-16。已完成32条新样本上的48个正式评分agent调用：成对比较3968个判断，多次排序16份结果。全部输出均覆盖指定ID，未出现不可判断。另有2次未产生输出的496对整批尝试，已单独保留失败记录。
+2026-11-16. 48 formal scoring agent calls on 32 new samples have been completed: 3968 judgments for pairwise comparison and 16 results for multiple rankings. All outputs covered the specified IDs, with no inconclusive items. There were also 2 whole-batch attempts with 496 pairs that produced no output; their failure records are kept separately.
 
-**明确结论：双模型联合方案均未通过；只有“Sol＋四次排序聚合”通过单模型稳定性条件，值得进入新样本验证。** 未放宽通过标准，也未把单模型通过改写成双模型路线通过。
+**Explicit conclusion: both joint two-model plans failed; only "Sol + four-run rank aggregation" passed the single-model stability conditions and is worth moving to validation on a new sample.** The pass criteria were not relaxed, and a single-model pass was not rewritten as a pass of the two-model route.
 
-主检查取名义25%尾部，即8条。要求同模型两次聚合在上下尾、两个方向均满足：同预算召回至少80%，为90%召回所需放行倍数不超过1.5，同分扩张不超过20%。这是工作阈值，不是显著性检验。8条中的90%经取整实际要求全8条，因而一条较深的漏选就会显著拉宽结果。
+The main check uses the nominal 25% tail, i.e. 8 items. The two aggregations of the same model must satisfy, for the upper and lower tails and in both directions: equal-budget recall of at least 80%, a widening factor of no more than 1.5 for 90% recall, and tie expansion of no more than 20%. These are working thresholds, not significance tests. After rounding, 90% of 8 items actually requires all 8, so a single fairly deep miss widens the result markedly.
 
-| 方法与模型 | 两组总体秩相关 | 最差同预算尾部召回 | 最大重复放行倍数 | 最大同分扩张 | 单模型结论 |
+| Method and model | Overall rank correlation between the two groups | Worst equal-budget tail recall | Maximum repeat widening factor | Maximum tie expansion | Single-model conclusion |
 |---|---:|---:|---:|---:|---|
-| 成对比较，Luna | 0.825 | 62.5% | 2.25 | 25% | 未通过 |
-| 成对比较，Sol | 0.920 | 87.5% | 1.875 | 0% | 未通过：正面端放行过宽 |
-| 四次排序聚合，Luna | 0.865 | 87.5% | 2.75 | 0% | 未通过：正面端漏选过深 |
-| 四次排序聚合，Sol | 0.987 | 100% | 1.00 | 0% | 通过 |
+| Pairwise comparison, Luna | 0.825 | 62.5% | 2.25 | 25% | Failed |
+| Pairwise comparison, Sol | 0.920 | 87.5% | 1.875 | 0% | Failed: pass-through too wide at the positive tail |
+| Four-run rank aggregation, Luna | 0.865 | 87.5% | 2.75 | 0% | Failed: miss too deep at the positive tail |
+| Four-run rank aggregation, Sol | 0.987 | 100% | 1.00 | 0% | Passed |
 
-成对比较的左右交换不一致率：Luna 两个panel为248/496、230/496（50.0%、46.4%）；Sol为56/496、63/496（11.3%、12.7%）。严格相反偏好的数量分别为131、113和14、8。合并冲突为平局后，Luna仍存在8/508、7/543个严格三边循环；Sol在1964、2125个严格三角中未观察到循环。零循环不证明总体传递，不一致也不能只归因于输入位置。
+Left-right swap inconsistency rates for pairwise comparison: Luna's two panels 248/496 and 230/496 (50.0%, 46.4%); Sol's 56/496 and 63/496 (11.3%, 12.7%). The numbers of strictly opposite preferences are 131 and 113, and 14 and 8, respectively. After merging conflicts into ties, Luna still has 8/508 and 7/543 strict three-edge cycles; Sol has no observed cycles among 1964 and 2125 strict triangles. Zero cycles do not prove transitivity in the population, and inconsistency cannot be attributed only to input position.
 
-多次聚合有实质改善，但没有修复所有模型。预先保留的m=1、2、4结果显示：Sol最差同预算召回由36.4%提升到100%，最大重复倍数由2.875降为1；m=2与m=4在这组主指标相同。Luna同预算召回也改善到87.5%，但正面端为找回8条仍须放行22条，倍数2.75。不能只展示相关系数提高或选择最好的一次运行。
+Multiple aggregation gives a substantive improvement, but it did not fix every model. The m=1, 2, 4 results reserved in advance show: Sol's worst equal-budget recall rose from 36.4% to 100%, and the maximum repeat factor fell from 2.875 to 1; m=2 and m=4 are identical on these main metrics. Luna's equal-budget recall also improved to 87.5%, but at the positive tail it still had to pass through 22 items to recover 8, a factor of 2.75. One cannot show only the higher correlation coefficient or pick the best single run.
 
-## 下一阶段已启动
+## Next stage started
 
-成对方法与Luna支路保留为失败结果，不扩大这些支路。对唯一通过的Sol四次聚合，另设一个在阶段1之后选中的单模型验证分支：从未使用过的family抽取128条新样本，保持提示、m=4及全部并列处理规则；主检查改为10%、20%，其余阈值不变。该分支只验证参照排序的可重复性，尚不完成便宜/贵模型尾部比较。若未通过，就保留失败，不在同一验证集上继续调参后改称成功。
+The pairwise method and the Luna branch are kept as failure results, and these branches are not scaled up. For the only passing method, Sol four-run aggregation, a separate single-model validation branch, selected after stage 1, is set up: 128 new samples are drawn from families never used before, keeping the prompt, m=4 and all tie-handling rules; the main checks change to 10% and 20%, with the other thresholds unchanged. This branch only validates the repeatability of the reference ranking and does not yet complete the cheap/expensive model tail comparison. If it fails, the failure is kept, and it is not tuned further on the same validation set and then called a success.
 
-本次32条、固定p与重复次数不能识别渐近α，也不是股票收益验证。参考模型不是真值。全部组合范围是重复敏感性，非置信区间；批内对比共享上下文。
+These 32 items, the fixed p and the number of repeats cannot identify the asymptotic α, and this is not a validation against stock returns. The reference model is not ground truth. All combination ranges are repeat sensitivity, not confidence intervals; within-batch comparisons share context.
 
-依据：[完整数值](methods_stage1_all.json)、[四面板图](methods_stage1_all.png)、[逐项通过条件](stage1_report.md)、[冻结设计及单模型分支说明](methods_protocol.md)、[聚合公式与来源](aggregation_math.md)、[分析代码](analyze_agent_methods.py)。原始输入及输出位于 `research/private/agent_tail_methods/stage1_n32/`。
+Basis: [full numbers](methods_stage1_all.json), [four-panel figure](methods_stage1_all.png), [item-by-item pass conditions](stage1_report.md), [frozen design and notes on the single-model branch](methods_protocol.md), [aggregation formulas and sources](aggregation_math.md), [analysis code](analyze_agent_methods.py). The raw inputs and outputs are in `research/private/agent_tail_methods/stage1_n32/`.

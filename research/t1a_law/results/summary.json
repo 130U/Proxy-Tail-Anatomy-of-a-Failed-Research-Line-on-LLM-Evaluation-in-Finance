@@ -52,9 +52,9 @@
       }
     ],
     "error_reasons": {
-      "遗漏有限增长因子 (1+g/2) 与分母非线性修正；并非小增长极限": 24,
-      "原始输入单位不同；直接相减未进行程序中的单位换算": 5,
-      "程序不等于两数增长率；原 category 的结构标签过宽": 2
+      "Omits the finite growth factor (1+g/2) and the nonlinear denominator correction; not the small-growth limit": 24,
+      "Raw inputs have different units; direct subtraction skips the program's unit conversion": 5,
+      "Program is not a growth rate of two numbers; the original category's structural label is too broad": 2
     }
   },
   "canonical_growth_n": 1427,

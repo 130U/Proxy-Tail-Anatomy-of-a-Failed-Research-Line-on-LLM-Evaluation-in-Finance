@@ -1,51 +1,51 @@
-# 候选5及补充检索日志
+# Search log for candidate 5 and supplementary searches
 
-执行日期：2026-11-17（America/New_York）。Web为通用搜索工具；带site限定不等于直接检索数据库。结果为本轮可见返回，未提供全库命中总量时不杜撰计数。下列均实际执行。
+Date of execution: 2026-11-17 (America/New_York). "Web" is a general search tool; a `site:` restriction is not the same as searching the database directly. Results are those visible in this round; where no database-wide hit total was provided, no count is invented. All of the following were actually executed.
 
-| ID | 渠道 | 完整检索词或请求 | 结果／用途 |
+| ID | Channel | Full query or request | Result / use |
 |---|---|---|---|
-| 5-01 | Web | FinQA "answer" "exe_ans" inconsistent | 发现OpenReward一致性筛选文档 |
-| 5-02 | Web | FinQA "answer" "exe_ans" cleaning | 同上，及数据schema |
-| 5-03 | Web中文 | FinQA 答案 程序执行 不一致 数据清洗 | 大量无关清洗资料；不据此判不存在 |
-| 5-04 | Web | FinQA "annotation errors" answer | 发现FinQA-fix二手线索，转交4组核原文 |
-| 5-05 | Web | "FinQA" "exe_ans" "inconsistent" | 官方实现等邻近结果 |
-| 5-06 | Web | "FinQA" "written answer" "program" | 指向EnvCommons/OpenReward |
-| 5-07 | Web | "FinQA-fix" | 二手线索；原文获取由4组记录 |
-| 5-08 | Web/ACL域 | site:aclanthology.org FinQA "answer" "exe_ans" | ViNumQA等字段说明，不是冲突率先例 |
-| 5-09 | Web/arXiv域 | site:arxiv.org FinQA "inconsistent" "annotation" | 获得评测相关候选，非穷尽 |
-| 5-10 | Web/S2域 | site:semanticscholar.org FinQA answer inconsistency cleaning | 混合无关结果，不当数据库零命中 |
-| 5-11 | Web/Scholar域 | site:scholar.google.com FinQA "annotation errors" | 未获得可用数据库导出 |
-| 5-12 | Web中文 | FinQA 人工答案 程序结果 矛盾 清洗 | 邻近资料与噪声 |
-| 5-13 | Web | FinQA "written answer" "consistency" | EnvCommons字段一致性 |
-| 5-14 | Web | FinQA "exe_ans" "filter" | OpenReward过滤规则 |
-| 5-15 | Web中文 | "FinQA" "FinQA-fix" "错误" | 清洗和新近评测线索 |
-| 5-16 | GitHub search_issues | repo=czyssrs/FinQA; query=answer exe_ans; topn=100 | 1条：issue #6 |
-| 5-17 | GitHub search_issues | repo=czyssrs/FinQA; query=wrong OR incorrect OR inconsistency OR rounding; topn=100 | 1条：issue #15 |
-| 1-PR-01 | Web | site:github.com/EnvCommons/FinQA pull rounding | 补查1的已知容差讨论，随后枚举PR |
-| 1/5-PR-02 | GitHub search_prs | repo=EnvCommons/FinQA; query=""; topn=100 | 搜索返回0；随后REST枚举6个，搜索结果不能用作不存在证据 |
-| 5-18 | Google Scholar直接入口 | https://scholar.google.com/scholar?q=FinQA+answer+exe_ans+inconsistency | 工具返回不可访问 |
-| 5-19 | Semantic Scholar直接入口 | https://www.semanticscholar.org/search?q=FinQA%20answer%20inconsistency&sort=relevance | 工具返回不可访问 |
-| 5-20 | GitHub REST完整枚举 | https://api.github.com/repos/czyssrs/FinQA/issues?state=all&per_page=100 | 15条可见issue/PR，逐条筛题；重点读6、13、15 |
-| 5-21 | GitHub REST完整枚举 | https://api.github.com/repos/EnvCommons/FinQA/pulls?state=all&per_page=100 | 6个PR，重点读2、3、4、5及4的全部补丁 |
-| 5-22 | GitHub REST交叉核对 | https://api.github.com/repos/EnvCommons/FinQA/issues?state=all&per_page=100 | 同6个PR，与PR枚举去重 |
+| 5-01 | Web | FinQA "answer" "exe_ans" inconsistent | Found the OpenReward consistency-filter documentation |
+| 5-02 | Web | FinQA "answer" "exe_ans" cleaning | Same as above, plus the data schema |
+| 5-03 | Web Chinese (query translated) | FinQA answer program execution inconsistent data cleaning | Much irrelevant cleaning material; not used to conclude that nothing exists |
+| 5-04 | Web | FinQA "annotation errors" answer | Found the second-hand FinQA-fix lead, passed to group 4 to check the original |
+| 5-05 | Web | "FinQA" "exe_ans" "inconsistent" | Nearby results such as the official implementation |
+| 5-06 | Web | "FinQA" "written answer" "program" | Points to EnvCommons/OpenReward |
+| 5-07 | Web | "FinQA-fix" | Second-hand lead; retrieval of the original is recorded by group 4 |
+| 5-08 | Web/ACL domain | site:aclanthology.org FinQA "answer" "exe_ans" | Field descriptions such as ViNumQA; not a precedent for a conflict rate |
+| 5-09 | Web/arXiv domain | site:arxiv.org FinQA "inconsistent" "annotation" | Obtained evaluation-related candidates; not exhaustive |
+| 5-10 | Web/S2 domain | site:semanticscholar.org FinQA answer inconsistency cleaning | Mixed irrelevant results; not treated as zero hits in the database |
+| 5-11 | Web/Scholar domain | site:scholar.google.com FinQA "annotation errors" | No usable database export obtained |
+| 5-12 | Web Chinese (query translated) | FinQA human answer program result contradiction cleaning | Nearby material and noise |
+| 5-13 | Web | FinQA "written answer" "consistency" | EnvCommons field consistency |
+| 5-14 | Web | FinQA "exe_ans" "filter" | OpenReward filter rules |
+| 5-15 | Web Chinese (query translated) | "FinQA" "FinQA-fix" "error" | Leads on cleaning and recent evaluations |
+| 5-16 | GitHub search_issues | repo=czyssrs/FinQA; query=answer exe_ans; topn=100 | 1 item: issue #6 |
+| 5-17 | GitHub search_issues | repo=czyssrs/FinQA; query=wrong OR incorrect OR inconsistency OR rounding; topn=100 | 1 item: issue #15 |
+| 1-PR-01 | Web | site:github.com/EnvCommons/FinQA pull rounding | Follow-up check on the known tolerance discussion for 1, after which the PRs were enumerated |
+| 1/5-PR-02 | GitHub search_prs | repo=EnvCommons/FinQA; query=""; topn=100 | Search returned 0; REST enumeration then found 6, so the search result cannot be used as evidence of absence |
+| 5-18 | Google Scholar direct entry | https://scholar.google.com/scholar?q=FinQA+answer+exe_ans+inconsistency | The tool returned "not accessible" |
+| 5-19 | Semantic Scholar direct entry | https://www.semanticscholar.org/search?q=FinQA%20answer%20inconsistency&sort=relevance | The tool returned "not accessible" |
+| 5-20 | GitHub REST full enumeration | https://api.github.com/repos/czyssrs/FinQA/issues?state=all&per_page=100 | 15 visible issues/PRs, screened one by one; 6, 13 and 15 read closely |
+| 5-21 | GitHub REST full enumeration | https://api.github.com/repos/EnvCommons/FinQA/pulls?state=all&per_page=100 | 6 PRs; 2, 3, 4, 5 and all patches of 4 read closely |
+| 5-22 | GitHub REST cross-check | https://api.github.com/repos/EnvCommons/FinQA/issues?state=all&per_page=100 | The same 6 PRs, de-duplicated against the PR enumeration |
 
-扩展读取：OpenReward Tasks/Reward；EnvCommons PR4 files、merge b0e5f907abda069f0915e93e006c4ba55658360e；官方evaluate.py；FinQAPT 2410.13959（由候选4引用链发现）；Gauging Overprecision 2504.12098与Chemistry 2024（由候选3发现，根代理交叉核读）；技能来源2609.00065元数据。首次误用Chemistry ISSN路径2673-7167，未获取；纠正为2624-8549后成功，不将失败路径当来源。
+Extended reading: OpenReward Tasks/Reward; EnvCommons PR4 files, merge b0e5f907abda069f0915e93e006c4ba55658360e; the official evaluate.py; FinQAPT 2410.13959 (found via candidate 4's citation chain); Gauging Overprecision 2504.12098 and Chemistry 2024 (found by candidate 3, cross-checked by the root agent); metadata of the skill source 2609.00065. The Chemistry ISSN path 2673-7167 was first used by mistake and nothing was obtained; after correcting it to 2624-8549 it succeeded, and the failed path is not treated as a source.
 
 
-## 根代理的补充引用链检索
+## Supplementary citation-chain searches by the root agent
 
-以下实际于2026-11-17执行，不计入候选5的最低10组要求。
+The following were actually executed on 2026-11-17 and do not count towards the minimum of 10 sets for candidate 5.
 
-| 渠道 | 查询／请求 | 结果 |
+| Channel | Query / request | Result |
 |---|---|---|
-| Web | `"TAT-QA" "rounding" "uncertainty"` | 多为评分约定、系统评测，未发现输入舍入审计直接先例 |
-| Web | `"ConvFinQA" "annotation errors" "2024"` | 金融推理评测、数据构建方向，结合4组追引 |
-| Web | `"FinQA" "condition number"` | 未定位直接先例，不作不存在证明 |
-| Web | `"FinQA" "rounding" "determinacy"` | 未定位直接先例，不作不存在证明 |
-| Semantic Scholar API | `/graph/v1/paper/ARXIV:2109.00122/citations?fields=title,year,url&limit=1000` | 工具不可访问；FinQA被引全集未取回 |
-| Semantic Scholar API | `/graph/v1/paper/ARXIV:2105.07624/citations?fields=title,year,url&limit=1000` | 工具不可访问；TAT-QA被引全集未取回 |
-| Semantic Scholar API | `/graph/v1/paper/ARXIV:2210.03849/citations?fields=title,year,url&limit=1000` | 工具不可访问；ConvFinQA被引全集未取回 |
+| Web | `"TAT-QA" "rounding" "uncertainty"` | Mostly scoring conventions and system evaluations; no direct precedent for an input-rounding audit found |
+| Web | `"ConvFinQA" "annotation errors" "2024"` | Financial reasoning evaluations and dataset construction, combined with group 4's citation tracing |
+| Web | `"FinQA" "condition number"` | No direct precedent located; not used as proof of absence |
+| Web | `"FinQA" "rounding" "determinacy"` | No direct precedent located; not used as proof of absence |
+| Semantic Scholar API | `/graph/v1/paper/ARXIV:2109.00122/citations?fields=title,year,url&limit=1000` | Tool could not access it; the full set of FinQA citations was not retrieved |
+| Semantic Scholar API | `/graph/v1/paper/ARXIV:2105.07624/citations?fields=title,year,url&limit=1000` | Tool could not access it; the full set of TAT-QA citations was not retrieved |
+| Semantic Scholar API | `/graph/v1/paper/ARXIV:2210.03849/citations?fields=title,year,url&limit=1000` | Tool could not access it; the full set of ConvFinQA citations was not retrieved |
 
-另根代理为复核已定位原文执行find：Chemistry正文 `3.2.`、`2 out`、`10 out`；后两者不命中字面，但3.2节原文有“2 correct answers over 10 trials”及随后全10次正确。find不是独立文献检索组。
+In addition, to re-check originals already located, the root agent ran find on the Chemistry full text for `3.2.`, `2 out` and `10 out`; the latter two did not match literally, but the original text of §3.2 has "2 correct answers over 10 trials" followed by all 10 runs correct. find is not an independent literature search set.
 
-追加实际关键词：`"EEDP" "FinQA" "ConvFinQA"`；`"ConvFinQA" "TAT-QA" "error analysis" benchmark 2023 2024`。发现EEDP正式论文及FINESSE-Bench（交4组读原文）。EEDP正文find键：Precision errors、A Metadata、missing information、rounding；后两类匹配/不匹配均通过上下文阅读解释。
+Additional actual keywords: `"EEDP" "FinQA" "ConvFinQA"`; `"ConvFinQA" "TAT-QA" "error analysis" benchmark 2023 2024`. These found the formal EEDP paper and FINESSE-Bench (passed to group 4 to read the original). find keys in the EEDP full text: Precision errors, A Metadata, missing information, rounding; matches and non-matches for the latter two were both interpreted by reading the context.

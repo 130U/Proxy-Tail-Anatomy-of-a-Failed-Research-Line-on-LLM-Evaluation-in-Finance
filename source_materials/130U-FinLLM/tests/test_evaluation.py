@@ -43,7 +43,7 @@ def test_target_link_is_not_ordinary_english_ticker_word():
     assert validate_input({"text": "Long $CAT.", "target": "CAT"}) is None
     assert validate_input({"text": "$CATER is falling.", "target": "CAT"}) == "target_not_supported"
     assert validate_input({"text": "Caterpillar demand is weak.", "target": "CAT", "target_aliases": ["Caterpillar"]}) is None
-    assert validate_input({"text": "$CAT 显著上涨，仍然看涨。", "target": "CAT"}) == "unsupported_script"
+    assert validate_input({"text": "$CAT заметно вырос, всё ещё бычий.", "target": "CAT"}) == "unsupported_script"
 
 
 def test_explicit_literal_entity_mode_matches_complete_entity_only():

@@ -1,66 +1,66 @@
-# 任务：模型对自己的头部名单有多稳定
+# Task: how stable is a model's own top list
 
-给执行这项任务的 agent。只用 agent 自身完成打分，不调用付费 API，不训练模型。
+For the agent executing this task. Do the scoring with the agent itself only; do not call paid APIs, and do not train models.
 
-## 问题
+## Question
 
-同一个模型给同一批金融标题重复打分，它自己选出的最高 10% 会变多少？把几次打分取平均之后，稳定性的提升是否符合一个简单的公式？
+When the same model scores the same batch of financial headlines repeatedly, how much does its own top 10% change? After averaging several scorings, does the gain in stability follow a simple formula?
 
-这决定一个花钱的选择：筛选时，token 应该花在让模型多问几遍，还是花在把网撒宽。
+This decides a choice that costs money: in screening, should tokens be spent on asking the model several more times, or on casting a wider net.
 
-## 上一次为什么不算数
+## Why the previous attempt does not count
 
-上一次让 agent 把 128 条标题排成一个长列表。有两个问题：最高 10% 只有 12 条；一条标题的名次取决于同一列表里还有哪些标题。这次改为**逐条打绝对分**，并把"同批里有谁"的影响单独量出来。
+Last time the agent was asked to rank 128 headlines in one long list. There were two problems: the top 10% had only 12 items; and a headline's rank depended on which other headlines were in the same list. This time switch to **scoring each item on an absolute scale**, and measure separately the effect of "who else is in the same batch".
 
-## 数据
+## Data
 
-- 1,000 条公开的英文金融新闻标题，每条带一个指定实体。来源自选，要求许可允许研究使用，并记录来源和版本。
-- 每个词法近重复簇只取一条。
-- 不看任何已有标签或已有模型的预测来挑选。
-- 标题原文不要提交到本仓库，只提交 ID、分数和汇总结果。
+- 1,000 public English financial news headlines, each with one designated entity. Choose the source yourself; its licence must allow research use; record the source and version.
+- Take only one item from each lexical near-duplicate cluster.
+- Do not look at any existing labels or existing model predictions when selecting.
+- Do not commit the original headline text to this repository; commit only IDs, scores and summary results.
 
-## 打分
+## Scoring
 
-**量表。** 0 到 100 的整数：标题对指定实体的表述，从最负面（0）到最正面（100），50 为中性或无方向。提示里给 5 个固定的锚点例子（约 5、25、50、75、95 分各一个），锚点例子不来自这 1,000 条。提示定稿后逐字不变。
+**Scale.** Integers from 0 to 100: how the headline portrays the designated entity, from most negative (0) to most positive (100), with 50 as neutral or no direction. The prompt gives 5 fixed anchor examples (one each at about 5, 25, 50, 75 and 95); the anchor examples do not come from these 1,000 items. Once finalized, the prompt stays verbatim unchanged.
 
-**分批。** 每次调用给 40 条标题，要求逐条独立打分，明确写"不要相互比较，不要排序"。
+**Batching.** Each call gets 40 headlines and is asked to score each one independently, stating explicitly "do not compare them with each other, do not rank them".
 
-**重复。** 每条标题打 8 次。每次重复都重新随机分批、重新随机批内顺序、使用新的会话。共 8,000 个分数，约 200 次调用。
+**Repetition.** Score each headline 8 times. For each repetition, re-randomize the batches and the order within batches, and use a new session. 8,000 scores in total, about 200 calls.
 
-**对照。** 另取 100 条（从这 1,000 条里随机抽），用**完全相同的批次组成和顺序**再打 2 次。它用来区分两种噪声：模型自身的生成波动，以及批次组成带来的波动。
+**Control.** Take another 100 items (randomly drawn from these 1,000) and score them 2 more times with **exactly the same batch composition and order**. This separates two kinds of noise: the model's own generation variability, and the variability caused by batch composition.
 
-如果调用预算不够，可以缩到 500 条 × 8 次，但不要减少重复次数。
+If the call budget is not enough, you may shrink to 500 items × 8 times, but do not reduce the number of repetitions.
 
-## 分析
+## Analysis
 
-把 8 次重复按先后分成两组，每组 4 次。记 m 为每组内取平均的次数，m = 1、2、4。
+Split the 8 repetitions in order into two groups of 4. Let m be the number of scorings averaged within each group, m = 1, 2, 4.
 
-1. **单次信度 r。** 两次单独打分之间的相关系数，在正态分数（秩变换后）上计算。报告所有成对组合的平均值和范围。
-2. **头部自我重合。** 对 p = 20%、10%、5%，上下两端分别计算：一组平均分的最高 p，与另一组平均分的最高 p，重合比例是多少。m = 1、2、4 各算一遍。
-3. **放大倍数。** 要找回一组头部的 90%，另一组需要放行多少，除以 p。
-4. **与公式对照。** 用第 1 步的 r 预测 m = 2 和 m = 4 的结果，不许用 m = 2、4 的数据调参：
-   - 平均 m 次后的信度：r_m = m·r / (1 + (m − 1)·r)。
-   - 重合比例和放大倍数：相关系数为 r_m 的二元正态分布下的对应值，数值积分求出。
-5. **噪声分解。** 用对照组比较：批次相同的两次打分之间的相关，与批次不同的两次之间的相关。
-6. **并列。** 报告每次打分用了多少个不同的分值，以及头部边界上的并列人数。边界并列全部保留，不按 ID 或顺序打破。
-7. **不确定性。** 对标题做 bootstrap，给出第 2、3 步各数的 95% 区间。
+1. **Single-scoring reliability r.** The correlation coefficient between two single scorings, computed on normal scores (after a rank transform). Report the mean and range over all pairwise combinations.
+2. **Top-list self-overlap.** For p = 20%, 10%, 5%, at the top and bottom ends separately: what fraction of one group's top p by average score overlaps with the other group's top p. Compute once each for m = 1, 2, 4.
+3. **Widening factor.** To recover 90% of one group's top list, how much the other group has to pass through, divided by p.
+4. **Comparison with the formula.** Use the r from step 1 to predict the results for m = 2 and m = 4; tuning on the m = 2, 4 data is not allowed:
+   - Reliability after averaging m times: r_m = m·r / (1 + (m − 1)·r).
+   - Overlap fraction and widening factor: the corresponding values under a bivariate normal distribution with correlation r_m, obtained by numerical integration.
+5. **Noise decomposition.** Using the control group, compare the correlation between two scorings with the same batches against the correlation between two scorings with different batches.
+6. **Ties.** Report how many distinct score values each scoring uses, and the number of items tied at the top-list boundary. Keep all boundary ties; do not break them by ID or order.
+7. **Uncertainty.** Bootstrap over headlines to give 95% intervals for each number in steps 2 and 3.
 
-## 交付
+## Deliverables
 
-- 一张图：横轴 m，纵轴头部自我重合比例；实测点带区间，叠加第 4 步的预测曲线。上下两端、三个 p 分开画。
-- 一页结论：单次打分对自己最高 10% 的重合率是多少；平均几次能到 90%；公式预测得准不准；两端是否不同；批次效应占多大。
-- 提示原文、分批方案、全部原始分数（按 ID）、分析代码。
+- One figure: x-axis m, y-axis the top-list self-overlap fraction; observed points with intervals, overlaid with the predicted curves from step 4. Plot the top and bottom ends and the three values of p separately.
+- A one-page summary: what is the overlap rate of a single scoring with its own top 10%; how many averaged scorings are needed to reach 90%; how accurate the formula's predictions are; whether the two ends differ; how large the batch effect is.
+- The original prompt text, the batching plan, all raw scores (by ID), the analysis code.
 
-不要清单、哈希表、打包脚本或对复核的复核。
+No checklists, hash tables, packaging scripts, or reviews of reviews.
 
-## 什么结果算有意思，什么结果算结束
+## What counts as an interesting result, and what ends the line
 
-**值得继续：** 单次打分的头部自我重合明显偏低（例如 10% 处低于 75%），并且至少出现下面一条——公式在尾部系统性地偏离实测；上下两端明显不同；批次效应占噪声的大头。
+**Worth continuing:** the top-list self-overlap of a single scoring is clearly low (for example below 75% at 10%), and at least one of the following appears: the formula systematically deviates from the observations in the tail; the top and bottom ends clearly differ; the batch effect makes up the bulk of the noise.
 
-**到此为止：** 单次重合已经很高（10% 处高于 90%），或者公式处处吻合且两端对称。那么结论是"按信度公式决定重复次数即可"，写成一页经验规则，这条线结束。
+**Stop here:** the single-scoring overlap is already high (above 90% at 10%), or the formula agrees everywhere and the two ends are symmetric. Then the conclusion is "just choose the number of repetitions by the reliability formula"; write it up as a one-page rule of thumb, and this line ends.
 
-**无法判断：** 分数并列太多，头部边界上的并列超过名义人数的 20%。这时如实报告，不要改量表后在同一批数据上重来。
+**Inconclusive:** too many tied scores, with ties at the top-list boundary exceeding 20% of the nominal count. Report it as it is in that case; do not change the scale and rerun on the same data.
 
-## 做之前先查一件事
+## Check one thing before starting
 
-花半天查文献：LLM 打分的重测信度、排序不稳定性、"多次采样取平均"的收益，是否已有人专门针对头部名单做过并给出同样的公式对照。查到了就先告诉 Theodore，不要继续跑。
+Spend half a day on the literature: whether anyone has already studied test-retest reliability of LLM scoring, ranking instability, and the gain from "sampling several times and averaging" specifically for top lists, with the same comparison against a formula. If you find it, tell Theodore first, and do not continue running.

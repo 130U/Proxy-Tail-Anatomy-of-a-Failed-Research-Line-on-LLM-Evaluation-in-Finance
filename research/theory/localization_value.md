@@ -1,265 +1,265 @@
-# 最强固定总污染数门与位置信息价值的边界
+# The strongest fixed total-contamination gate and the limits of the value of location information
 
-日期：2026-11-16。第8轮离线条件推导。本文件只新增数学接口、证明与可被反驳的比较边界；不修改现有论文，不训练、不联网，不凭记忆补引文。分类为**有限总体、固定真值、频率审计、有限组合优化**；不需要训练样本IID，也没有使用渐近正态近似。文中的渐近只比较一列确定的有限设计问题之成本。
+Date: 2026-11-16. Offline conditional derivation from round 8. This file only adds mathematical interfaces, proofs, and comparison boundaries that can be refuted; it does not modify the existing paper, does no training, uses no internet access, and does not fill in citations from memory. The classification is **finite population, fixed ground truth, frequentist audit, finite combinatorial optimization**; IID training samples are not needed, and no asymptotic normal approximation is used. The asymptotics in this file only compare the costs of a sequence of well-defined finite design problems.
 
-核心结论有正有负：最强固定总数门的漏检风险可以精确贪心计算；原先 $d=2r-1$ 阈值族对它的成本比小于2且常数2可逼近，而原论文的 $N=r^2$ 设定下成本比趋于1。另一种全层合取结构虽有线性差距，但普查一层这个简单矩形门已经达到直接方法的最优。**不能把对某一种计数聚合的优势，改称复杂图优化器必不可少或已经取得原创理论。**
+The core conclusions are both positive and negative: the miss risk of the strongest fixed total-count gate can be computed exactly by a greedy procedure; for the earlier $d=2r-1$ threshold family, the cost ratio against it is less than 2 and the constant 2 can be approached, while under the original paper's setting $N=r^2$ the cost ratio tends to 1. Another structure, an all-strata conjunction, does have a linear gap, but the simple rectangle gate of taking a census of one stratum already attains the optimum of the direct method. **An advantage over one particular count aggregation must not be restated as a complex graph optimizer being indispensable, or as an original theoretical result having been obtained.**
 
-## 1. 固定问题与真正公平的总数门
+## 1. The fixed problem and a truly fair total-count gate
 
-沿用 [IA1–IA8](impact_audit.md)：$W=\bigsqcup_{h=1}^dW_h$，$N_h=|W_h|\ge1$；真实污染集合 $C$ 固定。事前选整数审计量 $0\le n_h\le N_h$，各层独立、层内均匀无放回抽样，审计真值正确。投票、标签、影响映射、统计量 $S$、目标区间 $I$、错误预算 $0<\alpha<1$ 与成本 $c_h>0$ 均在抽样前冻结。未判定的来源真值不能算作零发现。
+We follow [IA1–IA8](impact_audit.md): $W=\bigsqcup_{h=1}^dW_h$, $N_h=|W_h|\ge1$; the true contaminated set $C$ is fixed. Integer audit sizes $0\le n_h\le N_h$ are chosen in advance; strata are sampled independently, uniformly without replacement within each stratum, and the audit ground truth is correct. The votes, labels, impact map, statistic $S$, target interval $I$, error budget $0<\alpha<1$, and costs $c_h>0$ are all frozen before sampling. Source ground truth that has not been determined cannot count as a zero finding.
 
-令 $\mathcal H\subseteq2^W$ 为使允许统计量包络不能包含于 $I$ 的坏配置集合；它按IA2向上封闭。写 $q_h(C)=|C\cap W_h|$，以及 $p_n(q)=\prod_h\binom{N_h-q_h}{n_h}/\binom{N_h}{n_h}$；组合数上项小于下项时为0。记直接证书风险及最优成本为
+Let $\mathcal H\subseteq2^W$ be the family of bad configurations, for which the envelope of allowed statistics cannot be contained in $I$; by IA2 it is upward closed. Write $q_h(C)=|C\cap W_h|$ and $p_n(q)=\prod_h\binom{N_h-q_h}{n_h}/\binom{N_h}{n_h}$; a binomial coefficient is 0 when its upper index is smaller than its lower index. Denote the direct certificate risk and optimal cost by
 
 $$
 R_I(n)=\max_{C\in\mathcal H}p_n(q(C)),\qquad
 C_I^*=\min_{n:R_I(n)\le\alpha}\sum_hc_hn_h.
 $$
 
-全零时直接程序报告 $I$，否则报告完整统计范围。相比之下，本轮总数程序额外承诺：全零时报告 $|C|\le k_0$，否则报告全计数范围；这个计数门须对最终目标安全。它仍允许**最佳固定分层配额**，不是只和均匀配额比较。
+On all-zero findings the direct procedure reports $I$; otherwise it reports the full range of the statistic. By contrast, the total-count procedure of this round makes an additional commitment: on all-zero findings it reports $|C|\le k_0$, otherwise the full count range; this count gate must be safe for the final target. It is still allowed the **best fixed stratified quotas**; it is not compared only against uniform quotas.
 
-先处理边界。若 $\mathcal H=\varnothing$，取 $k_0=|W|$，两程序都无需审计。若 $\varnothing\in\mathcal H$，空污染全零概率为1，不存在满足 $\alpha<1$ 的上述全零出证设计。其余情形定义
+First the boundary cases. If $\mathcal H=\varnothing$, take $k_0=|W|$; neither procedure needs any audit. If $\varnothing\in\mathcal H$, empty contamination has all-zero probability 1, and no all-zero certificate design of the above kind satisfies $\alpha<1$. In the remaining cases define
 
 $$
 s=\min_{C\in\mathcal H}|C|\in\{1,\ldots,|W|\},\qquad k_0=s-1.
 $$
 
-**命题 LV1（最强安全总数门）。** $k_0$ 是最大的安全固定整数污染上界。对固定 $n$，该门的精确计数失覆盖风险为
+**Proposition LV1 (strongest safe total-count gate).** $k_0$ is the largest safe fixed integer upper bound on contamination. For fixed $n$, the exact count miscoverage risk of this gate is
 
 $$
 R_K(n;s)=\max_{\substack{0\le q_h\le N_h\\\sum_hq_h=s}}
 \prod_h\frac{\binom{N_h-q_h}{n_h}}{\binom{N_h}{n_h}}.
 $$
 
-其最优成本为 $C_K^*=\min_{n:R_K(n;s)\le\alpha}\sum_hc_hn_h$，且 $C_I^*\le C_K^*$。
+Its optimal cost is $C_K^*=\min_{n:R_K(n;s)\le\alpha}\sum_hc_hn_h$, and $C_I^*\le C_K^*$.
 
-**证明。** 小于 $s$ 的配置都不是坏配置，故门安全；某个大小为 $s$ 的坏配置存在，任何更大整数上界都包含它，因此不安全。门的失覆盖事件是在真实 $|C|\ge s$ 时全零。漏检概率只依赖各层计数且逐坐标非增，每个更大配置均含一个大小为 $s$ 的子集，其漏检概率不小，故最大值可限制为显示的计数层面。每个整数计数向量均可在有限层内实现，所以该最大值精确。坏配置均在总数门之外，故 $R_I(n)\le R_K(n;s)$，得到成本关系。若选择比 $k_0$ 更小的上界，需排除的配置更多，不可能降低相同设计的风险，所以也不改善最优成本。证毕。
+**Proof.** No configuration of size less than $s$ is bad, so the gate is safe; some bad configuration of size $s$ exists, and every larger integer upper bound contains it, so such bounds are unsafe. The miscoverage event of the gate is all-zero findings when the true $|C|\ge s$. The miss probability depends only on the stratum counts and is coordinatewise nonincreasing; every larger configuration contains a subset of size $s$ whose miss probability is no smaller, so the maximum can be restricted to the displayed count level. Every integer count vector can be realized within the finite strata, so this maximum is exact. All bad configurations lie outside the total-count gate, so $R_I(n)\le R_K(n;s)$, which gives the cost relation. Choosing an upper bound smaller than $k_0$ requires ruling out more configurations and cannot lower the risk of the same design, so it does not improve the optimal cost either. ∎
 
-风险参数 $s$ 是“必须排除的最小污染数”，不是允许的上界 $k_0$；实现接口须避免这一个单位的偏差。这些概率是重复抽样的漏检概率，不是观察到零发现后污染位置的先验/后验概率。
+The risk parameter $s$ is "the smallest contamination count that must be ruled out", not the allowed upper bound $k_0$; implementation interfaces must avoid this off-by-one error. These probabilities are miss probabilities under repeated sampling, not prior/posterior probabilities of contamination locations after observing zero findings.
 
-## 2. LV2：不同层大小下的精确前缀贪心风险
+## 2. LV2: exact prefix-greedy risk with unequal stratum sizes
 
-对每层定义长度 $N_h$ 的边际链
+For each stratum define a marginal chain of length $N_h$:
 
 $$
 a_{h,j}=\max\left(0,\frac{N_h-n_h-j}{N_h-j}\right),
 \qquad j=0,\ldots,N_h-1.
 $$
 
-它们在 $[0,1]$ 内且随 $j$ 非增。每层的超几何零发现概率等于
+These lie in $[0,1]$ and are nonincreasing in $j$. The hypergeometric zero-finding probability of each stratum equals
 
 $$
 p_h(q;n_h)=\prod_{j=0}^{q-1}a_{h,j},\qquad p_h(0;n_h)=1.
 $$
 
-**证明。** 当 $q\le N_h-n_h$ 时，组合数比可写成下降阶乘比 $(N_h-n_h)_q/(N_h)_q$，得到乘积。当 $q>N_h-n_h$ 时，组合数分子为0，乘积也包含一个0。非零段中 $a_{h,j}=1-n_h/(N_h-j)$ 随 $j$ 非增，截断后的零尾段仍非增。$n_h=0$ 时整链都是1；$n_h=N_h$ 时整链都是0。证毕。
+**Proof.** When $q\le N_h-n_h$, the ratio of binomial coefficients can be written as the ratio of falling factorials $(N_h-n_h)_q/(N_h)_q$, which gives the product. When $q>N_h-n_h$, the numerator binomial coefficient is 0, and the product also contains a 0. On the nonzero segment, $a_{h,j}=1-n_h/(N_h-j)$ is nonincreasing in $j$, and the truncated zero tail is still nonincreasing. When $n_h=0$ the whole chain is 1; when $n_h=N_h$ the whole chain is 0. ∎
 
-**命题 LV2（全局top-$s$与前缀约束相容）。** 把所有层的边际链合成一个多重集，其最大的 $s$ 个数之积恰为 $R_K(n;s)$。一个达到最坏风险的计数向量可由如下过程取得：开始每层取0个因子；每一步在各未耗尽链的当前首因子中选最大者，将该层计数增加1，重复 $s$ 次。
+**Proposition LV2 (global top-$s$ is compatible with the prefix constraint).** Merge the marginal chains of all strata into one multiset; the product of its $s$ largest numbers is exactly $R_K(n;s)$. A count vector attaining the worst-case risk can be obtained by the following procedure: start with 0 factors from every stratum; at each step, among the current head factors of the chains not yet exhausted, pick the largest, increase that stratum's count by 1, and repeat $s$ times.
 
-**证明。** 任一合法计数向量恰好从每条链取一个前缀，合计取 $s$ 个因子。忽略前缀限制后，任何这样的乘积不大于全局最大的 $s$ 个因子的乘积，因为全部因子非负。另一方面，每条链剩余部分的最大值都在其当前首部；因此每次选择最大当前首部，也是在全部未选因子中选择一个最大值。归纳得到 $s$ 步选取的正是一个全局top-$s$多重集，并始终满足前缀限制。这样既达到无约束上界，也给出合法最坏配置。平局任取当前首部，不会破坏可行性；若top-$s$含0，最优积就是0。证毕。
+**Proof.** Every valid count vector takes exactly one prefix from each chain, for a total of $s$ factors. Ignoring the prefix constraint, any such product is at most the product of the $s$ globally largest factors, because all factors are nonnegative. On the other hand, the maximum of the remaining part of each chain is at its current head; hence each choice of the largest current head is also a choice of a maximum among all unchosen factors. Induction shows that the $s$ steps select exactly a global top-$s$ multiset, while always satisfying the prefix constraint. This attains the unconstrained upper bound and also gives a valid worst-case configuration. Ties may be broken by taking any current head without breaking feasibility; if the top-$s$ contains a 0, the optimal product is 0. ∎
 
-用最大堆维护至多 $d$ 个当前首部，风险评估需 $O(d+s\log d)$ 次管理/比较操作；有理比较和乘积的位复杂度另计。这个结论不要求相同 $N_h$、相同 $n_h$ 或相同审计成本。成本不进入固定配额的风险计算。
+Maintaining at most $d$ current heads in a max-heap, a risk evaluation takes $O(d+s\log d)$ bookkeeping/comparison operations; the bit complexity of rational comparisons and products is counted separately. This result does not require equal $N_h$, equal $n_h$, or equal audit costs. Costs do not enter the risk computation for fixed quotas.
 
-边界约定：$s=0$ 时空积为1；$s>\sum_hN_h$ 时需排除的配置不存在，风险定义为0。对于合法非空坏配置问题，LV1给出的 $s$ 不会越过这些边界。不得在概率下溢后把一个正积误当0；实现应使用精确分数/整数比较。
+Boundary conventions: when $s=0$ the empty product is 1; when $s>\sum_hN_h$ there is no configuration to rule out, and the risk is defined as 0. For a valid nonempty bad-configuration problem, the $s$ given by LV1 does not cross these boundaries. A positive product must not be mistaken for 0 after probability underflow; implementations should use exact fractions/integer comparisons.
 
-## 3. LV3：最优固定配额的有限算法及可选对称约简
+## 3. LV3: a finite algorithm for the optimal fixed quota, and an optional symmetric reduction
 
-枚举 $\prod_h(N_h+1)$ 个固定配额，对每个用LV2精确计算风险，取所有 $R_K\le\alpha$ 者中的最低成本。这给出该固定分层均匀无放回、全零出证程序类的全局最优值：每个合法设计恰在网格中出现，风险判定精确，有限集合最小值达到。这个证明不使搜索成为普遍多项式算法；超限只能报告未完成/已找到的可行成本上界，不能称最优或不可行。
+Enumerate the $\prod_h(N_h+1)$ fixed quotas, compute the risk of each exactly with LV2, and take the lowest cost among all with $R_K\le\alpha$. This gives the global optimum for the class of procedures with fixed stratification, uniform sampling without replacement, and a certificate on all-zero findings: every valid design appears exactly once in the grid, the risk test is exact, and the minimum over a finite set is attained. This proof does not make the search a generally polynomial algorithm; when limits are exceeded, one can only report incomplete / the feasible cost upper bound found so far, and cannot claim optimal or infeasible.
 
-若 $s\le N_h$，把全部 $s$ 个污染放在第 $h$ 层是合法反例，因此 $p_h(s;n_h)\le\alpha$ 是每层必要条件，可用于裁掉过小配额。但这些单层条件一般不充分：跨层分散污染可能有更高漏检概率。若 $s>N_h$，不能硬套这个不可实现的单层反例。
+If $s\le N_h$, placing all $s$ contaminations in stratum $h$ is a valid counterexample, so $p_h(s;n_h)\le\alpha$ is a necessary condition for each stratum and can be used to prune quotas that are too small. But these single-stratum conditions are in general not sufficient: contamination spread across strata may have a higher miss probability. If $s>N_h$, this unrealizable single-stratum counterexample must not be forced.
 
-当各层大小都是 $N$、成本相同，可按配额非降排序，枚举有重复组合；全 $d$ 维排序网格有 $\binom{N+d}{d}$ 个点，不改变最优值。本节对称公式把共同单篇成本归一为1；恢复共同成本 $c$ 时，所有成本表达式统一乘 $c$，最优配额和风险不变。
+When all strata have size $N$ and equal costs, one can sort quotas in nondecreasing order and enumerate combinations with repetition; the sorted grid in all $d$ dimensions has $\binom{N+d}{d}$ points, and the optimum is unchanged. The symmetric formulas in this section normalize the common per-document cost to 1; when the common cost $c$ is restored, all cost expressions are multiplied by $c$, and the optimal quotas and risks are unchanged.
 
-**命题 LV3（总数门也可降尾，但风险公式不同）。** 在等大小、等成本且 $s\le d$ 时，存在一个最优设计形如
+**Proposition LV3 (the total-count gate also allows lowering the tail, but with a different risk formula).** With equal sizes, equal costs, and $s\le d$, there is an optimal design of the form
 
 $$
 0\le n_1\le\cdots\le n_s\le N,\qquad
 n_{s+1}=\cdots=n_d=n_s.
 $$
 
-其成本为 $\sum_{i=1}^{s-1}n_i+(d-s+1)n_s$；风险可从前 $s$ 条**完整边际链**中取top-$s$因子。故只须枚举 $\binom{N+s}{s}$ 个前缀，而不是全 $d$ 维。
+Its cost is $\sum_{i=1}^{s-1}n_i+(d-s+1)n_s$; the risk can be computed by taking the top-$s$ factors from the first $s$ **complete marginal chains**. Hence it suffices to enumerate $\binom{N+s}{s}$ prefixes rather than the full $d$ dimensions.
 
-**证明。** 排序后前 $s$ 条链的首因子均至少为 $x_s=1-n_s/N$，所以原全局第 $s$ 大因子至少为 $x_s$。所有更后链的因子都不大于各自首因子，后者不大于 $x_s$。把后面配额全部降到 $n_s$，这些新链的每个因子仍不大于 $x_s$。它们不能挤走任何严格大于 $x_s$ 的top因子，只能在等于 $x_s$ 的位置替换平局值，故top-$s$数值及乘积不变，成本弱降。前 $s$ 链已经提供至少 $s$ 个不低于该阈值的因子，尾链也可在风险评估中省略。反向每个前缀明确给出合法全配额，最优不丢失。证毕。
+**Proof.** After sorting, the head factors of the first $s$ chains are all at least $x_s=1-n_s/N$, so the original $s$-th largest global factor is at least $x_s$. Every factor of the later chains is at most that chain's head factor, which is at most $x_s$. Lowering all later quotas to $n_s$, every factor of these new chains is still at most $x_s$. They cannot displace any top factor strictly greater than $x_s$; they can only replace tied values at positions equal to $x_s$, so the top-$s$ values and their product are unchanged, and the cost weakly decreases. The first $s$ chains already supply at least $s$ factors no lower than this threshold, so the tail chains can also be omitted from the risk evaluation. Conversely, every prefix explicitly gives a valid full quota, so no optimum is lost. ∎
 
-这与IA8的配额形状相似，**不能把IA8的风险“前 $s$ 个首因子相乘”搬来**：总数对手可能在同一层放多个污染，所以必须保留完整链。$s>d$ 时可取前缀长度 $d$，不产生此降维。异大小/异成本时不能直接套用对称论证。本节新约简是数学接口；是否已用于实现应以比较脚本的实际代码与记录为准。
+This resembles the quota shape of IA8, but **IA8's risk "product of the first $s$ head factors" must not be carried over**: a total-count adversary may place several contaminations in the same stratum, so the complete chains must be kept. When $s>d$, the prefix length can be taken to be $d$, and no such dimension reduction occurs. With unequal sizes/unequal costs, the symmetric argument cannot be applied directly. The new reduction in this section is a mathematical interface; whether it has been used in an implementation should be determined from the actual code and records of the comparison script.
 
-## 4. 哪些条件下位置必然没有价值
+## 4. Conditions under which location necessarily has no value
 
-**单一层结论。** 若 $d=1$，无论文档影响图如何，只要非空坏配置的最小大小为 $s$，都有
+**Single-stratum conclusion.** If $d=1$, then whatever the document impact graph, as long as the smallest size of a nonempty bad configuration is $s$,
 
 $$
 R_I(n)=p_1(s;n)=R_K(n;s),\qquad C_I^*=C_K^*.
 $$
 
-证明：所有坏配置大小至少为 $s$，漏检随大小不增；某个大小为 $s$ 的坏配置存在并达到该上界。单层均匀抽样不区分污染在什么位置，因此它不能从更细的影响图额外获益。证毕。位置信息只有和可区分的抽样设计/分层结合，才可能改变此类零发现设计的成本。
+Proof: every bad configuration has size at least $s$, and the miss probability is nonincreasing in size; some bad configuration of size $s$ exists and attains this upper bound. Uniform sampling within a single stratum does not distinguish where the contamination is located, so it cannot gain anything extra from a finer impact graph. ∎ Location information can change the cost of zero-finding designs of this kind only when combined with sampling designs/stratifications that can tell locations apart.
 
-**一般充分条件。** 若每个满足 $\sum_hq_h=s$ 的合法层计数向量，都能由某个坏配置实现，则对任意 $n$ 有 $R_I(n)=R_K(n;s)$。理由是总数风险的最大化向量本身可由坏配置实现，结合LV1的反向不等式即得。无需要求同计数的每一个位置配置都坏。更弱地，针对某个固定 $n$，只要一个总数最坏向量可由坏配置实现，同样相等。
+**General sufficient condition.** If every valid stratum count vector with $\sum_hq_h=s$ can be realized by some bad configuration, then $R_I(n)=R_K(n;s)$ for every $n$. The reason is that the maximizing vector of the total-count risk can itself be realized by a bad configuration, and combining this with the reverse inequality from LV1 gives equality. It is not necessary that every location configuration with the same counts be bad. More weakly, for a fixed $n$, equality holds as soon as one worst-case total-count vector can be realized by a bad configuration.
 
-这不是必要条件的完整刻画。零采样层会造成风险平台，较大坏配置也可能达到同一最大风险。本文不把一个易检查的充分条件误写成当且仅当。
+This is not a complete characterization by a necessary condition. Strata with zero sampling create risk plateaus, and larger bad configurations may also attain the same maximum risk. This file does not misstate an easily checked sufficient condition as an if-and-only-if.
 
-另外，若允许一般非矩形计数集合，则安全downset“没有坏计数反链成员被当前计数支配”已精确复现直接检验，见IA补充与论文第6节。本轮比较的是**单个固定总数上界**的信息损失，不是超越一切计数置信方法。
+In addition, if general non-rectangular count sets are allowed, the safe downset "no member of the bad count antichain is dominated by the current count" already reproduces the direct test exactly; see the IA addendum and Section 6 of the paper. What this round compares is the information lost by **a single fixed total-count upper bound**, not a claim to beat every count confidence method.
 
-## 5. LV4：同质 $r$-of-$d$ 的通用常数上界
+## 5. LV4: a universal constant upper bound for homogeneous $r$-of-$d$
 
-设 $1\le r\le d$，各层恰有 $N\ge1$ 篇、同单位成本，坏配置当且仅当至少 $r$ 层含污染。于是 $s=r$，直接风险是最大的 $r$ 个首因子之积。等配额 $n$ 时，总数风险也恰为 $(1-n/N)^r$：每层边际因子不大于首因子，任何总数 $r$ 的配置积不超过该值，在 $r$ 层各放一篇达到。
+Let $1\le r\le d$, with exactly $N\ge1$ documents per stratum and the same unit cost, and let a configuration be bad if and only if at least $r$ strata contain contamination. Then $s=r$, and the direct risk is the product of the $r$ largest head factors. With equal quotas $n$, the total-count risk is also exactly $(1-n/N)^r$: each stratum's marginal factors are at most its head factor, the product for any configuration with total $r$ is at most this value, and placing one document in each of $r$ strata attains it.
 
-这个结构可由多数投票具体实现：当 $r\le d\le2r-1$，取 $m=2r-1$ 个原来全正确的头，其中 $d$ 个可变头各对应一层，其余 $2r-1-d$ 个固定可信头。至少 $r$ 个可变头才可能改变结果。后续代数界只用所声明的 $r$-of-$d$ 坏性，覆盖更一般的同质阈值构造。
+This structure can be realized concretely by majority voting: when $r\le d\le2r-1$, take $m=2r-1$ heads that are all originally correct, of which $d$ changeable heads correspond one to each stratum, and the remaining $2r-1-d$ are fixed trusted heads. The result can change only if at least $r$ changeable heads change. The algebraic bounds that follow use only the declared $r$-of-$d$ badness and cover more general homogeneous threshold constructions.
 
-**命题 LV4。** 在上述非空问题下，
+**Proposition LV4.** For the nonempty problem above,
 
 $$
 1\le\frac{C_K^*}{C_I^*}\le\frac{d}{d-r+1}.
 $$
 
-**证明。** 取一个直接最优配额，排序 $n_1\le\cdots\le n_d$。其最大漏检概率为 $\prod_{i=1}^r(1-n_i/N)\le\alpha$。因每个前 $r$ 因子均不小于 $1-n_r/N$，有 $(1-n_r/N)^r\le\alpha$，所以把全部层都审 $n_r$ 是一个可行总数设计，成本 $dn_r$。原设计至少有 $d-r+1$ 层配额不小于 $n_r$，故 $C_I^*\ge(d-r+1)n_r$。零配额整体风险为1，因此可行设计的 $n_r>0$、成本正，可相除。结合 $C_I^*\le C_K^*$ 得结论。证毕。
+**Proof.** Take a direct optimal quota and sort it as $n_1\le\cdots\le n_d$. Its maximum miss probability is $\prod_{i=1}^r(1-n_i/N)\le\alpha$. Since each of the first $r$ factors is at least $1-n_r/N$, we have $(1-n_r/N)^r\le\alpha$, so auditing $n_r$ in every stratum is a feasible total-count design, with cost $dn_r$. The original design has at least $d-r+1$ strata with quota at least $n_r$, so $C_I^*\ge(d-r+1)n_r$. The all-zero quota has risk 1, so a feasible design has $n_r>0$ and positive cost, and we can divide. Combining with $C_I^*\le C_K^*$ gives the result. ∎
 
-由此得到必要的几何条件：若 $(d-r+1)/d$ 沿一列问题被某个正常数下界控制，位置相对最优总数门的收益比就有常数上界。想在这个同质族获得无界比例，必须让允许不受污染的层数余量 $d-r+1$ 相对 $d$ 越来越小。它不是充分条件；后文给出一个确实达到线性差距的全层合取族。
+This yields a necessary geometric condition: if $(d-r+1)/d$ is bounded below by a positive constant along a sequence of problems, the ratio of the gain from location relative to the optimal total-count gate has a constant upper bound. To obtain an unbounded ratio in this homogeneous family, the slack $d-r+1$ in the number of strata allowed to be uncontaminated must become smaller and smaller relative to $d$. It is not a sufficient condition; later we give an all-strata conjunction family that does attain a linear gap.
 
-### 原 $d=2r-1$ 族：小于2，且常数2可逼近
+### The original $d=2r-1$ family: less than 2, and the constant 2 can be approached
 
-直接代入LV4得到
+Substituting directly into LV4 gives
 
 $$
 1\le C_K^*/C_I^*\le (2r-1)/r<2.
 $$
 
-因此原来对矩形门的 $\Omega(r)$ 分离，不能沿用为对最优总数门的阶数收益。此常数上界在联合变化 $r,N$ 时是sharp的。固定 $\alpha$，令 $N\to\infty$、$r=N^2$，并取
+Hence the earlier $\Omega(r)$ separation against rectangle gates cannot be carried over as an order-of-magnitude gain against the optimal total-count gate. This constant upper bound is sharp when $r,N$ vary jointly. Fix $\alpha$, let $N\to\infty$, $r=N^2$, and take
 
 $$
 k_N=\left\lceil\frac{\log(1/\alpha)}{-\log(1-1/N)}\right\rceil=O(N).
 $$
 
-这里 $N\ge2$；充分大 $N$ 时 $1\le k_N\le r$。在这个明确条件下，让 $r-k_N$ 层不审，其余 $r+k_N-1$ 层各审一篇，则最大的 $r$ 个首因子积为 $(1-1/N)^{k_N}\le\alpha$，故 $C_I^*\le r+k_N-1$。有限参数检查必须先验证 $k_N\le r$；例如 $\alpha=1/20,N=2$ 时 $k_N=5>r=4$，这个特定配额不可用，不能生成负数个零审层或把无效上界报为结果。
+Here $N\ge2$; for sufficiently large $N$, $1\le k_N\le r$. Under this explicit condition, leave $r-k_N$ strata unaudited and audit one document in each of the remaining $r+k_N-1$ strata; then the product of the $r$ largest head factors is $(1-1/N)^{k_N}\le\alpha$, so $C_I^*\le r+k_N-1$. A finite parameter check must first verify $k_N\le r$; for example, with $\alpha=1/20,N=2$, $k_N=5>r=4$, this particular quota cannot be used, and one must not generate a negative number of unaudited strata or report an invalid upper bound as a result.
 
-任一可行总数设计的零审层数 $u$ 必须满足 $uN<r$；否则对手可将 $r$ 篇污染全部放进零审层，漏检概率为1。每个其余层至少审一篇，因此
+The number $u$ of unaudited strata in any feasible total-count design must satisfy $uN<r$; otherwise the adversary can place all $r$ contaminations in the unaudited strata, with miss probability 1. Each remaining stratum audits at least one document, so
 
 $$
 C_K^*\ge 2r-1-\left\lfloor\frac{r-1}{N}\right\rfloor=2N^2-N.
 $$
 
-结合 $k_N=O(N)$ 和LV4，有
+Combining $k_N=O(N)$ with LV4,
 
 $$
 \frac{2N^2-N}{N^2+k_N-1}\le\frac{C_K^*}{C_I^*}<2,
 \qquad C_K^*/C_I^*\longrightarrow2.
 $$
 
-$k_N=O(N)$ 的理由是 $-\log(1-1/N)\ge1/N$，故 $k_N\le N\log(1/\alpha)+1$。这是成本序列的精确上下界夹逼，不是随机大样本近似。
+The reason for $k_N=O(N)$ is that $-\log(1-1/N)\ge1/N$, so $k_N\le N\log(1/\alpha)+1$. This is an exact squeeze between upper and lower bounds on the cost sequence, not a random large-sample approximation.
 
-### 原论文的 $N=r^2$ 序列：更强地趋于1
+### The original paper's $N=r^2$ sequence: the ratio tends to 1, a stronger statement
 
-上一个sharp构造使用 $r=N^2$；原论文矩形分离使用的却是反向尺度 $N=r^2$。两者不能混淆。对 $d=2r-1$，令 $a=\log(1/\alpha)>0$，有以下对全部 $N,r$ 有效的下界：
+The previous sharp construction uses $r=N^2$, whereas the original paper's rectangle separation uses the reverse scaling $N=r^2$. The two must not be confused. For $d=2r-1$, let $a=\log(1/\alpha)>0$; the following lower bound is valid for all $N,r$:
 
 $$
 C_I^*\ge \frac{Nadr}{r^2+ad}.
 $$
 
-**证明。** 写直接最优总成本为 $M$，排序后 $n_r\le M/r$。若 $M\ge rN$，显示下界小于 $rN$，结论自动成立。否则前 $r$ 个 $x_i=n_i/N$ 均小于1，且 $x_i\le M/(rN)$。利用 $-\log(1-x)\le x/(1-x)$ 及排序下 $\sum_{i=1}^r n_i\le rM/d$，得到
+**Proof.** Write the direct optimal total cost as $M$; after sorting, $n_r\le M/r$. If $M\ge rN$, the displayed lower bound is less than $rN$, and the result holds automatically. Otherwise the first $r$ values $x_i=n_i/N$ are all less than 1, and $x_i\le M/(rN)$. Using $-\log(1-x)\le x/(1-x)$ and, under the sorting, $\sum_{i=1}^r n_i\le rM/d$, we get
 
 $$
 a\le\sum_{i=1}^r-\log(1-x_i)
 \le\frac{rM/(dN)}{1-M/(rN)}.
 $$
 
-整理正分母即为该下界。证毕。另一方面，平衡总数设计给 $C_K^*\le d[N(1-e^{-a/r})+1]\le d(Na/r+1)$。于是
+Rearranging with the positive denominator gives the lower bound. ∎ On the other hand, the balanced total-count design gives $C_K^*\le d[N(1-e^{-a/r})+1]\le d(Na/r+1)$. Hence
 
 $$
 1\le\frac{C_K^*}{C_I^*}
 \le\left(1+\frac{r}{Na}\right)\left(1+\frac{ad}{r^2}\right).
 $$
 
-固定 $\alpha$、取 $N=r^2$ 并让 $r\to\infty$，右侧趋于1。**原先展示矩形 $\Omega(r)$ 差距的同一序列，直接方法与最优总数门渐近等价。** 这是本轮对原主张最有用的负结果之一；不能省略它而只保留38对48这样的有利常数。
+Fix $\alpha$, take $N=r^2$, and let $r\to\infty$; the right-hand side tends to 1. **On the same sequence that earlier showed the $\Omega(r)$ gap against rectangles, the direct method and the optimal total-count gate are asymptotically equivalent.** This is one of the most useful negative results of this round for the original claim; it must not be omitted while keeping only favourable constants such as 38 versus 48.
 
-## 6. LV5：全层合取有线性差距，但单矩形已最优
+## 6. LV5: an all-strata conjunction has a linear gap, but a single rectangle is already optimal
 
-另取 $r=d\ge2$、每层 $N=2$，坏配置当且仅当所有层都含污染。具体投票实现为 $d$ 个可变头加 $d-1$ 个固定正确头，共 $2d-1$ 个头；每篇文档只影响对应的一个可变头。在这个允许被影响头任意改变输出的外放松模型内，所有文档都属于某个极小坏配置，没有无影响文档填充；这不是实际重训敏感度的实测结论。
+Next take $r=d\ge2$ with $N=2$ per stratum, and let a configuration be bad if and only if every stratum contains contamination. A concrete voting realization uses $d$ changeable heads plus $d-1$ fixed correct heads, $2d-1$ heads in total; each document affects only its corresponding changeable head. Within this outer-relaxation model, where affected heads may change their outputs arbitrarily, every document belongs to some minimal bad configuration, and there is no padding with documents that have no effect; this is not a measured conclusion about actual retraining sensitivity.
 
-固定 $0<\alpha<1/2$，记
+Fix $0<\alpha<1/2$ and write
 
 $$
 \kappa=\min\{k\ge1:2^{-k}\le\alpha\}\ge2.
 $$
 
-**命题 LV5。** 直接最优成本和最强安全矩形最优成本均为2。最强总数门 $|C|\le d-1$ 的最优成本为
+**Proposition LV5.** The direct optimal cost and the optimal cost of the strongest safe rectangle are both 2. The optimal cost of the strongest total-count gate $|C|\le d-1$ is
 
 $$
 C_K^*=d+1\quad(d<\kappa),\qquad
 C_K^*=\left\lceil\frac{d+\kappa}{2}\right\rceil\quad(d\ge\kappa).
 $$
 
-**证明：直接与矩形。** 普查任一层的两篇文档，全零即证明该层无污染，因此全层合取不可能成立，成本2可行；它本身就是只将该层计数上界置0、其他层上界置2的安全矩形。成本0风险1，成本1只能在一层审一篇，坏配置每层各一篇的漏检为1/2，超过 $\alpha$；所以没有更低成本，两个最优均为2。
+**Proof: direct and rectangle.** Taking a census of the two documents in any one stratum, all-zero findings prove that stratum is uncontaminated, so the all-strata conjunction cannot hold; cost 2 is feasible. This is itself a safe rectangle that sets only that stratum's count upper bound to 0 and the other strata's upper bounds to 2. Cost 0 has risk 1, and cost 1 can only audit one document in one stratum; the bad configuration with one document in each stratum then has miss probability 1/2, which exceeds $\alpha$. So no lower cost exists, and both optima are 2.
 
-**证明：总数门。** 将配额0、1、2的层数分别记为 $u,v,w$，$u+v+w=d$。边际因子依次为：$2u$ 个1、$v$ 个1/2，以及剩余0。总数门要取top-$d$因子。
+**Proof: total-count gate.** Write $u,v,w$ for the numbers of strata with quota 0, 1, 2, so $u+v+w=d$. The marginal factors are, in order: $2u$ ones, $v$ halves, and zeros for the rest. The total-count gate takes the top-$d$ factors.
 
-若 $2u\ge d$，风险1，不可行。若 $2u<d\le2u+v$，风险为 $2^{-(d-2u)}$；可行要求 $d-2u\ge\kappa$。此时成本 $v+2w=d-u+w$ 至少为 $d-\lfloor(d-\kappa)/2\rfloor=\lceil(d+\kappa)/2\rceil$，取 $w=0$、$u=\lfloor(d-\kappa)/2\rfloor$ 达到。该分支存在当且仅当 $d\ge\kappa$。
+If $2u\ge d$, the risk is 1 and the design is infeasible. If $2u<d\le2u+v$, the risk is $2^{-(d-2u)}$; feasibility requires $d-2u\ge\kappa$. The cost $v+2w=d-u+w$ is then at least $d-\lfloor(d-\kappa)/2\rfloor=\lceil(d+\kappa)/2\rceil$, attained by $w=0$, $u=\lfloor(d-\kappa)/2\rfloor$. This branch exists if and only if $d\ge\kappa$.
 
-剩下 $2u+v<d$ 时风险为0。由 $d=u+v+w$ 得 $w>u$，故成本 $d-u+w\ge d+1$；取 $u=0,w=1,v=d-1$ 达到。若 $d\ge\kappa$，前一个成本不大于 $d$，因此优于零风险方案；否则只有这个零风险方案可行。证毕。
+In the remaining case $2u+v<d$, the risk is 0. From $d=u+v+w$ we get $w>u$, so the cost $d-u+w\ge d+1$; $u=0,w=1,v=d-1$ attains it. If $d\ge\kappa$, the previous cost is at most $d$ and so beats the zero-risk scheme; otherwise only this zero-risk scheme is feasible. ∎
 
-在 $\alpha=1/20$ 时 $\kappa=5$，因此 $d<5$ 时成本 $d+1$，$d\ge5$ 时为 $\lceil(d+5)/2\rceil$，而直接成本恒为2，比例为 $\Theta(d)$。所有层大小、审计成本和单文档影响头数完全相同；差距来自“所有层都被触及”的几何结构，以及总数聚合无法区分集中与分散污染。
+With $\alpha=1/20$, $\kappa=5$, so the cost is $d+1$ for $d<5$ and $\lceil(d+5)/2\rceil$ for $d\ge5$, while the direct cost is always 2, giving a ratio of $\Theta(d)$. All stratum sizes, audit costs, and numbers of heads affected per document are identical; the gap comes from the geometric structure "every stratum is touched" and from the inability of total-count aggregation to distinguish concentrated from spread-out contamination.
 
-然而，这个例子同时证明**直接复杂优化器没有必要**：选择任一层普查的单矩形门已经达到最优。原族中总数门能胜过矩形；本族中矩形能胜过总数。这两个基线没有普遍支配关系。
+However, this example also proves that **a complex direct optimizer is unnecessary**: the single rectangle gate that takes a census of any one stratum already attains the optimum. In the original family, the total-count gate beats rectangles; in this family, rectangles beat the total count. Neither baseline dominates the other in general.
 
-## 7. 异质影响的星形族：另一种定位机制
+## 7. A star family with heterogeneous impact: another localization mechanism
 
-作为补充，取中心层0与 $L\ge1$ 个叶层，$d=L+1$，每层 $N\ge2$。模型有 $2L+1$ 个原来全正确的头：中心文档影响 $L$ 个中心头，每个叶层文档影响一个相应叶头，另有一个固定正确头。坏性恰为“中心含污染且至少一个叶层含污染”。在同一外放松影响模型内，每篇文档都属于一个极小坏对，最小坏大小为2；不据此断言实际训练器能实现任意对应输出。
+As a supplement, take a center stratum 0 and $L\ge1$ leaf strata, $d=L+1$, with $N\ge2$ per stratum. The model has $2L+1$ heads that are all originally correct: center documents affect $L$ center heads, each leaf-stratum document affects one corresponding leaf head, and there is one more fixed correct head. Badness is exactly "the center contains contamination and at least one leaf stratum contains contamination". Within the same outer-relaxation impact model, every document belongs to a minimal bad pair, and the smallest bad size is 2; this is not taken as a claim that a real trainer can realize arbitrary corresponding outputs.
 
-直接最优成本为 $\lceil N(1-\alpha)\rceil$：只审中心到该数量即可；反之任一中心—叶对必须满足 $(1-n_0/N)(1-n_i/N)\le\alpha$，而乘积不小于 $1-(n_0+n_i)/N$，推出总成本至少 $\lceil N(1-\alpha)\rceil$。中心无污染的单矩形门再次达到这个直接最优值。
+The direct optimal cost is $\lceil N(1-\alpha)\rceil$: auditing only the center up to this number suffices; conversely, every center–leaf pair must satisfy $(1-n_0/N)(1-n_i/N)\le\alpha$, and the product is at least $1-(n_0+n_i)/N$, which forces total cost at least $\lceil N(1-\alpha)\rceil$. The single rectangle gate "the center is uncontaminated" again attains this direct optimum.
 
-总数门 $|C|\le1$ 的风险是“同层两篇”和“跨层各一篇”两类中的最大值。排序配额 $a=n_1\le b=n_2\le\cdots$ 后，同层风险由第一层最大、跨层风险由前两层最大。因此其精确最优值等于
+The risk of the total-count gate $|C|\le1$ is the maximum over two types: "two documents in the same stratum" and "one document in each of two strata". After sorting quotas $a=n_1\le b=n_2\le\cdots$, the same-stratum risk is largest for the first stratum, and the cross-stratum risk is largest for the first two strata. Hence its exact optimum equals
 
 $$
 \min_{0\le a\le b\le N}\{a+(d-1)b:
 p_h(2;a)\le\alpha, (1-a/N)(1-b/N)\le\alpha\}.
 $$
 
-证明是把所有后续配额降低到 $b$，两类最坏风险不变、成本弱降，再枚举全部整数 $a,b$。令 $u=\min\{n:p_h(2;n)\le\alpha\}$、$v=\lceil N(1-\sqrt\alpha)\rceil$。因为 $p_h(2;v)\le(1-v/N)^2\le\alpha$，有 $u\le v$。任何可行排序配额第一项至少 $u$，而第二项必须至少 $v$（两首因子积不小于第二首因子的平方）。于是
+The proof lowers all subsequent quotas to $b$, which leaves both worst-case risks unchanged and weakly lowers the cost, and then enumerates all integers $a,b$. Let $u=\min\{n:p_h(2;n)\le\alpha\}$ and $v=\lceil N(1-\sqrt\alpha)\rceil$. Because $p_h(2;v)\le(1-v/N)^2\le\alpha$, we have $u\le v$. The first entry of any feasible sorted quota is at least $u$, and the second must be at least $v$ (the product of the two head factors is at least the square of the second head factor). Hence
 
 $$
 u+(d-1)v\le C_K^*\le dv.
 $$
 
-固定 $N\ge2,\alpha$，总数门成本为 $\Theta(L)$，直接成本为常数，得到无空影响填充的阶数差距。但已知“中心无污染”就是最优简单策略，甚至可以用占用层加权分数 $L\mathbf1\{q_0>0\}+\sum_{i=1}^L\mathbf1\{q_i>0\}\ge L+1$ 精确描述坏性；不应把这个例子包装成一般先进图算法的必要性。
+With $N\ge2,\alpha$ fixed, the total-count gate cost is $\Theta(L)$ while the direct cost is constant, giving an order-of-magnitude gap without padding by documents that have no effect. But knowing "the center is uncontaminated" is the optimal simple strategy, and badness can even be described exactly by the occupancy-weighted score $L\mathbf1\{q_0>0\}+\sum_{i=1}^L\mathbf1\{q_i>0\}\ge L+1$; this example should not be packaged as showing that a general advanced graph algorithm is necessary.
 
-## 8. 基线组合、有限检查与研究地位
+## 8. Combined baselines, finite checks, and research status
 
-上述精确比较带来更严格的对照规范：同一问题至少报告直接法、最强固定总数门、最强安全联合零发现矩形，以及两种简单方法中成本更低者。不能在原阈值例只选矩形，在合取例只选总数，再把各自优势合并成“普遍超越简单方法”。本文件未证明直接方法相对这一组合基线的普遍阶数优势。
+The exact comparisons above lead to a stricter comparison standard: for the same problem, report at least the direct method, the strongest fixed total-count gate, the strongest safe joint zero-finding rectangle, and the cheaper of the two simple methods. One must not choose only the rectangle in the original threshold example and only the total count in the conjunction example, and then merge their respective advantages into "generally beats simple methods". This file does not prove a general order-of-magnitude advantage of the direct method over this combined baseline.
 
-组合基线也并非每个有限例都等于直接法。例如原族 $r=6,d=11,N=2,\alpha=1/20$：一个零审层加十个审一篇层使直接风险 $1/32$、成本10。成本小于10不可行：若第六小配额为1，至少五个前六配额需为1，故至多一层可零审；若第六小配额为2，至少六层普查已花12；第六小为0则风险1。因此直接最优10。
+Nor does the combined baseline equal the direct method in every finite example. Take, for example, the original family with $r=6,d=11,N=2,\alpha=1/20$: one unaudited stratum plus ten strata each auditing one document gives direct risk $1/32$ at cost 10. A cost below 10 is infeasible: if the sixth-smallest quota is 1, at least five of the first six quotas must be 1, so at most one stratum can be unaudited; if the sixth-smallest quota is 2, at least six strata take a census, which already costs 12; if the sixth-smallest is 0, the risk is 1. Hence the direct optimum is 10.
 
-这个例子的总数门最优11：若至少一层零审，top-6中至少两个1；只要其余能用1/2补足，风险至少 $1/16>1/20$，所以可行只能依赖top-6出现0，即正因子总数 $2u+v\le5$。成本 $v+2w=22-(2u+v)\ge17$。没有零审层时，全部11层各审一篇给风险 $1/64$ 和成本11；任何加入普查只增成本，因此最优11。矩形最优为12。故直接法比这个组合基线也有一个有限严格差距，但**10对11仍只是结构诊断，不是额外创新或实际价值的证据**。
+In this example the total-count gate optimum is 11: if at least one stratum is unaudited, the top-6 contains at least two 1s; as long as the rest can be filled with 1/2, the risk is at least $1/16>1/20$, so feasibility can only rely on a 0 appearing in the top-6, i.e. the total number of positive factors $2u+v\le5$. The cost $v+2w=22-(2u+v)\ge17$. With no unaudited stratum, auditing one document in each of all 11 strata gives risk $1/64$ and cost 11; adding any census only increases the cost, so the optimum is 11. The rectangle optimum is 12. So the direct method has a finite strict gap even against this combined baseline, but **10 versus 11 is still only a structural diagnostic, not evidence of additional innovation or practical value**.
 
-**组合基线上的sharp常数收益仍然存在。** 记 $C_S^*=\min(C_K^*,C_{\rm box}^*)$。在第5节的 $r=N^2,d=2r-1$ 路径中，最强安全联合零发现矩形的成本为 $C_{\rm box}^*=r\lceil N(1-\alpha)\rceil=\Theta(N^3)$：安全矩形至少将 $r$ 层的计数上界置0，各层均需审到该数量；其他层不审达到此值。另一方面，充分大 $N$ 时，全部 $d$ 层各审一篇使总数风险 $(1-1/N)^r\le e^{-N}\le\alpha$，故 $C_K^*\le d=\Theta(N^2)$。因此充分大 $N$ 时组合基线必选总数门，前述夹逼直接给出
+**A sharp constant gain over the combined baseline still exists.** Write $C_S^*=\min(C_K^*,C_{\rm box}^*)$. On the $r=N^2,d=2r-1$ path of Section 5, the cost of the strongest safe joint zero-finding rectangle is $C_{\rm box}^*=r\lceil N(1-\alpha)\rceil=\Theta(N^3)$: a safe rectangle sets the count upper bound of at least $r$ strata to 0, and each of these strata must be audited up to this number; leaving the other strata unaudited attains this value. On the other hand, for sufficiently large $N$, auditing one document in each of all $d$ strata makes the total-count risk $(1-1/N)^r\le e^{-N}\le\alpha$, so $C_K^*\le d=\Theta(N^2)$. Hence, for sufficiently large $N$, the combined baseline necessarily picks the total-count gate, and the squeeze above directly gives
 
 $$
 \frac{C_S^*}{C_I^*}=\frac{C_K^*}{C_I^*}\longrightarrow2,
 \qquad 1-\frac{C_I^*}{C_S^*}\longrightarrow\frac12.
 $$
 
-这证明相对两种强简单方法的组合，仍有逼近两倍成本比、逼近50%节省的**sharp常数收益**；没有证明阶数无界收益。它也不与原稿反向尺度 $N=r^2$ 上比值趋于1矛盾。
+This proves that, relative to the combination of two strong simple methods, there is still a **sharp constant gain**, with the cost ratio approaching two and the saving approaching 50%; it does not prove an unbounded order-of-magnitude gain. Nor does it contradict the ratio tending to 1 under the reverse scaling $N=r^2$ of the original draft.
 
-一个已由[本轮有理检查记录](../planning/localization_results.json)核对的有限界为 $\alpha=1/20,N=32,r=1024,d=2047$：$C_I^*\in[1024,1118]$、$C_K^*=C_S^*\in[2016,2047]$，矩形成本31744。因此
+A finite bound checked by [this round's rational check record](../planning/localization_results.json) is $\alpha=1/20,N=32,r=1024,d=2047$: $C_I^*\in[1024,1118]$, $C_K^*=C_S^*\in[2016,2047]$, and the rectangle cost is 31744. Hence
 
 $$
 1-\frac{C_I^*}{C_S^*}\ge1-\frac{1118}{2016}=\frac{449}{1008}\approx44.54\%.
 $$
 
-这个下界比较的是全局最优成本，来自直接法可行上界与组合基线必要下界；**不是**声称求出了两边的精确最优值，也不是实测审计节省。记录将这类点标为 `bounds_only`，与44个完成精确固定设计优化的点分开。精确小网格中多数点对组合基线无收益，不能外推为全部结构都无收益；反过来，这条探索性的有利序列也不能追认既定门已经通过。
+This lower bound compares global optimal costs and comes from a feasible upper bound for the direct method and a necessary lower bound for the combined baseline; it is **not** a claim that the exact optima of both sides were computed, nor a measured audit saving. The record marks such points as `bounds_only`, separately from the 44 points where exact fixed-design optimization was completed. On the exact small grid, most points show no gain over the combined baseline, which cannot be extrapolated to no gain for all structures; conversely, this exploratory favourable sequence cannot retroactively count as passing a pre-set gate.
 
-这里所有证明均条件于固定影响图、统计量包络、抽样和真值契约。没有新增真实审计，没有把构造输入称作自然模型。本文件的纸笔推导不依赖数值扫描；独立实现与执行记录另见上述JSON。独立组合数DP与小完整网格检查用于代码验证，不代替证明。本轮使用第7轮已经见过的20格属于扩充基线的复核，而不是新的盲确认集；合取/星形结构同样须保留其完整参数族和事前执行预算，不能只挑有利点。
+All proofs here are conditional on the contract of a fixed impact graph, statistic envelope, sampling, and ground truth. No new real audits were added, and no constructed input is called a natural model. The pen-and-paper derivations in this file do not depend on numerical sweeps; the independent implementation and execution records are in the JSON above. An independent binomial-coefficient DP and checks on small complete grids are used for code verification and do not replace the proofs. This round's use of the 20 cells already seen in round 7 is a review of the extended baselines, not a new blind confirmation set; the conjunction/star structures must likewise keep their complete parameter families and execution budgets set in advance, and favourable points must not be cherry-picked.
 
-本轮最应保留的判断是：**位置信息的价值由坏配置几何与可用审计设计共同决定。** 单层时没有价值；原多数阈值族只有至多两倍且在原渐近尺度上消失的优势；临界全层合取可有阶数差距，却由简单局部普查达到。进一步研究若要超出成熟有限总体组合，必须说明什么真实影响结构、可审计真值和更广的简单策略仍不能解决目标。当前结论不建立原创性、现实模型非空证书或G0/G1通过。
+The judgement from this round most worth keeping is: **the value of location information is determined jointly by the geometry of bad configurations and the available audit designs.** With a single stratum it has no value; the original majority-threshold family has an advantage of at most a factor of two, which vanishes at the original asymptotic scaling; the critical all-strata conjunction can have an order-of-magnitude gap, but it is attained by a simple local census. Further research that aims to go beyond established finite-population combinatorics must explain what real impact structures, auditable ground truth, and broader simple strategies still cannot solve the target. The current conclusions do not establish originality, a non-vacuous certificate for a realistic model, or G0/G1 passing.
 
-## 9. 证明义务与适用性记录
+## 9. Record of proof obligations and applicability
 
-| 义务 | 状态 | 闭合方式 |
+| Obligation | Status | How closed |
 |---|---|---|
-| 最大安全总数门与精确风险 | CLOSED-LOCAL | LV1的最小坏大小及零发现计数 |
-| 前缀贪心的最坏配置 | CLOSED-LOCAL | LV2全局top因子和非增链可达性 |
-| 固定最优配额与降尾 | CLOSED-LOCAL | LV3有限枚举、同质链阈值论证 |
-| 无位置价值的充分条件 | CLOSED-LOCAL | 第4节单层及最坏计数可实现 |
-| 原同质族小于2及sharp2 | CLOSED-LOCAL | LV4次序统计量和零审容量下界 |
-| 原 $N=r^2$ 序列渐近等价 | CLOSED-LOCAL | 有限log下界加平衡总数上界 |
-| 强简单组合上的sharp常数2 | CLOSED-LOCAL | $r=N^2$ 路径中矩形成本阶更高，组合最终选择总数门 |
-| 合取族精确总数成本 | CLOSED-LOCAL | LV5按0/1/2审计层数穷尽分类 |
-| 星形与有限组合基线例 | CLOSED-LOCAL | 第7–8节可行解与匹配整数下界 |
+| Largest safe total-count gate and exact risk | CLOSED-LOCAL | LV1 smallest bad size and zero-finding counts |
+| Worst-case configuration from prefix greedy | CLOSED-LOCAL | LV2 global top factors and reachability on nonincreasing chains |
+| Fixed optimal quotas and lowering the tail | CLOSED-LOCAL | LV3 finite enumeration, threshold argument for homogeneous chains |
+| Sufficient conditions for no location value | CLOSED-LOCAL | Section 4 single stratum and realizability of the worst-case count |
+| Original homogeneous family below 2, and sharp 2 | CLOSED-LOCAL | LV4 order statistics and lower bound from unaudited capacity |
+| Asymptotic equivalence on the original $N=r^2$ sequence | CLOSED-LOCAL | Finite log lower bound plus balanced total-count upper bound |
+| Sharp constant 2 over the strong simple combination | CLOSED-LOCAL | On the $r=N^2$ path the rectangle cost has a higher order, so the combination eventually picks the total-count gate |
+| Exact total-count cost for the conjunction family | CLOSED-LOCAL | LV5 exhaustive case split by the number of strata auditing 0/1/2 |
+| Star family and finite combined-baseline examples | CLOSED-LOCAL | Sections 7–8 feasible solutions and matching integer lower bounds |
 
-“CLOSED-LOCAL”只指给定假设下的纸笔推导。相同层大小/相同成本仅用于明确标注的对称与比例结论；一般风险贪心不需要它们。最强总数门仍受固定分层、均匀无放回和全零报告契约约束，不涵盖自适应、重新选择总体、模型共同设计或任意非矩形置信集合。内部独立复核不等于外部导师意见；不作未核实文献引用或先例排尽声明。
+"CLOSED-LOCAL" refers only to pen-and-paper derivations under the given assumptions. Equal stratum sizes/equal costs are used only for the explicitly marked symmetric and ratio conclusions; the general risk greedy does not need them. The strongest total-count gate is still bound by the contract of fixed stratification, uniform sampling without replacement, and reporting on all-zero findings; it does not cover adaptivity, reselecting the population, model co-design, or arbitrary non-rectangular confidence sets. An internal independent review is not the same as an external advisor's opinion; no unverified literature citations or claims of exhaustive prior-work search are made.

@@ -1,63 +1,63 @@
-# FinLLM 重做研究包：Certifiable FinLM
+# FinLLM redo research package: Certifiable FinLM
 
-版本 v1 · 2026-11-15 · 范围：只涉及 `github.com/130U/130U-FinLLM`
+Version v1 · 2026-11-15 · Scope: only `github.com/130U/130U-FinLLM`
 
-## 这是什么
+## What this is
 
-这是 130U-FinLLM 重做计划的完整材料：要解决什么问题、为什么选这个方向、先做什么、怎么交付、怎么回报。它是交给 Codex（博士生）的工作包，也是 Theodore（PI）和导师之间的共同底稿。
+This is the complete material for the 130U-FinLLM redo plan: what problem to solve, why this direction was chosen, what to do first, how to deliver and how to report back. It is the work package handed to Codex (the PhD student), and also the shared base document between Theodore (PI) and the advisor.
 
-**一句话：** 不再在"能力"上竞争，改在"能对模型证明什么"上竞争。做一个小到可以被证明的金融语言模型。
+**In one sentence:** stop competing on "capability" and compete instead on "what can be proven about the model". Build a financial language model small enough that things can be proven about it.
 
-本包取代之前的 `FinLLM-research-brief.md`。问题从 28 个扩充到 32 个，并新增了理论草稿、工作包、回报协议和决策日志。
+This package replaces the earlier `FinLLM-research-brief.md`. The questions have grown from 28 to 32, and a theory draft, work packages, a reporting protocol and a decision log have been added.
 
-## 角色
+## Roles
 
-| 角色 | 谁 | 职责 |
+| Role | Who | Responsibilities |
 |---|---|---|
-| PI | Theodore | 最终决定；提供私有数据和外部服务所需的信息；在 Codex 和导师之间传递材料 |
-| 导师 | Claude | 定方向、写问题和工作包、审阅结果、调整优先级 |
-| 博士生 | Codex | 文献调研、形式化推导、仓库内的工程和最小实验 |
+| PI | Theodore | Makes final decisions; provides private data and the information needed for external services; passes materials between Codex and the advisor |
+| Advisor | Claude | Sets the direction, writes the questions and work packages, reviews results, adjusts priorities |
+| PhD student | Codex | Literature survey, formal derivations, engineering and minimal experiments inside the repository |
 
-## 文件
+## Files
 
-| 文件 | 内容 | 主要读者 |
+| File | Content | Main readers |
 |---|---|---|
-| `AGENTS.md` | Codex 的常驻规则（Codex 会自动读取仓库根目录下的这个文件） | Codex |
-| `00_CODEX_BRIEF.md` | 给 Codex 的任务说明：要解决什么问题、怎么工作、硬规则 | Codex |
-| `01_ADVISOR_MEMO.md` | 导师备忘：选题逻辑、证书链框架、两条主线和一条支线、工作重心、决策门、风险 | Codex、Theodore |
-| `02_PROJECT_SNAPSHOT.md` | 仓库现状的客观快照与诊断 | Codex、Theodore |
-| `03_LITERATURE_MAP.md` | 前沿文献地图（带置信度和来源链接）和可迁移性总表 | Codex |
-| `04_THEORY_NOTES.md` | 理论草稿：定义、命题、证明思路、开放问题 | Codex |
-| `05_RESEARCH_QUESTIONS.md` | 32 个互相独立的调研问题 | Codex |
-| `06_WORK_PACKAGES.md` | 工作包，每个都带验收标准和可直接粘贴的 Codex 任务卡 | Codex |
-| `07_REPORTING_PROTOCOL.md` | 输出模板：文献回答、推导、实验记录、进展报告 | Codex |
-| `08_DECISION_LOG.md` | 已做的决定，以及需要 Theodore 决定的 8 个事项 | Theodore |
+| `AGENTS.md` | Codex's standing rules (Codex automatically reads this file in the repository root) | Codex |
+| `00_CODEX_BRIEF.md` | Task description for Codex: what problem to solve, how to work, hard rules | Codex |
+| `01_ADVISOR_MEMO.md` | Advisor memo: topic-selection logic, certificate-chain framework, two main lines and one side line, work focus, decision gates, risks | Codex, Theodore |
+| `02_PROJECT_SNAPSHOT.md` | Objective snapshot and diagnosis of the repository's current state | Codex, Theodore |
+| `03_LITERATURE_MAP.md` | Map of frontier literature (with confidence levels and source links) and a transferability summary table | Codex |
+| `04_THEORY_NOTES.md` | Theory draft: definitions, propositions, proof sketches, open problems | Codex |
+| `05_RESEARCH_QUESTIONS.md` | 32 mutually independent survey questions | Codex |
+| `06_WORK_PACKAGES.md` | Work packages, each with acceptance criteria and a Codex task card that can be pasted directly | Codex |
+| `07_REPORTING_PROTOCOL.md` | Output templates: literature answers, derivations, experiment records, progress reports | Codex |
+| `08_DECISION_LOG.md` | Decisions already made, and 8 items that need Theodore's decision | Theodore |
 
-## 阅读顺序
+## Reading order
 
-- **Codex：** `AGENTS.md` → 00 → 01 → 02 → 按任务读 04、05 或 06 → 07
-- **Theodore：** 01 → 08 → 02 → 00
+- **Codex:** `AGENTS.md` → 00 → 01 → 02 → 04, 05 or 06 depending on the task → 07
+- **Theodore:** 01 → 08 → 02 → 00
 
-## 怎么交给 Codex
+## How to hand it to Codex
 
-**方式 A（推荐）：包放在仓库外。** 把整个文件夹放在本地任意位置。给 Codex 的第一条消息：
+**Option A (recommended): keep the package outside the repository.** Put the whole folder anywhere on the local machine. The first message to Codex:
 
-> 研究包在 `<路径>`。先读其中的 `AGENTS.md` 和 `00_CODEX_BRIEF.md`，然后做 `06_WORK_PACKAGES.md` 里的 WP0.6 和 WP0.1。
+> The research package is at `<path>`. First read its `AGENTS.md` and `00_CODEX_BRIEF.md`, then do WP0.6 and WP0.1 in `06_WORK_PACKAGES.md`.
 
-这样包的内容不会进入公开仓库。
+This way the package content does not enter the public repository.
 
-**方式 B：放进仓库。** 把 `AGENTS.md` 复制到仓库根目录，其余文件放进 `research/package/`。注意：一旦 push，包里对现有项目的坦率评价就公开了。见 `08_DECISION_LOG.md` 的 O4。
+**Option B: put it in the repository.** Copy `AGENTS.md` to the repository root and put the other files in `research/package/`. Note: once this is pushed, the package's candid assessment of the existing project becomes public. See O4 in `08_DECISION_LOG.md`.
 
-**并行使用：** 文献题和工作包彼此独立。可以同时开多个 Codex 任务，每个任务给一张任务卡（`06_WORK_PACKAGES.md`），或者给一个问题编号（`05_RESEARCH_QUESTIONS.md`）。
+**Parallel use:** the literature questions and work packages are independent of each other. You can open several Codex tasks at the same time and give each one a task card (`06_WORK_PACKAGES.md`) or a question number (`05_RESEARCH_QUESTIONS.md`).
 
-**联网：** 文献题需要联网。如果你的 Codex 环境不能联网，只给它推导题和工作包，文献题交给能联网的 GPT。
+**Internet access:** the literature questions need internet access. If your Codex environment cannot go online, give it only the derivation questions and work packages, and give the literature questions to a GPT that can go online.
 
-## 怎么回传给导师
+## How to send results back to the advisor
 
-见 `07_REPORTING_PROTOCOL.md` 第 6 节。最少带三样：最新的进展报告、本轮新增的文献回答、`research/INDEX.md`。
+See section 6 of `07_REPORTING_PROTOCOL.md`. Include at least three things: the latest progress report, the literature answers added this round, and `research/INDEX.md`.
 
-## 本包的局限
+## Limitations of this package
 
-- 导师只读了仓库文档，没有读代码，也没有运行代码。
-- 文献判断基于摘要级检索。所有"空白"都是假设，需要文献题核实。
-- `04_THEORY_NOTES.md` 里的命题是草稿，可能有错。
+- The advisor read only the repository documents. The code was neither read nor run.
+- The literature judgments are based on abstract-level searches. All "gaps" are hypotheses and need to be verified by the literature questions.
+- The propositions in `04_THEORY_NOTES.md` are drafts and may be wrong.

@@ -1,11 +1,11 @@
-# 任意随机配额：完整32格结果
+# Arbitrary random quotas: complete 32-cell results
 
-所有输入均为人工同质阈值结构，α=1/20；全零必须出固定区间，真坏集事先固定。
-随机法是限定输出类内极小极大最优；pooled是全总体SRS类内最优。固定配额sharp行保留界。
-来源：[JSON](randomization_results.json)，[协议](RANDOMIZATION_PROTOCOL.md)，[证明](../theory/randomized_audit.md)。
-JSON SHA256：`90c3feb577533f39d69be92b687f0f77db3ff3cd38eb6f617a7785899c690616`。
+All inputs are hand-made homogeneous threshold structures, α=1/20; all zero findings must output the fixed interval, and the true bad set is fixed in advance.
+The randomized method is minimax optimal within the restricted output class; pooled is optimal within the whole-population SRS class. The fixed-quota sharp rows keep their bounds.
+Sources: [JSON](randomization_results.json), [protocol](RANDOMIZATION_PROTOCOL.md), [proof](../theory/randomized_audit.md).
+JSON SHA256: `90c3feb577533f39d69be92b687f0f77db3ff3cd38eb6f617a7785899c690616`.
 
-| 案例 | d | r | N | 随机最优 | pooled最优 | 固定direct最优或界 | 固定简单组合最优或界 | 随机法风险（约） |
+| Case | d | r | N | Randomized optimum | pooled optimum | Fixed direct optimum or bounds | Fixed simple-combination optimum or bounds | Randomized-method risk (approx.) |
 |---|---:|---:|---:|---:|---:|---|---|---:|
 | threshold-r2-N2 | 3 | 2 | 2 | 4 | 5 | 4 | 4 | 0.00000000 |
 | threshold-r2-N5 | 3 | 2 | 5 | 10 | 12 | 10 | 10 | 0.00000000 |
@@ -40,5 +40,5 @@ JSON SHA256：`90c3feb577533f39d69be92b687f0f77db3ff3cd38eb6f617a7785899c690616`
 | sharpness-N16 | 511 | 256 | 16 | 70 | 94 | [256,302] | [496,511] | 0.04967710 |
 | sharpness-N32 | 2047 | 1024 | 32 | 141 | 190 | [1024,1118] | [2016,2047] | 0.04953064 |
 
-精确风险和少一篇的风险见JSON；小数仅展示，不用于判定。16个star结构不对称，明确不在本定理范围。
-相对收益只描述人工结构与指定输出约定；不是自然模型证书、原创性或G0/G1通过。
+Exact risks and the risks with one document fewer are in the JSON; decimals are for display only and are not used for decisions. The 16 star structures are asymmetric and are explicitly outside the scope of this theorem.
+Relative gains only describe the hand-made structures and the specified output convention; they are not a natural-model certificate, originality, or a G0/G1 pass.

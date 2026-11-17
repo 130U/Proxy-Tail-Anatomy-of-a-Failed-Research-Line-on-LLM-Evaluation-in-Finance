@@ -1,39 +1,39 @@
-# Fable 决策短笺：什么值得继续，什么仍可能是 toy
+# Decision note for Fable: what is worth continuing, and what may still be a toy
 
-2026-11-16，第七轮。本文件供用户转交；尚未送达 Fable，也没有收到 Fable 意见。内部 AI 反方审查不能代替导师决定。
+2026-11-16, round seven. This file is for the user to pass on; it has not yet reached Fable, and no comments from Fable have been received. The internal AI adversarial review cannot replace the advisor's decision.
 
-**当前最值得审的是一个窄的数学问题：给定可信的文档影响结构，认证固定统计量需要多少审计信息？但我们尚未证明它有论文级原创性，也没有证明它必须从零训练语言模型。** 新的[英文技术稿](manuscript.md)把条件、证明、完整构造结果和最强简单替代放在一起；[PDF](output/pdf/audit_budgets_working_report.pdf)供阅读，[独立审查](../reports/paper_review.md)供反驳。它不是完成稿或投稿稿。
+**What most deserves review now is one narrow mathematical question: given a trusted document-influence structure, how much audit information is needed to certify a fixed statistic? But we have not proven that it has paper-level originality, nor that it requires training a language model from scratch.** The new [English technical manuscript](manuscript.md) puts the conditions, proofs, complete construction results and the strongest simple alternatives together; the [PDF](output/pdf/audit_budgets_working_report.pdf) is for reading, and the [independent review](../reports/paper_review.md) is for rebuttal. It is not a finished manuscript or a submission.
 
-## 五条路径的现状
+## Status of the five paths
 
-| 路径 | 可以成立的窄对象 | 最关键的否决对照或缺口 | 当前建议 |
+| Path | Narrow object that can hold | Most critical rejecting control or gap | Current recommendation |
 |---|---|---|---|
-| [01 信息集证书](../paths/PATH_01_audited_information_set.md) | 固定删除比较器的统计量包络 | 历史字节、选择规则与可信共享核心没有被证明 | 保留应用目标，先拆清来源前提 |
-| [03 审计设计](../paths/PATH_03_audit_design_frontier.md) | 固定抽样类内的精确风险与成本 | 一般非矩形计数证书可复现直接法；现有主例甚至可由简单总数门达到 | 作为01的数学子题继续缩窄，不视为独立旗舰 |
-| [02 数值敏感度](../paths/PATH_02_numeric_sensitivity.md) | 给定语义候选后的单位不变、方向与宽度 | sign(x−b)的标签用规则就能解；自然语义覆盖没有金标 | 优先检验任务是否需要学习，再决定架构 |
-| [04 依赖稳健风险](../paths/PATH_04_dependence_robust_risk.md) | 给定真实边际及依赖集合的条件风险界 | 校准不能识别逐点真实概率，依赖假设未建立 | 支撑组件，暂不扩成旗舰 |
-| [05 可验证数值程序](../paths/PATH_05_proof_carrying_numeric_reasoning.md) | 检查计算轨迹及候选输出包络 | 执行正确不保证语义正确，规则程序是必须保留的对照 | 作为02的验证工具探索 |
+| [01 Information-set certificate](../paths/PATH_01_audited_information_set.md) | Statistic envelope for a fixed deletion comparator | Historical bytes, selection rules and a trusted shared core have not been proven | Keep the application goal; first separate out the provenance premises |
+| [03 Audit design](../paths/PATH_03_audit_design_frontier.md) | Exact risk and cost within a fixed sampling class | A general non-rectangular count certificate can reproduce the direct method; the current main example can even be reached by a simple total-count gate | Continue narrowing it as a mathematical sub-question of 01; do not treat it as an independent flagship |
+| [02 Numeric sensitivity](../paths/PATH_02_numeric_sensitivity.md) | Unit invariance, direction and width given semantic candidates | The labels of sign(x−b) can be solved by a rule; natural semantic coverage has no gold standard | First test whether the task needs learning, then decide the architecture |
+| [04 Dependence-robust risk](../paths/PATH_04_dependence_robust_risk.md) | Conditional risk bound given true marginals and a dependence set | Calibration cannot identify true pointwise probabilities; the dependence assumption is not established | Supporting component; do not expand into a flagship for now |
+| [05 Verifiable numeric programs](../paths/PATH_05_proof_carrying_numeric_reasoning.md) | Checking computation traces and candidate output envelopes | Correct execution does not guarantee semantic correctness; a rule program is a control that must be kept | Explore as a verification tool for 02 |
 
-原五份深度报告保留。[比较稿](../paths/COMPARATIVE_ANALYSIS.md)记录完整理由、计算预算和否决门；本表没有把五份报告冒充五个独立研究家族，也没有替您作G1选择。
+The original five in-depth reports are kept. The [comparison document](../paths/COMPARATIVE_ANALYSIS.md) records the full reasoning, compute budgets and rejection gates; this table does not pass off the five reports as five independent research families, and does not make the G1 choice for you.
 
-## 这次同行讨论改变了什么
+## What this peer discussion changed
 
-第一，矩形对照的最强风险是各越界层漏检概率的**最大值**，不是Bonferroni之和。此前已修正；本稿继续使用更强对照。
+First, the strongest risk for the rectangle control is the **maximum** of the miss probabilities of the out-of-bound strata, not the Bonferroni sum. This was corrected earlier; this manuscript keeps using the stronger control.
 
-第二，只在全零发现时给出的安全非矩形计数区域，可以完整复现直接针对统计量的风险。因此“直接法优于先给任何计数置信集合”是错误表述。已有定理隔离的是**单一矩形中间承诺**的代价。
+Second, a safe non-rectangular count region that is issued only when all findings are zero can fully reproduce the risk of the method aimed directly at the statistic. So "the direct method beats first giving any count confidence set" is a wrong statement. What the existing theorem isolates is the cost of **a single rectangular intermediate commitment**.
 
-第三，阈值族均衡审计下，简单的总污染数K≤r−1门也达到同一风险。因此88篇对114篇和渐近Ω(r)分离，都不足以证明文档位置建模不可替代。
+Third, under the threshold-family balanced audit, the simple total-contamination-count gate K≤r−1 also reaches the same risk. So neither 88 versus 114 documents nor the asymptotic Ω(r) separation is enough to prove that modelling document positions is irreplaceable.
 
-第四，位置仍可能有用，但要另行证明。审查后推得的小例为三层、每层20篇、两层受影响才坏、α=.05：直接法最优38；只认证K≤1的固定分层总数门最优48。下界来自任一层放两篇污染的漏检概率，48的达到由每层审16篇验证。这个例子是探索性的数学比较，不是预注册实验成功，不解决先例或真实相关性。
+Fourth, positions may still be useful, but this must be proven separately. A small example derived after the review: three strata, 20 documents per stratum, failure only if two strata are affected, α=.05: the direct method's optimum is 38; the fixed-stratification total-count gate that only certifies K≤1 has optimum 48. The lower bound comes from the miss probability of putting two contaminated documents in any one stratum, and attaining 48 is verified by auditing 16 documents per stratum. This example is an exploratory mathematical comparison, not a pre-registered experimental success, and it does not settle prior work or real-world relevance.
 
-完整20格中位节省仍为0，原全族20%投入门没有通过。我们没有用新增例子覆盖这一负结果。
+The median saving over the complete 20 cells is still 0, and the original whole-family 20% investment gate was not passed. We have not used the new example to cover up this negative result.
 
-## 请优先给三个判断
+## Please give three judgments first
 
-1. **贡献是否足够？** 上述窄问题是否只是标准复合检验、分片投毒证书和审计设计的组合？若是，请指出继续投入必须补出的最小结果，例如超越最强总数门的结构性定理、有效计算的紧下界，或有真实意义的影响结构。若没有这样的差异，建议终止将其作为旗舰。
-2. **从零训练门如何处理？** 当前审计与数值证明都不要求从零训练LM。是否坚持原硬门并淘汰这些旗舰候选，还是正式修订为“假设可控制且简单方法不可替代”？我们未擅自改写这个标准。
-3. **下一项应当证明什么？** 01/03若继续，应先固定能够否决方法的强基线和目标类；02/05若继续，应先给出具有外生方向依据、规则不能直接解出的文本任务。请指定一个窄目标及停止条件，避免继续堆组件。
+1. **Is the contribution sufficient?** Is the narrow question above just a combination of standard composite testing, shard-poisoning certificates and audit design? If so, please name the minimum result that further investment would have to supply, for example a structural theorem that beats the strongest total-count gate, a tight lower bound for efficient computation, or an influence structure with real meaning. Without such a difference, we suggest ending it as a flagship.
+2. **How should the train-from-scratch gate be handled?** Neither the current audit nor the numeric proofs require training an LM from scratch. Should the original hard gate be kept and these flagship candidates eliminated, or should it be formally revised to "assumptions controllable and simple methods irreplaceable"? We have not rewritten this criterion on our own.
+3. **What should the next item prove?** If 01/03 continue, first fix strong baselines and a target class that can reject the method; if 02/05 continue, first give a text task with an exogenous basis for direction that rules cannot solve directly. Please specify one narrow target and a stopping condition, to avoid piling on more components.
 
-真实来源任务已经从头训练word/char TF-IDF，macro-F1约0.7920/0.7548。它说明简单基线很强，不能证明语言预训练必要。原旧24M逐行证据无法恢复，FinBERT/小LLM同任务对照缺失，G0/G1仍未通过。源日期声明、非干扰代码、数学可测性和历史来源证据分别承担不同义务，不能互相替代。
+The real-source task has trained word/char TF-IDF from scratch, with macro-F1 about 0.7920/0.7548. This shows that simple baselines are strong; it cannot prove that language pretraining is necessary. The old 24M row-level evidence cannot be recovered, same-task FinBERT/small-LLM controls are missing, and G0/G1 are still not passed. Source-date declarations, non-interference code, mathematical measurability and historical provenance evidence each carry different obligations and cannot substitute for one another.
 
-用户要求保持本地研究。本轮没有下载、抓取、发送或公开发布；涉及新颖性的判断只到现有本地证据，未补成完整文献核验。
+The user asked to keep the research local. This round did no downloading, scraping, sending or public release; judgments about novelty go only as far as the existing local evidence and have not been completed into a full literature check.

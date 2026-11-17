@@ -1,42 +1,42 @@
-# T3：设计与解释边界
+# T3: design and limits of interpretation
 
-2026-11-16。独立设计分析；未生成新评分、未运行拟合。以下数学判断由任务公式直接推得，不是文献查重结论，也不能单独证明题目重复。
+2026-11-16. Independent design analysis; no new scores generated, no fits run. The mathematical judgements below follow directly from the task's formulas; they are not conclusions of a literature prior-art check, and cannot on their own prove that the topic is a duplicate.
 
-## 目前能回答什么
+## What can be answered at present
 
-T3 可以检验**固定提示和 0–100 输出量表上的组合规律**。它不能单凭某个公式拟合更好，证明模型内部采用该心理整合机制，也不能证明金融判断更正确或交易上可获利。单条分数经非线性单调变换后，排序仍不变，相加／平均关系却通常改变；固定锚点有助于稳定尺度，但不是等距尺度的证明。这是对 [任务第 19–31 行](../../tasks/T3_combination.md) 的数学解释。
+T3 can test **the combination rule on a fixed prompt and a 0–100 output scale**. A better fit of some formula alone cannot prove that the model internally uses that psychological integration mechanism, nor that its financial judgements are more correct or profitable in trading. After a nonlinear monotone transformation of the single scores the ranking is unchanged, but the additive/average relation usually changes; fixed anchors help stabilise the scale, but they are not proof of an interval scale. This is a mathematical interpretation of [lines 19–31 of the task](../../tasks/T3_combination.md).
 
-## 证据与推论记录
+## Record of evidence and inferences
 
-| 编号 | 已读依据或直接推论 | 对 T3 的影响 |
+| No. | Basis read or direct inference | Effect on T3 |
 |---|---|---|
-| D1 | [T3 第 9–15 行](../../tasks/T3_combination.md)：30 条原子、100+45+45+200 对、两种顺序。 | 共 390 个无序组合、780 个有序标题。每个原子反复出现；组合不是 390 个独立抽取的事实。200 个中性组合按数量应解释为 20 条有方向事实 × 10 条中性事实，不包括中性＋中性。 |
-| D2 | [T3 第 21–23 行](../../tasks/T3_combination.md) 只说明负面权重乘 λ，没有给分母。 | 归一化加权平均与不归一化负项放大是两个不同模型，λ 不可混用。 |
-| D3 | 由相加公式：加入中性 N 后的未截断变化为 d(N)；只有 d(N)=0 才严格预测“不变”。 | 必须代入中性标题的实际八次均分，不能因为设计标签叫中性就把其基准强制改成 50。 |
-| D4 | 对 0≤w≤1，平均必在两个输入分数之间；同向相加在未截断时比两条单独分数更极端。 | 同向组合是有效的第二条辨别证据；应单列饱和比例，避免端点截断掩盖差别。 |
-| D5 | [前轮一页结论第 15–17 行](../absolute_scoring/FABLE_ONE_PAGE.md) 报告重测相关 0.9748，同时存在同批与异批相关差。 | 0.9748 是另一批标题、另一任务上的实测，不能当 T3 的已知信度；新会话与重复也不能保证误差独立。 |
-| D6 | 原子基准来自有限八次评分，而同一估计被用于很多组合。 | λ 区间和拟合误差需传播基准不确定性；把单条均分当无误差真值会低估不确定性。 |
+| D1 | [T3 lines 9–15](../../tasks/T3_combination.md): 30 atoms, 100+45+45+200 pairs, two orders. | 390 unordered combinations and 780 ordered headlines in total. Each atom appears repeatedly; the combinations are not 390 independently drawn facts. By count, the 200 neutral combinations should be read as 20 directional facts × 10 neutral facts, excluding neutral + neutral. |
+| D2 | [T3 lines 21–23](../../tasks/T3_combination.md) only say that negative weights are multiplied by λ, and give no denominator. | A normalised weighted average and an unnormalised amplification of negative terms are two different models; their λ cannot be used interchangeably. |
+| D3 | From the additive formula: after adding a neutral N, the untruncated change is d(N); only d(N)=0 strictly predicts "no change". | The actual eight-run mean score of the neutral headline must be plugged in; its baseline cannot be forced to 50 just because the design label calls it neutral. |
+| D4 | For 0≤w≤1, an average must lie between the two input scores; same-direction addition, when not truncated, is more extreme than either single score. | Same-direction combinations are a valid second piece of discriminating evidence; the saturation fraction should be listed separately so that endpoint truncation does not hide the difference. |
+| D5 | [Lines 15–17 of the previous round's one-page summary](../absolute_scoring/FABLE_ONE_PAGE.md) report a retest correlation of 0.9748, together with a difference between same-batch and cross-batch correlations. | 0.9748 was measured on a different batch of headlines and a different task, and cannot be taken as T3's known reliability; new sessions and repetition also cannot guarantee independent errors. |
+| D6 | Atom baselines come from a limited eight scorings, while the same estimate is used in many combinations. | The λ interval and the fit errors need to propagate baseline uncertainty; treating single-item means as error-free true values would underestimate uncertainty. |
 
-## 若文献门通过，最少要先冻结的口径
+## Minimum conventions to freeze first if the literature gate is passed
 
-1. **明确三个函数和顺序参数。** 相加按原题截断；平均令 w 为第一条的位置权重，范围 [0,1]。一个可用的归一化不对称模型是
+1. **Specify the three functions and the order parameter.** Addition is truncated as in the original task; averaging lets w be the position weight of the first item, in the range [0,1]. One usable normalised asymmetric model is
 
-   f(A,B) = [w r(A)d(A) + (1−w)r(B)d(B)] / [w r(A)+(1−w)r(B)]，r(i)=λ 若 i 为预先指定负面事实，否则为 1，λ>0。
+   f(A,B) = [w r(A)d(A) + (1−w)r(B)d(B)] / [w r(A)+(1−w)r(B)], r(i)=λ if i is a pre-specified negative fact, otherwise 1, λ>0.
 
-   λ=1 回到平均模型；w=1/2 表示无位置偏好。负面类别在评分前确定，避免把轻微偏离 50 的中性标题临时归为负面。若预设极性与实测基准不符，保留并报告，不能按结果换题。此 λ 衡量的是**相对单条基准的额外合并权重**，不是模型全部负面偏向；单条负面分数已经包含一次价值判断。同向负＋负时 λ 在分子分母中消去，不能用这一子组独立估 λ。
+   λ=1 gives back the average model; w=1/2 means no position preference. The negative category is fixed before scoring, to avoid ad hoc reclassification of neutral headlines that deviate slightly from 50 as negative. If the pre-specified polarity disagrees with the measured baseline, keep it and report it; items cannot be swapped based on results. This λ measures **the extra combination weight relative to the single-item baseline**, not the model's whole negativity bias; the single negative score already contains one value judgement. For same-direction negative + negative, λ cancels between numerator and denominator, so this subgroup cannot be used to estimate λ independently.
 
-2. **连接词固定。** 主实验用分号；若测试 `as`，另列为语言条件。`as` 可以暗示时间或因果关系，两条事实的意义可能随组合改变，不能把全部差异都算作权重或顺序效应。文本避免事实互相解释、抵消、蕴含或重复；中性事实应对同一实体无方向，而且不改变另一事实的解释。
+2. **Fix the connective.** The main experiment uses a semicolon; if `as` is tested, list it separately as a linguistic condition. `as` can imply a temporal or causal relation, and the meaning of the two facts may change with the combination, so not all differences can be counted as weight or order effects. The texts avoid facts that explain, offset, entail or repeat each other; neutral facts should have no direction for the same entity and should not change the interpretation of the other fact.
 
-3. **比较预测能力，不只看训练残差。** 允许调 w、λ 的模型天然更灵活。至少把同一无序对的两个顺序放在同一折，按组合留出比较 RMSE，并同时报告各类别残差。此留出只检验这 30 个已知原子的未见组合；若要宣称可推广到新事实，需要按原子留出，不能混称。顺序效应用同一对的 A;B 与 B;A 配对差直接报告，可与拟合参数互相核对。
+3. **Compare predictive ability, not just training residuals.** Models that can tune w and λ are naturally more flexible. At minimum, put both orders of the same unordered pair in the same fold, compare RMSE with combinations held out, and report residuals by category as well. This hold-out only tests unseen combinations of these 30 known atoms; to claim generalisation to new facts requires holding out by atom, and the two must not be conflated. Report the order effect directly as the paired difference between A;B and B;A for the same pair, which can be cross-checked against the fitted parameters.
 
-4. **区间范围说清楚。** 不对 390 对做独立样本 bootstrap。最小结论可以限定为“这 30 条固定事实的重复评分表现”，在重采样评分时传播原子基准和组合分数的不确定性，并保留共享调用造成的依赖。若要推广到事实总体，应采用尊重两个原子成员的聚类／重采样方法；30 条手工选择事实本身仍不是总体随机样本。不要用大量组合数夸大有效样本量。
+4. **State the scope of the intervals clearly.** Do not bootstrap the 390 pairs as independent samples. The minimal conclusion can be limited to "the repeated-scoring behaviour of these 30 fixed facts", propagating the uncertainty of atom baselines and combination scores when resampling scores, and keeping the dependence created by shared calls. To generalise to a population of facts, use a clustering/resampling method that respects the two atom members; the 30 hand-picked facts are still not a random sample of the population. Do not use the large number of combinations to inflate the effective sample size.
 
-5. **先规定‘明显’。** 题目给了方向性判定，但未给“平均明显胜出”或“清晰顺序效应”的数值界限。评分前选择实际分数单位的最小效应和预测误差差值，并报告点估计与区间。λ 的区间排除 1 说明统计分离，不自动说明可利用的经济风险；边界附近如实报告数字，不能沿用旧任务的并列门临时制造新“无法判断”。
+5. **Define "clear" first.** The task gives directional decisions but no numeric thresholds for "averaging clearly wins" or "a clear order effect". Before scoring, choose the minimum effect in actual score units and the difference in prediction error, and report point estimates and intervals. A λ interval excluding 1 indicates statistical separation, and does not automatically indicate an exploitable economic risk; near the boundary, report the numbers as they are, and do not borrow the old task's tie gate to create a new "inconclusive" ad hoc.
 
-## 继续或停止的依据
+## Grounds for continuing or stopping
 
-**设计上有理由做一个小型筛查：** 中性组合与同向组合给出相加／平均的不同可观测预测，两种顺序与全交叉强弱组合有助于区分位置偏好和负面权重。当前设计缺口可用以上少量冻结口径修补，不构成自动停止理由。
+**On design grounds there is reason to run a small screen:** neutral combinations and same-direction combinations give different observable predictions for addition vs averaging, and the two orders together with the full crossing of strong and weak combinations help separate position preference from negative weight. The current design gaps can be patched with the small number of frozen conventions above and are not an automatic reason to stop.
 
-**新颖性上仍要独立过文献门：** 同样的理论、负面偏向或顺序效应的邻近研究，不等于已经重复这套测量；反过来，把旧测量换成金融词汇也未必产生研究贡献。是否已有同问题、同测量，应由原始文献逐项比较决定。本说明不替代该判断。
+**On novelty it must still pass the literature gate independently:** nearby studies of the same theory, negativity bias or order effects do not mean this measurement has already been replicated; conversely, swapping an old measurement into financial vocabulary does not necessarily produce a research contribution. Whether the same question and the same measurement already exist should be decided by item-by-item comparison with the primary literature. This note does not replace that judgement.
 
-**解释须收窄：** 平均胜出最多先支持“此评分协议的输出被中性文字稀释”。长度带来的响应压缩、语言语境改变和输出量表非线性仍是竞争解释。仅此不能声称发现模型内部平均机制或已证实公告操纵漏洞。
+**The interpretation must be narrowed:** averaging winning would at most first support "the outputs of this scoring protocol are diluted by neutral text". Response compression due to length, changes in linguistic context and nonlinearity of the output scale remain competing explanations. This alone cannot be used to claim the discovery of an internal averaging mechanism in the model or a confirmed loophole for announcement manipulation.

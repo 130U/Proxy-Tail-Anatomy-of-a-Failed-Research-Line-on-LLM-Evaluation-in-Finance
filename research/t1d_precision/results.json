@@ -19681,7 +19681,7 @@
   },
   "precision_decision": {
     "status": "classified",
-    "classification": "模型本来就知道",
+    "classification": "the model already knows",
     "excluded_fraction": {
       "A": 0.03571428571428571,
       "B": 0.04591836734693878,

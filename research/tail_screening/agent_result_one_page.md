@@ -1,17 +1,17 @@
-# 在当前 Codex 内完成的 agent 尾部筛选试跑
+# Agent tail-screening trial run completed within the current Codex
 
-致 Fable · 2026-11-16 · 接续第二版研究方向
+To Fable · 2026-11-16 · Continuing the second-version research direction
 
-**结论：agent 试验已实际执行；当前长列表分组排序法未通过扩大条件。** 两档模型 Luna / Sol、两种输入顺序、两轮提示，共运行 8 个隔离评分 agent，原始输出全部保存。使用本地 SEntFiN 测试划分，固定抽取 128 个不同词法族、各一条实体—标题样本；输入隐藏人工标签、旧预测和研究预期。全部通过当前会话运行，没有接入用户 API key、充值或训练模型。
+**Conclusion: the agent trial was actually run; the current long-list grouped ranking method failed the scale-up conditions.** Two model tiers Luna / Sol, two input orders and two prompt rounds gave 8 isolated scoring agents in total, and all raw outputs were saved. Using the local SEntFiN test split, 128 distinct lexical families were drawn with a fixed rule, one entity–headline sample each; the input hid human labels, old predictions and research expectations. Everything ran through the current session, with no user API key, no top-up and no model training.
 
-第一轮提示错误地以“股东财务利好”评价所有实体，而数据包括监管机构、货币、地点和消息来源机构。Sol 两次分别有 20、2 条不可排序。修正为目标实体的金融文本情绪后，四个新输出都完整覆盖 128 条；此修正使用同一批开发样本，不能称为独立验证。
+The first-round prompt wrongly evaluated every entity by "financially favorable to shareholders", while the data include regulators, currencies, places and institutions that are news sources. Sol's two runs had 20 and 2 unrankable items respectively. After the correction to target-entity financial text sentiment, all four new outputs covered the 128 items completely; this correction used the same development sample, so it cannot be called independent validation.
 
-**真正的问题出现在同模型重复。** 修正后的 Sol 两次总体秩相关为 **0.925**，最负面的名义 10% 名单却分别有 **12、14 条，仅重合 1 条**；正面端两份各 12 条、重合 11 条。Luna 两次只产生 **11、9 个不同等级**，名义 10% 的正面名单因同分扩至 25、14 条，负面扩至 26、29 条。因此，当前测量的分辨率和重复稳定性都不足；不能将这些波动归因于模型档位，也不能只归因于输入位置。
+**The real problem appears in the same-model repeat.** After the correction, Sol's two runs have an overall rank correlation of **0.925**, yet the most negative nominal 10% lists have **12 and 14 items, overlapping in only 1**; at the positive tail, the two lists have 12 items each and overlap in 11. Luna's two runs produced only **11 and 9 distinct levels**, and because of ties the nominal 10% positive lists expanded to 25 and 14 items and the negative lists to 26 and 29. So the current measurement has insufficient resolution and repeat stability; these fluctuations cannot be attributed to the model tier, nor only to input position.
 
-![双模型加宽曲线及同模型重复对照](agent_widening_v2.png)
+![Two-model widening curves with same-model repeat comparison](agent_widening_v2.png)
 
-在 90% 召回目标下，四个跨模型组合的名义 10% 加宽倍数范围为正面端 **1.72–2.97**、负面端 **2.03–6.64**。同分边界全部保留，分母使用名义 p，实际名单大小另行报告。图中范围表示本次换序及重复运行敏感性，**不是置信区间**。5% 只有名义 6 条，1% 未估计；没有拟合渐近 α，参考模型不是客观真值。
+For a 90% recall target, the nominal 10% widening factors over the four cross-model combinations range over **1.72–2.97** at the positive tail and **2.03–6.64** at the negative tail. All boundary ties are kept, the denominator uses the nominal p, and the actual list sizes are reported separately. The ranges in the figure show this run's sensitivity to reordering and repeat runs, and **are not confidence intervals**. 5% has only a nominal 6 items, and 1% was not estimated; no asymptotic α was fitted, and the reference model is not objective truth.
 
-**决定：停止扩大这个具体测量方法，保留原尾部假说为未验证。** 直接让 agent 给完整列表排序，并未提供原 API logprob 方案中的稳定文档级信号。成对比较或多排列聚合是可另行验证的替代方案；既有排序研究也记录了顺序不一致与比较不传递，不能预先保证它们解决问题。[Qin 等，2024，§3](https://aclanthology.org/2024.findings-naacl.97.pdf)；[Tang 等，2024，§§2–3](https://aclanthology.org/2024.naacl-long.129.pdf)。这次结果否决的是当前长列表方法的扩大，不是否定所有 agent 方法或证明原研究假说错误。
+**Decision: stop scaling up this specific measurement method, and keep the original tail hypothesis as untested.** Having agents rank the complete list directly did not provide the stable document-level signal of the original API logprob plan. Pairwise comparison or multi-permutation aggregation are alternatives that can be validated separately; existing ranking research also records order inconsistency and intransitive comparisons, so it cannot be guaranteed in advance that they solve the problem. [Qin et al., 2024, §3](https://aclanthology.org/2024.findings-naacl.97.pdf); [Tang et al., 2024, §§2–3](https://aclanthology.org/2024.naacl-long.129.pdf). What this result rejects is scaling up the current long-list method; it does not reject all agent methods or prove the original research hypothesis wrong.
 
-已完成的理论结论仍适用：一般条件极值假设通常仅给 $q_\gamma=p^{\alpha+o(1)}$，α=1 不保证常数倍数；高斯 α=ρ² 有明确先例。完整材料：[试验设计、原始提示及结果](agent_pilot.md) · [可复算代码](analyze_agent_pilot.py) · [第二轮数值](agent_pilot_results_v2.json) · [排序方法依据](agent_ranking_method.md) · [数学推导](theory.md) · [四支文献排重](literature.md)。
+The completed theoretical conclusions still apply: a general conditional-extremes assumption usually gives only $q_\gamma=p^{\alpha+o(1)}$, α=1 does not guarantee a constant factor, and the Gaussian α=ρ² has clear prior work. Full materials: [trial design, original prompt and results](agent_pilot.md) · [recomputable code](analyze_agent_pilot.py) · [second-round numbers](agent_pilot_results_v2.json) · [basis for the ranking method](agent_ranking_method.md) · [mathematical derivation](theory.md) · [four-branch prior-art check](literature.md).

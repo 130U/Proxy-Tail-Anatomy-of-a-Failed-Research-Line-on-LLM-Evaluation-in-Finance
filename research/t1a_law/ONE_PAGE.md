@@ -1,32 +1,32 @@
-# T1A：定量规则通过检验，但最坏情形不能读成通常错误
+# T1A: the quantitative rule passes its tests, but the worst case must not be read as the typical error
 
-2026-11-16（America/New_York）。**判定：达到任务的数值验收门槛。** 结论条件是 T1 固定的输入绑定与独立半末位舍入盒；1% 是本项目审计容差。没有测量模型答错率，也没有证明结合全文披露后仍不确定。
+2026-11-16 (America/New_York). **Verdict: the task's numerical acceptance threshold is met.** The conclusion is conditional on T1's fixed input binding and independent half-a-last-digit-unit rounding boxes; 1% is this project's audit tolerance. We did not measure the rate at which models answer wrongly, nor prove that indeterminacy remains after combining full-text disclosures.
 
-**复现成功。** 原“Δ<100”口诀在 1,425 题中正确 1,394 题，即 **97.8246%**。60–100、100–150、150–300、≥300 四组分别为 99/99、16/83、6/144、7/646 越界，与导师复核一致。1,425 的口径是两个绑定输入、growth 分类、T1 已判定；它不等于全部严格增长率程序。
+**Replication succeeded.** The original "Δ<100" rule of thumb is correct on 1,394 of 1,425 questions, i.e. **97.8246%**. The four bins 60–100, 100–150, 150–300 and ≥300 have 99/99, 16/83, 6/144 and 7/646 out of tolerance, respectively, matching the advisor's review. The 1,425 questions are defined as: two bound inputs, growth category, decided by T1; this is not the same as all strict growth-rate programs.
 
-**精确规则需要保留增长幅度。** 对同号、同末位单位、分母不触零、非零增长率，令 $g=(b-a)/a$、$\Delta=|b-a|/d$，则最大中心相对误差恰为
+**The exact rule must keep the size of the growth.** For same-sign inputs with the same last-digit unit, a denominator that does not touch zero, and a non-zero growth rate, let $g=(b-a)/a$ and $\Delta=|b-a|/d$. Then the maximum relative error about the center is exactly
 
 $$R=\frac{1+g/2}{\Delta-|g|/2},\qquad
 R\le\tau\iff\Delta\ge\frac{1+g/2}{\tau}+\frac{|g|}{2}.$$
 
-因此“100 单位”是小增长近似，不是无条件定理。原 31 条误判中，24 条遗漏有限增长修正、5 条没有统一输入单位、2 条实际不是两数增长率。单位统一后的 1,427 条标准增长率题，口诀一致率为 **97.97%**。有效数字预算还依赖首数（mantissa），同样的输入位数和增长率可差接近一位精度；完整必要充分条件见 [证明 §5](PROOFS.md)。
+So "100 units" is a small-growth approximation, not an unconditional theorem. Of the original 31 misclassifications, 24 omit the finite-growth correction, 5 did not put the inputs in a common unit, and 2 are not actually two-number growth rates. On the 1,427 standard growth-rate questions after unit harmonization, the rule of thumb agrees **97.97%** of the time. The significant-digit budget also depends on the leading digits (mantissa): the same number of input digits and the same growth rate can differ by nearly one digit of precision. The complete necessary and sufficient condition is in [Proofs §5](PROOFS.md).
 
-**全部运算的零参数规则通过。** 一阶半径 $R_1=\sum_i|\partial_i f|h_i$，以 $|f(x)-y|+R_1>\tau|y|$ 预测越界；没有拟合参数。正类为“越界”，下表与重新独立认证的精确值域比较：
+**The zero-parameter rule for all operations passes.** First-order radius $R_1=\sum_i|\partial_i f|h_i$; out of tolerance is predicted by $|f(x)-y|+R_1>\tau|y|$, with no fitted parameters. The positive class is "out of tolerance"; the table below compares against independently recertified exact ranges:
 
-| 运算 | 题数 | 真阳性 | 真阴性 | 假阳性 / 假阴性 | 一致率 |
+| Operation | Questions | True positive | True negative | False positive / false negative | Agreement |
 |---|---:|---:|---:|---:|---:|
-| 增长率 | 1,458 | 585 | 873 | 0 / 0 | 100% |
-| 差值 | 872 | 332 | 540 | 0 / 0 | 100% |
-| 比率 | 2,538 | 459 | 2,079 | 0 / 0 | 100% |
-| 求和 | 395 | 77 | 318 | 0 / 0 | 100% |
-| 其他 | 74 | 16 | 58 | 0 / 0 | 100% |
+| Growth rate | 1,458 | 585 | 873 | 0 / 0 | 100% |
+| Difference | 872 | 332 | 540 | 0 / 0 | 100% |
+| Ratio | 2,538 | 459 | 2,079 | 0 / 0 | 100% |
+| Sum | 395 | 77 | 318 | 0 / 0 | 100% |
+| Other | 74 | 16 | 58 | 0 / 0 | 100% |
 
-原 T1 的 15 个未定项全部认证为稳定；原已判定项无矛盾。100% 是本数据在 1% 容差下的结果：其他四档容差合计有 5 次误判，均保留；一阶近似本身不是认证器。
+All 15 items left undecided in the original T1 are certified stable; there are no contradictions with items T1 had already decided. The 100% is the result on this data at the 1% tolerance: the other four tolerance levels have 5 misclassifications in total, all of which are kept; the first-order approximation is not itself a certifier.
 
-**Benford 预测通过，但要补足假设。** 仅有首位分布不能唯一决定越界率。加入完整 log-uniform mantissa 及其与增长率、位数分布的独立性后，不读取逐题 mantissa，预测 **41.52%**，实测 **40.50%**，误差 **+1.01 个百分点**。保留增长率与位数的联合分布时预测 42.10%；仅约束首位的数值识别范围为 38.69%–44.59%。这是同一数据的分布代入检验，非外部样本验证。
+**The Benford prediction passes, but its assumptions must be made complete.** The leading-digit distribution alone cannot uniquely determine the out-of-tolerance rate. After adding a full log-uniform mantissa and its independence from the growth rate and digit-count distributions, and without reading the per-question mantissa, the prediction is **41.52%** and the observed value is **40.50%**, an error of **+1.01 percentage points**. Keeping the joint distribution of growth rate and digit count, the prediction is 42.10%; constraining only the leading digit, the numerically identified range is 38.69%–44.59%. This is a distribution-substitution test on the same data, not validation on an external sample.
 
-**概率版本约为最坏情形的一半。** 在独立连续均匀舍入模型下，test 的期望越界题数为 **98.62**：占 731 道可分析题 **13.49%**，对照最坏情形的 **196/731=26.81%**。若沿用全部 1,147 题分母，两者的已分析贡献分别为 **8.60%** 与 **17.09%**；另 416 题概率未知，8.60% 不能称全 test 的完整概率估计。把 17% 写成“答案通常错误”会夸大结果。模型内概率也不是实际财报真值的已知分布。
+**The probabilistic version is about half the worst case.** Under an independent continuous uniform rounding model, the expected number of out-of-tolerance test questions is **98.62**: **13.49%** of the 731 analyzable questions, against the worst case of **196/731=26.81%**. With the denominator of all 1,147 questions, the analyzed contributions are **8.60%** and **17.09%**, respectively; the probability for the other 416 questions is unknown, so 8.60% cannot be called a complete probability estimate for all of test. Writing 17% as "the answer is usually wrong" would exaggerate the result. The in-model probability is also not a known distribution of the true values in actual filings.
 
-**贡献定位：金融 QA 的条件性精度审计。** [Gittings（1991）](https://www.chicagofed.org/-/media/publications/economic-perspectives/1991/ep-may-jun1991-part1-gittings-pdf.pdf) 已实证研究经济增长率的舍入失真；本轮未检出完整的 FinQA 阈值验证重复。数学不是新发现。全文约束能否推翻结论仍由 T1B 检验，模型是否因此被判错仍由 T1C 检验。
+**Contribution positioning: a conditional precision audit of financial QA.** [Gittings (1991)](https://www.chicagofed.org/-/media/publications/economic-perspectives/1991/ep-may-jun1991-part1-gittings-pdf.pdf) already studied the rounding distortion of economic growth rates empirically; this round found no complete duplicate of a FinQA threshold validation. The mathematics is not a new discovery. Whether full-text constraints can overturn the conclusion is still to be tested by T1B, and whether models are marked wrong because of it is still to be tested by T1C.
 
-[一张图：阈值、位数预算与容差曲线](results/t1a_law.png) · [完整证明](PROOFS.md) · [复现方法与结果解释](README.md) · [31 条原口诀误判](results/simple_rule_mismatches.csv) · [查重](LITERATURE.md)
+[One figure: threshold, digit budget and tolerance curve](results/t1a_law.png) · [Full proofs](PROOFS.md) · [Replication method and interpretation of results](README.md) · [31 misclassifications of the original rule of thumb](results/simple_rule_mismatches.csv) · [Prior-art check](LITERATURE.md)

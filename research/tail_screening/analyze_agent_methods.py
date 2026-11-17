@@ -484,29 +484,29 @@ def plot_results(results, output, selection, plt, np):
 
 
 def write_report(result, output, selection):
-    lines = ["# 32条新样本：排序方法阶段结果", "", f"本次分析范围：`{selection}`。只读取已存输出；未调用模型、训练或联网。", "",
-             "所有名义尾部包含边界全部同分。gate 使用名义 p=25%；JSON 同时记录实际 A 人数、实际比例与 B/A 倍数。12.5% 仅为四条名义样本的诊断。", ""]
+    lines = ["# 32 new samples: stage results of the ranking methods", "", f"Scope of this analysis: `{selection}`. Only saved outputs were read; no model calls, training or network access.", "",
+             "Every nominal tail includes all ties at the boundary. The gate uses nominal p=25%; the JSON also records the actual A count, the actual fraction and the B/A factor. 12.5% is only a diagnostic with a nominal four items.", ""]
     for method, values in result["methods"].items():
-        lines += [f"## {method}", "", f"完整总体工作 gate：**{values['gate']['status']}**；全部输出可判断：{values['gate']['all_outputs_rankable']}。", ""]
+        lines += [f"## {method}", "", f"Full overall working gate: **{values['gate']['status']}**; all outputs judgeable: {values['gate']['all_outputs_rankable']}.", ""]
         for model, status in values["gate"]["per_model"].items():
-            lines.append(f"- {model} 的两个方向、上下尾合并判定：{status}。")
-        lines += ["", "未满足的工作项：", ""]
+            lines.append(f"- {model}, combined verdict over both directions and both tails: {status}.")
+        lines += ["", "Work items not met:", ""]
         failures = [c for c in values["gate"]["checks"] if not c["passed"]]
         if not failures:
-            lines.append("- 数值工作项均满足；任何 U 仍单独阻止完整总体通过。")
+            lines.append("- All numerical work items are met; any U still separately blocks a full overall pass.")
         for check in failures:
             failed = [k for k, v in check.items() if (k.endswith("0_8") or k.endswith("1_5") or k.endswith("0_2")) and not v]
-            lines.append(f"- {check['pair']}，{check['tail']}：" + (", ".join(failed) if check["available"] else "不可计算，存在不可排序输出") + "。")
+            lines.append(f"- {check['pair']}, {check['tail']}: " + (", ".join(failed) if check["available"] else "not computable, unrankable output present") + ".")
         if method == "pair":
-            lines += ["", "| 模型/panel | 换位不一致/可比较对 | 合并零边/496 | 严格三边循环/严格三角 | U判断 |", "|---|---:|---:|---:|---:|"]
+            lines += ["", "| Model/panel | Swap disagreements/comparable pairs | Merged zero edges/496 | Strict three-edge cycles/strict triangles | U judgments |", "|---|---:|---:|---:|---:|"]
             for key, s in values["panel_summaries"].items():
                 lines.append(f"| {key} | {s['raw_swap_disagreement_count_including_T']}/{s['comparable_pairs_excluding_U']} | {s['merged_tie_edges']}/496 | {s['directed_triangle_cycles']}/{s['strict_three_edge_triangles']} | {s['unrankable_raw_judgments']} |")
         else:
-            lines += ["", "m=1、2、4 的全部前缀结果均保留于 JSON；仅 m=4 决定本方法 gate，未挑选最有利的 m。"]
+            lines += ["", "All prefix results for m=1, 2, 4 are kept in the JSON; only m=4 decides this method's gate, and the most favorable m was not picked."]
         lines.append("")
-    lines += ["组合范围不是置信区间；同批判断共享上下文，重复排序不增加独立金融样本。pair 的 U 若进入零边诊断，始终保留失败身份；rank 的 U 不补造完整名次。", "",
-              f"结果：[methods_stage1_{selection}.json](methods_stage1_{selection}.json)；[图](methods_stage1_{selection}.png)。原始输入/输出在 `research/private/agent_tail_methods/stage1_n32/`。", "",
-              f"实际 CPU {result['execution']['CPU_seconds']:.3f} 秒；wall {result['execution']['wall_seconds']:.3f} 秒；未测峰值内存。", ""]
+    lines += ["Combination ranges are not confidence intervals; judgments in the same batch share context, and repeated rankings do not add independent financial samples. If a pair U enters the zero-edge diagnostic, it always keeps its failure identity; a rank U is not filled in with a made-up complete rank.", "",
+              f"Results: [methods_stage1_{selection}.json](methods_stage1_{selection}.json); [figure](methods_stage1_{selection}.png). Raw inputs/outputs are in `research/private/agent_tail_methods/stage1_n32/`.", "",
+              f"Actual CPU {result['execution']['CPU_seconds']:.3f} s; wall {result['execution']['wall_seconds']:.3f} s; peak memory not measured.", ""]
     (output / "stage1_report.md").write_text("\n".join(lines), encoding="utf-8")
 
 

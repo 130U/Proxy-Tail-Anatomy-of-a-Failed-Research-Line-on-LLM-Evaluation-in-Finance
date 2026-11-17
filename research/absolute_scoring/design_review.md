@@ -1,85 +1,85 @@
-# 绝对评分实验：执行前的设计复核
+# Absolute-scoring experiment: pre-execution design review
 
-2026-11-16。依据[新TASK.md](https://github.com/130U/proxy-tail/blob/main/TASK.md)和此前已保存的实验口径。本页是内部AI对设计的独立分析，不是实验结果或Fable反馈。尚未抽新样本、编写最终评分提示、调用评分agent或调整既有结果；文献否决检查由其他研究分支先完成。
+2026-11-16. Based on [the new TASK.md](https://github.com/130U/proxy-tail/blob/main/TASK.md) and the experimental conventions saved earlier. This page is an internal AI's independent analysis of the design; it is not an experimental result or Fable feedback. No new sample has been drawn yet, no final scoring prompt written, no scoring agent called and no existing result adjusted; the literature veto check is being done first by another research branch.
 
-## 建议采用的最小明确版本
+## Recommended minimal explicit version
 
-使用一个固定模型配置、1,000个新词法族各一条实体标题、8轮重随机分批。每轮25个40条批次，提示与5个外部锚点逐字不变，每次fresh上下文；仅输出ID及0–100整数。按既定先后编号分为1–4和5–8两组，主分析采用相同前缀m=1、2、4。主解释取p=10%，同时完整报告5%、20%；不从三种p或两个尾部中挑最有利结果。
+Use one fixed model configuration, 1,000 new lexical families with one entity headline each, and 8 rounds of re-randomized batching. Each round has 25 batches of 40 items; the prompt and the 5 external anchors stay verbatim unchanged, and every call uses a fresh context; the output is only IDs and 0–100 integers. Split the rounds by their fixed order into two groups, 1–4 and 5–8; the main analysis uses the same prefixes m=1, 2, 4. The main interpretation uses p=10%, while 5% and 20% are reported in full; do not pick the most favorable result among the three values of p or the two tails.
 
-现有来源统计允许从原测试1,570族排除此前288族后，在剩余1,282族中抽1,000族。抽样前应再次直接核验这些集合；不读旧标签或模型预测选样。每族一条和原测试划分只减少某些词法重复，不保证事件独立，也不证明LLM预训练未见过标题。
+The existing source statistics allow drawing 1,000 families from the remaining 1,282 families after excluding the earlier 288 families from the original 1,570 test families. These sets should be checked directly again before sampling; do not read old labels or model predictions to select the sample. One item per family and the original test split only reduce some lexical repetition; they do not guarantee independent events and do not prove that LLM pretraining never saw the headlines.
 
-新的标题输入应存放在仓库之外的本地实验目录；提交到本仓库的内容限定为ID、分数、批次ID及顺序、锚点提示、来源说明、分析代码、汇总与图。仅把文件放进一个叫private的目录并不满足新题的“标题原文不要提交”要求，因为此前该目录已经被显式上传。原有历史文件如何处理是另一个范围问题，不应默默删除。
+The new headline inputs should be stored in a local experiment directory outside the repository. Content committed to this repository is limited to IDs, scores, batch IDs and order, the anchor prompt, the source description, analysis code, summaries and figures. Just putting files in a directory called private does not satisfy the new task's requirement "do not commit the original headline text", because that directory was explicitly uploaded before. How to handle the existing historical files is a separate scope question; they should not be deleted silently.
 
-## 对照组：建议复用原40条上下文，而非新造小池
+## Controls: reuse the original 40-item contexts rather than building a new small pool
 
-先从1,000个ID中均匀无放回抽100个对照目标。保留这些目标在第1轮所属的**完整40条批次和原顺序**；每个涉及的批次另外交给两个新的同配置agent。逐字相同不仅指100条目标的顺序，还包括同批其余标题、序列化形式、提示和锚点。不得只抽出目标形成更小批次。
+First draw 100 control targets uniformly without replacement from the 1,000 IDs. Keep the **complete 40-item batches and original order** that these targets belonged to in round 1; give each batch involved to two additional new agents with the same configuration. Verbatim identical means not only the order of the 100 targets, but also the other headlines in the same batch, the serialization format, the prompt and the anchors. Do not pull out only the targets to form smaller batches.
 
-如果100个随机目标覆盖了全部25个第1轮批次，就新增50次调用；总计250次，而不是206次。期望涉及批次数为
+If the 100 random targets cover all 25 round-1 batches, 50 calls are added, for 250 in total rather than 206. The expected number of batches involved is
 
-`25 × [1 − C(960,100)/C(1000,100)]`，因此通常接近25个。这是由抽样规则决定的调用量，不应事后挑选集中在少数批次的100条来省调用，除非明确另立按批抽样的设计。初始预算可以写成主实验200次、对照最多50次；不减少8轮。
+`25 × [1 − C(960,100)/C(1000,100)]`, so it is usually close to 25. This call count is determined by the sampling rule. Do not pick 100 items concentrated in a few batches after the fact to save calls, unless a separate design that samples by batch is explicitly set up. The initial budget can be written as 200 calls for the main experiment and at most 50 for the controls; the 8 rounds are not reduced.
 
-重打完整批次会顺便产生非对照目标的分数。应保留这些实际输出，但主噪声比较只用事先抽定的100个目标；非目标分数不能在看过结果后换入对照组、扩充主8轮或用于拟合r。这样新增context是保持实验条件所需的伴随数据，不冒充更多独立目标。
+Rescoring complete batches also produces scores for non-control items. These actual outputs should be kept, but the main noise comparison uses only the 100 targets drawn in advance. Non-target scores cannot be swapped into the control group after seeing the results, used to enlarge the main 8 rounds, or used to fit r. In this way the added contexts are companion data needed to keep the experimental conditions, and they do not pose as more independent targets.
 
-同批相关以新增两次对照评分C1、C2为主。第1轮原评分与C1/C2的另外两对可作预先登记的敏感性结果；不要只选最高的相关。异批比较必须在**相同100个目标**上，用主8轮的28对相关均值和范围。不能拿100条同批相关直接对比1,000条异批相关，因为目标间信号方差和内容组成不同会改变相关系数。
+The same-batch correlation is based mainly on the two added control scorings C1 and C2. The other two pairs, the original round-1 scoring against C1 and against C2, can be pre-registered sensitivity results; do not select only the highest correlation. The different-batch comparison must be on the **same 100 targets**, using the mean and range of the 28 pairwise correlations from the main 8 rounds. A same-batch correlation over 100 items cannot be compared directly with a different-batch correlation over 1,000 items, because differences in between-target signal variance and content composition change the correlation coefficient.
 
-100条分成40、40、20条，再用20条随机填充到120条、做两次共6个调用，是一个可行的低成本“另一个固定上下文”实验。但它没有复用主实验原context，并且只覆盖三个不同批次；条件于选中的100个目标，批内目标占比和上下文分布也改变。不能将这6次结果与主8轮之差直接称为纯粹批次组成贡献。若预算迫使采用它，必须提前明确这个不同estimand；优先建议保留原40条上下文的版本。
+Splitting the 100 items into batches of 40, 40 and 20, filling the 20-item batch up to 40 with 20 random fillers to make 120 items, and scoring twice for 6 calls in total, is a feasible low-cost "different fixed context" experiment. But it does not reuse the main experiment's original contexts and covers only three distinct batches; conditional on the 100 chosen targets, the share of targets within each batch and the context distribution also change. The difference between these 6 calls and the main 8 rounds cannot be called directly the pure contribution of batch composition. If the budget forces this option, the different estimand must be stated in advance; the version that keeps the original 40-item contexts is preferred.
 
-## “噪声分解”可以声称到哪里
+## How far a "noise decomposition" can be claimed
 
-同批C1/C2与异批28对r的比较，回答的是“保持输入条件是否伴随更高的重测相关”。异批时同时改变批次组成和位置，因此不能进一步分离这两个因素。模型服务时间、底层版本或生成过程若变化，也可能影响差异；记录调用时间与配置，不把fresh会话视为误差独立的证明。
+Comparing the same-batch C1/C2 r with the 28 different-batch pairs answers "does keeping the input conditions fixed go together with higher retest correlation". The different-batch condition changes batch composition and position at the same time, so the two factors cannot be separated further. Changes in model service time, the underlying version or the generation process may also affect the difference. Record call times and configuration, and do not treat fresh sessions as proof of independent errors.
 
-若想给出“批次占噪声多少”的单一数，`(r_same − r_different)/(1 − r_different)`只有在同尺度、相同方差分解、独立加性误差和相应共享context效应模型下才有方差比例解释。这里0–100取整后再作正态秩变换，不自动满足这些条件。建议主要报告r_same、r_different、二者差及配对区间；上述比例若展示，应明确是依赖额外假设的描述性指标，不能直接写“X%的噪声来自批次”。不要把负值截成0或超过1的值截成1来掩盖模型不适配。
+If one wants a single number for "how much of the noise is batch", `(r_same − r_different)/(1 − r_different)` has a variance-share interpretation only under the same scale, the same variance decomposition, independent additive errors and a corresponding shared-context effect model. Here the scores are rounded to 0–100 and then normal-rank transformed, which does not automatically satisfy these conditions. We recommend mainly reporting r_same, r_different, their difference and a paired interval. If the ratio above is shown, it should be stated clearly as a descriptive index that depends on extra assumptions; do not write "X% of the noise comes from batches" directly. Do not clip negative values to 0 or values above 1 to 1 to hide model misfit.
 
-同批对照的执行时间应穿插在主要任务期间或预先安排在不同位置，避免全部同批都恰好对应一个单独时间段。不过这仍不足以证明模型内部版本恒定，也不提供纯因果噪声分解。
+The same-batch control calls should be interleaved with the main tasks or scheduled in advance at different positions, so that the same-batch calls do not all fall into one separate time window. This is still not enough to prove that the model's internal version is constant, and it does not give a purely causal noise decomposition.
 
-## 信度与不调参公式的精确定义
+## Exact definitions of reliability and the untuned formula
 
-每轮在相同1,000条上的原始整数分数先取平均名次，对并列给midrank，再使用`Phi^{-1}((rank−0.5)/N)`；对8轮中的每个无序组合计算Pearson相关，共28个r值。主r为28值的算术平均，另给范围；不能在看到平均后结果时更换成Fisher-z平均、最优一对或仅尾部相关。
+For each round, take the raw integer scores on the same 1,000 items, compute average ranks (midranks for ties), then apply `Phi^{-1}((rank−0.5)/N)`; compute the Pearson correlation for each unordered pair of the 8 rounds, giving 28 values of r. The main r is the arithmetic mean of the 28 values, with the range also given. After seeing the averaged results, it cannot be switched to a Fisher-z mean, the best pair, or a tail-only correlation.
 
-若某轮全同分而相关不可定义，应直接标为测量不足，不补成0或1。若得到r不在经典正信度模型的适用范围，不应强行截断后代入Spearman–Brown；保留观察值并报告该基准不适用。
+If a round has all scores tied and the correlation is undefined, mark it directly as insufficient measurement; do not fill in 0 or 1. If an r falls outside the range where the classical positive reliability model applies, do not force-clip it and plug it into Spearman–Brown; keep the observed value and report that the baseline does not apply.
 
-m次平均应在**原0–100分数**上算：
+The m-score averages should be computed on the **original 0–100 scores**:
 
-- m=1：第1轮对第5轮。
-- m=2：第1、2轮均分对第5、6轮均分。
-- m=4：第1–4轮均分对第5–8轮均分。
+- m=1: round 1 against round 5.
+- m=2: mean of rounds 1 and 2 against mean of rounds 5 and 6.
+- m=4: mean of rounds 1–4 against mean of rounds 5–8.
 
-实现上保留整数和与共同分母m即可，不用浮点小数打破真正相等的均分。不能改成先秩变换再平均，然后仍声称实施了原题的逐条绝对分均值。
+In the implementation it is enough to keep integer sums with a common denominator m, so that floating-point decimals do not break means that are truly equal. Do not switch to rank-transforming first and then averaging while still claiming to implement the original task's item-wise mean of absolute scores.
 
-主r只从单次分数的28对取得。将它固定代入`r_m = m*r/[1+(m−1)*r]`，再作Gaussian积分，不用m=2、4重合或放行结果反求、校准r。这个对照是**无额外调参的样本内plug-in检验**：r与被预测的m=2、4统计量来自同一8轮原始数据，所以不是独立样本预测。对照仍可证伪，但不能夸大独立性。
+The main r is taken only from the 28 pairs of single scores. Plug it as a fixed value into `r_m = m*r/[1+(m−1)*r]` and then do the Gaussian integration; do not back out or calibrate r from the m=2, 4 overlap or pass-through results. This comparison is an **in-sample plug-in test without extra tuning**: r and the predicted m=2, 4 statistics come from the same 8 rounds of raw data, so it is not an independent-sample prediction. The comparison is still falsifiable, but its independence must not be overstated.
 
-Spearman–Brown的经典方差模型与“原分数平均后再正态秩变换”之间并非恒等关系。把它作为明确的简单基准完全可以；公式失配可能来自误差相关、非线性尺度、异方差、取整或非高斯依赖，并不自动识别出一个新的尾部机制。该理论边界应由专门的数学/文献分支补足来源。
+The classical variance model of Spearman–Brown and "average the raw scores, then normal-rank transform" are not identical. Using it as an explicit simple baseline is fine. A mismatch with the formula may come from correlated errors, a nonlinear scale, heteroscedasticity, rounding or non-Gaussian dependence, and does not automatically identify a new tail mechanism. The sources for this theoretical limit should be supplied by the dedicated mathematics/literature branch.
 
-## 尾部名单、方向与并列门
+## Tail lists, directions and the ties gate
 
-名义人数k=floor(Np)；N=1,000和p=20%、10%、5%恰好对应200、100、50条。对每个方向、m和p，先定位第k名分数，再纳入边界整个同分组。上尾和下尾分别计算；分数相等不得用ID或输入顺序破并列。
+The nominal count is k=floor(Np); with N=1,000, p=20%, 10% and 5% correspond exactly to 200, 100 and 50 items. For each direction, m and p, first locate the score of the k-th item, then include the whole tie group at the boundary. The upper and lower tails are computed separately; ties in score must not be broken by ID or input order.
 
-两份名单A、B实际人数可能不同。主“重合比例”应同时报告`|A∩B|/|A|`与反方向`|A∩B|/|B|`，并列出名义人数、实际人数和交集。不要悄悄改成Jaccard、除以名义k，或只挑分母较小的方向。Gaussian名义同预算曲线连续且对称，一条预测线可以与两种方向的实测点并列展示。
+The two lists A and B can have different actual sizes. The main "overlap fraction" should report both `|A∩B|/|A|` and the reverse direction `|A∩B|/|B|`, and list the nominal size, the actual sizes and the intersection. Do not quietly switch to Jaccard, divide by the nominal k, or pick only the direction with the smaller denominator. The Gaussian equal-nominal-budget curve is continuous and symmetric, so a single prediction line can be shown next to the observed points from both directions.
 
-达到90%参考召回至少需`ceil(0.9*|A|)`条。候选只允许完整分数组边界，选能达到该人数的最小完整边界；主放行倍数为`B_selected/(N*p)`。另列B_selected/|A|可解释实际名单比例，但不能偷换主分母。两种参考方向都保留。
+Reaching 90% reference recall needs at least `ceil(0.9*|A|)` items. Candidates may use only complete score-group boundaries; choose the smallest complete boundary that reaches that count. The main widening factor is `B_selected/(N*p)`. B_selected/|A| can be listed separately to explain the actual list fraction, but the main denominator must not be swapped. Keep both reference directions.
 
-**新题的并列否决门比旧协议更严格：** 它说的是“头部边界上的并列人数超过名义人数20%”，应比较**整个边界同分组的大小**与0.2k，而非只比较因为纳入同分而额外增加的人数。即使阈值内额外扩张只有一条，边界组本身有30条，在k=100时也已超过门槛。两者都可报告，但不能以旧扩张门替代新门。
+**The new task's ties veto gate is stricter than the old protocol:** it says "the number of ties at the top-list boundary exceeds 20% of the nominal count", so the **size of the whole boundary tie group** should be compared with 0.2k, not only the number of items added by including the ties. Even if the extra expansion beyond the threshold is a single item, a boundary group of 30 items already exceeds the threshold at k=100. Both can be reported, but the old expansion gate cannot replace the new gate.
 
-建议逐轮单次分数以及m=1、2、4两panel全部登记这一门。对于p=10%的结论，任何用来支持该结论的边界超过门槛，就将该端/层的尾部判断标为并列不足；仍保留原统计，但不借它作公式成功或失败的证据。5%或20%单独失败要单列，不把它隐藏，也不必把能解释的其他部分假装没测过。最终“一条线是否继续”的处理须在评分前明确：最保守且贴近题意的是任一预定主要边界失格，即整体结论为无法判断；局部结果只作描述。
+We recommend registering this gate for every single-round score and for both panels at m=1, 2, 4. For the p=10% conclusion, if any boundary used to support that conclusion exceeds the threshold, mark the tail judgment for that end/level as tie-limited; keep the original statistics, but do not use them as evidence that the formula succeeded or failed. A failure at 5% or 20% alone should be listed separately, not hidden, and the other parts that can be interpreted need not be treated as if they were never measured. How the final question "does a line continue" is handled must be fixed before scoring: the most conservative option, closest to the task, is that if any pre-specified main boundary fails, the overall conclusion is inconclusive, and local results are only descriptive.
 
-并列导致实际p_A、p_B偏离名义p，本身可能产生与连续Gaussian基准的差距。主图按题意固定名义p即可，但须显示实际人数；如加按实际p_A、p_B积分的诊断，它只能是预先声明的离散边界敏感性分析，不取代主图，也不重新调信度。
+Ties make the actual p_A and p_B deviate from the nominal p, which by itself can produce a gap from the continuous Gaussian baseline. The main figure can fix the nominal p as the task says, but must show the actual sizes. If a diagnostic integrating at the actual p_A and p_B is added, it can only be a pre-declared sensitivity analysis for discrete boundaries; it does not replace the main figure and does not re-tune the reliability.
 
-## 标题bootstrap与预测不确定性
+## Headline bootstrap and prediction uncertainty
 
-主尾部分析对1,000个标题ID成对重采样，每次抽1,000次，带走该标题完整8轮分数；同一bootstrap里的所有m、方向、p都用同一组抽样索引。被重复抽中的标题是带重复权重的观测，不能按ID去重；每次在重采样多重集内重新求阈值、完整并列、交集和90%最小放行量。
+The main tail analysis resamples the 1,000 headline IDs in pairs, drawing 1,000 each time and carrying all 8 rounds of scores for each headline; all m, directions and p within the same bootstrap use the same set of sampled indices. Headlines drawn more than once are observations with repeat weights and must not be deduplicated by ID; in each draw, the threshold, the full ties, the intersection and the 90% minimum pass-through amount are recomputed within the resampled multiset.
 
-对照比较另外在预定100个控制目标中抽100次，每次同时带走其主8轮与C1/C2；据此重算同批与异批相关的差。不能分别重采样各轮或两个对照，那会破坏配对信息。只有100个目标使该区间通常比主尾部区间更粗，应直接显示这种不确定性。
+The control comparison separately draws 100 times from the 100 pre-specified control targets, each time carrying both their main 8 rounds and C1/C2; the difference between same-batch and different-batch correlations is recomputed from this. Do not resample each round or the two controls separately, which would destroy the pairing. With only 100 targets this interval is usually coarser than the main tail intervals, and this uncertainty should be shown directly.
 
-建议评分前固定5,000次重采样及独立随机种子，输出percentile 95%区间。图上的测量区间按任务要求给出。若评价“预测与实测偏差是否明显”，应在每次相同标题重采样内从单次分数重新计算r，再代入公式，形成“实测−预测”的配对区间；这不是用m=2、4调参。只画固定预测线而忽略r估计不确定性，会把预测当作已知常数。
+We recommend fixing 5,000 resamples and independent random seeds before scoring, and outputting percentile 95% intervals. The measurement intervals on the figure are given as the task requires. To judge "whether the gap between prediction and measurement is clear", recompute r from the single scores within each identical headline resample, plug it into the formula, and form a paired "observed − predicted" interval; this is not tuning with m=2, 4. Drawing only a fixed prediction line and ignoring the uncertainty in the r estimate treats the prediction as a known constant.
 
-这些是标题层条件重采样区间，未重新生成agent输出或批次。每40条共享一次上下文、词法族未必独立事件，所以不能宣称已覆盖所有批次和调用不确定性，也不能凭bootstrap条数把它升级为严格总体保证。三个p、两端及多个m的区间是逐项95%，不是同时95%；不把看到的任一显著差异自动称为系统性偏离。
+These are headline-level conditional resampling intervals; agent outputs and batches were not regenerated. Every 40 items share one context, and lexical families are not necessarily independent events, so we cannot claim to have covered all batch and call uncertainty, nor upgrade it to a rigorous population guarantee by the number of bootstrap draws. The intervals for the three values of p, both tails and the several m are item-wise 95%, not simultaneous 95%; any significant difference seen should not automatically be called a systematic deviation.
 
-## 三种结局需要怎样措辞
+## How the three outcomes need to be worded
 
-题目把“低于75%”“高于90%”作为例子，且“明显”“处处吻合”“噪声的大头”未给统计操作定义。应在评分前以p=10%为主明确工作规则，不能等看过结果再决定“明显”需要几个点。推荐至少同时报告点估计和区间相对于75%/90%的位置，并区分支持某结局与只是不够精确。
+The task gives "below 75%" and "above 90%" as examples, and gives no statistical operational definition for "clearly", "fits everywhere" or "the largest share of the noise". Working rules, with p=10% as the main case, should be fixed before scoring; one cannot wait until after seeing the results to decide how many points "clearly" needs. We recommend reporting at least both the point estimate and the position of the interval relative to 75%/90%, and distinguishing support for an outcome from mere lack of precision.
 
-“公式处处吻合”不能由所有差异都未拒绝零推出。若要声称实用等价，需要事先声明可接受的重合误差与放行误差范围；否则只能写“本样本未检出清晰偏离”，而不是证明公式足够准确。低重合加某一预先定义的、跨m一致的偏离或两端差异才支持继续；单个5%点的偶然偏离不宜决定整条线。
+"The formula fits everywhere" cannot be inferred from all differences failing to reject zero. To claim practical equivalence, acceptable ranges of overlap error and pass-through error must be declared in advance; otherwise one can only write "no clear deviation detected in this sample", which does not prove the formula is accurate enough. Only low overlap together with a pre-defined deviation that is consistent across m, or a difference between the tails, supports continuing; a chance deviation at a single 5% point should not decide the whole line.
 
-并列门失败、相关不可定义、或区间跨越判定区域，都应允许如实写无法判断。不要为得到二元成功/失败而在相同1,000条上改变0–100量表、锚点、提示或重复数。若文献查到同一头部测量与公式对照，则按题意在任何评分前停止并告知Theodore。
+A failed ties gate, an undefined correlation, or an interval spanning decision regions should all allow an honest verdict of inconclusive. Do not change the 0–100 scale, anchors, prompt or number of repeats on the same 1,000 items just to get a binary success/failure. If the literature search finds the same top-list measurement together with a formula comparison, then, as the task says, stop before any scoring and tell Theodore.
 
-本设计复核最重要的执行选择是：固定完整40条对照上下文；对同一100条比较同批与异批；按整个边界组解释新并列门；保留方向不对称与标题配对；将信度公式视为无额外调参的基准而非未经证明的恒等关系。
+The most important execution choices in this design review are: fix the complete 40-item control contexts; compare same-batch and different-batch on the same 100 items; interpret the new ties gate by the whole boundary group; keep the directional asymmetry and headline pairing; and treat the reliability formula as a baseline without extra tuning, not as an unproven identity.

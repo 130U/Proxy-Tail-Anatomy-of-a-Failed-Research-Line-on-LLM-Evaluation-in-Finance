@@ -1,38 +1,38 @@
-# T1a：把现象写成一条定律，并用零参数预测检验它
+# T1a: Write the phenomenon as a law and test it with a zero-parameter prediction
 
-前提：T1 已完成（分支 `task/t1`，目录 `research/t1_rounding/`）。本题在分支 `task/t1a`、目录 `research/t1a_law/` 里做，只读取 T1 的 `results/per_question.jsonl`，不改 T1 的文件。
+Prerequisite: T1 is complete (branch `task/t1`, directory `research/t1_rounding/`). This task is done on branch `task/t1a`, in directory `research/t1a_law/`; it only reads T1's `results/per_question.jsonl` and does not change T1's files.
 
-## 要检验的说法
+## The claim to test
 
-增长率 g = (b − a)/a 由两个舍入过的数算出。把两数之差换算成"末位显示单位"的个数，记为 Δ。那么：
+A growth rate g = (b − a)/a is computed from two rounded numbers. Convert the difference between the two numbers into a count of "last displayed units", written Δ. Then:
 
-> 增长率的相对不确定度约为 1/Δ。要让答案在相对容差 τ 内被确定，需要 Δ 不小于约 1/τ。
+> The relative uncertainty of the growth rate is about 1/Δ. For the answer to be determined within relative tolerance τ, Δ must be at least about 1/τ.
 
-容差 1% 对应 Δ ≥ 100。也就是说，两个数至少要相差 100 个末位单位，增长率才谈得上精确到 1%。
+A tolerance of 1% corresponds to Δ ≥ 100. In other words, the two numbers must differ by at least 100 last-digit units before the growth rate can be called exact to 1%.
 
-导师已经在 T1 的逐题结果上粗查过：全部 1,425 道双输入增长率题里，"Δ < 100 则不被确定"这一句话与 T1 的精确区间判定有 97.8% 一致；Δ 在 60–100 之间 100% 不被确定，在 150–300 之间只有 4%。请先复现这个数。
+The advisor has already made a rough check on T1's per-question results: over all 1,425 two-input growth-rate questions, the single sentence "if Δ < 100 then undetermined" agrees with T1's exact interval classification 97.8% of the time; with Δ between 60 and 100, 100% are undetermined, and between 150 and 300 only 4%. Reproduce this number first.
 
-## 要做的事
+## What to do
 
-1. **证明。** 给出增长率相对不确定度的精确上下界，写清楚一阶项、余项和适用条件（分母不跨零、两数同号等）。对差值、比率 b/a、求和各给出对应的一句话规则。
-2. **位数预算。** 把规则改写成有效数字的语言：由 k 位有效数字的数算出的、大小为 g 的增长率，大约只有 k − log10(1/g) 位是有意义的。要达到容差 τ，输入需要大约 log10(1/(g·τ)) 位有效数字。给出精确陈述。
-3. **零参数检验。** 对 T1 全部可分析的题，只用上面的规则预测"被确定 / 不被确定"，与 T1 的精确判定对照。按运算类型给出混淆表。逐条列出规则判错的题，说明原因。
-4. **先验预测。** 不看每道题的具体数值，只用"首位数字服从 Benford 分布"和实际的增长率分布、显示位数分布，预测不被确定的比例，与实测对照。
-5. **概率版本。** T1 的见证取在舍入盒的角上，是最坏情形。假设各输入的舍入误差独立、在半个末位单位内均匀分布，算出每道题"真值落在容差之外"的概率，再求和得到期望比例。增长率情形尽量给闭式。
-6. **容差曲线。** 把 1% 换成 0.1%、0.5%、2%、5%，画出不被确定比例随容差的变化。
+1. **Proof.** Give exact upper and lower bounds on the relative uncertainty of the growth rate, stating the first-order term, the remainder and the conditions of validity (the denominator does not cross zero, the two numbers have the same sign, etc.). Give a corresponding one-sentence rule for differences, ratios b/a and sums.
+2. **Digit budget.** Rewrite the rule in the language of significant digits: a growth rate of size g computed from numbers with k significant digits has only about k − log10(1/g) meaningful digits. To reach tolerance τ, the inputs need about log10(1/(g·τ)) significant digits. Give an exact statement.
+3. **Zero-parameter test.** For all analysable questions in T1, use only the rule above to predict "determined / undetermined", and compare with T1's exact classification. Give confusion tables by operation type. List every question the rule gets wrong, with the reason.
+4. **A priori prediction.** Without looking at the specific values of each question, use only "leading digits follow the Benford distribution" plus the actual distributions of growth rates and displayed digits to predict the undetermined share, and compare with the observed share.
+5. **Probabilistic version.** T1's witness is taken at a corner of the rounding box, which is the worst case. Assuming the rounding errors of the inputs are independent and uniform within half a last-digit unit, compute for each question the probability that "the true value lies outside the tolerance", then sum to get the expected share. For the growth-rate case, give a closed form if possible.
+6. **Tolerance curve.** Replace 1% with 0.1%, 0.5%, 2% and 5%, and plot how the undetermined share changes with the tolerance.
 
-## 交付
+## Deliverables
 
-- 一张图：横轴 Δ（对数刻度），纵轴不被确定的比例，标出 1/τ 处的台阶；旁边一幅是位数预算的预测对实测。
-- 一页结论。
-- 证明、代码、逐题结果。
+- One figure: x-axis Δ (log scale), y-axis the undetermined share, with the step at 1/τ marked; alongside it a panel of the digit-budget prediction versus observation.
+- A one-page summary.
+- Proofs, code, per-question results.
 
-## 判定
+## Decision
 
-- **成立：** 规则与精确判定的一致率在每个运算类型上都不低于 95%，且先验预测与实测相差不超过 5 个百分点。
-- **需要修正：** 某一类运算一致率明显偏低。如实列出，给出修正后的规则。
-- 概率版本的期望比例无论多少都照实报告。如果它远低于 17%，说明最坏情形的说法夸大了，要在结论里写明。
+- **Holds:** the agreement rate between the rule and the exact classification is at least 95% in every operation type, and the a priori prediction differs from the observed share by no more than 5 percentage points.
+- **Needs correction:** some operation type has a clearly lower agreement rate. List it as it is and give the corrected rule.
+- Report the expected share from the probabilistic version as it is, whatever it is. If it is far below 17%, the worst-case statement is exaggerated, and the summary must say so.
 
-## 先查
+## Check first
 
-数值分析里"相近数相减损失有效数字"是经典内容，不要当成新结果。要查的是：是否有人把它写成财务报表分析或金融问答基准的定量规则，并在基准上检验过。
+In numerical analysis, "subtracting nearby numbers loses significant digits" is classical material; do not treat it as a new result. What to check is whether anyone has written it as a quantitative rule for financial statement analysis or for financial QA benchmarks, and tested it on a benchmark.

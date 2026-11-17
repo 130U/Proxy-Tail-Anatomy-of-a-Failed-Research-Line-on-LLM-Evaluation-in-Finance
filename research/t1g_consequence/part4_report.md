@@ -1,46 +1,46 @@
-# 第四部分：全划分的同量不同精度
+# Part Four: same quantity, different precision, across all splits
 
-确认 **154 对**来源披露：FinQA **73 对**、TAT-QA **81 对**。其中能把出处绑定到数值标准解法的为 **78 对、79 道不同题、96 次单输入来源替换**。两个答案的相对差超过 1% 的有 **18 / 96 = 18.75%**，涉及 **16 道不同题**。这是一组明确检索规则下的确认下界，不是全部问题的发生率。〔我们的实验〕
+We confirmed **154 pairs** of source disclosures: FinQA **73 pairs**, TAT-QA **81 pairs**. Of these, **78 pairs, 79 distinct questions, and 96 single-input source substitutions** have sources that can be bound to a numeric standard solution. The relative difference between the two answers exceeds 1% for **18 / 96 = 18.75%**, involving **16 distinct questions**. This is a confirmed lower bound under one explicit search rule, not an incidence rate over all questions. [our experiment]
 
-| 数据集 | 确认来源对 | 可计算来源对 | 不同题数 | 单输入替换 | 答案相对差 >1% | 粗来源答案范围包含细来源答案 |
+| Dataset | Confirmed source pairs | Computable source pairs | Distinct questions | Single-input substitutions | Answer relative difference >1% | Coarse-source answer range contains fine-source answer |
 |---|---:|---:|---:|---:|---:|---:|
 | FinQA | 73 | 31 | 42 | 45 | 9/45 = 20.00% | 45/45 |
 | TAT-QA | 81 | 47 | 37 | 51 | 9/51 = 17.65% | 51/51 |
-| 合计 | 154 | 78 | 79 | 96 | 18/96 = 18.75% | 96/96 |
+| Total | 154 | 78 | 79 | 96 | 18/96 = 18.75% | 96/96 |
 
-同题有多个被替换的来源时，逐个替换，各算一次；相同经济指标、时期及替换值的重复文本或重复表行不重复计入替换分母。因此 96 是来源选择实验次数，不是 96 道题。多个表格 UID 若含相同原表仍分别列出，未声称是独立公司样本。FinQA 确认对分布为 train 36、dev 2、test 35；TAT-QA 为 train 60、dev 13、test 8。〔我们的实验〕
+When a question has several substituted sources, they are substituted one at a time and each counts once; repeated text or repeated table rows with the same economic metric, period, and substitute value are not counted twice in the substitution denominator. So 96 is the number of source-choice experiments, not 96 questions. Multiple table UIDs that contain the same original table are still listed separately, and we do not claim they are independent company samples. The confirmed pairs are distributed as FinQA train 36, dev 2, test 35; TAT-QA train 60, dev 13, test 8. [our experiment]
 
-## 检索与语义确认的范围
+## Scope of search and semantic confirmation
 
-扫描 FinQA 全部 **2,789 页**及 TAT-QA 全部 **2,756 个表格上下文**，包含 train/dev/test。先提名同页表格格子与正文显式 thousand/million/billion/percent 表达；记录明确单位来源、表头、年份、指标词、位置和显示精度。**不以数值接近、舍入区间相交或中心被包住作为提名条件。** 该宽检索提名 FinQA 23,445、TAT-QA 27,531 个位置对，原始候选以 gzip JSONL 保存，仅压缩数据而未删除不相容行。〔我们的实验〕
+We scanned all **2,789 pages** of FinQA and all **2,756 table contexts** of TAT-QA, including train/dev/test. First, table cells on the same page were nominated together with explicit thousand/million/billion/percent expressions in the full text; the explicit unit source, header, year, metric words, location, and displayed precision were recorded. **Numeric closeness, intersecting rounding intervals, or a center being enclosed was not used as a nomination condition.** This broad search nominated 23,445 position pairs for FinQA and 27,531 for TAT-QA; the raw candidates are saved as gzip JSONL, which only compresses the data and does not delete incompatible rows. [our experiment]
 
-新语义核对层要求：单位候选唯一、表格对应单一年份、正文按局部顺序或 respectively 对应该年；至少两个实义指标词且表行指标词全部出现在该句。再取下列两个互斥语法层：一句只有一个带显式量级的数字，或该金额紧接 was/were/totaled/amounted to 等谓语且紧邻主语含该指标。两个层合计 **337 个候选全部由 AI 阅读核对**，不是外部人类标注；不把关键词或近值直接认作同一经济量。追加前轮完整 test 审阅，去除重复后共审阅 385 个位置对：确认154、拒绝226、待定5。全量宽候选中其余50,591个没有逐一语义判定。语法条件是在本轮开发的，未宣称事前注册，也未对数字遮蔽阅读。〔我们的实验〕
+The new semantic-check layer requires: a unique unit candidate, a table that corresponds to a single year, and full text that corresponds to that year by local order or "respectively"; at least two substantive metric words, with all metric words of the table row appearing in the sentence. Then two mutually exclusive grammatical strata are taken: a sentence with only one number carrying an explicit magnitude, or an amount that immediately follows a predicate such as was/were/totaled/amounted to with an adjacent subject containing the metric. The two strata together have **337 candidates, all checked by AI reading**, not by external human annotation; keywords or close values are not directly taken as the same economic quantity. Adding the previous round's complete test review and removing duplicates, 385 position pairs were reviewed in total: 154 confirmed, 226 rejected, 5 pending. The other 50,591 broad candidates in the full set were not semantically judged one by one. The grammatical conditions were developed in this round; we do not claim they were pre-registered, and the reading was not blinded to the numbers. [our experiment]
 
-新规则提名并确认 **126 对**（FinQA45、TAT-QA81）；另外28对仅来自旧扫描。新规则子集贡献70次替换，**12/70 = 17.14%**相对差超过1%。旧扫描曾要求区间相交，所以其包住率不能充当独立验证；本报告将它们单列。没有充分覆盖无显式量级、无明确年份、指标同义改写、跨页、表表重复、括号负数的所有正文形式以及所有百分数语境。金额为合同精确值、批准预算等情形仍只能做来源选择实验，不能因此断言其真实值服从连续随机舍入模型。〔我们的实验〕
+The new rules nominated and confirmed **126 pairs** (FinQA 45, TAT-QA 81); the other 28 pairs come only from the old scan. The new-rule subset contributes 70 substitutions, of which **12/70 = 17.14%** have a relative difference above 1%. The old scan required intersecting intervals, so its enclosure rate cannot serve as independent validation; this report lists those pairs separately. Coverage is not adequate for: no explicit magnitude, no explicit year, synonymous rewording of metrics, cross-page, table-to-table duplicates, all full-text forms of negative numbers in parentheses, and all percentage contexts. Cases where the amount is an exact contract value, an approved budget, and the like can still only be used for source-choice experiments; one cannot assert from them that the true value follows a continuous random rounding model. [our experiment]
 
-## 答案差异的分布
+## Distribution of answer differences
 
-采用 `|粗来源答案 − 细来源答案| / |细来源答案|`，其余程序输入固定在原显示中心。来源精度按统一单位后的半末位比较，和公式使用的是哪个来源无关。这不是官方判分的同义词。精细答案为0时另计无穷或0，本批没有非零对0的该类分母。〔我们的实验〕
+We use `|coarse-source answer − fine-source answer| / |fine-source answer|`, with the other program inputs fixed at their original displayed centers. Source precision is compared by the half last-digit unit after unit normalization, regardless of which source the formula uses. This is not a synonym for official scoring. When the fine answer is 0, the case is counted separately as infinity or 0; this batch has no such denominator with a nonzero value against 0. [our experiment]
 
-| 数据集 | 最小 | 25%分位 | 中位数 | 75%分位 | 90%分位 | 95%分位 | 最大 |
+| Dataset | Min | 25th percentile | Median | 75th percentile | 90th percentile | 95th percentile | Max |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | FinQA | 0% | 0.0159% | 0.2452% | 0.6479% | 3.4546% | 16.4880% | 100% |
 | TAT-QA | 0.000227% | 0.0265% | 0.1486% | 0.2797% | 2.0767% | 3.5388% | 9.5445% |
 
-FinQA的旧35个确认对完整保留，旧23道单输入替换题全部复算，旧四道相对差超过1%的题也全部复现。所有FinQA替换公式在原显示值处的结果，与官方 `exe_ans` 相差均不超过0.0000051。手工补充绑定只处理已经读清语义角色的百分号、table_average、重复格子及年份误识别，不改标准运算。〔我们的实验〕
+The 35 old FinQA confirmed pairs are kept in full, all 23 old single-input substitution questions were recomputed, and all four old questions with a relative difference above 1% were reproduced. For every FinQA substitution formula, the result at the original displayed values differs from the official `exe_ans` by no more than 0.0000051. The hand-added bindings only handle percent signs, table_average, repeated cells, and misidentified years whose semantic roles had already been read clearly; they do not change the standard operations. [our experiment]
 
-PNC/2014/page_111.pdf-1 的两个 `2.6` 分别指2014年和2013年，不共享一个变量。逐个换成表中2.616或2.572时，答案由0变为0.016或0.028，各计一次替换。两者同时换成精细来源，标准差值为 **0.044 billion**，而粗来源联合范围为[-0.1,0.1]，包含0.044。联合替换另存一行，未重复加进96次分母。〔我们的实验；原始数据正文〕
+In PNC/2014/page_111.pdf-1, the two `2.6` values refer to 2014 and 2013 respectively and do not share a variable. Substituting each in turn with 2.616 or 2.572 from the table changes the answer from 0 to 0.016 or 0.028, each counted as one substitution. Substituting both with the fine sources at once, the standard difference is **0.044 billion**, while the joint range of the coarse sources is [-0.1,0.1], which contains 0.044. The joint substitution is saved as a separate row and is not added again to the denominator of 96. [our experiment; raw data full text]
 
-## 包住检验：保留一个失败
+## Enclosure test: one failure is kept
 
-直接在来源层检验，粗盒包住细中心的比例为 **FinQA73/73、TAT-QA80/81**；仅新规则提名的子集分别为45/45和80/81。TAT-QA 唯一失败 `p40065`（表格UID `9a8f8448-ba1b-45a8-bdbd-277ed197de04`）同一2019年所得税费用，表中为 **15,154 thousand**，正文 paragraph16 为 **15.1 million**。粗来源区间[15.05,15.15] million与细来源区间[15.1535,15.1545] million不相交，不能用本模型解释。该页题目没有用所得税费用做算术，因此其不相容未进入96次答案替换检验。未把它删除、改成相同量级或归为近值误配。〔我们的实验；原始数据正文〕
+Testing directly at the source level, the share of coarse boxes enclosing the fine center is **FinQA 73/73, TAT-QA 80/81**; for the subset nominated only by the new rules, the figures are 45/45 and 80/81. The only TAT-QA failure, `p40065` (table UID `9a8f8448-ba1b-45a8-bdbd-277ed197de04`), is the same 2019 income tax expense, shown as **15,154 thousand** in the table and **15.1 million** in full-text paragraph16. The coarse-source interval [15.05,15.15] million and the fine-source interval [15.1535,15.1545] million do not intersect, and this model cannot explain it. The questions on that page do not use income tax expense in arithmetic, so this incompatibility did not enter the 96-substitution answer test. It was not deleted, changed to the same magnitude, or classed as a near-value mismatch. [our experiment; raw data full text]
 
-96/96的答案包住率是**条件于能绑定标准解法的来源对**。这里使用精确一元有理函数值域：只让被替换的粗来源在其舍入区间变化，其他输入固定；求导的实临界点、端点与分母奇点均检查。这样得到的是可达范围，不只是可能过宽的区间算术包络。若进一步放宽其他输入，可行范围不会缩小；本结果不等于已经证明财报所有舍入盒假设成立，更不支持独立均匀分布。〔我们的实验〕
+The 96/96 answer enclosure rate is **conditional on source pairs that can be bound to a standard solution**. Here we use the exact range of a univariate rational function: only the substituted coarse source varies over its rounding interval, and the other inputs are fixed; real critical points of the derivative, endpoints, and denominator singularities are all checked. What this gives is the reachable range, not merely an interval-arithmetic envelope that may be too wide. Relaxing the other inputs further cannot shrink the feasible range; this result does not mean that all the rounding-box assumptions for the filings have been proved, let alone support an independent uniform distribution. [our experiment]
 
-相反例也保留了语义拒绝理由：`p37885` 的651 thousand是净减值，正文1.7 million是毛减值且随后明确收回1.0 million；`p12603`表为贷款净账面值，正文为公允价值，均不能拿来当舍入失败。〔原始数据正文；我们的语义审阅〕
+Counterexamples also keep their semantic rejection reasons: in `p37885`, 651 thousand is the net impairment, while the full text's 1.7 million is the gross impairment, followed by an explicit recovery of 1.0 million; in `p12603`, the table gives the net carrying amount of loans and the full text gives fair value. Neither can be used as a rounding failure. [raw data full text; our semantic review]
 
-## 数据与复算
+## Data and recomputation
 
-FinQA 使用前轮[固定官方数据](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset)，TAT-QA 使用本轮[固定官方数据](https://github.com/NExTplusplus/TAT-QA/tree/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw)的 train/dev/test_gold。TAT-QA 精确计算在预测提交 `0c68d8a` 后进行。源层级：披露数字、公式、单位和年份来自官方数据正文；全部计数、绑定、确认与区间为我们的实验。这里核对的是基准提供的文档表示，未对154对逐页回原始财报PDF；唯一不相容例也可能包含数据转录问题，不能据此断言发行人财报出错。
+FinQA uses the previous round's [pinned official data](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset), and TAT-QA uses train/dev/test_gold of this round's [pinned official data](https://github.com/NExTplusplus/TAT-QA/tree/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw). The exact TAT-QA computation was done after the prediction commit `0c68d8a`. Source levels: disclosed numbers, formulas, units, and years come from the official data full text; all counts, bindings, confirmations, and intervals are our experiment. What was checked here is the document representation provided by the benchmarks; the 154 pairs were not traced page by page back to the original filing PDFs. The single incompatible case may also involve a data transcription problem, so one cannot assert from it that the issuer's filing is wrong.
 
-`part4_duplicates.py` 重建全划分候选及语法层；`part4_measure.py` 重建审阅决定、逐题替换和摘要。运行时读取旧 `proxy-tail/research/t1_rounding/` 的固定数据/解析器及本轮 TAT-QA 数据、`part3_corrected_per_question.jsonl`，不修改旧材料。核心结果为 `part4_confirmed_pairs.jsonl`、`part4_reviewed_pairs.jsonl`、`part4_question_results.csv`、`part4_summary.json`；每对均保留出处、单位、半末位、语义理由和是否有可绑定标准解法。无关联算术题的来源对列明不可计算原因，不被当成“答案差为0”。
+`part4_duplicates.py` rebuilds the all-split candidates and grammatical strata; `part4_measure.py` rebuilds the review decisions, per-question substitutions, and the summary. At run time they read the pinned data/parser from the old `proxy-tail/research/t1_rounding/`, this round's TAT-QA data, and `part3_corrected_per_question.jsonl`, without modifying the old material. The core results are `part4_confirmed_pairs.jsonl`, `part4_reviewed_pairs.jsonl`, `part4_question_results.csv`, and `part4_summary.json`; every pair keeps its source, unit, half last-digit unit, semantic reason, and whether it has a bindable standard solution. Source pairs not linked to any arithmetic question state why they cannot be computed and are not treated as "answer difference 0".

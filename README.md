@@ -1,41 +1,170 @@
-# Proxy Tail：一次没有走通的研究
+# Proxy Tail
 
-2026-11-17 收尾。**这条研究路线失败了：做出了可以复核的实验和审计记录，但没有找到足以支撑原定论文目标的新发现。** 本文为这条路线的收尾记录，未完成计划按原状态保留。
+**A research line on LLM evaluation in finance that did not work, and an account of why.**
 
-## 研究经过
+Between 15 and 17 November 2026 this project tried to produce a paper for a top NLP venue. It passed
+through five stages and four pivots and ended without a publishable result. This repository keeps
+the whole record: every task brief, prompt, raw model output, analysis script, pre-registered gate,
+review and dead end. The write-up is a short report in ACL format:
 
-项目最早从“可认证的金融语言模型”出发，做了九轮推导、实现和审查，比较过五条候选路径。工作涉及历史时点信息、数值误差、抽样审计预算、风险界和可核查的计算过程。逐轮报告、反例、测试、来源快照和交付文件都保留在 [历史研究](research/FABLE_FULL_REPORT.md)、[五条路径比较](research/paths/COMPARATIVE_ANALYSIS.md)及[逐轮记录](research/reports/)中。最后的问题是：框架能够搭起来，使用的数学却主要是已有工具，尚未带来一个值得单独研究的结论。
+**📄 [Proxy Tail: Anatomy of a Failed Research Line on LLM Evaluation in Finance](report/proxy_tail_postmortem.pdf)**
+(Letao (Theodore) Ouyang, November 2026; LaTeX source in [`report/src`](report/src/))
 
-随后转向“便宜模型在尾部漏掉什么”：先用便宜模型筛金融文本，想保住参考模型最极端的一部分，需要把名单放大多少。这里的参考模型只是比较对象，不是真值。理论推导和文献核对发现，尾部放大、copula 级联和召回约束筛选已有相关工作，不能把它们重新命名为新的定律。[理论与反例](research/tail_screening/theory.md)和[当时的文献记录](research/tail_screening/literature.md)保留了判断过程。
+Status: **closed on 2026-11-17.** Nothing here is ongoing work.
 
-测量也没有顺利过关。先做词法基线，再做排序和成对比较；三批共覆盖 288 个不同词法族，完成 64 次评分任务，另有两次整批尝试未产生输出。新 128 条确认集中，四次排序聚合的八项主检查通过七项，但负面 10% 的一个方向只找回 11/14，即 78.6%，低于预定 80%。因此没有进入 512 条。后来改为逐条绝对评分，完成 1,000 条标题、八轮及对照，共 250 次调用、10,000 个原始分数。四次平均后，10% 双尾重合的点估计约为 90%–92%；第六、七轮的正面边界同分组却各有 22 条，超过事先允许的 20 条，正式结论仍是“无法判断”。这不是假说被证伪，也不能凭平均后的好看数字改判成功。[排序实验](research/tail_screening/FABLE_CURRENT_REPORT.md)、[绝对评分报告](research/absolute_scoring/FABLE_REPORT.md)和各自原始输入、输出、分批记录均原样保留。
+---
 
-这之后拆出了 T1 至 T4。T2 想测数字大小与情绪评分的关系，完成查重和设计审查后停止，**没有进入评分实验**。T3 实际完成 88 次主调用、3,360 个分数，另保留早期 4 次调用的 120 个弃用分数。组合评分更接近相加；拟合较差的加权平均模型虽然让一个预定指标过门，却不足以支持新的负面权重机制。T3 原报告中的正式“继续”判断没有改写，后续项目决策是收束。T4 没有执行。[T2 查重决策](research/t2_magnitude/FABLE_DECISION.md)与 [T3 原报告](research/t3_combination/README.md)分别说明了原因。
+## The route
 
-真正继续下去的是 T1：财报里的数字经过舍入，基准却把它们当作精确输入，这会使多少题的答案无法确定？最初在 FinQA 的 1,147 道测试题中找到 196 道输入盒见证，即 17.1%。T1a 推导精度规则，用有理数范围和数值计算复核，在 1% 容差下，一阶规则与所分析的 5,337 题标签全部一致。这是该数据、该口径下的结果，并非任意算式和容差下都不会出错。[T1 原始结果](research/t1_rounding/)与 [T1a 推导、反例和逐题表](research/t1a_law/)都在仓库里。
+Colours give the reason each stage was closed, not whether it was finished.
 
-接着主动尝试推翻这个发现。T1b 加入 511 条加总关系和 21 处重复披露，只救回一题；再排除来源绑定和语义问题，留下 139 道。T1d 的第二轮语义复核把两轮都认可的数量进一步收窄到 123 道，约占整个测试集 10.7%。这个比例依赖已建模的输入范围、文档约束和 AI 语义复核，不能扩大为已经穷尽整份财报信息的人工认证。[T1b](research/t1b_tighten/)及 [T1d 复核记录](research/t1d_precision/)保留了被剔除的题和原始判断。
+```mermaid
+flowchart TD
+    classDef std fill:#f1f1f1,stroke:#6e6e6e,color:#111
+    classDef prior fill:#f1ecf7,stroke:#764e9f,color:#111
+    classDef gate fill:#fbf3e0,stroke:#bf8000,color:#111
+    classDef conseq fill:#e5f2f4,stroke:#00768a,color:#111
+    classDef keep fill:#e6f3e9,stroke:#1a7f37,color:#111,stroke-width:3px
+    classDef end_ fill:#ffffff,stroke:#333,color:#111
 
-但这个现象没有自然转化为模型评测问题。T1c 做了 392 个独立题目会话，发现标准答案和模型通常都用相同的显示数字：输入精度的不确定，并没有按预想方式改变现有判分。T1d 又比较“不问精度”“提醒舍入并问精度”“再教规则”：提醒后，可评分回答中区间准确率为 98.4%，教规则后为 98.1%。不能据此说模型平时就会主动表达不确定性，但“模型不会处理这一精度问题”的解释也没有得到支持。[T1c 提示、回答与判分](research/t1c_models/)和 [T1d 一页结论](research/t1d_precision/ONE_PAGE.md)保留了分母、区间及服务条件限制。
+    A["<b>A. Certifiable FinLM</b> · Nov 15–16<br/>9 rounds, 5 research paths, proofs + one real baseline<br/>Closed: every component was a standard tool"]:::std
+    B["<b>B. Proxy tail</b> · Nov 16<br/>How wide must a cheap model's shortlist be?<br/>Closed: law already known; reference LLM unstable in the tail"]:::prior
+    C["<b>C. Absolute-score stability</b> · Nov 16<br/>1,000 headlines × 8 rounds, 10,000 scores<br/>Closed: inconclusive (tie gate 22 > 20)"]:::gate
+    D["<b>D. Two probes</b> · Nov 16<br/>T2 stopped at prior art; T3 additive, no mechanism"]:::prior
+    E["<b>E. Rounding precision in FinQA</b> · Nov 16–17<br/>196 / 1,147 test answers not pinned down by displayed precision"]:::conseq
+    E1["T1a law: zero-parameter rule, 5,337 / 5,337"]:::keep
+    E2["T1b kill test: survives, 123 questions (10.7%)"]:::keep
+    E3["T1c: no effect on official scores"]:::conseq
+    E4["T1d: models handle precision when asked (98.4%)"]:::conseq
+    E5["T1f: 4 of 5 claims had prior work"]:::prior
+    E6["T1g: no consequence; rule holds on TAT-QA"]:::conseq
+    Z["<b>Closeout</b> · Nov 17<br/>a verified note, no paper"]:::end_
 
-同一过程中还发现了反复被判错的题、参考答案问题、口径差异和标准字段冲突。T1f 对五项候选贡献查新后，四项已有相近工作，只剩精度规则在基准上的测量值得继续核查。T1e 的扩展计划因此没有全部执行；任务文件留作历史，不作为已完成工作。[T1f 查新材料](research/t1f_novelty/)保存了证据和未核实之处。
+    A -->|"no consumer for a certificate;<br/>drop certificates and training"| B
+    B -->|"reference disagrees with itself;<br/>measure its stability first"| C
+    C -->|"a pass would only confirm a textbook formula;<br/>issue four one-day probes"| D
+    D -->|"T1 finds a countable effect in an hour"| E
+    E --> E1 & E2 & E3
+    E3 -->|"null on scores; ask a behavioural question"| E4
+    E4 -->|"draft paper; check novelty first"| E5
+    E5 -->|"only the rule remains; look for a consequence"| E6
+    E6 --> Z
+```
 
-最后一轮 T1g 专门找“精度问题在哪里造成实际后果”，并先提交 TAT-QA 的预测，再计算结果。在覆盖的 5,261 道题上，预测受影响比例为 24.49%，修正后的实测为 20.47%；规则有可迁移的部分，原始结果和来源绑定修复也都有记录。然而，预期中的实际后果仍不足：982 条显示差额没有一条与显示值相减不符；能够关联到官方评分差异的题，在该轮各自统计口径下仅占 FinQA 的 0.153%、TAT-QA 的 0.354%，且都能由输出位数解释。只确认 25 道计算比较题，其中两道在输入盒内可以翻转，未达到预设继续条件。另找到 154 对不同精度的披露，96 个单输入替换中有 18 个答案差异超过 1%；这是筛选后的条件比例，不能当作全库发生率。[T1g 完整记录](research/t1g_consequence/ONE_PAGE.md)保留了四部分的逐行证据、排除记录、预测提交和修复前后结果。
+## Why it failed, in one paragraph
 
-## 为什么失败
+A result at the level we aimed for needs three things at once: it must be **new**, it must have a
+**consequence** that some reader would act on, and its **evidence** must be complete. Every stage
+failed on novelty or consequence; the only factor we reliably delivered was evidence. That is not a
+coincidence. Novelty and consequence are cheap to test (hours of reading), evidence is expensive
+(days of experiments), and a sensible plan tests the cheap factors first. Our agents made evidence
+nearly free to *start*, so each stage began with an experiment and ended with a novelty or
+consequence check. The report traces this one root cause through its three forms — **method before
+phenomenon**, **novelty checked late**, and **count before consequence** — and shows, with the
+project's own data, the earliest signal that could have closed each stage and how little it would
+have cost to read it.
 
-首先，研究目标与实际贡献之间始终有距离。几次看似可写的发现，经查新后都落回已有问题或经典方法。换一个金融数据集、换一个模型，并不会自动产生新的研究问题。最后留下的精度审计有用，但现有证据更适合作为技术注记，没有达到原定论文目标。
+A concrete example. The rounding line (Stage E) measured a real effect: for about one FinQA test
+question in ten, the precision printed in the filing cannot pin the answer down to the benchmark's
+1% tolerance. It took eleven hours and more than 1,500 model sessions to learn that this changes no
+official score. The reason is visible in the benchmark's definition: the gold answer is a program run
+on the displayed numbers, and models read the same displayed numbers. Uncertainty about the
+*unrounded* truth is invisible to every score that shares that convention. Reading the scorer would
+have shown this before the first experiment.
 
-其次，最有希望的现象没有表现出预期的后果。舍入误差确实能扩张可能答案的范围；这不等于官方判分会改变，也不等于模型无法处理。T1c、T1d 和 T1g 分别检查了这些连接，结果没有把它们接起来。继续扩大实验前，需要新的问题，而不是把同一个计数做得更大。
+## Five questions to answer before the first experiment
 
-还有一个具体假设被数据否定了：把财报数字看成各自独立舍入，据此预测约四分之一的显示差额不一致。实际是 0/982；此前 511 条加总关系也只有七条非零残差。独立均匀模型可以用来计算假设内的概率，却不能直接估计真实财报的发生率。半末位输入盒仍能描述可能范围，但真实未舍入底稿未知，不能据此认定财报采用了哪一种协调机制。
+1. **Who consumes the answer?** Name the score, decision or price that changes if the hypothesis is
+   true. For a benchmark defect, read the scorer and check that the defect passes through it.
+2. **Has it been done?** Two hours on prior art, including the last twelve months of preprints and
+   code repositories, searched by someone other than the proposer.
+3. **What is the cheapest kill test, and does it run first?**
+4. **Can the instrument resolve the gate?** From pilot data, compute granularity, ties and the
+   chance the gate passes under a plausible truth. (Two of our gates could not: one failed by a single
+   item out of 14, the other had a 40–70% chance of a tie breach before it ran.)
+5. **Is our edge decisive here?** If the mathematics is textbook and the field is crowded, expect to
+   lose the race to novelty.
 
-尾部方向则卡在新颖性与测量两端：理论已有先例，实验既有未通过的确认检查，也有触发并列门的不可判定结果。自我一致性又不等于正确性，更未回答重复打分与扩大筛选名单之间的经济取舍。跨厂商复现、真人抽查等事项没有完成；它们是证据边界，不应被写成已经做过的验证。
+## What survives
 
-## 留下什么
+- **A verified benchmark-precision note.** A zero-parameter rule predicts which financial-QA answers
+  the displayed precision cannot determine. On FinQA, 123 of 1,147 test questions (10.7%) remain
+  undetermined at 1% after duplicate disclosures, sum constraints and two independent AI semantic
+  reviews. Out of sample on TAT-QA, the prediction committed before measuring was 24.5%; the
+  measurement was 20.5%. The underlying mathematics is textbook (cancellation in a difference of
+  close numbers).
+- **A negative result about consequences.** This indeterminacy changes almost no official score
+  (0.15% of FinQA and 0.35% of TAT-QA scored items). Filings are self-consistent at their displayed
+  precision (0 of 982 printed differences inconsistent; 504 of 511 sum relations foot exactly), so
+  independent-rounding models should not be used to estimate real rates.
+- **Measurement facts for LLM scoring.** One model scoring 1,000 financial headlines has single-run
+  reliability 0.975; its top-10% list overlaps 84–87% with an independent run and 91–92% after
+  averaging four runs, close to the Spearman–Brown prediction.
 
-保留这份仓库，是为了留下从问题、执行到否决的完整过程。原任务、提示、批次、原始回答、弃用结果、代码、逐题判分、反例、查重、修订与未完成计划都有各自的位置。文章采用直接的叙述，不抹掉实际使用 AI 评分和复核的事实，也不把它们写成人工实验或真人审稿。
+## How the work was done
 
-[任务记录](tasks/README.md)按执行状态连接各阶段材料；[归档说明](archive/README.md)记录旧分支与提交位置；[收尾前首页](archive/README-before-closeout.md)保留当时的路线图。旧报告里“继续”“当前目标”和“下一步”等措辞属于当时的判断，本页是项目的最终状态。论文草稿保留为未完成稿，不作为已经成立或发表的论文。
+One human and two kinds of AI participants:
 
-GitHub 只保留 `main` 和收尾标签 `closeout-2026-11-17`。各研究分支的提交历史通过合并父节点保留，实际材料集中到主分支；不压平历史，不删除失败记录。
+- **The author** (Letao (Theodore) Ouyang) set the constraints — no own GPU, no model training,
+  theory first — and made every stop/continue decision.
+- **The advisor** (Claude, called "Fable" throughout the documents) proposed directions, wrote the
+  task briefs with pre-registered decision rules, and recomputed key numbers before ruling.
+- **The students** (OpenAI Codex with GPT-family models, named in the records as `gpt-6-sol`,
+  `gpt-6-astra`, `gpt-6.1-sol`, "Luna" and "Sol") executed the tasks and wrote most of the notes.
+  Semantic reviews and adjudications were also done by AI models. No human annotation was collected.
+
+Documents that address "Fable" or "Theodore" were written by the students for the advisor and the
+author. They are kept as written.
+
+## Repository map
+
+| Path | What is there |
+|---|---|
+| [`report/`](report/) | The post-mortem report (PDF) and its LaTeX source |
+| [`tasks/`](tasks/) | Every task brief the advisor issued, with its outcome |
+| [`research/`](research/) | One folder per stage or task: protocols, prompts, raw outputs, analysis code, results, reviews. Start with [`research/README.md`](research/README.md) |
+| [`source_materials/`](source_materials/) | Snapshot of the earlier 130U-FinLLM project and the source audits used in Stage A |
+| [`archive/`](archive/) | Historical homepages, the roadmap as it stood before closeout, and the abandoned paper draft |
+| [`REPRODUCE.md`](REPRODUCE.md) | How to recompute the saved results without calling any model |
+
+**Reading guide.** Five minutes: this page. Thirty minutes: the [report](report/proxy_tail_postmortem.pdf).
+An afternoon: the report, then the one-page summaries of each stage linked from
+[`research/README.md`](research/README.md), then the raw records of whichever stage you doubt.
+
+## About this version
+
+The working documents were written in Chinese. For this public release every document, comment
+and free-text data field was translated into English; numbers, code logic, prompts, raw model outputs
+and link targets were not changed. A few strings that scripts write into reports were translated in
+both places so that rerunning a script still reproduces its report. Two test inputs that were
+Chinese text were replaced by non-English text that tests the same thing, and one full-width comma
+inside a quoted TAT-QA question became an ASCII comma. Local absolute paths in run records were
+replaced by placeholders such as `<workspace>`. Delivery bundles that duplicated other files (ZIP packages, a concatenated
+review bundle, reading-copy PDFs) were removed. The state at closeout, in the original language and with every removed file, is
+preserved under the tag [`closeout-2026-11-17`](https://github.com/130U/proxy-tail/tree/closeout-2026-11-17).
+
+Some old records pin other files by SHA-256. Those hashes refer to the original bytes; checks that
+verify them will fail on translated files and should be run against the tag.
+
+## Data and licences
+
+The FinQA and TAT-QA datasets are downloaded by the scripts and are not stored here; excerpts that
+appear in prompts and per-question records stay under the datasets' own licences (FinQA: MIT, licence
+file in [`research/t1c_models/inputs/`](research/t1c_models/inputs/); TAT-QA: CC BY 4.0). SEntFiN
+(MIT) is stored with its licence in
+[`source_materials/130U-FinLLM/data/raw/candidates/sentfin/`](source_materials/130U-FinLLM/data/raw/candidates/sentfin/).
+FOMC minutes are public records of the Federal Reserve Board. No licence has been chosen yet for the
+project's own code and text.
+
+## Citation
+
+```bibtex
+@techreport{ouyang2026proxytail,
+  title       = {Proxy Tail: Anatomy of a Failed Research Line on {LLM} Evaluation in Finance},
+  author      = {Ouyang, Letao (Theodore)},
+  year        = {2026},
+  month       = nov,
+  institution = {Independent},
+  url         = {https://github.com/130U/proxy-tail}
+}
+```

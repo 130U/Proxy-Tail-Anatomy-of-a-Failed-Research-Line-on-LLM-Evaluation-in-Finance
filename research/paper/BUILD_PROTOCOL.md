@@ -1,25 +1,25 @@
-# 第七轮论文稿与可阅读版本：执行前约定
+# Round seven manuscript and readable version: pre-execution agreement
 
-日期：2026-11-16。仅本地整理，不联网、安装软件、训练模型或发送给 Fable。本轮不是新的确认性实验；引用的数值来自已有冻结协议与结果。
+Date: 2026-11-16. Local preparation only: no network access, no software installation, no model training, nothing sent to Fable. This round is not a new confirmatory experiment; the numbers cited come from existing frozen protocols and results.
 
-## 内容与比较对象
+## Content and comparison targets
 
-主稿以固定分层、均匀无放回、全零发现出证的有限总体问题为中心。必须包含完整的条件和关键证明、最强联合零发现矩形对照、全部20格结果，以及非矩形安全区域和简单总污染数证书这两个更强的比较对象。独立审查发现的简单替代必须进入正文，不能只放在附录或回应信。
+The main manuscript centres on the finite-population problem with fixed stratification, uniform sampling without replacement, and certification only when all findings are zero. It must include the full conditions and key proofs, the strongest joint zero-finding rectangle control, the results for all 20 cells, and two stronger comparison targets: a non-rectangular safe region and a simple total-contamination-count certificate. The simple alternatives found by the independent review must go into the full text; they cannot be put only in an appendix or a response letter.
 
-PIT和P2作为证书链的边界讨论，不把六轮产物拼成已完成的统一方法。真实SEntFiN基线只用于说明现有任务和简单模型参照，不能当成审计定理或历史证书的验证。G0/G1、新颖性和真实整链验收保持原有状态。
+PIT and P2 are discussed as boundaries of the certificate chain; the products of six rounds are not stitched together into a finished unified method. The real SEntFiN baseline is only used to describe the existing task and a simple-model reference; it cannot serve as verification of the audit theorem or of a historical certificate. G0/G1, novelty and real full-chain acceptance keep their existing status.
 
-## 构建预算
+## Build budget
 
-使用本机已有捆绑 Python、Playwright、本地浏览器和Poppler；不获取新的依赖。原拟ReportLab，但可用环境没有TeX/数学渲染依赖，改用受限TeX转原生MathML，再由断网浏览器排版，以避免自造公式坐标排版器。首轮PDF生成与逐页渲染预算为CPU墙钟120秒、不请求GPU计算，预计常驻内存低于1GB（估计，除非实际测量否则不报告为实测）。排版修正允许额外构建，每次记录是否改动数学内容；不因排版重跑研究实验。
+Use the bundled Python, Playwright, local browser and Poppler already on this machine; obtain no new dependencies. ReportLab was planned originally, but the available environment has no TeX/math-rendering dependency, so the build instead converts restricted TeX to native MathML and lets an offline browser typeset it, to avoid writing a home-made formula-coordinate typesetter. The budget for first-round PDF generation and page-by-page rendering is 120 seconds of CPU wall clock, no GPU compute requested, and expected resident memory below 1GB (an estimate; not reported as measured unless actually measured). Typesetting fixes may use extra builds, each recording whether the mathematical content changed; research experiments are not rerun because of typesetting.
 
-目标为一份完整可审阅的英文内部技术报告，约8–14页；若完整证明和全部对照需要更多页，保留内容而不压缩到不可读字号。作者栏使用“Prepared for Theodore and Fable - internal working draft”，不虚构机构、作者同意或投稿状态。
+The target is a complete, reviewable English internal technical report of about 8–14 pages; if the full proofs and all controls need more pages, the content is kept rather than squeezed into an unreadable font size. The author line uses "Prepared for Theodore and Fable - internal working draft"; no institution, author consent or submission status is invented.
 
-## 文件与验证
+## Files and verification
 
-- `manuscript.md`：主要可编辑内容源；独立审查逐段核对。
-- `manuscript.tex`：对应的可编辑LaTeX稿；本地没有TeX编译器，不能称其已编译验证。
-- `build_pdf.py`：本地PDF构建脚本；不允许静默丢掉不支持的数学表达式。
-- `output/pdf/audit_budgets_working_report.pdf`：本地浏览器原生MathML排版的可阅读版本，不称TeX编译产物；浏览器使用隔离上下文、禁用网络，不访问文献链接。
-- PDF中间页图保存在工作区`tmp/pdfs/`，不进入研究归档。检查每页渲染、公式、表格、页码、文本提取与源文件身份；检查器运行成功不能代替视觉检查。
+- `manuscript.md`: the main editable content source; the independent review checks it paragraph by paragraph.
+- `manuscript.tex`: the corresponding editable LaTeX manuscript; there is no local TeX compiler, so it cannot be called compiled and verified.
+- `build_pdf.py`: the local PDF build script; it must not silently drop unsupported mathematical expressions.
+- `output/pdf/audit_budgets_working_report.pdf`: the readable version typeset with the local browser's native MathML; it is not called a TeX compilation product; the browser uses an isolated context with the network disabled and does not visit reference links.
+- Intermediate PDF page images are saved in the workspace `tmp/pdfs/` and do not enter the research archive. Check each page's rendering, formulas, tables, page numbers, text extraction and source-file identity; a successful checker run cannot replace visual inspection.
 
-当前规定产物是这份集中稿。原WP0.3的`theory/notes.tex`全套理论笔记不是本稿的等价副本，不能用本PDF静默补成该项原定TeX编译验收完成。
+The deliverable currently specified is this focused manuscript. The full set of theory notes in the original WP0.3 `theory/notes.tex` is not an equivalent copy of this manuscript, and this PDF must not be used to silently mark that item's original TeX-compilation acceptance as complete.

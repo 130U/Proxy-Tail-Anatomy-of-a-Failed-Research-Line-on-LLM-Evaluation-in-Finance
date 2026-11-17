@@ -1,101 +1,101 @@
-# 给 Fable 的完整交付：同一模型的头部名单稳定性
+# Full deliverable for Fable: top-list stability of the same model
 
-2026-11-16。**实验已经完整执行；正式结论为“无法判断”，原因是预先规定的主要并列门失格。** 四次平均在本样本的 10% 双尾重合点估计达到 90%，不能据此改判协议通过或推导新尾部定律。本报告是 Codex 的实际实验及分析，供 Theodore 转交 Fable；不代表 Fable 已评审。
+2026-11-16. **The experiment was executed in full. The formal conclusion is "inconclusive", because the pre-registered main ties gate failed.** With four-score averages, the 10% two-tail overlap point estimates reach 90% in this sample; this cannot be used to change the verdict to a protocol pass or to derive a new tail law. This report is Codex's actual experiment and analysis, for Theodore to pass on to Fable; it does not mean that Fable has reviewed it.
 
-## 实际完成的工作
+## What was actually done
 
-在用户明确选择“按复现与压力测试继续评分”后，从尚未用于旧三次 agent 实验的 1,282 个测试词法族中，按冻结种子抽取 1,000 族，每族一条。固定 0–100 整数量表、五个合成锚点、每批 40 条，每轮重随机分批和次序。使用 gpt-6-sol、reasoning_effort=low、fork_turns=none，每次建立新评分上下文。
+After the user explicitly chose "continue scoring as a replication and stress test", 1,000 families were drawn with the frozen seed, one item per family, from the 1,282 test lexical families not used in the earlier three agent experiments. Fixed 0–100 integer scale, five synthetic anchors, 40 items per batch, with batches and order re-randomized each round. The scorer was gpt-6-sol with reasoning_effort=low and fork_turns=none, and every call opened a new scoring context.
 
-主实验 200 次调用产生 8,000 个分数。100 个对照目标分布于全部 25 个首轮批次，所以两个对照重复共 50 次调用、2,000 个伴随分数，其中仅预先选定目标的 200 个分数用于主要控制比较，另外 1,800 个分数仍完整保存。共 250 个不同评分代理任务、10,000 个原始分数；全部输出一次通过 ID、重复键和整数范围检查，评分重试为零。采集记录时间从 14:36:37 到 15:49:41 UTC，约 73.1 分钟，含调度等待，不能当成纯推理时长。
+The 200 calls of the main experiment produced 8,000 scores. The 100 control targets are spread over all 25 first-round batches, so the two control repeats took 50 calls in total and produced 2,000 companion scores. Only the 200 scores of the pre-selected targets are used in the main control comparison; the other 1,800 scores are still saved in full. In total there were 250 distinct scoring-agent tasks and 10,000 raw scores. All outputs passed the ID, duplicate-key and integer-range checks on the first pass, with zero scoring retries. The recorded collection time runs from 14:36:37 to 15:49:41 UTC, about 73.1 minutes including scheduling waits; it cannot be read as pure inference time.
 
-中途调度代理两次请求报 Bad Request，主代理接收已完成评分后接管第八轮，未重跑有效分数。最大并发由两个评分代理变为三个，模型与提示不变。主代理字段核对曾显示一条带旧标签的源行，随机选样与评分均未使用该标签；不能声称所有参与代理完全未见标签。详见 [执行说明](execution/notes.md)。
+Midway, the scheduling agent twice reported Bad Request on a request. The main agent received the completed scores and took over round eight, without rerunning any valid scores. Maximum concurrency changed from two scoring agents to three; model and prompt were unchanged. During the main agent's field check, one source row carrying an old label was displayed. Neither the random sampling nor the scoring used that label, but we cannot claim that no participating agent ever saw the labels. See the [execution notes](execution/notes.md).
 
-来源为保存版本的 SEntFiN，沿用其作者 MIT 许可及本地研究范围；来源版本、既有划分限制、族抽样种子与精确实施规则见 [冻结协议](protocol.md)。新标题原文保存在仓库外，本轮提交仅含 ID 对应、分数、合成提示、代码与汇总。词法族去重不证明事件独立，也不证明预训练未见过标题。
+The source is the saved version of SEntFiN, used under its authors' MIT license and the local research scope. The source version, the limits of the existing split, the family sampling seed and the exact implementation rules are in the [frozen protocol](protocol.md). The original text of the new headlines is stored outside the repository; this round's commit contains only ID mappings, scores, synthetic prompts, code and summaries. Lexical-family deduplication does not prove that events are independent, nor that pretraining never saw the headlines.
 
-## 主要结果：10% 双尾
+## Main results: 10% two tails
 
-A 为第 1–4 轮，B 为第 5–8 轮；每组按相同前缀取 m=1、2、4 次原始整数分的均值。A→B 以 A 的名单为参考分母，B→A 反向。边界同分全部保留，因此两份实际名单可能不一样大。下表两端范围是两个方向的点估计，不是置信区间。
+A is rounds 1–4 and B is rounds 5–8. For each group, we take the mean of the raw integer scores over the same prefix of m=1, 2, 4 rounds. A→B uses A's list as the reference denominator; B→A is the reverse. All boundary ties are kept, so the two actual lists can differ in size. The ranges in the table below are the point estimates from the two directions, not confidence intervals.
 
-| 平均次数 m | 最高 10% 重合 | 最低 10% 重合 | 固定高斯预测（双端相同） |
+| Number of averaged scores m | Top 10% overlap | Bottom 10% overlap | Fixed Gaussian prediction (same for both tails) |
 |---|---:|---:|---:|
 | 1 | 84.1%–87.2% | 81.3%–86.1% | 84.3% |
 | 2 | 85.6%–88.1% | 86.3%–88.0% | 88.8% |
 | 4 | 91.1%–92.0% | 90.1%–91.0% | 92.1% |
 
-单次与两次平均在四个主要方向的点估计均未达到 90%；四次平均的四项点估计首次均达到 90%。但是四次平均的逐项区间下限约为 84.5%–86.1%，不能宣称总体达到或保证 90%，也不能推断最小充分重复次数恰好为四次。
+For single scores and two-score averages, none of the point estimates in the four main directions reaches 90%. For four-score averages, all four point estimates reach 90% for the first time. But the item-wise interval lower bounds for four-score averages are about 84.5%–86.1%, so we cannot claim that the population reaches 90% or is guaranteed to, nor infer that the minimum sufficient number of repeats is exactly four.
 
-| m | 尾部 | 参考方向 | 交集 / 参考人数 | 重合 | 95% 区间 | 预测 | 实测减预测的 95% 区间 |
+| m | Tail | Reference direction | Intersection / reference size | Overlap | 95% interval | Prediction | 95% interval of observed minus predicted |
 |---|---|---|---:|---:|---|---:|---|
-| 1 | 正面 | A→B | 95/109 | 87.2% | [74.8%, 91.5%] | 84.3% | [-9.4%, 7.4%] |
-| 1 | 正面 | B→A | 95/113 | 84.1% | [74.4%, 91.3%] | 84.3% | [-9.7%, 7.2%] |
-| 1 | 负面 | A→B | 87/101 | 86.1% | [70.8%, 91.3%] | 84.3% | [-13.2%, 7.3%] |
-| 1 | 负面 | B→A | 87/107 | 81.3% | [76.1%, 91.4%] | 84.3% | [-8.2%, 7.4%] |
-| 2 | 正面 | A→B | 89/101 | 88.1% | [78.5%, 94.0%] | 88.8% | [-10.1%, 4.9%] |
-| 2 | 正面 | B→A | 89/104 | 85.6% | [79.6%, 94.1%] | 88.8% | [-9.1%, 5.4%] |
-| 2 | 负面 | A→B | 88/100 | 88.0% | [80.0%, 94.1%] | 88.8% | [-8.7%, 5.5%] |
-| 2 | 负面 | B→A | 88/102 | 86.3% | [79.8%, 94.0%] | 88.8% | [-8.9%, 5.0%] |
-| 4 | 正面 | A→B | 92/101 | 91.1% | [85.5%, 96.1%] | 92.1% | [-6.6%, 4.4%] |
-| 4 | 正面 | B→A | 92/100 | 92.0% | [86.1%, 96.1%] | 92.1% | [-6.0%, 4.3%] |
-| 4 | 负面 | A→B | 91/101 | 90.1% | [84.8%, 95.0%] | 92.1% | [-7.2%, 3.1%] |
-| 4 | 负面 | B→A | 91/100 | 91.0% | [84.5%, 95.0%] | 92.1% | [-7.6%, 3.2%] |
+| 1 | Positive | A→B | 95/109 | 87.2% | [74.8%, 91.5%] | 84.3% | [-9.4%, 7.4%] |
+| 1 | Positive | B→A | 95/113 | 84.1% | [74.4%, 91.3%] | 84.3% | [-9.7%, 7.2%] |
+| 1 | Negative | A→B | 87/101 | 86.1% | [70.8%, 91.3%] | 84.3% | [-13.2%, 7.3%] |
+| 1 | Negative | B→A | 87/107 | 81.3% | [76.1%, 91.4%] | 84.3% | [-8.2%, 7.4%] |
+| 2 | Positive | A→B | 89/101 | 88.1% | [78.5%, 94.0%] | 88.8% | [-10.1%, 4.9%] |
+| 2 | Positive | B→A | 89/104 | 85.6% | [79.6%, 94.1%] | 88.8% | [-9.1%, 5.4%] |
+| 2 | Negative | A→B | 88/100 | 88.0% | [80.0%, 94.1%] | 88.8% | [-8.7%, 5.5%] |
+| 2 | Negative | B→A | 88/102 | 86.3% | [79.8%, 94.0%] | 88.8% | [-8.9%, 5.0%] |
+| 4 | Positive | A→B | 92/101 | 91.1% | [85.5%, 96.1%] | 92.1% | [-6.6%, 4.4%] |
+| 4 | Positive | B→A | 92/100 | 92.0% | [86.1%, 96.1%] | 92.1% | [-6.0%, 4.3%] |
+| 4 | Negative | A→B | 91/101 | 90.1% | [84.8%, 95.0%] | 92.1% | [-7.2%, 3.1%] |
+| 4 | Negative | B→A | 91/100 | 91.0% | [84.5%, 95.0%] | 92.1% | [-7.6%, 3.2%] |
 
-区间为 5,000 次标题配对 percentile bootstrap。每次带走同一标题的全部八轮分数，保留重复抽中观测的重数；预测相关和实测减预测也在同一次重采样中重算。这些是逐项、条件于已有调用的区间，不是同时区间，不覆盖所有未来批次或服务变化的不确定性。
+The intervals are from a 5,000-draw headline-paired percentile bootstrap. Each draw carries all eight rounds of scores for the same headline and keeps the multiplicity of observations drawn more than once; the predicted correlation and the observed-minus-predicted value are recomputed in the same resample. These are item-wise intervals conditional on the calls already made. They are not simultaneous intervals, and they do not cover the uncertainty from all future batches or service changes.
 
-## 分辨率门为什么未通过
+## Why the resolution gate failed
 
-冻结协议规定：任一主要 10% 单轮或均分边界的整个同分组超过名义 100 人的 20%，整体主要结论为无法判断。第六、七轮上尾分数 76 的边界均有 **22 人**同分，分别令实际名单人数达到 **118、117**。虽然额外扩张只有 18、17 人，检查的是整个 22 人同分组，不能使用旧实验的“额外扩张比例”替代本题定义。
+The frozen protocol states: if the whole tie group at any main 10% single-round or mean-score boundary exceeds 20% of the nominal 100, the overall main conclusion is inconclusive. In rounds six and seven, the upper-tail boundary at score 76 has **22 items** tied each time, which brings the actual list size to **118 and 117**. The extra expansion is only 18 and 17, but the check is on the whole 22-item tie group; the "extra expansion fraction" from the earlier experiment cannot replace the definition used here.
 
-每轮使用的分值种数依次为 77、78、79、79、80、79、79、78；两次均分的两个 panel 为 145、147 种，四次为 275、270 种。分辨率提高是实际观察，但不消除已冻结的单轮门。5% 处也存在多个失格边界，完整记录见 [boundaries.csv](results/boundaries.csv)。结果 JSON 中的 84 个检查单元含单轮与 panel m=1 的重复记账，不能将 11 个失格单元当作 11 次独立失败。
+The number of distinct score values used in each round was 77, 78, 79, 79, 80, 79, 79, 78. For two-score means the two panels have 145 and 147, and for four-score means 275 and 270. The higher resolution is a real observation, but it does not remove the frozen single-round gate. Several boundaries also fail at 5%; the full record is in [boundaries.csv](results/boundaries.csv). The 84 check cells in the results JSON double-count single rounds and panel m=1, so the 11 failing cells cannot be treated as 11 independent failures.
 
-图中的 10% 六个均值比较点本身没有失格标记，因为它们使用的是指定 panel 前缀；总体门额外检查八个单轮，失败来自第六、七轮。图顶部说明已明确这一差别。超标是 22 对 20 的有限越线，不等于证明量表完全无用，但也不能事后放宽门槛。
+The six 10% mean-comparison points in the figure carry no failure marker themselves, because they use the specified panel prefixes. The overall gate additionally checks the eight single rounds, and the failure comes from rounds six and seven. The note at the top of the figure states this difference explicitly. The excess is a limited overshoot of 22 against 20. It does not prove that the scale is useless, but the threshold also cannot be relaxed after the fact.
 
-## 与固定公式的比较
+## Comparison with the fixed formula
 
-28 对单轮正态秩相关均值 r=0.974824，范围 0.971540–0.977704，配对 bootstrap 95% 区间 [0.971, 0.977]。由此给出 m=1、2、4 的 10% 高斯重合预测 84.31%、88.83%、92.07%；没有用均分后的重合或放行结果调参。
+The mean normal-rank correlation over the 28 single-round pairs is r=0.974824, with range 0.971540–0.977704 and paired bootstrap 95% interval [0.971, 0.977]. From this, the 10% Gaussian overlap predictions for m=1, 2, 4 are 84.31%, 88.83%, 92.07%. The averaged overlaps and widening results were not used for tuning.
 
-10% 处重合点估计的最大绝对误差为 3.25 个百分点，所有十二项差值区间均含零；全部三个 p 的 36 项重合差值区间也均含零。这是“没有检出清晰偏离”，不是“证明公式准确”：主要点的区间没有全部收进预定 ±5 个百分点等价范围。因此没有达到“公式处处实用吻合且双端对称”的停止成功条件。r 和均分结果共用八轮数据，是内部固定公式检验，不能称为独立留出预测。
+The maximum absolute error of the 10% overlap point estimates is 3.25 percentage points, and all twelve difference intervals contain zero; the 36 overlap difference intervals over all three values of p also all contain zero. This means "no clear deviation detected", not "the formula is proven accurate": the intervals for the main points do not all fall inside the pre-registered ±5 percentage point equivalence range. So the stopping success condition "the formula fits practically everywhere and both tails are symmetric" was not met. r and the averaged results share the same eight rounds of data, so this is an internal fixed-formula test and cannot be called an independent held-out prediction.
 
-放行倍数也没有被省略。它取完整分数组边界所需的最小人数，除以名义 k=100，目标是找回参考实际名单的至少 90%。因此倍数可以小于 1；它不是漏掉了分母，也不是强制不得缩小的预算。
+The widening factors were not omitted either. The factor takes the minimum number of items needed at a complete score-group boundary, divided by the nominal k=100, with the target of recovering at least 90% of the reference's actual list. So the factor can be below 1. This is not a missing denominator, and it is not a budget that is forbidden to shrink.
 
-| m | 尾部 | 参考方向 | 放行人数 | 放行倍数 | 95% 区间 | 预测倍数 |
+| m | Tail | Reference direction | Pass-through count | Widening factor | 95% interval | Predicted factor |
 |---|---|---|---:|---:|---|---:|
-| 1 | 正面 | A→B | 127 | 1.27 | [1.100, 1.870] | 1.153 |
-| 1 | 正面 | B→A | 168 | 1.68 | [1.090, 1.880] | 1.153 |
-| 1 | 负面 | A→B | 135 | 1.35 | [1.100, 1.710] | 1.153 |
-| 1 | 负面 | B→A | 138 | 1.38 | [1.130, 1.620] | 1.153 |
-| 2 | 正面 | A→B | 110 | 1.10 | [0.970, 1.440] | 1.027 |
-| 2 | 正面 | B→A | 133 | 1.33 | [0.970, 1.550] | 1.027 |
-| 2 | 负面 | A→B | 116 | 1.16 | [1.000, 1.320] | 1.027 |
-| 2 | 负面 | B→A | 111 | 1.11 | [0.990, 1.340] | 1.027 |
-| 4 | 正面 | A→B | 100 | 1.00 | [0.930, 1.160] | 0.960 |
-| 4 | 正面 | B→A | 94 | 0.94 | [0.920, 1.160] | 0.960 |
-| 4 | 负面 | A→B | 100 | 1.00 | [0.940, 1.160] | 0.960 |
-| 4 | 负面 | B→A | 101 | 1.01 | [0.940, 1.180] | 0.960 |
+| 1 | Positive | A→B | 127 | 1.27 | [1.100, 1.870] | 1.153 |
+| 1 | Positive | B→A | 168 | 1.68 | [1.090, 1.880] | 1.153 |
+| 1 | Negative | A→B | 135 | 1.35 | [1.100, 1.710] | 1.153 |
+| 1 | Negative | B→A | 138 | 1.38 | [1.130, 1.620] | 1.153 |
+| 2 | Positive | A→B | 110 | 1.10 | [0.970, 1.440] | 1.027 |
+| 2 | Positive | B→A | 133 | 1.33 | [0.970, 1.550] | 1.027 |
+| 2 | Negative | A→B | 116 | 1.16 | [1.000, 1.320] | 1.027 |
+| 2 | Negative | B→A | 111 | 1.11 | [0.990, 1.340] | 1.027 |
+| 4 | Positive | A→B | 100 | 1.00 | [0.930, 1.160] | 0.960 |
+| 4 | Positive | B→A | 94 | 0.94 | [0.920, 1.160] | 0.960 |
+| 4 | Negative | A→B | 100 | 1.00 | [0.940, 1.160] | 0.960 |
+| 4 | Negative | B→A | 101 | 1.01 | [0.940, 1.180] | 0.960 |
 
-放行阈值受到完整分数组跳跃影响，不能把本表的差异全部归为尾部依赖。下面列出全部六项放行倍数差值区间排除零的逐项结果，避免只展示有利于高斯基准的重合指标。其中四项同时有头部并列失格；另外两项不构成预定主要 10% 下、跨 m 的系统失配，也没有经过多重检验校正。
+The pass-through threshold is affected by jumps at complete score groups, so the differences in this table cannot all be attributed to tail dependence. Below are all six item-wise results whose widening-factor difference interval excludes zero, so that we do not show only the overlap metric that favors the Gaussian baseline. Four of them also fail the top-list ties gate. The other two do not amount to a systematic mismatch across m under the pre-registered main 10%, and no multiple-testing correction was applied.
 
-| m | p | 尾部 | 方向 | 放行倍数差值 95% 区间 | 该比较的头部并列门 |
+| m | p | Tail | Direction | 95% interval of widening-factor difference | Top-list ties gate for this comparison |
 |---|---|---|---|---|---|
-| 1 | 20.0% | upper | B_to_A | [0.006, 0.250] | 通过 |
-| 1 | 5.0% | upper | A_to_B | [0.058, 1.095] | 失格 |
-| 1 | 5.0% | upper | B_to_A | [0.095, 1.063] | 失格 |
-| 1 | 5.0% | lower | A_to_B | [0.186, 1.083] | 失格 |
-| 1 | 5.0% | lower | B_to_A | [0.103, 1.447] | 失格 |
-| 4 | 5.0% | upper | A_to_B | [0.005, 0.452] | 通过 |
+| 1 | 20.0% | upper | B_to_A | [0.006, 0.250] | passed |
+| 1 | 5.0% | upper | A_to_B | [0.058, 1.095] | failed |
+| 1 | 5.0% | upper | B_to_A | [0.095, 1.063] | failed |
+| 1 | 5.0% | lower | A_to_B | [0.186, 1.083] | failed |
+| 1 | 5.0% | lower | B_to_A | [0.103, 1.447] | failed |
+| 4 | 5.0% | upper | A_to_B | [0.005, 0.452] | passed |
 
-正态秩信度和原始整数分均值不在同一尺度，平均与秩变换不交换。公式本来就是本轮可证伪基准；当前不能把剩余偏差唯一归因于尺度、离散化、误差协方差或非高斯尾部。理论归属及相邻研究见 [文献门报告](PRECHECK_FOR_FABLE.md)、[数学分析](literature_reliability.md)，不把 Spearman–Brown 或高斯筛选公式当原创贡献。
+Normal-rank reliability and raw integer score means are not on the same scale; averaging and the rank transformation do not commute. The formula was meant to be this round's falsifiable baseline. At present the remaining deviation cannot be attributed uniquely to scale, discretization, error covariance or non-Gaussian tails. For the theoretical attribution and adjacent research, see the [literature gate report](PRECHECK_FOR_FABLE.md) and the [mathematical analysis](literature_reliability.md). Spearman–Brown and the Gaussian screening formula are not claimed as original contributions.
 
-## 两端差异与批次敏感性
+## Tail difference and batch sensitivity
 
-在主要 10% 下，全部六个 m/参考方向的上尾减下尾重合区间均包含零。不能据此证明对称，也没有证据支持稳定的双端不对称。尤其不能把这项同模型重测结论转移到便宜模型与贵模型之间的尾部关系。
+Under the main 10%, the upper-minus-lower-tail overlap intervals contain zero for all six combinations of m and reference direction. This does not prove symmetry, and there is no evidence for a stable two-tail asymmetry. In particular, this same-model retest conclusion cannot be transferred to the tail relation between a cheap model and an expensive model.
 
-控制比较使用相同 100 个目标：同批 C1/C2 的 r=0.985240，95% 区间 [0.973, 0.993]；异批八轮 28 对均值 r=0.971317，95% 区间 [0.958, 0.979]。配对差为 0.013922，95% 区间 [0.004, 0.028]。第 1 轮与 C1/C2 的相关分别为 0.987701、0.978335。
+The control comparison uses the same 100 targets: same-batch C1/C2 r=0.985240, 95% interval [0.973, 0.993]; different-batch mean over the 28 pairs of the eight rounds r=0.971317, 95% interval [0.958, 0.979]. The paired difference is 0.013922, 95% interval [0.004, 0.028]. The correlations of round 1 with C1 and with C2 are 0.987701 and 0.978335.
 
-固定同批输入与更高重测相关相伴，这支持批次敏感性。异批条件同时改变成员和位置，且会话时间与底层服务没有全部控制，所以不能进一步断言纯成员效应，更不能把两个相关的差直接称为总噪声中的某个百分比。本轮未报告未经识别的“批次效应占大头”。
+A fixed same-batch input goes together with a higher retest correlation, which supports batch sensitivity. The different-batch condition changes both membership and position, and session time and the underlying service were not fully controlled. So we cannot go further and assert a pure membership effect, still less call the difference between the two correlations a given percentage of the total noise. This round does not report an unidentified "batch effect is the largest share".
 
-## 20% 与 5% 的完整保留
+## 20% and 5% kept in full
 
-| p | m | 正面重合（双方向） | 负面重合（双方向） | 高斯预测 | 正面放行倍数 | 负面放行倍数 |
+| p | m | Positive overlap (both directions) | Negative overlap (both directions) | Gaussian prediction | Positive widening factor | Negative widening factor |
 |---|---|---|---|---:|---|---|
 | 20.0% | 1 | 83.3%–87.0% | 86.3%–87.2% | 87.5% | 1.12–1.14 | 1.10–1.18 |
 | 20.0% | 2 | 89.8%–90.6% | 89.6%–89.6% | 91.1% | 1.02–1.06 | 1.06–1.07 |
@@ -104,20 +104,20 @@ A 为第 1–4 轮，B 为第 5–8 轮；每组按相同前缀取 m=1、2、4 �
 | 5.0% | 2 | 77.2%–86.3% | 82.7%–84.3% | 86.9% | 1.28–1.40 | 1.22–1.28 |
 | 5.0% | 4 | 82.4%–84.0% | 86.8%–90.2% | 90.7% | 1.22–1.24 | 1.06–1.12 |
 
-这些范围同样是两个方向的点估计。5% 的多个边界失格，不能据其更大漏失单独建立新尾部定律；四次平均上尾 5% 的重合仍只有约 82%–84%，这项描述保留。全部方向、置信区间、并列状态及放行量见 [tables.csv](results/tables.csv) 和 [results.json](results/results.json)。
+These ranges are again the point estimates from the two directions. Several boundaries at 5% fail, so a new tail law cannot be built on their larger losses alone. With four-score averages, the upper-tail 5% overlap is still only about 82%–84%, and this description is kept. All directions, confidence intervals, tie status and pass-through amounts are in [tables.csv](results/tables.csv) and [results.json](results/results.json).
 
-![重复平均的双尾稳定性](results/stability.png)
+![Two-tail stability under repeated averaging](results/stability.png)
 
-[矢量 PDF 图](results/stability.pdf)。误差条为实测区间，黑线为固定预测，叉号表示该比较的边界门失格；这些区间没有同时覆盖保证。
+[Vector PDF figure](results/stability.pdf). Error bars are the observed intervals, black lines are the fixed prediction, and crosses mark comparisons whose boundary gate failed. These intervals carry no simultaneous coverage guarantee.
 
-## 给 Fable 的判断与下一步边界
+## Assessment for Fable and limits on next steps
 
-本轮实验完整结束，正式状态为 **无法判断**。它提供了实际可复算的描述证据：单次 10% 自我重合约 81%–87%，四次平均约 90%–92%；10% 重合的高斯点预测接近实测；固定上下文相关更高。它没有满足主要单次重合明显低于 75% 的继续门，也没有满足高于 90% 的单次成功门或实用等价门，且主要并列门已失败。
+This round of the experiment is fully finished, and the formal status is **inconclusive**. It provides descriptive evidence that can actually be recomputed: single-score 10% self-overlap is about 81%–87%, and four-score averages give about 90%–92%; the Gaussian point prediction for 10% overlap is close to the observed values; the fixed-context correlation is higher. It met neither the continuation gate (main single-score overlap clearly below 75%) nor the single-score success gate (above 90%) or the practical-equivalence gate, and the main ties gate has failed.
 
-建议将当前协议收束为复现与测量限制结果，保存全部失败原因，暂不以同一量表扩大或升级为新理论项目。按 TASK 的要求，不在这 1,000 条上改量表、锚点或提示后重新判通过。如果 Fable 认为仍值得继续，必须先说明剩余研究增量：新测量尺度能否在新样本上减少离散边界效应；或者另设能识别真实召回与成本的参考目标。高自我一致性既可能是稳定正确，也可能是稳定错误，本实验不能决定真实投资或筛选经济价值。
+Recommendation: close the current protocol as a replication and measurement-limitation result, keep all failure reasons on record, and for now do not expand it with the same scale or upgrade it into a new theory project. As the TASK requires, do not change the scale, anchors or prompt on these 1,000 items and then re-judge a pass. If Fable thinks it is still worth continuing, the remaining research increment must be stated first: whether a new measurement scale can reduce discrete boundary effects on a new sample, or a separate reference target that can identify true recall and cost. High self-consistency can be stably correct or stably wrong; this experiment cannot decide real investment value or the economic value of screening.
 
-## 文件与复算
+## Files and recomputation
 
-[一页结论](FABLE_ONE_PAGE.md)是交接入口；[REPRODUCE.md](REPRODUCE.md)给出分析命令。精确评分提示在 [prompt.txt](prompt.txt)，宿主任务指令在 [agent_task_template.txt](agent_task_template.txt)，批次和来源对应在 [schedule.csv](schedule.csv)、[batches.csv](batches.csv)、[sample.csv](sample.csv)，实际调用记录在 [calls.jsonl](calls.jsonl)，全部 ID 原分数在 [raw_scores/](raw_scores/)。输入重建代码 [prepare_inputs.py](prepare_inputs.py) 不输出新闻文本到仓库；分析代码 [analyze_scores.py](analyze_scores.py) 只读取 ID 分数。
+The [one-page summary](FABLE_ONE_PAGE.md) is the handoff entry point; [REPRODUCE.md](REPRODUCE.md) gives the analysis commands. The exact scoring prompt is in [prompt.txt](prompt.txt), the host task instructions are in [agent_task_template.txt](agent_task_template.txt), the batch and source mappings are in [schedule.csv](schedule.csv), [batches.csv](batches.csv) and [sample.csv](sample.csv), the actual call records are in [calls.jsonl](calls.jsonl), and all raw scores by ID are in [raw_scores/](raw_scores/). The input reconstruction code [prepare_inputs.py](prepare_inputs.py) does not write news text to the repository; the analysis code [analyze_scores.py](analyze_scores.py) reads only ID scores.
 
-13 项合成测试已通过；完整 250 个文件通过分析器的独立读取与完整性检查。早期 m=1、m=2 点估计与最终分析逐字段一致。5000 次主重采样与 5000 次控制重采样均完成，没有无效信度重复。高斯插值网格 3,000 个中点的最大重合误差约 1.45e-10、最大放行倍数误差约 5.87e-8；这是数值核对，不是连续域严格上界。图已生成并检查显示，图上的额外提示只澄清总体门与所示点的区别，没有改动统计结果。
+13 synthetic tests passed; all 250 files passed the analyzer's independent read and integrity checks. The early m=1 and m=2 point estimates match the final analysis field by field. Both the 5000 main resamples and the 5000 control resamples completed, with no invalid reliability replicates. On the 3,000 midpoints of the Gaussian interpolation grid, the maximum overlap error is about 1.45e-10 and the maximum widening-factor error about 5.87e-8; this is a numerical check, not a rigorous upper bound over the continuous domain. The figure was generated and its display was checked. The extra note on the figure only clarifies the difference between the overall gate and the points shown; it does not change the statistical results.

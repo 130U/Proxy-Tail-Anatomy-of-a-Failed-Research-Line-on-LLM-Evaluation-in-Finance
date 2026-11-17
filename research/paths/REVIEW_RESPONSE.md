@@ -1,47 +1,47 @@
-# 对独立审查的逐项回应与保留分歧
+# Item-by-item response to the independent review, and the disagreements that remain
 
-日期：2026-11-15。回应者：主代理与三名内部AI路径作者。原审查保留在 [PEER_REVIEW.md](PEER_REVIEW.md)，含初审文件SHA256和后续追加记录。本文不修改原审查结论，不将讨论称为人类同行认可；用户所指资深助手的实际意见仍未收到。
+Date: 2026-11-15. Responders: the main agent and three internal AI path authors. The original review is kept in [PEER_REVIEW.md](PEER_REVIEW.md), including the SHA256 of the files at the first review and the later appended records. This document does not change the original review's conclusions, and does not call the discussion human peer endorsement; the actual comments of the senior assistant the user referred to have still not been received.
 
-**处置结论：本轮分析报告的过度推断和设计缺口已作明确修订，可作为有条件的研究决策材料交付；关键科学证据仍开放。** “文档问题已修订”不等于“真实研究门已通过”，更不等于G0/G1通过。本轮没有新增真实语料训练、历史审计或自然文本金标。
+**Disposition: the over-inferences and design gaps in this round's analysis reports have been explicitly revised, and the reports can be delivered as conditional research-decision material; the key scientific evidence remains open.** "The document issues have been revised" does not mean "the real research gates have passed", and still less that G0/G1 have passed. This round added no training on real corpora, no historical audit, and no gold labels for natural text.
 
-## Important 问题逐项回应
+## Item-by-item responses to the Important issues
 
-| 编号 | 是否接受 | 实际修订与证据 | 仍开放的研究门 |
+| ID | Accepted? | Actual revision and evidence | Research gate still open |
 |---|---|---|---|
-| I01：P04保守入口在120簇下空泛 | 接受，并进一步排除过强否决 | [PATH04](PATH_04_dependence_robust_risk.md) 补 r120=.1117238462、最低600簇的解析计算，修订真实阶段用途；另证明独立等权有界簇均值的“全零用1−alpha^(1/C)，否则1”有效上界。它不把分数错误率当Bernoulli，不挪用到不等权行风险 | 600仅否决所用Hoeffding入口；更紧入口仍无真实独立样本/金标/迁移证据。共错矩需要完整独立重复批次或有证明的结构，不能把同一批所有两两乘积当独立观测 |
-| I02：没有具体有用性门 | 接受 | 新增 [DECISION_CRITERIA](DECISION_CRITERIA.md)，01/03补专节，02/05解释适用风险与宽度。明确主门、敏感性轴、最强对照、文档用途分账、59/299理想独立接受样本预算；阈值均为未来提案，未追认已有例子 | 真正任务、确认样本、人工成本与预注册仍未形成；当前库存未证明能同时验收覆盖与风险。不能按提案已写就判实验可行 |
-| I03：P01历史审计真值缺失 | 接受，保留为实质限制 | [PATH01](PATH_01_audited_information_set.md) 分开删除比较器与历史可测性，增加未知判定与共享核心门；比较报告把来源可判定性放在前面。零发现审计N=120、Ku=0需114份的数值列入审查，强调普查亦可能无法判断历史版本 | 没有取得新的历史版本证据。当前仍不能发布完整历史无前视证书；更强结论需要实际来源证据，而非增加测试数量 |
-| I04：P02避开语义歧义、学习头冗余 | 接受 | [PATH02](PATH_02_numeric_sensitivity.md) 明说单上下文定理没有解决关键歧义，加入有限一致语义配对下尾差最值的P2-L识别问题；把抽取与下游规则分开，允许删除学习头；不把保守数值界跨零误称存在真反例 | 新P2-L是初等部分识别刻画，非原创声明；实际候选集合覆盖、自然语义金标、有序随机任务和新颖性尚未建立 |
-| I05：P05错误接受分母与语义保证 | 接受 | [PATH05](PATH_05_proof_carrying_numeric_reasoning.md) 显式列 a、j、r=j/a；全样本失败界需除以a才控制接受风险。区分候选集合含正确程序与最终选中程序正确；新增P5-L不可区分世界的必要包络。gold程序仅验证计算核 | 真正语义候选生成与覆盖审计仍缺；类型/算术检查无法替代。P5-L也只是基本识别结论，没有因命名lemma而成为新贡献 |
-| I06：P03无可归属新增定理，成本对象混淆风险 | 接受 | [PATH03](PATH_03_audit_design_frontier.md) 保留D1/D2为标准工具接口；只提议固定设计、同alpha/w/信息条件、完整预定族的比较；建议中位成本节省≥20%且需要可推广结构解释或匹配下界，另报其他族及求解成本 | 尚未实现一般D1优化、序贯策略或证明差异族。固定零发现最小成本仍不等于随机停止期望成本；现有已知方法是否直接覆盖仍待查 |
-| I07：独立路径数与从零训练门 | 接受 | [比较报告](COMPARATIVE_ANALYSIS.md) 明确五篇、四个家族、约三个共享风险组；03是01分支，02/05共用解析风险。若严格要求随机初始化逻辑必要，当前没有三条通过，01也未证明 | 是否修订筛选器交给Fable/用户；没有默默解除。用户要求新实验从头构建，与理论须证明随机初始化不可替代分别处理 |
+| I01: P04's conservative entry point is vacuous with 120 clusters | Accepted, and an over-strong rejection was further ruled out | [PATH04](PATH_04_dependence_robust_risk.md) adds the analytic computation r120=.1117238462 and the minimum of 600 clusters, and revises the use of the real-data stage; it also proves that, for independent equally weighted bounded cluster means, "use 1−alpha^(1/C) when all are zero, otherwise 1" is a valid upper bound. It does not treat fractional error rates as Bernoulli, and is not carried over to unequally weighted row risk | 600 only rejects the Hoeffding entry point used; tighter entry points still have no real independent samples/gold labels/transfer evidence. Joint-error moments need complete independent repeated batches or a structure with a proof; all pairwise products within one batch cannot be treated as independent observations |
+| I02: no concrete usefulness gates | Accepted | Added [DECISION_CRITERIA](DECISION_CRITERIA.md); 01/03 got dedicated sections, and 02/05 explain the applicable risk and width. Made explicit the main gate, sensitivity axes, strongest controls, document-use accounting, and the 59/299 ideal budgets of independent accepted samples; all thresholds are future proposals and are not retroactively applied to existing examples | The real task, confirmation samples, human cost, and pre-registration are still not in place; the current inventory has not been shown able to validate coverage and risk at the same time. That the proposal has been written does not make the experiment feasible |
+| I03: P01 lacks ground truth for the historical audit | Accepted, kept as a substantive limitation | [PATH01](PATH_01_audited_information_set.md) separates the deletion comparator from historical measurability, and adds an "unknown" verdict and a shared-core gate; the comparison report puts the decidability of sources first. The figure that a zero-finding audit with N=120, Ku=0 needs 114 documents is entered in the review, stressing that even a census may be unable to determine the historical version | No new evidence on historical versions has been obtained. A complete historical no-look-ahead certificate still cannot be issued; a stronger conclusion needs actual source evidence, not more tests |
+| I04: P02 avoids semantic ambiguity, and the learned head is redundant | Accepted | [PATH02](PATH_02_numeric_sensitivity.md) states plainly that the single-context theorem does not resolve the key ambiguity, and adds the P2-L identification question on the extremes of tail differences over finite consistent semantic pairings; it separates extraction from the downstream rule and allows the learned head to be deleted; it does not misdescribe a conservative numeric bound crossing zero as the existence of a real counterexample | The new P2-L is an elementary partial-identification characterization, not a claim of originality; actual candidate-set coverage, natural semantic gold labels, ordinal random tasks, and novelty are not yet established |
+| I05: P05's denominator for wrong acceptances and its semantic guarantee | Accepted | [PATH05](PATH_05_proof_carrying_numeric_reasoning.md) lists a, j, r=j/a explicitly; the full-sample failure bound must be divided by a to control acceptance risk. It distinguishes "the candidate set contains the correct program" from "the finally selected program is correct", and adds P5-L, the envelope necessitated by indistinguishable worlds. Gold programs only verify the computation core | Real semantic candidate generation and coverage audit are still missing; type/arithmetic checks cannot replace them. P5-L is also only a basic identification conclusion and does not become a new contribution by being named a lemma |
+| I06: P03 has no attributable new theorem, and risks confusing cost objects | Accepted | [PATH03](PATH_03_audit_design_frontier.md) keeps D1/D2 as standard tool interfaces; it proposes only comparisons with fixed designs, the same alpha/w/information conditions, and complete pre-specified families; it proposes a median cost saving ≥20% together with a generalizable structural explanation or a matching lower bound, with the other families and solver costs reported separately | General D1 optimization, sequential policies, or a proof of a difference family have not been implemented. The fixed zero-finding minimum cost still does not equal the expected cost under random stopping; whether known existing methods already cover it directly is still to be checked |
+| I07: number of independent paths and the training-from-scratch gate | Accepted | The [comparison report](COMPARATIVE_ANALYSIS.md) states explicitly five reports, four families, and about three shared-risk groups; 03 is a branch of 01, and 02/05 share the parsing risk. If logical necessity of random initialization is strictly required, none of three currently passes, and 01 has not shown it either | Whether to revise the filter is left to Fable/the user; it has not been lifted silently. The user's requirement that new experiments be built from scratch is handled separately from whether the theory must prove that random initialization is irreplaceable |
 
-## Minor 项与额外修订
+## Minor items and additional revisions
 
-- M01：PATH04统一说明“旧P3／本轮PATH04”，避免与审计成本PATH03混淆。
-- M02：固定计数下的独立簇与给定计数后的条件独立分开；相应均值和概率同属该条件律。相同要求适用于全零界。
-- M03：PATH02/05把语义集合覆盖、计算包含性、接受率和接受样本风险分开；所测零失败不能支持“所有文本被认证”。
-- 文档分账：120份先用12–20探索，剩100–108；50%接受的期望数50–54不足59，且尚未分配训练/开发。这是理想条件算账，真实跨文档独立性和接受率仍未知。已在共同标准和两篇路径中注明。
-- 作者身份统一为内部AI研究助手；未用“资深导师已认可”等虚构身份或结论。
+- M01: PATH04 uniformly states "old P3 / this round's PATH04", to avoid confusion with the audit-cost PATH03.
+- M02: independent clusters under fixed counts are separated from conditional independence given the counts; the corresponding means and probabilities all belong to that conditional law. The same requirement applies to the all-zero bound.
+- M03: PATH02/05 separate semantic-set coverage, computation containment, acceptance rate, and accepted-sample risk; zero failures in what was tested cannot support "all texts are certified".
+- Document accounting: of the 120 documents, 12–20 are first used for exploration, leaving 100–108; at 50% acceptance the expected count of 50–54 is short of 59, and training/development have not yet been allocated. This is ideal-condition accounting; the real cross-document independence and acceptance rate are still unknown. This is noted in the common criteria and in the two path reports.
+- Author identity is uniformly stated as internal AI research assistants; no fictitious identities or conclusions such as "endorsed by the senior advisor" are used.
 
-## 没有强行达成一致的投入排序
+## Investment order on which agreement was not forced
 
-三方意见保留如下，不能用平均名次当证据：
+The three views are kept as follows; an average rank cannot be used as evidence:
 
-| 来源 | 偏好的问题/投入次序 | 理由和条件 |
+| Source | Preferred questions/investment order | Reasons and conditions |
 |---|---|---|
-| 风险路径作者的独立问题稿 | 依赖信息识别 → 统计量导向审计 → 语义约束冲突 | 偏重短而致命的数学反例和可能的上下界，不据此主张风险实证最易做 |
-| 未继承历史的独立审查员 | 03 → 01 → 05 → 02 → 04 | 先收窄P1；05允许删除冗余学习头；04真实依赖信息最缺 |
-| 主代理比较建议 | 01/03家族 → 02 → 04 → 05 | 保持导师主线的最小改题路径，同时保留与金融风险界最契合的独立统计备选；绝不以此跳过反方否决 |
+| The risk-path author's independent question draft | Dependence-information identification → statistic-oriented auditing → semantic constraint conflicts | Weighted toward short, fatal mathematical counterexamples and possible upper and lower bounds; it does not claim on this basis that risk empirics are the easiest to do |
+| The independent reviewer who did not inherit the history | 03 → 01 → 05 → 02 → 04 | Narrow P1 first; 05 allows the redundant learned head to be deleted; 04 lacks real dependence information the most |
+| The main agent's comparison recommendation | 01/03 family → 02 → 04 → 05 | Keep the advisor's main line with the minimal change of question, while keeping the independent statistics alternate that fits best with financial risk bounds; this is never used to skip adversarial rejection |
 
-共同部分是：先做P1的窄数学问题和来源门；不扩模型掩盖语义/依赖缺证；没有一条获得“原创理论已成立”的结论。争议集中在第二笔投入应是P2有序任务的必要性检查，还是P5语义候选与计算对象。主代理接受条件转向：若P2只剩抽取＋阈值，则删除冗余头并入语义/程序方向；若P04缺可识别依赖信息，则只保留短识别边界，不启动大批实证。
+What is shared: do P1's narrow mathematical question and the source gate first; do not scale up models to cover up missing evidence on semantics/dependence; no path has reached the conclusion "original theory established". The dispute centers on whether the second investment should be the necessity check of P2's ordinal task, or P5's semantic candidates and computation objects. The main agent accepts conditional switches: if P2 is left with only extraction + threshold, delete the redundant head and merge it into the semantic/program direction; if P04 lacks identifiable dependence information, keep only a short identification boundary and do not launch large-scale empirical work.
 
-## 验证记录与审查闭合范围
+## Verification record and the scope at which the review is closed
 
-初审新增 [review_checks.py](review_checks.py) 与 [JSON](review_checks.json)：1,008个R1有理可达性例、1,024个D1分层漏检概率例均通过；这些是有限数学检查，没有R2 LP执行、训练或历史审计。既有36项集成测试见 [第二轮复现日志](../reproduction_log.json)，本轮不重复计为新增实验。
+The first review added [review_checks.py](review_checks.py) and its [JSON](review_checks.json): 1,008 R1 rational attainability cases and 1,024 D1 stratified miss-probability cases all passed. These are finite mathematical checks; there was no R2 LP run, training, or historical audit. The existing 36 integration tests are in the [round 2 reproduction log](../reproduction_log.json), and are not counted again as new experiments in this round.
 
-作者修订后的限定增量复核另附在原审查末尾，文件身份最终由 [交接manifest](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json) 固定。I01–I07作为报告质量问题已有明确回应；其中的来源、语义、样本、先例与非空性门仍作为研究问题开放，不能将“已回应”改写为“已解决”。
+The limited incremental review after the authors' revisions is appended at the end of the original review, and the file identities are finally fixed by the [handoff manifest](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json). I01–I07, as report-quality issues, have explicit responses; the source, semantic, sample, precedent, and non-vacuity gates within them stay open as research questions, and "responded to" cannot be rewritten as "resolved".
 
-## 给用户所指资深助手
+## To the senior assistant the user referred to
 
-2026-11-16用户确认资深助手是Fable。[SENIOR_REVIEW_REQUEST](SENIOR_REVIEW_REQUEST.md) 是给Fable的待转交问题包，优先请他判断删除比较器的科学价值、审计结构差异的先例边界、从零训练过滤器、P2是否有非冗余任务、P5语义覆盖，以及P04依赖信息的现实来源。当前工具没有Fable直连能力，尚未发送或收到反馈；收到真实反馈后，应另列其原意与我们的逐项回应，保留与本轮AI审查不同的意见。
+On 2026-11-16 the user confirmed that the senior assistant is Fable. [SENIOR_REVIEW_REQUEST](SENIOR_REVIEW_REQUEST.md) is the question package to be forwarded to Fable. It asks Fable first to judge the scientific value of the deletion comparator, the precedent boundary of differences in audit structure, the training-from-scratch filter, whether P2 has a non-redundant task, P5's semantic coverage, and the real source of dependence information for P04. The current tools have no direct connection to Fable; nothing has been sent and no feedback received. When real feedback arrives, its original meaning and our item-by-item responses should be listed separately, keeping any views that differ from this round's AI review.

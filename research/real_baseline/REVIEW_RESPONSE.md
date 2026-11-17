@@ -1,16 +1,16 @@
-# 第四轮审查回应
+# Round four review response
 
-2026-11-16。本文件区分内部AI设计建议、运行前协议、实现审查与Fable尚未给出的意见。用户明确只在本地研究；以下修复没有外部访问。
+2026-11-16. This file separates internal AI design suggestions, the pre-run protocol, the implementation review, and the comments Fable has not yet given. The user explicitly asked for local-only research; the fixes below involved no external access.
 
-| 意见/发现 | 处理与证据 | 尚存边界 |
+| Comment/finding | Handling and evidence | Remaining limits |
 |---|---|---|
-| DESIGN_REVIEW建议开发集优胜者对多数类作为主比较 | 未采纳；真实运行前PROTOCOL固定char−word，整个运行保持这一比较。多数类只作sanity诊断 | 这是有记录的设计分歧，非已得到Fable同意 |
-| 来源标签不能静默改为bearish/bullish | 共享评测器新增显式三类名称参数，保留旧默认；新任务只用negative/neutral/positive，等值与拒绝测试通过 | 来源情绪不等于投资立场，标签本身未独立金标复核 |
-| 数据清理分母不同 | 增补PREPARATION_ACCOUNTING.md：10753=13+10740源行；14371=14+73+14284实体出现；未改冻结manifest/rows | 13异常行的意图实体数未知，7是冲突键数 |
-| Windows中文DLL路径令构造测试失败 | 真实fit前修复进程内Unicode枚举，验证发现的库前后均自报≤2线程，不改site-packages | 不是OS峰值线程/内存测量；首次失败无真实fit |
-| 训练与bootstrap模型命名不一致 | PREDICTION_KEYS显式长名→报告短名对接；新增读取训练器SYSTEMS的合成集成测试，拒绝缺失/别名混用；真实bootstrap首次运行成功 | 没有因此重新训练或挑选test结果 |
-| substring与整词匹配失败数不同 | 分别报告19与112（81/10/21）；两个阶段采用不同已冻结规则 | 字面标记不证明语义绑定正确 |
-| entity-only不能量化“解释比例” | 报告限定为身份捷径诊断；不把F1比值解释为贡献，不把差值解释为推理能力 | 需要另设计身份控制与确认任务才能识别机制 |
-| CI不能写成证书或时间外推 | 明示条件bootstrap、词法簇、行加权、次要指标未多重校正；与旧分数不直接比较 | 依赖、代表性、训练/选择与历史性仍开放 |
+| DESIGN_REVIEW suggested development-set winner versus majority class as the primary comparison | Not adopted; the PROTOCOL fixed char−word before the real run, and this comparison was kept throughout the run. The majority class is only a sanity diagnostic | This is a recorded design disagreement, not something Fable has agreed to |
+| Source labels must not be silently changed to bearish/bullish | The shared evaluator gained an explicit three-class-name parameter, keeping the old default; the new task uses only negative/neutral/positive; equivalence and rejection tests pass | Source sentiment is not investment stance; the labels themselves have not had an independent gold-standard review |
+| Data-cleaning denominators differ | Added PREPARATION_ACCOUNTING.md: 10753=13+10740 source rows; 14371=14+73+14284 entity occurrences; the frozen manifest/rows were not changed | The number of intended entities in the 13 anomalous rows is unknown; 7 is the number of conflict keys |
+| A Windows DLL path containing Chinese characters made the construction tests fail | Fixed in-process Unicode enumeration before the real fit; the libraries found all self-reported ≤2 threads before and after; site-packages not changed | Not an OS measurement of peak threads/memory; there was no real fit at the first failure |
+| Model names inconsistent between training and bootstrap | PREDICTION_KEYS maps long names explicitly to the short report names; added a synthetic integration test that reads the trainer's SYSTEMS and rejects missing names / mixed aliases; the first real bootstrap run succeeded | No retraining or picking of test results because of this |
+| Different failure counts for substring and whole-word matching | Reported separately as 19 and 112 (81/10/21); the two stages use different frozen rules | Literal marking does not prove that semantic binding is correct |
+| entity-only cannot quantify an "explained share" | The report limits it to an identity-shortcut diagnostic; the F1 ratio is not read as a contribution, and the difference is not read as reasoning ability | Identifying the mechanism needs a separately designed identity control and confirmation task |
+| The CI must not be written as a certificate or a temporal extrapolation | States explicitly: conditional bootstrap, lexical clusters, row weighting, no multiple-comparison correction for secondary metrics; no direct comparison with old scores | Dependence, representativeness, training/selection and historicity remain open |
 
-实现问题均以构造数据测试；独立审查另以全部27种不等大簇抽样手算配对指标。真实训练仅这一套固定9次拟合；测试输出只在开发选择冻结后生成。后来文档补充和计数核销没有改变实验身份。完整意见见 [独立审查](../reports/real_baseline_review.md)。
+All implementation problems were tested with constructed data; the independent review also computed the paired metrics by hand over all 27 resamplings of unequal-sized clusters. Real training was only this one fixed set of 9 fits; test outputs were generated only after the development selection was frozen. The later documentation additions and count reconciliation did not change the experiment's identity. The full comments are in the [independent review](../reports/real_baseline_review.md).

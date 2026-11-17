@@ -1,79 +1,79 @@
-# 从头建立的真实来源任务基线
+# Real-source task baseline built from scratch
 
-2026-11-16，第四轮。**本轮已有实际训练和配对评测：在固定的 SEntFiN 实体情绪测试划分上，word TF-IDF/LR 的 macro-F1 为 0.7920，char TF-IDF/LR 为 0.7548。预定 char−word 差为 −0.03723，名义95%词法簇 bootstrap 区间为 [−0.05306, −0.02156]。** 这是后续研究的简单方法参照，不是新颖性、历史信息集或金融部署证书。
+2026-11-16, round four. **This round has actual training and paired evaluation: on the fixed SEntFiN entity-sentiment test split, word TF-IDF/LR has macro-F1 0.7920 and char TF-IDF/LR has 0.7548. The pre-specified char−word difference is −0.03723, with a nominal 95% lexical-cluster bootstrap interval of [−0.05306, −0.02156].** This is a simple-method reference for later research, not a certificate of novelty, of a historical information set, or of financial deployment.
 
-所有数据、库和计算来自本机；没有下载、外部请求、消息或发布。模型是本轮新拟合的线性分类器，没有使用旧 checkpoint，也不是从头预训练语言模型。原始文本、逐条标签、划分、预测、词表和权重全部留在被 gitignore 和归档器排除的 `research/private/`。公共证据是 [运行前协议](../../real_baseline/PROTOCOL.md)、[准备清单](../../real_baseline/aggregate_manifest.json)、[训练汇总](baseline_summary.json)、[配对汇总](bootstrap_summary.json) 和 [独立审查](../../reports/real_baseline_review.md)。
+All data, libraries and computation come from this machine; there were no downloads, external requests, messages or publications. The models are linear classifiers newly fitted in this round; no old checkpoint was used, and this is not pretraining a language model from scratch. The raw text, per-row labels, splits, predictions, vocabularies and weights all stay in `research/private/`, which is excluded by gitignore and by the archiver. The public evidence is the [pre-run protocol](../../real_baseline/PROTOCOL.md), the [preparation manifest](../../real_baseline/aggregate_manifest.json), the [training summary](baseline_summary.json), the [paired summary](bootstrap_summary.json) and the [independent review](../../reports/real_baseline_review.md).
 
-## 本轮回答了什么
+## What this round answered
 
-目标是标题中**指定实体的来源情绪**，三类为 negative / neutral / positive。它们不等价于证券看空/中性/看多。同一标题涉及多个实体时，不同实体可以具有不同的情绪标签；输入中因此保留 target，并用预先写定的字面整词规则标记标题中的目标。
+The target is the **source sentiment toward the specified entity** in a headline, with three classes negative / neutral / positive. These are not equivalent to bearish/neutral/bullish on a security. When one headline involves several entities, different entities can have different sentiment labels; the input therefore keeps the target, and the target is marked in the headline with a literal whole-word rule written in advance.
 
-两个正式模型都只在训练集拟合词表、IDF和LR系数。各自在 C∈{0.1,1,10} 中按开发集三类 macro-F1 选取，精确并列选小C；选择后不在 train+dev 重训。主比较在真实运行前固定为 char−word 的测试 macro-F1，所有四个系统的测试集完全相同。多数类和 entity-only 是预定诊断。没有用测试成绩挑选C、重划数据或改变实体输入规则。
+Both formal models fit the vocabulary, IDF and LR coefficients on the training set only. Each selects C from {0.1,1,10} by three-class macro-F1 on the development set, with exact ties going to the smaller C; after selection there is no retraining on train+dev. The primary comparison was fixed before the real run as char−word test macro-F1, and the test set is exactly the same for all four systems. The majority class and entity-only are pre-specified diagnostics. Test scores were not used to choose C, re-split the data, or change the entity input rule.
 
-独立设计建议曾提出“开发集优胜者−多数类”作为主比较；根代理未采纳这一建议，保留运行前协议中的 char−word。两种设计均可回答明确问题，但不能在看到测试结果后切换。协议中“实体身份解释了多少性能”只按捷径诊断理解：F1不能分解，本轮不估计实体身份的因果贡献或解释比例。完整回应见 [评审回应](../../real_baseline/REVIEW_RESPONSE.md)。
+An independent design suggestion proposed "development-set winner − majority class" as the primary comparison; the root agent did not adopt it and kept char−word from the pre-run protocol. Either design answers a well-defined question, but one cannot switch after seeing the test results. "How much performance entity identity explains" in the protocol is to be read only as a shortcut diagnostic: F1 cannot be decomposed, and this round does not estimate the causal contribution or explained share of entity identity. The full response is in the [review response](../../real_baseline/REVIEW_RESPONSE.md).
 
-## 数据准备和抽样范围
+## Data preparation and sampling scope
 
-来源为本地已有 SEntFiN.csv，SHA256 `570af7ba58f724f3fcc414dd5ba80da5b1a3b342134d76c6ebdf53a32c54a92f`。严格AST检查在 literal_eval 前拒绝重复键；异常不猜修。冲突的单位是同规范化标题＋同实体，不是同标题的不同实体。
+The source is the locally available SEntFiN.csv, SHA256 `570af7ba58f724f3fcc414dd5ba80da5b1a3b342134d76c6ebdf53a32c54a92f`. A strict AST check rejects duplicate keys before literal_eval; anomalies are not repaired by guessing. The unit of conflict is same normalized headline + same entity, not different entities in the same headline.
 
-| 阶段 | 计数与单位 |
+| Stage | Count and unit |
 |---|---:|
-| 原始源行 | 10,753 |
-| 整行语法异常隔离 / 成功解析源行 | 13 / 10,740 |
-| 成功解析后展开的实体出现 | 14,371 |
-| 冲突键 / 涉及的实体出现 | 7 / 14 |
-| 非冲突重复合并的额外实体出现 | 73 |
-| 最终实体样本 / 词法簇 | 14,284 / 10,591 |
+| Raw source rows | 10,753 |
+| Whole-row syntax anomalies quarantined / source rows parsed successfully | 13 / 10,740 |
+| Entity occurrences expanded from successfully parsed rows | 14,371 |
+| Conflict keys / entity occurrences involved | 7 / 14 |
+| Extra entity occurrences merged as non-conflicting duplicates | 73 |
+| Final entity samples / lexical clusters | 14,284 / 10,591 |
 
-可闭合关系为 10,753=13+10,740，以及 14,371=14+73+14,284。异常源行的原意标签数未知，14,371不是全部原文件的已知标签总数。补充核算只读来源，没有改动冻结数据或清单，见 [计数核销](../../real_baseline/PREPARATION_ACCOUNTING.md)。
+The closing relations are 10,753=13+10,740 and 14,371=14+73+14,284. The number of intended labels in the anomalous source rows is unknown, so 14,371 is not the known total number of labels in the whole original file. The supplementary accounting only reads the source and did not change the frozen data or manifest; see the [count reconciliation](../../real_baseline/PREPARATION_ACCOUNTING.md).
 
-规范化标题相同或 token-set Jaccard≥4/5 的标题连边，取传递连通分量，再以固定 seed=130 的哈希分区。查重用全部标题；异常/冲突处理使用来源标签。它是公开说明的数据集构造过程，不能称完全未见测试资料。已有来源材料也可能在早期项目中被接触，新的哈希划分不会抹去这些历史。
+Headlines with the same normalized form or with token-set Jaccard≥4/5 are joined by an edge; transitive connected components are taken and then partitioned by a hash with fixed seed=130. Duplicate detection uses all headlines; anomaly/conflict handling uses the source labels. This is a publicly described dataset construction process, and the test data cannot be called completely unseen. The source material may also have been seen in an earlier project, and a new hash split does not erase that history.
 
-| 分区 | 实体行 | 词法簇 | negative | neutral | positive |
+| Partition | Entity rows | Lexical clusters | negative | neutral | positive |
 |---|---:|---:|---:|---:|---:|
 | train | 10,041 | 7,438 | 2,658 | 3,831 | 3,552 |
 | development | 2,136 | 1,583 | 572 | 838 | 726 |
 | test | 2,107 | 1,570 | 558 | 787 | 762 |
 
-最大保留簇7个实体样本、最多3个规范标题。定义内的 family、相同规范标题、近重复边跨分区数均为0。这里的簇只是词法组件；未审计的同事件改写、实体身份共享和跨簇依赖仍可能存在。没有时间切分或未见实体泛化证据。
+The largest kept cluster has 7 entity samples and at most 3 normalized headlines. The number of within-definition families, identical normalized headlines and near-duplicate edges that cross partitions is 0 in each case. The clusters here are only lexical components; unaudited same-event rewrites, shared entity identity and cross-cluster dependence may still exist. There is no evidence for a time split or for generalization to unseen entities.
 
-准备阶段的字面 substring 无匹配有19条；模型使用整词边界，无法标记的样本为112条（train81/dev10/test21）。两个数字的规则不同，不能互换。无法标记时按协议保留原标题和目标前缀，没有调用NER补充别名，也没有按测试错误删样本。
+In the preparation stage, 19 rows had no literal substring match; the model uses whole-word boundaries, under which 112 samples could not be marked (train 81/dev 10/test 21). The two numbers use different rules and are not interchangeable. When a target cannot be marked, the original headline and the target prefix are kept as the protocol specifies; no NER was called to add aliases, and no samples were deleted based on test errors.
 
-## 固定测试结果
+## Fixed test results
 
-下表区间都是10,000次、seed=130的名义95%百分位词法簇 bootstrap，系统/各类边际区间仅作描述，没有多重比较修正。一次抽中某簇时，该簇全部实体行共同进入；点估计为实体行加权，不是簇等权。
+All intervals in the table below are nominal 95% percentile lexical-cluster bootstraps with 10,000 replicates and seed=130; the per-system / per-class marginal intervals are descriptive only, with no multiple-comparison correction. When a cluster is drawn, all of its entity rows enter together; point estimates are weighted by entity row, not equal-weighted by cluster.
 
-| 系统 | 开发集所选C | 测试macro-F1 | 描述性区间 | 测试accuracy |
+| System | C selected on development set | Test macro-F1 | Descriptive interval | Test accuracy |
 |---|---:|---:|---|---:|
-| 训练多数类 | — | 0.18129 | [0.17325, 0.18952] | 0.37352 |
+| Training majority class | — | 0.18129 | [0.17325, 0.18952] | 0.37352 |
 | word TF-IDF/LR | 10 | 0.79202 | [0.77249, 0.81089] | 0.79402 |
 | char TF-IDF/LR | 1 | 0.75478 | [0.73497, 0.77371] | 0.75368 |
 | entity-only TF-IDF/LR | 0.1 | 0.53359 | [0.51063, 0.55593] | 0.53726 |
 
-**唯一预定主比较：char−word macro-F1 = −0.0372334，区间 [−0.0530595, −0.0215595]。** 通过同一组抽样索引对两个模型作配对差，不从两条边际区间相减。当前设计分辨出了词语基线的较高分数；它不证明词语模型在其他任务或总体分布上普遍更好。
+**The only pre-specified primary comparison: char−word macro-F1 = −0.0372334, interval [−0.0530595, −0.0215595].** The paired difference of the two models is computed on the same set of resampling indices, not by subtracting two marginal intervals. The current design resolves the higher score of the word baseline; it does not prove that the word model is generally better on other tasks or over the population distribution.
 
-entity-only 的0.5336说明仅实体字段就能在此划分上支持有信息的预测，值得在后续研究中控制身份/标签先验捷径。不能写成“解释了词语模型约67%的性能”，也不能把剩余差值直接归因于组合推理。训练多数类 macro-F1 低于accuracy是固定三类平均的结果，不是计算错误。
+The 0.5336 of entity-only shows that the entity field alone can support informative predictions on this split, so identity/label-prior shortcuts are worth controlling in later research. This must not be written as "explains about 67% of the word model's performance", and the remaining difference cannot be attributed directly to compositional reasoning. The training majority class has macro-F1 below its accuracy because of the fixed three-class average; this is not a computation error.
 
-当前区间条件于固定的训练结果、开发选择和测试预测。词法簇独立且有代表性并未得到证明；区间也不包含训练随机性、研究搜索、未知事件依赖或分布漂移。10,000次抽样只降低重采样数值误差，不将这些缺口变成有限样本保证。全部数值不得与旧项目0.6549/0.6087作同测试集差异比较。
+The current intervals are conditional on the fixed training results, the development selection and the test predictions. That lexical clusters are independent and representative has not been proven; the intervals also do not include training randomness, research search, unknown event dependence or distribution drift. 10,000 replicates only reduce the numerical resampling error; they do not turn these gaps into a finite-sample guarantee. None of these numbers may be compared with the old project's 0.6549/0.6087 as a same-test-set difference.
 
-## 执行与可追溯性
+## Execution and traceability
 
-| 步骤 | 实际wall time | 运行状态 |
+| Step | Actual wall time | Run status |
 |---|---:|---|
-| 原始准备与精确词法查重 | 0.766725 s | 冻结数据及清单已落盘 |
-| 9次LR拟合、模型选择与四系统预测 | 13.809371 s | 9次均无收敛警告 |
-| 固定预测的配对及描述性bootstrap | 2.306168 s | 10,000次；全部测试行对齐 |
+| Raw preparation and exact lexical deduplication | 0.766725 s | Frozen data and manifest written to disk |
+| 9 LR fits, model selection and predictions for four systems | 13.809371 s | No convergence warning in any of the 9 |
+| Paired and descriptive bootstrap on fixed predictions | 2.306168 s | 10,000 replicates; all test rows aligned |
 
-执行前预算分别为2/5/2分钟；上述实际值均在预算内。训练CPU时间13.15625秒；GPU未使用。峰值内存未测，不能据此宣布达成≤2GB目标。
+The pre-execution budgets were 2/5/2 minutes respectively; all the actual values above are within budget. Training CPU time 13.15625 seconds; GPU not used. Peak memory was not measured, so the ≤2GB target cannot be declared met on this basis.
 
-Python3.12.14、NumPy2.5.3、SciPy1.18.1、scikit-learn1.9.1、joblib1.6.0、threadpoolctl3.7.0。Windows上的初始构造测试因 threadpoolctl 将中文DLL路径损坏而失败，此前没有真实拟合。修复仅在进程上下文内使用现有Unicode模块枚举后备路径，并设置启动线程环境；没有修改全局库或更换模型。训练前后发现的三个数值库都自报2线程，证据在汇总中。这是库配置核验，不是操作系统峰值线程实测。
+Python 3.12.14, NumPy 2.5.3, SciPy 1.18.1, scikit-learn 1.9.1, joblib 1.6.0, threadpoolctl 3.7.0. On Windows the initial construction tests failed because threadpoolctl corrupted a DLL path containing Chinese characters; no real fit had happened before that. The fix only uses the existing Unicode module to enumerate fallback paths inside the process context and sets the startup thread environment; no global library was modified and no model was changed. The three numeric libraries found before and after training all self-reported 2 threads; the evidence is in the summary. This is a library-configuration check, not an operating-system measurement of peak threads.
 
-冻结rows SHA256为 `8ab314ebd74680466f3a24055433f3a44d442107773607204cd3983122d87567`；联合测试预测SHA256为 `d18a8a43c8ee10c5ce248ae7d0e96207ce759cbdf238dc36436f911e7f10adab`。训练汇总绑定源代码、配置、准备清单、输入和全部私有产物摘要；bootstrap再次核对rows清单与测试ID/标签/组完整性，并记录预测摘要。公开包不包含这些逐条私有产物，第三方重跑真实训练需已有合法本地来源；包内人工构造测试可独立运行。
+The frozen rows SHA256 is `8ab314ebd74680466f3a24055433f3a44d442107773607204cd3983122d87567`; the joint test-prediction SHA256 is `d18a8a43c8ee10c5ce248ae7d0e96207ce759cbdf238dc36436f911e7f10adab`. The training summary binds the source code, configuration, preparation manifest, inputs and the digests of all private artifacts; the bootstrap re-checks the rows manifest and the integrity of test IDs/labels/groups, and records the prediction digest. The public package does not include these per-row private artifacts; a third party rerunning the real training needs its own lawful local source; the hand-constructed tests in the package can run independently.
 
-## 审查和后续决策
+## Review and next decisions
 
-独立内部AI审查核对了开发集选择、21份汇总混淆矩阵和精确分数，并用三个不等大簇的全部27种重采样验证配对评估。审查发现训练器长模型名与评估器短名不匹配，已用显式映射修正，并新增真实训练schema的构造集成测试；修复发生在本轮真实bootstrap首次运行之前，没有改动模型/分数或重选参数。当前74项集成单元测试通过；来源解析另有10项自测，其他有限数学检查见统一复现日志。
+An independent internal AI review checked the development-set selection, 21 summary confusion matrices and the exact scores, and verified the paired evaluation with all 27 resamplings of three unequal-sized clusters. The review found that the trainer's long model names did not match the evaluator's short names; this was fixed with an explicit mapping, and a constructed integration test of the real training schema was added. The fix happened before the first real bootstrap run of this round and did not change models/scores or reselect parameters. The current 74 integration unit tests pass; source parsing has another 10 self-tests, and the other finite mathematical checks are in the unified reproduction log.
 
-本轮关闭的是“没有本轮真实任务基线”的部分缺口。旧24M行级记录仍缺，FinBERT/小LLM基线未运行，原G0未通过，也没有据此开始G1旗舰训练。下一步研究价值应围绕**可被否决的数学命题和完整证书链**定义；继续堆普通情绪分类模型，即使超过0.7920，也不会自动解决导师指出的toy问题。
+This round closes part of the gap "there is no real task baseline for this round". Row-level records for the old 24M model are still missing, the FinBERT/small-LLM baselines were not run, the original G0 is not passed, and G1 flagship training was not started on this basis. The research value of the next step should be defined around **falsifiable mathematical propositions and a complete certificate chain**; piling on more ordinary sentiment classifiers, even ones that exceed 0.7920, will not automatically solve the toy problem the advisor pointed out.
 
-Fable应收到的判断是：简单参照已经可运行；需要导师审视的是新任务如何替代旧G0、为什么必须学习或从头训练、何种结构结论是已有方法未提供的。评审包尚未发送，没有Fable反馈；内部AI审查不冒充外部同行认可。
+The judgment Fable should receive: the simple reference now runs; what needs the advisor's scrutiny is how a new task replaces the old G0, why learning or training from scratch is necessary, and which structural conclusion existing methods do not provide. The review package has not yet been sent and there is no feedback from Fable; the internal AI review does not pose as external peer endorsement.

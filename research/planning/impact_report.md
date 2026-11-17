@@ -1,36 +1,36 @@
-# 从总污染数审计到最终统计量：本轮精确计算
+# From total-contamination-count audits to the final statistic: this round's exact computations
 
-**第七轮解释更新：** 下表及其原预定结果不变。后续[独立审查](../reports/paper_review.md)证明：均衡总污染数门也达到88及同一渐近矩形分离；故本文结果是矩形中间承诺的代价，不足以证明位置感知必要。[集中稿](../paper/manuscript.md)完整列出这个对照，并把另一个38对48位置收益例标为审查后探索推导。一般非矩形安全计数区域与直接法的等价性也在新稿明确。
+**Round seven interpretation update:** the table below and its original pre-specified results are unchanged. The later [independent review](../reports/paper_review.md) proved that the balanced total-contamination-count gate also reaches 88 and the same asymptotic separation from the rectangle; so the result here is the cost of the rectangular intermediate commitment and is not enough to prove that position awareness is necessary. The [focused manuscript](../paper/manuscript.md) lists this control in full, and labels the other position-gain example, 38 versus 48, as an exploratory derivation made after the review. The equivalence between general non-rectangular safe count regions and the direct method is also made explicit in the new manuscript.
 
-日期：2026-11-16。来源层级：本地纸笔推导与人工数学输入的精确计算；无模型训练、真实污染审计或新文献核验。[执行前预算](impact_budget.md)、[IA1–IA8证明](../theory/impact_audit.md)、[原始20格结果](threshold_results.json)。
+Date: 2026-11-16. Source level: local pen-and-paper derivations and exact computations on hand-made mathematical inputs; no model training, real contamination audit or new literature check. [Pre-execution budget](impact_budget.md), [IA1–IA8 proofs](../theory/impact_audit.md), [original 20-cell results](threshold_results.json).
 
-## 得到了什么，没得到什么
+## What was obtained and what was not
 
-直接针对最终坏配置的审计，确实可以比“先保证一个安全污染计数矩形，再推出最终区间”的程序严格省成本；本轮给出了可推广的构造和对应算法。在预先固定的r=6、每层20篇结构中，直接设计的全局最优成本为88，最强联合零发现矩形为114。两者均针对相同alpha=1/20、相同accuracy区间[.9,1]和同样的固定分层均匀抽样。
+An audit aimed directly at the final bad configurations can indeed cost strictly less than a procedure that "first guarantees a safe contamination-count rectangle and then derives the final interval"; this round gives a generalizable construction and the corresponding algorithm. In the pre-fixed structure with r=6 and 20 documents per stratum, the global optimum cost of the direct design is 88 and the strongest joint zero-finding rectangle costs 114. Both target the same alpha=1/20, the same accuracy interval [.9,1] and the same fixed stratified uniform sampling.
 
-这不是对所有可能审计方法的优势，也不是实际金融模型结果。矩形方法还承诺其中间计数盒本身覆盖，直接方法只承诺最终统计量。优势来自少证明不需要的中间事实；其先例边界尚未完成核验。所有初始头都正确是人工结构，不能拿它证明现实任务精度或历史来源。
+This is not an advantage over all possible audit methods, nor a result on an actual financial model. The rectangle method also promises that its intermediate count box is itself covered, while the direct method promises only the final statistic. The advantage comes from proving fewer intermediate facts that are not needed; its boundary with prior work has not yet been checked. All initial heads being correct is a hand-made structure and cannot be used to prove real-task accuracy or historical provenance.
 
-**完整20格中9格严格改善、11格没有改善，中位改善为0；只有3格超过20%。** 因而不能用最大26.67%或单格22.81%宣称整个预定族通过中位20%的投入门。后续若研究r=6子族，须另行冻结假设与确认设计，不把本次见过的结果包装为盲测成功。
+**Of the complete 20 cells, 9 improve strictly and 11 do not, with a median improvement of 0; only 3 cells exceed 20%.** So the maximum of 26.67% or the single cell at 22.81% cannot be used to claim that the whole pre-specified family passes the median 20% investment gate. If the r=6 sub-family is studied later, the assumptions and a confirmatory design must be frozen separately, and the results seen this time must not be packaged as a blind-test success.
 
-## 基线纠错
+## Baseline correction
 
-初步讨论中容易把各层漏检风险相加当成最强矩形。独立讨论指出：在“只有全部零发现才报固定盒，否则全范围”的同一程序类中，精确最坏失覆盖风险是各越界层漏检概率的 **最大值**。盒外真污染至少越过一层；在最难层放恰好超过预算的一组污染、其他层全干净可达到最大值。
+In the preliminary discussion it was easy to take the sum of the per-stratum miss risks as the strongest rectangle. The independent discussion pointed out that, within the same procedure class "report the fixed box only when all findings are zero, otherwise the full range", the exact worst-case coverage-failure risk is the **maximum** of the miss probabilities of the out-of-bound strata. True contamination outside the box exceeds at least one stratum; putting a group of contamination just over budget in the hardest stratum, with all other strata clean, attains the maximum.
 
-因此主比较使用这个max版本。Bonferroni求和版本仅作为更保守的附加对照。r=6、N=20时，其最优成本119，比正确主基线114更高；若只选119，会夸大直接设计的收益。
+The main comparison therefore uses this max version. The Bonferroni-sum version is only a more conservative additional control. For r=6, N=20, its optimal cost is 119, higher than the correct main baseline of 114; choosing only 119 would exaggerate the gain of the direct design.
 
-## 阈值族和精确性
+## Threshold family and exactness
 
-每层N篇只影响对应头，共h=2r−1个头；所有头在固定测试点投真类。少于r层含污染则输出不变；至少r层含污染就能让全部测试点错，因此坏配置是任r层各至少一篇污染。实际执行脚本以一个标签0的点代表该抽象结构；两类、多点一致投票是同样概率公式的数学扩展，未冒充已训练/已运行的投票实验。
+Each stratum's N documents influence only the corresponding head, with h=2r−1 heads in total; all heads vote for the true class at the fixed test point. If fewer than r strata contain contamination the output is unchanged; if at least r strata contain contamination, all test points can be made wrong, so the bad configurations are those with at least one contaminated document in each of any r strata. The executed script represents this abstract structure with one point labelled 0; two classes and consistent votes over several points are mathematical extensions of the same probability formula and are not passed off as a trained/run voting experiment.
 
-配额n_h下的风险为所有r层子集上 `prod(1−n_h/N)` 的最大值。均衡设计的最小单层配额用有理整数幂反演；不使用浮点开根来判断边界。层大小与成本相等时，排序后仅最小的r个配额决定风险，其他配额可降到第r个而不增加风险。因此枚举非降r元组，得到所声明固定设计类中的全局最优。
+The risk under quotas n_h is the maximum of `prod(1−n_h/N)` over all r-stratum subsets. The minimum per-stratum quota of the balanced design is found by inverting with rational integer powers; floating-point roots are not used to decide boundaries. When stratum sizes and costs are equal, after sorting only the r smallest quotas determine the risk, and the other quotas can be lowered to the r-th without increasing risk. Enumerating non-decreasing r-tuples therefore gives the global optimum within the declared fixed design class.
 
-最强矩形必须对至少r层证明污染数为0；它的精确最低成本是 `r*ceil(N*(1−alpha))`。求和矩形最低成本为 `r*N−floor(N*alpha)`。定义、达到下界的构造和适用类均见IA6–IA8。
+The strongest rectangle must prove a contamination count of 0 for at least r strata; its exact minimum cost is `r*ceil(N*(1−alpha))`. The minimum cost of the sum rectangle is `r*N−floor(N*alpha)`. The definitions, the constructions attaining the lower bounds and the applicable class are in IA6–IA8.
 
-## 完整预定网格
+## Complete pre-specified grid
 
-每格alpha=.05、accuracy目标[.9,1]、层成本1；费用为审计篇数，规划CPU耗时另记。直接列是全局最优，而不是只试一个均衡方案。
+Every cell has alpha=.05, accuracy target [.9,1] and stratum cost 1; the cost is the number of audited documents, and planning CPU time is recorded separately. The direct column is the global optimum, not just one balanced scheme tried.
 
-| r | 层数h | 每层N | 直接最优 | 最强矩形最优 | 相对节省 |
+| r | Strata h | N per stratum | Direct optimum | Strongest rectangle optimum | Relative saving |
 |---:|---:|---:|---:|---:|---:|
 | 2 | 3 | 2 | 4 | 4 | 0% |
 | 2 | 3 | 5 | 10 | 10 | 0% |
@@ -53,21 +53,21 @@
 | 6 | 11 | 10 | 44 | 60 | 26.67% |
 | 6 | 11 | 20 | 88 | 114 | 22.81% |
 
-零发现风险是坏真值下审计恰巧完全漏掉污染的概率；不是实际审计会成功的概率，也不是观察零发现后污染的后验概率。给定设计还可能发现错误并弃权，不能把审计费用最优解释成总研究收益最优。
+The zero-finding risk is the probability that, under a bad truth, the audit happens to miss the contamination completely; it is not the probability that an actual audit will succeed, nor the posterior probability of contamination after observing zero findings. A given design may also find errors and abstain, so optimal audit cost cannot be read as optimal total research benefit.
 
-## 负对照和渐近结果
+## Negative controls and asymptotic results
 
-两层AND结构、N=20时，直接和最强矩形都以[0,19]审计配额达到最优成本19；联合结构并不天然带来节省。即使有收益，整数舍入也会使相邻规模表现不同，不能根据本表外推单调效率趋势。
+For the two-stratum AND structure with N=20, both the direct design and the strongest rectangle reach the optimal cost of 19 with audit quotas [0,19]; a joint structure does not by itself bring savings. Even where there is a gain, integer rounding makes neighbouring sizes behave differently, so no monotone efficiency trend can be extrapolated from this table.
 
-另一项已证明、但未以大规模实验执行的结果是：固定alpha、令N=r²，直接均衡设计成本至多 `2N*log(1/alpha)+2r`，矩形至少 `r*N*(1−alpha)`，成本比下界随r线性增长。语料总规模同时增长为(2r−1)r²，且所有投票都是人工oracle结构。它是中间矩形承诺的结构代价，不是实际语言模型中的任意倍节约，也不是新颖性认证。
+Another result, proven but not executed as a large-scale experiment: with fixed alpha and N=r², the direct balanced design costs at most `2N*log(1/alpha)+2r` and the rectangle at least `r*N*(1−alpha)`, so the lower bound on the cost ratio grows linearly in r. The total corpus size grows at the same time as (2r−1)r², and all votes are hand-made oracle structures. This is the structural cost of the intermediate rectangle commitment, not an arbitrary-factor saving in an actual language model, and not a certification of novelty.
 
-## 实际执行与复现
+## Actual execution and reproduction
 
-阈值脚本 [threshold_design.py](threshold_design.py) 使用Python 3.12.14标准库；独立20格扫描用时0.702440秒，随后集成复跑为0.680830秒（当前JSON）。最大精确搜索域为230,230个非降元组；费用剪枝不丢失任何更小可行费用。独立5项测试用时0.363秒，通过完整小域未压缩配额、抽样结果与安全盒枚举交叉验证；不是只验证某个手选成功点。
+The threshold script [threshold_design.py](threshold_design.py) uses the Python 3.12.14 standard library; the standalone 20-cell scan took 0.702440 seconds, and the later integration rerun 0.680830 seconds (current JSON). The largest exact search domain is 230,230 non-decreasing tuples; cost pruning does not lose any smaller feasible cost. The 5 independent tests took 0.363 seconds and cross-validate against full small-domain enumeration of uncompressed quotas, sampling outcomes and safe boxes; they do not only verify some hand-picked success point.
 
 ```powershell
 python -m unittest research.planning.test_threshold_design -v
 python -m research.planning.threshold_design
 ```
 
-一般非对称影响图的检查器与独立审查另有记录；本页不以阈值压缩公式代替任意图可扩展性的证据。总体必须先冻结、影响图必须覆盖任意联合删除、历史审计真值必须有效。缺少其中任何一项，当前结果仍只是有条件的数学设计。
+The checker for general asymmetric influence graphs and its independent review are recorded separately; this page does not use the compressed threshold formula as evidence of scalability to arbitrary graphs. The population must be frozen first, the influence graph must cover arbitrary joint deletions, and the historical audit truth must be valid. Missing any one of these, the current result is still only a conditional mathematical design.

@@ -30,7 +30,7 @@ class LocalizationWriteTests(unittest.TestCase):
                         raise error
                     return original_replace(source, destination)
 
-                expected = {'status': 'complete', 'value': '数学'}
+                expected = {'status': 'complete', 'value': 'mathematics α≤β'}
                 with patch.object(runner, 'OUTPUT', output), \
                      patch.object(Path, 'replace', autospec=True, side_effect=replace_once), \
                      patch.object(runner.time, 'sleep') as sleep:

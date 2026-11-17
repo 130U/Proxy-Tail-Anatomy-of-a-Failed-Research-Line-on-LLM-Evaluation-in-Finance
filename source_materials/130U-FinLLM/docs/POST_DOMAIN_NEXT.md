@@ -1,59 +1,59 @@
-# 03a完成后：接收真实审核进度
+# After 03a: taking in the real review progress
 
-2026-10-30。用户提供完整03a输出：`domain_v1`完成74次更新、1,211,960个有效tokens，金融验证loss为3.2375，最终7文件／615,896,468字节备份输出为`verified: true`。原seed通用保留子集loss为3.9842→4.0574，增加0.07317。见[领域训练记录](../reports/colab_t4_domain_20261030.json)。这些是用户贴出的云端证据；代理没有独立下载Drive权重。
+2026-10-30. The user provided the full 03a output: `domain_v1` completed 74 updates and 1,211,960 effective tokens, the financial validation loss was 3.2375, and the final backup of 7 files / 615,896,468 bytes reported `verified: true`. The loss on the original seed general retention subset went 3.9842→4.0574, an increase of 0.07317. See the [domain training record](../reports/colab_t4_domain_20261030.json). This is cloud evidence posted by the user; the agent did not independently download the Drive weights.
 
-最新快速路径：[04a实体立场SFT试验](ENTITY_SFT_PILOT.md)已准备，可用1008条已确认标题、以标题字面实体为目标开展私有探索，无需先将实体声称为已核验证券。尚未在用户Colab执行；真实证券映射和最终任务评估仍待完成。
+Latest fast path: the [04a entity stance SFT trial](ENTITY_SFT_PILOT.md) is ready. It can use the 1008 confirmed headlines, with the literal entity in the headline as the target, for private exploration, without first claiming that the entities are verified securities. It has not yet been run in the user's Colab; real security mapping and the final task evaluation are still to be done.
 
-本段已经完成，无需重新训练03a。后面重跑probe显示74→74、`resumed_no_training: true`是完成后的只读恢复，不是又训练74步。原100M通用／25M金融预算尚未完成；本次验收的是有界领域小实验。
+This stage is complete and 03a does not need to be retrained. A later probe re-run showed 74→74 and `resumed_no_training: true`; that is a read-only resume after completion, not another 74 training steps. The original 100M general / 25M finance budget has not been completed; what was accepted here is a bounded small domain experiment.
 
-## 当前进度：已接收标题审核表
+## Current progress: headline review table received
 
-用户已交付2000条CSV，并在本对话明确确认除7条待查外均已逐条审核。已独立核对全部ID、标题及目标与原始冻结数据一致；1,993条确认包括看多426、看空234、中性1219和排除114，另7条待查。保留五条标题与文章上下文判断不同的记录。确认来源是用户在本对话的声明，原CSV中旧`human_reviewed`字段仍为false；独立派生版本以明确确认更新该字段，原表不变。[汇总记录](../reports/human_headline_review_20261030.json)及完整私有文件分别保留，未公开新闻原文。
+The user has delivered the 2000-row CSV and, in this conversation, explicitly confirmed that every row except 7 pending ones was reviewed one by one. All IDs, headlines and targets were independently checked against the original frozen data and match. The 1,993 confirmed rows comprise 426 bullish, 234 bearish, 1219 neutral and 114 excluded; another 7 are pending. Five records where the judgment from the headline differs from the article context are kept. The confirmation comes from the user's statement in this conversation; the old `human_reviewed` field in the original CSV is still false. An independent derived version updates this field based on the explicit confirmation, and the original table is unchanged. The [summary record](../reports/human_headline_review_20261030.json) and the full private files are kept separately; the news text has not been published.
 
-资产核验尚未完成。1,879条三分类候选合并为740个目标候选组，已准备本地`runs/review_packages/asset_audit_20261030/`供后续核对。下一步核对资产、来源许可和事件分组，随后建立固定SFT数据分区。此CSV不是原工作台进度JSON；两者版本不能直接互相覆盖或合并。
+Asset verification is not complete. The 1,879 three-class candidates were merged into 740 target candidate groups, and a local `runs/review_packages/asset_audit_20261030/` has been prepared for later checking. The next step is to check assets, source permissions and event grouping, then set up fixed SFT data partitions. This CSV is not the original workspace progress JSON; the two versions cannot directly overwrite each other or be merged.
 
-已获取NSE现行证券、历史代码及公司名称变更清单，按组产生[证据统计](../reports/nse_asset_evidence_20261030.json)和本地私有候选表。740组中347组有当前同代码线索，30组有旧代码变更线索，其余未确认；当前同代码不证明新闻时点的资产身份。`STOCKEXCHNG`、`GOLDSPC`等来源候选还包括非股票类别，需区分指数、商品、货币、行业与公司。
+The NSE lists of current securities, historical symbols and company name changes were obtained, and per-group [evidence statistics](../reports/nse_asset_evidence_20261030.json) and a local private candidate table were produced. Of the 740 groups, 347 have a lead from the same current symbol, 30 have a lead from an old symbol change, and the rest are unconfirmed. The same current symbol does not prove the asset identity at the time of the news. Source candidates such as `STOCKEXCHNG` and `GOLDSPC` also include non-equity categories; indices, commodities, currencies, sectors and companies need to be distinguished.
 
-新增只读`finllm.sft_preflight.audit_domain_parent`，可在材料齐备后核对实际Drive领域快照、冻结母检查点、词表、分片和前后保留集报告；此工具不建立正式数据、不启动训练，也未实际读取用户Drive。总体与token预算统计见[项目进度](PROJECT_PROGRESS.md)。
+The new read-only `finllm.sft_preflight.audit_domain_parent` can, once the materials are in place, check the actual Drive domain snapshot, the frozen parent checkpoint, the vocabulary, the shards and the before/after retention-set reports. This tool does not build formal data or start training, and it has not actually read the user's Drive. For overall and token-budget statistics, see [project progress](PROJECT_PROGRESS.md).
 
-## 原工作台进度JSON说明
+## Note on the original workspace progress JSON
 
-如需保留原工作台的独立操作记录，可在**原浏览器、原工作台**点击左侧「备份进度 JSON」。该文件包含完整数据SHA、行号列表和人工操作，保留已确认、草稿、待查及排除决定，不含新闻全文。
+To keep the original workspace's independent record of operations, click "Back up progress JSON" on the left **in the original browser and the original workspace**. The file contains the full data SHA, the list of row IDs and the human actions, and keeps confirmed, draft, pending and exclusion decisions; it does not contain the news full text.
 
-本次已按用户明确确认接收CSV；仅在需要恢复原工作台独立操作记录时才需要进度JSON。不同版本不自动合并。
+This time the CSV was taken in on the basis of the user's explicit confirmation; the progress JSON is needed only to recover the original workspace's independent record of operations. Different versions are not merged automatically.
 
-如需补资产，筛选「立场已审／资产待核实」后填写标识、勾选核实框，最后再按`A`。修改字段会撤销旧确认；立场已审与资产已核实分别记录。未查清的资产可以保留待查，先导出已有进度即可。
+To add assets, filter on "Stance reviewed / asset unverified", fill in the identifier, tick the verification box, and only then press `A`. Changing a field revokes the old confirmation; stance review and asset verification are recorded separately. Assets that have not been resolved can stay pending; export the existing progress first.
 
-## 已准备的接收检查
+## Prepared intake check
 
-在项目根目录执行，替换实际导出路径；审核材料仅存本地忽略目录：
+Run in the project root, replacing the path with the actual export; review material is kept only in local ignored directories:
 
 ```powershell
 .\.venv\Scripts\python.exe -X utf8 scripts/import_review_progress.py `
   --source runs/review_packages/review_2000_20261030/ai_annotations.jsonl `
-  --progress <实际导出的review_progress文件.json> `
+  --progress <actually-exported-review_progress-file.json> `
   --output runs/review_imports/review_v1
 ```
 
-导入器核对精确输入SHA、完整有序行号、逐行状态及布尔标记。草稿中的资产标识不会提升为人工核实；AI建议、原作者情绪和人工立场分别保留。存在不同版本、未知或重复行号、状态矛盾时停止，保留原文件。若使用初版工作台，需找到匹配的原始输入；不能改SHA来绕过校验。
+The importer checks the exact input SHA, the complete ordered list of row IDs, the per-row status and the boolean flags. Asset identifiers in drafts are not promoted to human-verified. AI suggestions, the original author's sentiment and the human stance are kept separately. If versions differ, row IDs are unknown or duplicated, or statuses contradict each other, it stops and keeps the original file. If the first version of the workspace was used, the matching original input must be found; the SHA cannot be changed to bypass the check.
 
-成功后生成：
+On success it produces:
 
-| 文件 | 用途 |
+| File | Purpose |
 |---|---|
-| `normalized_decisions.jsonl` | 全部原始行号的真实进度，未操作的行单列为unreviewed |
-| `reviewed_label_candidates.jsonl` | 人工确认且未排除的标签候选，保留原文、来源及事件组 |
-| `pending_asset_resolution.csv` | 后续资产标准标识、别名、事件与来源审核表 |
-| `manifest.json` | 输入及产物哈希、状态／类别数量、剩余关卡 |
+| `normalized_decisions.jsonl` | Real progress for all original row IDs; rows with no action are listed separately as unreviewed |
+| `reviewed_label_candidates.jsonl` | Human-confirmed, non-excluded label candidates, keeping the text, source and event group |
+| `pending_asset_resolution.csv` | Review table for the later standard asset identifiers, aliases, events and sources |
+| `manifest.json` | Hashes of inputs and outputs, counts by status / class, remaining gates |
 
-这些产物均为`formal_training_ready: false`，没有训练用`label`或`target`，不能直接当作SFT文件。已有不同或不完整目录不会被覆盖；审核有新进度时使用新版本目录。
+All of these outputs are `formal_training_ready: false` and have no training `label` or `target`; they cannot be used directly as SFT files. A different or incomplete existing directory is not overwritten; when the review has new progress, use a new version directory.
 
-## 接收后的推进顺序
+## Order of work after intake
 
-1. 统计实际已审数量、三类分布、排除和待查项；优先补齐资产已核实但无法映射到输入规则的记录。
-2. 核对资产身份，生成合法`target`与`target_aliases`。历史来源代码只是候选，`NSE:TCS`等自由文本标识不能直接当模型目标。
-3. 核验来源许可与事件／语义重复关系。相同来源标题、多目标、词法近重复及同一事件先联合归组，再固定train／development／calibration／test；后续把人工`event_group_id`显式映射为现有代码的`event_id`。校准两半也须非空且组隔离。
-4. 新SFT入口先重新读回并校验`domains/domain_v1/run`、匹配报告和诊断，冻结选定的领域母权重，沿用`tokenizer/seed_v1`并建立新的优化器。旧`04_sft.ipynb`的默认路径不适用于这条训练分支，暂不直接运行。
-5. 对开发集选定的SFT建立基线评测，再准备需另行人工审核的DPO偏好对；最终模型独立校准后才开封测试。确认立场不等于已批准DPO偏好。
+1. Count the actual numbers reviewed, the distribution over the three classes, the exclusions and the pending items; first complete the records whose asset is verified but cannot be mapped to the input rules.
+2. Check asset identity and generate valid `target` and `target_aliases`. Historical source symbols are only candidates; free-text identifiers such as `NSE:TCS` cannot be used directly as model targets.
+3. Verify source permissions and event / semantic duplicate relations. Same-source headlines, multiple targets, lexical near-duplicates and the same event are first grouped jointly, and only then are train / development / calibration / test fixed. Later, the human `event_group_id` is mapped explicitly to the `event_id` of the existing code. The two calibration halves must also be non-empty and group-isolated.
+4. The new SFT entry point first re-reads and verifies `domains/domain_v1/run`, the matching report and the diagnostics, freezes the chosen domain parent weights, keeps using `tokenizer/seed_v1`, and creates a new optimizer. The default paths of the old `04_sft.ipynb` do not apply to this training branch; do not run it directly for now.
+5. Build a baseline evaluation for the SFT model selected on the development set, then prepare DPO preference pairs, which need a separate human review. The test set is unsealed only after the final model has been calibrated independently. A confirmed stance is not an approved DPO preference.
 
-2000条比200条更适合开始小规模真实SFT，但可用量以人审、资产和分组验收后为准。原AI草稿有113条排除建议；这不决定最终人审类别数。此批来源是金融新闻标题，不能据此宣布已验证推特场景效果。
+2000 rows are better suited than 200 for starting a small real SFT, but the usable amount depends on acceptance of the human review, the assets and the grouping. The original AI draft had 113 exclusion suggestions; this does not determine the final class counts of the human review. The source of this batch is financial news headlines, so it cannot be used to announce a verified effect in the Twitter setting.

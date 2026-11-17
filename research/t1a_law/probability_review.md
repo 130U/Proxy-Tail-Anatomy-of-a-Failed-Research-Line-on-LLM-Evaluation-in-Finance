@@ -1,42 +1,42 @@
-# 概率实现独立审查
+# Independent review of the probability implementation
 
-审查日期：2026-11-16（America/New_York）。审查对象为 `probability.py`；独立复核脚本为 `test_probability.py`。没有修改被审查实现，也没有使用 T1 代码模块。
+Review date: 2026-11-16 (America/New_York). The object of review is `probability.py`; the independent review script is `test_probability.py`. The implementation under review was not modified, and no T1 code modules were used.
 
-**结论：在明确的独立连续均匀舍入模型下，已检查部分通过。** 这里是数学模型内的概率，不是实际财报末位的经验分布，也不是模型答错的概率。
+**Conclusion: under the explicit independent continuous uniform rounding model, the checked parts pass.** These are probabilities within a mathematical model, not an empirical distribution of the last digits of actual filings, and not the probability that a model answers wrongly.
 
-## 推导与边界
+## Derivation and boundaries
 
-对于固定符号分母的线性分式 `f=N/D`，令 `s=sign(D)`，则 `f <= t` 等价于 `s(N-tD) <= 0`。实现对负分母也乘了 `s`，不等号方向正确。两个独立均匀变量经线性变换后，其加权和具有梯形/三角形分布；分段二次 CDF 连续、归一化，零权重退化为单个均匀分布，两权重都为零时退化为点质量。
+For a linear-fractional `f=N/D` with a denominator of fixed sign, let `s=sign(D)`; then `f <= t` is equivalent to `s(N-tD) <= 0`. The implementation also multiplies by `s` for negative denominators, so the direction of the inequality is correct. After a linear transformation of two independent uniform variables, their weighted sum has a trapezoidal/triangular distribution; the piecewise quadratic CDF is continuous and normalized, degenerates to a single uniform distribution when one weight is zero, and to a point mass when both weights are zero.
 
-越界事件写成 `P(f < lo) + 1 - P(f <= hi)`，符合闭接受区间；常量恰落在任一端点时也正确。重复引用同一个变量使用同一符号及同一批抽样，未把共享变量错误拆成独立变量。gold 偏移保留在接受区间内。未固定符号的分母拒绝使用该闭式。
+The out-of-tolerance event is written as `P(f < lo) + 1 - P(f <= hi)`, which matches a closed acceptance interval; it is also correct when a constant falls exactly on either endpoint. Repeated references to the same variable use the same symbol and the same batch of samples; shared variables were not wrongly split into independent variables. The gold offset is kept in the acceptance interval. The closed form is refused for denominators whose sign is not fixed.
 
-符号化简可能移除原程序在单个零点上的可去奇点；在连续均匀模型中，非恒等零的分母零集测度为零，不改变概率。但这不支持该点处程序有定义的最坏情形声明。此次主样本的值域证书另行检查整个程序分母；概率闭式不替代值域证书。
+Symbolic simplification may remove a removable singularity of the original program at a single zero; in the continuous uniform model, the zero set of a denominator that is not identically zero has measure zero, so the probability is unchanged. But this does not support a worst-case statement that the program is defined at that point. In this run the range certificates for the main sample check the whole program's denominators separately; the closed-form probability does not replace the range certificate.
 
-## 实际运行的独立检验
+## Independent tests actually run
 
-运行命令（工作目录为仓库根）：
+Command (working directory is the repository root):
 
 ```powershell
 & ../130U-FinLLM/.venv/Scripts/python.exe research/t1a_law/test_probability.py
 ```
 
-8 个测试全部通过，覆盖零权重、常量、同一变量相消、两个独立同中心变量、零增长、负分母、非中心 gold、`const_m1`、分母跨零拒绝。
+All 8 tests pass, covering zero weights, constants, cancellation of the same variable, two independent variables with the same center, zero growth, negative denominators, a non-central gold, `const_m1`, and refusal for denominators crossing zero.
 
-独立 oracle 不是另一份同样的 CDF：它用 `fractions.Fraction` 在单位方形上裁剪半平面，并以多边形面积精确积分。
+The independent oracle is not another copy of the same CDF: it clips half-planes on the unit square with `fractions.Fraction` and integrates exactly via polygon areas.
 
-| 检验 | 结果 |
+| Test | Result |
 |---|---:|
-| 80 个合成线性分式 × 3 个接受区间，与有理面积对照 | 240 带，最大绝对差 `2.22e-16` |
-| 固定等间距抽取 42 条真实双变量以内题目；38 条符合闭式 × 3 个容差 | 114 带，最大绝对差 `2.25e-13` |
-| 上述 38 条每题独立抽取 65,536 点，与闭式概率对照 | 最大偏差 1.581 个理论 MC 标准误；均在预设 6 SE＋2/n 范围内 |
+| 80 synthetic linear-fractional functions × 3 acceptance intervals, against rational areas | 240 bands, maximum absolute difference `2.22e-16` |
+| Fixed equally spaced sample of 42 real questions with at most two variables; 38 fit the closed form × 3 tolerances | 114 bands, maximum absolute difference `2.25e-13` |
+| For each of the 38 above, 65,536 independently drawn points, against the closed-form probability | Maximum deviation of 1.581 theoretical MC standard errors; all within the preset 6 SE + 2/n range |
 
-选择规则不依赖越界概率或原判定。检查数据仅来自 T1 的 `results/per_question.jsonl`。
+The selection rule does not depend on the out-of-tolerance probability or the original decision. The check data come only from T1's `results/per_question.jsonl`.
 
-## 报告中的精确性限定
+## Qualifications on exactness in the report
 
-- `closed_form_affine_fraction` 表示闭式计算；实现最终使用双精度浮点，不能称“有理数精确概率”。上述误差检查支持本任务数值精度，但没有给出每个浮点运算的形式化误差证书。
-- MC 的 Wilson 区间仅描述给定舍入模型下的抽样数值误差。题间独立种子使聚合 MC 误差可相加；报告的聚合 SE 是估计量，不是关于实际财报真值分布的置信区间。
-- MC 未观察到越界不等于概率严格为零；不可用它证明被确定。最坏情形判定应以值域证书为准。
-- 排除题没有定义可核验的概率；对全部题的下/上界把排除题分别赋 0/1，是缺失覆盖界限，不能将下界称全部题的完整概率估计。
+- `closed_form_affine_fraction` denotes a closed-form computation; the implementation ultimately uses double-precision floating point, so it cannot be called a "rational exact probability". The error checks above support the numerical precision for this task, but give no formal error certificate for each floating-point operation.
+- The MC Wilson intervals describe only the sampling numerical error under the given rounding model. Independent seeds across questions make the aggregate MC errors additive; the reported aggregate SE is an estimate, not a confidence interval about the true-value distribution of actual filings.
+- MC observing no out-of-tolerance cases does not mean the probability is strictly zero; it cannot be used to prove determinacy. Worst-case decisions should rest on the range certificate.
+- Excluded questions have no verifiable probability defined; the lower/upper bounds over all questions assign 0/1 to the excluded questions, respectively. These are coverage bounds for missing items, and the lower bound cannot be called a complete probability estimate for all questions.
 
-未发现需要阻止概率结果交付的错误。
+No error was found that should block delivery of the probability results.

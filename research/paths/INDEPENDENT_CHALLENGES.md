@@ -1,33 +1,33 @@
-# 独立提出的三个数学问题
+# Three mathematical questions proposed independently
 
-日期：2026-11-15。提出者：当前项目中的独立子代理，不是外部专家或 Fable。此文件先于本代理负责路径的成文分析写出；排序依据是问题是否可辨识、是否有短而致命的反例、是否能导出匹配的上下界，不沿用“P1 主、P2 次、P3 支线”的预设。只使用已存理论与文献台账，未联网；新颖性一律未确认。
+Date: 2026-11-15. Proposer: an independent sub-agent in this project, not an outside expert or Fable. This file was written before this agent's written analysis of the paths it was responsible for. The order rests on whether a question is identifiable, whether it has a short and fatal counterexample, and whether matching upper and lower bounds can be derived; it does not follow the preset "P1 main, P2 secondary, P3 side line". Only the stored theory and the literature ledger were used, with no network access; novelty is unconfirmed throughout.
 
-论文类型按用户的原意定位为 THEORY：主结果应是一个边界、刻画或不可能性，而不是新数据集上的更高分数。方法参考本地“统计理论框架设计”技能的目标量—假设—上界/下界结构；用户当前离线边界优先于技能中的新增检索建议。
+The paper type is set as THEORY, as the user originally intended: the main result should be a boundary, a characterization, or an impossibility, not a higher score on a new dataset. The method follows the target quantity–assumptions–upper/lower bound structure of the local "statistical theory framework design" skill; the user's current offline boundary takes precedence over the skill's suggestion to run additional searches.
 
-## 1. 什么最小、可估计的信息能让部署尾部风险界低于整批全错？
+## 1. What minimal, estimable information can bring a deployment tail-risk bound below "the whole batch is wrong"?
 
-这不是先做一个风险计算器的问题。固定预测器，未来一批 B 条样本的错误数 S 是明确对象；但普通校准只约束平均频率，既不能识别逐点错误概率，也不能识别尾部共同失败。应先刻画：给定能够从历史独立簇估计的约束集合，`sup_Q ES_beta(S)` 何时严格小于 B，必要的独立簇样本量是多少？
+This is not a question of building a risk calculator first. With a fixed predictor, the number of errors S in a future batch of B samples is a well-defined object. But ordinary calibration only constrains average frequency, and identifies neither pointwise error probabilities nor joint failure in the tail. One should first characterize: given a set of constraints that can be estimated from historical independent clusters, when is `sup_Q ES_beta(S)` strictly less than B, and how many independent clusters are necessary?
 
-一个立即可反驳过度承诺的事实是：如果只知道整批平均错误率不超过 u，允许任意共同依赖，那么最坏 ES 等于 `B*min(1,u/(1-beta))`。例如 beta=.95 而 u=.1，即使 u 完全准确，界仍等于 B；继续提高边际估计精度并不能修复这个结构缺口。已知边际的同单调结果是成熟工具，不是我们的新定理。
+A fact that immediately refutes overclaiming: if all that is known is that the batch-average error rate is at most u, and arbitrary common dependence is allowed, then the worst-case ES equals `B*min(1,u/(1-beta))`. For example, with beta=.95 and u=.1, even if u is exactly right, the bound still equals B; further improving the precision of the marginal estimate cannot fix this structural gap. The comonotone result for known marginals is a mature tool, not our new theorem.
 
-真正值得深挖的是同一问题的下界与结构门槛：增加可验证的事件图、重复独立批次、跨簇矩约束或漂移预算后，究竟哪种信息第一次使界非空？能否证明一个“依赖信息量—独立簇样本数—尾部预算”前沿，而不是给任何坏情况都加一个任意超参数？这是我独立排序的第一项，因为它可能很快否定 P3 当前叙事，也可能得到清楚的部分识别论文。它不要求从零训练，因此与导师的原必要性过滤器有冲突，不能靠包装消除。
+What is truly worth digging into is the lower bound and the structural threshold for the same problem: after adding a verifiable event graph, repeated independent batches, cross-cluster moment constraints, or a drift budget, which kind of information is the first to make the bound non-vacuous? Can one prove a frontier of "amount of dependence information–number of independent clusters–tail budget", rather than adding an arbitrary hyperparameter for every bad case? This is the first item in my independent ranking, because it could quickly reject P3's current narrative, or it could yield a clear partial-identification paper. It does not require training from scratch, so it conflicts with the advisor's original necessity filter, and packaging cannot remove that conflict.
 
-## 2. 审计到底应该为“认证多少点”还是为“收窄最终统计量”付费？
+## 2. Should the audit pay for "how many points are certified" or for "narrowing the final statistic"?
 
-现有精确规划器以票差决定可认证比例，并计算零发现下的固定审计量。这是正确组件，但论文关心的是清洁比较器的 accuracy/macro-F1 区间。大量单点都不稳定时，macro-F1 仍可能恒定；相反，少数类别的几个脆弱点可能主导整个区间。因而“认证比例最大化”不是天然正确的资源分配目标。
+The existing exact planner uses vote margins to decide the certifiable fraction and computes the fixed audit size under zero findings. This is a correct component, but the paper cares about the accuracy/macro-F1 interval of the clean comparator. When many single points are unstable, macro-F1 may still be constant; conversely, a few fragile points in a minority class may dominate the whole interval. So "maximize the certified fraction" is not a naturally correct resource-allocation objective.
 
-候选主问题：在预先冻结的训练结构、共同头身份、可疑来源分层和成本下，最少需要多少审计预算，才能以至少 1−alpha 保证最终统计区间宽度≤epsilon？先研究固定设计，避免将自适应抽查、事后改模型和固定时点区间混用。必须同时给出一个困难实例族，证明某些票矩阵/类别分布下任何同预算抽样设计都不能达到目标；否则只是给精确反演器加优化外壳。
+Candidate main question: under a pre-frozen training structure, joint head identity, stratification of suspect sources, and costs, what is the minimum audit budget needed to guarantee, with probability at least 1−alpha, that the final statistic's interval width is ≤epsilon? Study fixed designs first, to avoid mixing adaptive spot checks, post-hoc model changes, and fixed point-in-time intervals. A hard instance family must be given at the same time, proving that under certain vote matrices/class distributions no sampling design with the same budget can reach the target; otherwise it is only an optimization wrapper around the exact inverter.
 
-非平凡处在于统计不确定性与组合敏感度不是一个标量 k 能完全概括：同一污染上界可能分布在完全不同的头上，改变可达统计量集合。应比较最强的集体精确 oracle，而非只比较原来的逐点松界。若所谓改进全来自基线故意忽略头身份，或变成经典分层审计的直接套用，就降低为工程组件。该题与现有数据来源控制直接相关，但“不需要新语言模型也能证明”不构成缺陷；真正的必要性应落在可控训练来源，而不是模型大小口号。
+The non-trivial part is that statistical uncertainty and combinatorial sensitivity cannot be fully summarized by one scalar k: the same contamination upper bound may fall on completely different heads, changing the set of attainable statistics. The comparison should be with the strongest collective exact oracle, not only with the original loose pointwise bound. If the so-called improvement comes entirely from a baseline that deliberately ignores head identity, or becomes a direct application of classical stratified auditing, it is downgraded to an engineering component. This question bears directly on the existing control of data sources, but "it can be proved without a new language model" is not a defect; the real necessity should rest on controllable training sources, not on slogans about model size.
 
-## 3. 一个语义对象究竟能同时支持多少种硬不变性和方向约束？
+## 3. How many hard invariances and direction constraints can one semantic object support at the same time?
 
-P2 现有条件式结论是：解析正确、无数值旁路、固定上下文、限制单调坐标时，单位不变与 Greeks 界成立。最可能的核心瓶颈却在这些条件是否与任务语义兼容。我的问题是：给定可观测文本和数字、允许的表示变换及目标标签，能否刻画“保留足够任务信息的最小不变表示”，并证明何时任何精确不变且单调的预测器都必然付出不可消除的错误代价？
+P2's existing conditional conclusion is: when parsing is correct, there is no numeric bypass, the context is fixed, and the monotone coordinates are restricted, unit invariance and the Greeks bounds hold. The most likely core bottleneck, however, is whether these conditions are compatible with the task semantics. My question: given observable text and numbers, the permitted representation transformations, and target labels, can one characterize "the minimal invariant representation that keeps enough task information", and prove when every exactly invariant and monotone predictor must pay an irreducible error cost?
 
-最短起点是同一不变轨道上标签冲突的反例：如果两种语义状态被要求映为同一表示而目标不同，任何确定性分类器都无法同时正确。进一步，把不完整比较基准、符号/零值、舍入区间、holder/target 绑定纳入可观测等价类，得到部分识别集合，再问哪些方向约束在整个集合中成立。比在一个手选 g 上证明 sigmoid 导数有界更有研究价值的是“何时方向根本不可证”。
+The shortest starting point is a counterexample of label conflict on the same invariance orbit: if two semantic states are required to map to the same representation but have different targets, no deterministic classifier can be correct on both. Further, bring incomplete comparison benchmarks, signs/zero values, rounding intervals, and holder/target binding into the observable equivalence classes to obtain partial-identification sets, and then ask which direction constraints hold over the whole set. More valuable for research than proving a bounded sigmoid derivative on one hand-picked g is "when direction cannot be proved at all".
 
-危险在于这可能完全落入已有不变表示、充分统计与单调学习的经典理论。需要准确指出金融数值语义带来的新对象，例如单位变换轨道与缺失比较基准的共同商空间，而不是只改应用词汇。最小测试应同时含合法单位变换和非法的经济概念偷换：币种转换若汇率时点改变，或百分比与百分点互换，不能纳入同一不变性。若最后只有规则解析加正权重头，应诚实保留为证书演示，而非理论旗舰。
+The danger is that this may fall entirely within the existing classical theory of invariant representations, sufficient statistics, and monotone learning. One needs to point out precisely the new objects that financial numeric semantics brings, for example the joint quotient space of unit-transformation orbits and missing comparison benchmarks, rather than only changing the application vocabulary. The minimal test should include both legitimate unit transformations and illegitimate substitutions of economic concepts: a currency conversion in which the exchange-rate date changes, or swapping percent for percentage points, cannot be brought under the same invariance. If in the end there is only rule parsing plus a positive-weight head, it should honestly be kept as a certificate demonstration, not a theory flagship.
 
-## 这三个问题怎样影响下一轮投入
+## How these three questions affect the next round's investment
 
-优先投入可以推翻自己的短推导：第一题先证明均值信息下的空泛阈值，第二题先构造“零单点认证但统计量确定”的差异族，第三题先构造同轨道语义冲突。只有这些问题表明存在未被经典工具直接解决的空间，才扩大训练或实现。现有短证明、构造矩阵、文献题状态可作为起点；不能把本文件的选择称为外部同行认可，也不能在尚未查重时承诺理论创新。
+Invest first in short derivations that could overturn themselves: for question 1, first prove the vacuity threshold under mean information; for question 2, first construct a difference family with "zero single points certified but the statistic determined"; for question 3, first construct same-orbit semantic conflicts. Only if these questions show that there is room not directly solved by classical tools should training or implementation be expanded. The existing short proofs, constructed matrices, and the status of the literature questions can serve as starting points. The choices in this file cannot be called external peer endorsement, and theoretical innovation cannot be promised before the prior-art check.

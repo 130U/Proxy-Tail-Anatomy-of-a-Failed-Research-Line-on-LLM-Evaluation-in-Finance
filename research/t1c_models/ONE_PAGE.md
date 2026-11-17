@@ -1,26 +1,26 @@
-# T1C：一页结论
+# T1C: one-page summary
 
-**按官方执行评分，未达到预设“有实际影响”门槛；本次没有确认由输入舍入单独造成的模型误判。** 见证组错误率高 **5.10 个百分点**，但 95% 区间 **[−2.57, 12.55]** 包含零；68 个拒绝结果中，仅 **3 个（4.4%）** 可证明在 T1 舍入盒内相容，且这三例均涉及分母或参考程序问题。这个结果是“尚未检出”，不是证明影响为零。
+**Under official execution scoring, the result did not reach the preset "has practical impact" threshold; this run did not confirm any model misjudgment caused by input rounding alone.** The witness group's error rate is higher by **5.10 percentage points**, but the 95% interval **[−2.57, 12.55]** contains zero. Of 68 rejections, only **3 (4.4%)** can be proved compatible within the T1 rounding box, and all three involve a denominator or reference-program problem. This result means "not yet detected"; it does not prove the effect is zero.
 
-全部 196 个 T1 见证题，按运算类型无放回匹配 196 个稳定题；392 次独立新会话、固定提示、单一继承运行时条件。置信区间用 237 个财报页面联合成簇 bootstrap，10,000 次，保留同页跨组依赖。
+All 196 T1 witness questions were matched without replacement, by operation type, to 196 stable questions; 392 independent fresh sessions, a fixed prompt, and a single inherited runtime condition. Confidence intervals use a joint cluster bootstrap over 237 filing pages, 10,000 draws, keeping the cross-group dependence within a page.
 
-| 评分轨道／规则 | 见证组准确率 | 对照组准确率 | 错误率差，百分点（95% CI） |
+| Scoring track / rule | Witness-group accuracy | Control-group accuracy | Error-rate difference, percentage points (95% CI) |
 |---|---:|---:|---:|
-| 算式执行／官方五位 | 80.10% | 85.20% | +5.10 [−2.57, 12.55] |
-| 算式执行／相对 1% | 80.61% | 85.71% | +5.10 [−2.48, 12.45] |
-| 算式执行／人工答案显示位数 | 76.96% | 86.91% | +9.95 [2.08, 17.73] |
-| 最终数值／官方数值规则迁移 | 75.00% | 67.86% | −7.14 [−16.22, 2.00] |
-| 最终数值／相对 1% | 80.61% | 85.71% | +5.10 [−2.48, 12.45] |
-| 最终数值／人工答案显示位数 | 76.96% | 85.86% | +8.90 [0.88, 16.73] |
+| Formula execution / official five decimals | 80.10% | 85.20% | +5.10 [−2.57, 12.55] |
+| Formula execution / relative 1% | 80.61% | 85.71% | +5.10 [−2.48, 12.45] |
+| Formula execution / human-answer displayed digits | 76.96% | 86.91% | +9.95 [2.08, 17.73] |
+| Final value / official numeric rule carried over | 75.00% | 67.86% | −7.14 [−16.22, 2.00] |
+| Final value / relative 1% | 80.61% | 85.71% | +5.10 [−2.48, 12.45] |
+| Final value / human-answer displayed digits | 76.96% | 85.86% | +8.90 [0.88, 16.73] |
 
-每组分母 196；显示规则仅使用每组 191 个可解析人工标签。所有轨道先按声明单位归一化；算式交给未修改的官方执行器，保留原操作数与运算。Q377 的百万／十亿换算另有来源记录，不是直接比较未经归一化的原始 DSL。
+The denominator is 196 per group; the display rule uses only the 191 parsable human labels per group. Every track first normalizes by the declared unit; formulas go to the unmodified official executor, keeping the original operands and operations. The million/billion conversion for Q377 has its own source record; it is not a direct comparison of raw, unnormalized DSL.
 
-**归因。** 68 个官方拒绝案例均经两次来源复核：33 个参考答案／程序问题，24 个合理口径差异，11 个信息不足或混合问题；后者含 3 个可识别的模型算式问题，不能据此声称模型全部正确。7 处分歧已裁决，原意见保留。单独由同一事实的不同显示精度解释的拒绝为 **0/68**；Q236 同时存在精细披露与符号差异，未计作纯精度原因。已通过数值评分的算式没有全部做语义审查。
+**Attribution.** All 68 official rejections received two source reviews: 33 reference answer/program problems, 24 defensible alternative conventions, and 11 cases of insufficient information or mixed problems; the last group includes 3 identifiable model formula problems, so one cannot claim from this that the model was right in every case. 7 disagreements were adjudicated, with the original opinions kept. Rejections explained solely by different displayed precision of the same fact: **0/68**. Q236 has both a finer disclosure and a sign difference, and was not counted as a pure precision cause. Formulas that already passed numeric scoring did not all receive semantic review.
 
-**规则敏感性确实存在。** 显示规则满足组间差异门槛，但有 32 个人工标签与标准程序中心值的显示不一致。直接评分最终数值又新增 44 个仅因输出舍入被拒绝的答案，其正确算式本来通过；该轨道的盒内相容比例为 36/112（32.1%）。显示规则的算式相容比例为 16/69（23.2%）。这些宽口径门槛的通过，不能作为输入舍入的因果证据。
+**Rule sensitivity is real.** The display rule meets the between-group difference threshold, but 32 human labels disagree with the display of the standard program's center value. Scoring the final value directly adds 44 more answers rejected only because of output rounding, whose correct formulas had passed; the in-box compatibility fraction on that track is 36/112 (32.1%). The formula compatibility fraction under the display rule is 16/69 (23.2%). Passing these broad-convention thresholds cannot serve as causal evidence about input rounding.
 
-**多报位数。** 在同源、同式的增长题子集（见证 69／对照 75 题），报告有效数字中位数为 16／12，T1A 一阶误差量级预算中位数为 1.39／3.03，逐题超出预算的中位数为 **14.42／8.36 位**。精确预算同时保存；全体适用题中两种预算最多差 0.058 位。这是假定披露是舍入测量时的量级诊断，不是对相同首位数字的保证，也不等于按显示数字计算有误。
+**Over-reported digits.** In the subset of growth questions with the same source and the same formula (witness 69 / control 75 questions), the median number of reported significant digits is 16/12, the median T1A first-order error-magnitude budget is 1.39/3.03, and the median per-question excess over the budget is **14.42/8.36 digits**. The exact budget is saved as well; across all applicable questions the two budgets differ by at most 0.058 digits. This is a magnitude diagnostic that assumes the disclosure is a rounded measurement. It does not guarantee identical leading digits, and it does not mean that computing from the displayed digits is wrong.
 
-**适用边界。** 仅一次模型条件，工具不暴露精确服务版本；公开数据污染可能不等量影响两组。运算匹配不是因果识别；均衡样本不能估计整个 FinQA 的误判比例。盒内证书未加入 T1B 的全文约束。建议将 T1 保留为输入精度与基准语义诊断，暂不据此主张已证实大规模舍入误判。
+**Scope limits.** Only one model condition; the tool does not expose the exact service version; public-data contamination may affect the two groups unequally. Operation matching is not causal identification; a balanced sample cannot estimate the misjudgment rate for all of FinQA. The in-box certificates do not include the T1B full-text constraints. We recommend keeping T1 as a diagnostic of input precision and benchmark semantics, and not claiming on this basis that large-scale rounding misjudgment has been confirmed.
 
-[结果图（PNG）](t1c_results.png) · [矢量图（PDF）](t1c_results.pdf) · [逐题判分与归因](judgments.csv) · [复算与原始记录](README.md) · [独立数值审计](independent/FINAL_CODE_AUDIT.md)
+[Results figure (PNG)](t1c_results.png) · [Vector figure (PDF)](t1c_results.pdf) · [Per-question scoring and attribution](judgments.csv) · [Recomputation and raw records](README.md) · [Independent numeric audit](independent/FINAL_CODE_AUDIT.md)

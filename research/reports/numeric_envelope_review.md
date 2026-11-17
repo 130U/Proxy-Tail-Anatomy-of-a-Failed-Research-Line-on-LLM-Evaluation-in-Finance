@@ -1,90 +1,90 @@
-# 第 6 轮 P2 语义包络：独立内部审查
+# Round 6 P2 semantic envelopes: independent internal review
 
-日期：2026-11-16。审查基线：`research/certifiable`，`8e4dd0b`，审查对象是其上的未提交新增文件。状态：**条件数学与有限实现检查通过；无未闭合 S0/S1 缺陷；自然文本有效性未验。** 这里的独立指另一代理独立推导与反例检查，不是 Fable、外部审稿人或证明助手认证。全程离线；不读取私有文本、标签、权重，不训练模型。
+Date: 2026-11-16. Review baseline: `research/certifiable`, `8e4dd0b`; the object of review is the uncommitted new files on top of it. Status: **conditional mathematics and finite implementation checks passed; no open S0/S1 defects; validity on natural text not verified.** "Independent" here means independent derivation and counterexample checking by another agent; it is not certification by Fable, an external referee or a proof assistant. Fully offline throughout; no private text, labels or weights were read, and no model was trained.
 
-## 结论
+## Conclusion
 
-SE1–SE6 在各自明确假设下成立：正分母独立矩形能给紧的比值/仿射像；中间类别必须检查内部峰；联合结果是最小坐标盒；宽度与接受率界只针对指定候选规范。代码对指数尾项和所有后续运算使用精确有理外包，达到预算后才能返回结果。未发现把数值中心值冒充认证端点、漏掉中间峰或混合不同声明目标的实现缺陷。
+SE1–SE6 hold under their respective explicit assumptions: independent rectangles with positive denominators give tight ratio/affine images; middle classes must be checked for interior peaks; the joint result is the minimal coordinate box; the width and acceptance-rate bounds apply only to the specified candidate specification. The code uses exact rational outer envelopes for the exponential tail terms and all subsequent operations, and can return a result only once the budget is reached. No implementation defect was found that passes off numeric centre values as certified endpoints, misses an interior peak, or mixes different declared targets.
 
-本轮真正新增的是可复核的歧义传播接口和否决条件。候选是否覆盖真实语义、候选是否过宽、类别方向是否合理、概率是否校准及是否优于符号规则，都没有由数学正确性解决。G0/G1、真实 P2 解析实验与论文新颖性均不能据此升级。
+What is genuinely new in this round is a reviewable interface for propagating ambiguity, together with veto conditions. Whether the candidates cover the true semantics, whether they are too wide, whether the class direction is reasonable, whether the probabilities are calibrated, and whether this beats a symbolic rule are all not resolved by mathematical correctness. G0/G1, the real P2 parsing experiment and the paper's novelty cannot be upgraded on this basis.
 
-## 审查范围与预算
+## Review scope and budget
 
-范围为 `theory/notes.md` 的 T2.2、`paths/PATH_02_numeric_sensitivity.md` 的有限语义候选命题，以及本轮待完成的 `theory/semantic_envelopes.md`、`numeric/semantic_envelope.py`。采用“学术研究-数学证明审查”的分命题、假设传播、边界及反例方法；本次所有审查台账合并于此文件。
+The scope is T2.2 of `theory/notes.md`, the finite semantic candidate propositions of `paths/PATH_02_numeric_sensitivity.md`, and this round's pending `theory/semantic_envelopes.md` and `numeric/semantic_envelope.py`. The method of the "academic research - mathematical proof review" procedure was used: proposition by proposition, assumption propagation, boundaries and counterexamples; all review ledgers for this review are merged into this file.
 
-已读导师 AGENTS、00、01、02、06、07。按 00 §5 和 06 Phase 1 的规定，G0 未通过仍可开展理论；本次执行检查仅是人工有理数例子的数学/实现健全性检查，不作为自然语言 P2 主线实验已完成的证据。
+The advisor files AGENTS, 00, 01, 02, 06 and 07 were read. Under 00 §5 and Phase 1 of 06, theory may proceed while G0 has not passed; the execution checks here are only mathematical/implementation soundness checks on hand-made rational examples, and are not evidence that the natural-language P2 main-line experiment has been completed.
 
-开跑前预算：单核 CPU 为主，GPU/显存 0；无训练 token；不超过 5 分钟；只使用人工构造的有理数输入，独立脚本通过标准输入运行，不另建产出。预算及后续测试数字均标为“我们的实验：round6-numeric-review”。
+Budget before running: mainly single-core CPU, GPU/VRAM 0; no training tokens; no more than 5 minutes; only hand-constructed rational inputs, with independent scripts run through standard input and no separate outputs created. The budget and the later test numbers are all labelled "our experiment: round6-numeric-review".
 
-## 先行反例与负担清单
+## Up-front counterexamples and list of burdens
 
-| 编号 | 可击穿的不当结论 | 反例或必要条件 |
+| ID | Improper conclusion that can be broken | Counterexample or necessary condition |
 |---|---|---|
-| C1 | 中间类只需算区间端点 | 阈值为 −1、1，η∈[−3,3]，中间类最大值在 η=0；端点值严格较小。 |
-| C2 | 任一候选上包络宽度都是文本不可消除歧义 | 若真实耦合为 x=b∈[1,2]，真实增长率恒为 0；独立矩形抽象给出 [−1/2,1]。只能宣称所选候选规范下的最小宽度。 |
-| C3 | 每分支单调即可跨输入单调 | η₁(t)=t、η₂(t)=t−100；输入改变时由分支 1 切到分支 2，可使输出下降。分支对应、上下文、阈值和方向必须固定或另有被证明的配对契约。 |
-| C4 | 最小坐标盒中的每个向量都联合可达 | 非退化 η 区间上，第一类最大值和末类最大值在相反端点达到；盒的上角通常连概率单纯形都不属于。 |
-| C5 | 数值外包证明了语义解析正确 | 漏掉真实基准、期间、指标、方向或上下文的候选集仍可产生算术完全正确的证书；覆盖事件必须检查完整对象。 |
-| C6 | 原始数字具有统一正向或固定 Greek 上界 | b=0 时比值无定义；b<0 时 x 方向翻转；b→0⁺ 时原始 x 的导数可无界；x<0 时对 b 的方向与 x>0 相反。 |
-| C7 | 比较标签需要学习有序概率头 | 标签若按 sign(x−b) 定义，金标元组加符号规则已给 oracle 标签；有序头及从零训练必要性没有成立。 |
-| C8 | 数值外界跨宽度门就证明不可认证 | 若真实宽度在数值包络内且包络跨 τ，只能标记未决；不能把数值松弛误当最小宽度下界超过 τ。 |
-| C9 | 不同分支的任意类别坐标均可合并 | 各分支须有共同、冻结的任务目标及同一有序类别含义；维度相同并不保证坐标语义相同。 |
-| C10 | 审计 α 等于每条输出失效概率 | r 是最终接受事件下的部署风险；α 是随机审计上界程序的覆盖错误。包络失效风险至多为语义漏包风险，不一定相等。 |
+| C1 | For a middle class it is enough to compute the interval endpoints | With thresholds −1, 1 and η∈[−3,3], the middle-class maximum is at η=0; the endpoint values are strictly smaller. |
+| C2 | The width of the envelope over any candidate set is ambiguity that text cannot remove | If the true coupling is x=b∈[1,2], the true growth rate is always 0; the independent-rectangle abstraction gives [−1/2,1]. One can only claim the minimal width under the chosen candidate specification. |
+| C3 | Monotonicity within each branch implies monotonicity across inputs | η₁(t)=t, η₂(t)=t−100; when the input changes and the selection switches from branch 1 to branch 2, the output can decrease. The branch correspondence, context, thresholds and direction must be fixed, or there must be a separately proven pairing contract. |
+| C4 | Every vector in the minimal coordinate box is jointly reachable | On a non-degenerate η interval, the maximum of the first class and the maximum of the last class are reached at opposite endpoints; the upper corner of the box usually does not even lie in the probability simplex. |
+| C5 | A numeric outer envelope proves that semantic parsing is correct | A candidate set that misses the true baseline, period, metric, direction or context can still produce an arithmetically flawless certificate; the coverage event must check the complete object. |
+| C6 | Raw numbers have a uniform positive direction or a fixed Greek upper bound | At b=0 the ratio is undefined; for b<0 the x direction flips; as b→0⁺ the derivative with respect to raw x can be unbounded; for x<0 the direction with respect to b is the opposite of that for x>0. |
+| C7 | A comparison label needs a learned ordered-probability head | If the label is defined by sign(x−b), the gold tuple plus the sign rule already gives the oracle label; the necessity of an ordered head and of training from scratch has not been established. |
+| C8 | A numeric outer bound crossing the width gate proves that certification is impossible | If the true width lies inside the numeric envelope and the envelope straddles τ, it can only be marked undetermined; numeric slack must not be mistaken for a minimal-width lower bound above τ. |
+| C9 | Any class coordinates of different branches can be merged | Each branch must have a shared, frozen task target and the same meaning of the ordered classes; equal dimension does not guarantee that the coordinates have the same semantics. |
+| C10 | The audit α equals the failure probability of each output | r is the deployment risk under the final acceptance event; α is the coverage error of the randomized audit upper-bound procedure. The envelope failure risk is at most the semantic miss risk, not necessarily equal to it. |
 
-## 逐命题复核与依赖
+## Proposition-by-proposition review and dependencies
 
-以下行号指审查时的 [semantic_envelopes.md](../theory/semantic_envelopes.md)；所有证明单元分类为 COMPLETE，局部数学判定为 PROVABLE AS STATED / Verified under stated assumptions。没有将实际解析前提也标为 Verified。
+The line numbers below refer to [semantic_envelopes.md](../theory/semantic_envelopes.md) at the time of review; all proof units are classified COMPLETE, and the local mathematical verdict is PROVABLE AS STATED / Verified under stated assumptions. The actual parsing premises were not also marked Verified.
 
-| 单元及位置 | 策略与关键复核 | 条件及判定 |
+| Unit and location | Strategy and key checks | Conditions and verdict |
 |---|---|---|
-| SE1，L27–38 | 对 x 单调、对 b 按 x 符号定向；紧矩形连续像连通，所以四角极值之间无空洞；负/零 slope 单独包含 | 正分母、独立矩形；额外耦合时仅 outer。通过 |
-| SE2，L40–80 | σ′=1/(2+2cosh) 为距离递减偶函数；相邻阈值中点唯一峰；区间最小值在端点；各坐标极值可分别实现 | 共同任务/schema、固定阈值、完整 η 区间；盒不等于联合像。通过 |
-| SE3，L82–101 | 可达两端直接迫使宽度≥D；平移至中点给 D/2+距离；冻结权重逐任务计数给精确接受质量上界 | “对全部候选健全”是指定规范，不能升级为自然文本信息下界。通过 |
-| SE4，L103–111 | 非单标签集合击穿每个确定预测；最小标签质量≤1/s，均匀分配达到最坏错误1−1/s | 对手在预测随机实现之前选标签；目标须确为符号规则定义。通过 |
-| SE5，L113–137 | 固定分支逐项有序后 min/max 保序；交换 z,z′ 给 Lipschitz；中间概率导数为两个[0,1/4]数之差 | 共同编辑域与真实分支对应；集合动态变化的跳变反例成立。通过 |
-| SE6，L139–171 | A∩E⊆A∩Cᶜ 后除以同一 P(A)；条件 union bound；二项 CDF 低计数尾反演 | 冻结最终接受规则、代表性 IID 接受审计、正确参照。r_C 与 α 分层。通过 |
+| SE1, L27–38 | Monotone in x, directed in b according to the sign of x; the continuous image of a compact rectangle is connected, so there is no gap between the corner extremes; negative/zero slope is included separately | Positive denominators, independent rectangles; only outer under additional coupling. Passed |
+| SE2, L40–80 | σ′=1/(2+2cosh) is an even function decreasing in distance; the midpoint of adjacent thresholds is the unique peak; the interval minimum is at an endpoint; the extremes of each coordinate can be realized separately | Shared task/schema, fixed thresholds, full η interval; the box is not the joint image. Passed |
+| SE3, L82–101 | The two reachable ends directly force width ≥D; shifting to the midpoint gives D/2 + distance; counting per task with frozen weights gives an exact upper bound on accepted mass | "Sound for all candidates" is a specified specification and cannot be upgraded to an information lower bound for natural text. Passed |
+| SE4, L103–111 | A non-singleton label set breaks every deterministic prediction; the minimum label mass is ≤1/s, and uniform allocation attains the worst-case error 1−1/s | The adversary chooses the label before the prediction's randomness is realized; the target must truly be defined by the sign rule. Passed |
+| SE5, L113–137 | After fixed branches are ordered term by term, min/max preserve order; swapping z,z′ gives Lipschitz; the derivative of the middle probability is the difference of two numbers in [0,1/4] | A shared edit domain and a true branch correspondence; the jump counterexample with a dynamically changing set holds. Passed |
+| SE6, L139–171 | A∩E⊆A∩Cᶜ, then divide by the same P(A); conditional union bound; inversion of the low-count tail of the binomial CDF | Frozen final acceptance rule, representative IID acceptance audit, correct reference. r_C and α are kept on separate levels. Passed |
 
-依赖链是 A0/正基准域 → SE1 → SE2 → SE3；SE4 只依赖任务定义及精确差值集合；SE5 依赖固定分支映射及概率导数界；SE6 依赖前面证书在覆盖事件内健全，并另加抽样假设。没有发现循环证明或把统计覆盖偷换为每条输出的后验概率。
+The dependency chain is A0/positive-baseline domain → SE1 → SE2 → SE3; SE4 depends only on the task definition and the exact difference set; SE5 depends on a fixed branch mapping and the probability derivative bound; SE6 depends on the earlier certificates being sound within the coverage event, plus a sampling assumption. No circular proof was found, and statistical coverage was not swapped for a per-output posterior probability.
 
-两处 S3 明确性问题已由作者修补并重新检查：审计现在显式要求 0<α<1、固定 n≥1，并单列 n=0 时 U=1；几乎处处可微限定于实区间内部/开欧氏域。修补未改变核心命题或添加隐藏经验假设。二项 CDF 对 p 的严格下降亦可直接核对：对 x<n，其导数为 −n·C(n−1,x)·p^x·(1−p)^(n−1−x)<0，足以支持作者的唯一反演根论证。草图检测为0；没有待展开的关键证明。
+Two S3 clarity issues have been patched by the author and re-checked: the audit now explicitly requires 0<α<1 and fixed n≥1, and lists U=1 separately for n=0; "differentiable almost everywhere" is restricted to the interior of real intervals / open Euclidean domains. The patches did not change the core propositions or add hidden empirical assumptions. The strict decrease of the binomial CDF in p can also be checked directly: for x<n its derivative is −n·C(n−1,x)·p^x·(1−p)^(n−1−x)<0, which is enough to support the author's unique-inversion-root argument. Sketch detection found 0; there are no key proofs left to expand.
 
-## 数值实现审查
+## Review of the numeric implementation
 
-审查 [semantic_envelope.py](../numeric/semantic_envelope.py) 的关键位置：L101 起的指数尾界、L126 起的 sigmoid、L198–241 的点概率与极值、L267–284 的分支联合、L297–311 的宽度门。
+Key locations reviewed in [semantic_envelope.py](../numeric/semantic_envelope.py): the exponential tail bound from L101, the sigmoid from L126, the point probabilities and extremes at L198–241, the branch join at L267–284, and the width gate at L297–311.
 
-对 y≥0，代码的 total 是 S_n=Σₖ₌₀ⁿ y^k/k!，next_term 为 y^(n+1)/(n+1)!。其后项比不超过 y/(n+2)，故在 y<n+2 时，余项≤next_term/(1−y/(n+2))。这给严格有理上下界；负参数通过正数倒数反向包络。sigmoid 对 exp(|y|) 的两种稳定映射单调，且在该指数≥1时导数幅值≤1/4。点概率内设 tolerance/4；中间类作上下端交叉相减并交[0,1]；min/max不会放大最大单项数值宽度。故最终每个极值的不确定宽度受 tolerance 控制，语义范围本身则可能很宽。
+For y≥0, the code's total is S_n=Σₖ₌₀ⁿ y^k/k!, and next_term is y^(n+1)/(n+1)!. The ratio of successive later terms is at most y/(n+2), so for y<n+2 the remainder is ≤next_term/(1−y/(n+2)). This gives strict rational upper and lower bounds; negative arguments are enveloped in reverse through the reciprocal of the positive value. The two stable mappings of the sigmoid in terms of exp(|y|) are monotone, and when that exponential is ≥1 the derivative magnitude is ≤1/4. Point probabilities internally use tolerance/4; middle classes are computed by cross-subtracting upper and lower ends and intersecting with [0,1]; min/max do not enlarge the largest single-term numeric width. So the uncertainty width of every final extreme is controlled by the tolerance, while the semantic range itself may be very wide.
 
-宽度门先给每个精确坐标宽度的上下界，再取最大；上界≤阈值才 pass，下界>阈值才 fail，否则 undetermined。等号、零宽、预算耗尽、空分支、重复分支 ID、不同 K/target/class labels、float/bool、非正分母均有拒绝或边界检查。任一分支计算失败时整体抛出异常，没有静默丢弃失败分支。
+The width gate first gives upper and lower bounds on the width of each exact coordinate, then takes the maximum; it passes only if the upper bound ≤ the threshold, fails only if the lower bound > the threshold, and is otherwise undetermined. Equality, zero width, budget exhaustion, empty branches, duplicate branch IDs, different K/target/class labels, float/bool and non-positive denominators all have rejections or boundary checks. If any branch computation fails, the whole computation raises an exception; failed branches are not silently dropped.
 
-此处仅验证声明的模型/域与目标 schema 一致。默认示例 target/class labels 不是语义证明；公开 dataclass 也不是针对恶意伪造证书对象的认证格式。使用者仍必须通过计算器构造输出并保持所列前提。程序接受负 slope 是为了覆盖一般仿射分支，不意味着它自动颁发全局单调证书。
+This only verifies that the declared model/domain agrees with the target schema. The default example target/class labels are not a semantic proof; the public dataclass is also not an authenticated format against maliciously forged certificate objects. Users must still construct outputs through the calculator and maintain the listed premises. The program accepts negative slopes in order to cover general affine branches; this does not mean it automatically issues global monotonicity certificates.
 
-## 独立执行结果
+## Results of independent execution
 
-全部数字来源为**我们的实验：round6-numeric-review**，均为人工有理数输入的确定性检查。
+The source of all numbers is **our experiment: round6-numeric-review**; all are deterministic checks on hand-made rational inputs.
 
-| 检查组 | 结果 | 含义与限制 |
+| Check group | Result | Meaning and limits |
 |---|---|---|
-| 独立有理参考交叉计算 | 258 个 exp/sigmoid/精确极值断言通过；24 个分支、729 个内部概率坐标包含检查通过；Python 内计时0.860秒 | 参考先把绝对参数反复除2至≤1，以80阶精确 Taylor 和有理几何余项括住 exp，再反复平方恢复；与生产代码的直接参数 Taylor 迭代路径不同。覆盖±50、极小有理参数、正负/零 slope、中间峰、窄阈值间距。无 libm 误差猜测 |
-| 比值及拒绝边界 | 65 个断言通过 | 负/零/正 x、正单位缩放、非正分母、非法类型/参数、预算耗尽、不同 K/重复 ID、符号标签与冲突拒绝；另精确验证 (19/20)^59<1/20<(19/20)^58，仅为零发现二项预算的数学阈值 |
-| 最终 schema 与宽度边界 | 8 个断言通过 | 不同任务/类别顺序拒绝；精确零宽门通过；数值下界等号与中间阈值保持未决；严格超宽才失败 |
-| 作者正式测试的独立重跑 | 14 项 unittest 全部通过，0.103秒 | 正式测试另用96阶 Lagrange 余项参考 e^y≤3^ceil(y)，不是依赖相同尾界的纯自证。有限通过仍不能代替全部输入的程序形式验证 |
+| Independent rational reference cross-computation | 258 exp/sigmoid/exact-extreme assertions pass; inclusion checks at 24 branches and 729 interior probability coordinates pass; 0.860 seconds timed within Python | The reference first halves the absolute argument repeatedly until ≤1, brackets exp with an exact 80th-order Taylor polynomial and a rational geometric remainder, then recovers by repeated squaring; this differs from the production code's direct-argument Taylor iteration path. Covers ±50, very small rational arguments, positive/negative/zero slopes, interior peaks, narrow threshold spacing. No guessing of libm error |
+| Ratios and rejection boundaries | 65 assertions pass | Negative/zero/positive x, positive unit scaling, non-positive denominators, invalid types/arguments, budget exhaustion, different K / duplicate IDs, sign labels and conflict rejection; also exact verification that (19/20)^59<1/20<(19/20)^58, which is only the mathematical threshold of the zero-finding binomial budget |
+| Final schema and width boundaries | 8 assertions pass | Different task / class orders rejected; exact zero-width gate passes; equality of the numeric lower bound and intermediate thresholds remain undetermined; fail only when strictly too wide |
+| Independent re-run of the author's formal tests | All 14 unittests pass, 0.103 seconds | The formal tests also use a 96th-order Lagrange remainder reference with e^y≤3^ceil(y), so they are not pure self-verification relying on the same tail bound. Finite passes still cannot replace formal program verification over all inputs |
 
-复现正式测试：在仓库根目录，使用相邻原仓库 `.venv/Scripts/python.exe -m unittest research.numeric.test_semantic_envelope -v`。独立 exp/sigmoid 参考参数为 Python `range(-150,151,7)` 各整数除3，再加0、50、−50、10⁻⁸、−10⁻⁸。随机分支序列使用 Python Random(240616)；24 个编号依次采用阈值数1、2、4，阈值为 i−2；编号3另改为±10⁻¹⁰；每个分支顺序抽取 g 下端 `randint(-8,0)/2`、g 上端 `randint(0,8)/2`、slope `randint(-3,3)`、offset `randint(-2,2)`，各 η 区间取9个等距点。因此是216个内部支持点、729个坐标包含检查，二者不能混为同一计数。独立参考与边界检查通过标准输入运行，不产生数据文件；本报告是唯一新增审查产出。
+To reproduce the formal tests: at the repository root, use the adjacent original repository's `.venv/Scripts/python.exe -m unittest research.numeric.test_semantic_envelope -v`. The independent exp/sigmoid reference arguments are each integer of Python `range(-150,151,7)` divided by 3, plus 0, 50, −50, 10⁻⁸, −10⁻⁸. The random branch sequence uses Python Random(240616); the 24 IDs use 1, 2, 4 thresholds in turn, with thresholds i−2; ID 3 is changed to ±10⁻¹⁰; each branch draws in order the lower end of g `randint(-8,0)/2`, the upper end of g `randint(0,8)/2`, slope `randint(-3,3)`, offset `randint(-2,2)`, and each η interval takes 9 equally spaced points. So there are 216 interior support points and 729 coordinate inclusion checks, and the two must not be merged into a single count. The independent reference and boundary checks were run through standard input and produce no data files; this report is the only new review output.
 
-补充静态核对父任务 [run_checks.py](../numeric/run_checks.py) 及 [results.json](../numeric/results.json)：记录冻结的25个等权人工格，宽度门0.05、0.10、0.20对应通过数2、3、5，未决数均为0，其余分别23、22、20格已证超宽；主门为0.10。源代码与结果内源哈希一致。中间峰、离散分支保留、x=b耦合、5种正单位尺度、分支选择跳变、符号一致/冲突及数值边界探针均与报告范围吻合。这里是对父任务运行记录及逻辑的独立核对，没有重复运行其25格，也没有将人工比例当作自然文本接受率。发现协议把729坐标检查除以3误写为243支持点；作者已保留勘误并改为实际216点，结果中协议哈希亦已更新并复核一致。这是记录计数问题，不改变数值结论。
+Supplementary static check of the parent task's [run_checks.py](../numeric/run_checks.py) and [results.json](../numeric/results.json): they record the frozen 25 equally weighted hand-made cells; width gates 0.05, 0.10, 0.20 have 2, 3, 5 passes respectively, 0 undetermined in each case, and the remaining 23, 22, 20 cells respectively are proven too wide; the main gate is 0.10. The source code agrees with the source hash inside the results. Interior peaks, retention of discrete branches, x=b coupling, 5 positive unit scales, branch-selection jumps, sign agreement/conflict and the numeric-bound probe all match the scope of the report. This is an independent check of the parent task's run record and logic; its 25 cells were not re-run, and the hand-made proportion was not treated as an acceptance rate on natural text. It was found that the protocol had miswritten the 729 coordinate checks divided by 3 as 243 support points; the author has kept an erratum and changed this to the actual 216 points, and the protocol hash in the results has also been updated and re-checked as consistent. This is a record-count issue and does not change the numeric conclusions.
 
-## 问题关闭与保留限制
+## Issues closed and limits kept
 
-C1–C10 的不当版本均被当前前提、反例或拒绝接口阻止；它们不是当前文稿仍在宣称的结论。两项理论 S3、上述计数勘误及 Lagrange 参考文字中 y=0 应取等号的边界措辞均已复核关闭；最后一项只改 README 和测试 docstring，不改变执行逻辑，因此无需再跑相同测试。没有未闭合 S0/S1；这是一份内部条件核验结果，不是外部认可。
+The improper versions of C1–C10 are all blocked by the current premises, counterexamples or rejection interfaces; they are not conclusions the current draft still claims. The two theoretical S3 items, the count erratum above, and the boundary wording in the Lagrange reference text that y=0 should take equality have all been re-checked and closed; the last item changed only the README and a test docstring, not the execution logic, so the same tests did not need to be run again. There are no open S0/S1 items; this is an internal conditional verification result, not external endorsement.
 
-仍未核验的事项必须保留：自然语言 parser 未构建；未做真实完整语义金标/候选覆盖审计；未验证单位词和数值词不会旁路改变上下文；未建立真实任务方向、校准概率、部署分布或语义分支概率；没有证明有序头或从零训练优于符号规则；未进行本轮文献检索；未证明通用 transformer 的 Lipschitz 常数。此处数学条件成立不消除这些负担，也不代表 G0/G1 通过。
+Items not yet verified must be kept: the natural-language parser has not been built; no audit of real complete semantic gold labels / candidate coverage has been done; it has not been verified that unit words and number words cannot bypass and change the context; real task direction, calibrated probabilities, the deployment distribution and semantic branch probabilities have not been established; it has not been proven that an ordered head or training from scratch beats the symbolic rule; no literature search was done in this round; the Lipschitz constant of a general transformer has not been proven. The mathematical conditions holding here does not remove these burdens, and does not mean G0/G1 have passed.
 
-## 审查版本
+## Reviewed versions
 
-源文件 SHA-256（文件之后变化需评估是否重审）：
+Source file SHA-256 (if a file changes later, assess whether re-review is needed):
 
-- `theory/semantic_envelopes.md`：`a7bb88f3db025b7e1c8c9779ccf5350bedbd66d0d08b3378f3bdaa4c0c49661a`
-- `numeric/semantic_envelope.py`：`78743f8efcdd9f2ec01f99b11df37ab3a181e7e416c5f658092c584f80316e84`
-- `numeric/test_semantic_envelope.py`：`b356b2ce1089d0d731ede0f0b5b9dd890075491a2927d245f816a1f3755d0651`（执行后仅更正文档字符串的 ≤）
-- `numeric/run_checks.py`：`c1ecf3bf2110982a883cc75e3b2f2420784008482fc8f211f41663e22f4b4b24`
-- `numeric/PROTOCOL.md`：`3b6bd3f819f91e8e271ffe2386dad8b5f6d609325333fa18ca70ecdbf26a2163`（计数勘误后与结果记录一致）
+- `theory/semantic_envelopes.md`: `a7bb88f3db025b7e1c8c9779ccf5350bedbd66d0d08b3378f3bdaa4c0c49661a`
+- `numeric/semantic_envelope.py`: `78743f8efcdd9f2ec01f99b11df37ab3a181e7e416c5f658092c584f80316e84`
+- `numeric/test_semantic_envelope.py`: `b356b2ce1089d0d731ede0f0b5b9dd890075491a2927d245f816a1f3755d0651` (after execution, only the ≤ in a docstring was corrected)
+- `numeric/run_checks.py`: `c1ecf3bf2110982a883cc75e3b2f2420784008482fc8f211f41663e22f4b4b24`
+- `numeric/PROTOCOL.md`: `3b6bd3f819f91e8e271ffe2386dad8b5f6d609325333fa18ca70ecdbf26a2163` (consistent with the results record after the count erratum)

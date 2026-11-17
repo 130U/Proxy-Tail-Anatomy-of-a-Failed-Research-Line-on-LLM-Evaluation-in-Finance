@@ -1,28 +1,28 @@
-# T1：财报的舍入精度，决定不了多少道题的答案
+# T1: For how many questions does the rounding precision of filings fail to determine the answer
 
-## 问题
+## Question
 
-金融问答基准把表格里的数字当成精确值。但财报数字是四舍五入过的（常见是到百万、保留一位小数）。差值、增长率、比率会放大输入的舍入误差。有多少道题，标准答案在基准自己的容差之内，并不被文档确定？
+Financial QA benchmarks treat the numbers in tables as exact values. But filing figures are rounded (commonly to millions, with one decimal place). Differences, growth rates and ratios amplify the rounding error of the inputs. For how many questions is the gold answer, within the benchmark's own tolerance, not determined by the document?
 
-## 做法
+## Method
 
-1. 取 FinQA 的公开数据，它每道题带有标准解法程序（gold program）。可行的话再加 TAT-QA 的开发集。
-2. 对每个输入数字，按它在文档里显示的小数位数，给一个舍入区间：显示值 ± 最后一位的半个单位。
-3. 用区间算术执行标准解法，得到答案的区间。
-4. 与两种常用判分规则比较：相对误差 1%，以及按标准答案显示位数四舍五入后相等。
-5. 统计：答案区间超出容差的题目比例；按运算类型分组（差值、增长率、比率、求和）；按输入的有效数字位数分组。
-6. 另数一件事：同一个量在文档里以不同精度出现两次以上的题目有多少，用不同的出现位置计算，答案是否会跨过判分边界。
+1. Take the public FinQA data; each question comes with a gold solution program (gold program). If feasible, also add the TAT-QA development set.
+2. For each input number, give a rounding interval according to the number of decimal places it shows in the document: displayed value ± half a unit of the last digit.
+3. Execute the gold solution with interval arithmetic to get an interval for the answer.
+4. Compare with two common scoring rules: 1% relative error, and equality after rounding to the number of digits shown in the gold answer.
+5. Count: the share of questions whose answer interval exceeds the tolerance; grouped by operation type (difference, growth rate, ratio, sum); grouped by the number of significant digits of the inputs.
+6. Count one more thing: how many questions have the same quantity appearing two or more times in the document at different precisions, and whether computing from different occurrences makes the answer cross the scoring boundary.
 
-## 判定
+## Decision
 
-- **继续：** 超出容差的题目比例 ≥ 5%，或者在某一类运算里 ≥ 15%。
-- **放弃：** 全体比例 < 2%。
-- 介于两者之间：写清楚数字，由 Theodore 决定。
+- **Continue:** the share of questions exceeding the tolerance is ≥ 5%, or ≥ 15% within some operation type.
+- **Abandon:** the overall share is < 2%.
+- In between: write the numbers out clearly, and Theodore decides.
 
-## 如果继续，下一步是什么
+## If continuing, what comes next
 
-给出一个闭式的条件数：对增长率 (b − a)/a，答案的不确定度约为舍入单位 ×(|a| + |b|)/a²。然后预测"把报告单位从百万改成千"会让不被确定的题目减少多少，并在数据上验证。
+Give a closed-form condition number: for a growth rate (b − a)/a, the uncertainty of the answer is about rounding unit ×(|a| + |b|)/a². Then predict how much "changing the reporting unit from millions to thousands" would reduce the number of undetermined questions, and verify it on the data.
 
-## 先查
+## Check first
 
-检索是否已有工作用区间算术或条件数分析过金融问答基准的答案确定性。已知社区在争论容差该取 1% 还是按位数取，这不算同一件事。
+Search for existing work that has used interval arithmetic or condition numbers to analyse the determinacy of answers in financial QA benchmarks. The community is known to debate whether the tolerance should be 1% or digit-based; that does not count as the same thing.

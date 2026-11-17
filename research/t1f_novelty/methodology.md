@@ -1,30 +1,30 @@
-# 范围、判定规则与复核方法
+# Scope, decision rules and review method
 
-执行日及检索截止：**2026-11-17，America/New_York**。任务来源：`tasks/T1f_novelty.md`；已先读仓库README与`paper/finqa_short_v0.md`。基线提交为 `5fcbe690f3fcd12bc20a9ffaa851cf64df472a19`。本轮为可追溯的定向查新，不是完成全库导出、双人筛选和PRISMA计数的系统综述。
+Date of execution and search cutoff: **2026-11-17, America/New_York**. Task source: `tasks/T1f_novelty.md`; the repository README and `paper/finqa_short_v0.md` were read first. The baseline commit is `5fcbe690f3fcd12bc20a9ffaa851cf64df472a19`. This round is a traceable, targeted novelty check, not a systematic review with a full-database export, two-person screening and PRISMA counts.
 
-## 先定边界，再判重合
+## Set the boundary first, then judge overlap
 
-按任务原定五条“什么算已有人做过”判断，尤其保留其中的“或”条件；不要求先例同时满足我们所有设计细节。学术论文、规范、可追溯的公开代码和issue/PR均可命中任务的公开先例标准；规范例子与同行评审数据研究在证据表中明确区分。既有理论/方法不自动等于相同领域实证，但新的样本和数字也不自动构成新的研究问题。
+We judge by the five "what counts as already done" criteria set in the task, and in particular we keep their "or" conditions; a precedent is not required to match all of our design details at once. Academic papers, specifications, traceable public code and issues/PRs can all meet the task's standard for public precedent; specification examples and peer-reviewed data studies are clearly distinguished in the evidence tables. Existing theory or methods do not automatically equal an empirical study in the same domain, but new samples and numbers do not automatically make a new research question either.
 
-“读了正文仍未见”仅意为：本轮实际取得并检查的相关正文中，未找到符合该条标准的研究。它不证明从未有人做过。绿色只是一项**查新侧的有条件建议**，不等于证据链已过关或文章必被接收；保留导师决定颜色的职责。
+"Not found after reading full texts" means only this: among the relevant full texts actually obtained and checked in this round, no study meeting that criterion was found. It does not prove that nobody has ever done it. Green is only a **conditional recommendation from the novelty-check side**. It does not mean the evidence chain has passed or that the paper will be accepted; the decision on colour stays with the advisor.
 
-## 检索及阅读
+## Searching and reading
 
-- 五条各自使用至少10组实际检索词，含中英文，日志保留原词、渠道、结果与访问失败。ACL、arXiv正文，GitHub原始资料可以直接核读。
-- 通用Web的site限定仅为补充发现，不冒充Google Scholar/Semantic Scholar内部数据库检索。二者直接界面及引用API有不可访问/限流记录，未取得全部被引文献导出。
-- 从FinQA/TAT-QA/ConvFinQA出发，跟进2023年后评测与清洗文献，再沿FinanceReasoning→BizBench/DocMath/FinanceMath及数值精度→XBRL/统计披露控制/数值LM的引用链追踪。具体边见[引用链](citation_chains.md)。
-- 三个并行研究分组分别负责1–2、3、4；根代理负责5、原始GitHub核验和整合，并复核决定性行为与字段证据。它们是代理间交叉核查，**不是人类独立双审**。
-- 每条附件列最接近三项来源及短摘。未取回的正文不列作“已读”；搜索摘要和二手介绍不能升级成正文证据。重复的arXiv/正式版、仓库/发布页面不作独立研究数累加。
-- 本轮未复现本项目的10.7%、1/196、98.4%、55/68、508/7,952，也未运行新模型。所有“我们的结果”来自任务和初稿，查新只判断其与前人工作的关系。
+- Each of the five items used at least 10 actual sets of search queries, in Chinese and English; the log keeps the original wording, channel, results and access failures. ACL and arXiv full texts and GitHub primary material could be read and checked directly.
+- `site:`-restricted general web searches were only a supplementary discovery tool and are not passed off as searches of the internal Google Scholar / Semantic Scholar databases. The direct interfaces and citation APIs of both have records of being inaccessible or rate-limited; a full export of citing papers was not obtained.
+- Starting from FinQA/TAT-QA/ConvFinQA, we followed evaluation and cleaning papers from 2023 on, then traced citation chains along FinanceReasoning→BizBench/DocMath/FinanceMath and numeric precision→XBRL/statistical disclosure control/numeric LMs. The specific edges are in [citation chains](citation_chains.md).
+- Three parallel research groups handled 1–2, 3 and 4; the root agent handled 5, the primary GitHub verification and the integration, and reviewed the decisive behavioural and field evidence. This is cross-checking between agents, **not independent double review by humans**.
+- Each attachment lists the three closest sources with short excerpts. Full texts that were not retrieved are not listed as "read"; search snippets and second-hand descriptions cannot be upgraded to full-text evidence. Duplicate arXiv/formal versions and repository/release pages are not counted as separate studies.
+- This round did not reproduce the project's 10.7%, 1/196, 98.4%, 55/68 or 508/7,952, and did not run any new model. All "our results" come from the task and the draft; the novelty check only judges their relation to prior work.
 
-## 资料组织与验证
+## Organisation of material and validation
 
-[一页结论](README.md)汇总裁决；`candidate_*.md`给证据与逐项核实，`queries_*.md`给实际检索，`reading_*.md`给阅读范围。引用使用原始出版者、ACL、arXiv、规范发布者与作者仓库。网页正文读取不等于附带PDF/补充材料都读取成功，失败单列。
+The [one-page summary](README.md) collects the verdicts; `candidate_*.md` give the evidence and item-by-item verification, `queries_*.md` give the actual searches, and `reading_*.md` give the reading scope. Citations use the original publishers, ACL, arXiv, specification publishers and author repositories. Reading a web page's full text does not mean the attached PDF or supplementary material was also read successfully; failures are listed separately.
 
-已核对关键标题、年份、章节/页码及GitHub时间与合并版本；DOI脚本的结果另见`citation_verification.json`及[验证记录](validation.md)。注册状态只确认标识符，不能代替原文支持关系。正文未取回的FinQA-fix、Chemistry原始补充回答与其他列明线索仍是缺口；它们可能进一步压缩新颖性。
+Key titles, years, sections/page numbers, and GitHub timestamps and merged versions have been checked; the results of the DOI script are in `citation_verification.json` and the [validation record](validation.md). Registration status only confirms the identifier and cannot replace checking that the original text supports the claim. FinQA-fix, whose full text was not retrieved, the raw supplementary responses of the Chemistry paper and the other listed leads remain gaps; they may further reduce novelty.
 
-本轮只新增 `research/t1f_novelty/` 下的查新材料。原始全文缓存留在本次本地工作区，GitHub交付采用作者撰写的核查笔记、短摘、链接和检索记录。
+This round only adds novelty-check material under `research/t1f_novelty/`. Raw full-text caches stay in the local workspace of this run; the GitHub deliverable consists of the author's verification notes, short excerpts, links and search records.
 
-## 工作流归属
+## Workflow attribution
 
-使用本地技能“学术研究-系统文献综述”辅助检索记录和证据分层；按其要求注明方法工具来源：Timothy Kassis、Vinayak Agarwal、Yuhuan He、Darshil Patel、Aubrey M. Brueckner（2026），[Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents](https://doi.org/10.48550/arXiv.2609.00065)。作者/年份已核arXiv记录；这是工作流归属，不是上述五条的新颖性证据。
+The local skill "Academic research - systematic literature review" was used to help with search records and evidence grading; as it requires, we credit the source of the method tool: Timothy Kassis, Vinayak Agarwal, Yuhuan He, Darshil Patel, Aubrey M. Brueckner (2026), [Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents](https://doi.org/10.48550/arXiv.2609.00065). Authors and year were checked against the arXiv record; this is workflow attribution, not novelty evidence for the five items above.

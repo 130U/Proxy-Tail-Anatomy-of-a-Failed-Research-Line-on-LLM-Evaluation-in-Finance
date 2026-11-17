@@ -1,15 +1,15 @@
-# FOMC 来源证据审计：执行前预算
+# FOMC source evidence audit: pre-execution budget
 
-日期：2026-11-16（America/New_York）。本轮仅离线、只读审计；不联网、不下载、不训练，不复制原文或输出逐条 SEntFiN 标签。
+Date: 2026-11-16 (America/New_York). This round is an offline, read-only audit only: no internet access, no downloads, no training, no copying of original text, and no output of per-item SEntFiN labels.
 
-目标是固定读取本地 FOMC 候选全集元数据，按发布日期分布选 10 份 HTML，核验保存字节哈希与可见日期字段。选样为日期排序后的等距秩，不依据正文、模型或标签；不是随机抽样，不计算总体错误率。另只读 SEntFiN 来源、权利和批准范围文件，不读取标签行。
+The goal is to read the metadata of the full local FOMC candidate set, select 10 HTML files according to the distribution of publication dates, and verify the hashes of the saved bytes and the visible date fields. The sample is taken at equally spaced ranks after sorting by date, independent of the full text, any model or any label; it is not a random sample, and no population error rate is computed. In addition, only the SEntFiN source, rights and approval-scope files are read; no label rows are read.
 
-预算估计：Python 标准库、CPU 单进程、GPU/训练 token 为 0；JSONL 约 7 MB、HTML 仅 10 份，预计运行 <30 秒、内存 <100 MB。文档审阅预计 <30 分钟。以上为执行前估计，实际耗时记录在 JSON，峰值内存若未测则不报告实测值。程序只允许向新工作区 research/data/ 写匿名编号、日期字段、布尔核验和哈希，不写原文、标题、逐条标签或本地绝对来源路径。
+Budget estimate: Python standard library, single CPU process, 0 GPU/training tokens; the JSONL is about 7 MB and there are only 10 HTML files, so the run is expected to take <30 seconds and use <100 MB of memory. Document review is expected to take <30 minutes. These are pre-execution estimates; the actual time is recorded in the JSON, and if peak memory is not measured, no measured value is reported. The program may only write anonymous IDs, date fields, boolean checks and hashes to the new workspace research/data/; it does not write original text, titles, per-item labels or local absolute source paths.
 
-固定选样：全体记录按 published_at、text_sha256 排序；在 N 个位置中取 i*(N−1)//9，i=0,…,9，覆盖首尾。120 只是既有盘点值，工具重读确认实际 N；N<10 或字段不合法则拒绝。使用完整原始 JSONL 和 source manifest 的 SHA256 锁定样本总体；选择后不因发现异常替换样本。
+Fixed sample: sort all records by published_at, text_sha256; among the N positions take i*(N−1)//9, i=0,…,9, covering both ends. 120 is only the existing inventory count; the tool rereads the data to confirm the actual N, and refuses if N<10 or if a field is invalid. The SHA256 of the complete raw JSONL and of the source manifest lock the sample population; after selection, no sample is replaced because an anomaly is found.
 
-解释边界：当前 HTML 上的发布日期证据与 manifest 一致，不等于这些字节在该历史日期已公开可得。发布日期、会议日、页面更新日期与抓取时间分别报告。2026 年搜集和筛选较早文档的动作本身可能包含未来信息；本轮不补造历史快照或来源独立性。
+Limits of interpretation: publication-date evidence on the current HTML that agrees with the manifest does not mean these bytes were publicly available on that historical date. Publication date, meeting date, page update date and crawl time are reported separately. The act of collecting and screening older documents in 2026 may itself contain future information; this round does not fabricate historical snapshots or source independence.
 
-执行中范围补充：纪要页只有 Last Update，故额外读取已保存的、与所选纪要对应的官方日历／历史索引，用纪要链接所在局部容器的 Released 日期核对公开日；共涉及 8 个本地索引快照。没有联网或改变已冻结的 10 个样本。实际运行与测试结果见 source_audit.json 和 source_audit.md。SEntFiN 首次读取候选 manifest 时遇到内嵌局部标签样例，属于实际接触范围例外；后续仅用白名单元数据，最终产物不保存这些内容。
+Scope addition during execution: the minutes pages only have Last Update, so the saved official calendar / historical index pages corresponding to the selected minutes were also read, and the Released date in the local container holding the minutes link was used to check the public date; 8 local index snapshots in total. There was no internet access, and the 10 frozen samples were not changed. Actual run and test results are in source_audit.json and source_audit.md. When the SEntFiN candidate manifest was first read, it contained embedded examples of partial labels; this is an exception to the actual scope of contact. Afterwards only whitelisted metadata were used, and the final artifacts do not keep that content.
 
-独立代码审查后追加一次同等规模的离线重跑：修复同一容器内两份不同纪要可能被误配唯一日期的问题。预算仍为 CPU <30 秒、10 份纪要和 8 个索引；增加构造反例，不增加原文样本、不训练。实际修复后审计 0.341598 秒，10 项自测约 0.005 秒；峰值内存未测。只重写新工作区结果，旧来源文件原位不变。
+After an independent code review, one offline rerun of the same size was added: it fixes a problem where two different minutes in the same container could be wrongly matched to a single date. The budget remained CPU <30 seconds, 10 minutes documents and 8 indexes; constructed counterexamples were added, with no additional original-text samples and no training. After the fix the actual audit took 0.341598 seconds, and the 10 self-tests took about 0.005 seconds; peak memory was not measured. Only the results in the new workspace were rewritten; the old source files stayed unchanged in place.

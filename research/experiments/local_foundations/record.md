@@ -1,19 +1,19 @@
-# 本地地基实验：预先预算与约束
+# Local foundations experiment: pre-run budget and constraints
 
-## 要检验的问题
-WP0.5 的确定性、会计恒等式和精确污染；WP0.2 的四配置三 seed 对照。另运行 T1.4 的精确整数计算和穷举证明检查，属于理论数值核查，不是通过 G0 后的主线训练。
+## Questions to test
+Determinism, accounting identities and exact contamination for WP0.5; the four-configuration, three-seed comparison for WP0.2. The exact integer computation and exhaustive proof checks for T1.4 are also run; they are theoretical numeric checks, not main-line training after passing G0.
 
-## 预算（运行前记录）
-- CPU，GPU 显存 0；合成数据约 600 个训练/评估 family，3 个训练 seed。
-- 预计数据生成与整数检查 < 1 分钟；小文本编码器四配置三 seed 总计 < 10 分钟，内存 < 2 GB。这是预算，不是实测。
-- 不下载任何外部数据、模型或权重。仅运行本地新代码。
-- 文本模型从随机初始化训练，使用 mean embedding + MLP，不宣称它是预训练语言模型；结果只检验地基流程与合成许可规范。
-- 不用这些结果通过真实数据 G0/G1，也不运行 Phase 1 的分片模型训练。
+## Budget (recorded before the run)
+- CPU, 0 GPU memory; about 600 synthetic training/evaluation families, 3 training seeds.
+- Expected: data generation and integer checks < 1 minute; small text encoder, four configurations × three seeds, < 10 minutes in total, memory < 2 GB. This is a budget, not a measurement.
+- No external data, models or weights are downloaded. Only new local code is run.
+- The text model is trained from random initialization with mean embedding + MLP and is not claimed to be a pretrained language model; the results only test the foundation pipeline and the synthetic permission specifications.
+- These results are not used to pass G0/G1 on real data, and Phase 1 shard-model training is not run.
 
-## 配置
-- 基线 commit：8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254；新增源文件以交接包 SHA256 manifest 固定。
-- 数据 seed 20261115；训练 seeds 11, 23, 47；时间顺序 family 切分。
-- 实测用时、环境、数据哈希及指标由脚本输出 JSON。
+## Configuration
+- Base commit: 8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254; new source files are pinned by the SHA256 manifest of the handoff package.
+- Data seed 20261115; training seeds 11, 23, 47; chronological family split.
+- Measured time, environment, data hashes and metrics are written by the script as JSON.
 
-## 结果与限制
-运行后见同目录 `results.json` 与 `report.md`。未执行前不填结果。
+## Results and limits
+After the run, see `results.json` and `report.md` in the same directory. No results are filled in before execution.

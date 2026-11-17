@@ -1,33 +1,33 @@
-# 准备计数核销：源行、实体出现和冲突键不能混加
+# Preparation count reconciliation: source rows, entity occurrences and conflict keys must not be added together
 
-日期：2026-11-16。性质：针对独立审查意见的补充只读核算。没有重生成数据、重划分、训练或修改冻结的 `prepare.py`、manifest、rows／split 文件；没有网络访问。公开输出只有聚合计数，没有标题、实体名或逐条标签。
+Date: 2026-11-16. Nature: a supplementary read-only accounting in response to the independent review's comments. No data were regenerated, re-split or trained on, and the frozen `prepare.py`, manifest and rows/split files were not modified; there was no network access. The public output contains only aggregate counts, with no headlines, entity names or per-row labels.
 
-**正确的两条主账是 `10,753 = 13 + 10,740`（源行）和 `14,371 = 14 + 73 + 14,284`（成功解析后的实体标签出现次数）。** 原报告中的 13 个异常源行、7 个冲突键、73 个重复实体出现次数使用了三个不同的计数单位，不能直接从同一个总数中相减。
+**The two correct main ledgers are `10,753 = 13 + 10,740` (source rows) and `14,371 = 14 + 73 + 14,284` (entity-label occurrences after successful parsing).** The 13 anomalous source rows, 7 conflict keys and 73 duplicate entity occurrences in the original report use three different counting units and cannot be subtracted directly from the same total.
 
-## 证据和计数方法
+## Evidence and counting method
 
-先只读 [prepare.py](prepare.py) 与冻结 [aggregate_manifest.json](aggregate_manifest.json)。原 manifest 足以解释变量定义并给出部分等式，但它没有直接记录“成功解析实体出现总数”或“冲突键涵盖的实体出现总数”；仅凭 7 个冲突键不能推断删除 7 个或 14 个实体出现。
+First, [prepare.py](prepare.py) and the frozen [aggregate_manifest.json](aggregate_manifest.json) were read, read-only. The original manifest is enough to explain the variable definitions and gives some of the equations, but it does not directly record "the total number of successfully parsed entity occurrences" or "the total number of entity occurrences covered by conflict keys"; from the 7 conflict keys alone one cannot infer whether 7 or 14 entity occurrences were removed.
 
-为补齐缺项，本轮再次只读本地原 CSV 的同一字节版本，用冻结的严格解析／规范化函数计算实体—标题键及其出现数。只进行计数，不调用准备器 `run`、不写行级文件、不读取私有预测或模型成绩。这个补充核算沿用既定解析定义，**不是对源标签语义做一次新的独立标注**。用时约 0.220020 秒，全部核销断言通过；原 manifest 读取前后字节相同。
+To fill the missing items, this round again read, read-only, the same byte version of the local original CSV, and used the frozen strict parsing/normalization functions to compute entity–headline keys and their occurrence counts. Only counting was done: the preparer's `run` was not called, no row-level files were written, and no private predictions or model scores were read. This supplementary accounting reuses the established parsing definitions and **is not a new independent annotation of the source label semantics**. It took about 0.220020 seconds, and all reconciliation assertions passed; the original manifest was byte-identical before and after reading.
 
-固定指纹：
+Fixed fingerprints:
 
-- 源 CSV SHA256：`570af7ba58f724f3fcc414dd5ba80da5b1a3b342134d76c6ebdf53a32c54a92f`。
-- 冻结 prepare.py SHA256：`c7f56b29875b6e76b7d2201cb4de6bea329c97b3582523218424096af53af06c`。
-- 冻结 aggregate manifest SHA256：`6a8e8175bbbe391e866528e8b9d1e35fb3292c9d693da61948a4a91a44eac212`。
-- 冻结 manifest 记录的私有 rows SHA256：`8ab314ebd74680466f3a24055433f3a44d442107773607204cd3983122d87567`；本轮没有重读或重写该行级产物。
+- Source CSV SHA256: `570af7ba58f724f3fcc414dd5ba80da5b1a3b342134d76c6ebdf53a32c54a92f`.
+- Frozen prepare.py SHA256: `c7f56b29875b6e76b7d2201cb4de6bea329c97b3582523218424096af53af06c`.
+- Frozen aggregate manifest SHA256: `6a8e8175bbbe391e866528e8b9d1e35fb3292c9d693da61948a4a91a44eac212`.
+- Private rows SHA256 recorded by the frozen manifest: `8ab314ebd74680466f3a24055433f3a44d442107773607204cd3983122d87567`; this round did not reread or rewrite that row-level product.
 
-## 第一层：原始 CSV 源行
+## Layer one: raw CSV source rows
 
-| 量 | 单位 | 数量 | 依据 |
+| Quantity | Unit | Count | Basis |
 |---|---|---:|---|
-| 原始输入 | CSV 源行 | 10,753 | 冻结 manifest，补充只读计数一致 |
-| 严格字面量语法解析失败 | CSV 源行 | 13 | 冻结 manifest；补充计数确认原因仅为语法错误 |
-| 成功解析并进入实体展开 | CSV 源行 | 10,740 | 冻结 manifest，补充计数一致 |
-| 至少有一个最终保留实体键的来源 | 不同 CSV 源行 | 10,726 | 补充计数；等于分区 source_rows_represented 之和 |
-| 已解析但没有任何最终保留实体键 | 不同 CSV 源行 | 14 | 本轮补充计数 |
+| Raw input | CSV source rows | 10,753 | Frozen manifest; the supplementary read-only count agrees |
+| Strict literal-syntax parse failures | CSV source rows | 13 | Frozen manifest; the supplementary count confirms the only cause is syntax errors |
+| Successfully parsed and entering entity expansion | CSV source rows | 10,740 | Frozen manifest; the supplementary count agrees |
+| Sources with at least one finally retained entity key | Distinct CSV source rows | 10,726 | Supplementary count; equals the sum of source_rows_represented over partitions |
+| Parsed but without any finally retained entity key | Distinct CSV source rows | 14 | Supplementary count in this round |
 
-核销为：
+The reconciliation is:
 
 ```text
 10,753 = 13 + 10,740
@@ -35,57 +35,57 @@
 10,753 = 13 + 14 + 10,726
 ```
 
-本次 14 行各自涉及冲突键，并且没有其他非冲突实体可保留；涉及冲突且仍有其他实体保留的源行为 0。因此，本数据版本中完全不贡献保留实体的源行为 27。**这不是通用公式 `异常行 + 2×冲突键`**：别的数据中一个冲突键可重复更多次，同一行可含多个冲突键，也可同时含有有效的其他实体。
+Each of these 14 rows involves a conflict key and has no other non-conflicting entity to keep; the number of source rows that involve a conflict and still keep another entity is 0. So in this data version, 27 source rows contribute no retained entity at all. **This is not the general formula `anomalous rows + 2×conflict keys`**: in other data one conflict key can repeat more times, the same row can contain several conflict keys, and a row can also contain other valid entities at the same time.
 
-## 第二层：实体标签出现次数与最终样本
+## Layer two: entity-label occurrences and final samples
 
-“实体标签出现”指成功解析源行字典中的一次实体→标签记录；相同实体—标题在不同源行再出现，会重复计数。“键”指 `(规范化标题,规范化实体)`；“最终样本”指通过冲突检查后每个键保留的一条样本。不同实体的不同标签合法，不是冲突。
+An "entity-label occurrence" is one entity→label record in the dictionary of a successfully parsed source row; the same entity–headline appearing again in a different source row is counted again. A "key" is `(normalized headline, normalized entity)`; a "final sample" is the one sample kept per key after the conflict check. Different labels for different entities are legitimate and are not conflicts.
 
-| 量 | 单位 | 数量 | 依据 |
+| Quantity | Unit | Count | Basis |
 |---|---|---:|---|
-| 成功解析源行包含的全部实体标签记录 | 实体出现次数 | 14,371 | 本轮补充计数 |
-| 规范化标题＋实体的全部不同键 | 不同键 | 14,291 | 本轮补充计数 |
-| 至少出现两种源标签的键 | 冲突键 | 7 | 冻结 manifest 与补充计数一致 |
-| 上述冲突键包含的全部记录 | 实体出现次数 | 14 | 本轮补充计数；本次恰为每键 2 次 |
-| 非冲突键包含的全部记录 | 实体出现次数 | 14,357 | 本轮补充计数 |
-| 非冲突键内合并掉的额外出现 | 实体出现次数 | 73 | 冻结 manifest 与补充计数一致 |
-| 非冲突键／最终样本 | 不同键／样本 | 14,284 | 冻结 manifest 与补充计数一致 |
+| All entity-label records in successfully parsed source rows | Entity occurrences | 14,371 | Supplementary count in this round |
+| All distinct normalized headline + entity keys | Distinct keys | 14,291 | Supplementary count in this round |
+| Keys with at least two different source labels | Conflict keys | 7 | Frozen manifest and supplementary count agree |
+| All records contained in these conflict keys | Entity occurrences | 14 | Supplementary count in this round; here exactly 2 per key |
+| All records contained in non-conflict keys | Entity occurrences | 14,357 | Supplementary count in this round |
+| Extra occurrences merged within non-conflict keys | Entity occurrences | 73 | Frozen manifest and supplementary count agree |
+| Non-conflict keys / final samples | Distinct keys / samples | 14,284 | Frozen manifest and supplementary count agree |
 
-完整核销为：
+The full reconciliation is:
 
 ```text
-14,371 = 14（冲突记录全部隔离）+ 14,357（非冲突记录）
-14,357 = 73（同标签重复的额外出现）+ 14,284（最终样本）
+14,371 = 14 (all conflict records quarantined) + 14,357 (non-conflict records)
+14,357 = 73 (extra occurrences duplicating the same label) + 14,284 (final samples)
 14,371 = 14 + 73 + 14,284
 
-14,291（全部不同键）= 7（冲突键）+ 14,284（非冲突键）
-14,371 − 14,291 = 80（全部键中超出首次的出现）
-80 = 73（非冲突键额外出现）+ 7（冲突键中超出首次的出现）
+14,291 (all distinct keys) = 7 (conflict keys) + 14,284 (non-conflict keys)
+14,371 − 14,291 = 80 (occurrences beyond the first, over all keys)
+80 = 73 (extra occurrences of non-conflict keys) + 7 (occurrences beyond the first in conflict keys)
 ```
 
-73 不是删除了 73 个标题或 73 个源行，而是保留键中被合并的额外实体出现。冲突键先被整体隔离，根本没有进入 `merged_duplicate_entity_title_occurrences` 的计数。7 也不是 7 个被删除样本的完整记录数，因为它们涉及的 14 次出现全部排除。
+73 does not mean that 73 headlines or 73 source rows were deleted; it is the number of extra entity occurrences merged into retained keys. Conflict keys are quarantined as a whole first and never enter the `merged_duplicate_entity_title_occurrences` count. Nor is 7 the complete record count of 7 deleted samples, because all 14 occurrences they involve are excluded.
 
-`quarantine_reasons` 中的 13 与 7 对应不同 `stage`：前者每条隔离记录代表一个源行，后者每条隔离记录代表一个冲突键及其所有成员。它们可以相加为 20 个不同类型的隔离记录对象，但不能称为 20 个源行或 20 个实体标签。
+The 13 and the 7 in `quarantine_reasons` correspond to different `stage`s: in the former each quarantine record represents one source row, in the latter each quarantine record represents one conflict key with all its members. They can be added to give 20 quarantine record objects of different types, but cannot be called 20 source rows or 20 entity labels.
 
-## 第三层：标题、分区与簇的交叉核对
+## Layer three: cross-checks of headlines, partitions and clusters
 
-全输入有 10,686 个规范化标题；最终样本覆盖 10,666 个。本次补充计数得到 13 个语法异常独有标题、7 个冲突独有标题，二者交集为 0，且这些标题均无保留实体，因此：
+The full input has 10,686 normalized headlines; the final samples cover 10,666. The supplementary count found 13 headlines unique to syntax anomalies and 7 headlines unique to conflicts, with an intersection of 0, and none of these headlines has a retained entity, so:
 
 ```text
-10,686 = 13 + 7 + 10,666（规范化标题）
+10,686 = 13 + 7 + 10,666 (normalized headlines)
 10,666 = 7,494 train + 1,595 development + 1,577 test
-10,726 = 7,537 train + 1,606 development + 1,583 test（来源行覆盖）
-14,284 = 10,041 train + 2,136 development + 2,107 test（最终实体样本）
+10,726 = 7,537 train + 1,606 development + 1,583 test (source-row coverage)
+14,284 = 10,041 train + 2,136 development + 2,107 test (final entity samples)
 14,284 = 3,788 negative + 5,456 neutral + 5,040 positive
-10,591 = 7,438 train + 1,583 development + 1,570 test（保留词法簇）
+10,591 = 7,438 train + 1,583 development + 1,570 test (retained lexical clusters)
 ```
 
-这些分区和类别数均来自原 manifest，与补充计数需要核对的总量一致。来源 ID、标题和 family 不跨分区，所以对应分区计数可以求和。词法簇是另一个单位：全有效标题先得到 10,611 个词法连通分量，最终保留样本涉及 10,591 个；不能将词法簇数当作实体样本数或已审语义事件数。
+These partition and class counts all come from the original manifest and agree with the totals the supplementary count needed to check. Source IDs, headlines and families do not cross partitions, so the corresponding partition counts can be summed. Lexical clusters are another unit: all valid headlines first give 10,611 lexical connected components, of which the finally retained samples involve 10,591; the number of lexical clusters must not be taken as the number of entity samples or of reviewed semantic events.
 
-## 尚不能恢复或不能声称的量
+## Quantities that cannot be recovered or claimed yet
 
-1. **13 个语法异常源行本来“意图表达”的实体标签数量未知。** 本轮没有用正则补救、手工猜测或 AI 解释恢复它们。因此 14,371 是成功严格解析行的实体出现数，不能称为全部原始 CSV 的完整意图标签总数，也不能加上一个未经核验的异常标签数去凑外部报告。
-2. 原 manifest 单独没有记录冲突成员出现总数；本轮的 14 来自对固定输入的补充只读核算。今后若数据版本改变，不能沿用“每个冲突键正好两次”的观察。
-3. 核销证明的是当前准备规则下数量自洽，不证明源标签语义正确、证券映射正确、事件独立或历史信息集无泄漏。它没有改变原实验估计对象，也没有把已见数据重新命名为新的确认集。
+1. **The number of entity labels that the 13 syntactically anomalous source rows were "meant to express" is unknown.** This round did not recover them by regex repair, manual guessing or AI interpretation. So 14,371 is the number of entity occurrences in successfully and strictly parsed rows; it cannot be called the complete total of intended labels in the whole original CSV, nor can an unverified count of anomalous labels be added to match an external report.
+2. The original manifest by itself did not record the total number of occurrences of conflict members; this round's 14 comes from a supplementary read-only accounting on the fixed input. If the data version changes in future, the observation "exactly two per conflict key" cannot be reused.
+3. The reconciliation proves that the counts are self-consistent under the current preparation rules; it does not prove that the source label semantics are correct, that the security mapping is correct, that events are independent, or that the historical information set has no leakage. It did not change the estimand of the original experiment, nor rename seen data as a new confirmation set.
 
-上述说明补齐了计数解释，而未修改冻结数据或原实验结果。
+The notes above complete the explanation of the counts without modifying the frozen data or the original experimental results.

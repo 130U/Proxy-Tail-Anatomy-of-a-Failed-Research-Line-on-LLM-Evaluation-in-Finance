@@ -1,59 +1,59 @@
-# 五条候选路径的分析与同行评审约定
+# Analysis and peer-review agreement for the five candidate paths
 
-日期：2026-11-15。任务来自用户最新要求：深入分析至少三至五条可行路径，各自形成分析报告，并把疑问交给指定的资深助手讨论。
+Date: 2026-11-15. The task comes from the user's latest request: analyze in depth at least three to five feasible paths, write an analysis report for each, and hand the open questions to the designated senior assistant for discussion.
 
 ## Charter
 
-目标是支持下一步研究投入决策：为五个候选分别给出明确的数学问题、最强已有替代方案、可检验增量、证据不足处、最小验证和否决条件；保留独立反方审查与作者回应。不是把五个候选都宣称已成立，更不是把一条主线拆成五篇“创新”。
+The goal is to support the decision on the next research investment: for each of the five candidates, give an explicit mathematical question, the strongest existing alternative, a testable increment, where the evidence is insufficient, a minimal validation, and rejection conditions; keep an independent adversarial review and the authors' responses. The goal is not to claim that all five candidates hold, and still less to split one main line into five "innovations".
 
-范围为可认证金融语言模型及与其直接相关的统计决策理论。对象为信息集、数字敏感度、审计设计、部署风险、带可检查计算轨迹的文本数值任务。每份报告的具体单位是一个目标量、一个候选命题、一组必要假设和一个可以终止投入的实验。研究类型为探索性比较；已掌握项目的工作级知识，但尚无完整新颖性结论、真实历史信息证书或最终旗舰。
+The scope is certifiable financial language models and the statistical decision theory directly related to them. The objects are information sets, numeric sensitivity, audit design, deployment risk, and text-based numeric tasks with checkable computation traces. The concrete unit of each report is one target quantity, one candidate proposition, one set of necessary assumptions, and one experiment that can end the investment. The research type is an exploratory comparison; working-level knowledge of the project is in hand, but there is not yet a complete novelty conclusion, a real historical information certificate, or a final flagship.
 
-问题：R1 哪一条能产生不是已有技术改名的数学增量？R2 最弱的证书环节是否可在本地验证？R3 从零训练与语言理解各自是否必要？R4 简单符号/统计/冻结编码器基线能否解决同一问题？R5 何种负结果足以让我们停止？R6 哪个具体争议需要资深助手判断？
+Questions: R1 Which path can produce a mathematical increment that is not a renaming of existing techniques? R2 Can the weakest link of the certificate be verified locally? R3 Are training from scratch and language understanding each necessary? R4 Can simple symbolic/statistical/frozen-encoder baselines solve the same problem? R5 What negative result is enough to make us stop? R6 Which specific dispute needs the senior assistant's judgment?
 
 ## Canonical sources
 
-1. 已实际打开、逐条标明版本和全文/摘要层级的原论文，见 `../literature/literature_review.md`。保持既有检索边界，不凭新关键词推断没有先例。
-2. 固定源码、数学证明、实际执行JSON与测试日志；数学输入与真实训练结果分别标识。
-3. 本地原始文件的哈希、来源、时间与许可元数据，见 `../reports/local_data_inventory.md`。文件存在和哈希匹配是实际检查；历史时间和许可声明仍保留其来源层级。
-4. 导师包作为研究假设与决策规则来源，不把权威性当作证明。
+1. Original papers actually opened, each marked with its version and whether the full text or only the abstract was read; see `../literature/literature_review.md`. Keep the existing search boundary, and do not infer the absence of precedents from new keywords.
+2. Fixed source code, mathematical proofs, JSON from actual runs, and test logs; mathematical inputs and real training results are labelled separately.
+3. Hashes, sources, times, and license metadata of the local raw files; see `../reports/local_data_inventory.md`. File existence and hash matches are actual checks; historical times and license statements keep the evidence level of their sources.
+4. The advisor package is a source of research hypotheses and decision rules; its authority is not treated as proof.
 
-当前保持不新增外部访问的边界。2026-11-16用户明确所指资深助手为Fable，并允许与其讨论；当前工具没有Fable直连能力，故形成待转交材料。内部AI子代理审查与Fable实际反馈分别记录，没有声称已收到后者意见。
+The current boundary of no new external access is kept. On 2026-11-16 the user stated that the senior assistant referred to is Fable and allowed discussion with Fable; the current tools have no direct connection to Fable, so the material was prepared for forwarding. Reviews by internal AI sub-agents and Fable's actual feedback are recorded separately; there is no claim that Fable's comments have been received.
 
-## 评价规则（形成最终排序前写定）
+## Evaluation rules (written down before forming the final ranking)
 
-采用导师顺序的定性、分层判断，不生成伪精确的加权总分：
+Use qualitative, tiered judgments in the advisor's order, without producing a falsely precise weighted total score:
 
-1. **新颖性与可归属贡献**：已存在的定理不得计作增量；检索不足记为未知。
-2. **非空性和可检验性**：明确目标量、真实前提及最低有用阈值。人工小例只证明可能性。
-3. **执行可行性**：数据能否合法在本地使用、标注/审计是否可做、CPU/T4预算是否有实测或只是估计。
-4. **研究风格契合**：是否以定义、证明、可执行界及必要实验为中心。
+1. **Novelty and attributable contribution**: existing theorems must not be counted as increments; insufficient search is recorded as unknown.
+2. **Non-vacuity and testability**: an explicit target quantity, real premises, and a minimum useful threshold. Small hand-made examples only show possibility.
+3. **Execution feasibility**: whether the data can legally be used locally, whether annotation/audit is doable, and whether the CPU/T4 budget is measured or only estimated.
+4. **Fit with research style**: whether the work centers on definitions, proofs, executable bounds, and necessary experiments.
 
-以下为单独硬问题，不能被平均分掩盖：没有可靠目标量；关键前提不可验证且不承认条件性；简单基线已完整解决且没有理论差异；从零训练必要性不成立却继续以此作核心贡献。若将“必须从零训练”保留为字面硬门，则报告应直接说明哪些路径不能入选。
+The following are separate hard questions that cannot be hidden by an average score: no reliable target quantity; key premises that cannot be verified, with their conditional nature not acknowledged; a simple baseline already solves the problem completely with no theoretical difference; the necessity of training from scratch does not hold, yet it is still used as the core contribution. If "must train from scratch" is kept as a literal hard gate, the report should state directly which paths cannot be selected.
 
-候选ID不等于最终名次：01信息集完整证书，02数字敏感度，03审计成本前沿，04依赖稳健部署风险，05带计算证据的数值文本推理。03是01的数学分支；02与05共享解析瓶颈，不能把两者当完全独立的风险分散。
+Candidate IDs are not final ranks: 01 complete information-set certificate, 02 numeric sensitivity, 03 audit-cost frontier, 04 dependence-robust deployment risk, 05 numeric text reasoning with computation evidence. 03 is a mathematical branch of 01; 02 and 05 share the parsing bottleneck, so the two cannot be treated as fully independent risk diversification.
 
 ## Findings ledger
 
-本轮事实证据复用下列已存在台账，避免把重复写作计为新增证据：L01–L17文献台账；C01–C46仓库审计；T0–T3理论；CM1–CM5集体统计量证明；local_foundations、collective_metrics、planning的JSON；本地语料盘点。每篇报告引用对应文件和编号。新的候选定理、预算与实验阈值必须标为提案/估计，不与这些已执行结果混用。
+The factual evidence in this round reuses the following existing ledgers, so that repeated writing is not counted as new evidence: the L01–L17 literature ledger; the C01–C46 repository audit; the T0–T3 theory; the CM1–CM5 proofs for collective statistics; the JSON for local_foundations, collective_metrics, and planning; the local corpus inventory. Each report cites the corresponding files and IDs. New candidate theorems, budgets, and experiment thresholds must be marked as proposals/estimates and not mixed with these executed results.
 
 ## Scope filter
 
-排除“金融应用改名就是创新”“小模型本身就是贡献”“满分合成任务证明方法有效”等推断。风险报告、数值计算工具和语言模型研究是不同对象，需要分别说明为什么属于本项目。
+Exclude inferences such as "renaming something as a financial application is innovation", "a small model is a contribution in itself", and "a perfect score on a synthetic task proves the method works". Risk reports, numeric computation tools, and language-model research are different objects, and each needs its own explanation of why it belongs in this project.
 
 ## Object filter
 
-以当前本地材料核查适用性：FOMC可以支撑重新训练或数值段落抽取准备，不自动支撑历史内容版本认证；SEntFiN的情感不自动等于作者stance；无XBRL金标不能声称已有完整解析监督。不能因旧模型预测缺失而否定本地原始语料存在。
+Check applicability against the current local material: FOMC can support retraining or preparation for extracting numeric paragraphs, but does not automatically support certification of historical content versions; SEntFiN sentiment does not automatically equal author stance; without XBRL gold labels, one cannot claim complete parsing supervision exists. The missing predictions of the old model cannot be used to deny that the local raw corpus exists.
 
 ## Conclusions
 
-此处不预填优胜者。完成各路径的独立分析后，由未撰写这些报告的审查员攻击假设、必要性、简单基线和证据外推，记录作者回应，再形成比较报告。资深助手实际意见单列；没有收到就明确写待反馈。
+No winner is pre-filled here. After the independent analysis of each path is complete, a reviewer who did not write these reports attacks the assumptions, necessity, simple baselines, and extrapolation of evidence; the authors' responses are recorded; and then the comparison report is written. The senior assistant's actual comments are listed separately; if none have been received, this is stated explicitly as awaiting feedback.
 
 ## Next steps / Risks
 
-五份报告 → 独立反方审查 → 逐项回应/修订 → 比较排序与Fable问题包。内部分析已完成，Fable真实反馈仍待转交后取得。核心风险是候选共享同一个未解决前提、文献覆盖不足，以及把原计划需要修订的部分暗中当作已通过。
+Five reports → independent adversarial review → item-by-item responses/revisions → comparative ranking and the question package for Fable. The internal analysis is complete; Fable's real feedback still has to be obtained after forwarding. The core risks are that the candidates share the same unresolved premise, that literature coverage is insufficient, and that parts of the original plan that need revision are quietly treated as passed.
 
-## 方法与参与来源
+## Method and contributing sources
 
-本轮使用本地技能“学术研究-研究选题与反方讨论”和“学术研究-组织反方研究审查”，用于独立分析、明确否决条件、保留异议和审查回应。三个内部AI子代理分别撰写候选，新的独立审查员只接收待审材料；这些不是人类同行评审，也不是Fable的意见。候选来自导师方案与本轮问题拆分，作者已看过前期材料，故不是完全盲选题；独立排序与反方审查用于降低这一锚定影响。
+This round used the local skills "Academic research - topic selection and adversarial discussion" and "Academic research - organizing adversarial research review", for independent analysis, explicit rejection conditions, keeping dissent, and review responses. Three internal AI sub-agents each wrote candidates, and a new independent reviewer received only the material under review; these are not human peer review, and they are not Fable's opinion. The candidates come from the advisor's plan and this round's breakdown of the problem, and the authors had seen the earlier material, so topic selection was not fully blind; the independent ranking and adversarial review are meant to reduce this anchoring effect.
 
-技能来源分别固定到 K-Dense-AI/scientific-agent-skills 的 `154988403bb5a18e9d3c0ce4e6d5e2e4b184a298` 和 K-Dense-AI/science-superpowers 的 `0374bdf82c2372bdf1667e3c762146c3a29215f5`。前者本地SKILL.md建议引用 Kassis等（2026），*Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents*，arXiv:2609.00065；该书目信息来自技能元数据，本轮未另行联网核验，仅作流程来源披露，不作为任何研究路径的学术依据。
+The skill sources are pinned to K-Dense-AI/scientific-agent-skills at `154988403bb5a18e9d3c0ce4e6d5e2e4b184a298` and K-Dense-AI/science-superpowers at `0374bdf82c2372bdf1667e3c762146c3a29215f5`. The former's local SKILL.md suggests citing Kassis et al. (2026), *Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents*, arXiv:2609.00065. This bibliographic information comes from the skill metadata and was not separately verified online in this round; it is disclosed only as the source of the process and is not used as academic support for any research path.

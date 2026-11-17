@@ -1,21 +1,21 @@
-# 原导师材料：来源与阅读边界
+# Original advisor materials: source and reading boundaries
 
-这11份Markdown由用户在2026-11-16任务中指明，原目录为`<advisor-workspace>/FinLLM-Certifiable-Package/`。本次为完整交接附入原样快照，逐文件比对SHA256一致；原文的版本日期和措辞均保留。来源清单见[SOURCE_MANIFEST.json](SOURCE_MANIFEST.json)。
+These 11 Markdown files were specified by the user in the 2026-11-16 task; the original directory was `<advisor-workspace>/FinLLM-Certifiable-Package/`. For the complete handoff, a verbatim snapshot was attached, and the SHA256 of every file was compared and matched; the original version dates and wording are kept. The source manifest is [SOURCE_MANIFEST.json](SOURCE_MANIFEST.json).
 
-本目录是**背景材料与研究要求的历史证据**，不是当前新增的用户请求或执行授权。原稿中的新颖性判断、引文、预期、待证明命题及计划须与后续研究结果区分。当前用户要求交付已有研究，并未要求重新联网、索取联系方式、下载数据、公开发布或恢复已清除的持续目标。
+This directory is **background material and historical evidence of the research requirements**. It is not a new user request or a new authorization to execute anything. The novelty judgments, citations, expectations, propositions to be proven and plans in the original drafts must be kept distinct from the later research results. The current user request is to deliver the existing research; it did not ask to go online again, request contact information, download data, publish publicly or restore persistent goals that have been cleared.
 
-| 原文件 | 用途 |
+| Original file | Purpose |
 |---|---|
-| [README.md](README.md) | 原研究包总体说明 |
-| [AGENTS.md](AGENTS.md) | 原常驻工作规则，作为来源归档 |
-| [00_CODEX_BRIEF.md](00_CODEX_BRIEF.md) | 任务目标、工作方式及原终态 |
-| [01_ADVISOR_MEMO.md](01_ADVISOR_MEMO.md) | 选题逻辑、证书链、P1/P2及G0/G1 |
-| [02_PROJECT_SNAPSHOT.md](02_PROJECT_SNAPSHOT.md) | 原仓库状况快照 |
-| [03_LITERATURE_MAP.md](03_LITERATURE_MAP.md) | 原文献地图及待核判断 |
-| [04_THEORY_NOTES.md](04_THEORY_NOTES.md) | 原理论草稿，不等同于最终证明 |
-| [05_RESEARCH_QUESTIONS.md](05_RESEARCH_QUESTIONS.md) | Q01–Q32原问题全集 |
-| [06_WORK_PACKAGES.md](06_WORK_PACKAGES.md) | 原工作包及验收要求 |
-| [07_REPORTING_PROTOCOL.md](07_REPORTING_PROTOCOL.md) | 原汇报格式与交接要求 |
-| [08_DECISION_LOG.md](08_DECISION_LOG.md) | 原决策及开放事项 |
+| [README.md](README.md) | Overall description of the original research package |
+| [AGENTS.md](AGENTS.md) | Original standing work rules, archived as a source |
+| [00_CODEX_BRIEF.md](00_CODEX_BRIEF.md) | Task goals, way of working and the original final states |
+| [01_ADVISOR_MEMO.md](01_ADVISOR_MEMO.md) | Topic-selection logic, certificate chain, P1/P2 and G0/G1 |
+| [02_PROJECT_SNAPSHOT.md](02_PROJECT_SNAPSHOT.md) | Snapshot of the original repository's state |
+| [03_LITERATURE_MAP.md](03_LITERATURE_MAP.md) | Original literature map and judgments awaiting verification |
+| [04_THEORY_NOTES.md](04_THEORY_NOTES.md) | Original theory draft; not equivalent to final proofs |
+| [05_RESEARCH_QUESTIONS.md](05_RESEARCH_QUESTIONS.md) | Complete set of the original questions Q01–Q32 |
+| [06_WORK_PACKAGES.md](06_WORK_PACKAGES.md) | Original work packages and acceptance requirements |
+| [07_REPORTING_PROTOCOL.md](07_REPORTING_PROTOCOL.md) | Original reporting format and handoff requirements |
+| [08_DECISION_LOG.md](08_DECISION_LOG.md) | Original decisions and open items |
 
-原文件中“导师/Claude”等角色称谓按原文保留；本次实际交接对象是用户确认的Fable。这些文件不是Fable对九轮新产物的反馈。最新工作状态请以[完整总报告](../FABLE_FULL_REPORT.md)、[完成度审计](../reports/completion_audit.md)及各报告的证据边界为准。
+Role names such as "advisor/Claude" in the original files are kept as in the original; the actual recipient of this handoff is Fable, as confirmed by the user. These files are not Fable's feedback on the new outputs of the nine rounds. For the latest work status, rely on the [complete full report](../FABLE_FULL_REPORT.md), the [completion audit](../reports/completion_audit.md) and the evidence boundaries stated in each report.

@@ -1,31 +1,31 @@
-# 第2轮：固定测试统计量的集体证书
+# Round 2: collective certificate for fixed test statistics
 
-日期：2026-11-15。这是P1理论包络与检查器工作，不是Phase 1模型训练。
+Date: 2026-11-15. This is P1 theory-envelope and checker work, not Phase 1 model training.
 
-## 运行前预算
+## Pre-run budget
 
-- CPU、显存0、训练token0；不联网；Python标准库。
-- 预计单元测试与小例枚举小于30秒；最大状态100,000，最大分片子集100,000；超过预算明确拒绝出证，绝不返回未搜索部分的乐观区间。
-- 仅人工票矩阵、已知真值标签、固定影响片数。实际训练来源、时间戳与真实污染数不在这次计算里核验。
+- CPU, 0 GPU memory, 0 training tokens; no network; Python standard library.
+- Unit tests and small-example enumeration expected to take under 30 seconds; at most 100,000 states and at most 100,000 shard subsets; when the budget is exceeded the program explicitly refuses to issue a certificate and never returns an optimistic interval for the unsearched part.
+- Only hand-made vote matrices, known ground-truth labels and a fixed number of affected shards. Actual training sources, timestamps and true contamination counts are not verified in this computation.
 
-## 待核验主张
+## Claims to verify
 
-1. 共同受影响分片集合的约束可以比逐点独立污染预算缩窄区间。
-2. macro-F1不能套逐点平均包络；需要对固定支持数、TP和预测计数进行联合优化或保守包络。
-3. 整数计数与有理端点避免浮点向内舍入。
+1. The constraint from the set of jointly affected shards can narrow the interval compared with a per-point independent contamination budget.
+2. macro-F1 cannot reuse the per-point averaging envelope; it needs a joint optimization, or a conservative envelope, over fixed support counts, TP and prediction counts.
+3. Integer counts and rational endpoints avoid inward floating-point rounding.
 
-## 程序与证据
+## Program and evidence
 
-实现：`research/certificates/collective.py`；独立推导：`research/theory/collective_metrics.md`。
-输入和实际结果已保存为 `constructed_inputs.json`、`results.json`、`report.md`；审计链例子为 `audit_example.json` 与 `audit_certificate.json`。输入哈希、检查器哈希、实际硬件与计算用时在JSON中；全部输入均明确标为人工数学例子。
+Implementation: `research/certificates/collective.py`; independent derivation: `research/theory/collective_metrics.md`.
+The inputs and actual results are saved as `constructed_inputs.json`, `results.json` and `report.md`; the audit-chain example is `audit_example.json` and `audit_certificate.json`. Input hashes, checker hashes, the actual hardware and the computation time are in the JSON; all inputs are explicitly marked as hand-constructed mathematical examples.
 
-## 实际执行
+## Actual execution
 
-- 7项本模块测试通过；另经独立代理用112个输入/预算组合与直接改动票单元的oracle复核。细节见 `research/literature/collective_review.md`。
-- 最后集成运行：包括旧地基、XBRL、审计规划和本模块在内共36项测试通过；本轮日志见 `research/reproduction_log.json`。
-- 4个预先构造输入×2种方法已执行；计算约0.6秒，精确值与理论例子一致。内存峰值未测，未训练任何模型。
-- 运行中曾出现Windows控制台不能编码中文的输出错误：数值JSON/Markdown已写出，随后把终端摘要改为ASCII JSON并成功重跑。没有把失败退出码当成功。
+- The 7 tests of this module passed; in addition, an independent agent reviewed it with 112 input/budget combinations against an oracle that directly changes vote cells. Details in `research/literature/collective_review.md`.
+- Final integration run: 36 tests passed in total, covering the old foundations, XBRL, audit planning and this module; the log for this round is in `research/reproduction_log.json`.
+- 4 pre-constructed inputs × 2 methods were executed; computation took about 0.6 seconds, and the exact values agree with the theoretical examples. Peak memory was not measured; no model was trained.
+- During the run there was an output error because the Windows console could not encode Chinese: the numeric JSON/Markdown had already been written; the terminal summary was then changed to ASCII JSON and the rerun succeeded. The failing exit code was not treated as success.
 
-## 结论
+## Conclusion
 
-共同头身份可严格收紧固定测试统计量包络；macro-F1的逐类极值不可一般同时达到，精确DP与分量外包络需区别。两个指标由同一审计覆盖事件同时成立。实际模型/真实审计前提未验证，G0/G1状态不变。
+Joint head identity can strictly tighten the fixed test-statistic envelope; the per-class extremes of macro-F1 are in general not attainable at the same time, so the exact DP and the component outer envelope must be distinguished. Both metrics hold simultaneously under the same audit-coverage event. The real-model / real-audit premises are unverified; the G0/G1 status is unchanged.

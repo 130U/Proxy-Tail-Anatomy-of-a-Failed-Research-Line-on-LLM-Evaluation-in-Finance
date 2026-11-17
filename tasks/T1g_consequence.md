@@ -1,157 +1,157 @@
-# T1g：舍入精度在哪里真正造成后果
+# T1g: Where rounding precision really has consequences
 
-分支 `task/t1g`，目录 `research/t1g_consequence/`。只读前面各轮的结果，不改它们的文件。前三个部分不需要 agent 答题，只需要数据和计算。
+Branch `task/t1g`, directory `research/t1g_consequence/`. Only read the results of earlier rounds; do not change their files. The first three parts do not need agents to answer questions; they only need data and computation.
 
-## 背景，从头说
+## Background, from the start
 
-项目在审计金融问答基准。完整的探索链路在仓库首页 [README](../README.md)，请先读。到目前为止站得住的只有一条：
+The project is auditing financial QA benchmarks. The full exploration map is on the repository homepage [README](../README.md); read it first. So far only one item stands:
 
-> 财报里的数字是舍入过的。把每个输入看成"显示值 ± 半个末位单位"，精确计算标准解法的取值范围，FinQA 测试集至少 10.7% 的题答案定不到 1%。有一条不带拟合参数的规则能预测哪些题会这样：两个数至少要相差约 100 个末位单位，增长率才精确到 1%。
+> The numbers in filings are rounded. Treating each input as "displayed value ± half a last-digit unit" and computing the exact range of the gold solution, for at least 10.7% of FinQA test questions the answer cannot be determined to 1%. A rule with no fitted parameters predicts which questions this applies to: two numbers must differ by at least about 100 last-digit units for the growth rate to be exact to 1%.
 
-查新（T1f）确认这一条没有检索到先例。但它有一个已知的弱点（T1c）：**它不改变现有判分。** 标准答案和模型用的是同一批显示数字，算出来是同一个数，所以谁也没被判错。
+The novelty check (T1f) confirmed that no prior work on this item was found. But it has a known weakness (T1c): **it does not change current scoring.** The gold answer and the model use the same displayed figures and compute the same number, so nobody is marked wrong.
 
-只有这一条，是一条关于基准的注记，撑不起文章。这一轮要回答两个问题：
+On its own, this item is a note about a benchmark and cannot carry a paper. This round has to answer two questions:
 
-1. 有没有一个场合，舍入精度造成了**看得见的后果**——文档里有两个互相矛盾的数，或者标准答案的结论本身定不下来？
-2. 这条规则换一个数据集还成立吗？
+1. Is there a setting where rounding precision has a **visible consequence**: the document contains two numbers that contradict each other, or the conclusion of the gold answer itself cannot be determined?
+2. Does the rule still hold on another dataset?
 
-下面四个部分互相独立，可以同时做。每一部分都可能得到"没有后果"，那也是结果，照实写。
-
----
-
-## 第一部分：文档自己印出来的变化，与用印出来的数字重算的变化
-
-### 想法
-
-财报的表格经常同时印出两年的数字和它们的变化。例如印着 137、133 和"变化 2.6%"。公司算这个 2.6% 用的是没舍入的原始数字。用印出来的 137 和 133 重算，得到的是 3.0%。很多财报在脚注里直接写明"百分比按未舍入的金额计算"。
-
-这是一个天然实验：**文档自己泄露了舍入之前的信息。** 它同时带来三样东西：
-
-- 对我们舍入模型的真实数据检验（之前只有最坏情形和假设的均匀分布）；
-- 一个看得见的矛盾：同一份文档支持两个不同的答案，而其中公司自己印的那个更有资格算"对"；
-- 一个对评测的后果：基准的标准解法用印出来的数字重算，得到的答案与文档印的不一样。
-
-### 要做的事
-
-1. **找出这样的表格行。** 在 FinQA 和 TAT-QA 的全部表格里（所有划分），找出同时印有"两个水平值"和"它们的变化"的行。变化分两种：金额差（常见列名 Change、Increase/Decrease、Variance）和百分比变化（% Change、%）。要处理括号表示负数、"n/m"、"—"、不同量级。每找到一行，记下两个水平值、印出来的变化、各自的显示小数位。
-2. **先检验模型本身。** 对每一行，按半个末位单位的舍入盒算出"重算值"的精确范围，再看印出来的变化所代表的区间与它是否相交。
-   - 不相交的行说明我们的假设在这一行不成立（公司用了别的基数、列的含义不同、或者解析错了）。抽 50 行人工读一下原因，报告各类原因的比例。这些行不进入后面的统计。
-3. **量矛盾有多常见。** 在相交的行里：
-   - 金额差：印出来的差不等于两个印出来的水平值之差的比例。**导师的推算：如果三个数都是从原始值独立舍入得到的，这个比例应该是 1/4。** 请先自己推导一遍，再和实测对照。
-   - 百分比变化：把重算值四舍五入到印出来的小数位之后，与印出来的值不相等的比例；以及两者相对差超过 1% 的比例。
-4. **规则能不能预测。** 对每一行，用独立均匀舍入的假设算出"不相等"的概率（不许用实测数据调任何参数）。按 Δ（两个水平值之差换算成末位单位的个数）分组，画预测概率对实测比例。
-5. **印出来的值落在范围的哪里。** 把印出来的变化在精确范围里的相对位置（0 到 1）画成直方图。它检验的是"均匀舍入"这个假设本身。
-6. **用已有的数据再验一次。** T1b 已经整理出 511 条"合计 = 各项之和"的关系。算出每条关系的残差（印出来的合计减去印出来的各项之和，以末位单位计），与独立均匀舍入下的理论分布对照。
-7. **对问答的后果。** 找出这样的题：标准解法计算的正是某两个格子的变化，而表里另有一个格子印着这个变化，并且两者按该数据集的判分规则不一致。FinQA 用官方规则、1% 和显示位数三种规则各数一遍；TAT-QA 用它自己的规则。
-   - 报告这样的题有多少，占全部"求变化"的题的比例。
-   - 对落在 T1c、T1d 那 392 道题里的，查已有的模型回答：模型用的是重算值，还是直接读了印出来的值？被判对还是判错？
-
-### 判定
-
-- **有后果：** 第 7 步找到的题，在任一数据集里占"求变化"的题的 5% 以上；或者第 3 步的百分比变化在 Δ < 100 的行里有 30% 以上不相等。
-- 两条都不满足：写清楚数字，结论是"文档内的矛盾存在但很少"。
+The four parts below do not depend on each other and can be done at the same time. Any part may end with "no consequence"; that is also a result, and should be reported as it is.
 
 ---
 
-## 第二部分：比较题
+## Part one: changes the document prints itself, versus changes recomputed from the printed figures
 
-### 想法
+### Idea
 
-求一个数的题有容差兜底。**比较题没有**："哪一年增长得更快""这个比率是否超过某个值""哪个部门利润率最高"。答案是"是 / 否"或者一个名字。如果两个被比较的量的取值范围重叠，标准答案就不是文档能确定的，而且没有容差可言。
+Filing tables often print two years of figures together with their change. For example, they print 137, 133 and "change 2.6%". The company computed this 2.6% from the unrounded original figures. Recomputing from the printed 137 and 133 gives 3.0%. Many filings state directly in a footnote that "percentages are calculated on unrounded amounts".
 
-T1 当时把这类题排除在外了（FinQA 里含 `greater(` 的 154 道全部没有分析），所以这一块完全没看过。
+This is a natural experiment: **the document itself leaks information from before rounding.** It brings three things at once:
 
-直接比较两个印出来的数（137 对 133）不会翻转，除非两者并列。会翻转的是**比较两个算出来的量**：两个增长率、两个比率、两个差。
+- a test of our rounding model on real data (until now we only had the worst case and an assumed uniform distribution);
+- a visible contradiction: the same document supports two different answers, and the one the company printed itself has the stronger claim to be "right";
+- a consequence for evaluation: the benchmark's gold solution recomputes from the printed figures and gets an answer different from the one the document prints.
 
-### 要做的事
+### What to do
 
-1. FinQA：全部划分里含 `greater(` 的题，以及标准答案是 yes / no 的题。分成两类：比较的是印出来的数；比较的是算出来的量。
-2. TAT-QA：答案由比较或排序得到的题（答案是年份、类别名、yes / no，而推导涉及算出来的量）。先写清楚你用什么规则识别这类题，再抽 40 道人工核对识别得准不准。
-3. 对每道题，在舍入盒上精确计算：被比较的两个量的范围是否重叠，也就是存不存在一组符合显示精度的输入，使结论翻转。给出翻转的见证。
-4. 沿用 T1a 的均匀舍入假设，算出每道题结论翻转的概率，求期望比例。
-5. 写出比较两个增长率时的规则：两个增长率之差至少要多大，结论才是确定的。用它预测，与精确判定对照。
+1. **Find such table rows.** In all tables of FinQA and TAT-QA (all splits), find rows that print both "two level values" and "their change". There are two kinds of change: amount difference (common column names Change, Increase/Decrease, Variance) and percentage change (% Change, %). Handle negatives in parentheses, "n/m", "—" and different scales. For each row found, record the two level values, the printed change, and the displayed decimal places of each.
+2. **First test the model itself.** For each row, compute the exact range of the "recomputed value" over a rounding box of half a last-digit unit, then check whether the interval represented by the printed change intersects it.
+   - Rows with no intersection show that our assumption fails on that row (the company used a different base, the column means something else, or the parsing is wrong). Read 50 such rows by hand to find the reasons, and report the share of each kind of reason. These rows do not enter the later statistics.
+3. **Measure how common contradictions are.** Among the rows that intersect:
+   - Amount difference: the share where the printed difference is not equal to the difference of the two printed level values. **The advisor's estimate: if all three numbers were rounded independently from the original values, this share should be 1/4.** First derive it yourself, then compare with the observed value.
+   - Percentage change: the share where the recomputed value, rounded to the printed decimal places, is not equal to the printed value; and the share where the relative difference between the two exceeds 1%.
+4. **Can the rule predict it.** For each row, compute the probability of "not equal" under the assumption of independent uniform rounding (no parameter may be tuned on the observed data). Group by Δ (the difference between the two level values converted into a count of last-digit units), and plot the predicted probability against the observed share.
+5. **Where the printed value falls in the range.** Plot a histogram of the relative position (0 to 1) of the printed change within the exact range. This tests the "uniform rounding" assumption itself.
+6. **Check again with existing data.** T1b has already compiled 511 "total = sum of the items" relations. Compute the residual of each relation (the printed total minus the sum of the printed items, in last-digit units), and compare with the theoretical distribution under independent uniform rounding.
+7. **Consequences for QA.** Find questions where the gold solution computes exactly the change between two cells, another cell in the table prints this change, and the two disagree under that dataset's scoring rule. For FinQA, count once under each of the official rule, 1% and displayed digits; for TAT-QA, use its own rule.
+   - Report how many such questions there are, and their share of all "compute a change" questions.
+   - For those among the 392 questions of T1c and T1d, check the existing model answers: did the model use the recomputed value, or read the printed value directly? Was it marked right or wrong?
 
-### 判定
+### Decision
 
-- **有后果：** 在"比较算出来的量"的题里，结论不确定的占 10% 以上。
-- 低于 10%，或者这类题总数太少（两个数据集合计不足 100 道）：照实写。
-
----
-
-## 第三部分：换一个数据集，先预测再计算
-
-### 想法
-
-之前对规则的先验检验用的是 FinQA 自己的分布，不算样本外。TAT-QA 的表格多以千为单位，数字位数更多。按规则，位数越多，定不下来的题越少。这是一个可以先写下来、再去核对的预测。
-
-### 要做的事
-
-1. **先预测，并提交一次。** 只统计 TAT-QA 算术题的两样东西：输入数字的有效位数分布，答案（增长率、差、比率）的大小分布。不计算任何一道题的精确范围。用 T1a 的方法预测在 1% 容差下定不下来的比例，分运算类型给出。把预测写进一个文件，**单独提交一次**，提交信息里写明"预测，尚未计算实测"。
-2. **再计算。** 对 TAT-QA 的算术题重做 T1 的精确区间审计（它的推导式和量级字段可以直接用）。
-3. 报告：可分析的题数；定不下来的比例（按运算类型）；预测与实测的差；T1a 的一阶规则与精确判定的一致率。
-4. 用同一张图把 FinQA 和 TAT-QA 放在一起：横轴是输入的有效位数，纵轴是定不下来的比例，叠上规则的预测曲线。
-
-TAT-QA 取不到就用 ConvFinQA 的开发集，并写明。
-
-### 判定
-
-- **规则成立：** 总体预测与实测相差不超过 5 个百分点，且一阶规则的一致率不低于 95%。
-- 否则照实写，并说明规则在哪里失效。
+- **Has consequences:** the questions found in step 7 make up more than 5% of the "compute a change" questions in either dataset; or in step 3, more than 30% of percentage changes in rows with Δ < 100 are not equal.
+- If neither holds: write the numbers out clearly; the conclusion is "contradictions within documents exist but are rare".
 
 ---
 
-## 第四部分：同一个量，两种精度（较小，可以最后做）
+## Part two: comparison questions
 
-T1 在 FinQA 测试集里找到过 35 对"同一个量以不同精度出现两次"的情况（比如正文写 12 亿，表里写 1,201 百万）。把这个扫描扩展到 FinQA 和 TAT-QA 的全部划分。
+### Idea
 
-对每一对，分别用两个出处计算标准解法的答案，报告：两个答案的相对差的分布；相对差超过 1% 的比例；T1 的规则对粗的那个出处给出的范围是否包住了细的那个出处算出的答案（这又是一次用真实数据检验舍入模型）。
+Questions that ask for a number have a tolerance as a safety net. **Comparison questions do not**: "which year grew faster", "does this ratio exceed some value", "which segment has the highest margin". The answer is "yes / no" or a name. If the ranges of the two quantities being compared overlap, the gold answer cannot be determined by the document, and there is no tolerance to speak of.
 
-不设门槛。
+T1 excluded this kind of question at the time (none of the 154 FinQA questions containing `greater(` was analysed), so this area has not been looked at at all.
+
+Directly comparing two printed numbers (137 vs 133) cannot flip unless the two are tied. What can flip is **comparing two computed quantities**: two growth rates, two ratios, two differences.
+
+### What to do
+
+1. FinQA: questions in all splits containing `greater(`, and questions whose gold answer is yes / no. Split them into two classes: comparing printed numbers; comparing computed quantities.
+2. TAT-QA: questions whose answer comes from a comparison or ranking (the answer is a year, a category name or yes / no, and the derivation involves computed quantities). First write down clearly the rule you use to identify such questions, then draw 40 and check by hand how accurate the identification is.
+3. For each question, compute exactly over the rounding box whether the ranges of the two compared quantities overlap, that is, whether there is a set of inputs consistent with the displayed precision that flips the conclusion. Give the witness of the flip.
+4. Using T1a's uniform rounding assumption, compute the probability that each question's conclusion flips, and the expected share.
+5. Write the rule for comparing two growth rates: how large must the difference between the two growth rates be for the conclusion to be determined. Use it to predict, and compare with the exact classification.
+
+### Decision
+
+- **Has consequences:** among questions that "compare computed quantities", more than 10% have undetermined conclusions.
+- Below 10%, or too few such questions in total (fewer than 100 across the two datasets): report it as it is.
 
 ---
 
-## 如果第一或第二部分"有后果"，再做这一步（需要 agent）
+## Part three: another dataset, predict first, then compute
 
-从找到的题里取最多 200 道，用 T1c 的原始提示逐字不改，让两个模型各答一遍，每题全新会话。报告：模型选了哪个答案；按该数据集的判分规则被判对还是判错；被判错的回答里，有多少其实与文档印出来的值一致。
+### Idea
 
-没有后果就不做。
+The earlier a priori test of the rule used FinQA's own distributions, so it does not count as out-of-sample. TAT-QA tables are mostly in thousands, and the numbers have more digits. According to the rule, the more digits, the fewer undetermined questions. This is a prediction that can be written down first and checked afterwards.
+
+### What to do
+
+1. **Predict first, and commit once.** For TAT-QA arithmetic questions, count only two things: the distribution of significant digits of the input numbers, and the distribution of the size of the answers (growth rates, differences, ratios). Do not compute the exact range of any question. Use T1a's method to predict the share that cannot be determined at the 1% tolerance, by operation type. Write the prediction into a file and **commit it separately, once**, with a commit message stating "prediction, observed values not yet computed".
+2. **Then compute.** Redo T1's exact interval audit on the TAT-QA arithmetic questions (its derivation and scale fields can be used directly).
+3. Report: the number of analysable questions; the undetermined share (by operation type); the difference between prediction and observation; the agreement rate between T1a's first-order rule and the exact classification.
+4. Put FinQA and TAT-QA together in one figure: x-axis the significant digits of the inputs, y-axis the undetermined share, with the rule's prediction curve overlaid.
+
+If TAT-QA cannot be obtained, use the ConvFinQA development set and say so.
+
+### Decision
+
+- **Rule holds:** the overall prediction differs from the observation by no more than 5 percentage points, and the agreement rate of the first-order rule is at least 95%.
+- Otherwise report it as it is, and explain where the rule fails.
 
 ---
 
-## 做之前先查半天
+## Part four: the same quantity at two precisions (smaller, can be done last)
 
-只查第一、二部分。要找的是：有没有人在金融问答或表格问答基准上，统计过"表里印出来的变化与用印出来的数字重算的结果不一致"；有没有人按输入精度分析过比较题的标准答案是否确定。相邻的方向包括：财务报表里的数字一致性检查、表格事实核查、数值幻觉检测。
+In the FinQA test set, T1 found 35 pairs where "the same quantity appears twice at different precisions" (for example, the text says 1.2 billion and the table says 1,201 million). Extend this scan to all splits of FinQA and TAT-QA.
 
-查到同样的测量，写一段话交回，然后停掉那一部分。
+For each pair, compute the gold solution's answer from each of the two sources, and report: the distribution of the relative difference between the two answers; the share with a relative difference above 1%; and whether the range T1's rule gives for the coarser source contains the answer computed from the finer source (this is another test of the rounding model on real data).
 
-## 顺带核实两处
+No gate.
 
-上一轮查新里有两处导师没能核实，请给出原文证据（标题、作者、链接、相关段落的原文摘录）：
+---
 
-- FINESSE-Bench（arXiv 2605.15482）是否在 FinQA 的 1,147 道题、53 个模型上统计了共同判错；在哪一节。
-- arXiv 2611.02461 是否存在；它关于"舍入的标签对应一个集合"具体说了什么。这一篇如果存在，与我们唯一保留的候选直接相关，请读全文，写清楚它做了什么、没做什么。
+## If part one or part two "has consequences", do this step as well (needs agents)
 
-## 交付
+Take at most 200 of the questions found, use T1c's original prompt verbatim, and have two models each answer once, with a fresh session per question. Report: which answer the model chose; whether it was marked right or wrong under that dataset's scoring rule; and how many of the answers marked wrong actually agree with the value the document prints.
 
-- **一页结论**，开头填这张表：
+If there are no consequences, do not do this.
 
-| 部分 | 关键数字 | 判定 |
+---
+
+## Spend half a day checking first
+
+Only for parts one and two. What to look for: has anyone, on a financial QA or table QA benchmark, counted "the change printed in the table disagrees with the result recomputed from the printed figures"; has anyone analysed by input precision whether the gold answers of comparison questions are determined. Adjacent directions include numeric consistency checks in financial statements, table fact checking, and numeric hallucination detection.
+
+If you find the same measurement, write a paragraph, send it back, and then stop that part.
+
+## Verify two things along the way
+
+In the previous novelty check, the advisor could not verify two points; give original-text evidence (title, authors, link, an excerpt of the relevant passage):
+
+- Whether FINESSE-Bench (arXiv 2605.15482) counted shared rejections on FinQA's 1,147 questions across 53 models; in which section.
+- Whether arXiv 2611.02461 exists; what exactly it says about "a rounded label corresponds to a set". If this paper exists, it is directly relevant to our only remaining candidate; read the full text, and write clearly what it did and what it did not do.
+
+## Deliverables
+
+- **A one-page summary**, opening with this table filled in:
+
+| Part | Key numbers | Decision |
 |---|---|---|
-| 一：印出来的变化对重算的变化 | 找到的行数；金额差不相等的比例（预测 / 实测）；百分比不相等的比例；受影响的题数和占比 | 有后果 / 很少 |
-| 二：比较题 | 比较算出来的量的题数；结论不确定的比例；期望翻转比例 | 有后果 / 很少 |
-| 三：第二个数据集 | 预测；实测；一阶规则一致率 | 成立 / 不成立 |
-| 四：两种精度 | 对数；答案相差超过 1% 的比例 | — |
+| One: printed change vs recomputed change | Number of rows found; share of unequal amount differences (predicted / observed); share of unequal percentages; number and share of affected questions | Has consequences / rare |
+| Two: comparison questions | Number of questions comparing computed quantities; share with undetermined conclusions; expected flip share | Has consequences / rare |
+| Three: second dataset | Prediction; observation; first-order rule agreement rate | Holds / does not hold |
+| Four: two precisions | Number of pairs; share of answers differing by more than 1% | — |
 
-- **一张图**，四幅：第一部分的预测对实测；第一部分的位置直方图；第二部分两个增长率之差对翻转与否；第三部分两个数据集与预测曲线。
-- 逐行、逐题的结果表，全部见证，代码。
-- 查新的一段话，以及那两处核实的原文证据。
+- **One figure**, four panels: predicted vs observed for part one; the position histogram for part one; for part two, the difference between two growth rates against whether the conclusion flips; for part three, the two datasets with the prediction curve.
+- Per-row and per-question result tables, all witnesses, code.
+- The one-paragraph novelty check, and the original-text evidence for the two verifications.
 
-不要清单、哈希表、打包脚本、对复核的复核。
+No checklists, hash tables, packaging scripts, or reviews of reviews.
 
-## 要注意
+## Watch out for
 
-- 压线时照实写数字，按上面的门槛归类，不要写"无法判断"。
-- 第一部分里"不相交"的行不能悄悄丢掉。它们的比例和原因是结果的一部分：比例很高说明我们的舍入模型有问题。
-- 第三部分的预测必须先提交。看过实测之后不改预测、不改预测方法。
-- 每个事实标来源层级：正文 / 摘要 / 二手 / 我们的实验。
-- 只写自己的目录，不改 README，不改短文初稿。
+- When a result lands right on the line, report the number as it is and classify it by the gates above; do not write "inconclusive".
+- The "no intersection" rows in part one must not be quietly dropped. Their share and reasons are part of the results: a high share means our rounding model has a problem.
+- The prediction in part three must be committed first. After seeing the observed values, do not change the prediction or the prediction method.
+- Mark the source level of every fact: full text / abstract / secondhand / our experiment.
+- Write only in your own directory; do not change the README, and do not change the short-paper draft.

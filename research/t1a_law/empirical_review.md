@@ -1,49 +1,49 @@
-# 零参数检验独立审查
+# Independent review of the zero-parameter test
 
-审查日期：2026-11-16（America/New_York）。对象：`law_core.py`、`analyze.py`、已生成逐题输出与汇总；只读取 T1 的 `results/per_question.jsonl`。没有修改被审查实现或 T1 文件。
+Review date: 2026-11-16 (America/New_York). Objects: `law_core.py`, `analyze.py`, and the generated per-question outputs and summaries; only T1's `results/per_question.jsonl` was read. The implementation under review and the T1 files were not modified.
 
-**结论：未发现使本次 1% 容差下一阶规则 5,337/5,337 一致率失效的实现错误。该数字是固定数据上的观察结果，不是普适精确性定理。**
+**Conclusion: no implementation error was found that would invalidate the first-order rule's 5,337/5,337 agreement at the 1% tolerance in this run. That number is an observation on fixed data, not a universal exactness theorem.**
 
-## 证书为何成立
+## Why the certificate holds
 
-`interval_ad` 按共享输入对原计算图传播导数区间。除法先要求整个分母区间不含零；此时平方分母的端点区间正确。只有每个偏导区间均不变号时，才用坐标单调性认证角点极值。导数相关性造成的区间放宽可能使认证失败，不会使认证不当地通过。
+`interval_ad` propagates derivative intervals through the original computation graph with shared inputs. Division first requires that the whole denominator interval exclude zero; then the endpoint interval of the squared denominator is correct. Only when every partial-derivative interval has a constant sign is coordinate monotonicity used to certify corner extrema. Interval widening caused by correlation among derivatives can make certification fail, but cannot make it pass improperly.
 
-另 7 题采用分子、分母对每个变量分别至多一次的线性分式性质。固定其他变量后，每条坐标截面是一元线性分式，在无极点区间上单调或恒定。依次将各坐标移到使输出不减/不增的端点，即能在顶点取得全局最大/最小值。实现仍要求原程序的自然区间计算通过，保证所有中间分母也远离零；不是仅检查化简后表达式。7 题的表达式是共享变量约掉后的倒数、恒等映射或普通比率，未见违反该条件者。
+Another 7 questions use the property of linear-fractional functions whose numerator and denominator each have degree at most one in each variable. With the other variables fixed, each coordinate section is a univariate linear-fractional function, monotone or constant on a pole-free interval. Moving each coordinate in turn to the endpoint where the output is non-decreasing/non-increasing attains the global maximum/minimum at a vertex. The implementation still requires the natural interval computation of the original program to pass, which guarantees that all intermediate denominators also stay away from zero; it does not just check the simplified expression. The expressions of the 7 questions are reciprocals, identity maps or ordinary ratios after shared variables cancel; none was seen to violate this condition.
 
-gold 使用 T1 保存的 `exe_ans`；中心由原程序重新执行并与 T1 精确中心逐条断言相等。百分数乘 100、百万/千的单位换算保留在原计算图内。粗 Δ 规则为复现导师结果，特意保留未经单位换算的原输入差值；修正分析另用程序导数。二者没有混写为同一规则。
+gold uses the `exe_ans` saved by T1; the center is re-executed from the original program and asserted, row by row, to equal T1's exact center. Multiplication by 100 for percentages and unit conversions between millions and thousands stay inside the original computation graph. To replicate the advisor's result, the coarse Δ rule deliberately keeps the raw input difference without unit conversion; the corrected analysis uses program derivatives separately. The two were not written up as the same rule.
 
-## 独立执行检查
+## Independent execution checks
 
-独立检查没有调用 `law_core.evaluate`、`gradient_radius` 或 `range_certificate`：另写有理数程序解释器对 T1 每题的全部输入角点执行，再与保存输出对照；偏导采用 SymPy 直接符号微分，和实现的前向自动微分不同。
+The independent check did not call `law_core.evaluate`, `gradient_radius` or `range_certificate`: a separate rational program interpreter executes all input corners of each T1 question and compares with the saved output; partial derivatives use direct symbolic differentiation in SymPy, unlike the implementation's forward-mode automatic differentiation.
 
-| 检查 | 结果 |
+| Check | Result |
 |---|---:|
-| T1 `analyzed` 行与 T1A 逐题输出按 `(split,id)` 对齐 | 5,337 对，无遗漏、无重复 |
-| 自行执行全部有理数角点并核对保存的最小/最大值 | 24,674 角点，0 差异 |
-| 重新用原 gold 构造 1% 接受带并核对角点标签 | 5,337 题，0 差异 |
-| 重新从保存半径/中心/gold 构造一阶预测，核对标签 | 5,337 题，0 差异 |
-| 固定每 23 题抽查、再加全部 7 个线性分式特例的独立符号求导 | 240 行检查、506 偏导比较，0 差异 |
-| 概率文件与确定性文件的题目集合 | 完全相同 |
-| 被认证稳定而概率大于 `1e-9`；闭式概率为零却严格越界 | 均为 0 题 |
+| T1 `analyzed` rows aligned with T1A per-question output by `(split,id)` | 5,337 pairs, none missing, none duplicated |
+| Execute all rational corners independently and check the saved minimum/maximum | 24,674 corners, 0 differences |
+| Rebuild the 1% acceptance band from the original gold and check corner labels | 5,337 questions, 0 differences |
+| Rebuild the first-order prediction from the saved radius/center/gold and check labels | 5,337 questions, 0 differences |
+| Independent symbolic differentiation on a fixed sample of every 23rd question, plus all 7 linear-fractional special cases | 240 rows checked, 506 partial derivatives compared, 0 differences |
+| Question sets of the probability file and the deterministic file | Identical |
+| Certified stable but probability greater than `1e-9`; closed-form probability zero but strictly out of tolerance | 0 questions each |
 
-原 T1 已判定 5,322 题的一致率和全量重算 5,337 题的一致率分开报告；15 个原 `unresolved` 保留并由新证书解为 inside，没有将其直接当作原 T1 的精确标签。
+The agreement on the 5,322 questions already decided by the original T1 and the agreement on the full recomputation of 5,337 questions are reported separately; the 15 original `unresolved` items are kept and resolved as inside by the new certificate, and were not treated directly as exact labels of the original T1.
 
-初审曾发现 `const_m1` 未被 `law_core.constant` 解析；已通知实现代理修复。上述全量检查在修复后执行，四次实际出现均纳入。
+The first review found that `const_m1` was not parsed by `law_core.constant`; the implementation agent was notified and fixed it. The full checks above were run after the fix, and all four actual occurrences are included.
 
-## 31 条粗规则误判
+## The 31 misclassifications of the coarse rule
 
-逐条 CSV 与程序结构核对吻合：24 条为同号同显示单位、有限增长量不可忽略；5 条原始操作数单位不同，原始差值不具可比性；2 条被宽泛的 `growth` 标签纳入但实际程序不等于双数增长率。
+The per-item CSV agrees with the program structures: in 24 cases the inputs have the same sign and the same displayed unit and the finite growth cannot be neglected; in 5 cases the raw operands have different units, so the raw difference is not comparable; in 2 cases the broad `growth` label pulled them in, but the actual program is not a two-number growth rate.
 
-5 条单位问题在按原程序换算后，Δ 分别约为 10.59、15.76、75.67、39.11、24.43，均回到小于 100 的预测区域。2 条非增长率是“按某百分比扣减后乘一个基数”的程序。其余 24 条的错误解释是遗漏有限增长因子及分母修正；不意味着这两项在每条题上的边际贡献相同。
+After conversion according to the original program, the 5 unit cases have Δ of about 10.59, 15.76, 75.67, 39.11 and 24.43, all back in the region predicted below 100. The 2 non-growth-rate cases are programs that "deduct a percentage and then multiply by a base". The explanation for the remaining 24 errors is the omitted finite growth factor and denominator correction; this does not mean that the two terms make the same marginal contribution in every question.
 
-## 防止过度外推的反例
+## A counterexample against overextrapolation
 
-令 `a=100,b=300,h_a=h_b=0.5`，增长率中心及 gold 均为 2。一阶半径是 0.02，恰等于 1% 容差，故一阶规则预测 inside。真实最大值却为
+Let `a=100,b=300,h_a=h_b=0.5`; the growth-rate center and the gold are both 2. The first-order radius is 0.02, exactly equal to the 1% tolerance, so the first-order rule predicts inside. Yet the true maximum is
 
 \[
 \frac{300.5}{99.5}-1=\frac{402}{199}\approx2.0201005>2.02,
 \]
 
-因此真实判定为 outside。数据上的 100% 一致率不能替代余项或精确端点；特别不能把这套近似规则宣传为对未来任意财务程序的认证器。
+so the true decision is outside. A 100% agreement on the data cannot replace the remainder or the exact endpoints; in particular, this approximate rule cannot be advertised as a certifier for arbitrary future financial programs.
 
-审查范围不含原输入语义绑定的重新人工标注、全文约束收紧、模型回答实测，以及跨数据集外推。
+The scope of the review does not include fresh manual annotation of the original input semantic bindings, tightening by full-text constraints, empirical measurement of model answers, or extrapolation across datasets.

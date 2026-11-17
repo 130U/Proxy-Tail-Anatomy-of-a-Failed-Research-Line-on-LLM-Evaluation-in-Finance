@@ -17,7 +17,7 @@ def tokenizer(tmp_path):
 
 
 def test_financial_punctuation_and_unicode_roundtrip(tokenizer):
-    text = "  $BRK.B isn't cheap: -2.5%, $1,250.00; € and £.\nCafé — 好。"
+    text = "  $BRK.B isn't cheap: -2.5%, $1,250.00; € and £.\nCafé — déjà vu."
     ids = tokenizer.encode(text).ids
     assert tokenizer.decode(ids) == text
 

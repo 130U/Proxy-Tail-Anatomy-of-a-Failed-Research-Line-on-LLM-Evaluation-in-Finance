@@ -32,14 +32,14 @@ def write_csv(path,rows,fieldnames=None):
 
 
 def simple_reason(row,descriptor,raw_delta,truth,cert):
-    if descriptor is None: return "程序不等于两数增长率；原 category 的结构标签过宽"
-    if descriptor["unit_ratio"]!=1: return "原始输入单位不同；直接相减未进行程序中的单位换算"
+    if descriptor is None: return "Program is not a growth rate of two numbers; the original category's structural label is too broad"
+    if descriptor["unit_ratio"]!=1: return "Raw inputs have different units; direct subtraction skips the program's unit conversion"
     center=exact(row["center"]); gold=F(str(row["exe_ans"]))
     center_truth=classify_range(cert,center,F(1,100))
-    if center_truth!=truth: return "gold 与中心值偏移改变了边界余量"
-    if not descriptor["equal_units"]: return "两输入显示单位不同；简单差值规则漏掉加权敏感度"
-    if not descriptor["same_sign"]: return "两数异号；小增长同号近似不适用"
-    return "遗漏有限增长因子 (1+g/2) 与分母非线性修正；并非小增长极限"
+    if center_truth!=truth: return "The offset between gold and the center value changes the boundary margin"
+    if not descriptor["equal_units"]: return "The two inputs have different displayed units; the simple difference rule misses the weighted sensitivity"
+    if not descriptor["same_sign"]: return "The two numbers have opposite signs; the small-growth same-sign approximation does not apply"
+    return "Omits the finite growth factor (1+g/2) and the nonlinear denominator correction; not the small-growth limit"
 
 
 def main():
@@ -77,7 +77,7 @@ def main():
                 tau_mistakes.append({"id":row["id"],"split":row["split"],"category":row["category"],
                                     "tau":float(tau),"program":row["program"],
                                     "prediction":details["first_order_by_tau"][key],"truth":statuses[key],
-                                    "reason":"一阶线性化未包含非线性余项或真实值域的不对称性",
+                                    "reason":"First-order linearization does not include the nonlinear remainder or the asymmetry of the true range",
                                     "center":str(center),"gold":str(gold),"radius":str(radius),
                                     "lo":str(cert["lo"]),"hi":str(cert["hi"]),"margin":str(abs(gold)*tau-offset)})
         if desc is not None and truth!="unresolved" and (desc["delta"]<100)!=(truth=="outside"):
@@ -87,8 +87,8 @@ def main():
                 "reason":simple_reason(row,desc,desc["delta"],truth,cert),"center":str(center),
                 "gold":str(gold),"radius":str(radius),"lo":str(cert["lo"]),"hi":str(cert["hi"])})
         if truth!="unresolved" and pred!=(truth=="outside"):
-            reason=("一阶余项使真实偏差超过阈值" if not pred else
-                    "一阶对称半径与 gold 偏移同向相加，未利用真实值域不对称性")
+            reason=("The first-order remainder pushes the true deviation past the threshold" if not pred else
+                    "The first-order symmetric radius is added to the gold offset in the same direction; the asymmetry of the true range is not used")
             fo_mistakes.append({"id":row["id"],"split":row["split"],"category":row["category"],
                                 "program":row["program"],"prediction":details["first_order_prediction"],
                                 "truth":truth,"reason":reason,"center":str(center),"gold":str(gold),

@@ -1,37 +1,37 @@
-# 开发与运行交接
+# Development and run handoff
 
-项目：130U-FinLLM｜130U 金融大语言模型。仓库：https://github.com/130U/130U-FinLLM 。
+Project: 130U-FinLLM | 130U Financial Large Language Model. Repository: https://github.com/130U/130U-FinLLM .
 
-## 已冻结
+## Frozen
 
-英文、指定资产三分类、自训8K tokenizer、24,255,744参数、随机权重、全参数预训练/金融继续预训练/SFT/DPO、独立校准和测试。参数调整以真实T4测量为依据，不因显存空余直接扩大模型。
+English; three-class stance on a specified asset; self-trained 8K tokenizer; 24,255,744 parameters; random initial weights; full-parameter pretraining / financial continued pretraining / SFT / DPO; independent calibration and testing. Parameter changes are based on real T4 measurements; the model is not enlarged just because GPU memory is free.
 
-## 已交付
+## Delivered
 
-原生PyTorch模型、训练/恢复/评测代码、数据格式与审核流程、分片与精确token混合、目标感知稀疏基线、分阶段 Colab Notebook、正式配置、必要测试与CPU工程小实验。实际验证见STATUS。
+Native PyTorch model; training / resume / evaluation code; data format and review workflow; sharding and exact token mixing; a target-aware sparse baseline; staged Colab notebooks; formal configurations; necessary tests and small CPU engineering experiments. For actual verification, see STATUS.
 
-## 下一步
+## Next steps
 
-2026-10-30最新接续：用户已提供完整03a输出，`domain_v1`完成74步／1,211,960有效tokens，金融验证loss 3.2375，seed通用保留集3.9842→4.0574，最终备份输出为7文件／615,896,468字节／`verified: true`。模型路径累计26,115,096有效tokens；本段为有界实验，并未完成原25M金融预算。见[领域记录](../reports/colab_t4_domain_20261030.json)。证据来自用户贴出日志，未独立下载Drive权重。下一步是[接收已完成的人工审核进度](POST_DOMAIN_NEXT.md)，无需重跑03a。
+Latest continuation, 2026-10-30: the user has provided the full 03a output. `domain_v1` completed 74 steps / 1,211,960 effective tokens, the financial validation loss was 3.2375, the seed general retention set went 3.9842→4.0574, and the final backup output was 7 files / 615,896,468 bytes / `verified: true`. The model path has processed 26,115,096 effective tokens in total. This stage is a bounded experiment and did not complete the original 25M financial budget. See the [domain record](../reports/colab_t4_domain_20261030.json). The evidence comes from logs posted by the user; the Drive weights were not downloaded independently. The next step is to [take in the completed human-review progress](POST_DOMAIN_NEXT.md); there is no need to re-run 03a.
 
-金融衔接完整274项测试通过（557.43秒），14本Notebook检查和依赖检查通过；03a在两个真实隔离内核验证过微型CPU训练、备份和新目录恢复。见[工程记录](../reports/domain_handoff_checks_20261030.json)。用户随后交付2000条CSV并明确确认1993条标题标签，7条待查；已保存独立派生记录和资产候选审核表。资产核验仍待完成，见[审核记录](../reports/human_headline_review_20261030.json)。
+For the bridge to the financial stage, the full suite of 274 tests passed (557.43 seconds), and the checks of the 14 notebooks and the dependency check passed. 03a was verified in two real isolated kernels for tiny CPU training, backup and recovery into a new directory. See the [engineering record](../reports/domain_handoff_checks_20261030.json). The user then delivered the 2000-row CSV and explicitly confirmed 1993 headline labels, with 7 pending investigation. An independent derived record and an asset-candidate review table have been saved. Asset verification is still to be done; see the [review record](../reports/human_headline_review_20261030.json).
 
-2026-10-11 验收：用户先完成 02a 的 61 步、999,424-token T4 试跑，再提供 02b 的连续 63–300 步日志、最终 summary 与备份输出。累计 300 步、4,914,941 有效 tokens，最后训练 loss 5.4151、限量验证 loss 5.5419；第 62→300 步耗时 1150.17 秒、约 3390.06 tokens/秒、PyTorch 分配峰值显存约 1.063 GiB。最终运行快照为 7 个文件、615,936,768 字节、`verified: true`，原始试跑报告保留。详见 `docs/T4_PILOT.md` 与 `reports/colab_t4_continuation_20261011.json`。这是用户提供的运行证据，未独立下载报告/检查点或读回 Drive 文件。首批来源、排除池、8192 词表和四份分片见 `docs/SEED_DATA.md`。
+Acceptance on 2026-10-11: the user first completed the 02a T4 trial run of 61 steps and 999,424 tokens, then provided the 02b log for the continuous steps 63–300, the final summary and the backup output. In total: 300 steps, 4,914,941 effective tokens, final training loss 5.4151, limited validation loss 5.5419. Steps 62→300 took 1150.17 seconds, about 3390.06 tokens/second, with peak PyTorch allocated memory of about 1.063 GiB. The final run snapshot is 7 files, 615,936,768 bytes, `verified: true`; the original trial-run report is kept. See `docs/T4_PILOT.md` and `reports/colab_t4_continuation_20261011.json`. This is run evidence provided by the user; the reports / checkpoints were not downloaded independently and the Drive files were not read back. For the first batch of sources, the exclusion pool, the 8192-token vocabulary and the four shards, see `docs/SEED_DATA.md`.
 
-02b 的本段训练和备份已完成，无需重跑。输入位置为 4,915,200，扣除 259 个 padding 后有效训练 tokens 为 4,914,941。通用池约 4.98M tokens，已接近一遍；下一阶段先扩充语料并明确新实验版本。seed 路径独立于 `general/english/pretrain`，03 的默认配置不能直接衔接。200 条 AI 初判表已完成，人工字段仍未确认。
+The training and backup for this 02b stage are complete and do not need to be re-run. There were 4,915,200 input positions; after subtracting 259 padding positions, the effective training tokens were 4,914,941. The general pool is about 4.98M tokens and has nearly been used for one full pass; the next stage first expands the corpus and defines a new experiment version. The seed path is independent of `general/english/pretrain`, so the default configuration of 03 cannot be chained on directly. The 200-row AI first-pass table is complete; the human fields are still unconfirmed.
 
-本地扩充准备已验证：新增通用 train 26,267 篇／41,499,364 tokens，金融 train 84 篇／972,438 tokens；新增 validation 为通用 1,394 篇／2,235,968 tokens、金融 4 篇／50,999 tokens。原 seed 的 825＋32 篇已排除，10,686 条任务原文保持冻结，原 8K 词表未重训。CPU 构建耗时 544.91 秒、采样 RSS 峰值约 344.7 MiB，三类产物合计约 560.2 MiB（不含旧 seed、检查点及外部缓存）。01b／02c 初次交付时205项测试、12本Notebook检查通过；加入02d后完整232项测试通过（343.60秒），13本Notebook检查和 `pip check` 通过。见 [本地扩充报告](../reports/expansion_local_validation_20261011.json)、[02d工程检查](../reports/expanded_continuation_checks_20261011.json) 和 [运行说明](DATA_EXPANSION.md)；这些不是新阶段 Colab 运行成绩，云端仍需匹配用户自己的冻结文件。
+Local expansion preparation has been verified: new general train data 26,267 documents / 41,499,364 tokens, finance train 84 documents / 972,438 tokens; new validation data general 1,394 documents / 2,235,968 tokens, finance 4 documents / 50,999 tokens. The original seed's 825 + 32 documents were excluded, the 10,686 task source texts remain frozen, and the original 8K vocabulary was not retrained. The CPU build took 544.91 seconds, sampled peak RSS was about 344.7 MiB, and the three kinds of artifacts total about 560.2 MiB (excluding the old seed, checkpoints and external caches). At the first delivery of 01b / 02c, 205 tests and the checks of 12 notebooks passed; after 02d was added, the full suite of 232 tests passed (343.60 seconds), and the checks of 13 notebooks and `pip check` passed. See the [local expansion report](../reports/expansion_local_validation_20261011.json), the [02d engineering checks](../reports/expanded_continuation_checks_20261011.json) and the [run notes](DATA_EXPANSION.md). These are not Colab results for the new stage; the cloud run still has to match the user's own frozen files.
 
-1. 保留 `seed_v1` 的原始数据、词表、300 步检查点、报告归档和已验证快照，不重做 01a/02a/02b。
-2. 保留并复用已完成 01b 的独立 `expansion_v1` 输入和三部分校验备份，不重新下载或构建。该版本已按固定来源排除原 seed／任务原文、去重、文档 train/dev 切分并用原 tokenizer 编码。来源为限量 Wikipedia 和 2011–2025 FOMC；实际新增规模见报告。不能把重复文本计为新增 100M 数据。
-3. 用户已完成01b、02c和02d，保留seed300步、原610步归档和1220步最终快照。02d执行证据固定在用户历史提交`e14b85e5660c4bce175341ee4d9da2e3984a12b5`；主分支可运行Notebook保持无输出。CI曾因保存执行输出导致生成器字节检查失败，没有训练数值失败证据。
-4. 保留已完成的[03a领域成果](DOMAIN_HANDOFF.md)：Drive`domains/domain_v1/run`、`retention`、`report_archive`和`parent`。当前最终latest SHA为`2a6585bf18ed4753330221292d89b45ab17a52388ab7a0350eaf5d0dc4255c1f`（来自用户after诊断输出）。准备SFT时需重新读回完整快照、匹配报告与诊断，再冻结选定母权重；不重新初始化原阶段或绕过检查。
-5. 用户已交付并确认[2000条标题审核结果](POST_DOMAIN_NEXT.md)：1993条已审、7条待查；确认仅覆盖标题标签。独立派生文件和740个三分类资产候选分组保存在本地忽略目录。源CSV不是工作台JSON，不调用仅支持JSON的旧导入器；SFT/DPO等待来源、资产、事件与分区验收。
+1. Keep the `seed_v1` raw data, vocabulary, 300-step checkpoint, report archive and verified snapshot. Do not redo 01a/02a/02b.
+2. Keep and reuse the independent `expansion_v1` inputs of the completed 01b and its three-part verified backup; do not download or build them again. This version excluded the original seed / task source texts by fixed source, was deduplicated, split into train/dev by document, and encoded with the original tokenizer. The sources are a limited Wikipedia sample and 2011–2025 FOMC; for the actual added size, see the report. Duplicated text cannot be counted as 100M of new data.
+3. The user has completed 01b, 02c and 02d; keep the seed 300-step run, the original 610-step archive and the 1220-step final snapshot. The 02d execution evidence is pinned in the user's historical commit `e14b85e5660c4bce175341ee4d9da2e3984a12b5`; runnable notebooks on the main branch are kept without outputs. CI once failed the generator's byte check because executed outputs had been saved; there is no evidence of a failure in the training numbers.
+4. Keep the completed [03a domain artifacts](DOMAIN_HANDOFF.md): Drive `domains/domain_v1/run`, `retention`, `report_archive` and `parent`. The current final latest SHA is `2a6585bf18ed4753330221292d89b45ab17a52388ab7a0350eaf5d0dc4255c1f` (from the user's "after" diagnostic output). When preparing SFT, re-read the complete snapshot, the matching report and the diagnostics, then freeze the chosen parent weights; do not re-initialize the original stage or bypass the checks.
+5. The user has delivered and confirmed the [2000-row headline review results](POST_DOMAIN_NEXT.md): 1993 reviewed, 7 pending investigation; the confirmation covers headline labels only. The independent derived files and the 740 three-class asset-candidate groups are stored in a local ignored directory. The source CSV is not workspace JSON, so the old importer, which only supports JSON, is not used on it. SFT/DPO wait for acceptance of sources, assets, events and partitions.
 
-## 恢复
+## Recovery
 
-- `latest.pt`及其`.json`成对保留。参考DPO的SFT检查点必须保持不变。
-- 正式Notebook挂载Drive后，配置会将各次保存的检查点同步至`MyDrive/130U-FinLLM/live_checkpoints/<stage>`。最终数据/模型目录另做带清单的snapshot。
-- 新VM先恢复data/tokenizer/runs；必要时恢复较新的live_checkpoints；验证源码、数据、tokenizer、运行时版本后显式`--resume`。
-- 不能把CPU smoke权重移入正式训练。精确续训绑定设备类型、AMP、PyTorch/CUDA版本、调度语义和数据哈希；变更后应记录为新实验。
-- 不把运行日志、完整语料或大权重提交Git。用户凭据只通过服务正常登录流程使用。
+- `latest.pt` and its `.json` are kept as a pair. The SFT checkpoint used as the DPO reference must remain unchanged.
+- After a formal notebook mounts Drive, the configuration syncs every saved checkpoint to `MyDrive/130U-FinLLM/live_checkpoints/<stage>`. Final data/model directories also get a separate snapshot with a manifest.
+- On a new VM, first restore data/tokenizer/runs; if needed, restore the newer live_checkpoints; verify the source code, data, tokenizer and runtime versions, then pass `--resume` explicitly.
+- CPU smoke weights cannot be moved into formal training. Exact continued training is bound to device type, AMP, PyTorch/CUDA version, schedule semantics and data hashes; after any change, record it as a new experiment.
+- Do not commit run logs, full corpora or large weights to Git. User credentials are used only through the services' normal sign-in flows.

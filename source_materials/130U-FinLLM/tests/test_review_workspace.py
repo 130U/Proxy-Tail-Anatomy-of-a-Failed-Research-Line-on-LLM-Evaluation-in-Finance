@@ -17,7 +17,7 @@ _spec.loader.exec_module(review)
 
 def _row(**changes):
     return {"id": "sentfin:7:Acme", "text": "Acme shares rally after forecasts rise.",
-            "source_entity": "Acme", "ai_stance": "bullish", "ai_rationale": "盈利前景改善。",
+            "source_entity": "Acme", "ai_stance": "bullish", "ai_rationale": "Earnings outlook improves.",
             "evidence_quotes": ["forecasts rise"], "human_reviewed": False,
             "source_symbol_candidates": ["OLD_ACME"], **changes}
 

@@ -1,39 +1,39 @@
-# 集中技术报告的构建与阅读版验收
+# Build and reading-version acceptance of the focused technical report
 
-日期：2026-11-16。最终交付为10页A4英文[阅读版PDF](output/pdf/audit_budgets_working_report.pdf)，约4,636词正文，19个显示公式、157个行内公式、3张表。可编辑[Markdown](manuscript.md)与[LaTeX](manuscript.tex)另附。本PDF由本地Chromium原生MathML排版，**不是TeX编译结果**；原全套理论notes.tex的规定编译验收没有因此完成。
+Date: 2026-11-16. The final deliverable is a 10-page A4 English [reading PDF](output/pdf/audit_budgets_working_report.pdf), with about 4,636 words of body text, 19 display formulas, 157 inline formulas and 3 tables. The editable [Markdown](manuscript.md) and [LaTeX](manuscript.tex) are attached separately. This PDF was typeset by local Chromium with native MathML and **is not a TeX compilation result**; the specified compilation acceptance of the original full theory notes.tex has not been completed by this.
 
-## 内容与身份核对
+## Content and identity checks
 
-[独立论文审查](../reports/paper_review.md)逐项回应PR01–PR06，比较两个源稿的全部176段数学表达，最终仅忽略空白后顺序完全一致。全部20格的Direct、Box、Balanced成本与精确节省也和既有结果JSON一致。发现并修复了D定义被错误转义的问题；盒预算整数约定已写明。审查支持内部技术报告定位，保留原创性、实际用途和G0/G1的科学缺口。
+The [independent paper review](../reports/paper_review.md) responds to PR01–PR06 item by item and compared all 176 mathematical expressions in the two source manuscripts; in the end they agree exactly in order, ignoring only whitespace. The Direct, Box and Balanced costs and the exact savings for all 20 cells also agree with the existing results JSON. A problem where the definition of D was wrongly escaped was found and fixed; the integer convention for the box budget has been written down. The review supports positioning this as an internal technical report and keeps the scientific gaps in originality, practical use and G0/G1.
 
-| 文件 | 最终SHA256 |
+| File | Final SHA256 |
 |---|---|
 | manuscript.md | a9cd81ab194e54bb583dab69cbc7f3440745468b2f701ee6146e66c02d844ce0 |
 | manuscript.tex | f4b423e730e235c38d816d4f50ea61fa2a6cb6b16d0aac94b906e29f144c02f2 |
 | build_pdf.py | 52de49e5d830fbb0be69d24c28229d4bb3cdb1c751dfd3688fbdf25b895db8cb |
-| 最终PDF | dabaf18262c037aabd8d3c2a67047bfc16f0047ad1b0f6e34789efd782b3f1f8 |
+| Final PDF | dabaf18262c037aabd8d3c2a67047bfc16f0047ad1b0f6e34789efd782b3f1f8 |
 
-机器可读构建信息见[BUILD_RESULT.json](BUILD_RESULT.json)。PDF可能包含生成时间等元数据，重建不承诺逐字节相同；内容源哈希用于核对本次被审版本。
+Machine-readable build information is in [BUILD_RESULT.json](BUILD_RESULT.json). The PDF may contain metadata such as the generation time, so a rebuild is not promised to be byte-identical; the content-source hashes are used to check the version reviewed this time.
 
-## 本地构建与视觉检查
+## Local build and visual inspection
 
-按[执行前约定](BUILD_PROTOCOL.md)运行。PDF技能要求的marker已在首次生成前成功执行一次；随后只修排版并重建，未重复marker。使用已有Python、Playwright、Chrome 157.0.8103.78与Poppler，没有安装依赖。浏览器隔离临时profile、上下文离线、请求拦截及禁止外部资源的CSP均启用；本页构建记录的请求计数为0。
+Run according to the [pre-execution agreement](BUILD_PROTOCOL.md). The marker required by the PDF skill was run successfully once before the first generation; after that only the typesetting was fixed and rebuilt, and the marker was not repeated. The existing Python, Playwright, Chrome 157.0.8103.78 and Poppler were used, and no dependencies were installed. An isolated temporary browser profile, an offline context, request interception and a CSP forbidding external resources were all enabled; the request count recorded by this build was 0.
 
-首轮内部构建耗时1.7981秒，生成10页。逐页查看Poppler图像后发现普通括号不应随整式拉高、数学text首尾空格丢失及孤立标点问题。只修改构建器：普通分隔符禁止自动拉伸、显式成对分隔符局部伸缩、保留text空白、绑定紧邻标点并避免引导句和公式分离；稿件正文与数学源哈希未变。
+The first internal build took 1.7981 seconds and produced 10 pages. Looking through the Poppler images page by page revealed that ordinary parentheses should not stretch with the whole expression, that leading and trailing spaces in math text were lost, and that some punctuation was orphaned. Only the builder was modified: ordinary delimiters are not stretched automatically, explicitly paired delimiters stretch locally, text whitespace is kept, adjacent punctuation is bound, and lead-in sentences are kept together with their formulas; the hashes of the manuscript body and math source did not change.
 
-最终内部构建耗时1.4061秒；外层命令墙钟约3.39秒，Poppler渲染约1.85秒。没有GPU训练，峰值内存未测。运行程序检测176个数学节点、原生分式可用、公式和表格横向越界列表为空。pypdf确认10页并提取33,006个字符；文字提取不替代版面检查。
+The final internal build took 1.4061 seconds; the outer command took about 3.39 seconds of wall clock, and Poppler rendering about 1.85 seconds. No GPU training; peak memory not measured. The run detected 176 math nodes, native fractions were available, and the lists of formulas and tables overflowing horizontally were empty. pypdf confirmed 10 pages and extracted 33,006 characters; text extraction does not replace a layout check.
 
-主代理查看了最终全部10页的100dpi渲染：未观察到裁切、重叠、缺失方块字形、断裂表行或缺页。重点核对accuracy式、超几何比值、D定义、矩形max风险、阶数分离、阈值优化、语义式和完整20格表。跨页表头重复且全部20行保留，页码连续1/10至10/10。当前PDF使用原生MathML字体样式，不声称与TeX字形排印逐像素一致。
+The main agent looked at 100dpi renderings of all 10 final pages: no clipping, overlap, missing glyph boxes, broken table rows or missing pages were observed. The accuracy formula, the hypergeometric ratio, the definition of D, the rectangle max risk, the order separation, the threshold optimization, the semantic formulas and the complete 20-cell table were checked in particular. Table headers repeat across pages and all 20 rows are kept; page numbers run continuously from 1/10 to 10/10. The current PDF uses native MathML font styles and does not claim pixel-for-pixel agreement with TeX glyph typesetting.
 
-## 复现
+## Reproduction
 
-在仓库根目录、已有Python环境中：
+From the repository root, in an existing Python environment:
 
 ```powershell
 python research/paper/build_pdf.py --check
 python research/paper/build_pdf.py --render
 ```
 
-`--check`只在内存解析；`--render`需要本机已有的Chrome或Edge、Node、Playwright及pypdf。默认指向本次捆绑runtime，换机器可以传`--node`、`--playwright`、`--browser`；不自动下载。未知数学命令、原生MathML不可用或公式越界会明确失败。临时HTML、profile及渲染页图不进入研究归档。
+`--check` only parses in memory; `--render` needs Chrome or Edge, Node, Playwright and pypdf already present on the machine. By default it points to the bundled runtime used this time; on another machine you can pass `--node`, `--playwright`, `--browser`; nothing is downloaded automatically. Unknown math commands, unavailable native MathML or overflowing formulas cause an explicit failure. Temporary HTML, the profile and the rendered page images do not enter the research archive.
 
-本轮只新增排版、内容审查及独立精确数学检查，没有重跑既有模型实验。打包私有数据边界的1项既有测试再次通过；第六轮106项集成单元测试仍属于此前运行记录，未冒充本轮新跑106项。
+This round only added typesetting, a content review and an independent exact mathematical check; no existing model experiment was rerun. The 1 existing test for the private-data boundary of packaging passed again; the 106 integration unit tests of round six still belong to the earlier run record and are not passed off as 106 tests newly run in this round.

@@ -1,51 +1,51 @@
-# 第三部分：TAT-QA 的预测检验在冻结适用总体通过
+# Part Three: the TAT-QA prediction test passes on the frozen applicable population
 
-**判定：成立，限于先验定义覆盖的 5,261 道题（全部算术题的 75.59%）。** 冻结预测为 24.4946%；修正明显结构常数误绑定后，实测为 **1,077 / 5,261 = 20.4714%**，差 **+4.0232 个百分点**；一阶规则与精确判定一致率 **100%**。以标注答案而非程序中心为容差中心，实测 **1,144 / 5,261 = 21.7449%**，差 **+2.7497 个百分点**，一阶一致率 **99.9810%**。两种口径都满足用户指定的总体门槛。不能据此声称所有 6,960 道算术题都通过预测验证。〔我们的实验〕
+**Verdict: holds, limited to the 5,261 questions covered by the prior definition (75.59% of all arithmetic questions).** The frozen prediction is 24.4946%; after fixing obvious mis-bindings of structural constants, the measurement is **1,077 / 5,261 = 20.4714%**, a difference of **+4.0232 percentage points**; the agreement rate between the first-order rule and the exact decision is **100%**. With the annotated answer instead of the program center as the tolerance center, the measurement is **1,144 / 5,261 = 21.7449%**, a difference of **+2.7497 percentage points**, with first-order agreement **99.9810%**. Both conventions meet the population threshold set by the user. This does not support claiming that all 6,960 arithmetic questions passed the prediction test. [our experiment]
 
-| 冻结类型 | 题数 | 冻结预测 | 修正实测：程序中心 | 修正实测：标注答案 | 中心误差（百分点） |
+| Frozen type | Questions | Frozen prediction | Corrected measurement: program center | Corrected measurement: annotated answer | Center error (percentage points) |
 |---|---:|---:|---:|---:|---:|
-| 增长率 | 1,349 | 27.4645% | 24.9073% | 26.1675% | +2.5572 |
-| 差值 / 有负系数的线性式 | 2,308 | 31.1810% | 26.9497% | 27.7296% | +4.2313 |
-| 两输入比率 | 515 | 12.2528% | 10.2913% | 14.5631% | +1.9616 |
-| 线性和 / 均值 | 1,089 | 12.4339% | 6.0606% | 6.9789% | +6.3733 |
-| 预测适用总体 | 5,261 | **24.4946%** | **20.4714%** | **21.7449%** | **+4.0232** |
+| Growth rate | 1,349 | 27.4645% | 24.9073% | 26.1675% | +2.5572 |
+| Difference / linear form with negative coefficients | 2,308 | 31.1810% | 26.9497% | 27.7296% | +4.2313 |
+| Two-input ratio | 515 | 12.2528% | 10.2913% | 14.5631% | +1.9616 |
+| Linear sum / mean | 1,089 | 12.4339% | 6.0606% | 6.9789% | +6.3733 |
+| Population the prediction applies to | 5,261 | **24.4946%** | **20.4714%** | **21.7449%** | **+4.0232** |
 
-类型沿用冻结分类，不在测量后重分母：比率组中的 9 道题实际有均值的精确除数，修正绑定后仍留在原来的 515 道题中。线性和的单独预测误差超过 5 个百分点，不能写成“每一种运算都通过”；用户门槛规定的是总体。〔我们的实验〕
+The types follow the frozen classification, and denominators are not redrawn after measurement: 9 questions in the ratio group actually have the exact divisor of a mean, and after the binding fix they stay among the original 515. The separate prediction error for linear sums exceeds 5 percentage points, so this cannot be written up as "every operation passed"; the user's threshold applies to the population. [our experiment]
 
-## 预测先行的证据
+## Evidence that the prediction came first
 
-预测文件和生成代码在 Git 提交 **`0c68d8a`** 单独冻结，提交信息为“**T1g 预测，尚未计算实测**”。`tatqa_prepare.py` 只绑定点值、提取显示精度与运算结构，未构造区间或计算值域。精确计算 `tatqa_measure.py` 在该提交之后运行，启动时验证预测 JSON 与该提交逐项相同。原始预测文件此后未改。〔我们的实验〕
+The prediction file and the code that generated it were frozen on their own in Git commit **`0c68d8a`**, with the commit message (in English translation) "**T1g prediction, measurement not yet computed**". `tatqa_prepare.py` only binds point values and extracts displayed precision and operation structure; it does not build intervals or compute ranges. The exact computation `tatqa_measure.py` ran after that commit and, on start-up, verifies that the prediction JSON is identical item by item to that commit. The original prediction file was not changed afterwards. [our experiment]
 
-增长率直接沿用 T1a 的 log-uniform mantissa 假设和经验边际独立混合；比率使用同一积分。基期 mantissa 在 `[1,10)` 取 log-uniform，预测函数的参数只有增长/比率幅度和输入有效位数。差值与线性和使用由显示末位及已知系数得到的半径分布，与答案绝对值分布独立混合。预测没有读取逐题 mantissa，没有用实测调整参数。后两类是本轮事先写下的分布模型扩展，不能称为 T1a 已证明的总体分布定律。〔我们的实验〕
+Growth rates directly follow T1a's log-uniform mantissa assumption and independent mixing of empirical marginals; ratios use the same integral. The base-period mantissa is log-uniform on `[1,10)`, and the only parameters of the prediction function are the growth/ratio magnitude and the input significant digits. Differences and linear sums use the distribution of radii obtained from the displayed last digits and the known coefficients, mixed independently with the distribution of absolute answer values. The prediction did not read per-question mantissas and did not adjust parameters using the measurements. The last two types are extensions of the distribution model written down in advance in this round; they cannot be called population distribution laws proved by T1a. [our experiment]
 
-**这是冻结的零参数分布代入检验，不是独立的第二个训练/验证拆分。** 输入精度和答案幅度的经验分布来自 TAT-QA 全划分，值域结果在预测提交之后才计算。与用户要求一致，预测可以知道答案幅度分布；但未使用这些题的实测越界标签。〔我们的实验〕
+**This is a frozen zero-parameter test of distribution substitution, not an independent second training/validation split.** The empirical distributions of input precision and answer magnitude come from all TAT-QA splits, and the range results were computed only after the prediction was committed. As the user required, the prediction may know the distribution of answer magnitudes, but it did not use the measured out-of-tolerance labels of these questions. [our experiment]
 
-## 数据与可分析范围
+## Data and analyzable scope
 
-官方 [TAT-QA README](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/README.md) 说明测试标签已公开。使用同一固定提交下 `dataset_raw/tatqa_dataset_train.json`、`tatqa_dataset_dev.json` 和 `tatqa_dataset_test_gold.json`；未重复计入无标签 test。train/dev/test 算术题为 **5,543 / 718 / 699**，共 **6,960**。〔正文：官方仓库；数量：我们的实验〕
+The official [TAT-QA README](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/README.md) states that the test labels have been released. We use `dataset_raw/tatqa_dataset_train.json`, `tatqa_dataset_dev.json`, and `tatqa_dataset_test_gold.json` under the same pinned commit; the unlabeled test is not counted twice. The train/dev/test arithmetic questions number **5,543 / 718 / 699**, **6,960** in total. [full text: official repository; counts: our experiment]
 
-保守绑定 **5,661 / 6,960 = 81.34%**，其中 train/dev/test 为 **4,493 / 602 / 566**。排除 **1,149** 道来源身份不唯一、**146** 道公式数值找不到来源、**3** 道没有不确定输入、**1** 道公式语法不支持，逐题原因保留在 `tatqa_excluded.jsonl`。已绑定的 **400** 道非标准运算没有本轮冻结的总体预测，但仍做了精确审计。〔我们的实验〕
+Conservative binding covers **5,661 / 6,960 = 81.34%**, with **4,493 / 602 / 566** in train/dev/test. Excluded: **1,149** questions whose source identity is not unique, **146** whose formula numbers have no source found, **3** with no uncertain input, and **1** with unsupported formula syntax; the per-question reasons are kept in `tatqa_excluded.jsonl`. The **400** bound questions with non-standard operations have no population prediction frozen in this round, but they were still audited exactly. [our experiment]
 
-半末位舍入盒下全部 **5,661** 题都获得精确值域，不存在只因外包区间重叠就判不确定的题。重复公式输入共享同一变量。解析后的表达式通过区间导数确定单调性，或证明每一坐标上是线性分式后，使用联合角点求精确极值。算术使用有理数，保留每个越界结论的完整输入见证。〔我们的实验〕
+Under the half-last-digit-unit rounding box, all **5,661** questions get an exact range; no question is judged uncertain merely because outer intervals overlap. Repeated formula inputs share one variable. After the parsed expression's monotonicity is established by interval derivatives, or it is proved to be linear-fractional in each coordinate, the exact extrema are found from the joint corners. Arithmetic uses rationals, and a complete input witness is kept for every out-of-tolerance conclusion. [our experiment]
 
-## 必须披露的绑定修复
+## A binding fix that must be disclosed
 
-首次测量发现一个具体实现问题：平均值公式中的 `/2`、`/3` 等计数，以及 `a/b−1` 中的 `1`，可能恰好匹配了表格或正文的无关数字，因而被错误赋予舍入宽度。该问题使未预测的复杂比率组显著高估敏感性。根据公式角色，将均值计数和单位增长基准恢复为精确常数，共修复 **253 道题、259 个操作数**；其中 **9 道**在冻结预测总体内。没有改变任何原始显示数、程序中心值、预测方法、预测数值或主比较的题目 ID 集合。〔我们的实验〕
+The first measurement revealed a specific implementation problem: counts such as `/2` and `/3` in average formulas, and the `1` in `a/b−1`, could happen to match unrelated numbers in the table or text and thus be wrongly given a rounding width. This problem made the unpredicted complex-ratio group markedly overstate sensitivity. Based on the role in the formula, mean counts and the unit growth baseline were restored as exact constants, fixing **253 questions and 259 operands** in total; **9** of these questions are inside the frozen prediction population. No original displayed number, program center value, prediction method, predicted value, or set of question IDs for the main comparison was changed. [our experiment]
 
-这属于**提交后的绑定实现修复**，不能装作从未发生。原始执行结果和修正结果同时保留：原始预测总体实测中心 **20.6425%**，修正后 **20.4714%**；原始全绑定总体 **23.9534%**，修正后 **19.9258%**。冻结预测到修正实测的差由 **3.8521** 增至 **4.0232** 个百分点，结论仍通过。逐项修改在 `part3_binding_corrections.jsonl`；修复代码在 `tatqa_binding_sensitivity.py`。主表使用修正后的值。〔我们的实验〕
+This is a **post-commit fix to the binding implementation**, and we cannot pretend it never happened. The original and corrected results are both kept: the measured center on the original prediction population is **20.6425%**, and **20.4714%** after the fix; on the original fully bound population **23.9534%**, and **19.9258%** after the fix. The difference from the frozen prediction to the corrected measurement grows from **3.8521** to **4.0232** percentage points, and the conclusion still passes. The item-by-item changes are in `part3_binding_corrections.jsonl`; the fix code is in `tatqa_binding_sensitivity.py`. The main table uses the corrected values. [our experiment]
 
-## 与 FinQA 的对照
+## Comparison with FinQA
 
-保持标准两数增长率和“基期有效位数”口径，FinQA 前轮 **1,427** 题实测 **40.5046%**、预测 **41.5192%**；TAT-QA **1,349** 题实测 **24.9073%**、预测 **27.4645%**。TAT-QA 的增长率不可确定比例较低，方向符合事先预期。两者都是各自可保守绑定的条件子集，不能作为两个基准所有题目的无条件比较。〔我们的实验〕
+Keeping the standard two-number growth rate and the "base-period significant digits" convention, the previous FinQA round measured **40.5046%** on **1,427** questions with a prediction of **41.5192%**; TAT-QA measures **24.9073%** on **1,349** questions with a prediction of **27.4645%**. The share of indeterminate growth rates is lower in TAT-QA, in the direction expected in advance. Both are conditional subsets that could be conservatively bound in each dataset; they cannot serve as an unconditional comparison of all questions in the two benchmarks. [our experiment]
 
-`part3_growth_precision_plot.csv` 提供两数据集按基期有效位数分组的实测和冻结分布预测，适合主图第四幅。`part3_all_precision_corrected_plot.csv` 另提供全部可绑定运算按最小输入有效位数分组的实测与逐题一阶判定比例；后者是一阶判定曲线，**不能标为冻结的总体先验预测曲线**。图中 3 位有效数字的 TAT-QA 增长率组，预测 **65.74%**、实测 **52.33%**，显示分组拟合并非处处紧密。〔我们的实验〕
+`part3_growth_precision_plot.csv` gives the measurements and frozen distribution predictions for both datasets grouped by base-period significant digits, suitable for the fourth panel of the main figure. `part3_all_precision_corrected_plot.csv` additionally gives, for all bindable operations grouped by the minimum input significant digits, the measurements and the per-question first-order decision shares; the latter is a first-order decision curve and **must not be labeled as the frozen population prior prediction curve**. In the plot, the TAT-QA growth-rate group with 3 significant digits has a prediction of **65.74%** and a measurement of **52.33%**, showing that the fit by group is not tight everywhere. [our experiment]
 
-## 适用边界与实现检验
+## Scope limits and implementation checks
 
-百分比推导式在数据集中混用比例和百分点。本实现对 percent 输出在因子 **1 与 100** 中选择更接近标注答案的规范化方式，是 **reference-assisted normalization**，不是纯结构识别。这种整体乘法不改变程序中心口径的相对越界率和一阶判断，但会影响围绕标注答案的偏移解释；因此中心口径为主，gold 仅并列敏感性分析。**98** 道题即使不扰动输入，程序中心已经超出标注答案的 1% 容差，它们不能被归因成舍入造成的标注错误。〔我们的实验〕
+Percentage derivations in the dataset mix fractions and percentage points. For percent outputs, this implementation chooses between factors **1 and 100** the normalization closer to the annotated answer; this is **reference-assisted normalization**, not pure structural identification. This overall multiplication does not change the relative out-of-tolerance rate or the first-order judgment under the program-center convention, but it does affect the interpretation of offsets around the annotated answer; the center convention is therefore primary, and gold is given only as a side-by-side sensitivity analysis. For **98** questions, the program center already lies outside the 1% tolerance of the annotated answer even without perturbing the inputs; these cannot be attributed to annotation errors caused by rounding. [our experiment]
 
-来源解析把无小数的 1900–2100 排除为年份，可能误排同范围的真实金额；公式里找不到来源的小整数按常见结构常数处理，并未逐题完成经济语义核验。实际来源中的精确计数、合同数值也未全部语义排除。结果的严格含义是：**在记录的来源绑定、公式和独立半末位盒假设下，数值结论成立**，不是证明所有这些财报量现实中都有独立连续舍入误差。〔我们的实验〕
+Source parsing excludes 1900–2100 without decimals as years, which may wrongly exclude real amounts in the same range; small integers in formulas without a source are treated as common structural constants, and their economic semantics were not verified question by question. Exact counts and contract values among the actual sources were also not all excluded semantically. The strict meaning of the results is: **under the recorded source bindings, formulas, and the independent half-last-digit-unit box assumption, the numeric conclusions hold**; this does not prove that all these filing quantities actually carry independent continuous rounding errors. [our experiment]
 
-检验重新代入全部修正程序中心和 **2,339** 个完整联合见证：**2,241** 个严格位于盒内，**98** 个是原始中心已越出 gold 容差。全部见证均在各输入范围内且精确重现越界输出。另外检验了共享输入 `x/x` 必须恒等于 1，以及相近两数相减的精确端点。唯一一阶分歧是 `ebca9215-a46c-45f4-8149-b43c80d5704a` 的 gold 口径：分母非线性与中心-gold 偏移使实际越界而一阶未越界；中心口径没有误判。〔我们的实验〕
+The check substitutes back all corrected program centers and **2,339** complete joint witnesses: **2,241** lie strictly inside the box, and **98** are cases where the original center already exceeds the gold tolerance. Every witness is within each input's range and exactly reproduces the out-of-tolerance output. We also checked that a shared input `x/x` must be identically 1, and the exact endpoints of subtracting two close numbers. The only first-order disagreement is the gold convention of `ebca9215-a46c-45f4-8149-b43c80d5704a`: denominator nonlinearity and the center–gold offset make it actually out of tolerance while the first-order rule says it is not; the center convention has no misjudgment. [our experiment]
 
-复现时在有 numpy/sympy 的 Python 环境依次运行 `tatqa_prepare.py`、`tatqa_measure.py`、`tatqa_binding_sensitivity.py`、`tatqa_validate.py`。第一次脚本重建的是已冻结的点值预测，不允许把它改成适配实测的版本。FinQA 绘图读取旁边前轮 `proxy-tail`、`proxy-tail-t1a` 已有结果；TAT-QA 的数据文件保留在本目录 `data/tatqa/`，不提交原始数据副本。所有修改只在本轮目录。〔我们的实验〕
+To reproduce, run `tatqa_prepare.py`, `tatqa_measure.py`, `tatqa_binding_sensitivity.py`, and `tatqa_validate.py` in order in a Python environment with numpy/sympy. The first script rebuilds the already frozen point-value prediction; it must not be changed into a version fitted to the measurements. The FinQA plotting reads the existing results of the earlier rounds in the neighboring `proxy-tail` and `proxy-tail-t1a`; the TAT-QA data files stay in `data/tatqa/` in this directory, and no copy of the raw data is committed. All changes are only in this round's directory. [our experiment]

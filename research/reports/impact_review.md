@@ -1,108 +1,108 @@
-# 影响结构审计与来源日期检查：独立增量审查
+# Influence-structure audit and source-date check: independent incremental review
 
-日期：2026-11-16。审查者：内部 AI 子代理 `fresh_reviewer`，未编写本轮被审的数学文档、优化器或来源检查器；不是 Fable 或外部专家。全程离线。只修改本审查报告，未改作者代码、旧报告或旧语料；发现问题后交给作者修订，再复核。
+Date: 2026-11-16. Reviewer: internal AI sub-agent `fresh_reviewer`, which did not write the mathematical document, optimizer or source checker reviewed in this round; it is not Fable or an external expert. Fully offline throughout. Only this review report was modified; the author's code, old reports and old corpora were not changed. Problems found were handed back to the author for revision and then reviewed again.
 
-**结论：当前版本的 IA1–IA8、阈值精确优化和小规模一般影响图检查器，在明示的条件与程序类内未发现未解决的实质数学或实现错误。发现并修复了一个重要的来源日期绑定缺陷，以及一个实验输入身份不一致。完整 20 格的节省中位数是 0，未达到预定中位节省≥20%的投入门。来源复查仍只支持当前保存页面上的日期声明，历史字节版本证明数仍为 0。**
+**Conclusion: In the current version of IA1–IA8, the exact threshold optimization and the small-scale general influence-graph checker, no unresolved substantive mathematical or implementation error was found within the stated conditions and program class. One important source-date binding defect and one inconsistency in experiment input identity were found and fixed. The median saving across the full 20 cells is 0, which does not reach the pre-registered investment gate of median saving ≥20%. The source re-check still supports only the date claims on the currently saved pages; the number of historical byte versions proven is still 0.**
 
-这次可以验收的是有限数学接口、指定设计类的精确结果及已声明范围内的来源检查。真实依赖图、真实历史审计真值、实际模型效用、独立确认和原创性均未因此通过。
+What can be accepted this time is the finite mathematical interface, the exact results for the specified design class, and the source check within its declared scope. Real dependency graphs, real historical audit ground truth, actual model utility, independent confirmation and originality have not passed as a result.
 
-## 1. 检查对象与执行边界
+## 1. Objects checked and execution boundary
 
-完整阅读并逐式核对 [IA1–IA8](../theory/impact_audit.md)；静态审查 [threshold_design.py](../planning/threshold_design.py)、[其测试](../planning/test_threshold_design.py)、[20 格机器结果](../planning/threshold_results.json)、[一般影响图实现](../planning/impact_audit.py)、[一般实现测试](../planning/test_impact_audit.py)、[执行前预算](../planning/impact_budget.md)与[结果报告](../planning/impact_report.md)。定向复核被调用的精确零发现反演接口及集体统计量接口，没有重跑旧 36 项检查。
+I read [IA1–IA8](../theory/impact_audit.md) in full and checked it formula by formula; statically reviewed [threshold_design.py](../planning/threshold_design.py), [its tests](../planning/test_threshold_design.py), the [20-cell machine results](../planning/threshold_results.json), the [general influence-graph implementation](../planning/impact_audit.py), the [general implementation tests](../planning/test_impact_audit.py), the [pre-execution budget](../planning/impact_budget.md) and the [results report](../planning/impact_report.md). I did a targeted review of the exact zero-finding inversion interface and the collective-statistic interface that are called; the old 36 checks were not re-run.
 
-来源部分阅读 [fomc_source_audit.py](../data/fomc_source_audit.py)、[source_audit.json](../data/source_audit.json)、[来源报告](../data/source_audit.md)、[来源预算](../data/compute_budget.md)。只读检查原仓库中的固定 10 份样本所对应局部容器元数据；没有输出正文、标题或完整 URL。修复后直接调用 `audit()` 只读重算，未调用写 JSON 的主程序，返回的全部记录和总体元数据与已保存 JSON 一致。
+For the source part I read [fomc_source_audit.py](../data/fomc_source_audit.py), [source_audit.json](../data/source_audit.json), the [source report](../data/source_audit.md) and the [source budget](../data/compute_budget.md). I did a read-only check of the local container metadata corresponding to the fixed 10 samples in the original repository; no body text, titles or full URLs were output. After the fix I called `audit()` directly for a read-only recomputation, without calling the main program that writes the JSON; all returned records and the population metadata agree with the saved JSON.
 
-没有执行训练、外部访问、真实污染判定或完整文献新颖性检索。没有把有限测试当形式化证明，也没有把原始文件存在、哈希一致与历史可得性混为同一件事。
+No training, external access, real contamination judgement or full literature novelty search was performed. Finite tests were not treated as a formal proof, and the existence of raw files, hash agreement and historical availability were not conflated.
 
-## 2. 本轮发现的问题及修复状态
+## 2. Problems found in this round and fix status
 
-### IR01 — important，已修复：同一容器内不同纪要可能被错误绑定到唯一日期
+### IR01 — important, fixed: different minutes in the same container could be wrongly bound to a single date
 
-原函数只要求目标链接唯一、局部容器内恰有一个 Released 日期。构造一个段落同时含纪要 A、B，唯一日期属于 B，查询 A 仍得到 `local_release_label`。审查时用离线构造实际复现了该错误；manifest 或目标链接唯一都不能消除这个歧义。
+The original function required only that the target link be unique and that the local container contain exactly one Released date. Construct a paragraph that contains both minutes A and B, with the single date belonging to B; a query for A still returns `local_release_label`. During the review this error was actually reproduced with an offline construction; neither the manifest nor a unique target link removes this ambiguity.
 
-作者已增加受支持的纪要身份判断：只接受 HTTPS 官方域名的已知纪要 HTML/PDF 路径，验证 URL 中八位会议日期；局部容器所有链接都须属于同一纪要身份。不同纪要、未知路径、外站、查询参数、重复目标或多个 Released 日期均拒绝。同一纪要的 HTML/PDF 两种排列仍允许。
+The author has added a check of supported minutes identity: only known minutes HTML/PDF paths on the official HTTPS domain are accepted, and the eight-digit meeting date in the URL is verified; all links in a local container must belong to the same minutes identity. Different minutes, unknown paths, external sites, query parameters, duplicate targets or multiple Released dates are all rejected. Both orderings of HTML/PDF for the same minutes are still allowed.
 
-新增反例/正例通过，审查者重跑 10 项测试通过。对原固定 10 份样本，我另只读检查：每个局部容器均恰有 HTML/PDF 两链接，会议日期身份相同；前 7 个 HTML 在先、后 3 个 PDF 在先。修复后原 10 份的日期匹配结论保持不变。**因此缺陷确实需要修复，但没有证据表明它改变了这 10 份已有观察。** 当前验收限定于声明的 FOMC 模板与支持路径，不是任意网页日期语义解析的证明。
+The new counterexamples/examples pass, and the reviewer's re-run of the 10 tests passes. For the original fixed 10 samples I also did a read-only check: each local container has exactly two links, HTML and PDF, with the same meeting-date identity; in the first 7 the HTML comes first, in the last 3 the PDF comes first. After the fix, the date-match conclusions for the original 10 are unchanged. **So the defect did need fixing, but there is no evidence that it changed these 10 existing observations.** The current acceptance is limited to the declared FOMC template and supported paths; it is not a proof of date-semantics parsing for arbitrary web pages.
 
-### IR02 — important，已修复：数学示例与实际执行输入身份一度不一致
+### IR02 — important, fixed: the identity of the mathematical example and the actual execution input were briefly inconsistent
 
-数学文档最初把主族写作 J=10、两类标签；执行前预算、脚本和 JSON 实际以单点标签 0 的抽象阈值结构计算。两者在所有头逐点投真类时导出相同风险公式与审计成本，故数值结论不受影响；但不能据此声称运行了未执行的多点投票实验。
+The mathematical document originally wrote the main family as J=10 with two label classes; the pre-execution budget, script and JSON actually computed an abstract threshold structure with a single point of label 0. When every head votes the true class at every point, the two yield the same risk formula and audit cost, so the numeric conclusions are not affected; but one cannot use this to claim that an unexecuted multi-point voting experiment was run.
 
-当前 IA7 明确适用任意 J≥1，实际执行身份明确为 J=1；多点双类版本仅为同一证明的数学扩展。结果报告同步区分，并以已冻结预算为运行身份。该说明问题关闭；人工完美投票仍不检验真实任务效用。
+IA7 now explicitly applies to any J≥1, and the actual execution identity is explicitly J=1; the multi-point two-class version is only a mathematical extension of the same proof. The results report makes the same distinction and takes the frozen budget as the run identity. This description issue is closed; hand-made perfect voting still does not test real task utility.
 
-### IR03 — minor，已修复：一般检查器严格分离测试最初仅验证不劣
+### IR03 — minor, fixed: the strict-separation test of the general checker originally only verified "not worse"
 
-最初名为严格分离的测试实际使用两层 AND，只断言成本不高于矩形；该结构的等成本自由配额最优值本来相同。审查建议替换成六文档、三层、每层两篇对应一个头、三头全正确、alpha=1/4 的例子。
+The test originally named strict separation actually used a two-stratum AND and only asserted that the cost was no higher than the rectangle; for that structure the equal-cost free-quota optimum is the same anyway. The review suggested replacing it with an example of six documents, three strata, two documents per stratum mapping to one head, all three heads correct, alpha=1/4.
 
-当前测试对全部改票、实际抽样结果、全部盒和配额独立穷举：直接方案 (1,1,1) 成本 3、风险 1/4；最强联合零发现矩形成本 4。严格不等式现在真正被检查。两层 AND 保留为无收益对照，不再承担严格增益证据。
+The current test independently enumerates all vote changes, actual sampling outcomes, all boxes and quotas: the direct scheme (1,1,1) has cost 3 and risk 1/4; the strongest joint zero-finding rectangle has cost 4. The strict inequality is now genuinely checked. The two-stratum AND is kept as a no-gain baseline and no longer serves as evidence of a strict gain.
 
-### 必须保留的判定：主族没有过门
+### A verdict that must be kept: the main family did not pass the gate
 
-我从完整 JSON 重新计算：20 格中 9 格严格改善、11 格零改善，中位节省为 0，仅 3 格节省超过 20%。当前数学/结果报告已经如实记录。不能把已见过的 r=6 子族事后单独挑出，冒充原完整族通过中位 20% 门。这个负结果不推翻存在严格分离的定理，但限制当前“值得升级投入”的经验支持。
+I recomputed from the full JSON: of the 20 cells, 9 improve strictly and 11 have zero improvement; the median saving is 0, and only 3 cells save more than 20%. The current mathematical/results reports already record this honestly. The already-seen r=6 sub-family cannot be picked out after the fact and passed off as the original full family passing the median 20% gate. This negative result does not overturn the theorem that a strict separation exists, but it limits the current empirical support for "worth upgrading the investment".
 
-## 3. 数学命题的独立核对
+## 3. Independent check of the mathematical propositions
 
-| 命题或结论 | 审查判断与关键限定 |
+| Proposition or conclusion | Review verdict and key qualifications |
 |---|---|
-| IA1 联合删除依赖图 | 固定 DAG、确定节点、固定外生随机性和完整控制依赖下，拓扑归纳成立。H_i 必须覆盖任意联合删除，不能由单篇删除不变推断；OR 反例有效。真实流水线是否满足图契约仍是外部义务。 |
-| IA2 单调与 accuracy | 可变头允许保留原票使可行预测集合嵌套。精确可达类与 accuracy 端点正确；任意可靠但不嵌套的近似包络不能直接套向上封闭剪枝。 |
-| IA3 覆盖 | 分层独立均匀无放回、固定 C 下的全零概率是组合数乘积；对每个固定真值控制错误出证。不是零发现后的污染后验概率，也不是审计成功概率。 |
-| IA4 两级反链 | 极小坏文档集和 Pareto 极小计数分别约简成立。风险约简只需有限性与概率单调；单元素删除判极小性及上闭剪枝另外需要坏集合上闭。存在某计数的坏位置不等于该计数所有位置都坏。 |
-| IA5 全局设计 | 完整有限网格能取得声明类的最优；未完成搜索不能输出精确最优或不可行。最优性相对于固定分层、固定 I、全零报告和 relaxed 威胁集，不是任意训练或任意审计方法。 |
-| IA6 矩形基线 | 全零才报告整盒、其他情况全空间时，盒覆盖精确风险为 max_h p_h(b_h+1)。单个越界层可达到它。若只保证最终 I 而不保证盒，就属于更广的直接校准类，不能再称该 max 盒比较是它的最强基线。 |
-| IA7 分离 | h=2r−1 一致真类投票恰需 r 个可变头才可能错误；最强盒精确成本 r·ceil[N(1−alpha)]。普通 Bonferroni 盒成本 rN−floor(N alpha)，额外保守性没有被当主收益。 |
-| IA7 阶数 | 固定 alpha、N=r² 时，直接可行上界 O(N)，盒下界 Omega(rN)，比值 Omega(r) 推导正确。总体也增长为 (2r−1)r²；没有证明固定真实语料上任意倍节省或一般图 minimax 最优。 |
-| IA8 对称约简 | 等层大小、等成本时排序后风险由最小 r 个配额决定。其余配额降至第 r 个不增风险且弱降成本，因此非降 r 元组穷举不漏更优解。非等成本/层大小不能套用；代码的专用函数没有作这种推广。 |
+| IA1 joint-deletion dependency graph | Under a fixed DAG, deterministic nodes, fixed exogenous randomness and complete control dependencies, topological induction holds. H_i must cover arbitrary joint deletions and cannot be inferred from invariance under single-document deletion; the OR counterexample is valid. Whether the real pipeline satisfies the graph contract remains an external obligation. |
+| IA2 monotonicity and accuracy | Allowing a variable head to keep its original vote makes the feasible prediction sets nested. The exact reachable classes and accuracy endpoints are correct; an arbitrary reliable but non-nested approximate envelope cannot be plugged directly into upward-closed pruning. |
+| IA3 coverage | Under stratified independent uniform sampling without replacement and fixed C, the all-zero probability is a product of binomial coefficients; it controls erroneous certification for each fixed ground truth. It is not the posterior probability of contamination after zero findings, nor the probability of audit success. |
+| IA4 two-level antichains | The reductions to minimal bad document sets and to Pareto-minimal counts each hold. The risk reduction needs only finiteness and monotonicity of probability; judging minimality by single-element deletion and upward-closed pruning additionally need the bad sets to be upward closed. Having some bad placement for a count does not mean every placement for that count is bad. |
+| IA5 global design | A complete finite grid attains the optimum of the declared class; an incomplete search cannot output an exact optimum or infeasibility. Optimality is relative to fixed stratification, fixed I, all-zero reporting and the relaxed threat set, not to arbitrary training or arbitrary audit methods. |
+| IA6 rectangle baseline | When the whole box is reported only on all-zero and the full space otherwise, the exact box-coverage risk is max_h p_h(b_h+1). A single out-of-bound stratum can attain it. If only the final I is guaranteed and not the box, the method belongs to the broader direct-calibration class, and this max-box comparison can no longer be called its strongest baseline. |
+| IA7 separation | With h=2r−1 consistent true-class votes, an error is possible only with exactly r variable heads; the exact cost of the strongest box is r·ceil[N(1−alpha)]. The ordinary Bonferroni box costs rN−floor(N alpha); its extra conservatism is not counted as the main gain. |
+| IA7 order | For fixed alpha and N=r², the direct feasible upper bound is O(N), the box lower bound is Omega(rN), and the derivation of the Omega(r) ratio is correct. The population also grows, as (2r−1)r²; arbitrary-factor savings on a fixed real corpus, or minimax optimality on general graphs, were not proven. |
+| IA8 symmetric reduction | With equal stratum sizes and equal costs, after sorting, the risk is determined by the smallest r quotas. Lowering the other quotas to the r-th does not increase risk and weakly lowers cost, so exhaustive enumeration of non-decreasing r-tuples misses no better solution. This does not carry over to unequal costs / stratum sizes; the code's specialized function does not make that generalization. |
 
-空坏集合风险 0、空污染已坏则不可行、零采样因子 1、污染层普查因子 0、b_h=N_h 无盒外限制、空影响和空总体均已在实现/测试中区分。一般 API 允许空层，作为因子 1 的中性层处理；这与理论先删除空层等价。
+Zero risk for an empty bad set, infeasibility when an empty contamination is already bad, a factor of 1 for zero sampling, a factor of 0 for a census of a contaminated stratum, no out-of-box restriction when b_h=N_h, empty influence and an empty population are all distinguished in the implementation/tests. The general API allows empty strata and treats them as neutral strata with factor 1; this is equivalent to the theory first deleting empty strata.
 
-## 4. 实现与精确最优值
+## 4. Implementation and exact optimal values
 
-阈值优化器用 `Fraction` 和整数幂比较，无浮点开根参与可行性判定。初始均衡方案为合法上界，成本剪枝只跳过不可能严格改进 incumbent 的元组；完整枚举全部允许的非降元组后可声称全局最优。最大域 C(26,6)=230,230；超 `max_tuples` 拒绝返回部分最优。
+The threshold optimizer uses `Fraction` and integer-power comparisons; no floating-point roots take part in feasibility decisions. The initial balanced scheme is a valid upper bound, and cost pruning skips only tuples that cannot strictly improve on the incumbent; after full enumeration of all allowed non-decreasing tuples, global optimality can be claimed. The largest domain is C(26,6)=230,230; beyond `max_tuples` the code refuses to return a partial optimum.
 
-因此 **r=6、h=11、N=20、alpha=1/20 的 88 是该固定等成本分层均匀设计类内的计算精确最优**，不再只是手算均衡可行上界。全部配额为 8，最坏漏检风险 729/15625=.046656；最强盒 114，Bonferroni 盒 119，较强主基线节省 13/57≈22.807%。这没有扩大到随机配额、序贯、层内非均匀或不等成本最优。
+So **for r=6, h=11, N=20, alpha=1/20, 88 is the computed exact optimum within this fixed equal-cost stratified uniform design class**, no longer just a hand-computed balanced feasible upper bound. All quotas are 8, and the worst-case miss risk is 729/15625=.046656; the strongest box is 114 and the Bonferroni box 119, so the saving against the stronger main baseline is 13/57≈22.807%. This was not extended to optimality under random quotas, sequential designs, non-uniform within-stratum sampling or unequal costs.
 
-一般实现独立处理真实文档影响列表，枚举污染集合、缓存头并集的精确包络、检查单删除极小性并做计数 Pareto 约简。accuracy 使用可加精确端点，macro-F1 使用既有联合计数 DP，不把类别分量界误称精确。正有理成本和精确 alpha/区间被保留，bool/float 等不合法输入拒绝。
+The general implementation independently handles real document influence lists: it enumerates contamination sets, caches exact envelopes for unions of heads, checks single-deletion minimality and performs Pareto reduction on counts. Accuracy uses additive exact endpoints and macro-F1 uses the existing joint-count DP; per-class component bounds are not miscalled exact. Positive rational costs and exact alpha/intervals are kept, and invalid inputs such as bool/float are rejected.
 
-矩形优化只枚举极大安全盒是正确的额外约简：安全盒集合下闭；增大安全预算坐标不会提高对应所需最小零发现审计量，所以正成本下可把某个最优盒扩展为极大盒。该部分仍以整盒覆盖为目标。配置、DP 状态与搜索预算超限均抛出 `BudgetExceeded`，没有返回伪精确的部分搜索结果。一般代码明确限于小总体，不证明任意影响图可扩展性。
+Enumerating only maximal safe boxes in the rectangle optimization is a correct additional reduction: the set of safe boxes is downward closed; increasing a safe budget coordinate does not raise the corresponding minimum zero-finding audit size required, so under positive costs some optimal box can be extended to a maximal box. This part still targets whole-box coverage. Exceeding the configuration, DP-state or search budgets raises `BudgetExceeded`, and no pseudo-exact partial search result is returned. The general code is explicitly limited to small populations and does not prove scalability to arbitrary influence graphs.
 
-零发现风险 API 允许外部传入 profiles，文档明确要求其覆盖完整坏集或有效前沿；该低层函数自身不验证现实依赖图。高层 `plan_impact_audit` 从声明的图、投票与标签构造前沿，避免把手工漏列 profile 偷当完整证书。
+The zero-finding risk API allows profiles to be passed in from outside; the documentation explicitly requires them to cover the full bad set or a valid frontier; this low-level function does not itself verify the real dependency graph. The high-level `plan_impact_audit` builds the frontier from the declared graph, votes and labels, so that a hand-written profile list with omissions is not slipped in as a complete certificate.
 
-## 5. 来源日期证据的范围
+## 5. Scope of the source-date evidence
 
-修复后只读复算确认：120 条原始候选、固定等距日期秩取 10 份、8 个对应索引快照；10 份当前 Released 声明、manifest 发布日和当前 Last Update 比较一致；源码哈希和全部输出记录与保存 JSON 相符。重算未改变源文件或保存结果。
+The read-only recomputation after the fix confirms: 120 raw candidates, 10 taken at fixed equally spaced date ranks, 8 corresponding index snapshots; for all 10 the current Released claim, the manifest publication date and the current Last Update agree; the source hash and all output records match the saved JSON. The recomputation did not change the source files or saved results.
 
-支持的结论只到：**当前保存的官方索引在同一纪要身份的局部容器中声明了相同公开日期，相关保存对象与清单哈希一致。** 没有把下列未知关闭：
+The supported conclusion goes only as far as: **the currently saved official index declares the same public date within the local container of the same minutes identity, and the related saved objects agree with the list hashes.** The following unknowns were not closed:
 
-- 日期声明是否证明当时同一字节公开、是否有未标记修订；所有 `historical_byte_version_proven` 仍为 false。
-- 日内发布时刻和时区；所有 `release_time_of_day_proven` 仍为 false，会议正文中任意 2 p.m. 没有被冒用。
-- 2026 年搜集、筛选与预处理在历史时点的可测性。
-- 120 份总体错标率；样本不是随机抽样，10/10 不能变成零污染率或有限总体置信界。
-- 抽取文本与 HTML 的语义完全一致。当前正文/HTML 双哈希核对的是记录与保存清单的关联，未独立重跑文本提取并证明无遗漏/误抽。
+- Whether the date claim proves that the same bytes were public at that time, and whether there were unmarked revisions; all `historical_byte_version_proven` are still false.
+- The intraday release time and time zone; all `release_time_of_day_proven` are still false, and no arbitrary "2 p.m." in the meeting text was borrowed for this.
+- Point-in-time measurability of the 2026 collection, filtering and preprocessing.
+- The mislabelling rate over all 120; the sample is not a random sample, and 10/10 cannot be turned into a zero contamination rate or a finite-population confidence bound.
+- Full semantic agreement between the extracted text and the HTML. The current dual hash check on text/HTML verifies the link between the records and the saved list; text extraction was not independently re-run to prove there are no omissions/mis-extractions.
 
-Last Update 被保留为独立更新通道而非发布日期证明；没有发现机器日期字段只针对所支持入口，不是对任意网页脚本的穷尽性否定。当前报告已分别记录这些限制。
+Last Update is kept as an independent update channel, not as proof of the publication date; finding no machine date field applies only to the supported entry points and is not an exhaustive negation over arbitrary web-page scripts. The current report records these limits separately.
 
-SEntFiN 的用途判断来自另读的本地来源/批准说明，不是本检查器逐行核验结果；我没有复核全部原始标签、出版方权利或新增训练划分。其 source-native 情绪、资产立场、证券身份、批准范围和事件独立性仍须分别验收，不能拿本次 FOMC 日期检查替代。
+The judgement about SEntFiN's use comes from separately reading the local source/approval notes, not from row-by-row verification by this checker; I did not review all the raw labels, the publisher's rights or the new training split. Its source-native sentiment, asset stance, security identity, approval scope and event independence still need separate acceptance and cannot be replaced by this FOMC date check.
 
-## 6. 本审查实际运行的验证
+## 6. Verification actually run by this review
 
-以下为审查者运行，不与作者原运行耗时混用；没有重跑旧 36 测试或重新训练。
+The following were run by the reviewer and are not mixed with the author's original run times; the old 36 tests were not re-run and nothing was retrained.
 
-| 动作 | 结果 |
+| Action | Result |
 |---|---|
-| `python -m unittest research.planning.test_threshold_design -v` | 当前 5 项通过，unittest 报告 0.361 秒；含未压缩配额、完整盒/抽样对照和 Bonferroni 对照 |
-| `python -m unittest research.planning.test_impact_audit -v` | 当前 8 项通过，0.093 秒；含实际改票与抽样 oracle、两指标、六文档严格分离、两级反链和边界拒绝 |
-| `python research/data/fomc_source_audit.py --self-test` | 修复后 10 项通过，0.003 秒；含本审查所提混绑反例 |
-| 直接调用来源 `audit()`，只打印摘要和一致性布尔值 | 0.328512 秒；记录、总体元数据与保存 JSON 完全一致；没有写输出文件 |
-| 读取完整阈值 JSON 后重算汇总及源码哈希 | 20 格、11 格零增益、中位 0、3 格超过20%；JSON 绑定的源码/预算哈希匹配 |
+| `python -m unittest research.planning.test_threshold_design -v` | Currently 5 pass, unittest reports 0.361 seconds; includes uncompressed quotas, full box/sampling baselines and the Bonferroni baseline |
+| `python -m unittest research.planning.test_impact_audit -v` | Currently 8 pass, 0.093 seconds; includes actual vote-change and sampling oracles, both metrics, six-document strict separation, two-level antichains and boundary rejections |
+| `python research/data/fomc_source_audit.py --self-test` | After the fix 10 pass, 0.003 seconds; includes the mixed-binding counterexample raised by this review |
+| Direct call of the source `audit()`, printing only a summary and consistency booleans | 0.328512 seconds; records and population metadata fully agree with the saved JSON; no output file written |
+| Recomputing the summary and source hashes after reading the full threshold JSON | 20 cells, 11 with zero gain, median 0, 3 cells above 20%; the source/budget hashes bound in the JSON match |
 
-作者先前 20 格扫描为 0.702440 秒；根代理随后集成重跑更新 JSON 为 0.680830 秒。审查者只读检查了更新后的 20 格汇总、r=6/N=20 的 88/114 与源码/预算哈希，结论不变，没有再执行写结果的扫描主程序，也没有重复根代理的整套 49 测试。所有耗时均为本地 CPU 记录，未测峰值内存，因此没有声称 RAM 预算实测通过。测试通过支持这些有限输入与实现边界，不是所有输入的机器证明。
+The author's earlier 20-cell sweep took 0.702440 seconds; the root agent's subsequent integration re-run updated the JSON to 0.680830 seconds. The reviewer did a read-only check of the updated 20-cell summary, the 88/114 for r=6/N=20, and the source/budget hashes; the conclusions are unchanged. The reviewer did not run the result-writing sweep main program again, nor repeat the root agent's full set of 49 tests. All timings are local CPU records; peak memory was not measured, so no claim is made that the RAM budget passed a measurement. Passing tests supports these finite inputs and implementation boundaries; it is not a machine proof for all inputs.
 
-## 7. 被审快照与最终处置
+## 7. Reviewed snapshot and final disposition
 
-以下 SHA256 锁定本次完成复核时的主要文件，后续变化需另记；预算、来源说明和结果报告也已阅读，但表内只列核心计算与来源证据文件。
+The SHA256 values below pin the main files at the time this review was completed; later changes need a separate record. The budget, source notes and results report were also read, but the table lists only the core computation and source-evidence files.
 
-| 文件 | SHA256 |
+| File | SHA256 |
 |---|---|
 | theory/impact_audit.md | `9ec371e5727d0cd8b9bbae088047c75cee93800ff6ae13e8b0eae515b19c79ec` |
 | planning/threshold_design.py | `2eddf0a0d29621ecafedbdb23d31aebfe141f6fa63a2a4bb3a1a144ca508e8f1` |
@@ -114,4 +114,4 @@ SEntFiN 的用途判断来自另读的本地来源/批准说明，不是本检�
 | data/source_audit.json | `d8649cddcded9d5153bf0e71abde59b4209e22d1a6f0005181da6b06ad5d358d` |
 | data/source_audit.md | `c056e06d8d8ada569d52ce124736e58cf83bcb5b0ad6bb4b1d367f62f7931a53` |
 
-**处置：本轮识别的代码/说明缺陷已修复并复查；小规模数学实现可保留。** 全族 20% 投入门未通过，真实历史版本、任务效用、人工审计可靠性和先例差异仍开放。后续可以研究哪类结构稳定产生收益及需要什么真实来源证据；不能将本次检查标成 G0/G1、完整历史证书或投稿级创新已完成。
+**Disposition: the code/description defects identified in this round have been fixed and re-checked; the small-scale mathematical implementation can be kept.** The family-wide 20% investment gate was not passed, and real historical versions, task utility, reliability of manual audits, and differences from prior work remain open. Follow-up work can study which structures reliably produce gains and what real source evidence is needed; this check must not be marked as G0/G1, a complete historical certificate, or a submission-level innovation being complete.

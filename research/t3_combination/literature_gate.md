@@ -1,46 +1,46 @@
-# T3 文献门：允许进入小实验，不能宣称首创
+# T3 literature gate: allowed into a small experiment, cannot claim to be first
 
-2026-11-16（America/New_York）。已阅读用户指定的《构建可认证金融语言模型研究计划》对话，从最初证书方向至最后绝对评分复现，并核对仓库任务固定版本 8b89b7d。当前任务沿用最新的“不训练、不用付费API、先查重、一天筛选”要求；此前可认证模型路线不作为本题必须完成的内容。
+2026-11-16 (America/New_York). The conversation "Research plan for building a certifiable financial language model" specified by the user has been read, from the initial certificate direction to the final absolute-scoring replication, and the repository's pinned task version 8b89b7d has been checked. The current task keeps the latest requirements "no training, no paid APIs, check prior art first, one-day screening"; the earlier certifiable-model route is not something this topic must complete.
 
 ## Charter
 
-目标：判断 T3 是否已被同问题、同测量的原始研究覆盖；覆盖则停止，否则仅开展规定规模的行为筛查。范围 / 对象 / 单位：金融LLM情绪判断 / 同一实体两条信息的组合 / 单条标定分、组合分、中性添加与顺序反转。类型为探索性，任务设计已理解，文献覆盖需外部核验。Q1已有相同组合函数测量吗？Q2中性稀释的先例是什么？Q3负面权重与顺序效应是否新？Q4剩余实证能回答什么？
+Goal: judge whether T3 is already covered by primary research on the same question with the same measurement; if covered, stop, otherwise only carry out a behavioural screen of the specified size. Scope / object / unit: financial LLM sentiment judgement / the combination of two pieces of information about the same entity / single-item calibration score, combination score, neutral addition and order reversal. The type is exploratory; the task design is understood, and literature coverage needs external verification. Q1 Has the same combination function already been measured? Q2 What is the precedent for neutral dilution? Q3 Are negative weighting and order effects new? Q4 What can the remaining empirical work answer?
 
 ## Canonical sources
 
-优先原始论文正文及附录，其次作者代码与机构文档；搜索摘要只定位来源。两份分支笔记记录具体检索词和逐篇边界：[信息整合](literature_integration.md)、[金融情绪](literature_sentiment.md)。另有直接数学分析 [design_notes.md](design_notes.md)，它不能替代查重。
+Primary paper full texts and appendices come first, then author code and institutional documents; search snippets are used only to locate sources. Two branch notes record the specific queries and the boundaries paper by paper: [information integration](literature_integration.md), [financial sentiment](literature_sentiment.md). There is also a direct mathematical analysis, [design_notes.md](design_notes.md), which cannot replace the prior-art check.
 
 ## Findings ledger
 
-| 编号 | 已核验主张 | 原始证据 | 对应问题 |
+| No. | Verified claim | Primary evidence | Question |
 |---|---|---|---|
-| F1 | 相加/平均、温和信息降低极端性及带初始意见的平均，均是既有理论与实验范式。 | Anderson (1971), [pp.181–182](https://fsnagle.org/files/anderson1971integration.pdf)，原始理论，等级1 | Q1/Q4 |
-| F2 | 已有正负特征倒序、分别独立数值评分的LLM实验；顺序效应本身不新。 | Hämäläinen (2025), [§3–5、Tables 4/6](https://aclanthology.org/2025.nlp4dh-1.18.pdf)，200组描述、1–5分，等级1 | Q3 |
-| F3 | 金融新闻已有纳入中性句的稀释指标，但合成规则由研究者显式指定，不能当作生成式模型自发平均的证据。 | Mavillonio et al., ECB WP3283 (2026), [§3.2、Appendix A、Table A.1](https://www.ecb.europa.eu/pub/pdf/scpwps/ecb.wp3283~df0633dfd3.de.pdf?495f4d0ec675f3cbda625976eb20dff3=)，等级1 | Q2/Q4 |
-| F4 | 负面内容优先保留、金融交易锚定、跨项目评价历史的负面不对称已有研究，但结果变量不是T3的组合情绪分。 | 信息整合笔记I4/I5与情绪笔记S2中所列原始全文，等级1 | Q3/Q4 |
-| F5 | 对立子句情绪组合已有经典实验；连接词语义会改变其解释。 | Socher et al. (2013), [§5.3、Fig.7](https://aclanthology.org/D13-1170.pdf)，等级1 | Q1/Q4 |
-| F6 | FLUKE比较词法/句法/话语等小修改后的分类稳健性；其情绪任务为SST-2正负二分类，不是从单条数值分估计成对合成函数。 | Otmakhova et al., [§2、Appendix A.8](https://arxiv.org/html/2504.17311v3)，等级1 | Q1/Q4 |
+| F1 | Addition/averaging, moderate information reducing extremity, and averaging with an initial opinion are all existing theory and experimental paradigms. | Anderson (1971), [pp.181–182](https://fsnagle.org/files/anderson1971integration.pdf), original theory, level 1 | Q1/Q4 |
+| F2 | There are already LLM experiments that reverse the order of positive and negative features and score each independently on a numeric scale; order effects themselves are not new. | Hämäläinen (2025), [§3–5, Tables 4/6](https://aclanthology.org/2025.nlp4dh-1.18.pdf), 200 sets of descriptions, 1–5 points, level 1 | Q3 |
+| F3 | Financial news already has a dilution measure that includes neutral sentences, but the combination rule is specified explicitly by the researchers and cannot be used as evidence that a generative model averages spontaneously. | Mavillonio et al., ECB WP3283 (2026), [§3.2, Appendix A, Table A.1](https://www.ecb.europa.eu/pub/pdf/scpwps/ecb.wp3283~df0633dfd3.de.pdf?495f4d0ec675f3cbda625976eb20dff3=), level 1 | Q2/Q4 |
+| F4 | Preferential retention of negative content, anchoring in financial trading, and negative asymmetry in cross-item evaluation history have been studied, but the outcome variable is not T3's combined sentiment score. | Original full texts listed in I4/I5 of the information-integration note and S2 of the sentiment note, level 1 | Q3/Q4 |
+| F5 | Sentiment composition of contrasting clauses has classic experiments; the semantics of the connective changes the interpretation. | Socher et al. (2013), [§5.3, Fig.7](https://aclanthology.org/D13-1170.pdf), level 1 | Q1/Q4 |
+| F6 | FLUKE compares classification robustness after small lexical/syntactic/discourse modifications; its sentiment task is SST-2 positive/negative binary classification, not estimating a pairwise combination function from single-item numeric scores. | Otmakhova et al., [§2, Appendix A.8](https://arxiv.org/html/2504.17311v3), level 1 | Q1/Q4 |
 
-F1–F3和F6由主代理核读原文关键段落；F4–F5由独立检索分支核读并保留出处。没有复跑任何文献实验。
+The main agent checked the key passages of the originals for F1–F3 and F6; F4–F5 were checked by an independent search branch, with sources kept. No experiments from the literature were re-run.
 
 ## Scope filter
 
-排除意识领域的 integrated information theory、长上下文注意力稀释、模型权重平均、版权稀释等同名结果。人类心理实验只提供已有理论及实验范式，不直接证明LLM具有相同机制。
+Exclude same-name results such as integrated information theory in consciousness research, attention dilution in long contexts, model weight averaging and copyright dilution. Human psychology experiments only provide existing theory and experimental paradigms; they do not directly prove that LLMs have the same mechanism.
 
 ## Object filter
 
-区分标题内部的组合、同批其他标题、前序对话、摘要保留及人工聚合。F2覆盖T3的顺序分支；F3覆盖平均含中性的数学性质。两者均未覆盖“独立单条基准预测模型直接读取双条标题的分数”这个核心测量。F1也说明简单二项平均只是受限基准，不能由其失败否决全部平均理论。
+Distinguish combination within a headline, other headlines in the same batch, preceding conversation, summary retention and human aggregation. F2 covers T3's order branch; F3 covers the mathematical properties of averaging with neutral items. Neither covers the core measurement "predicting, from independent single-item baselines, the score the model gives when it reads a two-item headline directly". F1 also shows that a simple two-item average is only a restricted baseline, and its failure cannot be used to reject all averaging theories.
 
 ## Conclusions
 
-**文献门：继续规定规模的小实验。** 在已核读来源中未确认“同一核心问题和同一测量”的重复；不能据此证明首创。（F1–F6）继续的理由是尚有一个明确可测的增量，而不是已有顺序/负面偏差突然变成新发现。
+**Literature gate: continue with the small experiment of the specified size.** Among the sources checked, no duplicate of "the same core question and the same measurement" was confirmed; this cannot be used to prove that we are first. (F1–F6) The reason to continue is that there is still one clearly measurable increment, not that existing order/negativity biases have suddenly become a new finding.
 
-可检验增量限于：固定模型、提示和合成金融标题的输出组合规律；重点是中性添加是否自发改变有方向事实的得分、受限公式有多大预测误差。λ显著或顺序效应显著，都不足以单独保证论文贡献。（F2–F5）
+The testable increment is limited to: the output combination rule of a fixed model, prompt and synthetic financial headlines; the focus is whether neutral addition spontaneously changes the score of a directional fact, and how large the prediction error of the restricted formulas is. A significant λ or a significant order effect alone is not enough to guarantee a paper contribution. (F2–F5)
 
-即使平均拟合优于相加，也不能据此断言内部采用心理平均机制或已发现可获利的公告操纵漏洞。量表非线性、事实语境互动和其他整合模型仍是竞争解释。（F1/F3/F5）
+Even if averaging fits better than addition, one cannot assert from this that a psychological averaging mechanism is used internally or that a profitable announcement-manipulation loophole has been found. Nonlinearity of the scale, contextual interaction between facts and other integration models remain competing explanations. (F1/F3/F5)
 
 ## Next steps / Risks
 
-按 [protocol.md](protocol.md) 完成3360分、88次新会话的固定小实验；主判定与图由原始分数复算。文献门决定先于新评分，不以出现的效应修改新颖性标准。
+Complete the fixed small experiment of 3360 scores and 88 fresh sessions per [protocol.md](protocol.md); the main decision and figure are recomputed from the raw scores. The literature-gate decision precedes the new scoring, and the novelty standard is not modified in light of the effects that appear.
 
-本次是多路定向查重，检索截至2026-11-16；并未声称耗时半天或穷尽全部数据库。COLM印象形成论文全文验证受阻，Algorithmic Hesitation仅有作者发布线索，审计稀释研究的PDF超时；它们不作为已核验重复或无重复的依据。搜索引擎日期有错误时以原文封面为准。后续若取得真正覆盖核心测量的原文，应撤回新颖性定位并停止扩展。
+This was a multi-branch targeted prior-art check, with searches up to 2026-11-16; there is no claim of having spent half a day or of exhausting all databases. Full-text verification of the COLM impression-formation paper was blocked, Algorithmic Hesitation has only an author-release lead, and the PDF of the audit-dilution study timed out; none of these is used as a basis for a verified duplicate or for the absence of one. Where a search engine's date is wrong, the cover of the original is used. If an original that truly covers the core measurement is obtained later, the novelty positioning should be withdrawn and expansion stopped.

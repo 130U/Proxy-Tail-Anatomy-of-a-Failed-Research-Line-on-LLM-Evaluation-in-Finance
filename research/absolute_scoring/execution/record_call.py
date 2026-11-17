@@ -19,7 +19,7 @@ def update_progress():
     main=sum(SCHEDULE[c]['kind']=='main' for c in completed)
     control=len(completed)-main
     remaining=[c for c in SCHEDULE if c not in completed]
-    (OUT/'progress.md').write_text(f'# 绝对评分运行进度\n\n更新时间（UTC）：{now()}\n\n已保存并验证 {len(completed)}/250 次调用；主实验 {main}/200，对照 {control}/50。\n已保存 {40*len(completed)} 个 ID 分数（重复不是新增独立标题）。\n下一待执行调用：{remaining[0] if remaining else "无，评分完成"}。\n\n本页仅报告执行进度，不提前判定研究结论。\n',encoding='utf-8')
+    (OUT/'progress.md').write_text(f'# Absolute-scoring run progress\n\nUpdated (UTC): {now()}\n\nSaved and validated {len(completed)}/250 calls; main experiment {main}/200, controls {control}/50.\nSaved {40*len(completed)} ID scores (repeats are not new independent headlines).\nNext call to run: {remaining[0] if remaining else "none, scoring complete"}.\n\nThis page reports only execution progress and does not judge the research conclusion in advance.\n',encoding='utf-8')
     return {'completed':len(completed),'main':main,'control':control,'next':remaining[:3]}
 action=sys.argv[1]
 if action=='start':

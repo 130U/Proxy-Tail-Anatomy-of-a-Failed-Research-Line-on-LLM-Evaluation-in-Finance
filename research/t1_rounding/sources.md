@@ -1,45 +1,45 @@
-# T1 输入来源与可解析性
+# T1 input sources and parseability
 
-核查日期：2026-11-16（America/New_York）。本文件仅记录数据准备与结构检查；此阶段未执行答案区间、越界率或继续／放弃的假设测量。
+Check date: 2026-11-16 (America/New_York). This file only records data preparation and structural checks; at this stage no hypothesis measurement of answer intervals, out-of-tolerance rates or continue/abandon was run.
 
-## 固定输入
+## Pinned inputs
 
-| 数据 | 固定上游版本 | 本地位置 | 实际读取条数 |
+| Data | Pinned upstream version | Local location | Records actually read |
 |---|---|---|---:|
 | FinQA train | `0f16e2867befa6840783e58be38c9efb9229d742` | `data/finqa/train.json` | 6,251 |
-| FinQA dev | 同上 | `data/finqa/dev.json` | 883 |
-| FinQA public test | 同上 | `data/finqa/test.json` | 1,147 |
-| TAT-QA dev | `870accc41953dcde885aabeb963d94aabdc0fbc3` | `data/tatqa/dev.json` | 278 文档组、1,668 问 |
+| FinQA dev | Same as above | `data/finqa/dev.json` | 883 |
+| FinQA public test | Same as above | `data/finqa/test.json` | 1,147 |
+| TAT-QA dev | `870accc41953dcde885aabeb963d94aabdc0fbc3` | `data/tatqa/dev.json` | 278 document groups, 1,668 questions |
 
-FinQA 合计 8,281 问；没有下载不提供 gold program 的 private test。以上数量来自对下载文件的 JSON 结构读取，不是研究结果。固定版本分别由官方 [FinQA commit](https://github.com/czyssrs/FinQA/commit/0f16e2867befa6840783e58be38c9efb9229d742) 和 [TAT-QA commit](https://github.com/NExTplusplus/TAT-QA/commit/870accc41953dcde885aabeb963d94aabdc0fbc3) 确认。
+FinQA has 8,281 questions in total; the private test, which does not provide gold programs, was not downloaded. The counts above come from reading the JSON structure of the downloaded files; they are not research results. The pinned versions are confirmed by the official [FinQA commit](https://github.com/czyssrs/FinQA/commit/0f16e2867befa6840783e58be38c9efb9229d742) and [TAT-QA commit](https://github.com/NExTplusplus/TAT-QA/commit/870accc41953dcde885aabeb963d94aabdc0fbc3), respectively.
 
-两者官方仓库根目录均提供 MIT License：FinQA 为 Copyright (c) 2021 Zhiyu Chen；TAT-QA 为 Copyright (c) 2021 Fengbin Zhu。原文已随下载保存在各数据目录的 `LICENSE`，对应 [FinQA LICENSE](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/LICENSE)、[TAT-QA LICENSE](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/LICENSE)。本交付提交下载器及派生分析，原始下载文件由本目录 `.gitignore` 排除。
+The root of both official repositories provides an MIT License: FinQA is Copyright (c) 2021 Zhiyu Chen; TAT-QA is Copyright (c) 2021 Fengbin Zhu. The original license texts were saved with the downloads as `LICENSE` in each data directory, corresponding to [FinQA LICENSE](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/LICENSE) and [TAT-QA LICENSE](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/LICENSE). This deliverable commits the downloader and the derived analyses; the raw downloaded files are excluded by this directory's `.gitignore`.
 
-在仓库根目录执行 `python research/t1_rounding/download_inputs.py` 可重新取得上述固定版本及官方评测源文件。下载器只用 Python 标准库，先完整下载、校验 JSON 可读取再写盘；已存在文件跳过。没有模型调用或付费 API。FinQA 文件较大，使用官方 raw 固定提交地址下载；首次 TAT-QA 连接中断后重新下载成功，没有保留不完整文件。
+Running `python research/t1_rounding/download_inputs.py` from the repository root re-fetches the pinned versions above and the official evaluation source files. The downloader uses only the Python standard library; it downloads each file completely and checks that the JSON is readable before writing to disk; existing files are skipped. No model calls or paid APIs. The FinQA files are large and are downloaded from the official raw pinned-commit URLs; the first TAT-QA connection was interrupted, the re-download succeeded, and no incomplete file was kept.
 
-## FinQA：可以做，但数字必须绑定到来源
+## FinQA: feasible, but numbers must be bound to their sources
 
-每条记录含 `pre_text`、`post_text`、`table_ori`、`table`、`filename`、`id` 和 `qa`。`qa` 含 `question`、`answer`、`program`、`program_re`、`steps`、`gold_inds`、`ann_table_rows`、`ann_text_rows`、`exe_ans`。另有检索结果，不能当作新的源披露。[官方数据](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset)
+Each record contains `pre_text`, `post_text`, `table_ori`, `table`, `filename`, `id` and `qa`. `qa` contains `question`, `answer`, `program`, `program_re`, `steps`, `gold_inds`, `ann_table_rows`, `ann_text_rows`, `exe_ans`. There are also retrieval results, which cannot be treated as new source disclosures. [Official data](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset)
 
-- `qa.answer` 在三个 split 中全为字符串，能保留人工答案的 `127.40`、`93.5%` 等格式；`qa.exe_ans` 多为 float，少量为 `yes` / `no`。人工答案格式与执行尺度须分别处理。
-- `table_ori` 保留原始表格字符串，包括逗号、括号负数、HTML、`5.0` 等末尾零；`table` 是预处理表示。`pre_text` / `post_text` 已经是提取和预处理后的文本，并非原 PDF 的逐字排版。因此此数据准备支持的是“基准提供的文档表示中显示的精度”，不能保证恢复原始 PDF 的全部版面、末尾零或全文信息。
-- `gold_inds` 和 `ann_table_rows` 标出支持行，但没有为每个 program operand 提供唯一 cell 坐标。同一数值在不同年份、行、列多次出现时，不能仅凭值相等断言是同一变量，也不能把同一来源的多次引用视为独立扰动。
-- `const_*` 是 DSL 编码，不能一概解释为数学上精确的常量。下面第一例 `const_5` 实际代表报告显示的 `5.0`。相反，比例换算 `const_100`、求平均的计数常量等应保持精确，须按用途分类。
-- 不应利用 `steps[*].res` 的显示小数位重建中间误差：官方执行器不在每一步舍入，只在最终结果处调用 `round(this_res, 5)`。`steps` 的人工中间答案与程序执行是不同层次。
+- `qa.answer` is a string in all three splits, which preserves human-answer formats such as `127.40` and `93.5%`; `qa.exe_ans` is mostly a float, with a few `yes` / `no`. The human answer format and the execution scale must be handled separately.
+- `table_ori` keeps the original table strings, including commas, parenthesized negatives, HTML, and trailing zeros such as `5.0`; `table` is a preprocessed representation. `pre_text` / `post_text` are already extracted and preprocessed text, not the verbatim layout of the original PDF. So this data preparation supports "the precision displayed in the document representation provided by the benchmark"; it cannot guarantee recovery of the full layout, trailing zeros or full-text information of the original PDF.
+- `gold_inds` and `ann_table_rows` mark supporting rows, but do not give a unique cell coordinate for each program operand. When the same value occurs several times in different years, rows or columns, one cannot assert from equal values alone that they are the same variable, nor treat multiple references to the same source as independent perturbations.
+- `const_*` is a DSL encoding and cannot always be interpreted as a mathematically exact constant. In the first example below, `const_5` actually stands for the reported displayed value `5.0`. Conversely, ratio conversions such as `const_100` and count constants for averaging should remain exact; they must be classified by use.
+- The displayed decimals of `steps[*].res` should not be used to reconstruct intermediate errors: the official executor does not round at each step, and calls `round(this_res, 5)` only on the final result. The human intermediate answers in `steps` and program execution are different layers.
 
-### 具体陷阱
+### Concrete pitfalls
 
-1. **数据编码常量不等于精确数学常量。** `V/2008/page_17.pdf-1` 问 American Express 每笔交易平均支付量。程序 `divide(637, const_5)`；`table_ori` 对应行中 Payments Volume 为 `637`（billions）、Total Transactions 为 `5.0`（billions），人工答案为 `127.40`，执行答案为 `127.4`。若把 `const_5` 固定不动，会漏掉输入分母的舍入不确定性。[dev 数据](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/dataset/dev.json)
-2. **百分数程序尺度不统一。** `C/2017/page_328.pdf-1` 的答案 `93.5%` 对应 `subtract(193.5, const_100), divide(#0, const_100)`，执行答案为 `0.935`。`DVN/2007/page_58.pdf-2` 的答案 `24.69%` 对应 `divide(60, 243), multiply(#0, const_100)`，执行答案为 `24.69136`。不能对所有含 `%` 的人工答案统一除以 100 后直接和执行结果比较。[dev 数据](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/dataset/dev.json)
-3. **预处理伪数字。** `DVN/2007/page_58.pdf-2` 中 International 的 NGLs 原单元格为 em dash `—`，`table` 把它编码成 `2014`。年份、脚注、缺失符号和 HTML 编码必须排除出可扰动财务量。[dev 数据](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/dataset/dev.json)
-4. **括号和表操作。** `AES/2016/page_191.pdf-3` 使用 `table_average(settlements, none)`；预处理行是 `-13 ( 13 )`、`-19 ( 19 )`、`-2 ( 2 )`。官方 `process_row` 去掉 `$` 并截去 `(` 及之后部分，得到负数。应在与官方中心值对齐后，用 `table_ori` 的原显示位数建区间，而不是把括号里的数当成额外独立输入。[dev 数据及官方执行器](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/code/evaluate/evaluate.py)
+1. **A data-encoded constant is not an exact mathematical constant.** `V/2008/page_17.pdf-1` asks for American Express's average payment volume per transaction. The program is `divide(637, const_5)`; in the corresponding row of `table_ori`, Payments Volume is `637` (billions) and Total Transactions is `5.0` (billions); the human answer is `127.40` and the executed answer is `127.4`. Holding `const_5` fixed would miss the rounding uncertainty of the input denominator. [dev data](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/dataset/dev.json)
+2. **Percentage programs do not use a uniform scale.** In `C/2017/page_328.pdf-1`, the answer `93.5%` corresponds to `subtract(193.5, const_100), divide(#0, const_100)`, with executed answer `0.935`. In `DVN/2007/page_58.pdf-2`, the answer `24.69%` corresponds to `divide(60, 243), multiply(#0, const_100)`, with executed answer `24.69136`. One cannot uniformly divide every human answer containing `%` by 100 and compare it directly with the execution result. [dev data](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/dataset/dev.json)
+3. **Preprocessing pseudo-numbers.** In `DVN/2007/page_58.pdf-2`, the original cell for International NGLs is an em dash `—`, which `table` encodes as `2014`. Years, footnotes, missing-value symbols and HTML encodings must be excluded from perturbable financial quantities. [dev data](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/dataset/dev.json)
+4. **Parentheses and table operations.** `AES/2016/page_191.pdf-3` uses `table_average(settlements, none)`; the preprocessed rows are `-13 ( 13 )`, `-19 ( 19 )`, `-2 ( 2 )`. The official `process_row` strips `$` and truncates `(` and everything after it, giving negative numbers. After aligning with the official center value, intervals should be built from the original displayed digits in `table_ori`, rather than treating the numbers in parentheses as additional independent inputs. [dev data and official executor](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/code/evaluate/evaluate.py)
 
-官方 DSL 支持 `add`、`subtract`、`multiply`、`divide`、`exp`、`greater` 以及 `table_max`、`table_min`、`table_sum`、`table_average`。`#k` 引用前面第 k 步；table 操作第一个参数是行名，第二个通常为 `none`。最终执行值保留五位小数后，直接与 `qa.exe_ans` 判等，**不是 1% 相对容差，也不是按 `qa.answer` 小数位舍入**。T1 的两套判分规则应命名为额外审计口径。[官方 evaluate.py](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/code/evaluate/evaluate.py)
+The official DSL supports `add`, `subtract`, `multiply`, `divide`, `exp`, `greater` and `table_max`, `table_min`, `table_sum`, `table_average`. `#k` refers to the earlier step k; the first argument of a table operation is the row name, and the second is usually `none`. The final executed value is rounded to five decimals and compared for equality directly with `qa.exe_ans`; **it is not a 1% relative tolerance, nor rounding to the decimals of `qa.answer`**. T1's two scoring rule sets should be named additional audit conventions. [Official evaluate.py](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/code/evaluate/evaluate.py)
 
-## TAT-QA：可选扩展的实际成本
+## TAT-QA: the actual cost of the optional extension
 
-开发集共 1,668 问，其中 `answer_type=arithmetic` 718 问，`span` 701，`multi-span` 217，`count` 32。每个文档组含 `table`、`paragraphs`、`questions`；题目有 `derivation`、`scale`、`rel_paragraphs` 等字段。算术题的 `derivation` 是中缀表达式，例如 `44.1-56.7`，并非 FinQA 的 DSL。[固定开发集](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw/tatqa_dataset_dev.json)
+The dev set has 1,668 questions: `answer_type=arithmetic` 718, `span` 701, `multi-span` 217, `count` 32. Each document group contains `table`, `paragraphs`, `questions`; questions have fields such as `derivation`, `scale` and `rel_paragraphs`. The `derivation` of an arithmetic question is an infix expression, for example `44.1-56.7`, not FinQA's DSL. [Pinned dev set](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw/tatqa_dataset_dev.json)
 
-具体例：`eb787966-fa02-401f-bfaf-ccabf3828b23` 问 Other 在 2019 相比 2018 的变化，`derivation=44.1-56.7`，`answer=-12.6`，`scale=million`；来源表格保留字符串 `44.1` 和 `56.7`。但算术答案通常是 JSON float/int，不能由 Python `str(float)` 可靠恢复作者原先希望显示的末尾零。若做 TAT-QA 扩展，需要独立安全中缀解析器、scale 规范化、来源绑定，并将“gold 显示位数”无法恢复的题单列，不能伪造精度。
+A concrete example: `eb787966-fa02-401f-bfaf-ccabf3828b23` asks for the change in Other in 2019 compared with 2018, with `derivation=44.1-56.7`, `answer=-12.6`, `scale=million`; the source table keeps the strings `44.1` and `56.7`. But arithmetic answers are usually JSON floats/ints, and Python `str(float)` cannot reliably recover the trailing zeros the authors originally intended to display. A TAT-QA extension would need a separate safe infix parser, scale normalization and source binding, and questions whose "gold displayed digits" cannot be recovered would have to be listed separately; precision must not be fabricated.
 
-官方 TAT-QA metric 与数值处理代码也已本地保存，以便分析时核对，不应假设其评分和 FinQA 一致：[tatqa_metric.py](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/tatqa_metric.py)、[tatqa_utils.py](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/tatqa_utils.py)。
+The official TAT-QA metric and number-handling code are also saved locally for checking during analysis; one should not assume that its scoring matches FinQA's: [tatqa_metric.py](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/tatqa_metric.py), [tatqa_utils.py](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/tatqa_utils.py).

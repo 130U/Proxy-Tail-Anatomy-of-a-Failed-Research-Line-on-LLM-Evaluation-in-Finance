@@ -1,114 +1,114 @@
-# T1e：把样本上的结论做到整个测试集
+# T1e: Extend the sample conclusions to the whole test set
 
-分支 `task/t1e`，目录 `research/t1e_full_test/`。只读前面各轮的结果，不改它们的文件。不训练模型，不调用付费 API。
+Branch `task/t1e`, directory `research/t1e_full_test/`. Only read the results of earlier rounds; do not change their files. Do not train models and do not call paid APIs.
 
-## 为什么做这一轮
+## Why this round
 
-导师用 T1d 的逐题表复算时，看到一件比"模型知道精度"更重要的事：
+When the advisor recomputed from T1d's per-question table, they saw something more important than "the model knows the precision":
 
-- 四次运行（两个已知模型、三种提示）的官方准确率都在 81%–83%。
-- 被判错的几乎是同一批题：392 道里，63 道在四次运行中全部被判错，316 道从未被判错，只有 13 道结果不一致。
-- 这 68 个判错，两次独立复核一致认为 32 个是参考答案有问题、23 个是合理的口径差异，没有一个被判成明确的模型错误。
-- 不需要任何判断的机械检查：FinQA 自己的两个标准字段（人工写的 `answer` 和程序执行值 `exe_ans`）在测试集里有 6.2% 互相矛盾。
+- The official accuracy of all four runs (two known models, three prompts) is between 81% and 83%.
+- The questions marked wrong are almost the same set: of 392 questions, 63 were marked wrong in all four runs, 316 were never marked wrong, and only 13 had inconsistent results.
+- Of these 68 rejections, two independent reviews agreed that 32 are reference errors and 23 are defensible alternative conventions; none was judged a definite model error.
+- A mechanical check that needs no judgment: FinQA's own two gold fields (the human-written `answer` and the program-executed value `exe_ans`) contradict each other in 6.2% of the test set.
 
-也就是说，模型在这个基准上已经到顶，剩下的"错误"是基准自己的。短文的初稿已经按这个写了（`paper/finqa_short_v0.md`）。
+In other words, models have reached the ceiling on this benchmark, and the remaining "errors" belong to the benchmark itself. The first draft of the short paper has already been written on this basis (`paper/finqa_short_v0.md`).
 
-问题在于：这些数来自 392 道分层抽出的题，不是整个测试集。这一轮把它们做到全部 1,147 道。下面四个部分互相独立，可以同时做。
+The problem is that these numbers come from 392 questions drawn by stratification, not from the whole test set. This round extends them to all 1,147 questions. The four parts below do not depend on each other and can be done at the same time.
 
 ---
 
-## 第一部分：其余 755 道题（需要 agent）
+## Part one: the remaining 755 questions (needs agents)
 
-1. 测试集里不在那 392 道之内的 755 道题，用 T1d 的**提示 B 原文**，逐字不改。
-2. 两个模型各做一遍：`gpt-6-astra` 和 `gpt-6.1-sol`。每题全新会话，规则同 T1d。
-3. 打分沿用 T1d：算式交给官方执行器，按官方规则判对错；精度指标照旧算。
-4. 与 T1d 的条件 B、B′ 合并，得到两个模型在全部 1,147 道上的结果。
+1. For the 755 test questions not among those 392, use T1d's **prompt B verbatim**, without changing a word.
+2. Two models each do one pass: `gpt-6-astra` and `gpt-6.1-sol`. A fresh session for each question; rules as in T1d.
+3. Scoring follows T1d: the expression goes to the official executor and is marked right or wrong by the official rule; the precision metrics are computed as before.
+4. Merge with T1d's conditions B and B′ to get both models' results on all 1,147 questions.
 
-报告：
+Report:
 
-- 两个模型在全部 1,147 道上的官方准确率，带区间。
-- 两个模型判错集合的重合：都错、只有一个错、都对的题数；Jaccard。
-- 全部测试集上的精度指标（T1d 一页结论里那张表，条件 B 和 B′ 两列）。
+- The official accuracy of both models on all 1,147 questions, with intervals.
+- The overlap of the two models' rejected sets: the number of questions both get wrong, only one gets wrong, and both get right; Jaccard.
+- The precision metrics on the whole test set (the table from T1d's one-page summary, with columns for conditions B and B′).
 
-## 第二部分：把所有判错都归因（需要 agent）
+## Part two: attribute every rejection (needs agents)
 
-1. 对象：第一部分里至少被一个模型判错的题；再加上 392 道里在 B、C、B′ 中被判错、但 T1c 没有归因过的 9 道。
-2. 做法同 T1d 第二部分：两个互相看不到的复核者，沿用 `REVIEW_RUBRIC.md`；不一致的交给第三个。
-3. 每个案例另外标一个**细类**，从下面的固定清单里选。已有的 68 个案例也由两个复核者按这份清单重新标一遍（导师的初步计数写在短文初稿第 4 节，请独立标完再对照）。
+1. Items: questions marked wrong for at least one model in part one; plus the 9 questions among the 392 that were marked wrong in B, C or B′ but were never attributed by T1c.
+2. Method as in part two of T1d: two reviewers who cannot see each other, using `REVIEW_RUBRIC.md`; disagreements go to a third.
+3. Each case is additionally given a **sub-type**, chosen from the fixed list below. The existing 68 cases are also relabelled by both reviewers with this list (the advisor's preliminary counts are in Section 4 of the short-paper draft; label everything independently first, then compare).
 
-| 大类 | 细类 |
+| Category | Sub-type |
 |---|---|
-| 参考答案有问题 | 程序里的运算错了或漏了；变化算反了方向或用错了基数；取错了行、年份或概念；漏了单位换算；其他 |
-| 合理的口径差异 | "下降"的正负号；分母或基数的选择；期间或措辞有歧义；绝对变化与百分比变化；其他 |
-| 明确的模型错误 | 取错数；算错；其他 |
-| 无法判定 | 问题残缺；文档信息不足；其他 |
+| Reference error | wrong or missing operation in the program; change computed in the wrong direction or on the wrong base; wrong row, year or concept; missing unit conversion; other |
+| Defensible alternative convention | sign of a "decrease"; choice of denominator or base; ambiguous period or wording; absolute versus percentage change; other |
+| Definite model error | wrong figure taken; arithmetic error; other |
+| Inconclusive | question truncated; document information insufficient; other |
 
-报告：
+Report:
 
-- 全部测试集上，官方判错的题按大类和细类的计数，分两个模型各一张表，再给"两个模型都错"的那部分单独一张。
-- 把"两次复核一致认定为基准一侧"的案例算作正确之后，两个模型的准确率各是多少。
-- 两次复核的一致率和 κ。
+- On the whole test set, counts of officially rejected questions by category and sub-type: one table for each model, plus a separate table for the part where "both models are wrong".
+- The accuracy of each model after counting as correct the cases that "both reviews agree lie on the benchmark side".
+- The agreement rate and κ of the two reviews.
 
-## 第三部分：两个标准字段是否互相矛盾（不需要 agent）
+## Part three: do the two gold fields contradict each other (no agents needed)
 
-对全部 8,281 道题，机械比较人工写的 `answer` 和程序执行值 `exe_ans`。不用任何模型判断。
+For all 8,281 questions, mechanically compare the human-written `answer` with the program-executed value `exe_ans`. Use no model judgment.
 
-规则：
+Rules:
 
-1. 把 `answer` 去掉 %、$、逗号后解析成数，记下它显示的小数位数。解析不了的单独计数。
-2. 下面任一条成立就算"一致"：把 `exe_ans` 四舍五入到 `answer` 的小数位后相等；或者两者相对误差不超过 1%。
-3. 把 `exe_ans` 乘以 100 或除以 100 后满足第 2 条，算"只差百分号"。
-4. 取相反数后满足第 2 或第 3 条，算"只差正负号"。
-5. 其余算"矛盾"。
+1. Strip %, $ and commas from `answer`, parse it as a number, and record the number of decimal places it shows. Count unparseable ones separately.
+2. Count as "consistent" if either holds: `exe_ans` rounded to the decimal places of `answer` is equal; or the relative error between the two is at most 1%.
+3. If `exe_ans` multiplied or divided by 100 satisfies rule 2, count it as "differs only by the percent sign".
+4. If the negation satisfies rule 2 or 3, count it as "differs only in sign".
+5. Count everything else as "contradiction".
 
-导师自己算的结果，请独立复现并核对：全部题目里可解析的 7,952 道，矛盾 508 道，只差正负号 79 道；测试集可解析的 1,101 道，矛盾 68 道，只差正负号 10 道。
+The advisor's own results, to be independently reproduced and checked: of all questions, 7,952 are parseable, with 508 contradictions and 79 differing only in sign; on the test set, 1,101 are parseable, with 68 contradictions and 10 differing only in sign.
 
-再报告两个数：
+Report two more numbers:
 
-- "矛盾"的题在第一部分里被判错的比例，与"一致"的题比较。
-- 模型的答案等于 `answer`、却不等于 `exe_ans` 的判错案例有多少。
+- The share of "contradiction" questions that are marked wrong in part one, compared with "consistent" questions.
+- How many rejection cases have the model's answer equal to `answer` but not to `exe_ans`.
 
-## 第四部分：换一个数据集检验舍入定律（不需要 agent）
+## Part four: test the rounding law on another dataset (no agents needed)
 
-短文现在只有 FinQA 一个基准。在 TAT-QA 的开发集上重做 T1 的精确区间审计。TAT-QA 的算术题带有推导式和量级（scale）。取不到就用 ConvFinQA 的开发集。
+The short paper currently has only one benchmark, FinQA. Redo T1's exact interval audit on the TAT-QA development set. TAT-QA's arithmetic questions come with derivations and a scale. If it cannot be obtained, use the ConvFinQA development set.
 
-报告：
+Report:
 
-- 可分析的题数，以及其中答案在 1% 容差内不被输入精度确定的比例，按运算类型分组。
-- T1a 的一阶规则与精确判定的一致率。
-- 用 T1a 的先验预测方法得到的预测值与实测值。
+- The number of analysable questions, and the share of them whose answer is not determined by the input precision within the 1% tolerance, grouped by operation type.
+- The agreement rate between T1a's first-order rule and the exact classification.
+- The predicted value from T1a's a priori prediction method, and the observed value.
 
-这一部分不设门槛，数字是多少就写多少。
+This part has no gate; whatever the numbers are, write them down.
 
 ---
 
-## 可选
+## Optional
 
-- **换一家的模型。** 如果能用到 OpenAI 以外的模型，用 T1c 的原始提示在那 392 道上做一遍，报告它的判错集合与"四次全错的 63 道"重合多少。做不到就写明。
-- **给 Theodore 的抽查表。** 从"参考答案有问题"和"合理的口径差异"里各随机抽 10 个案例，生成 `human_check_20.csv`：题号、问题、标准程序及其执行值、人工写的答案、模型的算式和答案、复核者的一句理由、一列空着的"同意 / 不同意"。投稿时审稿人会问有没有人工核对过，这张表就是为此准备的。
+- **Another provider's model.** If a model from outside OpenAI is available, run it on those 392 questions with T1c's original prompt, and report how much its rejected set overlaps with "the 63 wrong in all four runs". If that is not possible, say so.
+- **A spot-check sheet for Theodore.** Randomly draw 10 cases each from "reference error" and "defensible alternative convention" and generate `human_check_20.csv`: question ID, question, gold program and its executed value, the human-written answer, the model's expression and answer, the reviewer's one-sentence reason, and an empty "agree / disagree" column. At submission, reviewers will ask whether anyone checked by hand; this sheet is prepared for that.
 
-## 交付
+## Deliverables
 
-- 一页结论，开头填这张表：
+- A one-page summary, opening with this table filled in:
 
 | | gpt-6-astra | gpt-6.1-sol |
 |---|---:|---:|
-| 全部 1,147 道的官方准确率 | | |
-| 判错的题数 | | |
-| 其中两次复核一致认定为参考答案有问题 | | |
-| 其中两次复核一致认定为合理口径差异 | | |
-| 其中被认定为明确的模型错误 | | |
-| 把基准一侧的案例算作正确后的准确率 | | |
-| 两个模型都判错的题数 | | |
+| Official accuracy on all 1,147 questions | | |
+| Number of rejected questions | | |
+| Of which both reviews agree are reference errors | | |
+| Of which both reviews agree are defensible alternative conventions | | |
+| Of which judged definite model errors | | |
+| Accuracy after counting benchmark-side cases as correct | | |
+| Number of questions both models get wrong | | |
 
-  接着写：第三部分的四个数；第四部分的三个数。
-- `results.json`：以上全部数字和区间。
-- 逐题表（沿用 T1d 的 `per_response.csv` 列，另加细类）、全部原始回答、复核记录、代码。
+  Then write: the four numbers from part three; the three numbers from part four.
+- `results.json`: all the numbers and intervals above.
+- Per-question table (reusing the columns of T1d's `per_response.csv`, plus the sub-type), all raw answers, review records, code.
 
-不要清单、哈希表、打包脚本、对复核的复核。
+No checklists, hash tables, packaging scripts, or reviews of reviews.
 
-## 要注意
+## Watch out for
 
-- 提示 B 逐字沿用，不改。不根据答得对不对重试。
-- 复核者看不到题目被哪个模型判错、看不到另一个复核者的结论、看不到前几轮的结果。
-- 结果如果和 392 道样本上的结论不一样（比如整个测试集上判错集合的重合度低很多，或者出现了相当数量的明确模型错误），照实写。这种情况下短文的主结论要改，这本身是重要的结果。
+- Use prompt B verbatim, without changes. Do not retry based on whether an answer is right.
+- Reviewers cannot see which model got a question wrong, the other reviewer's conclusion, or the results of earlier rounds.
+- If the results differ from the conclusions on the 392-question sample (for example, the overlap of rejected sets is much lower on the whole test set, or a sizeable number of definite model errors appears), report it as it is. In that case the main conclusion of the short paper must change, and that is itself an important result.

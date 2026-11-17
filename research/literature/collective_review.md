@@ -1,38 +1,38 @@
-# 集体统计量检查器独立复核
+# Independent review of the collective-statistic checker
 
-日期：2026-11-15。只读审查 `research/certificates/collective.py`、测试、例子生成器、README、`research/theory/collective_metrics.md` 与已保存 JSON/报告；未联网、未训练、未修改被审查实现。
+Date: 2026-11-15. Read-only review of `research/certificates/collective.py`, its tests, the example generator, the README, `research/theory/collective_metrics.md` and the saved JSON/reports; no internet access, no training, and no modification of the implementation under review.
 
-**结论：在已声明的固定测试集、共同受影响头、任意头输出的外放松威胁模型及 K≥2 接口范围内，未发现影响所报告包络正确性的实质错误。审计包装器的两个统计量共享同一覆盖事件，条件式解释正确。此结论不验证真实语料、训练来源、污染数量或新颖性。**
+**Conclusion: within the declared fixed test set, jointly affected heads, the outer-relaxation threat model with arbitrary head outputs, and the K≥2 interface scope, no substantive error affecting the correctness of the reported envelopes was found. The two statistics of the audit wrapper share the same coverage event, and the conditional interpretation is correct. This conclusion does not verify real corpora, training sources, the amount of contamination or novelty.**
 
-## 数学与实现对应
+## Correspondence between mathematics and implementation
 
-| 检查对象 | 复核结论 |
+| Object checked | Review conclusion |
 |---|---|
-| 固定受影响集合 B 的可达类别 | 对类别 c，将 B 内全部票改为 c 同时最大化其得票并最小化对手得票，故 `u_c+|B| >= u_d+1{d<c}` 是必要充分条件；最小类编号的平局规则实现正确 |
-| 只枚举恰好 min(k,m) 个头 | 较大集合可以保留新增头原票，故覆盖“至多 k”集合的并集；不会遗漏较小预算的真实可能性 |
-| 集体 vs 逐点放松 | 实现保留相同列身份与同一个 B；逐点 `reachable` 允许不同点使用不同影响头，因此集体区间包含在相同计算方法的逐点包络内 |
-| Accuracy | 对固定 B，真标签是唯一可达标签的点给最坏正确数，真标签可达的点给最好正确数；任意跨点选择在该放松模型内允许，故精确 |
-| Macro-F1 分量界 | 固定支持数下 F1 对 TP 单调不减、对 FP 单调不增。每类端点安全，但不同类别未必同时达到；`component` 未错误标成宏平均精确极值 |
-| Macro-F1 DP | 状态为 TP 与预测计数；未来允许标签不依赖历史选择，合并相同计数不会丢失可达值。固定全部 K 类且空支持类贡献 0，与公式一致 |
-| 超预算处理 | 子集数量事前检查，DP 超状态预算立即抛异常；没有将部分搜索极值当完整区间。`exact` 可能因逐点放松状态过大而拒绝，即使某些集体子问题较小；这是计算限制，不是错误出证 |
-| 数值端点 | Fraction 精确计算并保留分数字符串；binary64 展示若向内舍入则 `nextafter` 向外修正，测试包括 1/5、11/15 等非二进制有理数 |
-| 审计包装 | 固定 n 的精确超几何上界作用于文档污染数，在稳定 ID/每文档最多影响一片/共享核心不变等明示假设下换算头预算。Accuracy 与 macro-F1 同时由同一 K_true≤K_upper 事件导出，无需为两者再次平分 α |
+| Reachable classes for a fixed affected set B | For a class c, changing all votes in B to c both maximizes its votes and minimizes its rivals' votes, so `u_c+|B| >= u_d+1{d<c}` is necessary and sufficient; the tie rule favouring the smallest class index is implemented correctly |
+| Enumerating only exactly min(k,m) heads | A larger set can keep the original votes of the added heads, so it covers the union of the "at most k" sets; no real possibility under a smaller budget is missed |
+| Collective vs pointwise relaxation | The implementation keeps the same column identities and the same B; pointwise `reachable` lets different points use different affected heads, so the collective interval is contained in the pointwise envelope computed by the same method |
+| Accuracy | For a fixed B, points whose true label is the only reachable label give the worst-case number correct, and points where the true label is reachable give the best-case number correct; any cross-point choice is allowed within this relaxed model, so the bound is exact |
+| Macro-F1 component bounds | With fixed support counts, F1 is non-decreasing in TP and non-increasing in FP. Each class's endpoints are safe, but different classes are not necessarily attained at the same time; `component` is not wrongly labelled as the exact extreme of the macro average |
+| Macro-F1 DP | The state is TP and the prediction counts; future admissible labels do not depend on past choices, so merging identical counts loses no reachable value. All K classes are fixed and classes with empty support contribute 0, consistent with the formula |
+| Handling of budget overruns | The number of subsets is checked in advance, and the DP raises an exception immediately when it exceeds the state budget; no partial-search extreme is treated as a complete interval. `exact` may refuse because the pointwise-relaxation state is too large, even when some collective subproblems are small; this is a computational limit, not a wrongly issued certificate |
+| Numeric endpoints | Fraction computes exactly and keeps fraction strings; if the binary64 display rounds inward, `nextafter` corrects it outward; the tests include non-binary rationals such as 1/5 and 11/15 |
+| Audit wrapper | An exact hypergeometric upper bound at fixed n acts on the number of contaminated documents, and is converted to a head budget under explicit assumptions such as stable IDs, each document affecting at most one partition, and an unchanged shared core. Accuracy and macro-F1 are both derived from the same event K_true≤K_upper, so α does not need to be split again between the two |
 
-## 实际独立检查
+## Independent checks actually carried out
 
-来源层级：**我们的实验，独立复核 collective**。Windows 本地 CPU，Python 3.12.14；命令使用 `-B`，不写字节码，无网络。
+Source level: **our experiment, independent review of collective**. Local Windows CPU, Python 3.12.14; commands use `-B`, no bytecode is written, no network.
 
-1. 重跑 `python -B -m unittest research.certificates.test_collective -v`：7 项全部通过，框架计时 0.346 秒。测试中的 oracle 直接枚举被改动的投票单元，与实现的计数 DP 不同。
-2. 用固定 seed 4781 扩展 112 个输入/预算组合：K∈{2,3,4}，J∈{2,3}，m∈{2,3}，随机真标签（允许缺失类别），预算从 0 到 m+1；比较 direct modified-vote-cell oracle。所有 exact 集体端点与 oracle 相等，component 均包住 oracle，所有浮点展示端点向外包住精确分数。
-3. 从已保存 `audit_example.json` 原样重算审计包装，除身份字段外与 `audit_certificate.json` 完全一致；输入 SHA256 与 checker SHA256 均匹配当前字节。构造输入 N=20、n=16、x=0、α=1/20 给 K_upper=1，同时得到 accuracy [1/4,3/4] 与 macro-F1 [1/5,11/15]。这是人工数学输入，不是实际审计发现。
-4. 逐项核对结果表：共同头约束严格收紧第一例；第二例 exact macro-F1 恒为 5/9，而分量包络 [4/9,2/3] 更宽。k=0 与 k≥m 边界遵循固定类别约定。
+1. Reran `python -B -m unittest research.certificates.test_collective -v`: all 7 tests pass, framework timing 0.346 seconds. The oracle in the tests directly enumerates the modified voting cells, which differs from the counting DP of the implementation.
+2. Extended to 112 input/budget combinations with fixed seed 4781: K∈{2,3,4}, J∈{2,3}, m∈{2,3}, random true labels (missing classes allowed), budgets from 0 to m+1; compared with a direct modified-vote-cell oracle. All exact collective endpoints equal the oracle, all component bounds contain the oracle, and all floating-point display endpoints contain the exact fractions from outside.
+3. Recomputed the audit wrapper from the saved `audit_example.json` as-is; apart from identity fields it is identical to `audit_certificate.json`; the input SHA256 and the checker SHA256 both match the current bytes. The constructed input N=20, n=16, x=0, α=1/20 gives K_upper=1, and at the same time accuracy [1/4,3/4] and macro-F1 [1/5,11/15]. This is a hand-made mathematical input, not a finding of an actual audit.
+4. Checked the results table item by item: the shared-head constraint strictly tightens the first example; in the second example the exact macro-F1 is always 5/9, while the component envelope [4/9,2/3] is wider. The boundaries k=0 and k≥m follow the fixed class convention.
 
-## 必须保留的限制
+## Limitations that must be kept
 
-- exact 只指明示的有限测试点、任意受影响头输出模型；同输入的一致性、实际训练可实现性、文档级可实现性均被放松。不能叫“真实重训的最紧证书”。
-- 原始文档修改若跨两个 ID/分片，或共享 tokenizer/骨干被污染，就不能直接用污染文档数作为头预算。相关前提未被检查器验证。
-- 固定 n、均匀无放回、正确审计与固定总体是统计前提；不是序贯置信序列，不认证总体泛化，也不能修复测试标签或样本选择问题。
-- 输入每列是同一头的类别预测，不能用 planning 的每类票数矩阵替换；README 和 CLI 的 `input_kind` 已明确这一点。
-- 理论允许讨论 K=1 的平凡情况，当前公开接口明确 K≥2 并拒绝 K=1。验收范围应写清此差异，不把代码描述为实现了理论的每个边界情形。
-- 单独 `checker_sha256` 只绑定 `collective.py`；重现还依赖 `local/audit.py` 等导入代码。交付应同时携带完整源码与包 manifest，不能将单文件哈希当依赖闭包身份。
-- 7 项测试和扩展 112 例是实现错误检查，普遍正确性依赖上述命题的证明。新增数学组件不会使 G0/G1 或真实数据终态自动通过。
+- exact refers only to the explicitly stated finite test points and the model with arbitrary outputs from affected heads; consistency on identical inputs, achievability by actual training and achievability at the document level are all relaxed. It cannot be called "the tightest certificate for real retraining".
+- If a modification of an original document spans two IDs/partitions, or a shared tokenizer/backbone is contaminated, the number of contaminated documents cannot be used directly as the head budget. The checker does not verify these premises.
+- Fixed n, uniform sampling without replacement, a correct audit and a fixed population are statistical premises; this is not a sequential confidence sequence, does not certify population generalization, and cannot fix problems with test labels or sample selection.
+- Each input column is the class predictions of one head; it cannot be replaced with the per-class vote-count matrix from planning; the `input_kind` in the README and CLI already makes this explicit.
+- The theory allows discussing the trivial case K=1; the current public interface explicitly requires K≥2 and rejects K=1. The acceptance scope should state this difference clearly and not describe the code as implementing every boundary case of the theory.
+- A single `checker_sha256` binds only `collective.py`; reproduction also depends on imported code such as `local/audit.py`. The deliverable should carry the complete source code together with the package manifest; a single-file hash cannot serve as the identity of the dependency closure.
+- The 7 tests and the 112 extended cases are checks for implementation errors; general correctness depends on the proofs of the propositions above. A new mathematical component does not make G0/G1 or the final state on real data pass automatically.

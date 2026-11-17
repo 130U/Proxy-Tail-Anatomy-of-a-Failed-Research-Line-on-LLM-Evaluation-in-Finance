@@ -1,44 +1,44 @@
-# WP0.3 数学健全性检查记录
+# WP0.3 mathematical soundness check record
 
-日期：2026-11-15（America/New_York）。本记录与 `theory/notes.md` 配套。
+Date: 2026-11-15 (America/New_York). This record goes with `theory/notes.md`.
 
-## 要检验的命题
+## Propositions checked
 
-T1.3–T1.4 的平局反例；T2.1 的规范反例；T2.2 的线性有序头结构常数、单调性与概率导数界；T2.3 的有理数单位变换；T3.1 在有限概率网格上的凸序、ES 与 VaR 反例。
+The tie counterexamples of T1.3–T1.4; the specification counterexamples of T2.1; the structural constants, monotonicity and probability-derivative bound of the linear ordered head in T2.2; the rational unit transformations of T2.3; the convex order, ES and VaR counterexamples of T3.1 on a finite probability grid.
 
-这是 Phase 0 证明辅助计算，不是 Phase 1 主线训练，不是金融模型性能实验。
+This is Phase 0 proof-support computation; it is not Phase 1 main-line training and not an experiment on financial model performance.
 
-## 预算（执行前）
+## Budget (before execution)
 
-- 硬件：CPU，单进程；显存 0；训练 token 0；无网络、无数据下载。
-- 预计时间：30 秒以内；预计内存：100 MB 以内。两项均为执行前估计，实际资源以结果文件为准。
-- 数据：构造的投票/概率向量；100,000 个固定 seed 数值点；3 个 Bernoulli 变量、分母为 12 的概率网格。
-- 软件：Python 标准库；不安装包。
-- 基线 commit：`8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`；检查源码哈希由执行器写入结果。
-- seeds：`20261115`。
+- Hardware: CPU, single process; 0 GPU memory; 0 training tokens; no network, no data download.
+- Expected time: under 30 seconds; expected memory: under 100 MB. Both are pre-execution estimates; the actual resources are as recorded in the results file.
+- Data: constructed vote/probability vectors; 100,000 numeric points with a fixed seed; 3 Bernoulli variables on a probability grid with denominator 12.
+- Software: Python standard library; no packages installed.
+- Base commit: `8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`; the executor writes the hash of the check source into the results.
+- Seeds: `20261115`.
 
-## 复现
+## Reproduction
 
-在仓库根目录运行：
+Run from the repository root:
 
 ```powershell
 python research/checks/theory_checks.py --output research/checks/results.json
 ```
 
-## 解释边界
+## Limits of interpretation
 
-`results.json` 保存实际检查数量、耗时、软件与机器信息以及源码 SHA256。通过有限测试只能说明这些输入未暴露实现错误；全域结论来自 `notes.md` 的证明。线性头是已知权重的数学例子，没有接上 transformer，也没有真实解析器、训练或金融数据。分母 12 的枚举不是所有实数概率耦合的枚举；所有耦合的结论由 T3.1 的有限维极值证明支撑。
+`results.json` stores the actual number of checks, the elapsed time, software and machine information, and the source SHA256. Passing finite tests only shows that these inputs did not expose an implementation error; the global conclusions come from the proofs in `notes.md`. The linear head is a mathematical example with known weights; it is not attached to a transformer, and there is no real parser, training or financial data. The enumeration with denominator 12 is not an enumeration of all real-valued probability couplings; the conclusion for all couplings rests on the finite-dimensional extremal proof of T3.1.
 
-本环境未发现 `pdflatex`、`xelatex`、`tectonic`。提供 `notes.tex` 源码，**未编译 PDF，未声称版面验收完成**。
+`pdflatex`, `xelatex` and `tectonic` were not found in this environment. The `notes.tex` source is provided; **no PDF was compiled, and layout acceptance is not claimed as complete**.
 
-## 已执行结果（我们的实验）
+## Executed results (our experiment)
 
-首次执行：Python 3.13.12、Windows 11、Intel64 Family 6 Model 170，耗时 0.9293 秒；未测量内存峰值。
+First execution: Python 3.13.12, Windows 11, Intel64 Family 6 Model 170, 0.9293 seconds; peak memory not measured.
 
-- 439 个满足票差条件的配置经过其全部预算内投票改动检查；平局反例与统计区间反例均重现。
-- 100,000 个数值点通过：最大观察概率导数绝对值 0.1874999991，小于声明界 0.25；最小上尾概率增量 −1.11e−16，处于 1e−15 浮点容差内。没有把该浮点残差报告为数学单调性反例或严格零误差。
-- 27 个有理数单位变换精确相等；无效结构权重被拒绝。
-- 枚举 50,388 个分母 12 的概率质量表，其中 50 个满足边际 (3/12,6/12,9/12)。它们的 stop-loss、二阶矩与 ES 均不超过同单调上界。
-- VaR 中位数反例：同单调为 0，反单调为 1。
+- 439 configurations that satisfy the vote-margin condition were checked against all vote changes within budget; both the tie counterexample and the statistic-interval counterexample were reproduced.
+- 100,000 numeric points passed: the largest observed absolute probability derivative was 0.1874999991, below the stated bound of 0.25; the smallest upper-tail probability increment was −1.11e−16, within the 1e−15 floating-point tolerance. This floating-point residual is not reported as a counterexample to mathematical monotonicity, nor as exactly zero error.
+- 27 rational unit transformations were exactly equal; invalid structural weights were rejected.
+- 50,388 probability mass tables with denominator 12 were enumerated, of which 50 satisfy the marginals (3/12,6/12,9/12). Their stop-loss, second moment and ES all do not exceed the comonotone upper bound.
+- VaR median counterexample: 0 for comonotone, 1 for countermonotone.
 
-这些检查没有采样金融总体，因此不报告金融准确率置信区间。`notes.tex` 仅做 ASCII、环境 begin/end 配对的静态检查；不是 TeX 编译测试。
+These checks did not sample a financial population, so no confidence interval for financial accuracy is reported. `notes.tex` only received a static check for ASCII content and matching environment begin/end pairs; this is not a TeX compilation test.

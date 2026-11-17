@@ -6,7 +6,7 @@ Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
 Complete T1g consequence audit and cross-dataset validation
 
 0c68d8aa8dff485af1ecc91bcb1090c883ef03fe 2026-11-17T08:31:38-05:00 LeOu
-T1g 预测，尚未计算实测
+T1g predictions, observed values not yet computed
 
 ff30d61cf7fbe240a11efc79ebb9a7799ebc73f4 2026-11-17T08:20:17-05:00 LeOu
 Add T1g: where rounding precision has consequences; update map

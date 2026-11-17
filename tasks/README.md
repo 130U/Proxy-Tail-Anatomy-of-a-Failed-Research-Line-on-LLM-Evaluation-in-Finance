@@ -1,21 +1,30 @@
-# 任务记录
+# Task briefs
 
-原研究路线已于 2026-11-17 收尾。下表是做过的工作及其材料入口，不是待执行路线图。各任务文件保留布置时的原文，最终判断见[首页复盘](../README.md)。
+The advisor wrote one brief per task: the question, the data, the analysis, a decision rule fixed in
+advance (continue, stop, or inconclusive) and a prior-art step. The briefs are kept as issued, so
+words like "next", "continue" or "write the short paper" describe plans at the time, not the final
+state. The final state of each task is in the table and in the [report](../report/proxy_tail_postmortem.pdf).
 
-| 任务 | 实际状态 | 原任务与材料 |
-|---|---|---|
-| 尾部排序与成对比较 | 完成；128 条确认未通过全部预定门槛 | [完整报告](../research/tail_screening/FABLE_CURRENT_REPORT.md) |
-| 绝对评分 | 完成 250 次调用；触发并列门，正式无法判断 | [原任务](absolute_scoring.md) · [报告与原始分数](../research/absolute_scoring/) |
-| T1 舍入输入 | 完成范围计算与见证检查 | [任务](T1_rounding.md) · [材料](../research/t1_rounding/) |
-| T1a 精度规则 | 完成推导、逐题复核及条件概率计算 | [任务](T1a_law.md) · [材料](../research/t1a_law/) |
-| T1b 文档约束 | 完成加总、重复披露约束及语义筛查 | [任务](T1b_tighten.md) · [材料](../research/t1b_tighten/) |
-| T1c 模型判分 | 完成 392 题独立会话与评分审计；未支持预想的判分影响 | [任务](T1c_models.md) · [材料](../research/t1c_models/) |
-| T1d 精度问答 | 完成条件比较、独立复跑和第二轮语义复核 | [任务](T1d_precision.md) · [材料](../research/t1d_precision/) |
-| T1e 扩展测试 | 未整体完成；前三部分暂缓，第二数据集审计转入 T1g | [原计划](T1e_full_test.md) |
-| T1f 查新 | 完成五项候选的查新；保留检索边界 | [任务](T1f_novelty.md) · [材料](../research/t1f_novelty/) |
-| T1g 实际后果 | 四部分审计完成；未达进入模型答题的门槛 | [任务](T1g_consequence.md) · [材料](../research/t1g_consequence/) |
-| T2 数字大小 | 查重和设计审查后停止；新增评分 0 次 | [任务](T2_magnitude.md) · [记录](../research/t2_magnitude/) |
-| T3 消息组合 | 评分完成；原 λ 门通过，后续因机制解释不足收束 | [任务](T3_combination.md) · [材料](../research/t3_combination/) |
-| T4 跨模型尾部 | 未执行 | [原计划](T4_cross_model.md) |
+Stages A and B ran before this folder existed; their plans are in
+[`research/advisor_reference/`](../research/advisor_reference/) and
+[`research/tail_screening/methods_protocol.md`](../research/tail_screening/methods_protocol.md).
 
-跨厂商复现和真人抽查未完成。任务原文中的“并行开展”“继续”“写短文”都是当时安排，不代表项目仍在运行。原任务目录首页完整保存在[历史版本](../archive/tasks-before-closeout.md)。
+| Order | Brief | Question | What happened | Records |
+|---|---|---|---|---|
+| 1 | [absolute_scoring.md](absolute_scoring.md) | How stable is a model's own top list under repeated scoring? | 250 calls, 10,000 scores; formally inconclusive (tie gate) | [absolute_scoring/](../research/absolute_scoring/) |
+| 2 | [T1_rounding.md](T1_rounding.md) | How many FinQA answers does the filing's rounding leave undetermined? | 196 / 1,147 test questions; continue | [t1_rounding/](../research/t1_rounding/) |
+| 2 | [T2_magnitude.md](T2_magnitude.md) | Does sentiment respond smoothly to the size of a number? | Stopped at the prior-art check; no scoring | [t2_magnitude/](../research/t2_magnitude/) |
+| 2 | [T3_combination.md](T3_combination.md) | How does a model combine good and bad news? | 3,360 scores; close to additive; closed | [t3_combination/](../research/t3_combination/) |
+| 2 | [T4_cross_model.md](T4_cross_model.md) | Top-list overlap between a cheap and an expensive model | Not run (the tail line was closed) | — |
+| 3 | [T1a_law.md](T1a_law.md) | A rule that predicts which questions are affected | Zero-parameter rule; matches the exact classification on 5,337 questions | [t1a_law/](../research/t1a_law/) |
+| 3 | [T1b_tighten.md](T1b_tighten.md) | Kill test: does the rest of the document pin the answers down? | Only 1 question rescued; 139 survive review | [t1b_tighten/](../research/t1b_tighten/) |
+| 3 | [T1c_models.md](T1c_models.md) | Does this change how models are scored? | No effect found | [t1c_models/](../research/t1c_models/) |
+| 4 | [T1d_precision.md](T1d_precision.md) | Do models know how precise their answers are? | Yes, when reminded (98.4% accurate intervals); second review leaves 123 | [t1d_precision/](../research/t1d_precision/) |
+| 5 | [T1e_full_test.md](T1e_full_test.md) | Extend to the full test set and a second dataset | Not run as a whole; the second-dataset part moved into T1g | — |
+| 5 | [T1f_novelty.md](T1f_novelty.md) | Novelty check of five candidate claims | Four of five already had prior work | [t1f_novelty/](../research/t1f_novelty/) |
+| 6 | [T1g_consequence.md](T1g_consequence.md) | Where does rounding precision have consequences? | Almost nowhere; the rule holds on TAT-QA | [t1g_consequence/](../research/t1g_consequence/) |
+
+Tasks with the same order number were issued together and ran in parallel.
+
+Cross-vendor replication and a human spot-check of the AI attributions were planned as optional
+parts of T1e and were never done.

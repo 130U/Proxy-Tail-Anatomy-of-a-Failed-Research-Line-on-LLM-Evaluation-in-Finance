@@ -1,14 +1,14 @@
-# Sol四次排序聚合：128条新样本验证
+# Sol four-ranking aggregation: validation on 128 new samples
 
-主结果：**FAIL**。仅针对已选中的 Sol＋每 panel 四次聚合分支；不表示两模型联合门通过。
+Main result: **FAIL**. Applies only to the selected branch of Sol + four-run aggregation per panel; it does not mean the joint two-model gate passed.
 
-样本来自128个新词法族，与先前排除族的交集为0；八份输入的ID与文本完全一致。排序指令规定最正面在前，整数Borda据此给较高分。词法族不保证完整事件独立。
+The sample comes from 128 new lexical families, with an intersection of 0 with the previously excluded families; the IDs and texts of the eight inputs are identical. The ranking instruction puts the most positive first, and the integer Borda gives higher scores accordingly. Lexical families do not guarantee fully independent events.
 
-两panel使用order1–4与order5–8；m=1、2、4前缀均保留，只有m=4用于主工作门。八份输出均严格校验ID恰好一次，U不补名次。
+The two panels use order1–4 and order5–8; the m=1, 2, 4 prefixes are all kept, and only m=4 is used for the main working gate. All eight outputs are strictly checked for each ID appearing exactly once, and U items are not filled in with ranks.
 
-## 原始输出与精确聚合
+## Raw outputs and exact aggregation
 
-| 输出 | 已排序 | U | 组数 | 真同分组数 | 最大同分组 |
+| Output | Ranked | U | Groups | True tie groups | Largest tie group |
 |---|---:|---:|---:|---:|---:|
 | rank_sol_o1.json | 128 | 0 | 43 | 41 | 27 |
 | rank_sol_o2.json | 128 | 0 | 77 | 25 | 23 |
@@ -19,35 +19,35 @@
 | rank_sol_o7.json | 128 | 0 | 98 | 12 | 18 |
 | rank_sol_o8.json | 128 | 0 | 98 | 8 | 24 |
 
-Borda使用两倍midrank之和计算整数分子；完全相同的整数分子保留同分。
+Borda computes integer numerators from sums of twice the midrank; identical integer numerators are kept as ties.
 
-## 主工作门的逐项数值
+## Item-by-item values for the main working gate
 
-| 方向 | 尾部 | p | 名义/A实际人数 | 90%所需/B放行人数 | 实际召回 | 同预算召回 | q90/p | A/B边界扩张 | 通过 |
+| Direction | Tail | p | Nominal/A actual count | Needed for 90%/B pass-through count | Actual recall | Same-budget recall | q90/p | A/B boundary expansion | Passed |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---|
-| panel1_to_panel2 | upper | 10% | 12/12 | 11/13 | 0.917 | 0.917 | 1.016 | 0.0%/8.3% | 是 |
-| panel1_to_panel2 | upper | 20% | 25/25 | 23/25 | 0.920 | 0.920 | 0.977 | 0.0%/0.0% | 是 |
-| panel1_to_panel2 | lower | 10% | 12/14 | 13/16 | 1.000 | 0.786 | 1.250 | 16.7%/0.0% | 否 |
-| panel1_to_panel2 | lower | 20% | 25/27 | 25/28 | 0.926 | 0.889 | 1.094 | 8.0%/0.0% | 是 |
-| panel2_to_panel1 | upper | 10% | 12/13 | 12/14 | 0.923 | 0.846 | 1.094 | 8.3%/0.0% | 是 |
-| panel2_to_panel1 | upper | 20% | 25/25 | 23/25 | 0.920 | 0.920 | 0.977 | 0.0%/0.0% | 是 |
-| panel2_to_panel1 | lower | 10% | 12/12 | 11/11 | 0.917 | 0.917 | 0.859 | 0.0%/16.7% | 是 |
-| panel2_to_panel1 | lower | 20% | 25/25 | 23/23 | 0.920 | 0.960 | 0.898 | 0.0%/8.0% | 是 |
+| panel1_to_panel2 | upper | 10% | 12/12 | 11/13 | 0.917 | 0.917 | 1.016 | 0.0%/8.3% | yes |
+| panel1_to_panel2 | upper | 20% | 25/25 | 23/25 | 0.920 | 0.920 | 0.977 | 0.0%/0.0% | yes |
+| panel1_to_panel2 | lower | 10% | 12/14 | 13/16 | 1.000 | 0.786 | 1.250 | 16.7%/0.0% | no |
+| panel1_to_panel2 | lower | 20% | 25/27 | 25/28 | 0.926 | 0.889 | 1.094 | 8.0%/0.0% | yes |
+| panel2_to_panel1 | upper | 10% | 12/13 | 12/14 | 0.923 | 0.846 | 1.094 | 8.3%/0.0% | yes |
+| panel2_to_panel1 | upper | 20% | 25/25 | 23/25 | 0.920 | 0.920 | 0.977 | 0.0%/0.0% | yes |
+| panel2_to_panel1 | lower | 10% | 12/12 | 11/11 | 0.917 | 0.917 | 0.859 | 0.0%/16.7% | yes |
+| panel2_to_panel1 | lower | 20% | 25/25 | 23/23 | 0.920 | 0.960 | 0.898 | 0.0%/8.0% | yes |
 
-N=128时，p=10%、20%的名义人数分别为floor(Np)=12、25。主门的加宽倍数始终为B放行人数/(N×p)，没有改成B/floor(Np)；JSON另列B/A实际人数。90%要求ceil(0.9×A实际人数)，因此有限名单的实际召回会高于90%。同预算名单也各自包含完整边界组，双方实际人数可能不同。
+With N=128, the nominal counts for p=10% and 20% are floor(Np)=12 and 25. The main gate's widening factor is always the B pass-through count/(N×p), not changed to B/floor(Np); the JSON lists the actual B/A counts separately. 90% requires ceil(0.9×A actual count), so the actual recall of a finite list will be above 90%. The same-budget lists also each include their complete boundary groups, so the two actual counts can differ.
 
-工作阈值在两个方向、上下尾均要求：同预算召回≥80%、q90/p≤1.5、A和B的名义边界同分扩张≤20%，且无U。它是预设工作门，不是显著性检验。
+The working thresholds require, in both directions and for both tails: same-budget recall ≥80%, q90/p≤1.5, nominal boundary-tie expansion of A and B ≤20%, and no U. This is a pre-set working gate, not a significance test.
 
-## 前缀敏感性（非事后择优）
+## Prefix sensitivity (not post-hoc selection)
 
-| m | midrank Spearman | 主p范围内最小同预算召回 | 最大q90/p |
+| m | midrank Spearman | Minimum same-budget recall over the main p | Maximum q90/p |
 |---:|---:|---:|---:|
 | 1 | 0.9596 | 0.643 | 2.969 |
 | 2 | 0.9853 | 0.714 | 1.875 |
 | 4 | 0.9929 | 0.786 | 1.250 |
 
-Spearman只作辅助。5%名单仅作诊断，重复调用不增加金融样本量，两个方向的变化不是置信区间；未做bootstrap、alpha拟合或尾部极限推断。
+Spearman is auxiliary only. The 5% lists are diagnostic only; repeated calls do not increase the financial sample size, and the variation between the two directions is not a confidence interval; no bootstrap, alpha fitting or tail-limit inference was done.
 
-[完整数值](validation_stage2.json) · [曲线](validation_stage2.png) · [PDF](validation_stage2.pdf)。原始盲输出位置：`research/private/agent_tail_methods/stage2_n128_sol`。
+[Full numbers](validation_stage2.json) · [Curves](validation_stage2.png) · [PDF](validation_stage2.pdf). Location of the raw blind outputs: `research/private/agent_tail_methods/stage2_n128_sol`.
 
-本次只读分析：CPU 2.672秒，wall 3.737秒；未测峰值内存。无模型调用、训练、外部API或网络。
+This read-only analysis: CPU 2.672 s, wall 3.737 s; peak memory not measured. No model calls, training, external API or network.

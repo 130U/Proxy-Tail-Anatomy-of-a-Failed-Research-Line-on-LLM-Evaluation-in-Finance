@@ -1,39 +1,39 @@
-# 单次信度能否预测平均后的头部名单：文献与数学审查
+# Can single-score reliability predict the averaged top list? Literature and mathematical review
 
-审查日期：2026-11-16。对象：本仓库 `TASK.md` 的绝对评分实验。本报告不包含新评分，不改变题目；判断截至本次定向检索与全文核对。
+Review date: 2026-11-16. Object: the absolute-scoring experiment in this repository's `TASK.md`. This report contains no new scoring and does not change the task; its judgments hold as of this targeted search and full-text check.
 
-## 结论及对实验门的建议
+## Conclusion and recommendation for the experiment gate
 
-**建议在批量评分之前停下，将高度相近的先例交给 Fable 判断研究增量。** 已有研究不仅证明高斯相关与决策翻转的关系，还在 LLM 批次评分中，用主实验估计的参数预先预测重复投票后的稳定性，再进行新运行检验。另有 LLM 研究直接测同版本头部名单的重测变化。把 Spearman–Brown 接到高斯分类一致性上，也有经典测量学先例。
+**We recommend stopping before batch scoring and handing the highly similar prior work to Fable to judge the research increment.** Existing research not only establishes the relation between Gaussian correlation and decision flips, but also, in LLM batch scoring, uses parameters estimated from a main experiment to predict in advance the stability after repeated voting, and then tests this with new runs. Other LLM research directly measures retest changes in the top list for the same version. Connecting Spearman–Brown to Gaussian classification consistency also has precedent in classical measurement theory.
 
-这不是“完全相同的金融标题、0–100 均分、m=2/4、双尾固定 top-p 实验已经发表”的断言：**本次没有在已读原文中找到这个逐项相同的实验。** 但是这些实现差别不足以自动恢复理论贡献。当前合理定位至多是既有测量模型在特定筛选任务上的复现与压力测试；是否值得做，应先说明一个已有研究不能回答的增量问题。停止批量评分是研究判断，不能把这个判断改写成文献已逐字覆盖 `TASK.md`。
+This is not the assertion that "exactly the same experiment, with financial headlines, 0–100 means, m=2/4 and two-tail fixed top-p, has been published": **in the original papers read this time, we did not find this item-by-item identical experiment.** But these implementation differences are not enough to restore a theoretical contribution automatically. The reasonable framing at present is at most a replication and stress test of an existing measurement model on a specific screening task; whether it is worth doing depends on first stating an incremental question that existing research cannot answer. Stopping batch scoring is a research judgment, and it cannot be rewritten as the literature having covered `TASK.md` word for word.
 
-## 决定性相邻文献
+## Decisive adjacent literature
 
-### Judged in Company：与当前方案最接近
+### Judged in Company: closest to the current plan
 
-[Judged in Company: In-Context Batching Makes LLM Verdicts Depend on Other Items，v1](https://arxiv.org/html/2610.40241v1) 的 §3 Proposition 3 给出任意阈值下的高斯翻转积分；H.4 讨论均分与投票；Tables 12、17 明确区分新投票实验之前的预测与之后的实测。§5.4 还报告对 level probabilities 取平均的实际结果。因此不能声称该文只有投票、完全没有均分。其主要实证是固定 ordinal cutoff，未见本题的固定 p 双尾均分名单曲线。
+In [Judged in Company: In-Context Batching Makes LLM Verdicts Depend on Other Items, v1](https://arxiv.org/html/2610.40241v1), §3 Proposition 3 gives the Gaussian flip integral at an arbitrary threshold; H.4 discusses means and votes; Tables 12 and 17 clearly separate the predictions made before the new voting experiment from the measurements after it. §5.4 also reports actual results from averaging level probabilities. So we cannot claim that the paper only uses votes and has no averaging at all. Its main empirical work uses fixed ordinal cutoffs; we did not see this question's fixed-p two-tail mean-score list curves.
 
-这里最重要的差别是**观察量与聚合规则**，不是金融语境或样本数：已有研究主要检查固定类别阈值的决定及多数票；本题主要检查原始整数分均值的排序集合。这个差别可能影响结果，但目前没有证据说明它能产生足够的研究贡献。也不能把“在新数据检验未重新调参的稳定性预测”当成本题首创。
+The most important difference here is **the observed quantity and the aggregation rule**, not the financial context or the sample size: the existing research mainly checks fixed-category threshold decisions and majority votes; this question mainly checks the ranked sets of raw integer score means. This difference may affect the results, but at present there is no evidence that it can produce a sufficient research contribution. Nor can "testing an untuned stability prediction on new data" be treated as original to this question.
 
-### 其他覆盖边界
+### Other coverage limits
 
-| 原始来源 | 已经覆盖的内容 | 不能归为本题首次提出的内容 |
+| Original source | What it already covers | What cannot be counted as first proposed by this question |
 | --- | --- | --- |
-| [LLM-as-a-Judge Version Shift，v1，§7、Appendix J](https://arxiv.org/html/2610.32986v1) | 同版本重新评分的排序及 top-30% 集合变化，作为版本变化的基线；讨论并列造成的假稳定 | LLM 对自己的头部名单不稳定；用同版本重测建立头部稳定性基准 |
-| [JudgeProfile，v1，§C.1](https://arxiv.org/html/2609.36705v1) | 对拟合出的属性权重做 split-half，再以 Spearman–Brown 换算全样本信度 | 在 LLM judge 研究中使用 Spearman–Brown；但其对象不是本题的标题均分头部集合 |
-| [Right Order, Wrong Scale，v1，Appendix M](https://arxiv.org/html/2610.02492v1) | 人类职业评分均值的 split-half 与 Spearman–Brown；区分 ordinal 与 cardinal 评价 | 不能把“相关可靠但量表不同”当新发现；其信度目标并非同一 LLM 的重复均分 |
-| [Just Ask the Model，作者稿，p.3](https://valentinklotzbuecher.github.io/llm-uj-research-eval/Just-Ask-the-Model--One-Shot-LLM-Research-Evaluation-and-Structured-Expert-Review.pdf) | 明确提醒将 Spearman–Brown 用于秩相关及不等面板大小只是近似调整 | 把秩相关直接当作任意平均操作的精确信度输入 |
+| [LLM-as-a-Judge Version Shift, v1, §7, Appendix J](https://arxiv.org/html/2610.32986v1) | Changes in ranking and in the top-30% set when rescoring with the same version, as a baseline for version changes; discusses false stability caused by ties | That an LLM's own top list is unstable; using same-version retests to build a top-list stability baseline |
+| [JudgeProfile, v1, §C.1](https://arxiv.org/html/2609.36705v1) | Split-half on fitted attribute weights, then Spearman–Brown to convert to full-sample reliability | Using Spearman–Brown in LLM judge research; but its object is not this question's top sets of headline mean scores |
+| [Right Order, Wrong Scale, v1, Appendix M](https://arxiv.org/html/2610.02492v1) | Split-half and Spearman–Brown for means of human occupational ratings; distinguishes ordinal and cardinal evaluation | "Reliable correlation but a different scale" cannot be treated as a new finding; its reliability target is not repeated means of the same LLM |
+| [Just Ask the Model, author manuscript, p.3](https://valentinklotzbuecher.github.io/llm-uj-research-eval/Just-Ask-the-Model--One-Shot-LLM-Research-Evaluation-and-Structured-Expert-Review.pdf) | Explicitly warns that applying Spearman–Brown to rank correlations and to unequal panel sizes is only an approximate adjustment | Treating a rank correlation directly as an exact reliability input for an arbitrary averaging operation |
 
-经典基础也必须明确归属。[Taylor–Russell (1939) 原论文](https://gwern.net/doc/statistics/decision/1939-taylor.pdf) 已将二元正态的相关、入选比例和结果比例联系起来。更直接的是 [Wan、Brennan、Lee (2007)，CASMA Research Report 22，§1.1–1.2](https://education.uiowa.edu/sites/education.uiowa.edu/files/2022-10/casma-research-report-22.pdf)：其分类一致性比较研究说明以 Spearman–Brown 升长后的信度作为二元正态相关，再计算分类一致性；原文将这些做法追溯至 Woodruff–Sawyer (1989) 等。本次直接核读的是 2007 年原始比较研究，没有把未取得全文的 1989 年论文写成已读。
+The classical foundations must also be attributed explicitly. The [original Taylor–Russell (1939) paper](https://gwern.net/doc/statistics/decision/1939-taylor.pdf) already links bivariate normal correlation, selection ratio and outcome ratio. More directly, [Wan, Brennan, Lee (2007), CASMA Research Report 22, §1.1–1.2](https://education.uiowa.edu/sites/education.uiowa.edu/files/2022-10/casma-research-report-22.pdf): their comparative study of classification consistency describes using the Spearman–Brown-lengthened reliability as a bivariate normal correlation and then computing classification consistency; the paper traces these practices back to Woodruff–Sawyer (1989) and others. What we read directly this time is the 2007 original comparative study; the 1989 paper, whose full text we did not obtain, is not reported as read.
 
-[Ellis 与 Sijtsma (2024)](https://link.springer.com/article/10.1007/s11336-024-09956-7) 在随机抽题、误差不相关及正则条件下研究 Spearman–Brown 的渐近收敛速度，并讨论短量表预测偏差。它不能被用作本题 m=2、4 在任意评分机制下精确成立的依据。
+[Ellis and Sijtsma (2024)](https://link.springer.com/article/10.1007/s11336-024-09956-7) study the asymptotic convergence rate of Spearman–Brown under random item sampling, uncorrelated errors and regularity conditions, and discuss prediction bias for short scales. It cannot be used as a basis for m=2, 4 in this question holding exactly under an arbitrary scoring mechanism.
 
-## 两步数学必须分开
+## The two mathematical steps must be kept apart
 
-以下推导用于核对题目，没有新定理主张。第一步是二阶矩，第二步才是决定尾部事件的分布假设。
+The derivation below is for checking the task; it makes no new theorem claim. The first step is about second moments; only the second step is the distributional assumption that determines tail events.
 
-设某随机标题在第 j 次的分数为 S_j=T+ε_j。若 Var(T)=τ²，误差与 T 不相关，各次误差均值为零、方差 σ²、彼此不相关，则单次相关为 r=τ²/(τ²+σ²)。两个不相交的 m 次均值的相关为
+Let the score of a random headline in round j be S_j=T+ε_j. If Var(T)=τ², the errors are uncorrelated with T, and the errors in each round have mean zero, variance σ² and are mutually uncorrelated, then the single-score correlation is r=τ²/(τ²+σ²). The correlation between two disjoint m-round means is
 
 \[
 \operatorname{Corr}(\bar S_{1:m},\bar S_{m+1:2m})
@@ -41,57 +41,57 @@
 =\frac{mr}{1+(m-1)r}.
 \]
 
-这个式子不需要正态。更一般地，若所有重复的方差都是 v、每对不同重复的协方差都是 κ，相同恒等式成立，其中 r=κ/v。因此不能笼统说“异方差或相关误差必然使公式失效”：条件异方差仍可能保留这些无条件矩；跨重复永久共享的偏差也可能被吸收到稳定成分中。后者使自我一致性很高，却不说明对真值准确。
+This formula does not need normality. More generally, if every repeat has variance v and every pair of distinct repeats has covariance κ, the same identity holds with r=κ/v. So one cannot say in general that "heteroscedasticity or correlated errors necessarily break the formula": conditional heteroscedasticity can still preserve these unconditional moments, and a bias permanently shared across repeats can be absorbed into the stable component. The latter makes self-consistency very high, but says nothing about accuracy relative to the truth.
 
-如果组内协方差是 κ_W、组间是 κ_B，且各次方差为 v，两组 m 次均值的相关则是
+If the within-group covariance is κ_W, the between-group covariance is κ_B, and each round has variance v, the correlation between the two m-round means is
 
 \[
 \frac{m\kappa_B}{v+(m-1)\kappa_W}.
 \]
 
-所有 28 个相关的一个平均数无法一般地识别这个式子。会话、时间漂移、共同批次等造成的非交换结构，需要从设计与数据判断，不能仅凭“开了新会话”宣称独立。
+A single average of all 28 correlations cannot identify this expression in general. Non-exchangeable structure caused by sessions, time drift, shared batches and so on must be judged from the design and the data; independence cannot be claimed just because "a new session was opened".
 
-第二步，令 X、Y 为标准二元正态，相关为 ρ；z_p=Φ⁻¹(1−p)，并记
+Second step: let X, Y be standard bivariate normal with correlation ρ; let z_p=Φ⁻¹(1−p), and write
 
 \[
 J_\rho(p,q)=\int_{z_p}^{\infty}\phi(x)
 \bar\Phi\!\left(\frac{z_q-\rho x}{\sqrt{1-\rho^2}}\right)dx.
 \]
 
-连续分布下，同等比例头部重合为 O_ρ(p)=J_ρ(p,p)/p。固定召回 γ 所需放行比例为 q_γ(p)=inf{q:J_ρ(p,q)≥γp}，放大倍数为 q_γ/p。正负两端在此模型下相同；上下端不对称会否定这个共同高斯基准，但单独无法确定是哪项机制导致。
+Under a continuous distribution, the equal-fraction top-list overlap is O_ρ(p)=J_ρ(p,p)/p. The pass-through fraction needed for a fixed recall γ is q_γ(p)=inf{q:J_ρ(p,q)≥γp}, and the widening factor is q_γ/p. The positive and negative tails are the same under this model; an asymmetry between the upper and lower tails would reject this common Gaussian baseline, but on its own it cannot determine which mechanism causes it.
 
-边界可检验：ρ=0 时 O=p、q_γ=γ；ρ=1 时 O=1、q_γ=γp。最后一个例子说明所谓放大倍数可以小于 1；若人为强制 q≥p，得到的已经是另一个定义。
+The boundaries can be checked: at ρ=0, O=p and q_γ=γ; at ρ=1, O=1 and q_γ=γp. The last case shows that the so-called widening factor can be below 1; if q≥p is forced artificially, the result is already a different definition.
 
-令 F 为两个同等大小、总体比例 p 的集合之对称差比例，则恒等式为
+Let F be the symmetric-difference fraction of two equal-size sets with population fraction p; then the identity is
 
 \[
 O=1-\frac{F}{2p}.
 \]
 
-**这一步是本报告给出的集合恒等变换，不是声称上述 LLM 论文已经实测 top-p 曲线。** 将其与正态翻转公式及均分矩恒等式结合，便得到题目拟使用的曲线。因而不能把重写成 overlap 或换成固定分位点视为新理论。若两个集合因并列而大小不同，必须用各自的实际大小，不能直接套这个等大小式子。
+**This step is a set identity transformation given by this report; it does not claim that the LLM papers above have measured top-p curves.** Combining it with the normal flip formula and the moment identity for means gives the curve the task intends to use. So rewriting it as overlap or switching to fixed quantiles cannot be treated as a new theory. If the two sets differ in size because of ties, their actual sizes must be used; this equal-size formula cannot be applied directly.
 
-## 当前题目最关键的尺度缺口
+## The most critical scale gap in the current task
 
-题目先对每一轮评分做秩正态变换，再计算 r；实际决策却是先对原始 0–100 分作算术平均，再取头部。**秩变换与平均不交换。** 即使前一个尺度上的 Spearman–Brown 精确成立，也不能据此推得后一个尺度的名单预测精确成立。
+The task first applies a rank-normal transformation to each round of scores and then computes r; the actual decision, however, first takes the arithmetic mean of the raw 0–100 scores and then takes the top list. **Rank transformation and averaging do not commute.** Even if Spearman–Brown held exactly on the first scale, that would not imply that the list prediction holds exactly on the second scale.
 
-一个纯代数反例即可说明：某两轮在变换前的坐标，标题 A 为 (3,0)，B 为 (2,2)，均值会排 B 在前；在这几个点上使用同一个严格递增变换 g(z)=100(e^z−1)/(e³−1)，A 的均值为 50，B 的均值约为 33.5，次序反转。每一轮原有排序完全没变，平均后的排序却改变。反例只证明运算不交换，不假定这两条标题来自正态总体。
+A purely algebraic counterexample is enough: for two rounds, suppose the pre-transformation coordinates are (3,0) for headline A and (2,2) for headline B; the means put B first. Apply the same strictly increasing transformation g(z)=100(e^z−1)/(e³−1) at these points: A's mean is 50 and B's mean is about 33.5, so the order reverses. The original ordering within each round is unchanged, yet the ordering after averaging changes. The counterexample only proves that the operations do not commute; it does not assume that these two headlines come from a normal population.
 
-因此主分析若照题目执行，应把该曲线称为**固定的可证伪基准**，而不是在已满足假设下的理论必然。偏离至少可能来自原始量表形状、分数的离散并列、协方差结构、非高斯联合分布及有限样本。不能先把前几项忽略，再将偏离命名为新尾部规律。补充诊断也不应在看到结果后改写主聚合规则。
+So if the main analysis is run as the task says, the curve should be called a **fixed falsifiable baseline**, not a theoretical necessity under satisfied assumptions. Deviations may come at least from the shape of the raw scale, discrete ties in the scores, the covariance structure, a non-Gaussian joint distribution and the finite sample. One cannot first ignore the earlier items and then name the deviation a new tail regularity. Supplementary diagnostics also should not rewrite the main aggregation rule after the results have been seen.
 
-正常分数上的 Pearson r 不是原始分数 ICC，也不是 Spearman 秩相关。将中秩映射到 Φ⁻¹((rank−0.5)/N) 只是一个明确的计算定义；大量并列时，它不会产生连续正态边际。整数平均会细化网格，却不保证消除头部边界上的同分。
+Pearson r on normal scores is neither the raw-score ICC nor the Spearman rank correlation. Mapping midranks to Φ⁻¹((rank−0.5)/N) is only an explicit computational definition; with many ties it does not produce a continuous normal margin. Integer averaging refines the grid, but does not guarantee removing ties at the top-list boundary.
 
-## 可以报告什么，不能由当前设计直接得到什么
+## What can be reported, and what the current design cannot give directly
 
-“不使用 m=2、4 的重合率调参”可以成立；但 r 来自同一批 8 次重复，m=2、4 也由这些重复构成，因此不是独立留出数据上的预测。应称为固定公式的内部检验，并在 bootstrap 时连同 r 与预测曲线一起重算差值，保留它们的依赖关系。
+"Not tuning with the m=2, 4 overlap rates" can hold; but r comes from the same 8 repeats, and m=2, 4 are also built from these repeats, so this is not a prediction on independent held-out data. It should be called an internal test of a fixed formula, and in the bootstrap the difference should be recomputed together with r and the prediction curve, keeping their dependence.
 
-按标题重采样应同时携带该标题全部重复分数；若批次内误差相关，普通标题 bootstrap 的区间只覆盖所采用的重采样假设，未必覆盖重新生成批次的全部波动。不能把多个区间与曲线相交直接当作已证明模型处处吻合。
+Resampling by headline should carry all repeat scores of that headline together. If errors within a batch are correlated, the interval from an ordinary headline bootstrap covers only the resampling assumption used, and does not necessarily cover all the variation from regenerating batches. Several intervals intersecting the curve cannot be taken directly as proof that the model fits everywhere.
 
-同批次与异批次的相关差可以描述批次敏感性，但两个相关系数之差不是“批次效应占噪声的百分比”。在没有明确方差模型与识别条件之前，本题的一页结论应报告可见差异及其不确定性，不给未经识别的方差占比。固定 100 条对照也不能自动区分所有会话、位置、共同上下文与时间效应。
+The difference between same-batch and different-batch correlations can describe batch sensitivity, but a difference of two correlation coefficients is not "the percentage of noise due to the batch effect". Without an explicit variance model and identification conditions, this task's one-page summary should report the visible difference and its uncertainty, and not give an unidentified variance share. Fixing 100 control items also cannot automatically separate all session, position, shared-context and time effects.
 
-## 检索覆盖与未解决之处
+## Search coverage and open issues
 
-本次有针对性核查了 Spearman–Brown、正态分类一致性、LLM 重测头部、LLM 均分/投票收益、批次效应几个交叉方向，阅读重点是上述原文的公式、方法和附录，而非仅凭摘要匹配术语。检索词包括 “Spearman Brown LLM”、 “test retest top selection”、 “classification consistency bivariate normal”、 “Gaussian top-k overlap measurement noise reliability”。
+This check targeted several intersecting directions: Spearman–Brown, normal classification consistency, LLM retest top lists, LLM averaging/voting gains, and batch effects. The reading focused on the formulas, methods and appendices of the original papers above, rather than matching terms from abstracts only. Search terms included "Spearman Brown LLM", "test retest top selection", "classification consistency bivariate normal", "Gaussian top-k overlap measurement noise reliability".
 
-Stanford *AI Measurement Science* 的网页索引显示相关章节，但直接全文访问在本次返回 404，因此没有将它作为决定性证据。[LLM Judge Validation Under Sparse Overlap](https://arxiv.org/html/2609.31857v1) 的 overlap 指人类共同标注覆盖，其 top-1 指最佳 judge 选择；这些术语与本题不是同一对象，未据此判断撞题。
+The web index of Stanford *AI Measurement Science* shows relevant chapters, but direct full-text access returned 404 this time, so it is not used as decisive evidence. In [LLM Judge Validation Under Sparse Overlap](https://arxiv.org/html/2609.31857v1), overlap refers to coverage by shared human annotation and top-1 refers to selecting the best judge; these terms do not refer to the same objects as in this question, and no collision was judged on that basis.
 
-本报告未做全数据库系统综述，也没有证明不存在更早完全同型研究。已取得的证据足以否定“信度公式接高斯头部概率是新数学”和“第一次测 LLM 自己的头部稳定性”。是否仍开展这项实验，应由一个明确的剩余研究问题支撑，而不能以没有找到逐字相同的实施细节作为继续的理由。
+This report did not do a full-database systematic review and does not prove that no earlier study of exactly the same type exists. The evidence obtained is enough to reject both "a reliability formula connected to Gaussian top-list probabilities is new mathematics" and "this is the first measurement of an LLM's own top-list stability". Whether to carry out this experiment anyway should rest on a clearly stated remaining research question; not having found word-for-word identical implementation details cannot be a reason to continue.

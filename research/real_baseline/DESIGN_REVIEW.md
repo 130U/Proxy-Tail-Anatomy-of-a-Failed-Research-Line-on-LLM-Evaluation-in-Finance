@@ -1,97 +1,97 @@
-# 新的 SEntFiN Phase 0：独立设计审查
+# The new SEntFiN Phase 0: independent design review
 
-日期：2026-11-16。执行者：内部 AI 研究助手，不代表 Fable 或外部同行。状态：**可以在下述运行前契约关闭后开展新的来源原任务基线；不能据此恢复旧 24M 结果，也不能据此声称需要语言模型。** 本审查未实现或训练模型，未查看原始 CSV、私有测试文本、逐行标签或预测，只读取代码和已有来源汇总。
+Date: 2026-11-16. Performed by: an internal AI research assistant, not representing Fable or external peers. Status: **a new baseline on the original source task can go ahead once the pre-run contract below is closed; this cannot be used to restore the old 24M results, nor to claim that a language model is needed.** This review did not implement or train a model and did not look at the raw CSV, private test text, per-row labels or predictions; it only read code and existing source summaries.
 
-读取证据为 [来源审计](../data/source_audit.md)、[库存说明](../reports/local_data_inventory.md)、[评估实现](../evaluation/evaluate.py) 及其构造测试。最初查找新目录中的同名文件未找到，随后按既有实际路径读取；不存在新 `real_baseline/source_audit.md` 不代表已有来源审计缺失。本审查按本地“科研主张与偏差审查”技能区分证据、设计要求与尚不能推出的结论；未联网核验该技能附带的文献条目，不把它作为方法有效性来源。
+The evidence read was the [source audit](../data/source_audit.md), the [inventory note](../reports/local_data_inventory.md), the [evaluation implementation](../evaluation/evaluate.py) and its constructed tests. A first search for files of the same name in the new directory found nothing, and they were then read from their existing actual paths; the absence of a new `real_baseline/source_audit.md` does not mean the existing source audit is missing. This review follows the local "research claim and bias review" skill to separate evidence, design requirements and conclusions that cannot yet be drawn; the literature entries attached to that skill were not checked online, and it is not used as a source of methodological validity.
 
-## 1. 被审查的问题应当是什么
+## 1. What the reviewed question should be
 
-一个样本是 **(headline, target_entity, source_sentiment)**，标签固定为 `negative / neutral / positive`。目标量首先是清理后来源任务、预留词法组测试集上的三类 macro-F1；accuracy、每类 precision/recall/F1 和混淆矩阵为辅助。保持三类列表固定，缺失类别和零分母用预定的 `zero_division=0` 约定。
+A sample is **(headline, target_entity, source_sentiment)**, with labels fixed as `negative / neutral / positive`. The target quantity is first of all the three-class macro-F1 on the cleaned source task, on a held-out test set of lexical groups; accuracy, per-class precision/recall/F1 and the confusion matrix are auxiliary. Keep the three-class list fixed, and use the pre-specified `zero_division=0` convention for missing classes and zero denominators.
 
-这是“文本对所标实体的来源情绪”的预测问题。实体可以不是已验证上市证券，正向情绪也不等于收益看多、交易动作或投资立场。原始标签是否准确、是否包含模糊/混合情绪，仍是基准测量误差，模型成绩不会为来源标签提供独立真值证明。
+This is a prediction problem for "the source sentiment of the text toward the labelled entity". The entity may not be a verified listed security, and positive sentiment is not the same as a bullish return view, a trading action or an investment stance. Whether the original labels are accurate, and whether they contain vague/mixed sentiment, is still benchmark measurement error; model scores do not provide independent ground-truth proof for the source labels.
 
-新的实验应从本地原始来源重建数据和特征，使用新运行身份、代码/输入摘要及新的从头训练模型。旧 24M 逐行预测无法恢复，与本轮新训练是否可行是两件事。新结果不能标成旧模型重跑，也不能把 TF-IDF/LR 称为 FinBERT、LLM 或从头预训练语言模型。后续随机初始化小编码器必须另立预算和比较问题；当前简单基线强或弱都不逻辑推出“必须上语言模型”。
+The new experiment should rebuild the data and features from the local raw source, with a new run identity, code/input digests and newly trained-from-scratch models. That the old 24M per-row predictions cannot be recovered and whether new training in this round is feasible are two separate matters. New results must not be labelled as a rerun of the old model, and TF-IDF/LR must not be called FinBERT, an LLM or a language model pretrained from scratch. A later randomly initialized small encoder must have its own budget and comparison question; whether the current simple baselines are strong or weak does not logically imply "a language model is required".
 
-## 2. 运行前必须关闭的任务与解析契约
+## 2. Task and parsing contract that must be closed before the run
 
-### 实体输入必须成为正式输入
+### The entity must become a formal input
 
-同一标题可以同时对实体 A 正向、实体 B 负向。这是有效的多实体样本，**不是标签冲突**。只给标题的确定性分类器对这些行无法区分，因此 headline-only 只能作“是否需要目标实体”的诊断，不能当完整任务的唯一强基线。
+The same headline can be positive toward entity A and negative toward entity B. This is a valid multi-entity sample, **not a label conflict**. A deterministic classifier given only the headline cannot distinguish these rows, so headline-only can serve only as a diagnostic of "whether the target entity is needed", not as the sole strong baseline for the full task.
 
-word 与 char 两个正式模型应使用同一冻结的实体条件化文本格式。例如固定实体字段前缀，并在可精确匹配的标题目标跨度前后加标记；重复出现的目标、大小写/Unicode/词边界规则、无字面匹配的回退格式都要预先写清楚。只有字符串追加也能构成合法 `(headline,target)` 输入，但加性线性特征未必能绑定远处的实体与谓词，故不能把它失败解释为全部简单方法的上限。
+The two formal models, word and char, should use the same frozen entity-conditioned text format. For example, a fixed entity-field prefix, with markers before and after the target span in the headline where it can be matched exactly; repeated occurrences of the target, case/Unicode/word-boundary rules and the fallback format for no literal match must all be written down in advance. Simply appending the string also forms a valid `(headline,target)` input, but additive linear features may not bind a distant entity to its predicate, so its failure cannot be read as the upper limit of all simple methods.
 
-不得按测试表现决定是否换标记、增加目标窗口或删掉无匹配行。无匹配目标不自动等于错误来源标签：可能存在合法简称或来源标注语义。可先固定保留并用实体字段回退，汇总匹配率及覆盖；若要排除，需在运行前给出不依赖标签/模型得分的排除规则，并将被排除任务比例列入分母。不能为漂亮成绩事后精修测试实体映射。
+Whether to change the markers, add a target window or delete unmatched rows must not be decided by test performance. An unmatched target does not automatically mean a wrong source label: there may be a legitimate abbreviation or source annotation semantics. One can fix in advance to keep them with the entity-field fallback and summarize match rate and coverage; to exclude them, an exclusion rule that does not depend on labels/model scores must be given before the run, and the fraction of excluded tasks must be included in the denominator. The test entity mapping must not be refined after the fact for a better score.
 
-建议保留 entity-only 诊断（同样仅训练集拟合、开发集选择），检查实体身份和标签先验是否已解释大量表现。实体跨分区出现本身不违反本轮标题组泛化定义；它使结果不能称“未见实体泛化”。另做 entity-disjoint 会回答不同问题，不能结果出来后替换主划分。
+It is suggested to keep an entity-only diagnostic (likewise fitted only on the training set and selected on the development set) to check whether entity identity and label priors already explain much of the performance. An entity appearing across partitions does not in itself violate this round's headline-group generalization definition; it means the result cannot be called "generalization to unseen entities". An entity-disjoint split would answer a different question and cannot replace the main split after the results are out.
 
-### 严格解析必须防静默修复
+### Strict parsing must prevent silent repair
 
-- 对结构字符串仅接受已声明字面字典语法，不用 `eval`。`ast.literal_eval` 本身仍可能静默覆盖重复字典键；需要先逐个 AST 键值验证重复键、类型及标签，再构建对象。
-- 接受的原生标签、允许的大小写/空白规范化、空标题/空实体、非字符串值、未知标签、多余字段如何处理均固定。未知标签不能自动落到 neutral；异常不能用正则猜补。
-- 冲突至少以**同一规范化标题与同一目标实体**为单位检查。相同对出现不一致情绪时隔离整组冲突，不能选择多数标签、第一行或更易预测的一行。规范化不能先删掉数值、否定或实体差异，再把真实不同标题误判为冲突。
-- 完全重复的同标题—实体—标签记录应按冻结键去重，防止重复拷贝放大权重；近重复只做同组隔离，不在未核实事件身份时任意合并为一条。
-- 输出可核对的聚合流水账：原行数、解析成功标题数、展开实体行数、异常/冲突/重复隔离数、最终标题与实体行数。各步骤分母和交叠计数明确，别把“实体行数”写成独立新闻数。
+- For structured strings, accept only the declared literal dictionary syntax, without `eval`. `ast.literal_eval` itself may still silently overwrite duplicate dictionary keys; duplicate keys, types and labels must first be validated key by key on the AST before building the object.
+- How to handle the accepted native labels, the allowed case/whitespace normalization, empty headlines/empty entities, non-string values, unknown labels and extra fields is all fixed. Unknown labels must not fall back to neutral automatically; anomalies must not be patched by guessing with regular expressions.
+- Conflicts are checked at least at the unit of **the same normalized headline and the same target entity**. When the same pair has inconsistent sentiment, quarantine the whole conflicting group; do not pick the majority label, the first row or the row that is easier to predict. Normalization must not first strip numbers, negations or entity differences and then misjudge genuinely different headlines as conflicts.
+- Exactly duplicate headline–entity–label records should be deduplicated by a frozen key, so that duplicate copies do not inflate weight; near duplicates are only quarantined into the same group and are not merged arbitrarily into one record without a verified event identity.
+- Output a checkable aggregate ledger: raw row count, successfully parsed headlines, expanded entity rows, counts quarantined for anomalies/conflicts/duplicates, and final headline and entity-row counts. The denominator and overlap counts of each step must be explicit, and "entity rows" must not be written as the number of independent news items.
 
-这些隔离规则会改变任务总体。即使不查看测试结果，清理后表现也只对应保留部分，不能泛化为全部来源新闻。保留隔离原因与聚合比例，原始私有行仍只在排除归档的私有目录中。
+These quarantine rules change the task population. Even without looking at test results, performance after cleaning corresponds only to the retained part and cannot be generalized to all source news. Keep the quarantine reasons and aggregate fractions; the raw private rows stay only in the private directory excluded from the archive.
 
-## 3. 分组和 hash 划分：能关闭什么、不能关闭什么
+## 3. Grouping and hash split: what they can and cannot close
 
-提案为：完全相同标题及 token-set Jaccard≥0.8 的标题连边，取传递连通分量；所有同标题的实体行继承同一分量；用 seed 130 的固定 hash 分成 70/15/15 的 train/dev/test。它可以关闭**所定义词法关系**的直接跨分区边，不是历史时间隔离或真正事件隔离。
+The proposal: join headlines that are identical or have token-set Jaccard≥0.8 by an edge, take transitive connected components; all entity rows with the same headline inherit the same component; split 70/15/15 into train/dev/test by a fixed hash with seed 130. This can close direct cross-partition edges of **the defined lexical relation**; it is not historical time isolation or genuine event isolation.
 
-运行前固定以下细节：
+Fix the following details before the run:
 
-1. 归一化、分词、token set、空 token 标题规则；阈值宜以 `5*intersection >= 4*union` 的整数比较落实。不能去掉数字后再声称相近标题一定同事件。对空集应单独处理，避免所有无 token 标题都被视作完全相同。
-2. 传递闭包按整个标题图构建，而不是只把每条记录分给第一个近邻。A近B、B近C即使A不近C仍同组；这可能产生很大分量，应如实报告。
-3. 组件 ID 使用固定内容/来源身份的确定规则，再哈希 seed 与 ID。不能依赖输入行顺序或运行时 union-find 根编号，否则重排文件可能换分区。不要把原文用作公开组件 ID；公开仅摘要和聚合。
-4. 70/15/15 是哈希阈值目标，不保证实际行数、组数或类比例恰好如此。报告每个分区的行、标题、组、三类计数和最大组大小。若某类没有训练/开发支持，按预定停止规则报告设计无法评估，不反复换 seed 直到测试集好看。
-5. 运行前后核对相同组不跨区、完全重复标题不跨区、已定义近重复边的跨区数为 0。若算法为近似候选检索，需要明确漏边保证；不能把近似未找到当作 exhaustive 没有边。
+1. Normalization, tokenization, token sets and the rule for empty-token headlines; the threshold should be implemented as the integer comparison `5*intersection >= 4*union`. One cannot strip digits and then claim that similar headlines must be the same event. The empty set should be handled separately, so that all token-less headlines are not treated as identical.
+2. The transitive closure is built over the whole headline graph, not by assigning each record to its first neighbour. If A is near B and B is near C, they are in the same group even if A is not near C; this can produce very large components, which should be reported truthfully.
+3. Component IDs use a deterministic rule based on fixed content/source identity, and then hash the seed with the ID. They must not depend on input row order or on runtime union-find root numbers, otherwise reordering the file could change partitions. Do not use the raw text as a public component ID; publish only digests and aggregates.
+4. 70/15/15 is a hash-threshold target and does not guarantee exactly these proportions of rows, groups or classes. Report rows, headlines, groups, the three class counts and the largest group size for each partition. If some class has no training/development support, report that the design cannot be evaluated according to the pre-specified stopping rule; do not keep changing the seed until the test set looks good.
+5. Before and after the run, check that the same group does not cross partitions, that exactly duplicate headlines do not cross partitions, and that the number of defined near-duplicate edges crossing partitions is 0. If the algorithm uses approximate candidate retrieval, the guarantee about missed edges must be stated explicitly; an approximate search that finds nothing must not be treated as an exhaustive search with no edges.
 
-使用全部**无标签文本**构建固定去重图属于此划分方案的一部分，不等于模型训练读了测试标签。但它是依赖整批语料的基准构造，不是模拟未来新文档在线进入；输入语料有增补时，传递分量可能合并，必须另立数据版本并禁止静默重划。
+Using all **unlabelled text** to build the fixed deduplication graph is part of this split scheme and does not mean model training read the test labels. But it is a benchmark construction that depends on the whole corpus, not a simulation of new future documents arriving online; if the input corpus is extended, transitive components may merge, so a separate data version must be created and silent re-splitting is forbidden.
 
-词法相异但描述同一事件的标题仍可跨区，词法相近但不同事件也可能被过度合并。因此 `family_id` 可以标识 lexical component，**不要伪造经审定的 event_id**。现有 [connected_groups](../evaluation/evaluate.py) 可传只有 `family_id` 的记录；需把输出说明改成词法组件，并保留自然事件/来源之间仍可能相关的限制。
+Headlines that are lexically different but describe the same event can still cross partitions, and lexically similar but different events may be over-merged. So `family_id` can identify a lexical component, but **do not fabricate a reviewed event_id**. The existing [connected_groups](../evaluation/evaluate.py) can take records that have only `family_id`; its output description must be changed to lexical components, and the limitation that natural events/sources may still be correlated must be kept.
 
-此前来源语料或派生开发集已经用于项目探索，新 hash 划分不会让研究者先前接触过的材料变成完全未见。应叫“本轮新训练的冻结测试划分”，而不是宣称从未见过的外部独立确认集。这不阻止诚实的 Phase 0，但降低其确认性。
+The source corpus or derived development sets have already been used in project exploration, and a new hash split does not make material the researchers have seen before completely unseen. It should be called "the frozen test split for this round's new training", not an external, independent confirmation set never seen before. This does not prevent an honest Phase 0, but it lowers its confirmatory value.
 
-## 4. 简单模型与选择协议
+## 4. Simple models and the selection protocol
 
-正式候选为 train-only 多数类、word `(1,2)` TF-IDF+LR、char_wb `(3,5)` TF-IDF+LR。两个 LR 固定 `class_weight='balanced'`，只在 `C∈{0.1,1,10}` 上用开发集 macro-F1 选择；多数类及平局规则只依据训练数据。类别权重由训练标签计算，不能用全数据频率。
+The formal candidates are the train-only majority class, word `(1,2)` TF-IDF+LR and char_wb `(3,5)` TF-IDF+LR. Both LRs fix `class_weight='balanced'` and select only over `C∈{0.1,1,10}` by development-set macro-F1; the majority class and its tie rule depend only on the training data. Class weights are computed from the training labels, not from whole-data frequencies.
 
-TF-IDF 的词表、IDF、频次截断、最大特征数均只在训练集拟合；dev/test 只能 transform。训练不足、空词表、优化未收敛不能无记录退回另一实现。solver、随机种子、最大迭代数、停止容差与预算预先固定；若按预定策略增迭代，保留过程及其仅依据训练收敛的理由。
+The TF-IDF vocabulary, IDF, frequency cutoff and maximum number of features are all fitted on the training set only; dev/test may only be transformed. Insufficient training, an empty vocabulary or non-convergence of the optimizer must not fall back to another implementation without a record. The solver, random seed, maximum iterations, stopping tolerance and budget are fixed in advance; if iterations are increased according to a pre-specified policy, keep the process and the justification that it was based only on training convergence.
 
-建议采用一个明确主比较：**开发集选出的词法方案对 train-only 多数类**。在两套特征内选 C，再在两者之间用同一开发指标选择总体方案，并冻结并列排序（例如较小 C，再预定特征顺序）。若本轮选择同时把 word 和 char 作为并列主模型，则如实报告两项比较及其探索/多重性，不在测试成绩出来后选择胜者并配一条未调整 CI。
+It is suggested to adopt one explicit primary comparison: **the lexical scheme selected on the development set versus the train-only majority class**. Select C within each of the two feature sets, then choose the overall scheme between them with the same development metric, and freeze the tie ordering (for example the smaller C, then a pre-specified feature order). If this round instead chooses both word and char as co-primary models, report both comparisons and their exploratory/multiplicity status truthfully; do not choose the winner after the test scores are out and attach an unadjusted CI.
 
-可以公开两套冻结最佳模型的测试分数，word–char 的差异作为预定次要分析。不能先看测试错误再换实体格式、C、去重阈值、class weight 或 tokenization，之后仍称同一次首次测试。后续改进可以做，但本测试集从此转为开发证据，需要另定确认设计。
+The test scores of both frozen best models can be published, with the word–char difference as a pre-specified secondary analysis. One must not first look at test errors and then change the entity format, C, the deduplication threshold, class weights or tokenization, and still call it the same first test. Later improvements can be made, but from then on this test set becomes development evidence, and a separate confirmatory design is needed.
 
-`class_weight='balanced'` 优化的是加权训练损失，不保证原分布的后验概率校准。当前仅分类比较不需要额外概率校准；若后续概率证书/选择性预测用这些分数，应另划校准协议，不能将 LR predict_proba 直接视为逐点真实概率。
+`class_weight='balanced'` optimizes a weighted training loss and does not guarantee calibrated posterior probabilities under the original distribution. The current classification-only comparison needs no extra probability calibration; if later probability certificates/selective prediction use these scores, a separate calibration protocol is needed, and LR predict_proba must not be treated directly as true pointwise probabilities.
 
-## 5. 已有评估实现的适配与统计解释
+## 5. Adapting the existing evaluation implementation, and statistical interpretation
 
-本审查实际读取的 `research/evaluation/evaluate.py` 具有以下可复用内容：固定三类混淆矩阵、零分母置零、按连接组构建组混淆矩阵、10,000 次组 multinomial 重采样、同一次组权重用于两模型配对差。其 docstring 已承认 percentile cluster bootstrap 是近似方法、没有选择或漂移校正。
+The `research/evaluation/evaluate.py` actually read by this review has the following reusable content: a fixed three-class confusion matrix, zeroing of zero denominators, group confusion matrices built from connected groups, 10,000 group multinomial resamples, and the same group weights used for the paired difference of two models. Its docstring already admits that the percentile cluster bootstrap is an approximate method without selection or drift correction.
 
-**必须修复的语义接口：** 当前文件把 `LABELS` 硬编码为 `bearish/neutral/bullish`，`METRICS` 随之生成。来源情绪不能直接传入，也不能通过改名伪装成投资立场。可显式参数化三类名字并保留旧默认，或在新适配器中只复用数值混淆矩阵函数再输出原生名字；不要临时改共享全局变量，因为它让运行身份和旧评估解释不清楚。
+**Semantic interface that must be fixed:** the current file hard-codes `LABELS` as `bearish/neutral/bullish`, and `METRICS` is generated from it. Source sentiment cannot be passed in directly, nor disguised as investment stance by renaming. One can explicitly parameterize the three class names while keeping the old default, or reuse only the numeric confusion-matrix functions in a new adapter and output the native names; do not temporarily modify the shared global variable, because that makes the run identity and the interpretation of the old evaluation unclear.
 
-**重采样契约：** 主估计是所有保留实体行等权的指标；重采样单位是词法组件，每次有放回抽取与测试组件数相同的组件，包含抽中组件的全部行，并按抽中次数重复计数。这是 row-weighted metric 的 cluster bootstrap，不是每组等权 macro-F1。多实体标题或大组件会对主点估计有较大权重，必须报告组件大小分布。如果另报 headline/group 等权指标，需要不同明示估计量，不能只换名称。
+**Resampling contract:** the main estimate is the metric with all retained entity rows weighted equally; the resampling unit is the lexical component; each replicate draws, with replacement, as many components as there are test components, includes all rows of each drawn component, and counts them repeatedly by the number of times drawn. This is a cluster bootstrap of a row-weighted metric, not a macro-F1 with equal weight per group. Multi-entity headlines or large components carry large weight in the main point estimate, so the distribution of component sizes must be reported. If a headline/group equal-weight metric is also reported, it needs a different, explicitly stated estimand; renaming alone is not enough.
 
-配对差必须在相同测试行、真实标签及相同组抽样下计算；缺任一基线预测就拒绝比较，不把缺失行删掉凑配对。固定三类 macro-F1 不能在某次 bootstrap 缺类时动态缩小类别集合。
+The paired difference must be computed on the same test rows, true labels and the same group sampling; if any baseline prediction is missing, the comparison is refused, and missing rows are not dropped to force a pairing. The fixed three-class macro-F1 cannot dynamically shrink the class set when a class is missing in some bootstrap replicate.
 
-95% percentile 区间需要近似独立、代表性的簇等条件来支撑总体解释。词法组不是这些条件的证明；10,000 次减少的是重采样 Monte Carlo 噪声，不是簇间依赖、来源偏差或非时间划分误差。小簇数/大组件、重复来源及稀有类会降低近似可靠性。现有少于30簇警示只是提醒，不是30簇即有效的定理。
+The 95% percentile interval needs conditions such as approximately independent, representative clusters to support a population interpretation. Lexical groups are not proof of these conditions; 10,000 replicates reduce resampling Monte Carlo noise, not between-cluster dependence, source bias or the error of a non-temporal split. A small number of clusters / large components, duplicate sources and rare classes lower the reliability of the approximation. The existing warning for fewer than 30 clusters is only a reminder, not a theorem that 30 clusters are valid.
 
-更具体地，这个 bootstrap **条件于已选定并训练好的模型和本次划分**，不包含随机初始化、训练语料采样、开发选择、预处理探索的全部不确定性。开发集独立选择方案后锁定测试是合理的保留集比较；现有区间不把整个研究搜索过程变成已校正的显著性推断。若需要训练过程稳定性，另定重复种子/划分研究，不能把本次10k区间误当作它。
+More specifically, this bootstrap is **conditional on the selected and trained models and on this split**, and does not include all the uncertainty from random initialization, training-corpus sampling, development selection and preprocessing exploration. Locking the test after the development set independently selects the scheme is a reasonable held-out comparison; the existing interval does not turn the whole research search process into a corrected significance inference. If training-process stability is needed, a separate repeated-seed/split study must be designed, and this 10k interval must not be mistaken for it.
 
-## 6. 可关闭的设计项与结果边界
+## 6. Closable design items and limits of the results
 
-| 项目 | 现有状态 | 本轮可关闭动作 |
+| Item | Current status | Closing action for this round |
 |---|---|---|
-| 来源候选及私有研究边界 | 已有本地来源/批准范围说明；未独立证明新闻发布方全部权利 | 引用来源审计，冻结原始文件摘要，公开只聚合 |
-| 来源标签与实体任务 | 原任务可以启动；非投资立场 | 固定三类原名及 `(headline,target)` 输入 |
-| 严格解析/冲突 | 提案明确；本审查未查看新实现 | AST重复键拒绝、同标题同实体冲突隔离、聚合流水账 |
-| 词法分组及划分 | 方法可行；不等于事件或时间审计 | 确定规范化/稳定组件ID，固定seed130并记录跨区边检查 |
-| 特征与C选择 | 合理的低成本起点 | train-only拟合，开发macro-F1、确定并列规则，选择日志 |
-| 评估原生标签接口 | 既有代码硬编码投资立场词 | 参数/适配器显式输出negative/neutral/positive及词法簇语义 |
-| 配对bootstrap | 既有实现具备机制 | 固定主比较、同组权重、相同行、10k及其条件解释 |
-| 历史与事件独立性 | 未关闭 | 不冒称通过；不阻止来源原任务Phase0 |
-| 需要LM/理论创新 | 没有证据 | 先记录简单基线的实际表现与失效范围，再决定下一轮 |
+| Source candidates and private research boundary | Local source/approved-scope notes exist; all rights of the news publishers are not independently proven | Cite the source audit, freeze the digest of the raw file, publish only aggregates |
+| Source labels and the entity task | The original task can start; not an investment stance | Fix the three original class names and the `(headline,target)` input |
+| Strict parsing/conflicts | The proposal is explicit; this review did not see the new implementation | Reject duplicate AST keys, quarantine same-headline same-entity conflicts, aggregate ledger |
+| Lexical grouping and split | The method is feasible; it is not an event or time audit | Fix normalization/stable component IDs, fix seed 130 and record the cross-partition edge check |
+| Features and C selection | A reasonable low-cost starting point | train-only fitting, development macro-F1, deterministic tie rule, selection log |
+| Native-label evaluation interface | Existing code hard-codes investment-stance words | Parameters/adapter explicitly output negative/neutral/positive and lexical-cluster semantics |
+| Paired bootstrap | The existing implementation has the mechanism | Fixed primary comparison, same group weights, same rows, 10k and its conditional interpretation |
+| Historical and event independence | Not closed | Do not claim it passed; it does not block the source-task Phase 0 |
+| Need for an LM / theoretical innovation | No evidence | First record the actual performance and failure range of the simple baselines, then decide the next round |
 
-运行前关闭前六项中对应实现契约，并由独立代码审查核对，不需要等待不存在的旧预测恢复。结果阶段无论好坏都应报告：保留/隔离总量、分区和簇结构、全部开发候选分数、冻结选择、测试聚合与配对区间、计算预算和实际用时、未达收敛/失败记录。公开归档只纳入代码、协议、环境和聚合报告；原文、逐行标签/预测、特征词表/模型若可泄露私有文本，只放 `research/private/` 且由打包程序明确排除。
+Before the run, close the implementation contracts corresponding to the first six items and have an independent code review check them; there is no need to wait for the recovery of old predictions that do not exist. At the results stage, report regardless of outcome: retained/quarantined totals, partition and cluster structure, all development candidate scores, the frozen selection, test aggregates and paired intervals, the compute budget and actual time, and records of non-convergence/failure. The public archive includes only code, protocols, environment and aggregate reports; the raw text, per-row labels/predictions, and feature vocabularies/models that could leak private text go only in `research/private/` and are explicitly excluded by the packaging program.
 
-可支持的最终表述是：“在来源原任务、固定非时间词法组划分上，新训练的某简单方案取得这些聚合表现；不确定性按指定组件近似重采样。”不能支持“无泄漏历史回测”“已取得信息集证书”“恢复旧24M”“优于FinBERT/LLM”“证明从零训练语言模型不可替代”。本审查没有验证新训练结果，也没有读取私有测试内容；它批准的是可闭合的设计，不是尚未发生的结论。
+The final statement that can be supported is: "On the original source task, with a fixed non-temporal lexical-group split, a newly trained simple scheme achieved these aggregate scores; uncertainty is from approximate resampling over the specified components." It cannot support "a leak-free historical backtest", "an information-set certificate has been obtained", "the old 24M has been restored", "better than FinBERT/LLM", or "proof that training a language model from scratch is irreplaceable". This review did not verify the new training results and did not read private test content; what it approves is a closable design, not conclusions that have not yet happened.

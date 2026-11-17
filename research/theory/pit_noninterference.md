@@ -1,200 +1,200 @@
-# Point-in-time 日志投影、历史非干扰与可识别边界
+# Point-in-time log projection, historical non-interference, and identifiability limits
 
-日期：2026-11-16。状态：下列 PNI1–PNI6 为完整条件命题及纸笔证明；不是 Lean 形式核验。只使用本地 [T1.1](notes.md) 与导师 WP1.2 的对象定义，不联网、不训练、不改实现。本文把“测试作为构造性证书”修正为：**构造给出条件性通用理由，测试检查实际实现的有限行为，两者不能互相替代**。这些因子化、可测函数复合和识别必要条件是通用事实，不据此声称理论新颖性。
+Date: 2026-11-16. Status: PNI1–PNI6 below are complete conditional propositions with pen-and-paper proofs; they are not formally verified in Lean. Only the object definitions from the local [T1.1](notes.md) and from the advisor's WP1.2 are used; no internet access, no training, no changes to the implementation. This file corrects "tests as constructive certificates" to: **the construction gives a conditional general argument, tests check the finite behaviour of the actual implementation, and neither can substitute for the other**. These factorizations, compositions of measurable functions, and necessary conditions for identification are general facts, and no theoretical novelty is claimed on their basis.
 
-PIT reference pipeline 是定理接口与实现证据，不是新的主线模型训练，不使 G0、G1 自动通过。源数据历史真实性仍需单独证据。后文特别区分记录所称的可见性与真实历史可得性。
+The PIT reference pipeline is a theorem interface and implementation evidence, not new main-line model training, and it does not make G0 or G1 pass automatically. The historical authenticity of the source data still needs separate evidence. The sections below distinguish in particular between the visibility a record claims and true historical availability.
 
-## 1. 对象：有限版本日志，而不是最终文档表
+## 1. Object: a finite version log, not a final document table
 
-固定截止时点 $t$。一个有限事件日志 $L=(e_1,\ldots,e_n)$ 的事件头包含：
+Fix a cutoff time $t$. The event header of each event in a finite event log $L=(e_1,\ldots,e_n)$ contains:
 
-- `event_id`：不可变的版本事件身份；
-- `document_id`：逻辑文档身份；
-- `knowledge_time`，记 $\kappa(e)$：本条**全部会被使用的事实**进入允许信息集的时间声明。
+- `event_id`: the immutable identity of the version event;
+- `document_id`: the logical document identity;
+- `knowledge_time`, written $\kappa(e)$: the declared time at which **all facts of this event that will be used** enter the allowed information set.
 
-事件体包含 `operation`、声称的 `record_time` 以及完整版本 payload。payload 可以含文本、内容摘要、来源、核心角色、标签与元数据；删除是 tombstone 事件。事件时间、文中会计期间、来源发布日期、原记录时间与知识时间是不同对象。实现应按 **knowledge_time** 投影；未来修订可以保留一个很早的 `record_time`，但不能因此倒写历史状态。
+The event body contains the `operation`, the claimed `record_time`, and the full version payload. The payload may contain text, a content digest, the source, the core role, labels, and metadata; deletion is a tombstone event. The event time, the accounting period in the text, the source publication date, the original record time, and the knowledge time are different objects. The implementation should project by **knowledge_time**; a future revision may keep a very early `record_time`, but that must not be allowed to rewrite historical state retroactively.
 
-定义历史投影
+Define the history projection
 
 $$H_t(L)=\operatorname{canon}\{e\in L:\kappa(e)\le t\},$$
 
-其中 canon 使用固定的历史可见键（例如 knowledge_time、event_id）排序并作确定性编码；不使用日志终值长度、物理行号、未来计数或最终全局版本编号作 tie-break。$H_t$ 包含所有可见版本事件，**不先只取全日志最新版本**。最新有效状态由一个单独的可见事件重放器 $R$ 计算，$X_t=R(H_t(L))$。
+where canon sorts by fixed historically visible keys (for example knowledge_time, event_id) and applies a deterministic encoding; it does not use the final log length, physical row numbers, future counts, or final global version numbers as tie-breaks. $H_t$ contains all visible version events, and **does not first take only the latest version over the whole log**. The latest valid state is computed by a separate visible-event replayer $R$, $X_t=R(H_t(L))$.
 
-为使测度论部分具体闭合，理论输入取有限字节/JSON 编码及整数时间的合法子集，带离散 $\sigma$-代数。有限长度的有限字节串构成可数空间；快照空间 $\mathcal H_t=H_t(\mathcal D_t)$ 也可数。若推广到任意不可数数据对象，应另外提供可测截面、合适商空间或显式可测构造，不能直接从集合上的因子化推出可测因子。
+To close the measure-theoretic part concretely, the theoretical input is taken to be a valid subset of finite byte/JSON encodings with integer times, with the discrete $\sigma$-algebra. Finite byte strings of finite length form a countable space; the snapshot space $\mathcal H_t=H_t(\mathcal D_t)$ is also countable. If this is extended to arbitrary uncountable data objects, a measurable section, a suitable quotient space, or an explicit measurable construction must be supplied separately; a measurable factor cannot be inferred directly from a set-theoretic factorization.
 
-**相同 hash 不是定义。** 历史等价以投影的规范内容相同为准；哈希只是实现证据。相同内容必产生相同确定性哈希，但反方向不能在无碰撞假设下当作数学恒等。若构造性证明需要输入身份，应保留规范内容/对象身份契约，而非仅说“hash相等”。
+**An identical hash is not the definition.** Historical equivalence means that the canonical content of the projections is the same; a hash is only implementation evidence. Identical content necessarily produces the same deterministic hash, but the converse cannot be treated as a mathematical identity without a collision-freeness assumption. If a constructive proof needs input identity, it should keep a canonical content / object identity contract, rather than merely saying "the hashes are equal".
 
-### 1.1 字段可得性契约
+### 1.1 Field availability contract
 
-完整版本 upsert 的知识时间应不早于该版本中每个被使用字段的真实允许可得时间；形式上，若字段集合为 $F(e)$，需要
+The knowledge time of a full version upsert should be no earlier than the true allowed availability time of every field used in that version; formally, if the set of fields is $F(e)$, we need
 
 $$\kappa(e)\ge \max_{f\in F(e)}\tau_f^*(e).$$
 
-实际历史可测性还要求事件是否被收录、各身份和时间元数据的形成机制历史适应；上式单独不排除未来决定保留哪些旧文档。标签若来自未来收益或后续人工审阅，其可得时间不能借标题发布时间提前。来源身份、core 标记、去重规则、模型选择规则、可用验证标签同样如此。
+Actual point-in-time measurability also requires that whether an event is included, and the mechanism forming each identity and time metadata field, be historically adapted; the inequality above alone does not rule out the future deciding which old documents are kept. If a label comes from future returns or later human review, its availability time cannot be moved earlier by borrowing the headline's publication time. The same applies to source identity, the core flag, deduplication rules, model selection rules, and available validation labels.
 
-完整版本方式会保守地延迟整个新版本，旧版本仍可在此前使用。若希望字段各自按时间更新，必须把字段版本化或采用等价可重放结构，不能从当前最终对象读取“补齐”的标签/来源字段。内容 hash 引用也需要与之对应的不可变字节在许可时间内已可得；今天能根据一个旧 hash 找到文本不证明过去已有这些字节。
+The full-version approach conservatively delays an entire new version, while the old version can still be used before then. If fields are to be updated separately by time, the fields must be versioned or an equivalent replayable structure must be used; "back-filled" label/source fields must not be read from the current final object. A content-hash reference also needs the corresponding immutable bytes to have been available within the allowed time; being able to find a text today from an old hash does not prove those bytes existed in the past.
 
-### 1.2 定义域与拒绝结果
+### 1.2 Domain and rejection results
 
-投影至少需要解析外层事件头。因此“所有未来扩展”指约定合法头的扩展：字典结构、非空身份、可解析的知识时间等满足契约。外层无法判定时间的损坏数据不在该定理保证域内；应报告输入无效，不声称任意恶意字节追加都不影响服务可用性。
+Projection requires at least parsing the outer event header. Hence "all future extensions" means extensions with headers valid by convention: dictionary structure, nonempty identities, parsable knowledge times, and so on satisfy the contract. Corrupted data whose time cannot be determined at the outer level is outside the guarantee domain of the theorem; it should be reported as invalid input, and no claim is made that appending arbitrary malicious bytes cannot affect service availability.
 
-在固定 $t$ 下，未来事件体可以是 opaque 的；不要读取它的标签、内容 hash 或 core 来决定历史输出是否有效。先根据合法头投影，再验证可见事件体。可见事件体无效时，可把确定性 `Reject` 纳入输出空间，仍由同一个 $H_t$ 决定。未来错误只进入审计附录，不应使相同历史下的稳定结果从成功变成失败。若实现选择只接受全日志均合法的更小定义域，应明示该限制，不能把域外错误处理也声称为已证明非干扰。
+At a fixed $t$, future event bodies may be opaque; their labels, content hashes, or core flags must not be read to decide whether the historical output is valid. First project by valid headers, then validate the visible event bodies. When a visible event body is invalid, a deterministic `Reject` can be included in the output space, still determined by the same $H_t$. Future errors go only into the audit appendix and must not turn a stable result under the same history from success into failure. If an implementation chooses to accept only the smaller domain where the whole log is valid, this restriction should be stated explicitly, and error handling outside the domain must not also be claimed as proved non-interference.
 
-## 2. PNI1：历史等价非干扰当且仅当通过历史投影因子化
+## 2. PNI1: historical-equivalence non-interference if and only if the output factors through the history projection
 
-固定代码/控制配置 $c$ 与种子值 $\omega$。令确定性稳定输出为 $F_{t,c,\omega}:\mathcal D_t\to\mathcal Y$；$\mathcal Y$ 包含全部承诺稳定的产物与状态，而不只模型权重。定义
+Fix the code/control configuration $c$ and the seed value $\omega$. Let the deterministic stable output be $F_{t,c,\omega}:\mathcal D_t\to\mathcal Y$; $\mathcal Y$ contains all artifacts and states promised to be stable, not only the model weights. Define
 
 $$L\sim_t L'\quad\Longleftrightarrow\quad H_t(L)=H_t(L').$$
 
-**命题 PNI1。** 以下二者等价：
+**Proposition PNI1.** The following are equivalent:
 
-1. 对任意 $L,L'\in\mathcal D_t$，$L\sim_t L'$ 蕴含 $F_{t,c,\omega}(L)=F_{t,c,\omega}(L')$。
-2. 存在唯一 $G_{t,c,\omega}:\mathcal H_t\to\mathcal Y$，使 $F_{t,c,\omega}=G_{t,c,\omega}\circ H_t$。
+1. For any $L,L'\in\mathcal D_t$, $L\sim_t L'$ implies $F_{t,c,\omega}(L)=F_{t,c,\omega}(L')$.
+2. There exists a unique $G_{t,c,\omega}:\mathcal H_t\to\mathcal Y$ with $F_{t,c,\omega}=G_{t,c,\omega}\circ H_t$.
 
-**证明。** 若2成立，同一历史投影交给同一函数必产生同一结果，得1。若1成立，对任意 $h\in\mathcal H_t$，定义 $G(h)$ 为任何满足 $H_t(L)=h$ 的 $L$ 的 $F(L)$。像空间定义保证这样的 $L$ 存在；1保证所有这样的值相同，因此定义良好，不依赖代表。于是对每个 $L$，$G(H_t(L))=F(L)$。若另一函数有相同因子化，逐个取像空间中的 $h=H_t(L)$，它的值必等于 $F(L)=G(h)$，故唯一。证毕。
+**Proof.** If 2 holds, the same history projection passed to the same function necessarily produces the same result, giving 1. If 1 holds, for any $h\in\mathcal H_t$ define $G(h)$ as $F(L)$ for any $L$ with $H_t(L)=h$. The definition of the image space guarantees such an $L$ exists; 1 guarantees that all such values are the same, so the definition is well defined and independent of the representative. Then $G(H_t(L))=F(L)$ for every $L$. If another function has the same factorization, taking each $h=H_t(L)$ in the image space in turn, its value must equal $F(L)=G(h)$, so it is unique. ∎
 
-这是纯集合命题，不需要训练算法、随机独立性、准确率或真实时间证据。在本节的可数离散空间中，因子可测；如果输出还依赖随机 $\Omega$，且每个固定日志上的 $F(L,\cdot)$ 可测，可在每个可数历史纤维固定一个代表，将 $G(h,\omega)$ 拼成可测函数。**在一般可测空间上，纤维常值本身不保证这个可测性结论。**
+This is a purely set-theoretic proposition and needs no training algorithm, independence of randomness, accuracy, or real time evidence. In the countable discrete spaces of this section, the factor is measurable; if the output also depends on a random $\Omega$ and $F(L,\cdot)$ is measurable for each fixed log, one can fix a representative in each countable history fibre and assemble $G(h,\omega)$ into a measurable function. **On general measurable spaces, being constant on fibres does not by itself guarantee this measurability conclusion.**
 
-等价的历史摘要不必恰为 $X_t$ 最终文档状态。若训练策略依赖历史修订次数或截至 $t$ 的来源轨迹，$H_t$ 中的版本事件仍可合法使用；如果只传 $X_t$，需另证它对实际流水线充分。默认保留 $H_t$ 可避免误把不同合法历史压成一个状态。
+An equivalent historical summary need not be exactly the final document state $X_t$. If the training policy depends on the number of historical revisions or on the source trajectory up to $t$, the version events in $H_t$ can still legitimately be used; if only $X_t$ is passed, one must separately prove that it is sufficient for the actual pipeline. Keeping $H_t$ by default avoids mistakenly collapsing different valid histories into one state.
 
-## 3. PNI2：纯未来追加何时等价于完整历史非干扰
+## 3. PNI2: when pure future appends are equivalent to full historical non-interference
 
-称 $L\rightsquigarrow_t L'$ 为一次合法纯未来扩展：加入的事件均满足 $\kappa>t$，没有改动任何既有事件身份、知识时间、内容或外生配置；且 $H_t(L')=H_t(L)$。这里区分**逻辑增加事件后规范排序**与**物理文件末尾 append**。
+Write $L\rightsquigarrow_t L'$ for one valid pure future extension: every added event satisfies $\kappa>t$, no existing event identity, knowledge time, content, or exogenous configuration is changed, and $H_t(L')=H_t(L)$. Here we distinguish **logically adding events followed by canonical sorting** from **physically appending at the end of the file**.
 
-**命题 PNI2。** 历史非干扰总蕴含每次合法纯未来扩展不变。反之，若对每个 $h\in\mathcal H_t$ 有一个合法基日志 $b_h$，满足 $H_t(b_h)=h$，而每个投影为 $h$ 的 $L$ 都可从 $b_h$ 经有限条合法纯未来扩展到达，那么“所有合法一步扩展均不变”蕴含 PNI1 的历史非干扰。
+**Proposition PNI2.** Historical non-interference always implies invariance under every valid pure future extension. Conversely, if for each $h\in\mathcal H_t$ there is a valid base log $b_h$ with $H_t(b_h)=h$, and every $L$ with projection $h$ can be reached from $b_h$ by finitely many valid pure future extensions, then "invariance under all valid one-step extensions" implies the historical non-interference of PNI1.
 
-**证明。** 正向直接使用扩展前后相同的投影。反向令从 $b_h$ 到 $L$ 的链长为 $k$；对 $k$ 归纳，一步不变使链上每个输出都等于 $F(b_h)$。因此任意 $L,L'$ 具有相同 $h$ 时，都等于 $F(b_h)$，得到非干扰。零长度链对应 $L=b_h$，同样成立。证毕。
+**Proof.** The forward direction uses directly that the projection is the same before and after an extension. For the converse, let the chain from $b_h$ to $L$ have length $k$; by induction on $k$, one-step invariance makes every output along the chain equal to $F(b_h)$. Hence any $L,L'$ with the same $h$ both equal $F(b_h)$, which gives non-interference. A chain of length zero corresponds to $L=b_h$, and the claim holds as well. ∎
 
-**常用充分条件。** 合法日志按知识时间与固定 tie-break 排序；$\le t$ 的历史前缀本身合法；每个完整日志由这个前缀依次追加 $>t$ 的合法事件得到，所有中间日志合法。此时可以取 $b_h=h$，一步追加的通用证明即可沿链延伸。更新事件的依赖必须能在当时解析，不能让早期记录要求一个尚未出现的未来父版本才合法。
+**A commonly used sufficient condition.** Valid logs are sorted by knowledge time and a fixed tie-break; the historical prefix with $\le t$ is itself valid; every complete log is obtained from this prefix by successively appending valid events with $>t$, and all intermediate logs are valid. Then one can take $b_h=h$, and a general proof for one-step appends extends along the chain. The dependencies of update events must be resolvable at the time; an early record must not require a future parent version that has not yet appeared in order to be valid.
 
-更一般地，若相同历史纤维在“合法未来增加/删除”的无向图中连通，不变性也沿路径传递。这说明真正需要的是足够的可比较性，不是字面要求文件格式一定为某种前缀格式。
+More generally, if each fibre of identical history is connected in the undirected graph of "valid future additions/deletions", invariance also propagates along paths. This shows that what is really needed is enough comparability, not a literal requirement that the file format be some prefix format.
 
-**缺少可达条件的反例。** 允许物理顺序任意，令输出为“最后一条历史记录之前出现的未来记录数”；没有历史记录时定义为0。向文件末尾追加任意未来事件都不改变此数，故全域物理末尾追加不变。可是 $L=[p]$ 与 $L'=[f,p]$ 中 $p$ 历史、$f$ 未来，投影同为 $[p]$，输出分别0与1。历史投影虽然合法，却不能从 $[p]$ 仅靠末尾追加得到 $[f,p]$。因此**仅有投影合法还不够**；应先规范化输入或明示只保证有序日志域。
+**Counterexample when the reachability condition is missing.** Allow arbitrary physical order, and let the output be "the number of future records appearing before the last historical record", defined as 0 when there is no historical record. Appending any future event at the end of the file does not change this number, so the output is invariant under physical end-appends over the whole domain. Yet for $L=[p]$ and $L'=[f,p]$, with $p$ historical and $f$ future, both projections are $[p]$, while the outputs are 0 and 1 respectively. Although the history projection is valid, $[f,p]$ cannot be obtained from $[p]$ by end-appends alone. Hence **a valid projection alone is not enough**; the input should be canonicalized first, or the guarantee should be stated explicitly only for the domain of ordered logs.
 
-**单条测试反例。** 若只从一个无未来基日志测试一次新增文档，程序“未来文档数达到2才翻转输出”会通过所有这种单条测试，却在两条未来追加时失败。这里失败的是测试量词；如果已经证明对每个合法中间状态的每次一步追加都不变，PNI2 的归纳正好排除这个问题。
+**Counterexample for single-item tests.** If one tests only a single document addition from one base log with no future events, the program "flip the output only once the number of future documents reaches 2" passes every such single-item test, yet fails with two future appends. What fails here is the quantifier of the test; if invariance under every one-step append from every valid intermediate state has been proved, the induction of PNI2 rules out exactly this problem.
 
-## 4. PNI3：先投影后重放的版本与构造性流水线
+## 4. PNI3: project first, then replay versions, and the constructive pipeline
 
-**命题 PNI3。** 固定 $c,\omega,t$。先取 $H_t(L)$，只验证和重放其可见版本，再依次运行有限个确定性组件
+**Proposition PNI3.** Fix $c,\omega,t$. First take $H_t(L)$, validate and replay only its visible versions, and then run finitely many deterministic components in sequence:
 
 $$Z_0=(t,H_t(L),c,\omega),\qquad Z_k=f_k(Z_0,\ldots,Z_{k-1}),\quad k=1,\ldots,K.$$
 
-若每个 $f_k$ 不访问任何未在参数中表达的外部状态，且稳定输出是这些 $Z_k$ 的确定性序列化，则全部组件及最终稳定输出满足 PNI1。
+If no $f_k$ accesses any external state not expressed in its arguments, and the stable output is a deterministic serialization of these $Z_k$, then all components and the final stable output satisfy PNI1.
 
-**证明。** 相同 $H_t$、$c,\omega,t$ 给相同 $Z_0$。假设前 $k-1$ 个状态相同，则 $f_k$ 的完整输入相同，确定性给出 $Z_k$ 相同。对有限组件归纳得全部状态相同，固定序列化得到相同字节。每个中间结果也明确是 $H_t$ 的函数，故可以独立作为检查对象。证毕。
+**Proof.** The same $H_t$ and $c,\omega,t$ give the same $Z_0$. Suppose the first $k-1$ states are the same; then the full input of $f_k$ is the same, and determinism gives the same $Z_k$. Induction over the finitely many components gives that all states are the same, and fixed serialization gives the same bytes. Each intermediate result is also explicitly a function of $H_t$, so it can be checked independently. ∎
 
-**版本重放的特例。** 对每个 document_id，在可见事件中按 $(\kappa,event\_id)$ 取最后一次完整 upsert/tombstone，或顺序重放等价状态。相同投影给相同可见事件顺序和相同状态。未来修订、未来 tombstone、未来标签/来源/core 更改都不在该输入中，因此不影响旧快照。删除是新的知识事件，不修改旧事件字节；新增更早知识时间的记录属于回填历史，不是纯未来追加，不在追加不变承诺内。
+**Special case of version replay.** For each document_id, among the visible events take the last full upsert/tombstone by $(\kappa,event\_id)$, or replay the equivalent state sequentially. The same projection gives the same visible event order and the same state. Future revisions, future tombstones, and future label/source/core changes are not in this input, so they do not affect old snapshots. A deletion is a new knowledge event and does not modify the bytes of old events; adding a record with an earlier knowledge time is back-filling history, not a pure future append, and is not covered by the append-invariance promise.
 
-**先 latest 后 filter 的反例。** 文档旧版本在知识时间0，文本A；修订在知识时间2，文本B，却保留 record_time=0。取截止1。全表先取最新再按 record_time 过滤会纳入B；全表先取最新再按 knowledge_time 过滤则会把原本可用的A也丢掉。正确顺序是先筛 $\kappa\le1$，再从历史事件中选择A。
+**Counterexample for taking the latest first and filtering afterwards.** The old version of a document has knowledge time 0 and text A; a revision has knowledge time 2 and text B, but keeps record_time=0. Take cutoff 1. Taking the latest over the whole table and then filtering by record_time includes B; taking the latest over the whole table and then filtering by knowledge_time drops A as well, which was originally available. The correct order is to filter $\kappa\le1$ first and then select A from the historical events.
 
-算法的“确定性”包含排序、并列规则、PRNG消费顺序和序列化。固定seed不能单独保证多线程数值库逐位确定；读取墙钟、环境变量、当前网络内容、未绑定版本的文件或共享cache也破坏封闭输入假设。reference pipeline可在限定运行环境中实现确定性；一般训练若只能证明分布一致，应报告分布非干扰，不冒充路径逐位不变。
+The "determinism" of the algorithm includes sorting, tie rules, the order of PRNG consumption, and serialization. A fixed seed alone cannot guarantee bitwise determinism of multithreaded numerical libraries; reading the wall clock, environment variables, current network content, unpinned versions of files, or a shared cache also breaks the closed-input assumption. The reference pipeline can achieve determinism in a restricted runtime environment; if general training can only be shown to be identical in distribution, distributional non-interference should be reported, and it must not be passed off as pathwise bitwise invariance.
 
-## 5. 全部共享组件都要在投影之后
+## 5. All shared components must come after the projection
 
-以下是构造条件的具体闭合项，不是仅靠每个函数加一个 cutoff 参数就完成的事情。
+The following are the concrete items that close the construction condition; this is not something achieved merely by adding a cutoff parameter to each function.
 
-| 入口 | 合法构造 | 违反构造的明确机制 |
+| Entry point | Valid construction | Explicit mechanism that violates the construction |
 |---|---|---|
-| 内容、来源、标签、core角色 | 仅用可见完整版本或字段版本 | 当前最终表中的未来标签回填；未来核验把旧文档升级为core |
-| 过滤与文档选择 | 规则和所用元数据均历史可得；作用于 $H_t$ | 未来是否存活、最终收益、后验优质来源决定保留旧文档 |
-| tokenizer / 词表 / IDF | 只在历史训练子集拟合 | 未来文本改变词频、词表容量排序、IDF或未知词编码 |
-| 去重 | 在历史集合上建图、取连通分量，历史键选代表 | 未来桥接文档把两个旧簇连成一簇，改变采样权重或代表 |
-| 抽样 | 从历史候选和历史大小出发，以外生seed抽样 | 用全日志长度作分母、先给未来行消耗随机数、先全库抽样再删未来 |
-| train/dev划分 | 历史候选的稳定ID及冻结规则 | 最终全库排序秩或未来形成的簇改变历史划分 |
-| 验证与超参数 | 验证标签截至决策时点已知，候选及选择规则固定 | 用未来收益标签选C、用未来验证损失早停、按将来表现选择core |
-| 缺失值、标准化与字典 | 仅历史统计量与版本化lookup | 最终财务修订、现行实体字典、全样本均值补旧缺失 |
-| 稳定输出身份 | 历史投影、历史配置、所用版本的确定性编码 | 把最终整个日志hash、未来数量、当前运行时间写进稳定证书 |
+| Content, source, labels, core role | Use only visible full versions or field versions | Future labels back-filled in the current final table; future verification upgrading an old document to core |
+| Filtering and document selection | Rules and the metadata they use are historically available; applied to $H_t$ | Future survival, final returns, or a posteriori high-quality sources deciding which old documents are kept |
+| tokenizer / vocabulary / IDF | Fitted only on the historical training subset | Future text changing word frequencies, vocabulary capacity ranking, IDF, or unknown-word encoding |
+| Deduplication | Build the graph on the historical set, take connected components, choose representatives by historical keys | A future bridging document joining two old clusters into one, changing sampling weights or representatives |
+| Sampling | Start from historical candidates and historical sizes, sample with an exogenous seed | Using the full log length as denominator, consuming random numbers for future rows first, sampling the whole database first and then deleting the future |
+| train/dev split | Stable IDs of historical candidates and a frozen rule | Rank in the final full-database order, or clusters formed in the future, changing the historical split |
+| Validation and hyperparameters | Validation labels known by the decision time, candidates and selection rule fixed | Choosing C with future return labels, early stopping on future validation loss, choosing core by future performance |
+| Missing values, standardization, and dictionaries | Only historical statistics and versioned lookups | Final financial restatements, the current entity dictionary, or full-sample means filling old missing values |
+| Stable output identity | Deterministic encoding of the history projection, the historical configuration, and the versions used | Writing the final whole-log hash, future counts, or the current run time into the stable certificate |
 
-**去重桥的具体例子。** 用token集合Jaccard≥$4/5$连边：旧集合 $A=\{1,2,3,4\}$ 和 $C=\{2,3,4,5\}$ 的相似度为 $3/5$，原来分属两簇；未来 $B=\{1,2,3,4,5\}$ 与二者相似度均为 $4/5$，全库建图会把两个旧簇合并。即使最后删去B，旧簇结构也已受未来影响。应先投影，再建图。
+**A concrete example of a deduplication bridge.** Add an edge when token-set Jaccard ≥$4/5$: the old sets $A=\{1,2,3,4\}$ and $C=\{2,3,4,5\}$ have similarity $3/5$ and originally belong to two clusters; the future $B=\{1,2,3,4,5\}$ has similarity $4/5$ with both, and building the graph on the full database merges the two old clusters. Even if B is deleted at the end, the old cluster structure has already been affected by the future. One should project first and then build the graph.
 
-**核心角色不豁免。** `core=True` 是必须有可得时间与依据的输入，不能以“核心可信”为名绕过历史投影。未来确认一篇旧材料可靠，不能反向证明当时的选择规则已知道这件事。一次受未来影响的共享预处理可能改变全部分片，因此它也不能只当作一篇边缘污染处理。
+**The core role is not exempt.** `core=True` is an input that must have an availability time and a basis; it cannot bypass the history projection in the name of "the core is trusted". Confirming in the future that an old document is reliable cannot prove retroactively that the selection rule at the time already knew this. A single future-affected shared preprocessing step may change every shard, so it cannot be treated as merely one document of edge contamination either.
 
-**评价标签的区别。** 预测未来结果后再用未来实现值评价，是定义回测统计量的正常部分；该标签须留在预测生成之后的评价路径。它不能倒流到历史模型的训练、验证选择或stable predictor artifact。预测 cutoff、标签可得时间及最终评估时点要分开记录。
+**The distinction for evaluation labels.** Predicting a future outcome and then evaluating with the future realized value is a normal part of defining a backtest statistic; that label must stay on the evaluation path after the prediction is generated. It must not flow back into the historical model's training, validation selection, or the stable predictor artifact. The prediction cutoff, the label availability time, and the final evaluation time must be recorded separately.
 
-## 6. 稳定证书与审计附录必须分开
+## 6. The stable certificate and the audit appendix must be kept separate
 
-令完整返回包为 $(Y_t,A_{\rm audit})$。非干扰承诺只施于明确定义的稳定对象
+Let the full returned package be $(Y_t,A_{\rm audit})$. The non-interference promise applies only to the explicitly defined stable object
 
 $$Y_t=G(H_t(L),c,\omega),$$
 
-可以包括历史版本状态、历史选取ID、词表、分组、采样、划分、超参数决策及上述产物的确定性hash。审计附录 $A_{\rm audit}$ 可以记录原始输入文件hash、最终总行数、被忽略未来事件数、检查器运行时间、环境与诊断，但必须标明它会随未来追加改变，且**不得反馈到 $Y_t$ 的任何决策**。
+which may include the historical version state, the historically selected IDs, the vocabulary, grouping, sampling, split, hyperparameter decisions, and deterministic hashes of these artifacts. The audit appendix $A_{\rm audit}$ may record the raw input file hash, the final total row count, the number of ignored future events, the checker's run time, the environment, and diagnostics, but it must be marked as changing under future appends, and **must not feed back into any decision of $Y_t$**.
 
-**反例。** 即使模型权重是常数，若stable certificate同时包含 `full_log_count`，从历史日志追加一个未来事件就使该计数增加1，整个证书不再不变。同理，最终全日志hash通常变化。若验收对象是整个返回包，便不能把附录变化称为“证书仍逐位不变”；必须明确可验证投影 $\pi_{\rm stable}(Y_t,A_{\rm audit})=Y_t$，或者直接分别保存。
+**Counterexample.** Even if the model weights are constant, if the stable certificate also contains `full_log_count`, appending one future event to the historical log increases this count by 1, and the whole certificate is no longer invariant. Likewise, the final whole-log hash usually changes. If the object of acceptance is the whole returned package, changes in the appendix cannot be described as "the certificate is still bitwise invariant"; one must make the verifiable projection $\pi_{\rm stable}(Y_t,A_{\rm audit})=Y_t$ explicit, or simply store the two separately.
 
-审计附录中的整体hash有溯源用途，但不是历史模型可测性证明。改成“只看权重相同”也过弱，因为词表、标签顺序、core身份或超参数说明可能已被未来改动，日后推理行为和证书解释会不同。
+The whole-file hash in the audit appendix serves provenance, but it is not a proof of measurability of the historical model. Switching to "only check that the weights are the same" is too weak as well, because the vocabulary, label order, core identities, or hyperparameter descriptions may have been changed by the future, and later inference behaviour and the interpretation of the certificate would differ.
 
-## 7. PNI4：记录非干扰何时推出真实历史可测性
+## 7. PNI4: when record non-interference implies true point-in-time measurability
 
-在真实数据世界概率空间上，以 $\mathcal F_t$ 表示截至 $t$ **实际允许**的信息。记录日志是随机对象 $L$。控制配置 $C_t$ 包括代码/规则选择、候选超参数、外部lookup与随机机制说明。
+On the probability space of the real data world, let $\mathcal F_t$ denote the information **actually allowed** up to $t$. The record log is a random object $L$. The control configuration $C_t$ includes the choice of code/rules, candidate hyperparameters, external lookups, and the description of the random mechanism.
 
-**命题 PNI4。** 如果 $H_t(L)$ 与 $C_t$ 对 $\mathcal F_t$ 可测，且 $G$ 可测，则 $Y_t=G(H_t(L),C_t,\Omega)$ 对 $\mathcal F_t\vee\sigma(\Omega)$ 可测。固定种子或将随机源事先纳入 $\mathcal F_0$ 时，得到相应历史信息集下的可测性。
+**Proposition PNI4.** If $H_t(L)$ and $C_t$ are $\mathcal F_t$-measurable and $G$ is measurable, then $Y_t=G(H_t(L),C_t,\Omega)$ is $\mathcal F_t\vee\sigma(\Omega)$-measurable. When the seed is fixed or the random source is included in $\mathcal F_0$ in advance, one obtains measurability with respect to the corresponding point-in-time information set.
 
-**证明。** $H_t(L)$、$C_t$、$\Omega$ 都对扩张 $\sigma$-代数可测；它们组成的随机向量可测，再与可测 $G$ 复合得到结论。若 $\Omega$ 已属于 $\mathcal F_t$，扩张不增加信息。证毕。
+**Proof.** $H_t(L)$, $C_t$, and $\Omega$ are all measurable with respect to the enlarged $\sigma$-algebra; the random vector they form is measurable, and composing with the measurable $G$ gives the result. If $\Omega$ already belongs to $\mathcal F_t$, the enlargement adds no information. ∎
 
-这一步**不需要独立性**，也不自动说扩张后的种子没有携带未来。可测性命题与下节的信息限制必须分开。类似地，PNI1在固定种子比较世界时也不要求种子随机；但它不能阻止实际使用者在看过未来结果后选种子。
+This step **does not need independence**, and it does not automatically say that the seed after enlargement carries no future. The measurability proposition must be kept separate from the information restriction in the next section. Similarly, PNI1 does not require the seed to be random when comparing worlds with the seed fixed; but it cannot prevent an actual user from choosing the seed after seeing future results.
 
-PNI4 的实质外部前提是 $H_t(L)$ 的真实历史适应性和控制选择。仅有字段名 knowledge_time、正确过滤、hash匹配不能证明它。若未来比特 $B$ 决定两个早已存在的旧文档中只收录 $d_B$，并给入选文档早期知识时间，模型输出下标就等于 $B$。日志程序可能完全因子化于记录投影，但这个投影本身已不是 $\mathcal F_t$ 可测。
+The substantive external premise of PNI4 is the true historical adaptedness of $H_t(L)$ and of the control choices. A field named knowledge_time, correct filtering, and matching hashes cannot prove it. If a future bit $B$ decides that only $d_B$ of two long-existing old documents is included, and the selected document is given an early knowledge time, the model outputting its index equals $B$. The log program may factor completely through the record projection, yet this projection itself is no longer $\mathcal F_t$-measurable.
 
-冻结当前代码hash用于重现，不证明该规则当时可得，也不排除其基于未来成绩被选择。历史策略/模型的强声明需要规则当时已确定或选择历史适应的证据；今天写的 reference pipeline可以证明一个固定条件比较器怎样计算，不能证明它在过去已部署。删除比较器 $D_{\rm del}$ 的成员选择、metadata和core同样要适应；仅删掉真实晚到内容不补齐这项前提。
+Freezing the current code hash serves reproducibility; it does not prove that the rule was available at the time, nor does it rule out that the rule was chosen on the basis of future performance. A strong claim about a historical strategy/model needs evidence that the rule was already determined at the time or that its selection was historically adapted; a reference pipeline written today can prove how a fixed conditional comparator computes, not that it was deployed in the past. The member selection, metadata, and core of the deletion comparator $D_{\rm del}$ must likewise be adapted; deleting only truly late-arriving content does not supply this premise.
 
-**可测性与历史构造性不能混同。** 在一个把某段文本设为常量的概率空间中，该文本即使实际未来才公开，也会在数学上对每个 $\mathcal F_t$ 可测。事后固定的已实现checkpoint也能被当成常函数；这并不是历史可用性证据。PNI4只传递给定信息模型中的可测性，未证明每个实际被使用版本符合来源准入、当时已能计算该输出或该策略已部署。研究必须事前固定算法和跨世界对象，记录真实版本、选择和可重放的依赖来源，再解释相应信息集；不能看完未来后把所有实现值改称常量而宣布无泄漏。
+**Measurability and historical constructibility must not be conflated.** In a probability space that sets some text to be a constant, that text is mathematically $\mathcal F_t$-measurable for every $t$ even if it was actually published only in the future. A realized checkpoint fixed after the fact can also be treated as a constant function; this is not evidence of historical availability. PNI4 only transfers measurability within a given information model; it does not prove that every version actually used satisfies source admissibility, that the output could already be computed at the time, or that the strategy was deployed. The research must fix the algorithm and the cross-world objects in advance, record the real versions, selections, and replayable dependency sources, and then interpret the corresponding information set; one cannot, after seeing the future, rename all realized values as constants and declare no leakage.
 
-## 8. PNI5：外生随机性的正确定义
+## 8. PNI5: the correct definition of exogenous randomness
 
-设 $Z$ 为研究中要排除额外读取的未来数据。足够条件是随机源独立于整个数据世界；较弱且针对固定 $t$ 的条件为
+Let $Z$ be the future data that the research must exclude from additional reading. A sufficient condition is that the random source be independent of the whole data world; a weaker condition, specific to a fixed $t$, is
 
 $$\Omega\ \perp\!\!\!\perp\ Z\mid\mathcal F_t.$$
 
-**命题 PNI5。** 在PNI4条件下，再有上述条件独立，则 $Y_t\perp\!\!\!\perp Z\mid\mathcal F_t$。这指在历史已知信息之外，外生随机计算不再额外携带 $Z$；并不否认历史本身对未来具有预测力。
+**Proposition PNI5.** Under the conditions of PNI4, together with the conditional independence above, $Y_t\perp\!\!\!\perp Z\mid\mathcal F_t$. This means that, beyond the historically known information, the exogenous random computation carries no additional $Z$; it does not deny that history itself has predictive power for the future.
 
-**证明。** 对有界可测 $a,b$，$a(Y_t)=a(G(H_t,C_t,\Omega))$ 是 $\Omega$ 与 $\mathcal F_t$ 可测量的函数。条件独立给出
+**Proof.** For bounded measurable $a,b$, $a(Y_t)=a(G(H_t,C_t,\Omega))$ is a function measurable with respect to $\Omega$ and $\mathcal F_t$. Conditional independence gives
 
 $$E[a(Y_t)b(Z)\mid\mathcal F_t]=E[a(Y_t)\mid\mathcal F_t]E[b(Z)\mid\mathcal F_t].$$
 
-可先对历史分段常值函数和随机源事件指示函数验证该式，再由有界单调类扩展到上述可测函数；或直接使用条件独立的可测变换封闭性，其前提正是历史量可测。该式是所述条件独立的定义，证毕。
+One can first verify this identity for functions that are piecewise constant in history and indicators of random-source events, and then extend it to the measurable functions above by the bounded monotone class theorem; or use directly the closure of conditional independence under measurable transformations, whose premise is exactly that the historical quantities are measurable. This identity is the definition of the stated conditional independence. ∎
 
-**边际独立不够。** 令历史比特 $H$ 和未来比特 $B$ 独立且各均匀，设 $\Omega=H\oplus B$。则 $\Omega$ 与 $B$ 边际独立，可是 $Y=H\oplus\Omega=B$；种子与历史合起来恰泄露未来。因而最初 [T1.1](notes.md) 中“种子独立于未来数据”的简写须收紧为整个数据世界独立或上述条件独立，不能只解释成边际独立。主代理已另行把该澄清同步到总笔记；本文记录完整理由，不修改其余文件。
+**Marginal independence is not enough.** Let the historical bit $H$ and the future bit $B$ be independent and each uniform, and set $\Omega=H\oplus B$. Then $\Omega$ and $B$ are marginally independent, yet $Y=H\oplus\Omega=B$; the seed and the history together leak exactly the future. Hence the shorthand "the seed is independent of future data" in the original [T1.1](notes.md) must be tightened to independence from the whole data world or the conditional independence above, and cannot be read as marginal independence only. The main agent has separately synced this clarification into the main notes; this file records the full reasoning and does not modify other files.
 
-`seed=130` 是明确的固定控制值，便于重复运行；它的数值本身不证明未经过未来调参。`seed=len(full_log)`、从最终文件hash取seed、测试许多seed后挑未来表现最好者，均不属于外生机制。若只声称分布非干扰，也应固定条件随机核；“用了随机数”不会自动消除未来信息。
+`seed=130` is an explicit fixed control value, convenient for repeated runs; its numerical value by itself does not prove that it was not tuned on the future. `seed=len(full_log)`, taking the seed from the final file hash, and testing many seeds and picking the one with the best future performance are not exogenous mechanisms. If only distributional non-interference is claimed, the conditional random kernel should also be fixed; "random numbers were used" does not automatically remove future information.
 
-## 9. PNI6：完美记录非干扰仍可能无法识别清洁统计量
+## 9. PNI6: perfect record non-interference may still fail to identify the clean statistic
 
-设可观测日志与全部已交证据为 $O$，与它相容的真实可得性世界集合 $\mathcal W(O)$ 非空。每个世界 $w$ 有有界清洁比较器统计量 $S_{\rm clean}(w)\in[0,1]$。考虑只读 $O$ 的确定性程序，输出闭区间 $I(O)=[\ell(O),u(O)]$。
+Let the observable log and all submitted evidence be $O$, and let the set of true-availability worlds compatible with it, $\mathcal W(O)$, be nonempty. Each world $w$ has a bounded clean-comparator statistic $S_{\rm clean}(w)\in[0,1]$. Consider deterministic procedures that read only $O$ and output a closed interval $I(O)=[\ell(O),u(O)]$.
 
-**命题 PNI6。** 若要求对所有相容世界均可靠，即 $S_{\rm clean}(w)\in I(O)$ 对每个 $w\in\mathcal W(O)$ 成立，那么
+**Proposition PNI6.** If the procedure is required to be sound for all compatible worlds, i.e. $S_{\rm clean}(w)\in I(O)$ for every $w\in\mathcal W(O)$, then
 
 $$\left[\inf_{w\in\mathcal W(O)}S_{\rm clean}(w),\ \sup_{w\in\mathcal W(O)}S_{\rm clean}(w)\right]\subseteq I(O)$$
 
-下确界和上确界有限；结论的端点包含性使用输出为闭区间这一假设。
+The infimum and supremum are finite; the inclusion of the endpoints in the conclusion uses the assumption that the output is a closed interval.
 
-**证明。** 可靠性要求区间包含每个相容数值。区间的下端不得大于这些数值的下确界，上端不得小于上确界；闭区间也包含极限端点，得到结论。证毕。
+**Proof.** Soundness requires the interval to contain every compatible value. The lower end of the interval cannot exceed the infimum of these values, and the upper end cannot be less than the supremum; a closed interval also contains limiting endpoints, which gives the result. ∎
 
-**两个世界的明确构造。** 取 cutoff=1；观察到同一条文档，记录声称 record_time=knowledge_time=0，文本及所有hash相同。真实允许可得时间尚未经认证。世界 $w_0$ 中该文档真实可得时间0；世界 $w_1$ 中实际为2、日志声明被错误回填。固定训练规则“集合非空则预测1，否则预测0”，固定一个真实标签为1的测试点，统计量是accuracy。按真实可得性定义清洁集合，则 $w_0$ 包含文档，$S_{\rm clean}=1$；$w_1$ 排除文档，$S_{\rm clean}=0$。记录投影在两个世界完全相同，任何严格按记录投影的程序都可完美满足PNI1–PNI3，但任何对两个世界都可靠的确定性区间必须包含 $[0,1]$。
+**An explicit two-world construction.** Take cutoff=1; the same document is observed, with the record claiming record_time=knowledge_time=0, and the text and all hashes identical. The true allowed availability time has not been certified. In world $w_0$ the document's true availability time is 0; in world $w_1$ it is actually 2, and the log's declaration was wrongly back-filled. Fix the training rule "predict 1 if the set is nonempty, otherwise predict 0", fix one test point with true label 1, and let the statistic be accuracy. Defining the clean set by true availability, $w_0$ includes the document and $S_{\rm clean}=1$; $w_1$ excludes it and $S_{\rm clean}=0$. The record projections are identical in the two worlds, and any procedure that works strictly from the record projection can perfectly satisfy PNI1–PNI3, but any deterministic interval sound for both worlds must contain $[0,1]$.
 
-这个例子刻意允许知识时间声明有误，违反的是**逐版本历史来源准入的真实性契约**，不能据此断言 $H_t$ 数学上不可测：在仅由这两个世界组成的概率空间中，同一观测 $O$ 及其 $H_t$ 是常量，反而必可测。因此它不是PNI4的反例；它说明记录非干扰、信息可测性、真实来源准入与清洁比较器识别是不同义务。未认证日志不能自行证明后两者。如果已取得覆盖所有字段与选择的可靠真实知识时间证据，相容世界会缩小，才能有望得到更窄结论。单靠再做未来追加测试不能缩小这些真实世界。
+This example deliberately allows the knowledge-time declaration to be wrong; what it violates is **the authenticity contract for per-version historical source admissibility**, and one cannot conclude from it that $H_t$ is mathematically non-measurable: in the probability space consisting of only these two worlds, the same observation $O$ and its $H_t$ are constants and hence necessarily measurable. So it is not a counterexample to PNI4; it shows that record non-interference, informational measurability, true source admissibility, and identification of the clean comparator are different obligations. An uncertified log cannot prove the latter two by itself. Only if reliable evidence of true knowledge times covering all fields and selections has been obtained will the set of compatible worlds shrink, so that a narrower conclusion might be possible. Running more future-append tests alone cannot shrink these real worlds.
 
-若采用随机置信程序，须另定义随机性和覆盖量词，不能直接套上面确定性必要条件。不过当两个世界给完全相同的观测分布，且分别要求覆盖0和1的概率都至少 $1-\alpha$，并集界仍要求程序以至少 $1-2\alpha$ 同时包含二者；这也说明没有新增识别信息时，随机化不能普遍产生可靠窄区间。该观察不使用也不替代后续真实审计设计。
+If a randomized confidence procedure is used, the randomness and the coverage quantifiers must be defined separately, and the deterministic necessary condition above cannot be applied directly. However, when the two worlds give exactly the same observation distribution and coverage of 0 and of 1 are each required with probability at least $1-\alpha$, the union bound still requires the procedure to contain both simultaneously with probability at least $1-2\alpha$; this also shows that, without new identifying information, randomization cannot in general produce sound narrow intervals. This observation neither uses nor replaces later real audit designs.
 
-## 10. 测试能证实的范围、接口验收和开放前提
+## 10. What tests can confirm, interface acceptance, and open premises
 
-**有限测试不构成通用证明。** 在合法事件空间无限的情况下，给定任何有限测试集合，都可构造一个程序：在所有已测输入上与正确程序相同，但遇到一个未测试的未来event_id/payload组合时翻转稳定输出。有限观察无法区分二者。如果输入宇宙和程序语义确实有限且已穷举全部相关输入对，可以证明那个有限模型的性质；不能将它外推为未建模文件、环境或真实来源的性质。
+**Finite tests do not constitute a general proof.** When the space of valid events is infinite, for any given finite set of tests one can construct a program that agrees with the correct program on all tested inputs but flips the stable output on an untested combination of future event_id/payload. Finite observation cannot distinguish the two. If the input universe and the program semantics really are finite and all relevant input pairs have been enumerated, one can prove properties of that finite model; they cannot be extrapolated to properties of unmodelled files, environments, or real sources.
 
-适合reference pipeline的测试是对构造的攻击性检查：未来新增、同ID修订、tombstone、标签/来源/core变更、未来去重桥、未来词表高频词、未来总数影响、随机流消费、未来验证标签与超参选择；检查全部中间稳定产物及稳定输出规范字节。另需cutoff边界、同知识时间的确定性排序、空历史、可见坏payload拒绝、未来opaque坏payload与合法头契约、同历史不同物理顺序的等价性。它们验证具体实现分支，不替代PNI3的封闭依赖假设。
+The tests suited to the reference pipeline are adversarial checks of the construction: future additions, same-ID revisions, tombstones, label/source/core changes, future deduplication bridges, high-frequency words in a future vocabulary, effects of future counts, random-stream consumption, future validation labels, and hyperparameter selection; check all intermediate stable artifacts and the canonical bytes of the stable output. Also needed: cutoff boundaries, deterministic ordering for equal knowledge times, empty history, rejection of bad visible payloads, opaque bad future payloads under the valid-header contract, and equivalence of different physical orders with the same history. These verify concrete implementation branches and do not replace the closed-dependency assumption of PNI3.
 
-建议实现接口为：
+The suggested implementation interface is:
 
-1. `canonical_history(events, cutoff)`：合法头投影，随后只验证可见payload；输出绑定cutoff的规范历史对象。
-2. `replay_visible(history, cutoff)`：按知识时间重放完整版本/tombstone；所有下游组件只接该历史及固定配置，不再接完整日志句柄。
-3. `stable_pipeline(history, config, seed, cutoff)`：过滤、词表、去重、采样、划分、开发选择依次输出可复核稳定产物。config的外生/历史可得性是调用契约。
-4. `audit_envelope(full_input, environment, diagnostics)`：记录完整文件身份和运行信息，单独保存，禁止回流。
+1. `canonical_history(events, cutoff)`: valid-header projection, then validation of visible payloads only; outputs a canonical history object bound to the cutoff.
+2. `replay_visible(history, cutoff)`: replays full versions/tombstones by knowledge time; all downstream components receive only this history and the fixed configuration, and no longer receive a handle to the full log.
+3. `stable_pipeline(history, config, seed, cutoff)`: filtering, vocabulary, deduplication, sampling, splitting, and development selection in sequence, each outputting a reviewable stable artifact. The exogenous/historical availability of config is part of the calling contract.
+4. `audit_envelope(full_input, environment, diagnostics)`: records the full file identity and run information, stored separately, with no flow back.
 
-| 证明义务 | 状态与闭合位置 | 不包含的现实主张 |
+| Proof obligation | Status and where closed | Real-world claims not included |
 |---|---|---|
-| 历史纤维常值与因子化 | CLOSED-LOCAL，PNI1 | 不验证记录的真实时间 |
-| 追加与非干扰的等价条件 | CLOSED-LOCAL，PNI2及可达性反例 | 不保证任意物理日志域都闭合 |
-| 可见版本重放与组件复合 | CLOSED-LOCAL，PNI3 | 不证明任意第三方程序无隐藏输入 |
-| 真历史可测性传递 | CLOSED-LOCAL，PNI4，外部适应性假设明确 | 不证明来源、选择和代码历史可得 |
-| 外生随机性不添加未来信息 | CLOSED-LOCAL，PNI5 | 不保证事后挑seed也合法 |
-| 未识别真值的必要区间宽度 | CLOSED-LOCAL，PNI6 | 不是新的统计最优性或原创性结果 |
+| Constant on history fibres and factorization | CLOSED-LOCAL, PNI1 | Does not verify the true times of records |
+| Equivalence conditions between appends and non-interference | CLOSED-LOCAL, PNI2 and the reachability counterexample | Does not guarantee closure for arbitrary physical log domains |
+| Visible-version replay and component composition | CLOSED-LOCAL, PNI3 | Does not prove that arbitrary third-party programs have no hidden inputs |
+| Transfer of true point-in-time measurability | CLOSED-LOCAL, PNI4, with the external adaptedness assumption made explicit | Does not prove that sources, selection, and code were historically available |
+| Exogenous randomness adds no future information | CLOSED-LOCAL, PNI5 | Does not guarantee that picking a seed after the fact is valid |
+| Necessary interval width under unidentified ground truth | CLOSED-LOCAL, PNI6 | Not a new statistical optimality or original result |
 
-六项条件数学义务均给出本地证明；真实时间、完整版本日志、历史选择及外部依赖的真实性仍开放。本文未执行新的检查器/训练，没有产生计算结果或额外算力消耗记录。内部独立审查可核对公式与量词；它不是Fable反馈。后续实现通过有限测试后，合理结论是“指定接口和输入契约下的PIT构造及其实现检查”，而不是“实际历史无泄漏已获证”。
+All six conditional mathematical obligations have local proofs; the authenticity of real times, complete version logs, historical selection, and external dependencies remains open. This file did not run any new checker/training and produced no computational results or records of additional compute use. An internal independent review can check the formulas and quantifiers; it is not feedback from Fable. After a later implementation passes finite tests, the reasonable conclusion is "a PIT construction and checks of its implementation under the specified interface and input contract", not "the absence of leakage in actual history has been proved".

@@ -1,23 +1,23 @@
-# T1g 口径与证据
+# T1g conventions and evidence
 
-2026-11-17，来源层级：任务正文、前序实验、我们的实验分别标注。工作限定为任务的四个问题与两处引文核实；不改 README 或论文。
+2026-11-17. Source levels are marked separately: task text, earlier experiments, our experiment. The work is limited to the task's four questions and the verification of two citations; the README and the paper are not changed.
 
-## 目标与来源
+## Goal and sources
 
-目标：按 T1g 的原门槛判断可见后果，以及 TAT-QA 样本外规则检验。范围是金融问答基准；对象是显示精度传播；单位是明确绑定出处的表格关系与问题。已有数据的实验性研究，辅以前置探索性查新。
+Goal: judge visible consequences under T1g's original thresholds, and run the out-of-sample rule test on TAT-QA. The scope is financial question-answering benchmarks; the object is the propagation of displayed precision; the units are table relations and questions with explicitly bound sources. This is an experimental study of existing data, supported by a preliminary exploratory novelty check.
 
-主源依序为 FinQA/TAT-QA 官方固定版本数据与评分代码、原论文全文、前序 T1/T1a/T1b/T1c/T1d 的冻结结果。网络二手资料只定位原文。逐条事实与出处记录于各部分报告及 literature.md。
+The primary sources, in order, are the official pinned versions of the FinQA/TAT-QA data and scoring code, the full texts of the original papers, and the frozen results of the earlier T1/T1a/T1b/T1c/T1d. Secondary web material is used only to locate original texts. Each fact and its source are recorded in the reports of the individual parts and in literature.md.
 
-## 执行边界
+## Execution boundaries
 
-第一、二部分等待查新 gate；所有 TAT-QA 精确范围计算等待第三部分预测单独提交。第三部分不能根据实测更改预测。对计算结论使用精确有理数或认证包络；抽样概率只称模型下数值估计。AI 阅读不冒充人类审阅。
+Parts One and Two wait for the novelty-check gate; all exact TAT-QA range computations wait until the Part Three prediction has been committed on its own. Part Three must not change the prediction based on the measurements. Computed conclusions use exact rationals or certified envelopes; sampled probabilities are called only numerical estimates under the model. AI reading is not passed off as human review.
 
-同一文档跨问题重复出现时，表行统计去重；问答统计按题计数。识别漏检、解析排除、单位不明和语义不匹配均报告，不当作稳定或一致。
+When the same document appears across several questions, table-row statistics are deduplicated; QA statistics are counted per question. Missed detections, parse exclusions, unclear units, and semantic mismatches are all reported, and are not treated as stable or consistent.
 
-## 金额差的事先推导
+## Prior derivation for amount differences
 
-设同一末位单位 d，两真实水平相对显示中心的误差 U,V 独立均匀于 [-d/2,d/2]，真实差由同一真实水平相减得到，再按 d 就近舍入。显示中心差恰在 d 的网格上，差额印值与中心差不等当且仅当 |U−V|>d/2。单位正方形中两个角三角形面积各为 1/8，总概率为 1/4。等号概率为零。
+Let the two levels share the same last-digit unit d, and let the errors U,V of the two true levels relative to the displayed centers be independent and uniform on [-d/2,d/2]. The true difference is obtained by subtracting the same true levels and is then rounded to the nearest multiple of d. The difference of the displayed centers lies exactly on the grid of d, so the printed difference differs from the center difference if and only if |U−V|>d/2. In the unit square the two corner triangles each have area 1/8, for a total probability of 1/4. The probability of equality at the boundary is zero.
 
-这里“各自舍入”不等于三个舍入误差统计独立：第三个误差由 U−V 与舍入网格决定。若强行让三个误差互相独立，同时要求真实差恒等式，模型不自洽。1/4 要求两个水平的末位一致，差额也用同一末位；异精度行须逐行积分。
+Here "each rounded separately" does not mean the three rounding errors are statistically independent: the third error is determined by U−V and the rounding grid. Forcing the three errors to be mutually independent while also requiring the true-difference identity makes the model inconsistent. The 1/4 requires the two levels to have the same last digit and the difference to use the same last digit as well; rows with mixed precision must be integrated row by row.
 
-百分比变化同理先扰动两个真实水平再形成比率并舍入，不能把第三个印值另作独立随机抽样。位置直方图也不应预期均匀：即使输入误差均匀，差值为三角分布，比率通常更不均匀。需与相同生成模型的预测直方图比较。
+Percentage changes work the same way: first perturb the two true levels, then form the ratio and round it; the third printed value cannot be treated as a separate independent random draw. Nor should the position histogram be expected to be uniform: even if the input errors are uniform, the difference has a triangular distribution, and the ratio is usually even less uniform. It must be compared with the predicted histogram from the same generative model.

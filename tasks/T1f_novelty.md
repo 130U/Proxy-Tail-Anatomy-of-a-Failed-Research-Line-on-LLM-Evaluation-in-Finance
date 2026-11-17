@@ -1,106 +1,106 @@
-# T1f：查新——五个候选 insight 有没有人做过
+# T1f: Novelty check: has anyone done the five candidate insights
 
-分支 `task/t1f`，目录 `research/t1f_novelty/`。需要联网检索。这是当前最重要的任务，值得花时间做透。
+Branch `task/t1f`, directory `research/t1f_novelty/`. Needs internet searches. This is currently the most important task and is worth taking the time to do thoroughly.
 
-## 背景，从头说
+## Background, from the start
 
-项目在审计金融问答基准 FinQA（Chen 等，EMNLP 2021）。目标是一篇顶会短文。完整的探索链路在仓库首页 [README](../README.md)，短文初稿在 [`paper/finqa_short_v0.md`](../archive/finqa_short_paper_draft_v0.md)，请先读这两个文件。
+The project is auditing the financial QA benchmark FinQA (Chen et al., EMNLP 2021). The goal is a short paper at a top conference. The full exploration map is on the repository homepage [README](../README.md), and the short-paper draft is at [`paper/finqa_short_v0.md`](../archive/finqa_short_paper_draft_v0.md); read these two files first.
 
-首页用颜色表示研究价值：
+The homepage uses colours to show research value:
 
-- 🟢 可以出文章：**查新确认没人做过**，并且证据完整。有一个 🟢，文章就成立。
-- 🟡 值得探索的候选：目前只是"导师没检索到"。
-- ⚪ 不再重点研究：别人已有相似的观点。
+- 🟢 Can become a paper: **the novelty check confirms that no one has done it**, and the evidence is complete. A single 🟢 is enough for the paper to stand.
+- 🟡 A candidate worth exploring: so far this only means "the advisor found nothing".
+- ⚪ No longer a focus: others already hold a similar view.
 
-现在五条都是 🟡。**这一轮决定每一条往哪边走。** 找到有人做过同样的事，把它降成 ⚪，和确认它没人做过同样有价值。不要为了保住候选而把相关工作说得离我们远。
+All five are currently 🟡. **This round decides which way each one goes.** Finding that someone has done the same thing, and downgrading it to ⚪, is as valuable as confirming that no one has. Do not describe related work as further from ours than it is in order to keep a candidate alive.
 
-## 要查的五条
+## The five items to check
 
-每条下面列了导师已经知道的相似观点。这些只是起点，来源层级多数是摘要或记忆，**都需要你读原文核实**，并继续往外找。
+Under each item are the similar views the advisor already knows of. They are only a starting point; most of the sources are at the level of abstracts or memory, and **all of them need you to read the original and verify**, and to keep searching further out.
 
-### 🟡1 舍入精度定不了答案：定律和精确计数
+### 🟡1 Rounding precision cannot determine the answer: a law and an exact count
 
-**我们的说法。** 财报数字是舍入过的。把每个输入看成"显示值 ± 半个末位单位"的区间，精确计算标准解法的取值范围，FinQA 测试集至少 10.7% 的题（增长率题里 40%）答案定不到 1%。有一条规则能事先预测：两数须相差约 100 个末位单位，增长率才精确到 1%；不带拟合参数，在 5,337 道题上与精确判定完全一致。
+**Our claim.** Filing figures are rounded. Treating each input as the interval "displayed value ± half a last-digit unit" and computing the exact range of the gold solution, for at least 10.7% of FinQA test questions (40% of growth-rate questions) the answer cannot be determined to 1%. A rule predicts this in advance: two figures must differ by about 100 last-digit units for the growth rate to be exact to 1%; with no fitted parameters, it agrees completely with the exact classification on 5,337 questions.
 
-**已知的相似观点。**
+**Known similar views.**
 
-- 数值分析里"相近的数相减损失有效数字"，教科书内容。
-- Gittings（1991，芝加哥联储 *Economic Perspectives*）：舍入对经济增长率的扭曲。
-- XBRL Calculations 1.1 规范：舍入区间和区间运算。
-- 社区对 FinQA 判分容差的争论（1% 相对误差还是按显示位数），例如 EnvCommons/FinQA 的 pull request。
-- FinanceReasoning（ACL 2025）提到模型在数值精度上有困难。
+- In numerical analysis, "subtracting nearby numbers loses significant digits"; textbook material.
+- Gittings (1991, Chicago Fed *Economic Perspectives*): distortion of economic growth rates by rounding.
+- The XBRL Calculations 1.1 specification: rounding intervals and interval arithmetic.
+- Community debate about the FinQA scoring tolerance (1% relative error or the displayed number of digits), for example the pull request on EnvCommons/FinQA.
+- FinanceReasoning (ACL 2025) mentions that models struggle with numerical precision.
 
-**什么算"已有人做过"。** 有工作在 FinQA、TAT-QA、ConvFinQA 或同类基准上，按输入的舍入精度或条件数统计过答案的确定性；或者把上面的规则用于财务报表分析并在数据上检验过。
+**What counts as "already done".** Work that, on FinQA, TAT-QA, ConvFinQA or a similar benchmark, has counted the determinacy of answers by the rounding precision or condition number of the inputs; or that has applied the rule above to financial statement analysis and tested it on data.
 
-### 🟡2 文档内的冗余信息救不回来
+### 🟡2 Redundant information in the document cannot rescue them
 
-**我们的说法。** 把同一个量在文档别处的重复披露、表内的加总关系都作为约束加进来，用有理数线性规划精确求解，196 道题里只有 1 道被重新确定。
+**Our claim.** Adding duplicate disclosures of the same quantity elsewhere in the document and sum relations within tables as constraints, and solving exactly with rational linear programming, only 1 of the 196 questions becomes determined again.
 
-**已知的相似观点。** XBRL 规范里有重复事实取交集和计算一致性检查。会计研究里用勾稽关系还原舍入前数值的工作，导师不了解，请重点查。
+**Known similar views.** The XBRL specification has intersection of duplicate facts and calculation consistency checks. The advisor does not know the accounting-research work that uses reconciliation relations to recover pre-rounding values; check this closely.
 
-**什么算"已有人做过"。** 有工作用会计恒等式或重复披露去收紧由舍入数字算出的量的范围，并报告了收紧的效果。
+**What counts as "already done".** Work that uses accounting identities or duplicate disclosures to tighten the range of quantities computed from rounded figures, and reports the effect of the tightening.
 
-### 🟡3 模型知道精度，但不主动用
+### 🟡3 The model knows the precision but does not use it unprompted
 
-**我们的说法。** 不问时，模型打印的有效数字位数与答案真实可信的位数无关（秩相关 0.02）。只提醒一句"数字是舍入过的"，98.4% 的回答给出正确的答案区间。真值是模型自己算式的精确取值范围。
+**Our claim.** Unprompted, the number of significant digits the model prints is unrelated to the number of truly reliable digits of the answer (rank correlation 0.02). With just a one-sentence reminder that "the figures are rounded", 98.4% of answers give the correct answer interval. The ground truth is the exact range of the model's own expression.
 
-**已知的相似观点。**
+**Known similar views.**
 
-- 语言模型的不确定性表达、校准、口头置信度，研究很多，但对象是"答对的概率"，不是数值的精度。
-- 语言模型的数值能力、有效数字、单位处理的评测。
-- 科学问答里对有效数字规则的评测，导师没有具体文献，请查。
+- There is a lot of research on uncertainty expression, calibration and verbal confidence in language models, but the object is "the probability of being right", not the precision of a number.
+- Evaluations of language models' numerical ability, significant digits and unit handling.
+- Evaluations of significant-figure rules in scientific QA; the advisor has no specific references, so search for them.
 
-**什么算"已有人做过"。** 有工作用可精确计算的区间作真值，测量过语言模型报告数值精度、有效数字或误差范围的能力；或者报告过"不问就不说、一问就会"这种差别。
+**What counts as "already done".** Work that uses exactly computable intervals as ground truth and measures language models' ability to report numerical precision, significant digits or error ranges; or that reports a difference of the "does not say it unless asked, gets it right when asked" kind.
 
-### 🟡4 判错的是同一批题
+### 🟡4 The rejections fall on the same questions
 
-**我们的说法。** 两个模型、三种提示、四次运行，官方准确率都在 81%–83%。392 道题里，63 道四次全错，316 道全对，只有 13 道不一致。两次独立复核把 68 个判错里的 55 个归到基准一侧（32 个参考答案错误，23 个口径歧义），0 个归为明确的模型错误。最大的一类口径歧义是"下降"的正负号。
+**Our claim.** Two models, three prompts, four runs: official accuracy is always 81%–83%. Of 392 questions, 63 are wrong in all four runs, 316 right in all four, and only 13 inconsistent. Two independent reviews attribute 55 of the 68 rejections to the benchmark side (32 reference errors, 23 convention ambiguities) and 0 to a definite model error. The largest class of convention ambiguity is the sign of a "decrease".
 
-**已知的相似观点。这一条别人说过的最多。**
+**Known similar views. This item is the one others have said the most about.**
 
-- FinanceReasoning（ACL 2025）：重新审核并修订了四个公开金融数值推理数据集 15.6% 的题，各数据集修订比例 9.72% 到 30%，并指出强模型已接近饱和旧基准。请读全文，查清楚这四个数据集是否包含 FinQA 原始测试集，修订的错误类型有哪些，有没有逐题的跨模型分析。
-- Northcutt 等（2021）：十个常用测试集普遍存在标签错误。
-- "Are We Done with MMLU?"（MMLU-Redux）和 Platinum Benchmarks 一类的基准清洗工作。
-- DocMath-Eval、BizBench、FinanceMath 在构建时对 FinQA 派生数据做过筛选或重标。
-- FinQA 原论文报告的专家准确率约 91%，本身就暗示了上限。
+- FinanceReasoning (ACL 2025): re-audited and revised 15.6% of the questions in four public financial numerical-reasoning datasets, with revision rates from 9.72% to 30% per dataset, and pointed out that strong models are close to saturating the old benchmarks. Read the full text and find out whether the four datasets include the original FinQA test set, what error types were revised, and whether there is a per-question cross-model analysis.
+- Northcutt et al. (2021): label errors are pervasive in ten commonly used test sets.
+- Benchmark-cleaning work such as "Are We Done with MMLU?" (MMLU-Redux) and Platinum Benchmarks.
+- DocMath-Eval, BizBench and FinanceMath filtered or relabelled FinQA-derived data when they were built.
+- The original FinQA paper reports expert accuracy of about 91%, which in itself implies a ceiling.
 
-**什么算"已有人做过"。** 有工作在 FinQA 原始测试集上做过逐题的跨模型判错重合分析；或者给出过 FinQA 判错的归因分类和比例；或者明确说过"当前模型在 FinQA 上的剩余错误主要来自基准"并给了证据。
+**What counts as "already done".** Work that has done a per-question cross-model overlap analysis of rejections on the original FinQA test set; or that has given an attribution classification and proportions for FinQA rejections; or that has stated explicitly, with evidence, that "the remaining errors of current models on FinQA come mainly from the benchmark".
 
-### 🟡5 两个标准字段自相矛盾
+### 🟡5 The two gold fields contradict each other
 
-**我们的说法。** FinQA 每道题有人工写的 `answer` 和程序执行值 `exe_ans`。按 `answer` 自己的显示精度比较，并允许差一个百分号，8,281 道题里可解析的 7,952 道中有 508 道（6.4%）互相矛盾，另有 1.0% 只差正负号。官方判分用的是 `exe_ans`。
+**Our claim.** Each FinQA question has a human-written `answer` and a program-executed value `exe_ans`. Comparing at the displayed precision of `answer` itself, and allowing a difference of a percent sign, 508 of the 7,952 parseable questions among the 8,281 (6.4%) contradict each other, and a further 1.0% differ only in sign. Official scoring uses `exe_ans`.
 
-**已知的相似观点。** 导师没检索到。但这个检查几行代码就能做，被人做过的可能性不小。请查 FinQA 的 GitHub issues、后续数据集的数据清洗说明、以及使用 FinQA 的论文的附录。
+**Known similar views.** The advisor found none. But the check takes a few lines of code, so there is a fair chance someone has done it. Check FinQA's GitHub issues, the data-cleaning notes of later datasets, and the appendices of papers that use FinQA.
 
-**什么算"已有人做过"。** 有工作或公开讨论报告过这两个字段的不一致率，或据此筛过数据。
+**What counts as "already done".** Work or public discussion that has reported the inconsistency rate of these two fields, or has filtered data on that basis.
 
-## 做法
+## Method
 
-1. 每条至少用 10 组不同的检索词，中英文都试。覆盖 ACL Anthology、arXiv、Semantic Scholar、Google Scholar、GitHub issues。**全部检索词都记下来。**
-2. 顺着引用链查：FinQA、TAT-QA、ConvFinQA 的被引文献里，2023 年以后做评测分析、数据清洗、错误分析的那些。
-3. 相关的工作要读正文和附录，不能只看摘要。每读一篇，记一行：题目、年份、链接、读了哪几节、与哪一条有关。
-4. 上面"已知的相似观点"里的每一项都要核实：出处对不对，它到底说了什么。导师记错的地方直接指出。
+1. Use at least 10 different sets of search terms for each item, trying both Chinese and English. Cover the ACL Anthology, arXiv, Semantic Scholar, Google Scholar and GitHub issues. **Record every search term.**
+2. Follow the citation chains: among the works citing FinQA, TAT-QA and ConvFinQA, those from 2023 onward that do evaluation analysis, data cleaning or error analysis.
+3. For relevant work, read the full text and appendices, not just the abstract. For each paper read, record one line: title, year, link, which sections were read, and which item it relates to.
+4. Verify every entry under "known similar views" above: is the source correct, and what exactly does it say. Point out directly where the advisor misremembered.
 
-## 交付
+## Deliverables
 
-**一页结论**，开头是这张表：
+**A one-page summary**, opening with this table:
 
-| 编号 | 结论 | 建议颜色 | 最接近的工作（题目、年份、链接） | 他们做了什么 | 我们多出来的是什么 | 把握 |
+| ID | Conclusion | Suggested colour | Closest work (title, year, link) | What they did | What we add | Confidence |
 |---|---|---|---|---|---|---|
 
-- "结论"三选一：已有人做过同样的事 / 部分做过 / 读了正文仍未见。
-- "建议颜色"：已有人做过 → ⚪；部分做过 → 🟡，并写清楚剩下的新意够不够撑一篇文章；仍未见 → 可以升 🟢（证据是否完整由导师另判）。
-- "把握"：高 / 中 / 低，并说明还有哪些地方没查到。
+- "Conclusion" is one of three: someone has already done the same thing / partly done / still not found after reading the full text.
+- "Suggested colour": already done → ⚪; partly done → 🟡, and state clearly whether the remaining novelty is enough to support a paper; still not found → may be upgraded to 🟢 (whether the evidence is complete is judged separately by the advisor).
+- "Confidence": high / medium / low, with a note on what has not yet been found.
 
-**附件：**
+**Attachments:**
 
-- 每条最接近的三篇工作，各一段原文摘录，注明页码或章节。
-- 全部检索词。
-- 读过正文的文献清单。
-- 对"已知的相似观点"逐项核实的结果。
+- The three closest works for each item, each with a one-paragraph excerpt from the original, with page or section.
+- All search terms.
+- The list of references whose full text was read.
+- The results of verifying each entry under "known similar views".
 
-## 要注意
+## Watch out for
 
-- 每个事实标来源层级：正文 / 摘要 / 二手。
-- 只查不改：不改 README，不改短文初稿。结论回来后由导师改颜色。
-- 查到一篇与某一条高度重合的工作时，先写一段话交回，不必等全部查完。
+- Mark the source level of every fact: full text / abstract / secondhand.
+- Check only, change nothing: do not change the README, and do not change the short-paper draft. The advisor changes the colours once the conclusions come back.
+- When you find work that overlaps heavily with one of the items, write a paragraph and send it back first; there is no need to wait until everything has been checked.

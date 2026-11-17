@@ -1,6 +1,6 @@
-# 固定测试统计量检查器
+# Fixed test-statistic checker
 
-离线实现P1中“共同受污染分片 → accuracy和macro-F1区间”。不训练模型、不下载数据。
+An offline implementation of P1's "jointly contaminated shards → accuracy and macro-F1 intervals". It trains no model and downloads no data.
 
 ```powershell
 python -m research.certificates.collective research/experiments/collective_metrics/audit_example.json research/experiments/collective_metrics/audit_certificate.json --method exact
@@ -8,29 +8,29 @@ python -m research.certificates.run_examples
 python -m unittest research.certificates.test_collective -v
 ```
 
-`audit_example.json` 明确是人工数学例子，其审计零发现不是实测数据。输出中的概率语句**条件于**随机抽样、正确审计和历史可信核心等前提；程序只核算这些前提下的界。
+`audit_example.json` is explicitly a hand-constructed mathematical example; its zero audit findings are not measured data. Probability statements in the output are **conditional on** premises such as random sampling, a correct audit and a historically trustworthy core; the program only computes the bounds under these premises.
 
-## 输入
+## Input
 
-- `input_kind` 必须是 `head_predictions`。
-- `votes_by_example_and_head` 是每行一个测试点、每列同一个分片头的**类别预测**，不是每类票数。列身份必须跨所有点相同。规划器 `research/planning/` 接收的是每类票数，两者不可互换。
-- `labels` 是固定测试真值；`classes` 固定且至少2；平局按最小编号。
-- 二选一：`budget` 是最多可改变的头数；或 `audit` 提供有限总体大小、固定抽样量、发现数与alpha，转换为文档污染上界。
+- `input_kind` must be `head_predictions`.
+- `votes_by_example_and_head` has one test point per row, and each column holds the **class prediction** of the same shard head; it is not per-class vote counts. Column identity must be the same across all points. The planner in `research/planning/` takes per-class vote counts; the two are not interchangeable.
+- `labels` are the fixed test ground truth; `classes` is fixed and at least 2; ties go to the smallest index.
+- Choose one: `budget` is the maximum number of heads that can change; or `audit` supplies a finite population size, a fixed sample size, the number of findings and alpha, which are converted into an upper bound on contaminated documents.
 
-完整可信核心/本地训练/稳定ID条件下，污染文档删除数可上界受影响头数。共享骨干被污染或一个修改跨两个ID时不能直接这样转换。
+Under the conditions of a fully trustworthy core, local training and stable IDs, the number of contaminated documents removed can upper-bound the number of affected heads. This conversion cannot be made directly when the shared backbone is contaminated or when one modification spans two IDs.
 
-## 两种计算
+## Two computations
 
-`component`：对每个共同头集合，逐类界TP/FP，再对F1分量作保守包络。它不保证各类端点同时可达。
+`component`: for each set of jointly affected heads, bound TP/FP per class, then take a conservative envelope over the F1 components. It does not guarantee that the per-class endpoints are reachable at the same time.
 
-`exact`：动态规划联合TP与预测计数，得到所声明“选中头可自由改变全部输出”放松模型内的精确极值。它不证明某训练集能实现端点。完全精确的计数模型仍是实际重训的外放松。
+`exact`: dynamic programming over TP and prediction counts jointly, giving the exact extremes within the declared relaxation model in which "selected heads can freely change all their outputs". It does not prove that some training set can realize the endpoints. Even a fully exact counting model is still an outer relaxation of actual retraining.
 
-两者枚举共同受影响的头集合，保留跨测试点共享约束。超过 `--max-subsets` 或 `--max-states` 时失败，不能把未搜索部分丢掉并继续出证。
+Both enumerate the sets of jointly affected heads and keep the constraints shared across test points. When `--max-subsets` or `--max-states` is exceeded they fail; they must not drop the unsearched part and go on issuing a certificate.
 
-数值端点同时给出精确分数与向外舍入浮点显示。全K类参与macro-F1；真支持和预测支持都为0的类贡献0。这不是按观察到的类别动态取平均。
+Numeric endpoints are given both as exact fractions and as an outward-rounded floating-point display. All K classes take part in macro-F1; a class whose true support and predicted support are both 0 contributes 0. This is not a dynamic average over the observed classes.
 
-## 统计语义
+## Statistical semantics
 
-审计包装器给的是固定有限语料上、对审计随机性的覆盖率。accuracy与macro-F1由同一事件 `K_true <= K_upper` 同时得到，无需把alpha再分两份。它不是未来总体置信区间，也不是随意提前停止仍有效的审计方法。
+The audit wrapper gives coverage with respect to the audit's randomness, on a fixed finite corpus. Accuracy and macro-F1 are obtained simultaneously from the same event `K_true <= K_upper`, so alpha does not need to be split in two. It is not a confidence interval for a future population, and it is not an audit method that stays valid under arbitrary early stopping.
 
-没有在此证明真实语料权利、时间戳、解析准确性、无未来选择信息、训练确定性或主干来源。输出明确列出这些未验证前提，不能因JSON显示conditional certificate就对外声称真实无泄漏。
+Nothing here proves real corpus rights, timestamps, parsing accuracy, absence of future selection information, training determinism or backbone provenance. The output lists these unverified premises explicitly; the fact that the JSON shows "conditional certificate" is no basis for claiming externally that there is truly no leakage.

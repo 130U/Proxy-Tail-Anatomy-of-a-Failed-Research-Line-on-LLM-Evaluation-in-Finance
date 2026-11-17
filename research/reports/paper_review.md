@@ -10,153 +10,153 @@ generated: 2026-11-16
 generator: internal-paper-reviewer; adapted mathematics-proof-review method
 ---
 
-# 固定分层零发现审计：论文级独立反方审查
+# Fixed stratified zero-finding audit: paper-level independent adversarial review
 
-审查者是内部 AI 子代理 `paper_reviewer`，不是 Fable，不代表外部同行评审，也不代替导师决定。全程离线，无训练、外部消息、文献下载或发布。使用本地“学术研究-数学证明审查”技能的假设、量词、反例和证据分层方法；未声称完成该技能的外部多轮审查、Lean 或 LaTeX 引用核验流程。只修改本报告，不修改被审数学证明或优化器。
+The reviewer is the internal AI sub-agent `paper_reviewer`, not Fable; it does not represent external peer review and does not replace the advisor's decisions. Fully offline throughout: no training, external messages, literature downloads or publication. The assumption, quantifier, counterexample and evidence-layering methods of the local "academic research - mathematical proof review" skill were used; no claim is made that the skill's external multi-round review, Lean, or LaTeX citation-verification procedures were completed. Only this report was modified; the mathematical proofs and optimizer under review were not modified.
 
-**当前判断：IA1–IA8 在明确的固定设计和放松威胁模型内可成立，未发现核心定理的反例；但数学正确不等于已经形成充分原创、充分有用的独立论文。最重要的新审查发现是：主打的 r=6、N=20、88 对 114 以及 Ω(r) 矩形分离，同样由一个无需污染位置细节的总污染数门实现。论文必须把“矩形中间承诺的代价”与“影响位置结构本身的价值”分开。**
+**Current verdict: IA1–IA8 can hold within the explicit fixed design and the relaxed threat model, and no counterexample to the core theorems was found; but mathematical correctness is not the same as already forming a sufficiently original, sufficiently useful standalone paper. The most important new finding of this review is that the headline r=6, N=20, 88 vs 114, and the Ω(r) rectangle separation are equally achieved by a total-contamination-count gate that needs no detail about where the contamination is located. The paper must separate "the cost of the rectangle's intermediate commitment" from "the value of the influence-location structure itself".**
 
-初审时 `research/paper/manuscript.md` 尚不存在；随后已阅读v1、v2及对应TeX，完成主文、附录C全表和Fable短笺对照。初始发现与逐项修订状态分开记录在末节。
+At the time of the first review, `research/paper/manuscript.md` did not yet exist; v1, v2 and the corresponding TeX were then read, and the main text, the full table in Appendix C and the Fable note were cross-checked. The initial findings and the item-by-item revision status are recorded separately in the last section.
 
-## 1. 首要发现与作者应回应内容
+## 1. Main findings and what the author should respond to
 
-数学问题使用 S0–S3：S0 为主结论不成立，S1 为缺失关键前提或步骤，S2 为局部歧义，S3 为编辑问题。科学贡献问题另标 Major，避免把“不够新颖”误称为数学错误。
+Mathematical issues use S0–S3: S0 means the main conclusion does not hold, S1 a missing key premise or step, S2 a local ambiguity, S3 an editorial issue. Scientific-contribution issues are labelled Major separately, so that "not novel enough" is not miscalled a mathematical error.
 
-| 编号 | 严重程度与状态 | 证据及影响 | 作者应回应 |
+| ID | Severity and status | Evidence and impact | What the author should respond |
 |---|---|---|---|
-| PR01 | Major，实质性贡献问题仍开放 | IA7 的均衡方案也精确认证总污染数 K≤r−1。故最醒目的 88 对 114 与 Ω(r) 不要求使用受污染文档位置，见下节完整推导。仅比较矩形不能证明影响结构方法优于最强简单计数法。 | 正文纳入总 K 门及等价成本；把主定理称为固定单矩形中间覆盖承诺的代价；若强调位置价值，另给同抽样类总 K 门下的严格差异。 |
-| PR02 | Major，限定措辞可修复，创新性问题仍开放 | 单个矩形是受限的置信区域类。允许非矩形安全计数区域 D 后，计数置信集方法与直接法的风险相等，见第3节。IA6 已正确限制盒覆盖承诺，但正文必须避免“直接法突破计数置信集”的更宽暗示。 | 给出 D 的定义及覆盖等价证明，所有 q 限于合法计数网格；精确说明最强仅相对于固定、全零输出单个预定安全盒的类。 |
-| PR03 | Major，开放 | IA1–IA8 证明主体是有限计数、单调性、极小元和排序约简；精确枚举本身不证明算法创新。已有本地综述也把有限审计定位为成熟方法迁移，但本轮未核验足以判定该分离族先例的原论文。 | 将“原创性未核验”写进贡献定位；需要针对当前窄命题的定理级先例差异表，或将稿件明确定位为条件式接口/技术笔记。不能从未发现反例推导发表级新颖性，也不能未经核验断言“别人早已证明同一定理”。 |
-| PR04 | Major，现有报告诚实披露但科学限制未关闭 | 全部头均投真标签、每层影响恰一个头、J=1，属于人工 oracle 阈值结构；即便改为多点双类，最坏情形仍能同步全错。20 格中9格改善、11格无收益、中位0，未过完整族中位20%的建议门。 | 全表及无收益对照留在正文或可直接阅读的附录；不要把多点复制当作现实性补强。可作为存在性数学例，但不能承担自然模型非空性、真实效用或预计人工成本收益的证据。 |
-| PR05 | Major，条件边界仍开放 | completion_audit.md 的 G0 总项未通过；G1 现实参数非空性缺失，新颖性和 T4 仅部分。真实影响图、历史真值、金标审计均未因数学推导通过而闭合。 | 允许继续条件数学及整理稿件，不把该稿件等同于旗舰选择/项目完成。若后续修改 G0 的原始24M要求，应独立记录导师/研究计划修订，不由本审查或论文写作静默替代。 |
-| PR06 | S2，需正文检查 | “全局最优”实际排除随机配额、非零发现出证、序贯设计、层内非均匀、改变分层/影响图，以及真实训练比放松更稳健的情况。A1 的条件抽样量词允许审计前基于 V/y 选 I，但不允许看审计结果再选区间。 | 在摘要/定理首次使用最优一词时说明固定配额类；对训练随机性和审计前信息明确条件化。输出区间仅覆盖固定测试集合上的实际删除比较器，不覆盖未来总体 accuracy。 |
+| PR01 | Major; the substantive contribution issue remains open | The balanced scheme of IA7 also exactly certifies the total contamination count K≤r−1. So the most prominent 88 vs 114 and Ω(r) do not require using the location of contaminated documents; see the full derivation in the next section. Comparing only against the rectangle cannot prove that the influence-structure method beats the strongest simple counting method. | Include the total-K gate and its equal cost in the full text; call the main theorem the cost of the fixed single-rectangle intermediate coverage commitment; if the value of location is to be stressed, give a separate strict difference against a total-K gate in the same sampling class. |
+| PR02 | Major; the qualifying wording can be fixed, the innovation issue remains open | A single rectangle is a restricted class of confidence regions. Once a non-rectangular safe count region D is allowed, the risk of the count-confidence-set method equals that of the direct method; see Section 3. IA6 already correctly limits the box-coverage commitment, but the full text must avoid the broader suggestion that "the direct method breaks through count confidence sets". | Give the definition of D and the coverage-equivalence proof, with all q restricted to the legal count grid; state precisely that "strongest" is only relative to the class that outputs a single pre-specified safe box on all-zero. |
+| PR03 | Major, open | The bulk of the IA1–IA8 proofs is finite counting, monotonicity, minimal elements and sorting reductions; exact enumeration by itself does not prove algorithmic innovation. The existing local review also positions finite auditing as a transfer of mature methods, but this round did not check the original papers needed to judge prior work on this separation family. | Write "originality not verified" into the contribution statement; a theorem-level table of differences from prior work is needed for the current narrow proposition, or the manuscript should be positioned explicitly as a conditional interface / technical note. Publication-level novelty cannot be inferred from finding no counterexample, nor can it be asserted without checking that "someone has already proven the same theorem". |
+| PR04 | Major; the existing report discloses honestly, but the scientific limitation is not closed | All heads vote the true label, each stratum influences exactly one head, J=1: this is a hand-made oracle threshold structure; even if changed to multiple points and two classes, the worst case can still make all of them wrong together. Of the 20 cells, 9 improve, 11 have no gain, median 0, failing the recommended full-family median 20% gate. | Keep the full table and the no-gain baselines in the full text or in a directly readable appendix; do not treat multi-point replication as a realism reinforcement. It can serve as an existence example in mathematics, but cannot carry evidence of natural-model non-emptiness, real utility, or expected savings in manual cost. |
+| PR05 | Major; the conditional boundary remains open | The G0 overall item in completion_audit.md has not passed; G1 non-emptiness under realistic parameters is missing, and novelty and T4 are only partial. Real influence graphs, historical ground truth and gold-label audits are not closed by the mathematical derivation passing. | Continuing the conditional mathematics and tidying the manuscript is allowed, but the manuscript must not be equated with a flagship choice / project completion. If the original 24M requirement of G0 is later modified, the advisor / research-plan revision should be recorded independently, not silently replaced by this review or by the paper writing. |
+| PR06 | S2, needs checking in the full text | "Global optimum" actually excludes random quotas, certification on non-zero findings, sequential designs, non-uniform within-stratum sampling, changing the stratification / influence graph, and cases where real training is more robust than the relaxation. The conditional-sampling quantifier of A1 allows choosing I before the audit based on V/y, but not choosing the interval after seeing the audit results. | Where the word "optimal" is first used in the abstract/theorem, state the fixed-quota class; make the conditioning on training randomness and on pre-audit information explicit. The output interval covers only the actual deletion comparator on the fixed test set, not future population accuracy. |
 
-## 2. PR01：最强简单替代及独立计算
+## 2. PR01: the strongest simple alternative and an independent computation
 
-### 2.1 均衡设计的总污染数门精确复现主分离
+### 2.1 The total-contamination-count gate of the balanced design exactly reproduces the main separation
 
-沿用 IA7：d=2r−1 层，每层 N 篇，每层固定审 n 篇，层间独立。记 K=Σ_h q_h。零发现时输出计数区域
+Follow IA7: d=2r−1 strata, N documents per stratum, a fixed n audited per stratum, independent across strata. Write K=Σ_h q_h. On zero findings, output the count region
 
 \[
 D_K=\{q:K\le r-1\}.
 \]
 
-该区域安全，因为总污染数不超过 r−1 时，含污染的层数也不超过 r−1。它不使用污染具体落在哪些层的判定。
+This region is safe because when the total contamination count is at most r−1, the number of contaminated strata is also at most r−1. It does not use any judgement about which strata the contamination falls in.
 
-对每层，如果 q≤N−n，则
+For each stratum, if q≤N−n, then
 
 \[
 p_h(q;n)=\prod_{j=0}^{q-1}\frac{N-n-j}{N-j}
 \le\left(1-\frac nN\right)^q.
 \]
 
-如果 q>N−n，则左边为0，上界仍成立；q=0时两边都为1。故任意 K≥r 的真配置满足
+If q>N−n, the left side is 0 and the upper bound still holds; for q=0 both sides are 1. So any true configuration with K≥r satisfies
 
 \[
 p_n(q)\le\left(1-\frac nN\right)^K
 \le\left(1-\frac nN\right)^r.
 \]
 
-在任意 r 个不同层各放一篇污染，便达到最后的上界。因此总 K 门的精确最坏漏检风险恰为 `(1−n/N)^r`，与 IA7 的直接均衡方案完全一致。这是同一固定分层抽样机制，不是偷偷改成全总体均匀抽样。
+Placing one contamination in each of any r different strata attains the last bound. So the exact worst-case miss risk of the total-K gate is exactly `(1−n/N)^r`, identical to IA7's direct balanced scheme. This is the same fixed stratified sampling mechanism, not a covert switch to uniform sampling over the whole population.
 
-于是 r=6、N=20、n=8 时，总 K 门同样以88次审计得到风险 `729/15625`；N=r²的 Ω(r) 矩形成本比分离也由该简单门实现。这个结果不反驳 IA7；它反驳的是用 IA7 主例证明“必须使用位置结构才获得这些节约”的叙事。
+So for r=6, N=20, n=8, the total-K gate likewise gets risk `729/15625` with 88 audits; the Ω(r) rectangle cost-ratio separation at N=r² is also achieved by this simple gate. This result does not refute IA7; what it refutes is the narrative of using IA7's main example to prove that "location structure must be used to obtain these savings".
 
-### 2.2 总 K 门并非处处与位置结构等价
+### 2.2 The total-K gate is not equivalent to location structure everywhere
 
-允许不等固定配额，取 r=2、N=20、d=3、alpha=1/20。总 K≤1 门必须排除每种在单层放两篇污染的真配置。因此每个 h 均必须满足
+Allow unequal fixed quotas, and take r=2, N=20, d=3, alpha=1/20. The total K≤1 gate must rule out every true configuration that places two contaminations in a single stratum. So every h must satisfy
 
 \[
 \frac{(20-n_h)(19-n_h)}{20\cdot19}\le\frac1{20}.
 \]
 
-n_h=15 时概率 `1/19>1/20`，n_h=16 时为 `3/95<1/20`，所以每层至少审16篇，总成本至少48。配额(16,16,16)下，K=2的两类配置风险分别为 `3/95`（同层）和 `1/25`（不同层），均达标；K>2由单调性不更危险。因此48是**固定分层零发现、报告总 K≤1 这一特定门**的精确最优成本，且唯一最小配额为(16,16,16)。这不是所有非矩形计数方法的下界。
+At n_h=15 the probability is `1/19>1/20`, and at n_h=16 it is `3/95<1/20`, so each stratum must audit at least 16 documents and the total cost is at least 48. Under quotas (16,16,16), the risks of the two kinds of K=2 configuration are `3/95` (same stratum) and `1/25` (different strata), both within the target; K>2 is no more dangerous by monotonicity. So 48 is the exact optimal cost of **this specific gate, fixed stratified zero-finding reporting total K≤1**, and the unique minimal quota is (16,16,16). It is not a lower bound for all non-rectangular counting methods.
 
-直接法的(0,19,19)风险为1/20、成本38，现有专用优化器也给出38的全局最优。因此可以报告影响位置在此例严格有价值：38对48。该例发生在本轮审查后，应标为探索性补充；不是预先冻结的额外成功门，也不能用于改写完整20格中位为0的结论。
+The direct method's (0,19,19) has risk 1/20 and cost 38, and the existing specialized optimizer also gives 38 as the global optimum. So one can report that influence location has strict value in this example: 38 vs 48. This example arose after this round's review and should be labelled an exploratory supplement; it is not a pre-frozen additional success gate, and cannot be used to rewrite the conclusion that the median over the full 20 cells is 0.
 
-### 2.3 本审查实际执行的小检查
+### 2.3 Small checks actually run by this review
 
-使用独立 Python 标准库计算，不调用作者风险或优化函数：
+Computed independently with the Python standard library, without calling the author's risk or optimization functions:
 
-- 对 N∈{2,3,5}、r∈{2,3}、各 n∈{0,…,N}，逐一枚举合法 K=r 计数配置，共26个均衡设计，最大精确有理概率均等于 `(1−n/N)^r`。
-- 对 r=2、N=20、d=3 的全部 `21³=9261` 固定配额，枚举六种 K=2 计数配置，得到总 K 门最优48、配额(16,16,16)、最坏风险1/25。
-- 精确重算 r=6、N=20 均衡风险为729/15625。
+- For N∈{2,3,5}, r∈{2,3} and each n∈{0,…,N}, all legal K=r count configurations were enumerated one by one; across 26 balanced designs, the maximum exact rational probability always equals `(1−n/N)^r`.
+- For r=2, N=20, d=3, all `21³=9261` fixed quotas were enumerated with the six K=2 count configurations, giving the total-K gate optimum 48, quotas (16,16,16), worst-case risk 1/25.
+- The r=6, N=20 balanced risk was recomputed exactly as 729/15625.
 
-完整独立算法保存在 [paper_review_checks.py](paper_review_checks.py)。在仓库根目录运行 `python research/reports/paper_review_checks.py`；它不读数据、不调用作者实现、不写结果文件，完整遍历9261个配额及每个配额的6种K=2计数配置，并输出精确分数。上面的推导同时覆盖K>2，无需枚举更大污染数。
+The full independent algorithm is saved in [paper_review_checks.py](paper_review_checks.py). Run `python research/reports/paper_review_checks.py` from the repository root; it reads no data, does not call the author's implementation, writes no result files, fully traverses the 9261 quotas and the 6 K=2 count configurations for each quota, and outputs exact fractions. The derivation above also covers K>2, so larger contamination counts need not be enumerated.
 
-这三项支持有限输入和新提出的基线识别；一般结论依赖上面证明，不由测试替代。没有重跑训练、修改既有 threshold_results.json，或把本审查耗时当作者实验耗时。
+These three items support the finite inputs and the identification of the newly proposed baseline; the general conclusions rest on the proofs above and are not replaced by tests. No training was re-run, the existing threshold_results.json was not modified, and this review's run time was not counted as the author's experiment time.
 
-## 3. PR02：非矩形计数区域与直接法等价
+## 3. PR02: non-rectangular count regions are equivalent to the direct method
 
-令合法计数网格为 `Qgrid=∏_h{0,…,N_h}`，并定义
+Let the legal count grid be `Qgrid=∏_h{0,…,N_h}`, and define
 
 \[
-D=\{q\in Qgrid:\text{不存在 }a\in Q_{\min}\text{ 使 }a\le q\}.
+D=\{q\in Qgrid:\text{there is no }a\in Q_{\min}\text{ with }a\le q\}.
 \]
 
-**计数覆盖等价。** 在零发现时报告D、其他结果报告完整网格，则最坏计数失覆盖风险是 `max_{q∉D}p_n(q)`。每个盒外q支配一个a，单调性给 `p_n(q)≤p_n(a)`；每个a本身在D外、且由某个真实文档配置实现，故下界也达到。因此风险恰为 `max_a p_n(a)=R_I(n)`。这一步只用漏检概率单调与a可实现。
+**Count-coverage equivalence.** If D is reported on zero findings and the full grid on any other result, the worst-case count miscoverage risk is `max_{q∉D}p_n(q)`. Each q outside the box dominates some a, and monotonicity gives `p_n(q)≤p_n(a)`; each a is itself outside D and is realized by some real document configuration, so the lower bound is also attained. So the risk is exactly `max_a p_n(a)=R_I(n)`. This step uses only the monotonicity of the miss probability and the realizability of a.
 
-**最大安全计数区域的精确语义。** 若要进一步说D恰好包含所有“任意该计数的文档位置配置都安全”的q，需要 IA2 的坏集合向上封闭。若a≤q，从实现a的极小坏文档集M出发，在每层补足至q_h篇；由于q_h≤N_h，总能补齐。所得C⊇M仍坏。反方向，任何坏C支配某个极小坏配置的极小计数。故q∉D当且仅当存在该计数的坏位置配置。
+**Exact semantics of the maximal safe count region.** To say further that D contains exactly those q for which "every document-location configuration with that count is safe", IA2's upward closure of the bad sets is needed. If a≤q, start from a minimal bad document set M realizing a and fill each stratum up to q_h documents; since q_h≤N_h, this can always be done. The resulting C⊇M is still bad. Conversely, any bad C dominates the minimal count of some minimal bad configuration. So q∉D if and only if there is a bad location configuration with that count.
 
-这没有声称同一个q的所有位置配置都坏；它只表示q不能在要求所有位置都安全的计数区域内。没有上闭时，风险等价仍可以成立，但“最大安全区域”这句需要另外证明。
+This does not claim that every location configuration with the same q is bad; it only says that q cannot be inside a count region that requires every location to be safe. Without upward closure, the risk equivalence can still hold, but the statement "maximal safe region" needs a separate proof.
 
-从而直接法也可描述为校准这个非矩形计数区域后再传递到最终I。论文的分离针对矩形形状限制，不是针对先构建任何中间计数置信集合的原则。
+So the direct method can also be described as calibrating this non-rectangular count region and then passing it on to the final I. The paper's separation targets the rectangular shape restriction, not the principle of first building some intermediate count confidence set.
 
-## 4. 核心证明复核
+## 4. Review of the core proofs
 
-| 单元 | 核验结果 | 尝试攻击及关键边界 |
+| Unit | Verification result | Attempted attacks and key boundaries |
 |---|---|---|
-| IA1 | 条件成立 | 固定DAG和完整控制依赖给拓扑归纳；联合删除OR反例正确反驳逐篇敏感度替代结构依赖。真实训练图是否覆盖所有tokenizer/选择/重分片依赖未核验。 |
-| IA2 | 条件成立 | 可变头允许保留原票保证嵌套；多数投票可达类别式的tie偏移方向正确；跨点独立改票使accuracy端点可共同达到。若采用更窄真实训练可达集合，则当前结果仍是外放松。阈值族需至少两种可输出类别。 |
-| IA3 | 条件成立 | 固定真C、层间独立、层内均匀无放回给精确组合数乘积。错误出证概率受控，不是P(真值安全∣零发现)。条件于审计前信息后仍须保持抽样机制；不得审到满意为止。 |
-| IA4 | 成立 | 集合极小元→计数Pareto极小元两步正确。风险约简不需要整个坏集合上闭；只查单删除判极小/剪枝需要上闭。这一区别原文已明确。 |
-| IA5 | 条件成立 | 有限网格全枚举与精确风险给指定类的最优；这是可行集合穷举的最优性，不是一般图多项式算法。真实训练的更小威胁集合不在必要性范围内。 |
-| IA6 | 成立 | 共用全零事件时，越界层的最大漏检概率是sharp值，不是相加；单层b_h+1污染达到上界。Bonferroni仅为较弱附加基线。 |
-| IA7 | 条件成立 | r个可变头阈值、至少r个零预算盒坐标、盒下界达到构造均正确。固定alpha与N=r²给Ω(r)，总语料同时增长。总K替代使其科学解释变窄，但不改变证明真伪。 |
-| IA8 | 成立 | 排序后最小r配额决定风险；尾部降至第r项不变风险且不增成本。对应目标 `Σ_{i<r}a_i+r*a_r` 正确；不等成本/层规模不能直接套此约简。 |
+| IA1 | Holds conditionally | A fixed DAG and complete control dependencies give topological induction; the joint-deletion OR counterexample correctly refutes substituting per-document sensitivity for structural dependence. Whether the real training graph covers all tokenizer/selection/re-sharding dependencies was not verified. |
+| IA2 | Holds conditionally | Allowing a variable head to keep its original vote guarantees nesting; the direction of the tie offset in the majority-vote reachable-class formula is correct; independent vote changes across points let the accuracy endpoints be attained jointly. If a narrower real-training reachable set is adopted, the current result is still an outer relaxation. The threshold family needs at least two outputtable classes. |
+| IA3 | Holds conditionally | Fixed true C, independence across strata and uniform within-stratum sampling without replacement give an exact product of binomial coefficients. The probability of erroneous certification is controlled; it is not P(ground truth safe ∣ zero findings). After conditioning on pre-audit information the sampling mechanism must still be kept; one may not audit until satisfied. |
+| IA4 | Holds | The two steps, minimal elements of sets → Pareto-minimal counts, are correct. The risk reduction does not need the whole bad set to be upward closed; checking only single deletions to judge minimality / prune needs upward closure. The original text already makes this distinction explicit. |
+| IA5 | Holds conditionally | Full enumeration of a finite grid and exact risks give the optimum of the specified class; this is optimality by exhaustion of the feasible set, not a polynomial algorithm for general graphs. A smaller threat set from real training is outside the scope of necessity. |
+| IA6 | Holds | With a shared all-zero event, the maximum miss probability over out-of-bound strata is the sharp value, not a sum; b_h+1 contaminations in a single stratum attain the bound. Bonferroni is only a weaker additional baseline. |
+| IA7 | Holds conditionally | The threshold of r variable heads, at least r zero-budget box coordinates, and the construction attaining the box lower bound are all correct. Fixed alpha and N=r² give Ω(r), while the total corpus grows at the same time. The total-K alternative narrows its scientific interpretation but does not change whether the proof is true. |
+| IA8 | Holds | After sorting, the smallest r quotas determine the risk; lowering the tail to the r-th entry leaves the risk unchanged and does not increase cost. The corresponding objective `Σ_{i<r}a_i+r*a_r` is correct; this reduction does not carry over directly to unequal costs / stratum sizes. |
 
-未发现S0或S1数学错误；没有将真实前提标为Verified。空坏集、空污染已坏、零抽样、普查、满预算盒等边界与原文约定兼容。固定训练随机性只使删除比较器在所条件信息下确定；它不会自动认证历史来源、抽样标签正确性或未来表现。
+No S0 or S1 mathematical errors were found; no real premises were marked Verified. Boundaries such as the empty bad set, an empty contamination that is already bad, zero sampling, a census, and a full-budget box are compatible with the original conventions. Fixing training randomness only makes the deletion comparator deterministic given the conditioning information; it does not automatically certify historical sources, the correctness of sampled labels, or future performance.
 
-## 5. 论文完成度与G0/G1
+## 5. Paper completeness and G0/G1
 
-本轮足够形成一份自含、可复查的条件数学笔记或候选论文草稿；目前证据不足以由内部审查宣布其具备独立强论文的原创性及实用性。尤其“exact optimizer”意味着本地可穷举范围内的精确解，不能用代码和测试数量替代新的复杂度界、真实任务证据或先例差异。
+This round is enough to produce a self-contained, reviewable conditional mathematical note or candidate paper draft; the current evidence is not enough for an internal review to declare that it has the originality and usefulness of a strong standalone paper. In particular, "exact optimizer" means an exact solution within the locally enumerable range; code and test counts cannot substitute for new complexity bounds, real task evidence, or differences from prior work.
 
-当前数学结果并不要求先训练模型才能为真，所以G0缺项不是继续证明或写稿的逻辑障碍。但项目既定的主线训练与旗舰选题门仍保持原义：原24M逐条family证据无法由新数学构造恢复；G1现实模型非空性、训练预算及窄命题新颖性仍缺材料。是否修订研究目标或升级投入，由用户和Fable决定，本报告不作代理批准或否决。
+The current mathematical results do not need a model to be trained first in order to be true, so the missing G0 items are not a logical obstacle to continuing the proofs or the writing. But the project's established gates for main-line training and the flagship choice keep their original meaning: the original 24M per-item family evidence cannot be recovered by new mathematical constructions; G1 non-emptiness on a realistic model, the training budget and the novelty of the narrow proposition still lack material. Whether to revise the research goal or increase the investment is for the user and Fable to decide; this report does not approve or veto on their behalf.
 
-最有价值的作者回应不是增添更多人工正确点或更多界面，而是明确：这份稿件究竟要证明矩形表达限制的代价，还是要证明影响结构对强简单审计基线的独立增量。两者已有不同证据，必须分开评价。
+The most valuable response from the author is not to add more hand-made correct points or more interfaces, but to make clear whether this manuscript is meant to prove the cost of the rectangle's expressive restriction, or to prove the independent increment of influence structure over a strong simple audit baseline. The two have different evidence and must be evaluated separately.
 
-## 6. 稿件对照与修订复审
+## 6. Manuscript cross-check and revision re-review
 
-### 6.1 v2 主文逐项对照
+### 6.1 Item-by-item cross-check of the v2 main text
 
-| 初审项 | 作者回应及核验位置 | 修订后的判断 |
+| First-review item | Author response and where it was verified | Verdict after revision |
 |---|---|---|
-| PR01 总K简单替代 | 摘要、§7总K命题及其证明、§9的88/114/88三行表、§10均明确主分离不需要位置建模；§7另外给38可行与48精确门下界，并标审查后解析比较 | **遗漏/叙事问题关闭。** 上界推导与零因子边界有效；没有把新解析例计成确认性过门。位置价值的真实相关性、一般结构增量和原创性仍开放。 |
-| PR02 非矩形等价 | §6给合法网格上的D，利用坏集合上闭扩展实现q，证明计数覆盖错误等于直接风险；明确单个预定安全矩形限制 | **数学及限定措辞关闭。** 没有将“存在某计数的坏配置”误写为所有该计数位置都坏；也没有声称超越所有计数置信集合。公式的源格式转换问题另见6.2。 |
-| PR03 原创性/算法贡献 | §2、摘要及§10均保留未核验新颖性，定位自含接口、证明、精确实现；§8承认指数复杂度和计算预算 | **夸大措辞关闭，科学Major开放。** 对当前窄定理仍无完整先例差异表，不能宣布独立原创论文成立。 |
-| PR04 toy及负结果 | §7明确J=1人工投票，附录C列出完整20格及Balanced门解释，§9保留中位0和未过20%门；真实SEntFiN仅作context | **披露问题关闭，科学Major开放。** 多点复制不被称为新现实验证；真实任务下影响结构/审计效用仍缺。 |
-| PR05 G0/G1 | §10明确研究目标未完成、G0/G1未通过，也未发送给Fable；短笺保留用户与导师判断 | **状态误传风险关闭，验收缺口开放。** 内部审查不是研究门变更授权或导师意见。 |
-| PR06 量词/最优类 | §1排除序贯、非均匀层内及随机配额；§3固定随机性与审计前条件抽样；§5明确不是零发现后的后验；§8给有限类穷举最优和未完成搜索处理 | **限定措辞关闭。** 仍只对放松威胁模型、固定测试量和固定设计承诺；真实依赖图不由证明认证。 |
+| PR01 simple total-K alternative | The abstract, the total-K proposition and its proof in §7, the three-row 88/114/88 table in §9, and §10 all state explicitly that the main separation does not need location modelling; §7 also gives 38 as feasible and 48 as the exact gate lower bound, labelled as a post-review analytic comparison | **Omission/narrative issue closed.** The upper-bound derivation and the zero-factor boundary are valid; the new analytic example was not counted as a confirmatory gate pass. The real relevance of location value, the general structural increment and originality remain open. |
+| PR02 non-rectangular equivalence | §6 gives D on the legal grid, uses upward closure of bad sets to extend and realize q, and proves that the count-coverage error equals the direct risk; the restriction to a single pre-specified safe rectangle is stated explicitly | **Mathematics and qualifying wording closed.** "There is a bad configuration with this count" was not miswritten as "every location with this count is bad"; nor is it claimed to surpass all count confidence sets. The source-format conversion issue in the formula is covered separately in 6.2. |
+| PR03 originality / algorithmic contribution | §2, the abstract and §10 all keep novelty as unverified, and position the work as a self-contained interface, proofs and an exact implementation; §8 acknowledges exponential complexity and the computational budget | **Overstated wording closed; scientific Major open.** There is still no full table of differences from prior work for the current narrow theorem, so it cannot be declared that a standalone original paper is established. |
+| PR04 toy and negative results | §7 states J=1 hand-made voting explicitly, Appendix C lists the full 20 cells and explains the Balanced gate, §9 keeps the median 0 and the failure of the 20% gate; real SEntFiN serves only as context | **Disclosure issue closed; scientific Major open.** Multi-point replication is not called a new realism validation; influence structure / audit utility on real tasks is still missing. |
+| PR05 G0/G1 | §10 states explicitly that the research goal is not complete, G0/G1 have not passed, and nothing has been sent to Fable; the note leaves the judgement to the user and the advisor | **Risk of misreporting status closed; acceptance gaps open.** The internal review is not authorization to change research gates, nor the advisor's opinion. |
+| PR06 quantifiers / optimal class | §1 excludes sequential designs, non-uniform within-stratum sampling and random quotas; §3 fixes randomness and pre-audit conditional sampling; §5 states explicitly that this is not a posterior after zero findings; §8 gives exhaustive optimality over a finite class and the handling of incomplete searches | **Qualifying wording closed.** The commitment is still only for the relaxed threat model, a fixed test quantity and a fixed design; the real dependency graph is not certified by the proof. |
 
-附录C20行的r、N、Direct、Box、Balanced与精确Saving已用只读脚本逐行对照 `threshold_results.json`，全部一致。Balanced列只称均衡类最优，未冒充不等配额总K门最优。审查复核了附录A/B当前精简陈述，未见明显新矛盾；没有在本轮重做其全部原始证明、源代码和实验审查。
+The r, N, Direct, Box, Balanced and exact Saving of the 20 rows in Appendix C were checked row by row against `threshold_results.json` with a read-only script, and all agree. The Balanced column is called optimal only within the balanced class and is not passed off as the optimum of the unequal-quota total-K gate. The review re-checked the current condensed statements in Appendices A/B and saw no obvious new contradiction; their full original proofs, source code and experiment review were not redone in this round.
 
-FABLE_DECISION_NOTE.md的四项讨论变化准确传达本审查：矩形max、一般非矩形等价、总K复现主例、位置敏感38/48另述。它明确未送达Fable、未收到反馈、不是旗舰选择；我没有替Fable决定继续或终止方向。
+The four discussion changes in FABLE_DECISION_NOTE.md accurately convey this review: the rectangle max, general non-rectangular equivalence, the total-K reproduction of the main example, and the location-sensitive 38/48 described separately. It states explicitly that it has not been delivered to Fable, that no feedback has been received, and that it is not a flagship choice; I did not decide on Fable's behalf whether to continue or end the direction.
 
-### 6.2 稿件源格式忠实度检查
+### 6.2 Check of the manuscript's source-format fidelity
 
-v2以正则提取MD的inline/display数学及TeX对应数学段，保留顺序、仅归一化空白后比较。共176段，175段完全一致；发现D定义在MD中用跨行单`$`，TeX转换器把该段变成了`\\textbackslash{}left`等字面转义命令。这是实际源转换缺陷，不只是排版偏好。作者已在v3改为display数学并重生成TeX；独立复核显示**两份源稿仍各有176个数学段，按顺序全部一致**，D的display定义存在。该源转换缺陷已修复并关闭。
+For v2, the inline/display math of the MD and the corresponding math segments of the TeX were extracted with regular expressions, keeping the order and normalizing only whitespace before comparing. Of 176 segments in total, 175 agree exactly; it was found that the definition of D in the MD used a single `$` spanning lines, and the TeX converter turned that segment into literal escaped commands such as `\\textbackslash{}left`. This is a real source-conversion defect, not just a typesetting preference. The author changed it to display math in v3 and regenerated the TeX; an independent re-check shows that **the two source drafts still each have 176 math segments, and all agree in order**, and the display definition of D is present. This source-conversion defect has been fixed and closed.
 
-另指出§6原盒预算只写`0≤b_h≤N_h`，而后续组合数要求整数。v3已明确`b_h∈{0,…,N_h}`，两稿数学段对照包括此改动；该S2局部定义歧义关闭，不改变IA6原理论中的整数定义。
+It was also pointed out that the original box budget in §6 was written only as `0≤b_h≤N_h`, while the later binomial coefficients require integers. v3 now states `b_h∈{0,…,N_h}` explicitly, and the comparison of math segments across the two drafts includes this change; this S2 local definitional ambiguity is closed, and it does not change the integer definition in the original IA6 theory.
 
-PDF尚未纳入本报告的完成核验；TeX未通过真实TeX编译。本报告不会从源文件数学核对推导PDF已逐页检查或LaTeX已编译成功。
+The PDF has not been included in this report's completion check; the TeX has not passed a real TeX compilation. This report does not infer from the math check of the source files that the PDF has been checked page by page or that LaTeX compiled successfully.
 
-最终被审源稿SHA256（v3；后续修改须重新对照）：
+SHA256 of the final reviewed source drafts (v3; later changes must be re-checked):
 
-| 文件 | SHA256 |
+| File | SHA256 |
 |---|---|
 | `research/paper/manuscript.md` | `a9cd81ab194e54bb583dab69cbc7f3440745468b2f701ee6146e66c02d844ce0` |
 | `research/paper/manuscript.tex` | `f4b423e730e235c38d816d4f50ea61fa2a6cb6b16d0aac94b906e29f144c02f2` |
 | `research/paper/FABLE_DECISION_NOTE.md` | `de785c0db986876fba42e187a16e1da9c31bd8f220dd16e73cf6e67fe317be9f` |
 
-### 6.3 当前学术处置
+### 6.3 Current academic disposition
 
-**同意作为内部技术报告整理给用户审阅；不同意据此宣称原创性已证实、独立旗舰已成立或论文已达到投稿条件。** 核心数学在其条件内可复查，作者也已接受最重要的强基线限制；仍需用户与Fable判断哪项窄差异值得下一轮研究。该判断是内部证据评估，不是外部接受/拒稿结论。
+**Agreed: it can be organized as an internal technical report for the user to review. Not agreed: claiming on this basis that originality is confirmed, that a standalone flagship is established, or that the paper meets submission conditions.** The core mathematics is reviewable within its conditions, and the author has accepted the most important strong-baseline limitation; the user and Fable still need to judge which narrow difference is worth the next round of research. This judgement is an internal evidence assessment, not an external accept/reject decision.

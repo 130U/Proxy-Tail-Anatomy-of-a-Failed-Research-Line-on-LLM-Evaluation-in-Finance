@@ -1,54 +1,54 @@
-# 第二部分：比较题的舍入后果很少，计算比较样本也不足 100 道
+# Part Two: rounding consequences for comparison questions are rare, and there are fewer than 100 computed comparisons
 
-以下数值的来源层级均为**我们的实验**；语义解释来自数据集所附财报原文。识别方法先写在 `part2_protocol.md`。TAT-QA 区间计算在第三部分预测提交 `0c68d8a` 之后执行。
+The source level of all numbers below is **our experiment**; semantic interpretations come from the filing texts attached to the datasets. The identification method was written first in `part2_protocol.md`. The TAT-QA interval computations ran after the Part Three prediction was committed as `0c68d8a`.
 
-| 数据集 | 确认的计算比较题 | 输入盒上结论可翻转 | 比例 | 均匀舍入下期望翻转题数 |
+| Dataset | Confirmed computed-comparison questions | Conclusion flippable on the input box | Share | Expected number of flipped questions under uniform rounding |
 |---|---:|---:|---:|---:|
-| FinQA，train/dev/test | 11 | 0 | 0% | 0 |
-| TAT-QA，train/dev/test_gold | 14 | 2 | 14.29% | 0.278173 |
-| 合计 | **25** | **2** | **8.00%** | **0.278173（1.1127%）** |
+| FinQA, train/dev/test | 11 | 0 | 0% | 0 |
+| TAT-QA, train/dev/test_gold | 14 | 2 | 14.29% | 0.278173 |
+| Total | **25** | **2** | **8.00%** | **0.278173 (1.1127%)** |
 
-**判定：很少；样本太少。** 合计 8.00% 低于任务的 10% 门槛，且 25 道远少于 100 道。TAT-QA 单独的 14.29% 超过比例门槛，但只有 14 道，不能隐藏样本门槛。第二部分不触发后续模型答题。
+**Verdict: rare; the sample is too small.** The combined 8.00% is below the task's 10% threshold, and 25 questions are far fewer than 100. TAT-QA alone, at 14.29%, exceeds the share threshold, but it has only 14 questions, which cannot hide the sample threshold. Part Two does not trigger the follow-up model answering.
 
-这 25 道包含 3 道使用明示精确设定的题：一题固定股息、一题事先设定的 KPI 权重、一题薪酬激励目标。去掉这 3 道，仍为 2/22 = 9.09%，判定不变。纯单位或正负号转换不算计算比较。
+These 25 include 3 questions that use explicitly exact settings: one with a fixed dividend, one with KPI weights set in advance, and one with a compensation incentive target. Removing these 3 still gives 2/22 = 9.09%, and the verdict is unchanged. Pure unit or sign conversions do not count as computed comparisons.
 
-## 从哪些题识别出来
+## Which questions they were identified from
 
-FinQA 全部 8,281 道题中有 154 个 `greater(` 程序，另有 2 道 yes/no 答案但程序没有比较。154 个程序中，16 个最终操作数引用前序运算；其中 5 个只有单位或符号转换，剩 11 个真正比较乘积、和、差、均值或比率。156 个候选全部保留在 `part2_finqa_results.csv`。154 个原比较程序的舍入盒均稳定；另外 2 道按问句单独重构后也稳定，原程序错误没有计作舍入后果。原始 `answer` 与 `exe_ans` 不一致单独记录，未混入翻转率。
+Among all 8,281 FinQA questions there are 154 `greater(` programs, plus 2 questions with yes/no answers whose programs have no comparison. Of the 154 programs, 16 have final operands that refer to earlier operations; 5 of these involve only unit or sign conversion, leaving 11 that truly compare products, sums, differences, means, or ratios. All 156 candidates are kept in `part2_finqa_results.csv`. The rounding boxes of all 154 original comparison programs are stable; the other 2 questions are also stable after being reconstructed separately from the question text, and the original program errors were not counted as rounding consequences. Disagreements between the original `answer` and `exe_ans` are recorded separately and not mixed into the flip rate.
 
-TAT-QA 使用官方 `req_comparison`、推导的比较符号以及问句比较词作宽召回，得到 1,817 个非算术答案候选。算式/问句筛选后逐条对照原表，确认 14 道需要比较计算结果；多数“哪年增长更快”“哪年比率更高”直接比较已印出的变化率或比率。完整候选及筛选状态在 `part2_inventory.csv`，14 道的来源坐标、运算、精确范围和见证在 `part2_tatqa_results.json`。其余宽召回候选包含直接比较、计数、抽取与原因解释，**未把它们当作已做区间认证的计算比较题**。
+TAT-QA uses the official `req_comparison`, comparison symbols in the derivation, and comparison words in the question for broad recall, giving 1,817 non-arithmetic answer candidates. After formula/question screening and item-by-item comparison with the original tables, 14 questions were confirmed to require comparing computed results; most "which year grew faster" or "which year had the higher ratio" questions directly compare change rates or ratios that are already printed. The full candidate list and screening status are in `part2_inventory.csv`; the source coordinates, operations, exact ranges, and witnesses of the 14 questions are in `part2_tatqa_results.json`. The remaining broad-recall candidates include direct comparisons, counts, extraction, and explanations of causes; **they are not treated as computed-comparison questions with interval certification**.
 
-40 道核对用固定种子 20261117 分层抽取：20 道推导字符串看似带算术符号的候选，20 道其余宽召回候选。AI 阅读问题、推导与表格后，前一层只有 11/20 确实是计算比较，后一层 0/20。伪阳性包括 `COL 3–5` 行列范围、`A1/A+` 评级名称、`provided by/(used in)` 行名和直接读取印出的百分比。此结果说明不能把正则命中数当作题数。逐条判断在 `part2_semantic_review_40.csv`；**这是 AI 语义阅读，不是人类人工复核**。本抽查检验识别精度，不估计全数据集召回率；14 是这套可复现识别与语义筛选所确认的集合，不能宣称穷尽一切未标注的隐含比较。
+The 40-question check was drawn by stratum with fixed seed 20261117: 20 candidates whose derivation strings appear to contain arithmetic symbols, and 20 other broad-recall candidates. After AI reading of the question, derivation, and table, only 11/20 in the first stratum were truly computed comparisons, and 0/20 in the second. False positives include row/column ranges such as `COL 3–5`, rating names such as `A1/A+`, row names such as `provided by/(used in)`, and directly reading a printed percentage. This result shows that regex hit counts cannot be taken as question counts. The item-by-item judgments are in `part2_semantic_review_40.csv`; **this is AI semantic reading, not human review**. This spot check tests identification precision and does not estimate the recall rate for the full dataset; 14 is the set confirmed by this reproducible identification and semantic screening, and we cannot claim to have exhausted every unannotated implicit comparison.
 
-## 两个可翻转实例及其实际限制
+## The two flippable cases and their actual limits
 
-**审计费用：`ce5fc144-7926-472b-9f90-f6fcbc3410e7`。** 2019 年三家费用为 2.4、1.2、1.3 百万，2018 年为 1.5、1.2、2.1 百万。中心合计为 4.9 对 4.8；差的精确范围是 **[−0.2, 0.4] 百万**。两个 1.2 属于不同年份、不同审计机构，保留为不同变量。内点见证为 2019 三项 2.35005、1.15005、1.25005；2018 三项 1.45005、1.24995、2.14995；合计分别为 4.75015 与 4.84995，结论反转。独立均匀模型的概率可以解析计算：六个对称舍入误差之和跨过 −0.1，等价于六个 U(0,1) 之和小于 2，因此概率为 **(2⁶−6)/6! = 29/360 = 8.05556%**。
+**Audit fees: `ce5fc144-7926-472b-9f90-f6fcbc3410e7`.** The three fees are 2.4, 1.2, and 1.3 million in 2019, and 1.5, 1.2, and 2.1 million in 2018. The center totals are 4.9 vs. 4.8; the exact range of the difference is **[−0.2, 0.4] million**. The two 1.2 values belong to different years and different audit firms and are kept as different variables. The interior witness is 2.35005, 1.15005, 1.25005 for the three 2019 items and 1.45005, 1.24995, 2.14995 for the three 2018 items; the totals are 4.75015 and 4.84995, and the conclusion reverses. The probability under the independent uniform model can be computed analytically: the sum of six symmetric rounding errors crossing −0.1 is equivalent to the sum of six U(0,1) being less than 2, so the probability is **(2⁶−6)/6! = 29/360 = 8.05556%**.
 
-**EPS 百分比差：`1d5aea847254a9c3a9771b7b1a9ae40b`。** 2018 年使用 3.00、2.96，2019 年使用 6.66、6.58；两个增长式之差中心为 0.00135546，精确范围为 **[−0.00357017, 0.00629025]**。内点见证及原始 DAG 重算在逐题 JSON。独立均匀模型下翻转概率约 **19.7617%**：先解析积分两分子所构成的矩形面积，再对两分母做数值积分；数值积分误差估计约 9.7×10⁻⁷（概率单位）。两次 131,072 点 Sobol 校验分别为 19.7517% 与 19.7853%。
+**EPS percentage difference: `1d5aea847254a9c3a9771b7b1a9ae40b`.** 2018 uses 3.00 and 2.96, and 2019 uses 6.66 and 6.58; the center of the difference between the two growth expressions is 0.00135546, and the exact range is **[−0.00357017, 0.00629025]**. The interior witness and the recomputation on the original DAG are in the per-question JSON. Under the independent uniform model the flip probability is about **19.7617%**: first integrate analytically the rectangle area formed by the two numerators, then integrate numerically over the two denominators; the estimated numerical integration error is about 9.7×10⁻⁷ (in probability units). Two 131,072-point Sobol checks give 19.7517% and 19.7853%.
 
-但 EPS 案例**不能作为“整份文档定不了答案”的证据**。同表另印了基本与稀释后的加权平均股数，并明确说明 EPS 的计算方式。利用共同净利润相消，可把所比较的量改写成“稀释股数 / 基本股数 − 1”。即使给四个股数各自独立的半末位盒，两个比率之差仍严格为正，范围为 **[0.00113463, 0.00121373]**，因此 2019 年较小这一结论可以被全文恢复。该计算保存在 `part2_eps_full_document_check.json`。这是本轮两个反例中一个已知的全文约束补救；没有据此假装已对全部题完成全文约束审计。
+But the EPS case **cannot serve as evidence that "the whole document cannot determine the answer"**. The same table also prints the basic and diluted weighted-average share counts and states explicitly how EPS is computed. Cancelling the common net income, the compared quantity can be rewritten as "diluted shares / basic shares − 1". Even if each of the four share counts gets its own independent half-last-digit-unit box, the difference of the two ratios is still strictly positive, with range **[0.00113463, 0.00121373]**, so the conclusion that 2019 is smaller can be recovered from the full text. This computation is saved in `part2_eps_full_document_check.json`. This is a known full-text-constraint remedy for one of this round's two counterexamples; we do not pretend on this basis that a full-text constraint audit has been completed for all questions.
 
-## 两个增长率比较的规则
+## The rule for comparing two growth rates
 
-令 \(g_i=b_i/a_i-1\)，\(a_i>h_{a_i}>0\)、\(b_i>0\)，输入半宽为 \(h_{a_i},h_{b_i}\)。中心附近精确的上下单边偏差为
+Let \(g_i=b_i/a_i-1\), with \(a_i>h_{a_i}>0\), \(b_i>0\), and input half-widths \(h_{a_i},h_{b_i}\). The exact upper and lower one-sided deviations around the center are
 
 \[
 e_i^+=\frac{h_{b_i}+(1+g_i)h_{a_i}}{a_i-h_{a_i}},\qquad
 e_i^-=\frac{h_{b_i}+(1+g_i)h_{a_i}}{a_i+h_{a_i}}.
 \]
 
-若中心 \(g_1>g_2\)，且两组输入独立，则严格顺序在整个闭盒上保持，当且仅当
+If at the center \(g_1>g_2\), and the two sets of inputs are independent, then the strict order holds on the whole closed box if and only if
 
 \[
 g_1-g_2>e_1^-+e_2^+.
 \]
 
-一阶版本把分母近似成 \(a_i\)，即比较增长率差与两组导数绝对值加权半宽之和。若两式共享输入，必须分析联合函数 \(D=g_1-g_2\)，不能仅看两个边际区间是否相交。比如 \(A=x\)、\(B=x+0.1\) 的区间可以相交，但顺序不会翻转。
+The first-order version approximates the denominator by \(a_i\), that is, it compares the growth-rate difference with the sum of half-widths weighted by the absolute values of the two sets of derivatives. If the two expressions share inputs, the joint function \(D=g_1-g_2\) must be analyzed; it is not enough to check whether the two marginal intervals intersect. For example, the intervals of \(A=x\) and \(B=x+0.1\) can intersect, but the order never flips.
 
-本集合中真正比较两个增长式的有 3 道题、4 对比较：FinQA 的农业/汽车增长、TAT-QA 的 EPS 差以及美国/欧洲/亚洲收入增长。精确规则与联合范围判定 **4/4 一致**；全部计算比较产生 35 个联合差函数，一阶判定 **35/35 一致**。样本很小，这不是一般正确率保证。图用数据在 `part2_growth_plot.csv`；EPS 点仍是“标准解法输入盒”上的结果，须附上全文可恢复的说明。
+In this set, 3 questions with 4 pairs of comparisons truly compare two growth expressions: FinQA's agriculture/automotive growth, TAT-QA's EPS difference, and US/Europe/Asia revenue growth. The exact rule agrees with the joint-range decision **4/4**; all computed comparisons produce 35 joint difference functions, and the first-order decision agrees **35/35**. The sample is very small; this is not a general accuracy guarantee. The plot data are in `part2_growth_plot.csv`; the EPS point is still the result on the "standard-solution input box" and must carry the note that the full text can recover it.
 
-## 计算方式与来源
+## Computation method and sources
 
-所有范围采用精确有理数，沿用 T1a 的单调导数/坐标线性分式极值认证。反例始终是一组共享输入的内点，不是两个不兼容的端点拼接；`part2_summarize.py` 已检查每个反例逐项位于盒内部且原始运算得到相反答案。无翻转概率样本从未被当成稳定证明。程序依赖相邻只读工作区的 T1 和 T1a 源码；重跑命令依次为 `part2_comparisons.py inventory`、`finqa`、`tatqa`、`part2_summarize.py`。
+All ranges use exact rationals, following T1a's certification by monotone derivatives / extrema of coordinate-wise linear-fractional functions. A counterexample is always a single interior point of shared inputs, not a splice of two incompatible endpoints; `part2_summarize.py` has checked that every counterexample lies entry by entry inside the box and that the original operations give the opposite answer. A lack of flipping probability samples was never treated as a proof of stability. The program depends on the T1 and T1a source code in adjacent read-only workspaces; the rerun commands are, in order, `part2_comparisons.py inventory`, `finqa`, `tatqa`, and `part2_summarize.py`.
 
-数据原始来源为 [FinQA 官方数据](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset) 和 [TAT-QA 官方数据](https://github.com/NExTplusplus/TAT-QA/tree/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw)。不以“未命中候选”证明不存在，不把标准程序的单位/方向错误称作舍入现象，不把输入盒可翻转称作实际财报真值已翻转。
+The original data sources are [FinQA official data](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset) and [TAT-QA official data](https://github.com/NExTplusplus/TAT-QA/tree/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw). We do not use "no candidate hit" to prove absence, do not call unit/direction errors in the standard program a rounding phenomenon, and do not call flippability on the input box a flip of the actual filing's true values.

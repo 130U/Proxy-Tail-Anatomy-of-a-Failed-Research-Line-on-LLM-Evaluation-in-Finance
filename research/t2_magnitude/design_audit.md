@@ -1,66 +1,66 @@
-# T2：执行前设计审查
+# T2: pre-execution design audit
 
-2026-11-16（America/New_York）。内部独立 AI 设计审查；尚未产生任何 T2 评分或实验结果。本页只审查测量解释，不承担文献新颖性判定。以下实验修订仅在查重未触发停止条件时适用。
+2026-11-16 (America/New_York). Internal independent AI design audit; no T2 scores or experimental results have been produced yet. This page only audits the interpretation of the measurements and does not make the literature-novelty judgement. The experimental revisions below apply only if the prior-art check does not trigger the stop condition.
 
 ## Charter
 
-- 目标：识别会改变 T2“继续／放弃”结论的设计缺口，并给出最小修订。
-- 范围／对象／单位：金融文本行为测量／数值改变引起的模型情绪评分变化／相同语义模板、数值与等价表示之间的配对差。
-- 类型：描述式设计审查，承接主任务的探索式查重；全部建议属于未执行方案。
-- 问题：Q1 数字变化是否保持经济语义可比？Q2 观测差异能否与表示、批次及重测波动区分？Q3 判定门能否支持声称的结论？
-- 验收：每个关键问题对应具体反例或已读来源，建议不把未显著差异当作“规矩”的证据。
+- Goal: identify design gaps that would change T2's "continue / drop" conclusion, and give the minimal revisions.
+- Scope / object / unit: behavioural measurement on financial text / change in the model's sentiment score caused by a numeric change / paired differences between the same semantic template, values and equivalent representations.
+- Type: descriptive design audit, following on from the main task's exploratory prior-art check; all recommendations are unexecuted plans.
+- Questions: Q1 Do the numeric changes keep the economic semantics comparable? Q2 Can the observed differences be separated from representation, batch and retest fluctuation? Q3 Can the decision gate support the claimed conclusion?
+- Acceptance: each key issue corresponds to a concrete counterexample or a source that was read; the recommendations do not treat a non-significant difference as evidence of "well-behaved".
 
 ## Canonical sources
 
-| 优先级 | 已读来源 | 用途／边界 |
+| Priority | Source read | Use / boundary |
 |---|---|---|
-| 1 | [T2 原任务](https://github.com/130U/proxy-tail/blob/main/tasks/T2_magnitude.md)，连接器读取时间 2026-11-16；服务返回修改时间 2026-11-17T02:15:10Z | A/B/C 设计与原始判定；未把文本内举例视为已冻结完整协议 |
-| 1 | [上一实验一页结论](../absolute_scoring/FABLE_ONE_PAGE.md) | 同项目观察到批次敏感性和离散评分边界问题；不能直接外推到 T2 |
-| 1 | [上一实验冻结协议](../absolute_scoring/protocol.md) | 固定模型、提示、全新上下文、原始输出、失败记录的既有约定 |
-| 3 | [上一实验设计复核](../absolute_scoring/design_review.md) | 本地内部分析，不作独立外部文献 |
-| 2 | [SEC Investor.gov：Basis Point](https://www.investor.gov/introduction-investing/investing-basics/glossary/basis-point)，正文已打开 | 1 bp = 0.01 个百分点；本文的转换例子由此计算 |
+| 1 | [T2 original task](https://github.com/130U/proxy-tail/blob/main/tasks/T2_magnitude.md), read through the connector on 2026-11-16; the service returned a modification time of 2026-11-17T02:15:10Z | A/B/C design and the original decision rule; the examples in the text are not treated as a frozen complete protocol |
+| 1 | [One-page summary of the previous experiment](../absolute_scoring/FABLE_ONE_PAGE.md) | The same project observed batch sensitivity and boundary problems with discrete scores; cannot be extrapolated directly to T2 |
+| 1 | [Frozen protocol of the previous experiment](../absolute_scoring/protocol.md) | Existing conventions: fixed model, prompt, fresh context, raw outputs, failure records |
+| 3 | [Design review of the previous experiment](../absolute_scoring/design_review.md) | Local internal analysis, not an independent external source |
+| 2 | [SEC Investor.gov: Basis Point](https://www.investor.gov/introduction-investing/investing-basics/glossary/basis-point), full text opened | 1 bp = 0.01 percentage points; the conversion examples on this page are computed from it |
 
 ## Findings ledger
 
-| 编号 | 发现／判断 | 依据 | 类型 | 问题 |
+| No. | Finding / judgement | Basis | Type | Question |
 |---|---|---|---|---|
-| D1 | 原任务未指定评分量表、目标实体视角、噪声估计量、检验族和无法判断分支 | T2“做法／分析／判定” | 文本观察 | Q2、Q3 |
-| D2 | 利润从正数基准下降超过 100% 会跨入亏损，100 附近存在经济语义边界 | 若初始利润 P>0，则下降 x% 后为 P(1−x/100)；直接代数 | 设计推论 | Q1 |
-| D3 | “0.5%”与“50 bp”数值上可表示同一个率，但替换成率的变化时，必须保持百分比变化与百分点变化的区别 | SEC bp 定义及本页转换例子 | 定义＋设计推论 | Q1 |
-| D4 | 旧实验同批与异批正态秩相关不同，报告已明确这不是纯粹噪声占比 | 旧一页结论与冻结协议 | 既有实验报告；未在本页重算 | Q2 |
-| D5 | 固定几个公司名轮换不自动保证公司名与数值正交；四次重复也不是四个独立金融事件 | T2 固定 5 个名称、轮换、重复 ≥4 的设计 | 设计推论 | Q2 |
-| D6 | “差异 > 两倍噪声”若不定义噪声及其不确定性，不能形成唯一的统计判定；未检出差异不等于等价 | T2 判定尚缺估计量；旧协议已区分实用等价与不拒绝 | 方法审查 | Q3 |
-| D7 | 连续有界情绪量表上的不对称不自动等于损失厌恶，局部跳变也不自动等于左位数机制 | T2 操作只改变标题并测评分，未测决策效用或隔离编码机制 | 识别边界推论 | Q1、Q3 |
+| D1 | The original task does not specify the scoring scale, the perspective of the target entity, the noise estimator, the test family or an inconclusive branch | T2 "method / analysis / decision" | Textual observation | Q2, Q3 |
+| D2 | A profit that falls by more than 100% from a positive base crosses into a loss; there is an economic-semantic boundary near 100 | If the initial profit is P>0, then after a fall of x% it is P(1−x/100); direct algebra | Design inference | Q1 |
+| D3 | "0.5%" and "50 bp" can represent the same rate numerically, but when substituting into a change in a rate, the distinction between a percentage change and a percentage-point change must be kept | SEC definition of bp and the conversion examples on this page | Definition + design inference | Q1 |
+| D4 | In the old experiment the normal-score rank correlation within the same batch differed from that across batches; the report already states clearly that this is not a pure noise share | Old one-page summary and frozen protocol | Existing experimental report; not recomputed on this page | Q2 |
+| D5 | Rotating a few fixed company names does not automatically make company name orthogonal to value; four repeats are also not four independent financial events | T2's design of 5 fixed names, rotation, ≥4 repeats | Design inference | Q2 |
+| D6 | "Difference > twice the noise" cannot give a unique statistical decision unless the noise and its uncertainty are defined; failing to detect a difference does not equal equivalence | T2's decision rule still lacks an estimator; the old protocol already distinguishes practical equivalence from failure to reject | Methodological review | Q3 |
+| D7 | An asymmetry on a continuous bounded sentiment scale does not automatically equal loss aversion, and a local jump does not automatically equal a left-digit mechanism | T2's operation only changes the headline and measures the score; it does not measure decision utility or isolate the encoding mechanism | Inference about identification limits | Q1, Q3 |
 
 ## Scope filter
 
-不把 T2 扩写成投资效果、人格心理学或模型正确性研究。单调性是待观察的响应性质；在缺乏规模、预期和基准的标题里，它不是普遍成立的金融正确答案。旧研究的批次敏感性仅提供设置控制的理由，不能证明 T2 必然受同样程度影响。保留 D1–D7，并按以上边界解释。
+Do not expand T2 into a study of investment effects, personality psychology or model correctness. Monotonicity is a response property to be observed; in headlines lacking scale, expectations and baseline, it is not a universally valid correct financial answer. The batch sensitivity of the old study only gives a reason to set up controls; it cannot prove that T2 will necessarily be affected to the same degree. D1–D7 are kept and interpreted within these boundaries.
 
 ## Object filter
 
-将“数字大小造成模型错误”降为“固定提示、模板和模型下的评分变化”。将“单位不变性”限定为逐项核验后的经济语义等价对。将“左位数效应”“损失厌恶”保留为后续候选解释，而非当前设计可识别的机制。公司名、模板和调用批次均须在分析层级中保留。
+Downgrade "numeric magnitude causes model errors" to "score changes under a fixed prompt, template and model". Restrict "unit invariance" to pairs whose economic semantics are equivalent after item-by-item verification. Keep "left-digit effect" and "loss aversion" as candidate explanations for later, not as mechanisms the current design can identify. Company name, template and call batch must all be kept as levels in the analysis.
 
 ## Conclusions
 
-**即使暂不考虑撞题，当前版本也只能支持探索性筛查，不能直接把任一异常升级为心理定律，或把未检出异常写成已证明规矩。** 相同金额的三种表示具有较清楚的配对含义，但这项设计优点不等于研究新颖，也不构成继续原题的理由；查重结论见主报告。（D1–D7）
+**Even setting aside the collision with existing work, the current version can only support exploratory screening; it cannot directly upgrade any anomaly to a psychological law, or write up an undetected anomaly as proof of being well-behaved.** The three representations of the same amount have a fairly clear paired meaning, but this design merit does not equal research novelty and is not a reason to continue the original topic; the prior-art conclusion is in the main report. (D1–D7)
 
-1. **正负曲线须共享可解释基准。** `quarterly profit falls 500%` 并非一概数学无效：正利润基准下，它意味着新利润为原利润的 −4 倍。问题是它跨越了盈亏状态，不能与 `rises 500%` 当作纯粹对称的常规增长。把主对称区间限定在 0.1%–50% 等不跨零的范围，并明确相同基期；>100% 的利润下跌单列为语义压力测试。人数必须整数且不超过明确的总员工数；裁员对公司前景的含义也可能与对员工的含义不同。罚款绝对金额缺少公司规模时，不应把曲率解释成心理标度。（D1、D2）
+1. **The positive and negative curves must share an interpretable baseline.** `quarterly profit falls 500%` is not mathematically invalid in every case: from a positive profit base, it means the new profit is −4 times the original. The problem is that it crosses from profit to loss and cannot be treated as the purely symmetric counterpart of the ordinary growth `rises 500%`. Restrict the main symmetric range to values that do not cross zero, such as 0.1%–50%, and specify the same base period; list profit falls >100% separately as a semantic stress test. Headcounts must be integers and not exceed an explicit total number of employees; the meaning of layoffs for the company's prospects may also differ from their meaning for employees. When the absolute amount of a fine lacks the company's size, its curvature should not be interpreted as a psychological scale. (D1, D2)
 
-2. **比例单位必须检查句子，不只检查数字。** 对同一个率水平，`default rate is 0.5%` 与 `default rate is 50 basis points` 数值等价。若讨论变化，`operating margin rises from 10% to 10.5%` 等价于 `rises by 0.5 percentage points` 或 `rises by 50 basis points`；“利润率相对增长 0.5%”却把 10% 变成 10.05%。因此不能对 `profit rises 0.5%` 机械替换 bp 后声称等价。金额三种表示可保留，但将逗号、十进制位数、词汇单位带来的整体效应称为“表示效应”，不据此单独识别分词原因。（D3、D7）
+2. **Proportional units require checking the sentence, not just the number.** For the same rate level, `default rate is 0.5%` and `default rate is 50 basis points` are numerically equivalent. When discussing a change, `operating margin rises from 10% to 10.5%` is equivalent to `rises by 0.5 percentage points` or `rises by 50 basis points`; "the profit margin grows by 0.5% in relative terms", however, turns 10% into 10.05%. So one cannot mechanically substitute bp into `profit rises 0.5%` and claim equivalence. The three representations of amounts can be kept, but the overall effect of commas, number of decimal places and word units should be called a "representation effect", and not used to identify tokenisation as the cause on its own. (D3, D7)
 
-3. **100 是经济边界的可能位置，不是干净的左位数检验。** 利润下跌 100% 跨越盈亏，裁员 100% 涉及全部员工；这些跳变具有语义解释。要测试数字表示边界，优先在明确规模且不触发经济事件的金额区间观察 9.9/10.1 等对照；另外保留 50 这种不增加数字位数的圆整关口。对每个关口使用相同间距的左右邻域控制，允许平滑曲率；把结果称为“局部额外变化”，不要仅凭两点差宣布数学不连续。（D2、D7）
+3. **100 is a possible location of an economic boundary, not a clean left-digit test.** A 100% profit fall crosses from profit to loss, and 100% layoffs involve all employees; such jumps have a semantic explanation. To test a numeric-representation boundary, prefer observing contrasts such as 9.9/10.1 in amount ranges with an explicit scale that do not trigger an economic event; also keep a round threshold like 50 that does not add a digit. For each threshold use left and right neighbourhood controls with the same spacing, allowing smooth curvature; call the result "local extra change", and do not declare a mathematical discontinuity from a two-point difference alone. (D2, D7)
 
-4. **正负不对称首先是量表现象。** 固定量表中点不保证某个模板的经验中性点恰为中点。先加入相同模板的零变化标题，报告 `s(+x)−s(0)` 与 `s(0)−s(−x)`；避免单侧接近量表上限/下限造成机械不对称。即使差异可重复，它仍只是该提示下的评分不对称，不能直接推出经济效用上的损失厌恶。（D1、D7）
+4. **Positive/negative asymmetry is first of all a scale phenomenon.** A fixed scale midpoint does not guarantee that a template's empirical neutral point is exactly the midpoint. First add zero-change headlines with the same template and report `s(+x)−s(0)` and `s(0)−s(−x)`; avoid mechanical asymmetry caused by one side being close to the scale's upper/lower limit. Even if the difference is repeatable, it is still only a scoring asymmetry under that prompt and cannot directly imply loss aversion in economic utility. (D1, D7)
 
-5. **原先二元判定须允许无法判断。** 一个模型每次都输出同一整数会令估计噪声为零，不能因此把一分差异自动升级为重大效应。反过来，四次重复没检出差异也不能证明曲线光滑、单位不变或对称。数值输入不能解析、量表几乎不分辨、区间跨越判定界限、明显上下文依赖，都应进入无法判断并保留结果。（D1、D6）
+5. **The original binary decision must allow "inconclusive".** A model that outputs the same integer every time makes the estimated noise zero, and a one-point difference must not therefore be upgraded automatically to a large effect. Conversely, failing to detect a difference with four repeats cannot prove that the curve is smooth, unit-invariant or symmetric. Unparseable numeric input, a scale that barely discriminates, an interval that crosses the decision boundary and obvious context dependence should all go to "inconclusive", with the results kept. (D1, D6)
 
 ## Next steps / Risks
 
-主协调收到的两个查重分支均报告 A 及正负响应核心已有研究覆盖，故本页不据残余设计建议启动实验。以下只保留以后单独评估 B/C 时需满足的条件，**不是新的执行计划**：
+Both prior-art branches received by the main coordinator report that A and the core of the positive/negative response are already covered by existing research, so this page does not launch an experiment on the basis of the residual design recommendations. Only the conditions that would have to be met if B/C were evaluated separately later are kept below; **this is not a new execution plan**:
 
-- 明确一个模型、提示、目标实体和量表；公司名与数值完全交叉，语义对分开呈现，固定填充与位置规则，记录完整调用输入。重复次数不是独立金融样本量。（D1、D5）
-- 同表示重测的单次标准差、表示之间的均值差及其区间分别报告。“两倍噪声”是实用门槛，不是显著性定理；固定完整批次的对照与重新随机批次不能混称纯生成噪声。（D4、D6）
-- 原始相邻逆序率只作描述；平坦曲线加噪声也会逆序。关口用相同间距的邻域对照；曲线比较冻结参数化并留出数值区段，不能靠更灵活模型的训练残差获胜。（D1、D7）
-- 对预定多个关口、表示或模板完整报告并控制多重比较，或单列独立确认。只有差异区间进入预定实用等价范围才支持“未见重要表示效应”；只是不显著应写无法判断。（D6）
+- Specify one model, prompt, target entity and scale; fully cross company names with values, present semantic pairs separately, fix the filler and position rules, and record the complete call inputs. The number of repeats is not an independent financial sample size. (D1, D5)
+- Report separately the single-run standard deviation of same-representation retests, the mean difference between representations and its interval. "Twice the noise" is a practical threshold, not a significance theorem; controls with a fixed complete batch and re-randomised batches must not both be called pure generation noise. (D4, D6)
+- The raw adjacent-inversion rate is descriptive only; a flat curve plus noise also produces inversions. Thresholds use neighbourhood controls with the same spacing; curve comparisons freeze the parameterisation and hold out value ranges, and cannot be won by the training residuals of a more flexible model. (D1, D7)
+- For several pre-specified thresholds, representations or templates, report everything and control for multiple comparisons, or list an independent confirmation separately. Only a difference interval that falls inside a pre-specified practical-equivalence range supports "no important representation effect seen"; mere non-significance should be written as inconclusive. (D6)
 
-本页证据复核：来源与直接代数支持所列设计缺口；不存在 T2 实测值。模型通用行为、文献新颖性、所需样本量和各曲线优劣均未在本页得到验证。
+Evidence review for this page: the sources and direct algebra support the design gaps listed; there are no T2 measurements. General model behaviour, literature novelty, the required sample size and the relative merits of the curves are not verified on this page.

@@ -1,49 +1,49 @@
-# 路径 04：从不确定边际到部署错误预算的依赖稳健证书
+# Path 04: dependence-robust certificates from uncertain marginals to deployment error budgets
 
-日期：2026-11-15。状态：数学候选与反方分析；不是已选旗舰，也不是外部同行评审。依据仅限本地 [T3.1](../theory/notes.md)、[有限网格检查](../checks/results.json)、[文献状态台账](../literature/question_status.md)及[本地语料盘点](../reports/local_data_inventory.md)。Q20 原始文献尚未充分核验；不新增网络请求，不声称任何下面的构造具有已确认的新颖性。
+Date: 2026-11-15. Status: a mathematical candidate and adversarial analysis; not a selected flagship, and not external peer review. The basis is limited to the local [T3.1](../theory/notes.md), the [finite grid checks](../checks/results.json), the [literature status ledger](../literature/question_status.md), and the [local corpus inventory](../reports/local_data_inventory.md). The original literature for Q20 has not been checked adequately; no new network requests were made, and none of the constructions below is claimed to have confirmed novelty.
 
-编号对应：导师旧方案的部署风险支线记作 **旧 P3／本轮 PATH04**；本轮 PATH03 指审计成本分支。后续试验的具体有用性门见 [DECISION_CRITERIA.md](DECISION_CRITERIA.md)：其中阈值是下一轮研究提案，尚未执行，也不是 Fable 已接受的门槛，不追溯充当既有结果的事前标准。
+Numbering: the deployment-risk side line of the advisor's old plan is written **old P3 / this round's PATH04**; this round's PATH03 refers to the audit-cost branch. The concrete usefulness gates for later trials are in [DECISION_CRITERIA.md](DECISION_CRITERIA.md). The thresholds there are a research proposal for the next round, not yet executed, and not thresholds Fable has accepted; they do not retroactively serve as ex ante criteria for existing results.
 
-**判断：已知逐点边际＋簇间独立的同单调计算器，本身不足以成为新理论方向。更有价值的问题是：在只能估计群体风险、簇间独立性也不确定时，什么最小信息能得到严格小于“整批全错”的尾部错误预算？如果不能同时说明识别、统计覆盖和非空条件，这条路径应保留为支线或负结果。**
+**Judgment: a comonotone calculator for known pointwise marginals + independence across clusters is not by itself enough to be a new theoretical direction. The more valuable question is: when only group risk can be estimated and independence across clusters is also uncertain, what minimal information yields a tail error budget strictly smaller than "the whole batch is wrong"? If identification, statistical coverage, and non-vacuity conditions cannot be stated together, this path should be kept as a side line or a negative result.**
 
-## 1. 目标量与概率层次
+## 1. Target quantity and levels of probability
 
-固定已训练的预测器 f、标签含义和未来批次抽样方案；训练数据、校准数据与最终评价数据分开。未来一批 B 条样本有错误指示 E_i=1{f(X_i)≠Y_i}，总错误数 S=Σ_i E_i∈{0,…,B}。主要目标是上尾 Expected Shortfall：
+Fix the trained predictor f, the meaning of the labels, and the sampling scheme for future batches; training data, calibration data, and final evaluation data are kept separate. A future batch of B samples has error indicators E_i=1{f(X_i)≠Y_i}, and total error count S=Σ_i E_i∈{0,…,B}. The main target is the upper-tail Expected Shortfall:
 
 \[
 \operatorname{ES}_{\beta,Q}(S)=\inf_{t\in\mathbb R}
 \left[t+\frac{\mathbb E_Q(S-t)_+}{1-\beta}\right],\qquad 0<\beta<1.
 \]
 
-离散分布时这个定义包含分位点原子质量的分摊，不能直接写成“超过 VaR 后的条件均值”。Q 是未来错误向量的联合分布。校准资料 D 产生一个上界 U(D)，需要的覆盖是
+For discrete distributions this definition includes splitting the atom mass at the quantile, so it cannot be written directly as "the conditional mean beyond VaR". Q is the joint distribution of the future error vector. The calibration data D produce an upper bound U(D), and the required coverage is
 
 \[
 \Pr_D\{\operatorname{ES}_{\beta,Q}(S)\le U(D)\}\ge1-\alpha.
 \]
 
-这是对**未来分布风险**的统计证书，不是声称某个已经看到的批次必然错不超过 U。若未来批次与 D 按设计独立，ES 上界还给对应分位数上界，因此可得到联合失败概率不超过 alpha+(1−beta) 的批次数量声明；两层随机性和失败预算必须分别写出。
+This is a statistical certificate for the **risk of the future distribution**; it does not claim that some batch already seen must have at most U errors. If future batches are independent of D by design, the ES upper bound also gives the corresponding quantile upper bound, so one can obtain a statement about the number of errors in a batch with joint failure probability at most alpha+(1−beta); the two layers of randomness and their failure budgets must be written out separately.
 
-本方案首先研究按预设群体/事件组成随机抽取的未来批次，**不提供给定任意一组已挑选特征 X_1,…,X_B 的无假设条件风险证书**。后者要求识别逐点条件错误率，比普通校准困难得多。
+This plan first studies future batches drawn at random according to preset group/event compositions. **It does not provide an assumption-free conditional risk certificate for an arbitrary given set of selected features X_1,…,X_B.** The latter requires identifying pointwise conditional error rates, which is much harder than ordinary calibration.
 
-## 2. 先保留三个能杀死错误叙事的反例
+## 2. First keep three counterexamples that can kill a wrong narrative
 
-**群体校准不等于逐点边际。** 两个等大子群的真实错误率分别为 0 和 .2，全部预测为 .1，则按预测值分组完全校准；一个未来批次若集中选择高风险子群，错误边际是 .2。对没有观察过标签的任意未来特征点，有限校准资料还允许两种与已观测数据一致、但该点条件错误率分别为 0 和 1 的机制。没有平滑性、参数模型、可重复分组或其他结构，就不能从校准曲线推出逐点 p_i 的同时上界。
+**Group calibration is not pointwise marginals.** Two equal-size subgroups have true error rates 0 and .2, and everything is predicted as .1; grouped by predicted value, this is perfectly calibrated. If a future batch concentrates on the high-risk subgroup, its error marginal is .2. For an arbitrary future feature point whose label has not been observed, finite calibration data also allow two mechanisms that are both consistent with the observed data but give that point conditional error rates of 0 and 1. Without smoothness, a parametric model, repeatable groups, or other structure, a simultaneous upper bound on the pointwise p_i cannot be derived from the calibration curve.
 
-**边际正确也不识别依赖。** B 个边际均为 .1 的错误，可相互独立，也可全部由一个 Bernoulli(.1) 共同驱动；平均错误率相同，尾部错误预算完全不同。把公司、事件或日期写进 metadata 不会证明簇间独立；一次系统性宏观新闻可能连接全部簇。
+**Correct marginals also do not identify dependence.** B errors each with marginal .1 can be mutually independent, or all be driven by one common Bernoulli(.1); the average error rate is the same, but the tail error budget is completely different. Writing company, event, or date into metadata does not prove independence across clusters; one systematic macro news item may connect all clusters.
 
-**任意漂移使历史评价失效。** 若不约束未来标签机制，历史数据和模型完全相同的两个世界，可以让未来全部正确或全部错误。任何声称同时覆盖这两个世界的上界都必须容许 B。对未标注未来特征观察到“分布看起来接近”，也不能排除 Y|X 已变。
+**Arbitrary drift invalidates historical evaluation.** If the future labelling mechanism is not constrained, two worlds with exactly the same historical data and model can make the future all correct or all wrong. Any upper bound claiming to cover both worlds must allow B. Observing that unlabelled future features "look close in distribution" also cannot rule out that Y|X has changed.
 
-## 3. 一个应先证明的边界：只有群体均值时何时必然空泛？
+## 3. A boundary to prove first: when is the bound necessarily vacuous with only group means?
 
-设未来批次被预先分为 G 个互斥群体，第 g 组有 b_g 条，Σ_g b_g=B；只知道
+Suppose the future batch is divided in advance into G mutually exclusive groups, group g having b_g items, Σ_g b_g=B; all that is known is
 
 \[
 \mathbb E_Q\sum_{i\in g}E_i\le b_g u_g,\qquad 0\le u_g\le1,
 \]
 
-允许组内、组间任意依赖，不声称每个 p_i≤u_g。令 \(\mathcal Q(u)\) 为满足这些条件的所有联合律，记 a=1−beta。
+with arbitrary dependence within and across groups allowed, and with no claim that each p_i≤u_g. Let \(\mathcal Q(u)\) be the set of all joint laws satisfying these conditions, and write a=1−beta.
 
-**本地可直接推导的刻画，非新颖性主张：**
+**A characterization that can be derived directly here; not a novelty claim:**
 
 \[
 \sup_{Q\in\mathcal Q(u)}\operatorname{ES}_{\beta,Q}(S)
@@ -51,73 +51,73 @@
 \tag{R1}
 \]
 
-证明路线很短。ES 的有限状态风险包络可写为在原律 q 上选择密度权重 z/q≤1/a，且 Σz=1。第 g 组的加权错误数既不超过 b_g，也不超过原期望 b_gu_g/a；逐组相加得到上界。取一个公共 U~Uniform(0,1)，令组 g 的全部错误同时为 1{U≤u_g}，再让尾部权重集中在 U≤a，即同时达到每一组的界。故这是锐界，不是保守松弛。
+The proof route is short. The finite-state risk envelope of ES can be written as choosing density weights z/q≤1/a on the original law q, with Σz=1. The weighted error count in group g exceeds neither b_g nor the original expectation b_gu_g/a; summing over groups gives the upper bound. Take one common U~Uniform(0,1), make all errors in group g equal to 1{U≤u_g} simultaneously, and concentrate the tail weight on U≤a; this attains every group's bound at once. So this is a sharp bound, not a conservative relaxation.
 
-这揭示一个可能直接否决路径的事实：若 beta=.95 且各组 u_g≥.05，R1 就等于 B，即使这些群体均值**完全已知且没有估计误差**。增加校准样本不能修复依赖信息缺失。若只有整体均值上界 u，则退化为 B·min(1,u/.05)。这里的 .95/.05 只是数学示例，不是本地模型测量结果。
+This reveals a fact that might reject the path directly: if beta=.95 and every group has u_g≥.05, R1 equals B, even if these group means are **fully known with no estimation error**. Adding calibration samples cannot repair the missing dependence information. If there is only an overall mean upper bound u, it degenerates to B·min(1,u/.05). The .95/.05 here is only a mathematical example, not a measurement of a local model.
 
-R1 可以作为论文的识别边界或短负结果，但同单调、风险包络及矩约束最坏分布都是经典框架。不能把这个几行推论称为独创定理。真正需要查重并深化的是：什么可从数据估计的额外约束，能使该锐界严格收紧，以及获得该收紧所需的最小样本数。
+R1 can serve as an identification boundary or a short negative result in a paper, but comonotonicity, risk envelopes, and worst-case distributions under moment constraints are all classical frameworks. This few-line corollary cannot be called an original theorem. What really needs a prior-art check and deeper work is: what extra constraints estimable from data can strictly tighten this sharp bound, and the minimal sample size needed to obtain that tightening.
 
-## 4. 一个可执行、但明确保守的统计入口
+## 4. An executable but explicitly conservative statistical entry point
 
-先冻结分组规则和 f。校准集由独立簇 c=1,…,C 构成，簇内任意依赖；先以设计固定的组内样本数 n_cg、n_g=Σ_c n_cg 为基本版本。若改用随机簇大小条件化后的版本，必须明确所条件化的 sigma-field H，并假设各簇在给定 H 后仍相互独立；下文 theta_g 也须改为同一条件律下的加权期望。**无条件独立不自动保证条件化后的独立性**，不能一边依数据固定计数/选择事件，一边未经证明沿用原独立集中界。以下全零事件界若采用条件化论证，也遵守同一要求。令
+First freeze the grouping rule and f. The calibration set consists of independent clusters c=1,…,C, with arbitrary dependence within clusters; the basic version takes the within-group sample sizes n_cg, n_g=Σ_c n_cg as fixed by design. If a version conditioned on random cluster sizes is used instead, the conditioning sigma-field H must be stated explicitly, and the clusters must be assumed still mutually independent given H; theta_g below must also be changed to the weighted expectation under the same conditional law. **Unconditional independence does not automatically guarantee independence after conditioning**; one cannot fix counts/selection events from the data on one hand and keep using the original independent concentration bound without proof on the other. If the all-zero event bound below uses a conditioning argument, it obeys the same requirement. Let
 
 \[
 \widehat\theta_g=\frac{\sum_c\sum_{i\in(c,g)}E_i}{n_g},\quad
 r_g=\sqrt{\frac12\sum_c(n_{cg}/n_g)^2\log(G/\alpha)}.
 \]
 
-因为每簇对该均值的贡献在区间 [0,n_cg/n_g] 内，独立有界块的集中界和 union bound 给同时上界 \(\theta_g\le\widehat\theta_g+r_g\)，其中 theta_g 是这个校准抽样设计的加权期望错误率；它不是逐点条件概率。n_g=0 的组必须设 u_g=1 或拒绝，而非默认零风险。
+Because each cluster's contribution to this mean lies in the interval [0,n_cg/n_g], the concentration bound for independent bounded blocks plus a union bound gives the simultaneous upper bound \(\theta_g\le\widehat\theta_g+r_g\), where theta_g is the weighted expected error rate for this calibration sampling design; it is not a pointwise conditional probability. A group with n_g=0 must be set to u_g=1 or rejected, not defaulted to zero risk.
 
-进一步**另行假设**未来随机批次第 g 组的期望平均错误率不超过 theta_g+delta_g，才可取
+Only with the **additional assumption** that the expected average error rate of group g in the future random batch is at most theta_g+delta_g can one take
 
 \[
 u_g=\min\{1,\widehat\theta_g+r_g+\delta_g\}
 \]
 
-并代入 R1 获得至少 1−alpha 的覆盖。一个足够的迁移条件是：在固定 f 和一致组内抽样设计下，未来与校准的组条件 (X,Y) 联合律总变差距离不超过 delta_g；因为错误损失有界，其期望偏移不超过这个距离。**delta_g 不是凭现有无标签文本就能估出的量，不能用看似小的 embedding 距离替代。**
+and plug it into R1 to obtain coverage of at least 1−alpha. One sufficient transfer condition is: under fixed f and a consistent within-group sampling design, the total variation distance between the future and calibration group-conditional joint laws of (X,Y) is at most delta_g; because the error loss is bounded, its expected shift is at most that distance. **delta_g is not a quantity that can be estimated from the existing unlabelled text; it cannot be replaced by a seemingly small embedding distance.**
 
-当各簇在某组大小相等时，半径由独立簇数控制；很多同事件改写不能增加有效独立样本量。数据驱动选组、选模型、反复调整 delta 后挑最紧结果也会破坏该保证，需要独立设计样本或明确统一控制。该入口本身是经典有界集中与风险包络的组合；价值是暴露预算，而不是靠“带有置信区间”制造新颖性。
+When the clusters within a group are equal in size, the radius is controlled by the number of independent clusters; many rewrites of the same event cannot increase the effective independent sample size. Choosing groups or models from the data, or repeatedly adjusting delta and then picking the tightest result, also breaks this guarantee and requires independent design samples or explicit uniform control. This entry point is itself a combination of classical bounded concentration and risk envelopes; its value is to expose the budget, not to manufacture novelty by "coming with a confidence interval".
 
-### 120 份 FOMC 对这个入口的直接否决：必须先算样本量
+### Direct rejection of this entry point by 120 FOMC documents: the sample size must be computed first
 
-独立审阅指出，前述预算必须与本地数量对照。取最有利的 G=1、alpha=.05、beta=.95、零观察错误、零漂移，并假设全部 C 个校准簇独立且等权，仍有
+The independent review pointed out that the budget above must be compared with local quantities. Take the most favourable case G=1, alpha=.05, beta=.95, zero observed errors, zero drift, and assume all C calibration clusters are independent and equally weighted; still
 
 \[
 r_C=\sqrt{\log(20)/(2C)},\qquad
 r_{120}=0.1117238462>0.05.
 \]
 
-因此代入 R1 得到的上界仍为 B。要让这一 **Hoeffding 入口**有机会严格小于 B，至少需要
+So the upper bound obtained by plugging into R1 is still B. For this **Hoeffding entry point** to have any chance of being strictly smaller than B, one needs at least
 
 \[
 C>\frac{\log(20)}{2(0.05)^2}=599.1464547,
 \]
 
-即 **600 个独立、等权校准簇**，而非 120 个。C=599 的半径为 .0500061121，C=600 才降到 .0499644230；后一种结果也只是略小于 B，尚不能叫有用的部署预算。非零观察错误或漂移会增加门槛；簇大小不等时应以 \(C_{\rm eff}=1/\sum_c(n_c/n)^2\le C\) 计，不能按标题行数充大样本量。多组校准还需考虑 log(G/alpha) 和每组各自的有效簇数。
+that is, **600 independent, equally weighted calibration clusters**, not 120. The radius at C=599 is .0500061121, and only at C=600 does it drop to .0499644230; even the latter result is only slightly smaller than B and cannot yet be called a useful deployment budget. Nonzero observed errors or drift raise the threshold. With unequal cluster sizes one should count \(C_{\rm eff}=1/\sum_c(n_c/n)^2\le C\), and cannot inflate the sample size by the number of headline rows. Calibration with multiple groups also needs to account for log(G/alpha) and each group's own effective number of clusters.
 
-以上数值是本轮用 Python 标准库直接核算的数学设计值，**不是 FOMC 实测错误率或有效样本量**。当前 120 份文档并无已验证错误金标，也未证明相互独立；训练/选择/校准拆分后更不会仍有 120 个未使用校准簇。所以本地 FOMC 不能据当前保守入口演示非空证书；这条判断在任何训练之前就已成立。
+The numbers above are mathematical design values computed directly in this round with the Python standard library; **they are not measured FOMC error rates or effective sample sizes**. The current 120 documents have no verified error gold labels and have not been shown to be mutually independent; after the training/selection/calibration split, there would certainly not still be 120 unused calibration clusters. So the local FOMC set cannot demonstrate a non-vacuous certificate with the current conservative entry point; this judgment already holds before any training.
 
-### 这没有证明所有统计入口都不可能
+### This does not prove that every statistical entry point is impossible
 
-需区别“R1 在给定真实均值约束下的锐界”与“我们用什么方法构造该均值上界”。前者的识别限制不能改；Hoeffding 对零错误数据可能很松，可以换用更适合观察结果且假设明确的有效方法。
+One must distinguish "R1's sharp bound under given true mean constraints" from "what method we use to construct that mean upper bound". The identification limit of the former cannot be changed; Hoeffding can be very loose for zero-error data, and one can switch to a valid method better suited to the observed results, with explicit assumptions.
 
-1. **真正的独立同分布 Bernoulli 错误。** 若有 C 个独立 Bernoulli(p) 校准单位，观察零错误，则单侧精确二项式上界为 \(u_0=1-\alpha^{1/C}\)。在上述 alpha/beta 下，要使 u_0<.05，需要 \(C>\log(.05)/\log(.95)=58.4039748\)，最小整数为 **59**。C=58、59、120 时，上界分别约 .0503393383、.0495076099、.0246554011；最后一种代入 R1 得 .493108022B。它们都是在“零发现且给定模型成立”的条件设计值，不是本地结果。校准单位可以是单条真正独立的错误，也可以是独立同分布簇的“是否至少有一条错误”指标；后一种上界控制的是簇出错概率，要转成行平均风险还需匹配簇权重/大小和目标抽样方案。
-2. **独立但簇内任意依赖的有界簇均值。** 不能把每簇的分数错误率强行当 Bernoulli。一个仅针对全零路径的合法替代是：令独立的 X_c∈[0,1] 为每簇平均错误率，mu_c=E X_c，目标为等权簇均值 \(\bar\mu=C^{-1}\sum_c\mu_c\)。因为 \(P(X_c=0)\le1-\mu_c\)，独立性及 AM–GM 给
+1. **Truly i.i.d. Bernoulli errors.** If there are C independent Bernoulli(p) calibration units and zero errors are observed, the one-sided exact binomial upper bound is \(u_0=1-\alpha^{1/C}\). Under the alpha/beta above, u_0<.05 requires \(C>\log(.05)/\log(.95)=58.4039748\), with smallest integer **59**. At C=58, 59, 120 the upper bounds are about .0503393383, .0495076099, .0246554011; plugging the last into R1 gives .493108022B. These are all design values under the condition "zero findings and the given model holds", not local results. A calibration unit can be a single truly independent error, or the indicator "at least one error" for an i.i.d. cluster; the latter upper bound controls the cluster error probability, and converting it to row-average risk also requires matching cluster weights/sizes and the target sampling scheme.
+2. **Bounded cluster means, independent across clusters but with arbitrary dependence within.** One cannot force each cluster's fractional error rate to be Bernoulli. A valid alternative only for the all-zero path is: let the independent X_c∈[0,1] be each cluster's average error rate, mu_c=E X_c, with target the equally weighted cluster mean \(\bar\mu=C^{-1}\sum_c\mu_c\). Because \(P(X_c=0)\le1-\mu_c\), independence and AM–GM give
 
 \[
 P(X_1=\cdots=X_C=0)
 \le\prod_c(1-\mu_c)\le(1-\bar\mu)^C.
 \]
 
-因此“全零时输出 u_0，否则输出 1”是覆盖至少 1−alpha 的单侧上界规则，不要求簇内独立，也不要求所有簇同分布。其全零门槛同为 59，但它**不是**把任意分数错误率代进完整 Clopper–Pearson 公式；对非零观察结果这里没有给出非平凡界。若原目标按行加权且簇不等大，等权 \(\bar\mu\) 与行风险不同，不能挪用这个门槛，必须重新解相应带权零事件极值问题或使用有效带权界。
+Therefore "output u_0 when all are zero, otherwise output 1" is a one-sided upper-bound rule with coverage at least 1−alpha; it requires neither independence within clusters nor that all clusters be identically distributed. Its all-zero threshold is also 59, but it is **not** plugging an arbitrary fractional error rate into the full Clopper–Pearson formula; no non-trivial bound is given here for nonzero observations. If the original target is row-weighted and the clusters are unequal, the equally weighted \(\bar\mu\) differs from row risk, so this threshold cannot be borrowed; the corresponding weighted zero-event extremal problem must be re-solved, or a valid weighted bound used.
 
-两种入口都仍需要独立校准单位、固定模型/设计、可核验错误标签，以及从校准风险到未来批次风险的迁移条件；不允许查看结果后挑选“恰好全零”的子组。该比较说明 **600 是所写 Hoeffding 公式的最低门槛，不是对一切方法的普遍下界**。尚未观察真实错误且独立性未验证时，“有 120 篇文章”既不能宣布成功，也不能宣布所有可能方法失败。
+Both entry points still need independent calibration units, a fixed model/design, verifiable error labels, and a transfer condition from calibration risk to future-batch risk; it is not allowed to pick subgroups that "happen to be all zero" after seeing results. This comparison shows that **600 is the minimum threshold for the Hoeffding formula as written, not a universal lower bound for all methods**. When no real errors have been observed and independence is unverified, "we have 120 articles" can neither announce success nor announce that all possible methods fail.
 
-## 5. 值得研究的增量应放在哪里？
+## 5. Where should the increment worth studying be placed?
 
-候选主问题应缩到一个轴：**在群体均值可估计但逐点边际不可识别时，部分可验证的依赖结构如何改变最坏 ES 的锐界和样本复杂度？** 不建议同时承诺解决任意漂移、未知簇、任意条件校准和大规模精确求解。
+The candidate main question should be narrowed to one axis: **when group means can be estimated but pointwise marginals are not identifiable, how does partially verifiable dependence structure change the sharp bound and the sample complexity of the worst-case ES?** It is not advisable to promise at the same time to solve arbitrary drift, unknown clusters, arbitrary conditional calibration, and large-scale exact solving.
 
-一个明确的起点是有限状态矩约束集合。对 e∈{0,1}^B，q_e 是原律，z_e 是尾部风险包络，直接解
+One explicit starting point is a finite-state set of moment constraints. For e∈{0,1}^B, q_e is the original law and z_e is the tail risk envelope; solve directly
 
 \[
 \begin{aligned}
@@ -125,20 +125,20 @@ P(X_1=\cdots=X_C=0)
 &q_e\ge0,\quad\sum_eq_e=1,\quad z_e\ge0,\quad\sum_ez_e=1,\\
 &z_e\le q_e/(1-\beta),\\
 &\sum_e q_e\sum_{i\in g}e_i\le b_gu_g,\\
-&\text{其他具有同时统计覆盖的线性矩约束。}
+&\text{other linear moment constraints with simultaneous statistical coverage.}
 \end{aligned}
 \tag{R2}
 \]
 
-R2 对所给联合律多面体的最坏 ES 是精确 LP；它有 2^B 个状态，不能因此声称可扩展，也不能因问题叫“风险证书”就称 LP 为创新。更关键的是：新增的跨簇共错矩如何从独立重复批次估计？只有一批互不重复的金融事件时，所谓共错约束可能根本不可辨识。
+R2 is an exact LP for the worst-case ES over the given polytope of joint laws. It has 2^B states, so scalability cannot be claimed, and the LP cannot be called an innovation because the problem is named a "risk certificate". More crucially: how would the added cross-cluster joint-error moments be estimated from independent repeated batches? When there is only one batch of non-repeating financial events, the so-called joint-error constraints may not be identifiable at all.
 
-这里需明确数据单位：若要约束未来簇 a、b 的共错矩 \(E[S_aS_b]\)，一种足够的设计是有 M 个彼此独立的**完整重复批次**，每批含预先对应的簇类型 a、b，模型和任务固定，批次组成与目标分布具有声明的可迁移关系。每批的 \(S_aS_b\in[0,b_ab_b]\) 才是一个可用于有界均值区间的观测；多组矩需同时覆盖。统计独立单位此时是 M 个完整批次，不能再把批内各簇算作独立重复来夸大精度。
+The data unit must be explicit here. To constrain the joint-error moment \(E[S_aS_b]\) of future clusters a, b, one sufficient design is M mutually independent **complete repeated batches**, each containing pre-matched cluster types a, b, with the model and task fixed, and with a declared transferability relation between the batch composition and the target distribution. Only then is each batch's \(S_aS_b\in[0,b_ab_b]\) an observation usable for a bounded-mean interval; multiple moments need simultaneous coverage. The independent statistical units are then the M complete batches; the clusters within a batch cannot also be counted as independent repetitions to exaggerate precision.
 
-一批 C 个事件并不自动提供 C(C−1)/2 个独立共错观测：成对乘积共享事件，依赖结构与估计目标均须另建模。不同日期的一次性 FOMC 事件也不会因相邻排列就变成同一联合分布的重复批次。可交换性、稳定簇类型、已知依赖图、时间混合等都是额外假设，不能从文件 metadata 推出。**当前本地盘点没有建立这种重复批次资料或已验证矩约束，所以 R2 暂只能用合成已知矩做 oracle 验证，不能在真实演示里填入共错点估计后称认证。** 若后来确有合格资料，还要为矩区间、边际区间和迁移误差联合记账；不可重复花费同一 alpha。
+One batch of C events does not automatically provide C(C−1)/2 independent joint-error observations: pairwise products share events, and both the dependence structure and the estimation target need separate modelling. One-off FOMC events on different dates also do not become repeated batches from the same joint distribution because they are listed next to each other. Exchangeability, stable cluster types, a known dependence graph, temporal mixing, and so on are all extra assumptions that cannot be inferred from file metadata. **The current local inventory has not established such repeated-batch data or verified moment constraints, so for now R2 can only be oracle-verified with synthetic known moments; one cannot fill in point estimates of joint errors in a real demonstration and call it certification.** If qualified data do appear later, the moment intervals, marginal intervals, and transfer error must also be accounted for jointly; the same alpha cannot be spent twice.
 
-值得交给资深导师判断的候选定理有两类。第一类是**匹配的可识别性/样本量上下界**：在指定重复簇或已知依赖图模型中，证明把 R1 收紧 epsilon 必须且足以增加多少独立信息；不能只给一个 Hoeffding 上界。第二类是**结构化可计算性**：给出某种有限图宽或块结构下 R2 的精确对偶检查器与复杂度，同时证明放松结构会损失多少紧度。若其全部内容已被经典分布稳健矩问题覆盖，就应降格为应用或教学工具。
+There are two classes of candidate theorems worth handing to the senior advisor for judgment. The first is **matching identifiability/sample-size upper and lower bounds**: in a specified repeated-cluster or known-dependence-graph model, prove how much independent information is necessary and sufficient to tighten R1 by epsilon; giving only a Hoeffding upper bound is not enough. The second is **structured computability**: give an exact dual checker and its complexity for R2 under some finite graph width or block structure, and at the same time prove how much tightness is lost by relaxing the structure. If all of this is already covered by classical distributionally robust moment problems, it should be downgraded to an application or a teaching tool.
 
-另一个可用于敏感性而非新颖性主张的界：若真实联合错误律 Q 与某个满足簇间独立的 Q0 的总变差距离≤rho，且 S∈[0,B]，则
+Another bound, usable for sensitivity and not as a novelty claim: if the total variation distance between the true joint error law Q and some Q0 that satisfies independence across clusters is ≤rho, and S∈[0,B], then
 
 \[
 \operatorname{ES}_{\beta,Q}(S)
@@ -146,51 +146,51 @@ R2 对所给联合律多面体的最坏 ES 是精确 LP；它有 2^B 个状态�
 \tag{R3}
 \]
 
-这是将有界 stop-loss 的期望偏移逐阈值控制后取下确界的直接结果。它展示极端尾部对依赖失配的放大；rho=.05、beta=.95 时加项已达 B。rho 需要来源明确的结构假设或独立估计，不得为得到非空界而随意调小。
+This follows directly from controlling the expected shift of the bounded stop-loss threshold by threshold and then taking the infimum. It shows how the extreme tail amplifies dependence mismatch; at rho=.05, beta=.95 the added term already reaches B. rho requires a structural assumption with an explicit source or an independent estimate, and must not be set small arbitrarily to obtain a non-vacuous bound.
 
-## 6. 必须用最强基线，而且先对齐 estimand
+## 6. The strongest baselines must be used, and the estimand aligned first
 
-| 基线 | 它真正回答的问题 | 公平比较方式 |
+| Baseline | Question it really answers | Fair comparison |
 |---|---|---|
-| 已知真实 p_i 的簇内同单调＋簇间卷积 | 给定真实边际和正确独立簇结构，未来总错误的最坏凸风险 | 作为 oracle；我们的估计边际方法应因不确定性而更宽，不能宣称以更窄区间战胜这个 oracle |
-| 全体同单调/群体均值锐界 R1 | 允许任意全局依赖时的识别极限 | 新方法若更窄，必须逐项列出额外信息及其代价 |
-| 完整有限状态 LP R2 | 同一约束集中的精确最坏 ES | 小规模黄金标准；近似算法需给安全外界和 gap，不与刻意弱化的逐类方法比较 |
-| 簇 bootstrap | 在独立、代表性簇等条件下，估计总体平均指标的抽样不确定性 | 不是未来 B 条错误总数的依赖最坏 ES；不能只因 bootstrap 区间窄或宽就判风险方法胜负 |
-| Markov/有界均值及简单 union bound | 只用低阶信息给数量尾部上界 | 基础下限比较；必须同时面对前面更强的 oracle 与锐界，不能只打败这些松界 |
+| Within-cluster comonotone + across-cluster convolution with known true p_i | Given the true marginals and the correct independent-cluster structure, the worst-case convex risk of the future total error | As an oracle; our estimated-marginal method should be wider because of uncertainty, and cannot claim to beat this oracle with a narrower interval |
+| Global comonotone/group-mean sharp bound R1 | The identification limit when arbitrary global dependence is allowed | If a new method is narrower, it must list item by item the extra information and its cost |
+| Complete finite-state LP R2 | Exact worst-case ES under the same constraint set | Small-scale gold standard; approximate algorithms must give a safe outer bound and a gap, and are not compared with a deliberately weakened per-class method |
+| Cluster bootstrap | Under conditions such as independent, representative clusters, the sampling uncertainty in estimating a population average metric | Not the dependence-worst-case ES of the total number of errors among B future items; the risk method cannot be judged a winner or loser just because the bootstrap interval is narrow or wide |
+| Markov/bounded mean and a simple union bound | An upper bound on the count tail using only low-order information | A basic lower-end comparison; one must face the stronger oracle and sharp bounds above at the same time, not merely beat these loose bounds |
 
-## 7. 三阶段最小验证与本地数据的真实作用
+## 7. Three-stage minimal validation and the real role of local data
 
-下列是**开跑前规划预算，尚未执行**；没有 GPU 前提，也不借扩大模型回避数学问题。
+The following are **planning budgets before any run, not yet executed**; no GPU is assumed, and enlarging the model is not used to sidestep the mathematical problem.
 
-**阶段一：证明与精确小实例。** 先证明 R1、校准覆盖链、R2 风险包络等价及 R3，独立审查零样本组、beta→1、单簇/全局共同冲击和漂移反例；将 120/600 的 Hoeffding 门槛与 59 的合法全零入口门槛作为必查边界，不混淆各自的统计单位。B≤8 时只需 256 个错误状态；先用有理数构造和已知极值交叉检查，若本地已有 LP 求解器再比 R2，不能把粗有理网格当全可行域。估计 CPU 10–30 分钟、RAM<1 GB、显存/训练 token 为 0；人工作证另计。验收要求上下界吻合、所有前提违反都有明确反例。
+**Stage 1: proofs and exact small instances.** First prove R1, the calibration coverage chain, the risk-envelope equivalence for R2, and R3; independently review zero-sample groups, beta→1, single-cluster/global common shocks, and drift counterexamples. Treat the 120/600 Hoeffding threshold and the 59 threshold for the valid all-zero entry point as mandatory boundary checks, without confusing their respective statistical units. For B≤8 there are only 256 error states; first cross-check with rational constructions and known extremes, and if an LP solver is already available locally, compare R2 as well; a coarse rational grid cannot be treated as the whole feasible region. Estimated 10–30 CPU minutes, RAM<1 GB, GPU memory/training tokens 0; human verification counted separately. Acceptance requires matching upper and lower bounds and an explicit counterexample for every premise violation.
 
-**阶段二：有限样本覆盖与空泛率。** 冻结独立簇数、簇不均衡、群体比例、潜在共冲击强度和漂移半径网格，再生成 D 和未来批次。主要指标是覆盖率、上界/B、空泛比例、与 oracle 的差距；对覆盖率模拟本身另报二项式区间，不要求每次经验覆盖恰好高于名义值。预算先取 20–40 个场景、每场景 2,000 次独立重复，CPU 1–2 小时、RAM<2 GB、GPU 0；这是计划估计，超预算应减重复并放宽模拟精度，不改变理论目标。必须同时展示错误假设下的失败，不只展示满足模型的成功。
+**Stage 2: finite-sample coverage and vacuity rate.** Freeze grids over the number of independent clusters, cluster imbalance, group proportions, latent common-shock strength, and drift radius, then generate D and future batches. The main metrics are coverage, upper bound/B, fraction vacuous, and gap to the oracle; report a separate binomial interval for the coverage simulation itself, and do not require each empirical coverage to be exactly above nominal. Initial budget: 20–40 scenarios, 2,000 independent replications per scenario, 1–2 CPU hours, RAM<2 GB, GPU 0. This is a planning estimate; if over budget, reduce replications and relax simulation precision, without changing the theoretical target. Failures under wrong assumptions must be shown alongside, not only successes when the model is satisfied.
 
-**阶段三：本地真实材料上的有限演示。** 本地有 120 份 FOMC 原文快照、SEntFiN 候选及私有 pilot，见盘点。FOMC 有日期/文档身份，适合设计事件单元和未来批次组成；但没有现成错误金标，不能据原文直接估 p_i。SEntFiN 有监督候选，可在核对逐行批准、任务语义与使用范围后重新训练简单固定基线，建立独立校准/测试；原有非时间 pilot 与未完成事件审计不能直接作为金融时间漂移保证。只在原处处理私有文本，交付匿名汇总和哈希。
+**Stage 3: a limited demonstration on real local material.** Locally there are 120 FOMC source snapshots, SEntFiN candidates, and a private pilot; see the inventory. FOMC has dates/document identities and suits designing event units and future-batch compositions; but there are no ready-made error gold labels, and p_i cannot be estimated directly from source text. SEntFiN has supervised candidates; after checking row-level approval, task semantics, and scope of use, a simple fixed baseline can be retrained and independent calibration/test sets built. The original non-temporal pilot and the unfinished event audit cannot directly serve as a guarantee about financial temporal drift. Private text is processed only in place; anonymized summaries and hashes are delivered.
 
-第三阶段应先给“哪些统计假设能由本地设计支撑、哪些只能做敏感性分析”的表，再决定是否值得运行小模型错误分析。**当前 120 份 FOMC 不足以使上述 Hoeffding 入口非空，训练更久不能改变该半径门槛；没有金标、独立性或重复批次证据时，也不能预先承诺改用全零入口或 R2 就会成功。** 预算估计：若前置判断通过，CPU 基线及离线统计 1–3 小时，RAM<4 GB；金标审查工时独立登记，不能用模型自动标注冒充真错误。若没有足够独立事件/重复批次，结果只能是经验示例，不能补成已验证依赖结构的部署证书。
+Stage 3 should first give a table of "which statistical assumptions the local design can support, and which can only be sensitivity analyses", and only then decide whether it is worth running a small-model error analysis. **The current 120 FOMC documents are not enough to make the Hoeffding entry point above non-vacuous, and training longer cannot change that radius threshold; without gold labels, independence, or evidence of repeated batches, one also cannot promise in advance that switching to the all-zero entry point or R2 will succeed.** Budget estimate: if the preliminary judgment passes, CPU baselines and offline statistics take 1–3 hours, RAM<4 GB; gold-label review hours are logged separately, and automatic model labelling cannot pose as true errors. Without enough independent events/repeated batches, the result can only be an empirical example and cannot be turned into a deployment certificate with a verified dependence structure.
 
-## 8. 从零训练的必要性与否决条件
+## 8. Necessity of training from scratch and rejection conditions
 
-这条路径对 f 基本是模型无关的：线性分类器、冻结现成编码器、从零训练的 LM 都能产生 E_i。**从零训练不是数学必要条件。** 因而它不满足导师最初“仅保留必须从零训练才能回答”的过滤器；若坚持该过滤器，旧 P3／本轮 PATH04 应保持≤10%的支线。若愿意把中心目标改为部署决策的 certified bounds，可将其作为独立统计论文候选，但必须记录这个范围变化，不能自称仍完全符合原筛选。
+This path is essentially model-agnostic with respect to f: a linear classifier, a frozen off-the-shelf encoder, and an LM trained from scratch can all produce E_i. **Training from scratch is not a mathematical necessity.** So it does not satisfy the advisor's original filter of "keep only questions that can only be answered by training from scratch"; if that filter is kept, old P3 / this round's PATH04 should stay a side line with ≤10% of effort. If one is willing to change the central target to certified bounds for deployment decisions, it can be a candidate for an independent statistics paper, but this change of scope must be recorded; it cannot claim to still fully meet the original screen.
 
-提前否决或降级条件：
+Conditions for early rejection or downgrading:
 
-- 新增内容只是把已知边际的同单调分布做卷积，或把估计概率直接当真 p_i：不构成新理论，后者还可能无效。
-- 只有群体均值，实际目标 beta 下 R1 持续等于 B，而又没有可信依赖信息来源：不继续训练更准模型来掩盖识别缺口。
-- 所选置信上界自身在样本量预算下已必然≥1−beta：先否决该统计入口。当前 C≤120 的所写 Hoeffding 公式属于此情形；这不自动否决不同假设下有效且更紧的全零界或其他方法。
-- 所有“非空”结果依赖未可验证、事后选小的 delta/rho，且报告没给稳健前沿：证书只是乐观情景。
-- 对候选矩约束无法给出同时覆盖，或 LP 只能得到未认证的数值内解：不声称安全风险上界。
-- 最小结构问题已被经典矩 LP、同单调理论与现有分布稳健文献完全覆盖：保留工具和复核，不以金融应用词汇宣称新颖性。
+- The new content only convolves comonotone distributions for known marginals, or treats estimated probabilities directly as the true p_i: this is not new theory, and the latter may also be invalid.
+- There are only group means, R1 stays equal to B at the actual target beta, and there is no credible source of dependence information: do not keep training a more accurate model to cover up the identification gap.
+- The chosen confidence upper bound is itself necessarily ≥1−beta under the sample-size budget: reject that statistical entry point first. The Hoeffding formula as written, with the current C≤120, falls into this case; this does not automatically reject a valid and tighter all-zero bound, or other methods under different assumptions.
+- All "non-vacuous" results depend on an unverifiable delta/rho chosen small after the fact, and the report gives no robustness frontier: the certificate is only an optimistic scenario.
+- Simultaneous coverage cannot be given for the candidate moment constraints, or the LP only yields an uncertified numerical interior solution: do not claim a safe risk upper bound.
+- The minimal structural problem is already fully covered by classical moment LPs, comonotonicity theory, and the existing distributionally robust literature: keep the tool and the review, and do not claim novelty through financial application vocabulary.
 
-负结果仍有价值：可以清楚指出“校准后的逐点风险”叙事在哪一步无法识别，并证明何种均值/依赖信息下任何方法都必须空泛。它能防止项目把一个已知风险计算器包装为金融语言模型创新，也为以后收集什么额外标签或重复事件提供原则。
+A negative result still has value: it can state clearly at which step the "calibrated pointwise risk" narrative cannot be identified, and prove under what mean/dependence information every method must be vacuous. It can stop the project from packaging a known risk calculator as a financial language-model innovation, and it gives principles for what extra labels or repeated events to collect later.
 
-## 9. 请资深导师重点攻击的具体问题
+## 9. Concrete questions for the senior advisor to attack
 
-1. R1 的均值识别界是否已足以杀死有实际意义的 beta/错误率组合？若是，旧 P3／本轮 PATH04 是否应立即维持支线，而不是继续铺工程？
-2. 我们真的有重复独立簇来估计共错矩，还是仅有一串不同宏观事件？哪条依赖结构假设能被研究设计支持，而不是凭经验断言？
-3. 目标究竟是随机未来批次，还是条件于已选择的具体文本？如果是后者，需要增加哪些函数类/平滑/重复测量结构，代价是否已超出项目预算？
-4. 在未知边际和未知依赖同时存在时，哪个最小子问题可能产生匹配下界、sharp frontier 或可认证对偶算法，而不只是经典集中界相加？
-5. 是否允许这条候选明确脱离“必须从零训练”过滤器？如果不允许，我们应停止把它竞争旗舰，仅保留 T3.1 作为正确的附录工具。
+1. Is R1's mean-identification bound already enough to kill the practically meaningful beta/error-rate combinations? If so, should old P3 / this round's PATH04 immediately stay a side line, instead of continuing to build engineering?
+2. Do we really have repeated independent clusters to estimate joint-error moments, or only a string of different macro events? Which dependence-structure assumption can be supported by the research design, rather than asserted from experience?
+3. Is the target really random future batches, or is it conditional on specific selected texts? If the latter, what function classes/smoothness/repeated-measurement structure need to be added, and does the cost already exceed the project budget?
+4. When unknown marginals and unknown dependence coexist, which minimal sub-question could yield a matching lower bound, a sharp frontier, or a certifiable dual algorithm, rather than just a sum of classical concentration bounds?
+5. Is this candidate allowed to break explicitly from the "must train from scratch" filter? If not, we should stop putting it forward to compete for the flagship and keep only T3.1 as a correct appendix tool.
 
-当前建议是先完成阶段一的识别边界，保留严格否决权；在新颖性和依赖信息来源澄清前，不将它排成确定的 Top 1，也不预承诺论文等级。
+The current recommendation is to finish the identification boundary in stage 1 first and keep a strict right of rejection; until novelty and the source of dependence information are clarified, do not rank it as a definite Top 1, and do not pre-commit to a paper grade.

@@ -1,57 +1,57 @@
-# 并行任务
+# Parallel tasks
 
-四个互相独立的小题目，可以各开一个对话同时做。每个题目一天内应能得出"继续"或"放弃"。
+Four small topics that do not depend on each other, so each can be run in its own conversation at the same time. Each topic should reach "continue" or "abandon" within one day.
 
-| 编号 | 题目 | 需要 agent 打分吗 | 产出目录 |
+| ID | Topic | Needs agent scoring? | Output directory |
 |---|---|---|---|
-| [T1](../tasks/T1_rounding.md) | 财报的舍入精度决定不了多少道题的答案 | 不需要 | `research/t1_rounding/` |
-| [T2](../tasks/T2_magnitude.md) | 模型对数字大小的响应曲线 | 需要 | `research/t2_magnitude/` |
-| [T3](../tasks/T3_combination.md) | 模型怎样合并一好一坏两条消息 | 需要 | `research/t3_combination/` |
-| [T4](../tasks/T4_cross_model.md) | 便宜模型与贵模型的头部重合（补完原问题） | 需要 | `research/t4_cross_model/` |
+| [T1](../tasks/T1_rounding.md) | For how many questions does the rounding precision of filings fail to determine the answer | No | `research/t1_rounding/` |
+| [T2](../tasks/T2_magnitude.md) | The model's response curve to the size of a number | Yes | `research/t2_magnitude/` |
+| [T3](../tasks/T3_combination.md) | How a model combines one good and one bad piece of news | Yes | `research/t3_combination/` |
+| [T4](../tasks/T4_cross_model.md) | Top-list overlap between a cheap model and an expensive model (finishing the original question) | Yes | `research/t4_cross_model/` |
 
-## 第二批（2026-11-16）：只推进 T1
+## Second batch (2026-11-16): push only T1
 
-T1 通过了查重和导师的独立复核，是目前唯一值得投入的方向。T2 因已有先例归档；T3 的实质结论是"模型按相加合并消息"，做完一次事后核查即结束；T4 不再需要。
+T1 passed the prior-art check and the advisor's independent review, and it is currently the only direction worth investing in. T2 is archived because prior work exists. The substantive conclusion of T3 is "the model combines news additively"; it ends after one post-hoc check. T4 is no longer needed.
 
-下面三个题目互相独立，可以同时做：
+The three topics below do not depend on each other and can run at the same time:
 
-| 编号 | 题目 | 需要 agent 吗 | 产出目录 |
+| ID | Topic | Needs an agent? | Output directory |
 |---|---|---|---|
-| [T1a](../tasks/T1a_law.md) | 把现象写成一条定律，并用零参数预测检验 | 不需要 | `research/t1a_law/` |
-| [T1b](../tasks/T1b_tighten.md) | 加上文档里的其他信息之后，结论还剩多少 | 不需要 | `research/t1b_tighten/` |
-| [T1c](../tasks/T1c_models.md) | 这件事对模型的评测有没有实际影响 | 需要 | `research/t1c_models/` |
+| [T1a](../tasks/T1a_law.md) | Write the phenomenon as a law and test it with a zero-parameter prediction | No | `research/t1a_law/` |
+| [T1b](../tasks/T1b_tighten.md) | How much of the conclusion remains after adding the other information in the document | No | `research/t1b_tighten/` |
+| [T1c](../tasks/T1c_models.md) | Does this have any real effect on model evaluation | Yes | `research/t1c_models/` |
 
-## 第三批（2026-11-17）：最后一轮
+## Third batch (2026-11-17): the last round
 
-T1a 和 T1b 通过，T1c 的结论是"不影响现有判分"。导师已用逐题记录复核三项结果。最后一轮只有一个题目，做完后导师写短文。
+T1a and T1b passed. The conclusion of T1c is "it does not affect current scoring". The advisor has reviewed all three results against the per-question records. The last round has only one topic; after it the advisor writes the short paper.
 
-| 编号 | 题目 | 需要 agent 吗 | 产出目录 |
+| ID | Topic | Needs an agent? | Output directory |
 |---|---|---|---|
-| [T1d](../tasks/T1d_precision.md) | 模型知不知道自己的答案有几位是可信的；另一个 AI 重做语义复核 | 需要 | `research/t1d_precision/` |
+| [T1d](../tasks/T1d_precision.md) | Does the model know how many digits of its own answer are reliable; a second AI redoes the semantic review | Yes | `research/t1d_precision/` |
 
-## 第四批（2026-11-17）：把样本上的结论做到整个测试集
+## Fourth batch (2026-11-17): extend the sample conclusions to the whole test set
 
-T1d 的结论是"模型本来就知道"。导师复算时另外发现：四次运行被判错的几乎是同一批题，复核认为这些判错绝大部分出在基准一侧。短文初稿见 [`paper/finqa_short_v0.md`](finqa_short_paper_draft_v0.md)。
+The conclusion of T1d is "the model already knows". During recomputation the advisor also found that the four runs are marked wrong on almost the same set of questions, and the review judged that the great majority of these rejections lie on the benchmark side. The short-paper draft is at [`paper/finqa_short_v0.md`](finqa_short_paper_draft_v0.md).
 
-| 编号 | 题目 | 需要 agent 吗 | 产出目录 |
+| ID | Topic | Needs an agent? | Output directory |
 |---|---|---|---|
-| [T1e](../tasks/T1e_full_test.md) | 其余 755 道测试题、全部判错的归因、两个标准字段的机械核对、第二个数据集上的舍入审计 | 部分需要 | `research/t1e_full_test/` |
-| [T1f](../tasks/T1f_novelty.md) | 对首页五个候选 insight 查新 | 不需要（需联网） | `research/t1f_novelty/` |
+| [T1e](../tasks/T1e_full_test.md) | The remaining 755 test questions, attribution of all rejections, a mechanical cross-check of the two gold fields, a rounding audit on a second dataset | Partly | `research/t1e_full_test/` |
+| [T1f](../tasks/T1f_novelty.md) | Novelty check of the five candidate insights on the homepage | No (needs internet access) | `research/t1f_novelty/` |
 
-## 第五批（2026-11-17）：查新之后
+## Fifth batch (2026-11-17): after the novelty check
 
-T1f 查新的结论：五条候选里只有"舍入定律与精确计数"没有先例，其余四条已有人做过。T1e 的前三部分因此暂缓。
+Conclusion of the T1f novelty check: of the five candidates, only "the rounding law and the exact count" has no prior work; the other four have been done before. The first three parts of T1e are therefore on hold.
 
-| 编号 | 题目 | 需要 agent 吗 | 产出目录 |
+| ID | Topic | Needs an agent? | Output directory |
 |---|---|---|---|
-| [T1g](../tasks/T1g_consequence.md) | 舍入精度在哪里真正造成后果；在 TAT-QA 上先预测再检验 | 前四部分不需要 | `research/t1g_consequence/` |
+| [T1g](../tasks/T1g_consequence.md) | Where rounding precision really has consequences; predict first, then test, on TAT-QA | Not for the first four parts | `research/t1g_consequence/` |
 
-## 共同规则
+## Common rules
 
-- 只在自己的产出目录里写文件，各自开分支 `task/t1` … `task/t4`，互不干扰。
-- 先花半天查这件事有没有人做过。查到同样的问题和同样的测量，当天写一段话说明，然后停。
-- 不训练模型，不调用付费 API。打分沿用 `research/absolute_scoring/` 已验证的做法：0–100 整数、固定锚点、每批 40 条、逐条独立打分、每次新会话。
-- 该做法的单次重测相关约为 0.975。每个条件至少重复 4 次再取平均。
-- 交付只要三样：一张图、一页结论、原始分数和分析代码。不要清单、哈希表、打包脚本、对复核的复核。
-- 判定门槛写在各题里。结果刚好压线时，如实写数字，不要因为差一点就判"无法判断"。
-- 标题原文和自造文本可以提交；来自 SEntFiN 的原文不要新增提交。
+- Write files only in your own output directory, each on its own branch `task/t1` … `task/t4`, so tasks do not interfere.
+- First spend half a day checking whether anyone has done this before. If you find the same question with the same measurement, write one paragraph explaining it that same day, then stop.
+- Do not train models and do not call paid APIs. Scoring follows the method already validated in `research/absolute_scoring/`: integers 0–100, fixed anchors, 40 items per batch, each item scored independently, a new session each time.
+- The single test-retest correlation of that method is about 0.975. Repeat each condition at least 4 times and then take the average.
+- Deliver only three things: one figure, a one-page summary, and the raw scores with the analysis code. No checklists, hash tables, packaging scripts, or reviews of reviews.
+- The decision thresholds are written in each task. When a result lands right on the line, report the number as it is; do not call it "inconclusive" because it missed by a little.
+- Original headline text and self-made text may be committed; do not commit any new original text from SEntFiN.

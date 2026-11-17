@@ -1,21 +1,36 @@
-# 归档说明
+# Archive
 
-2026-11-17，根据项目所有者的收尾决定整理。最终结论见[首页](../README.md)，执行情况见[任务记录](../tasks/README.md)。本次只整理文档和版本，不新增评分，不重跑实验，不修改原始结果。
+Historical documents kept for the record. They describe what the project believed at the time and
+are not current conclusions; the final account is the [report](../report/proxy_tail_postmortem.pdf)
+and the [front page](../README.md).
 
-旧的探索图和任务安排分别保存在 [README-before-closeout.md](README-before-closeout.md) 和 [tasks-before-closeout.md](tasks-before-closeout.md)。它们按原文保存，内部相对路径仍以原仓库根目录或 tasks 目录为基准；旧分支名称由下面的提交记录定位。
+| File | What it is |
+|---|---|
+| [README-before-closeout.md](README-before-closeout.md) | The project's front page on the morning of 2026-11-17, after T1g: the exploration map with its colour rules (🟢 publishable, 🟡 candidate, ⚪ closed or not distinctive, 🔴 not done) |
+| [README-2026-11-16-tail-screening.md](README-2026-11-16-tail-screening.md) | The front page on 2026-11-16, when the project was about tail screening |
+| [tasks-before-closeout.md](tasks-before-closeout.md) | The task index before closeout |
+| [finqa_short_paper_draft_v0.md](finqa_short_paper_draft_v0.md) | The abandoned short-paper draft ("FinQA at Its Ceiling"). Its framing and several expected counts did not survive T1f and T1g |
+| [commits-before.txt](commits-before.txt), [refs-before.json](refs-before.json) | Commit log and branch tips just before closeout |
 
-## 分支与历史
+Links inside the historical pages were adjusted to point at the current locations of the files.
 
-[refs-before.json](refs-before.json) 保存收尾前的分支名称与完整提交号。远端各研究分支、本地 T1d，以及独立本地仓库的 T1g 提交，都通过归档合并进入 main 的祖先历史。原提交、作者和提交时间不重写；[提交日志](commits-before.txt)另留一份文本。查看旧版本时可使用 `git show <commit>:<path>`，无需恢复已经删除的远端分支。
+## Branches and history
 
-主分支原有文件优先保留，各实验分支新增的文件汇入原目录。同一路径内容不同的版本另存于 [versions/](https://github.com/130U/proxy-tail/tree/closeout-2026-11-17/archive/versions)，同时仍可从原提交读取。旧稿中不再成立的判断不静默改成新结论。本次补入 8,411 个原分支文件路径，并保存 15 份同路径异版文件；另补入此前未提交的四份 T2 查重与设计记录。
+During the project each task ran on its own branch (`task/t1`, `task/t1a`, …). At closeout every
+branch was merged into `main` without rewriting history, and the branches were then deleted from
+GitHub. [refs-before.json](refs-before.json) lists the tip commit of each branch; any old file can be
+read with
 
-T1g 曾在独立本地仓库，导入的是 `8c5b3a1` 及其历史；其中 `0c68d8a` 保存先于实测的预测。T1d 来自本地 `67569c2`。所有来源版本的已跟踪文件均按 Git blob 内容核对，确保能在当前目录或 versions 中找到相同内容。环境、缓存及受原 .gitignore 排除的数据不新增上传；原本地工作目录保留。这里所说的完整保留，指现有已跟踪研究记录以及发现的未提交 T2 文档，不声称补出了不存在的会话记录或未执行任务。
+```sh
+git show <commit>:<path>
+```
 
-GitHub 保留一个分支 `main`、一个标签 `closeout-2026-11-17`。标签指向收尾版本。远端分支删除前先确认其尖端提交已是收尾提交的祖先；没有强制改写 main。
+T1d and T1g were first committed in local working copies and imported at closeout; the T1g import
+includes commit `0c68d8a`, which holds the TAT-QA prediction made before any TAT-QA measurement.
 
-## 原始材料
+## The closeout tag
 
-任务原文继续保留在 [tasks](../tasks/) 和 [TASK.md](../tasks/absolute_scoring.md)。各阶段研究目录保留其提示、输入、原始分数或回答、分析代码、判分、复核、废弃版本、图和执行说明。早期交付 ZIP 保持原样；它们是当时的快照，并不包含后来补入的实验。
-
-[短文初稿](finqa_short_paper_draft_v0.md)保留并标为未完成历史稿。草稿中的待补数字、待核引文及更强措辞不是本次收尾认可的结论。最新解释以首页及 T1g 报告中的范围限制为准。
+The tag [`closeout-2026-11-17`](https://github.com/130U/proxy-tail/tree/closeout-2026-11-17) points at
+the state of the repository at closeout, before the English release. It still contains the
+documents in their original Chinese, the delivery ZIP packages, the concatenated review bundle, the
+reading-copy PDFs, and older README variants from each branch.

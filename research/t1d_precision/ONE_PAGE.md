@@ -1,21 +1,21 @@
-| | 条件 A 不问 | 条件 B 问 | 条件 C 问并教 |
+| | Condition A: not asked | Condition B: asked | Condition C: asked and taught |
 |---|---:|---:|---:|
-| 可打分的回答数 | 378/392；96.4% [94.3%, 98.3%] | 374/392；95.4% [93.1%, 97.5%] | 375/392；95.7% [93.4%, 97.7%] |
-| 声称位数的中位数 | 5.00 [4.00, 11.00] | 2.00 [1.00, 2.00] | 2.00 [1.00, 2.00] |
-| 真实可信位数的中位数 | 2.07 [1.95, 2.32] | 2.07 [1.95, 2.34] | 2.05 [1.94, 2.32] |
-| 多报一位以上的比例 | 61.6% [56.1%, 67.0%] | 0.3% [0.0%, 0.8%] | 0.3% [0.0%, 0.8%] |
-| 区间“准确”的比例 | — | 98.4% [96.6%, 99.7%] | 98.1% [96.3%, 99.7%] |
-| 区间“过窄”的比例 | — | 1.1% [0.0%, 2.5%] | 1.1% [0.0%, 2.5%] |
-| 1% 判断准确率 | — | 99.7% [99.2%, 100.0%] | 99.5% [98.6%, 100.0%] |
+| Scorable responses | 378/392; 96.4% [94.3%, 98.3%] | 374/392; 95.4% [93.1%, 97.5%] | 375/392; 95.7% [93.4%, 97.7%] |
+| Median claimed digits | 5.00 [4.00, 11.00] | 2.00 [1.00, 2.00] | 2.00 [1.00, 2.00] |
+| Median true reliable digits | 2.07 [1.95, 2.32] | 2.07 [1.95, 2.34] | 2.05 [1.94, 2.32] |
+| Share over-reporting by more than one digit | 61.6% [56.1%, 67.0%] | 0.3% [0.0%, 0.8%] | 0.3% [0.0%, 0.8%] |
+| Share of intervals "accurate" | — | 98.4% [96.6%, 99.7%] | 98.1% [96.3%, 99.7%] |
+| Share of intervals "too narrow" | — | 1.1% [0.0%, 2.5%] | 1.1% [0.0%, 2.5%] |
+| 1% judgment accuracy | — | 99.7% [99.2%, 100.0%] | 99.5% [98.6%, 100.0%] |
 
-表内方括号为固定 237 个页面簇、10,000 次 bootstrap 的 95% 区间；第一行同时给出可评分比例。A 的“声称位数”仅指字面打印位数。前轮16/12位对应144道同源同式增长题的分组中位数。
+Brackets in the table are 95% intervals from 10,000 bootstrap draws over the fixed 237 page clusters; the first row also gives the scorable fraction. For A, "claimed digits" means only the literally printed digits. The previous round's 16/12 digits are the group medians for the 144 growth questions with the same source and the same formula.
 
-按执行前固定门槛（区间准确比例 ≥80%，且 1% 判断准确率 ≥90%），本轮归类为 **模型本来就知道**。
-同题配对 C−B：区间准确比例 -0.3 个百分点 [-0.8, +0.0]；1% 判断准确率 -0.3 个百分点 [-0.8, +0.0]。其中 1/374 题的真实 1% 状态随算式或来源改变；差异不能解释为精度意识的纯因果效应。
+Under the threshold fixed before execution (interval-accurate share ≥80% and 1% judgment accuracy ≥90%), this round is classified as **the model already knows**.
+Same-question pairing C−B: interval-accurate share -0.3 percentage points [-0.8, +0.0]; 1% judgment accuracy -0.3 percentage points [-0.8, +0.0]. For 1/374 questions the true 1% status changed with the formula or source; the difference cannot be read as a pure causal effect of precision awareness.
 
-语义复核主数字：**139 → 123**（两轮均 valid）；多数判 valid 为 132。196 道见证的两轮一致率 88.3% [84.1%, 92.2%]，κ=0.76 [0.67, 0.84]。二轮 invalid/uncertain：稳定题 18/60（30.0% [18.2%, 42.4%]），见证题 70/196（35.7% [29.1%, 42.6%]）。
-T1C 的 68 个拒绝案例：两轮归因一致率 92.6% [86.2%, 98.5%]，κ=0.88 [0.77, 0.97]；在 63 个两轮归因一致案例中，“参考答案有问题” 32/63（50.8% [37.9%, 63.9%]），“合理口径差异” 23/63（36.5% [23.8%, 49.2%]）；两类严格计数占全部复核案例分别为 32/68、23/68。
+Main semantic-review figure: **139 → 123** (valid in both rounds); valid by majority: 132. Two-round agreement on the 196 witness questions 88.3% [84.1%, 92.2%], κ=0.76 [0.67, 0.84]. Second-round invalid/uncertain: stable questions 18/60 (30.0% [18.2%, 42.4%]), witness questions 70/196 (35.7% [29.1%, 42.6%]).
+The 68 T1C rejection cases: two-round attribution agreement 92.6% [86.2%, 98.5%], κ=0.88 [0.77, 0.97]; among the 63 cases where both rounds agree on the attribution, "reference error" 32/63 (50.8% [37.9%, 63.9%]), "defensible alternative convention" 23/63 (36.5% [23.8%, 49.2%]); as strict counts over all reviewed cases, the two categories are 32/68 and 23/68.
 
-独立复跑 B（gpt-6.1-sol / high）：375/392 可评分，区间准确 98.1% [96.3%, 99.7%]，多报一位以上 0.5% [0.0%, 1.4%]，1% 判断准确率 99.5% [98.6%, 100.0%]；不混入主结论。
+Independent rerun of B (gpt-6.1-sol / high): 375/392 scorable, interval accurate 98.1% [96.3%, 99.7%], over-reporting by more than one digit 0.5% [0.0%, 1.4%], 1% judgment accuracy 99.5% [98.6%, 100.0%]; not mixed into the main conclusion.
 
-解释边界：A 的打印位数不等于主动声明可信精度；B 已提醒数字经过舍入，测的是提醒后能否计算。真值均按各回答自身算式。FinQA 公开，训练暴露可能存在；没有区间标签不等于已排除污染。A 的精确服务版本未暴露，且 B/C 分时运行，跨条件比较保留服务条件限制。
+Interpretation limits: A's printed digits are not the same as an active statement of reliable precision; B was already reminded that the numbers are rounded, so it measures whether the model can compute after the reminder. Every truth value follows the response's own formula. FinQA is public, so training exposure may exist; the absence of interval labels does not mean contamination has been ruled out. The exact service version for A was not exposed, and B/C ran at different times, so cross-condition comparisons keep the service-condition limitation.

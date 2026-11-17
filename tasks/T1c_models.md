@@ -1,41 +1,41 @@
-# T1c：这件事对模型的评测有没有实际影响
+# T1c: Does this have any real effect on model evaluation
 
-前提同 T1a。分支 `task/t1c`，目录 `research/t1c_models/`。需要 agent 答题，不调用付费 API。
+Prerequisites as for T1a. Branch `task/t1c`, directory `research/t1c_models/`. Needs agents to answer questions; no paid APIs are called.
 
-## 问题
+## Question
 
-T1 说明约 17% 的题，答案在基准的容差内不被输入的舍入精度确定。这会不会让模型的正确答案被判错？模型的错误是否集中在这些题上？
+T1 shows that for about 17% of questions, the answer is not determined within the benchmark's tolerance by the rounding precision of the inputs. Does this cause a model's correct answers to be marked wrong? Are the model's errors concentrated on these questions?
 
-如果不会，T1 就只是关于基准语义的一条注记。如果会，它就是金融模型评测里一个可以量化的噪声来源。
+If not, T1 is only a note about the semantics of the benchmark. If so, it is a quantifiable source of noise in the evaluation of financial models.
 
-## 要做的事
+## What to do
 
-1. **选题。** 测试集里 T1 找到见证的 196 道，加上 196 道被认证为稳定的对照题。对照题按运算类型逐一匹配。
-2. **答题。** 把每道题的文档（表格和前后正文）和问题交给 agent，要求给出最终数值和简短算式。提示固定，不提舍入、不提本研究。每道题用新会话，不让题目之间互相影响。条件允许时用两档模型各做一遍。
-3. **判分。** 三种规则都算：官方规则（五位小数相等）、相对 1%、按标准答案的显示位数。
-4. **归因。** 对每个被判错的答案，判断它属于哪一类：
-   - 落在 T1 给出的答案区间之内（即与文档一致，只是与标准答案的取法不同）；
-   - 等于用文档里另一处精度不同的数字算出的结果；
-   - 算式与标准解法不同但合理（例如分母取期末而非期初）；
-   - 真正的错误。
-5. **虚假精度。** 模型报告的有效数字位数，与按 T1a 的规则算出的"有意义的位数"相比，多报了几位。
+1. **Select questions.** The 196 test questions for which T1 found a witness, plus 196 control questions certified as stable. Match the controls one by one by operation type.
+2. **Answer.** Give each question's document (table and the text before and after it) and the question to an agent, and ask for a final value and a short arithmetic expression. The prompt is fixed and does not mention rounding or this study. Use a new session for each question so that questions do not influence one another. If conditions allow, have two model tiers each do one pass.
+3. **Score.** Compute all three rules: the official rule (equality at five decimal places), relative 1%, and the number of digits shown in the gold answer.
+4. **Attribution.** For each answer marked wrong, decide which class it belongs to:
+   - it lies within the answer interval given by T1 (that is, it is consistent with the document and only differs from the way the gold answer was taken);
+   - it equals the result computed from another figure in the document with a different precision;
+   - the expression differs from the gold solution but is reasonable (for example the denominator is taken at the end of the period rather than the start);
+   - a genuine error.
+5. **False precision.** How many more significant digits the model reports compared with the "meaningful digits" computed by T1a's rule.
 
-## 分析
+## Analysis
 
-- 见证组与对照组的错误率之差，带区间（按文档成簇做 bootstrap，同一页的多道题算一簇）。
-- 被判错的答案里，前两类（与文档一致）占多大比例。
-- 换一种判分规则，两组的正确率各变多少。
+- The difference in error rate between the witness group and the control group, with an interval (bootstrap clustered by document; several questions from the same page count as one cluster).
+- Among the answers marked wrong, what share falls in the first two classes (consistent with the document).
+- How much the accuracy of each group changes under a different scoring rule.
 
-## 交付
+## Deliverables
 
-一张图（两组在三种判分规则下的正确率，以及错误的归因构成）、一页结论、全部原始回答和判分记录。
+One figure (accuracy of the two groups under the three scoring rules, and the attribution breakdown of errors), a one-page summary, and all raw answers and scoring records.
 
-## 判定
+## Decision
 
-- **有实际影响：** 见证组的错误率比对照组高 5 个百分点以上且区间不含零；或者被判错的答案里有 10% 以上其实与文档一致。
-- **影响很小：** 两条都不满足。照实写。
+- **Real effect:** the error rate of the witness group is more than 5 percentage points higher than that of the control group and the interval excludes zero; or more than 10% of the answers marked wrong are actually consistent with the document.
+- **Small effect:** neither condition holds. Report it as it is.
 
-## 要注意
+## Watch out for
 
-- FinQA 是公开数据，模型可能在训练时见过。这会抬高正确率，但对两组的影响应当相近。在结论里写明这一限制。
-- 第 4 步的归因由程序先做（前两类可以精确判定），第三、四类再由人工或另一个 agent 复核，并保留分歧。
+- FinQA is public data, and models may have seen it during training. This raises accuracy, but its effect on the two groups should be similar. State this limitation in the summary.
+- The attribution in step 4 is done first by a program (the first two classes can be decided exactly); the third and fourth classes are then reviewed by a human or another agent, and disagreements are kept.

@@ -125,7 +125,7 @@ return {cleanDecision,validateImport,csvCell,csv};
 const DATA=JSON.parse(document.getElementById('review-data').textContent),ROWS=DATA.rows,SHA=DATA.dataset_sha256,KEY='130u-finllm-review:'+SHA,IDS=ROWS.map(r=>r.id),BYID=new Map(ROWS.map(r=>[r.id,r]));
 const $=id=>document.getElementById(id),LABELS={bearish:'Bearish',neutral:'Neutral',bullish:'Bullish',exclude:'Exclude'},QUEUE_NAMES={easy:'Easy',medium:'Moderate',hard:'Ambiguous / difficult',low:'Routine',high:'Priority review'};
 let decisions=Object.create(null),currentId=IDS[0],filtered=[],storeOk=true,decisionHistory=[];
-const text=v=>Array.isArray(v)?v.join('；'):typeof v==='object'&&v?JSON.stringify(v):String(v??'');
+const text=v=>Array.isArray(v)?v.join('; '):typeof v==='object'&&v?JSON.stringify(v):String(v??'');
 const field=(r,...keys)=>{for(const k of keys)if(r[k]!==undefined&&r[k]!==null&&r[k]!=='')return r[k];return '';};
 const group=r=>text(field(r,'group_id','text_group_id','source_headline_id'));
 const batch=r=>text(field(r,'batch_id','batch'))||'Unassigned';

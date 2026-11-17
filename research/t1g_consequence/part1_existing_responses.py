@@ -86,12 +86,12 @@ def main():
     fields=list(rows[0]) if rows else ['id','split','question','kind','printed_raw','printed_in_answer_unit','recomputed','gold','officially_affected','relative_1pct_affected','row_mismatch','condition','model','answer','expression','normalized_answer','normalized_expression','selected_value','selection_evidence','official_expression_correct','official_answer_correct','source','call_id']
     with (ROOT/'part1_existing_responses.csv').open('w',encoding='utf-8',newline='') as stream:
         writer=csv.DictWriter(stream,fieldnames=fields);writer.writeheader();writer.writerows(rows)
-    text=(f'# 第一部分：已有回答交集\n\n来源层级：我们的实验，复用 T1c/T1d 的已有回答；没有新调用模型。\n\n'
-        f'当前第一部分匹配到 {len(finqa)} 个 FinQA 题–印值对（{len({q["id"] for q in finqa})} 道独立题），其中官方评分不一致 {len({q["id"] for q in affected})} 道。'
-        f'与原 392 题样本的交集为 **{len(ids)} 道**；官方受影响题的交集为 **{len(affected_ids)} 道**，共 {len(rows)} 条匹配回答。'
-        '\n\nT1d 的 A 条件复用 T1c，已去重；B、C、B_secondary 分别保留。选值标签优先比较规范化表达式的精确值，再比较 FinQA 官方的五位小数执行值。数字相等只说明结果一致，不证明模型实际读取了哪个格子。'
-        '\n\n若交集为零，这批既有回答不能回答“模型在受影响题中选择印值还是重算值”，也不能据此断言模型没有该行为。'
-        '\n\n`part1_questions.json` 更新后重新运行 `part1_existing_responses.py` 即可刷新结果。\n')
+    text=(f'# Part One: intersection with existing answers\n\nSource level: our experiment, reusing existing T1c/T1d answers; no new model calls.\n\n'
+        f'Part One currently matches {len(finqa)} FinQA question–printed-value pairs ({len({q["id"] for q in finqa})} distinct questions), of which {len({q["id"] for q in affected})} disagree under official scoring. '
+        f'The intersection with the original 392-question sample is **{len(ids)} questions**; the intersection with officially affected questions is **{len(affected_ids)} questions**, with {len(rows)} matched answers in total.'
+        '\n\nT1d condition A reuses T1c and has been deduplicated; B, C, and B_secondary are each kept. The selected-value label first compares the exact value of the normalized expression, then the FinQA official five-decimal execution value. Equal numbers show only that the results agree; they do not prove which cell the model actually read.'
+        '\n\nIf the intersection is zero, these existing answers cannot answer "does the model choose the printed value or the recomputed value on affected questions", nor can they be used to assert that the model does not show this behavior.'
+        '\n\nAfter `part1_questions.json` is updated, rerun `part1_existing_responses.py` to refresh the results.\n')
     (ROOT/'part1_existing_responses.md').write_text(text,encoding='utf-8')
     print(json.dumps({k:v for k,v in summary.items() if k!='rows'},ensure_ascii=False,indent=2))
 

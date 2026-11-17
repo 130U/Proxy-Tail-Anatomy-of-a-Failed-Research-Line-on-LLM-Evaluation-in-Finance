@@ -1,71 +1,71 @@
-# WP0.1：公开开发集汇总重建与后续簇评测接口
+# WP0.1: reconstruction of the public development-set summary and an interface for later cluster evaluation
 
-日期：2026-11-15。状态：**部分完成**；公开汇总重建和评测工具完成，真实数据三基线及原模型簇置信区间未完成。
+Date: 2026-11-15. Status: **partly complete**; the public-summary reconstruction and the evaluation tools are done; the three real-data baselines and the cluster confidence interval for the original model are not done.
 
-## 要检验的问题
+## Question to test
 
-导师要求回答“0.655 对 0.609 的差距是否在抽样误差之内”。严格答案是：**现有汇总不能识别配对差异的不确定性，不能判定显著或不显著**。先重建模型本身在 IID 假设下的抽样敏感性，并明确未来需要什么数据才能检验差异。
+The advisor asked whether "the gap of 0.655 versus 0.609 is within sampling error". The strict answer is: **the existing summary cannot identify the uncertainty of the paired difference, so it cannot be judged significant or non-significant**. We first reconstruct the sampling sensitivity of the model itself under an IID assumption, and state clearly what data would be needed in future to test the difference.
 
-## 预算与配置
+## Budget and configuration
 
-运行前预算见 [budget.md](budget.md)。输入为 `docs/experiment-results.md` 的公开汇总，源码基线 `8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`。本轮新增源码在 `research/evaluation/`，运行时尚未提交；文件哈希由交付清单记录。
+The pre-run budget is in [budget.md](budget.md). The input is the public summary in `docs/experiment-results.md`; source baseline `8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`. The new source code for this round is in `research/evaluation/` and had not been committed at run time; file hashes are recorded by the deliverable manifest.
 
-- 数据规模：101 行的汇总；真实行级标签、预测和事件关联不可用。用户已确认不依赖旧 checkpoint/预测，应从头构建。
-- 实际硬件：Windows AMD64 CPU；Python 3.12.14、NumPy 2.5.3。处理器及输入文件 SHA256 见 [reconstruction.json](reconstruction.json)。
-- seed：130，矩阵索引通过 `SeedSequence([130,index])` 派生；每矩阵 100,000 个多项分布样本。
-- 实际计算时间：首次运行 1.109 秒；单元测试 0.367 秒、7/7 通过。来源：我们的实验 `wp0_1`，不是历史模型重训。
-- token、GPU 显存：0。没有下载新模型或数据。
+- Data size: a 101-row summary; real row-level labels, predictions and event links are not available. The user has confirmed that we should not rely on old checkpoints/predictions and should build from scratch.
+- Actual hardware: Windows AMD64 CPU; Python 3.12.14, NumPy 2.5.3. The processor and the input-file SHA256 are in [reconstruction.json](reconstruction.json).
+- Seed: 130; matrix indices are derived through `SeedSequence([130,index])`; 100,000 multinomial samples per matrix.
+- Actual computation time: first run 1.109 seconds; unit tests 0.367 seconds, 7/7 passed. Source: our experiment `wp0_1`, not a retraining of the historical model.
+- Tokens, GPU memory: 0. No new models or data were downloaded.
 
-## 推导与完整枚举
+## Derivation and complete enumeration
 
-采用类顺序 bearish / neutral / bullish，真实类支持数 `(10,76,15)`，对角线 `(5,62,12)`。根据四位小数 precision，在整数分母不超过 101 的范围内，对应预测数唯一为 `(11,66,24)`。一致的矩阵全部写成
+The class order is bearish / neutral / bullish, the true class supports are `(10,76,15)`, and the diagonal is `(5,62,12)`. From the four-decimal precision values, within integer denominators of at most 101, the corresponding prediction counts are uniquely `(11,66,24)`. All consistent matrices can be written as
 
 \[
 C(a)=\begin{pmatrix}5&a&5-a\\7-a&62&7+a\\a-1&4-a&12\end{pmatrix},\quad a\in\{1,2,3,4\}.
 \]
 
-非负性给出 `1 <= a <= 4`，所以没有遗漏其他矩阵。四者 accuracy 与各类 P/R/F1 相同，但误分类的联合结构不同。每个矩阵展开成经验联合分布，从中有放回抽取 101 个真值–预测对；用多项分布抽样与行 bootstrap 完全等价。对每次样本计算固定三类 macro-F1，缺失类的 F1 依现有评测约定计 0，取 2.5% 和 97.5% 分位数。
+Non-negativity gives `1 <= a <= 4`, so no other matrix is missed. The four have the same accuracy and the same per-class P/R/F1, but different joint structure of misclassifications. Each matrix is expanded into an empirical joint distribution, from which 101 truth–prediction pairs are drawn with replacement; multinomial sampling is exactly equivalent to the row bootstrap. For each sample the fixed three-class macro-F1 is computed, with the F1 of a missing class counted as 0 following the existing evaluation convention, and the 2.5% and 97.5% quantiles are taken.
 
-## 结果
+## Results
 
-所有以下区间和枚举数字来源：**我们的实验 wp0_1**；输入数字来源：仓库公开汇总，原始 provenance 是用户提供的 Kaggle 日志，非本轮独立复现。
+Source of all intervals and enumerated numbers below: **our experiment wp0_1**; source of the input numbers: the repository's public summary, whose original provenance is the Kaggle log supplied by the user, not an independent reproduction in this round.
 
-| a | Accuracy | Macro-F1 | Macro-F1 的 95% IID percentile bootstrap 区间 | n |
+| a | Accuracy | Macro-F1 | 95% IID percentile bootstrap interval for Macro-F1 | n |
 |---:|---:|---:|---|---:|
 | 1 | 0.782178 | 0.654938 | [0.520936, 0.769613] | 101 |
 | 2 | 0.782178 | 0.654938 | [0.521071, 0.768393] | 101 |
 | 3 | 0.782178 | 0.654938 | [0.520883, 0.769282] | 101 |
 | 4 | 0.782178 | 0.654938 | [0.520957, 0.769178] | 101 |
 
-每个矩阵的 accuracy 和全部分类别 precision/recall/F1 区间均在 JSON 中。报告区间下端范围 `[0.520883,0.521071]`、上端范围 `[0.768393,0.769613]`，而非任意挑选最有利的一个矩阵。不同 RNG 样本造成的少量端点差异也在其中，不应当把这些差异解释为精确的矩阵效应。
+The accuracy and all per-class precision/recall/F1 intervals for each matrix are in the JSON. We report the range of the lower endpoints `[0.520883,0.521071]` and the range of the upper endpoints `[0.768393,0.769613]`, rather than picking the single most favourable matrix. The small endpoint differences caused by different RNG samples are included in these ranges and should not be read as exact matrix effects.
 
-TF-IDF 的 0.6087 落在上述模型区间内，这只是描述；**不是差异检验**。差值需要同一批样本上两个系统的联合预测，尤其需要错误是否发生在同一簇上的信息。即使拿到两个独立 marginal CI，它们是否重叠也不能替代 paired CI。四个模型混淆矩阵仍无法重建 model × baseline × true label 的联合表，更无法恢复 family/event 结构。
+TF-IDF's 0.6087 falls inside the model interval above; this is only a description and **not a test of the difference**. The difference needs joint predictions of the two systems on the same samples, and in particular information on whether errors occur in the same cluster. Even given two independent marginal CIs, whether they overlap cannot replace a paired CI. The four model confusion matrices still cannot reconstruct the joint model × baseline × true label table, let alone recover the family/event structure.
 
-## 已提供的评测工具
+## Evaluation tools provided
 
-`research/evaluation/evaluate.py` 实现：
+`research/evaluation/evaluate.py` implements:
 
-1. accuracy、macro-F1、每类 P/R/F1 的簇 bootstrap；指标以行加权，整个簇为抽样单位。
-2. 对同一批行、同一组重采样簇的 model−baseline 差异区间；不允许部分缺失 baseline。
-3. family 和 event 两类关联的传递闭包，防止一个事件因不同 family 被错误视为独立。
-4. 预设时间阈值，按关联组的最晚 `available_at` 分区；一个晚到成员不会进入较早训练分区。
-5. 对已审计 event_id 和 target 保留最早视图的去重策略，发现同事件目标标签冲突即拒绝自动合并。
+1. Cluster bootstrap for accuracy, macro-F1 and per-class P/R/F1; metrics are row-weighted, and whole clusters are the sampling unit.
+2. Intervals for the model−baseline difference on the same rows with the same resampled clusters; a partially missing baseline is not allowed.
+3. Transitive closure over both family and event links, so that one event is not wrongly treated as independent because it sits in different families.
+4. Preset time thresholds, with partitioning by the latest `available_at` of each linked group; a late-arriving member does not enter an earlier training partition.
+5. A deduplication policy that keeps the earliest view per audited event_id and target, and refuses automatic merging when a label conflict for the same event target is found.
 
-这些工具不能自动发现所有语义重复，也不能把来源时间戳变成真实可得时间。独立/代表性的簇是假设；小簇数、非平稳、事后模型选择仍使 percentile bootstrap 失真。它不是 P1 的有限样本证书。
+These tools cannot automatically find all semantic duplicates, and cannot turn source timestamps into true availability times. Independent/representative clusters are an assumption; a small number of clusters, non-stationarity and post-hoc model selection still distort the percentile bootstrap. It is not a P1 finite-sample certificate.
 
-## 基线状态
+## Baseline status
 
-| 系统 | 当前可追溯状态 | 新 95% 簇区间 | 缺项 |
+| System | Current traceable status | New 95% cluster interval | Missing |
 |---|---|---|---|
-| 原 24M balanced SFT | 公开日志摘要；开发集点估计 | 未得到 | 原逐条预测与可靠事件簇，旧权重不作为依赖 |
-| TF-IDF + logistic regression | `src/finllm/baselines.py` 已实现，历史 dev 0.6087 | 未得到 | 相同独立新测试样本与配对预测 |
-| FinBERT | 未执行 | 无 | 本地模型权重、语义匹配数据、固定版本 |
-| 小 LLM 零样本 | 未执行 | 无 | 本地模型权重、固定 prompt/version、算力实测 |
+| Original 24M balanced SFT | Public log summary; development-set point estimate | Not obtained | Original per-row predictions and reliable event clusters; the old weights are not used as a dependency |
+| TF-IDF + logistic regression | Implemented in `src/finllm/baselines.py`, historical dev 0.6087 | Not obtained | The same independent new test samples and paired predictions |
+| FinBERT | Not run | None | Local model weights, semantically matched data, fixed version |
+| Small LLM zero-shot | Not run | None | Local model weights, fixed prompt/version, measured compute |
 
-用户要求不联系外部，因此本轮不为这些缺项新增下载或远程调用。合成地基实验另报，不能填充真实数据基线空白。
+The user asked for no external contact, so this round adds no downloads or remote calls for these missing items. The synthetic foundations experiment is reported separately and cannot fill the gap left by the real-data baselines.
 
-## 结论与限制
+## Conclusion and limits
 
-模型本身在 IID 行抽样假设下显示较宽的不确定区间。是否超过 TF-IDF **未判定**；“差异就是噪声”和“差异已显著”都不受现有证据支持。原开发集被用于选型，101 行也不是已确认独立的事件样本，故不能把该重建当作最终泛化区间。导师模板中的示例结论“0.655 vs 0.609 的差距在 95% 区间内”需要改成上述更准确表述。
+Under the IID row-sampling assumption the model itself shows a fairly wide uncertainty interval. Whether it beats TF-IDF is **not determined**; neither "the difference is just noise" nor "the difference is significant" is supported by the existing evidence. The original development set was used for model selection, and the 101 rows are not a confirmed sample of independent events, so this reconstruction cannot be treated as the final generalization interval. The example conclusion in the advisor's template, "the gap of 0.655 vs 0.609 is within the 95% interval", needs to be replaced by the more accurate statement above.
 
-下一步冻结新任务、事件/时间切分、预算和选择规则，从零产生独立测试预测；三条基线必须使用相同测试行和相同 bootstrap 簇。完整 G0 不可据本次汇总重建判为通过。
+Next step: freeze a new task, an event/time split, a budget and selection rules, and produce independent test predictions from scratch; the three baselines must use the same test rows and the same bootstrap clusters. The full G0 cannot be judged passed on the basis of this summary reconstruction.

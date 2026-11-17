@@ -58,7 +58,7 @@
     "sample_index": 0,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "finqa",
@@ -120,7 +120,7 @@
     "sample_index": 1,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -181,7 +181,7 @@
     "sample_index": 2,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "finqa",
@@ -242,7 +242,7 @@
     "sample_index": 3,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "finqa",
@@ -304,7 +304,7 @@
     "sample_index": 4,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -366,7 +366,7 @@
     "sample_index": 5,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -428,7 +428,7 @@
     "sample_index": 6,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -489,7 +489,7 @@
     "sample_index": 7,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -550,7 +550,7 @@
     "sample_index": 8,
     "reviewer": "AI source reading; not human review",
     "review_category": "reversed_change_direction",
-    "review_note": "同表支出以减少为正，印差为旧减新，与统一新减旧定义相反。"
+    "review_note": "In the same table, expenditure decreases are shown as positive; the printed difference is old minus new, the opposite of the uniform new-minus-old definition."
   },
   {
     "dataset": "tatqa",
@@ -610,7 +610,7 @@
     "sample_index": 9,
     "reviewer": "AI source reading; not human review",
     "review_category": "unexplained_or_source_error",
-    "review_note": "按表两水平重算约-17.49%，不落入-18%的半末位区间；材料无法区分印表错误、别的基数或预处理。"
+    "review_note": "Recomputing from the two levels in the table gives about -17.49%, which does not fall within the half-last-digit-unit interval of -18%; the material cannot distinguish a printing error in the table, a different base, or preprocessing."
   },
   {
     "dataset": "tatqa",
@@ -671,7 +671,7 @@
     "sample_index": 10,
     "reviewer": "AI source reading; not human review",
     "review_category": "reversed_change_direction",
-    "review_note": "Selling expenses下降被印作正百分比；为费用减少量。"
+    "review_note": "The decrease in Selling expenses is printed as a positive percentage; it is the amount by which the expense decreased."
   },
   {
     "dataset": "finqa",
@@ -733,7 +733,7 @@
     "sample_index": 11,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -794,7 +794,7 @@
     "sample_index": 12,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -855,7 +855,7 @@
     "sample_index": 13,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -916,7 +916,7 @@
     "sample_index": 14,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -977,7 +977,7 @@
     "sample_index": 15,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -1039,7 +1039,7 @@
     "sample_index": 16,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "finqa",
@@ -1101,7 +1101,7 @@
     "sample_index": 17,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -1163,7 +1163,7 @@
     "sample_index": 18,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -1225,7 +1225,7 @@
     "sample_index": 19,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "finqa",
@@ -1287,7 +1287,7 @@
     "sample_index": 20,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "finqa",
@@ -1347,7 +1347,7 @@
     "sample_index": 21,
     "reviewer": "AI source reading; not human review",
     "review_category": "unexplained_or_source_error",
-    "review_note": "薪酬显示两水平对应约14.13%，不是13.75%；需原始薪酬基数解释，现有表不能支持舍入解释。"
+    "review_note": "The two displayed compensation levels correspond to about 14.13%, not 13.75%; explaining it needs the original compensation base, and the existing table cannot support a rounding explanation."
   },
   {
     "dataset": "tatqa",
@@ -1407,7 +1407,7 @@
     "sample_index": 22,
     "reviewer": "AI source reading; not human review",
     "review_category": "reversed_change_direction",
-    "review_note": "融资成本下降被列为正Change；符号定义相反。"
+    "review_note": "The decrease in financing costs is listed as a positive Change; the sign definition is reversed."
   },
   {
     "dataset": "tatqa",
@@ -1469,7 +1469,7 @@
     "sample_index": 23,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -1530,7 +1530,7 @@
     "sample_index": 24,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "finqa",
@@ -1592,7 +1592,7 @@
     "sample_index": 25,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -1653,7 +1653,7 @@
     "sample_index": 26,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "finqa",
@@ -1715,7 +1715,7 @@
     "sample_index": 27,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -1776,7 +1776,7 @@
     "sample_index": 28,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -1837,7 +1837,7 @@
     "sample_index": 29,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -1897,7 +1897,7 @@
     "sample_index": 30,
     "reviewer": "AI source reading; not human review",
     "review_category": "reversed_change_direction",
-    "review_note": "同表融资成本下降被列为正Change。"
+    "review_note": "In the same table, the decrease in financing costs is listed as a positive Change."
   },
   {
     "dataset": "tatqa",
@@ -1958,7 +1958,7 @@
     "sample_index": 31,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -2020,7 +2020,7 @@
     "sample_index": 32,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -2082,7 +2082,7 @@
     "sample_index": 33,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -2143,7 +2143,7 @@
     "sample_index": 34,
     "reviewer": "AI source reading; not human review",
     "review_category": "reversed_change_direction",
-    "review_note": "BCE支出增长被列为负Change；符号定义相反。"
+    "review_note": "The increase in BCE expenditure is listed as a negative Change; the sign definition is reversed."
   },
   {
     "dataset": "tatqa",
@@ -2203,7 +2203,7 @@
     "sample_index": 35,
     "reviewer": "AI source reading; not human review",
     "review_category": "unexplained_or_source_error",
-    "review_note": "8324/4706−1约76.88%，印67%；不可能由半末位舍入解释，未把疑似转录错误当已证实。"
+    "review_note": "8324/4706−1 is about 76.88%, printed as 67%; this cannot be explained by half-last-digit-unit rounding; the suspected transcription error was not treated as confirmed."
   },
   {
     "dataset": "tatqa",
@@ -2263,7 +2263,7 @@
     "sample_index": 36,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -2324,7 +2324,7 @@
     "sample_index": 37,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -2385,7 +2385,7 @@
     "sample_index": 38,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -2446,7 +2446,7 @@
     "sample_index": 39,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -2507,7 +2507,7 @@
     "sample_index": 40,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -2568,7 +2568,7 @@
     "sample_index": 41,
     "reviewer": "AI source reading; not human review",
     "review_category": "reversed_change_direction",
-    "review_note": "费用下降被印作正百分比。"
+    "review_note": "The decrease in expenses is printed as a positive percentage."
   },
   {
     "dataset": "tatqa",
@@ -2628,7 +2628,7 @@
     "sample_index": 42,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -2690,7 +2690,7 @@
     "sample_index": 43,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "finqa",
@@ -2752,7 +2752,7 @@
     "sample_index": 44,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "finqa",
@@ -2814,7 +2814,7 @@
     "sample_index": 45,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "finqa",
@@ -2876,7 +2876,7 @@
     "sample_index": 46,
     "reviewer": "AI source reading; not human review",
     "review_category": "negative_base_convention",
-    "review_note": "负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。"
+    "review_note": "With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign."
   },
   {
     "dataset": "tatqa",
@@ -2938,7 +2938,7 @@
     "sample_index": 47,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -2999,7 +2999,7 @@
     "sample_index": 48,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   },
   {
     "dataset": "tatqa",
@@ -3060,6 +3060,6 @@
     "sample_index": 49,
     "reviewer": "AI source reading; not human review",
     "review_category": "adjusted_basis",
-    "review_note": "表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。"
+    "review_note": "The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels."
   }
 ]

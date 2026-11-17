@@ -1,27 +1,27 @@
-# T3 一页结论：按预定门继续，但先核查模型误设
+# T3 one-page summary: continue per the pre-registered gate, but check for model misspecification first
 
-2026-11-16｜**正式判定：继续；唯一通过的是 λ 门。研究建议：仅做一次模型设定核查，暂不扩大评分或主张新机制。** 固定 gpt-6-sol / low，30 条自造单事实各八次，390 对双顺序各四次：**88 次主调用、3,360 分全部完成**。
+2026-11-16 | **Formal decision: continue; the only gate passed is the λ gate. Research recommendation: do only one model-specification check, and for now do not expand scoring or claim a new mechanism.** Fixed gpt-6-sol / low, 30 self-made single facts eight times each, 390 pairs in both orders four times each: **88 main calls, 3,360 scores, all completed**.
 
-**最明确的观察是：组合分更接近相加，简单平均表现很差。** 误差单位均为0–100量表上的分数；留出仍使用被留事实的单条标定分。
+**The clearest observation: combined scores are closer to addition, and simple averaging performs poorly.** All error units are points on the 0–100 scale; the hold-out still uses the held-out fact's single-item calibration score.
 
-| 候选规则 | 拟合 RMSE | 按原子留出 RMSE |
+| Candidate rule | Fit RMSE | Leave-one-atom-out RMSE |
 |---|---:|---:|
-| 截断相加 | 5.235 | 5.235 |
-| 简单加权平均 | 12.144 | 12.144 |
-| 负面加权平均 | 10.300 | 10.564 |
-| 带中性初始意见的对照族（预设诊断） | 4.966 | 5.027 |
+| Truncated addition | 5.235 | 5.235 |
+| Simple weighted average | 12.144 | 12.144 |
+| Negativity-weighted average | 10.300 | 10.564 |
+| Control family with a neutral initial opinion (pre-specified diagnostic) | 4.966 | 5.027 |
 
-诊断对照仅略优于相加，不能据此确认内部平均机制。主要测量如下，括号为主95%重采样区间：
+The diagnostic control is only slightly better than addition, and cannot be used to confirm an internal averaging mechanism. The main measurements are as follows; brackets give the main 95% resampling intervals:
 
-- **λ：2.691［1.219，5.304］**，通过预定门；它来自拟合较差的负面加权平均模型。
-- **中性添加收缩：1.036［−0.030，2.014］分**。十条中性单分均为50；只看坏消息＋中性为1.176［−0.153，2.359］分，稀释证据不清晰。
-- **正面先说减负面先说：−0.168［−1.643，1.160］分**，顺序门未通过；位置权重w=0.498［0.487，0.510］。
-- **同向组合：**正正73.3%、负负64.4%比更强单条更极端，平均超出2.844、1.167分。
+- **λ: 2.691 [1.219, 5.304]**, passes the pre-registered gate; it comes from the negativity-weighted average model, which fits poorly.
+- **Shrinkage from adding a neutral item: 1.036 [−0.030, 2.014] points**. All ten neutral single scores are 50; looking only at bad news + neutral gives 1.176 [−0.153, 2.359] points, so the evidence for dilution is unclear.
+- **Positive first minus negative first: −0.168 [−1.643, 1.160] points**, the order gate failed; position weight w=0.498 [0.487, 0.510].
+- **Same-direction combinations:** positive-positive 73.3% and negative-negative 64.4% are more extreme than the stronger single item, exceeding it by 2.844 and 1.167 points on average.
 
-**λ的解释风险：**归一化平均对正面＋中性约预测dP/2，λ无法修正；对负面＋中性却能通过增大λ，将λ/(1+λ)·dN拉回单条。因此，接近相加的行为也可能推高λ。该模型留出误差约为相加的两倍，不能把2.69解释成真实的“坏消息影响倍数”。下一步只值得用现有数据做**明确标为事后探索**的正负系数相加检验，先排除模型误设，再决定是否扩大研究；本次冻结判定保持不变。
+**Risk in interpreting λ:** for positive + neutral, the normalised average predicts about dP/2, which λ cannot correct; for negative + neutral, however, increasing λ can pull λ/(1+λ)·dN back to the single item. So near-additive behaviour can also push λ up. This model's hold-out error is about twice that of addition, so 2.69 cannot be interpreted as a real "bad-news influence multiplier". The only next step worth taking is an additive test with separate positive and negative coefficients on the existing data, **clearly labelled as post hoc exploration**, to rule out model misspecification first and then decide whether to expand the study; this round's frozen decision stays unchanged.
 
-查重未确认完整重复，但[正负倒序评分](https://aclanthology.org/2025.nlp4dh-1.18.pdf)与[金融中性稀释的人工聚合规则](https://www.ecb.europa.eu/pub/pdf/scpwps/ecb.wp3283~df0633dfd3.de.pdf?495f4d0ec675f3cbda625976eb20dff3=)已有先例。不能称首次发现平均、顺序偏差或金融操纵漏洞。[文献门](literature_gate.md)
+The prior-art check did not confirm a complete duplicate, but [scoring in reversed positive/negative order](https://aclanthology.org/2025.nlp4dh-1.18.pdf) and [human aggregation rules for neutral dilution in finance](https://www.ecb.europa.eu/pub/pdf/scpwps/ecb.wp3283~df0633dfd3.de.pdf?495f4d0ec675f3cbda625976eb20dff3=) already have precedents. One cannot claim the first discovery of averaging, order bias or a financial manipulation loophole. [Literature gate](literature_gate.md)
 
-区间为1000次原子分层＋整轮评分重采样，限于手工题库。首版P/N/Z编号可能暗示极性，4次/120分原样保留并排除；决定修订时主代理未读分数值，主实验已换随机盲编号。实际92次调用；主实验无失败或重试。[执行与复算](execution_notes.md)
+The intervals come from 1000 resamples stratified by atom + whole-round score resampling, and are limited to the hand-made item bank. The first version's P/N/Z IDs may have hinted at polarity; those 4 calls / 120 scores are kept as is and excluded; when the revision was decided the main agent had not read the score values, and the main experiment switched to random blind IDs. 92 calls were actually made; the main experiment had no failures or retries. [Execution and recomputation](execution_notes.md)
 
-[结果图](combination.png) · [图PDF](combination.pdf) · [原始分数CSV](scores.csv) · [原始JSON](raw/) · [分析代码](analyze.py) · [完整指标与区间](results.json) · [冻结方案](protocol.md)
+[Result figure](combination.png) · [Figure PDF](combination.pdf) · [Raw scores CSV](scores.csv) · [Raw JSON](raw/) · [Analysis code](analyze.py) · [Full metrics and intervals](results.json) · [Frozen plan](protocol.md)

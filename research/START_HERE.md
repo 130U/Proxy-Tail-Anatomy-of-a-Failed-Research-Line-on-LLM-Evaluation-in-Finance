@@ -1,51 +1,51 @@
-# Fable 完整研究交付包：从这里开始
+# Fable complete research handoff package: start here
 
-> 本页以下为先前九轮研究包的历史入口。当前方向为“便宜模型在尾部漏掉什么”，最新实测、数学修正和完整交付请从[当前报告](tail_screening/FABLE_CURRENT_REPORT.md)开始；旧包不含后续agent实验。
+> Everything below this note is the historical entry point for the earlier nine-round research package. The current direction is "what does a cheap model miss in the tail". For the latest measurements, mathematical corrections and the complete deliverable, start from the [current report](tail_screening/FABLE_CURRENT_REPORT.md); the old package does not contain the later agent experiments.
 
-交付日期：2026-11-16（America/New_York）。项目：130U-FinLLM / Certifiable FinLM。交付对象：Theodore转交Fable。范围：截至第九轮的全部现有研究产出，以及用户提供的原导师材料参考快照。本次做汇总和打包，不新增实验、文献检索或研究结论，也未对外发送。
+Delivery date: 2026-11-16 (America/New_York). Project: 130U-FinLLM / Certifiable FinLM. Recipient: Fable, forwarded by Theodore. Scope: all existing research output through round 9, plus a reference snapshot of the original advisor materials that the user provided. This step only summarizes and packages. It adds no new experiments, literature searches or research conclusions, and nothing was sent externally.
 
-## 最省时的阅读方式
+## The fastest way to read this
 
-1. **先读[完整研究总报告](FABLE_FULL_REPORT.md)**：整合研究动机、五条路线、全部核心理论、真实与构造实验、负结果、评审争议和待裁定事项。不需要按九轮消息追溯才能理解结论。
-2. 决定方向时读[五路径比较](paths/COMPARATIVE_ANALYSIS.md)和[给Fable的评审请求](paths/SENIOR_REVIEW_REQUEST.md)，再打开相应路径全文。
-3. 逐项审查时读[完整合并阅读版](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_REVIEW_BUNDLE.md)。它合并本包全部Markdown正文，保留来源标题、原顺序内的内容和证据链接；最新材料排在前面，后附历史记录和背景材料。
-4. 需要检查公式、数值或复现时，用[逐文件索引](INDEX.md)、[复现说明](REPRODUCE.md)和ZIP内独立源码/JSON/TeX/PDF。合并版不代替机器可读结果或源码。
+1. **Read the [full research report](FABLE_FULL_REPORT.md) first.** It integrates the research motivation, the five paths, all core theory, real and constructed experiments, negative results, review disputes and the items awaiting a decision. You do not need to trace the nine rounds of messages to understand the conclusions.
+2. When choosing a direction, read the [five-path comparison](paths/COMPARATIVE_ANALYSIS.md) and the [review request for Fable](paths/SENIOR_REVIEW_REQUEST.md), then open the full text of the relevant path.
+3. For item-by-item review, read the [complete merged reading edition](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_REVIEW_BUNDLE.md). It merges all Markdown full text in this package, keeps the source headings, the content in its original order and the evidence links. The newest material comes first, followed by historical records and background material.
+4. When you need to check formulas, numbers or reproduction, use the [file-by-file index](INDEX.md), the [reproduction notes](REPRODUCE.md), and the standalone source code/JSON/TeX/PDF inside the ZIP. The merged edition does not replace the machine-readable results or the source code.
 
-可直接转交的文件是 **[FABLE_HANDOFF_COMPLETE_2026-11-16.zip](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip)**。解压后以`research/`为根目录保持相对路径；本页位于`research/START_HERE.md`。若只方便上传文本，优先提供总报告及完整合并阅读版。ZIP本身不嵌套进解压目录，以上ZIP链接是本地原始交付位置的下载入口。
+The file to forward directly is **[FABLE_HANDOFF_COMPLETE_2026-11-16.zip](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip)**. After unzipping, keep the relative paths with `research/` as the root; this page is at `research/START_HERE.md`. If only text upload is convenient, provide the full report and the complete merged reading edition first. The ZIP itself is not nested inside the unzipped directory; the ZIP link above is the download entry point at the original local delivery location.
 
-## 这次“完整版”包含什么
+## What this "complete edition" contains
 
-| 内容 | 入口与范围 |
+| Content | Entry point and scope |
 |---|---|
-| 整合总报告 | [FABLE_FULL_REPORT.md](FABLE_FULL_REPORT.md)，本次新增 |
-| 五条可行路径 | [比较与Top3](paths/COMPARATIVE_ANALYSIS.md)；01信息集、02数值敏感度、03审计前沿、04依赖风险、05可验证数值推理，五份全文都在`paths/` |
-| 文献研究 | [17条证据台账](literature/literature_review.md)、[32题覆盖矩阵](literature/question_status.md)、`answers/`的7份重点回答、先例与缺口审查 |
-| 全部数学推导 | `theory/`：基础T0–T3、集体统计量、影响审计、历史非干扰、语义包络、位置价值及随机审计最优性；相应假设、证明与反例保留 |
-| 所有研究轮次 | `reports/`的第1–9轮报告；保留结论被更强对照修正的过程，不覆盖旧叙事 |
-| 实验与执行证据 | `experiments/`、`planning/`、`pit/`、`numeric/`、`checks/`等处的完整表、JSON、预算、配置、源码与实际日志，包括负结果和写出失败记录 |
-| 同行式内部审查 | 路径反方意见、逐项回应、数学/统计/代码/论文独立审查及检查脚本；全部标明内部AI身份 |
-| 技术稿 | `paper/manuscript.md`、`.tex`和[阅读版PDF](paper/output/pdf/audit_budgets_working_report.pdf)；它们是第七轮稿，必须与第八/九轮补充一同理解 |
-| 复现与完整性 | [REPRODUCE.md](REPRODUCE.md)、[实际复现日志](reproduction_log.json)、[SHA256清单](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json)、打包脚本 |
-| 原导师材料 | [参考快照说明](advisor_reference/ORIGIN.md)；用户提供的11份原文件原样保存，另有来源hash，不把里面的设想当成已证明结论 |
+| Integrated full report | [FABLE_FULL_REPORT.md](FABLE_FULL_REPORT.md), new in this delivery |
+| Five feasible paths | [Comparison and Top 3](paths/COMPARATIVE_ANALYSIS.md); 01 information set, 02 numeric sensitivity, 03 audit frontier, 04 dependence risk, 05 verifiable numeric reasoning; all five full texts are in `paths/` |
+| Literature research | [17-entry evidence ledger](literature/literature_review.md), [32-question coverage matrix](literature/question_status.md), 7 focused answers in `answers/`, precedent and gap review |
+| All mathematical derivations | `theory/`: foundations T0–T3, collective statistics, impact audit, historical non-interference, semantic envelopes, localization value and randomized-audit optimality; the corresponding assumptions, proofs and counterexamples are kept |
+| All research rounds | Round 1–9 reports in `reports/`; the process by which conclusions were corrected by stronger controls is kept, and old narratives are not overwritten |
+| Experiment and execution evidence | Complete tables, JSON, budgets, configs, source code and actual logs in `experiments/`, `planning/`, `pit/`, `numeric/`, `checks/` and elsewhere, including negative results and records of write failures |
+| Peer-style internal review | Adversarial opinions on the paths, point-by-point responses, independent math/statistics/code/paper reviews and check scripts; all are labeled as internal AI |
+| Technical manuscript | `paper/manuscript.md`, `.tex` and the [reading PDF](paper/output/pdf/audit_budgets_working_report.pdf); these are the round 7 draft and must be read together with the round 8/9 supplements |
+| Reproduction and integrity | [REPRODUCE.md](REPRODUCE.md), the [actual reproduction log](reproduction_log.json), the [SHA256 manifest](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json), the packaging script |
+| Original advisor materials | [Reference snapshot notes](advisor_reference/ORIGIN.md); the 11 original files provided by the user are saved verbatim, with source hashes; the ideas in them are not treated as proven conclusions |
 
-## 必须先知道的研究状态
+## Research status you must know first
 
-本包完整的是**截至目前的研究材料**。它不表示完整可认证金融语言模型已经建成，不表示文献新颖性或G0/G1已经通过。
+What is complete in this package is **the research material to date**. It does not mean that a complete certifiable financial language model has been built, and it does not mean that literature novelty or G0/G1 has passed.
 
-- 五份路径报告构成四个研究家族：03是01的数学分支，02与05共享语义风险，不能据文件数量声称五个独立旗舰。
-- 32题没有一题达到所有子问均完成的系统综述标准：12项有部分证据、20项未完成。17条台账的来源层级不同，不能都当作全文精读。
-- 真实SEntFiN基线、人工构造检查、解析证明和研究建议分别标注；没有把构造例的非空区间说成真实历史来源已认证。
-- 第九轮证明只在明确的同质威胁族及全零必出证契约下给最优性。简单策略就达到下界；这不是复杂模型必要性或原创性的证据。
-- Fable尚未收到本包，也未提供本轮反馈；内部AI评审不能代替他的判断。
+- The five path reports form four research families: 03 is a mathematical branch of 01, and 02 and 05 share semantic risk. The number of files does not support a claim of five independent flagships.
+- None of the 32 questions meets the systematic-review standard of all sub-questions completed: 12 have partial evidence and 20 are incomplete. The 17 ledger entries come from different source tiers and cannot all be treated as close full-text readings.
+- The real SEntFiN baseline, hand-constructed checks, analytic proofs and research suggestions are labeled separately. Non-empty intervals from constructed examples are not described as certification of real historical sources.
+- The round 9 proof gives optimality only under an explicit homogeneous threat family and an all-zero must-issue-a-certificate contract. A simple strategy already attains the lower bound; this is not evidence that a complex model is necessary or that the work is original.
+- Fable has not yet received this package and has not given feedback on this round. Internal AI review cannot replace Fable's judgment.
 
-## 排除哪些文件，以及为什么
+## Which files are excluded, and why
 
-本包保留全部可交付研究正文、证明、代码、聚合结果和审查证据。按既有数据边界，不纳入私有原始标题、逐行标签/预测、词表、模型权重、checkpoint、运行缓存、环境目录或旧ZIP副本；这些不是被遗漏的研究结论。真实数据实验的来源hash、代码、聚合成绩和限制已保留，重跑真实实验仍需相应本地原始数据。没有承诺仅凭ZIP就能重建缺失的旧24M预测或独立重跑全部真实实验。
+This package keeps all deliverable research full text, proofs, code, aggregate results and review evidence. Following the existing data boundary, it does not include private raw headlines, row-level labels/predictions, vocabularies, model weights, checkpoints, run caches, environment directories or old ZIP copies; these are not omitted research conclusions. The source hashes, code, aggregate scores and limitations of the real-data experiments are kept; rerunning the real experiments still requires the corresponding local raw data. There is no promise that the ZIP alone can rebuild the missing old 24M predictions or independently rerun all real experiments.
 
-原导师11文件以背景资料身份附入本地包，不等于授权公开发布其中内容。文件内提到的联网、SEC联系信息、下一轮训练等是历史方案；本次请求只是交付已有研究，未执行这些动作。
+The 11 original advisor files are attached to the local package as background material. This does not authorize public release of their content. The mentions in those files of internet access, SEC contact information, next-round training and so on are historical plans; this request was only to deliver existing research, and none of those actions were carried out.
 
-## 给Fable的可直接附言
+## A note that can be forwarded to Fable as is
 
-> Fable，这是此前全部研究的完整交付。请先读FABLE_FULL_REPORT，再看五路径比较与评审请求。我们希望您按“继续、缩窄、仅作支撑组件、停止”判断各路线，优先攻击：现有窄定理是否只是已有理论的直接推论；是否存在简单基线不能解决的真实任务；原先“必须从零训练”的筛选器与G0材料缺失应如何处理。请明确一个可否决的下一步，不要把更多构造、测试通过或工程规模当作原创性证据。
+> Fable, this is the complete delivery of all research so far. Please read FABLE_FULL_REPORT first, then the five-path comparison and the review request. We hope you will judge each path as "continue, narrow, keep only as a supporting component, or stop", and attack these first: whether the existing narrow theorems are only direct corollaries of existing theory; whether there is a real task that simple baselines cannot solve; and how to handle the original "must train from scratch" filter and the missing G0 materials. Please state one falsifiable next step, and do not treat more constructions, passing tests or engineering scale as evidence of originality.
 
-文件完整性以`HANDOFF_MANIFEST.json`为准：清单记录每个归档载荷的大小和SHA256，也记录合并阅读版纳入的文档列表。生成清单自身不计算自身hash；ZIP校验值由交付时另行给出。
+File integrity is governed by `HANDOFF_MANIFEST.json`: the manifest records the size and SHA256 of every archived payload, and also records the list of documents included in the merged reading edition. The generated manifest does not compute its own hash; the ZIP checksum is given separately at delivery time.

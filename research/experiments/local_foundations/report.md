@@ -1,14 +1,14 @@
-# 本地地基实验结果
+# Local foundations experiment results
 
-日期：2026-11-15。所有数字来源层级：**我们的实验（local_foundations）**。
+Date: 2026-11-15. Source level of all numbers: **our experiment (local_foundations)**.
 
-## 实际执行与复现
+## Actual execution and reproduction
 
-CPU；Python 3.12.14，PyTorch 2.14.1+cpu，NumPy 2.5.3。四配置 × 三 seed 加一次确定性复跑，总用时 25.88 秒；显存 0，未测峰值 RAM。
+CPU; Python 3.12.14, PyTorch 2.14.1+cpu, NumPy 2.5.3. Four configurations × three seeds plus one determinism rerun, total time 25.88 seconds; 0 GPU memory, peak RAM not measured.
 
-数据为 480 个训练 family、120 个后续季度测试 family；按 30 个公司整簇重采样；数据 SHA256 `a2146e926a010ad8954ff7d9a5da8be204d6e65f3f0e18c9951a503c8a028b1f`。
+The data are 480 training families and 120 test families from later quarters; resampling is by whole company clusters (30 companies); data SHA256 `a2146e926a010ad8954ff7d9a5da8be204d6e65f3f0e18c9951a503c8a028b1f`.
 
-模型参数量：[13739]，随机初始化 mean embedding + MLP。训练词表仅来自训练 family 与预先定义的编辑。没有预训练、GPU、外部下载或私有数据。每配置250次全批量更新；相同seed初始权重相同。
+Model parameter count: [13739], randomly initialized mean embedding + MLP. The training vocabulary comes only from the training families and the predefined edits. No pretraining, GPU, external downloads or private data. 250 full-batch updates per configuration; the same seed gives the same initial weights.
 
 ```powershell
 python -m unittest research.local.test_foundations research.local.test_audit -v
@@ -17,9 +17,9 @@ python -m research.local.ablation
 python -m research.local.write_report
 ```
 
-## 四配置三 seed 消融
+## Four-configuration, three-seed ablation
 
-| Seed | 配置 | Macro-F1 [95% bootstrap CI] | INV违反率 [CI] | LBL违反率 [CI] | REL违反率 [CI] |
+| Seed | Configuration | Macro-F1 [95% bootstrap CI] | INV violation rate [CI] | LBL violation rate [CI] | REL violation rate [CI] |
 |---:|---|---|---|---|---|
 | 11 | original_ce | 1.0000 [1.0000, 1.0000] | 0.4167 [0.3333, 0.5000] | 0.0000 [0.0000, 0.0000] | 0.0000 [0.0000, 0.0000] |
 | 11 | edited_ce | 1.0000 [1.0000, 1.0000] | 0.0000 [0.0000, 0.0000] | 0.0000 [0.0000, 0.0000] | 0.0000 [0.0000, 0.0000] |
@@ -34,19 +34,19 @@ python -m research.local.write_report
 | 47 | permissions | 1.0000 [1.0000, 1.0000] | 0.0000 [0.0000, 0.0000] | 0.0000 [0.0000, 0.0000] | 0.0000 [0.0000, 0.0000] |
 | 47 | shuffled_permissions | 0.9919 [0.9725, 1.0000] | 0.2083 [0.1167, 0.3083] | 0.0000 [0.0000, 0.0000] | 0.0000 [0.0000, 0.0000] |
 
-INV：TV > 0.05；LBL：编辑前后预测标签不相同；REL：真实改标签的 log-odds 变化 < 0.5。UP 仅约束 metric 轴，未强加给 stance；FREE 不加约束。
+INV: TV > 0.05; LBL: the predicted label differs before and after the edit; REL: the log-odds change for an edit that truly changes the label is < 0.5. UP constrains only the metric axis and is not imposed on stance; FREE adds no constraint.
 
-**主要对照是 permissions − edited_ce**：三个 seed 的 macro-F1 差均为 0，配对 bootstrap 区间均为 [0,0]；完整分类别 P/R/F1、accuracy、配对结果与违反率区间见 `results.json`。这不证明总体差异严格为零：测试集饱和，重采样不能产生未观察到的错误。0 次违反的 bootstrap 区间也不是错误率的精确上置信界。
+**The main contrast is permissions − edited_ce**: for all three seeds the macro-F1 difference is 0 and the paired bootstrap interval is [0,0]; full per-class P/R/F1, accuracy, paired results and violation-rate intervals are in `results.json`. This does not prove that the population difference is exactly zero: the test set is saturated, and resampling cannot produce errors that were never observed. A bootstrap interval for 0 violations is also not an exact upper confidence bound on the error rate.
 
-原始 CE 对某些无关追加不稳定，但加编辑 CE 已足以消除本例中观察到的违反；不能将收益归因于 permission 项。打乱配置有错误，不能独立证明正确许可有额外价值。尤其打乱后将REL分配给真值标签相同的INV/LBL对时，log-odds差恒为0，损失成为常数且梯度为0；它同时改变有效梯度组成，并非等强度的纯语义错配对照。下一版应预注册能分离许可语义与有效正则强度的对照。
+The original CE is unstable under some irrelevant appends, but CE with edits is already enough to remove the violations observed in this example; the gain cannot be attributed to the permission term. The shuffled configuration makes errors, but that cannot independently prove that correct permissions add value. In particular, when shuffling assigns REL to an INV/LBL pair whose true labels are the same, the log-odds difference is always 0, so the loss becomes a constant with zero gradient; shuffling also changes the effective gradient composition, so it is not an equal-strength, purely semantic mismatch control. The next version should pre-register a control that can separate permission semantics from effective regularization strength.
 
-这套语法中的显式 stance 动词使任务过易。**负结论：当前试验台不能支持“permission 损失有增益”，也不能作为新模型有效的证据。** 不依据此结果继续调测试集；下一轮应在冻结的新任务中加入隐式比较基准、否定作用域、holder/target 绑定，并预留未使用的模板/公司/时期。
+The explicit stance verbs in this grammar make the task too easy. **Negative conclusion: the current testbed cannot support "the permission loss gives a gain", and cannot serve as evidence that a new model is effective.** The test set will not be tuned further on the basis of this result; the next round should add implicit comparison baselines, negation scope and holder/target binding in a frozen new task, and hold out unused templates/companies/periods.
 
-确定性检查：seed 11、permissions，重训权重逐位相等：True。只覆盖本机这个设置，不保证旧24M或跨硬件逐位相等。
+Determinism check: seed 11, permissions, retrained weights bitwise equal: True. This covers only this setting on this machine; it does not guarantee bitwise equality for the old 24M model or across hardware.
 
-## 精确审计计算（数学输入，不是实际 EDGAR 规模）
+## Exact audit computation (mathematical inputs, not actual EDGAR scale)
 
-| N | n | x | α | 精确 K_u | 平局有利时最小可能 m | 严格票差最小可能 m |
+| N | n | x | α | Exact K_u | Smallest possible m with favourable ties | Smallest possible m with strict margin |
 |---:|---:|---:|---:|---:|---:|---:|
 | 100000 | 1000 | 0 | 0.05 | 297 | 594 | 595 |
 | 10000 | 1000 | 0 | 0.05 | 28 | 56 | 57 |
@@ -54,18 +54,18 @@ INV：TV > 0.05；LBL：编辑前后预测标签不相同；REL：真实改标�
 | 1000 | 1000 | 0 | 0.05 | 0 | 1 | 1 |
 | 100 | 99 | 0 | 0.05 | 0 | 1 | 1 |
 
-最小分片数仅描述全票等极端票型下可能认证的门槛；不是实际模型会达到的认证覆盖率。有限总体抽样比例较高时，3N/n 近似明显过松。全查零错标时 K_u=0。
+The minimum shard counts only describe the threshold at which certification is possible under extreme vote patterns such as unanimous votes; they are not the certification coverage a real model would reach. When the sampling fraction of the finite population is high, the 3N/n approximation is clearly too loose. When every item is checked and zero mislabels are found, K_u=0.
 
-实现以整数二项式系数与有理数 α 比较，不依赖浮点 CDF 阈值。统计量以输入数的精确有理表示求和，并向外舍入binary64端点，同时保存分数端点；float输入按其二进制精确值解释。已对 N≤12 的全部 N,n,K 穷举覆盖率；对 m≤6 的三类投票穷举所有可达替换，与可达标签算法逐项核对。小域穷举是实现检查，全域结论依赖理论证明。
+The implementation compares integer binomial coefficients with a rational α and does not rely on floating-point CDF thresholds. Statistics are summed in the exact rational representation of the input numbers and the binary64 endpoints are rounded outward, while the fractional endpoints are also stored; float inputs are interpreted by their exact binary value. Coverage was checked exhaustively for all N,n,K with N≤12; for three-class votes with m≤6, all reachable replacements were enumerated exhaustively and checked one by one against the reachable-label algorithm. Small-domain exhaustion is an implementation check; the global conclusions rely on the theoretical proofs.
 
-## 合成世界数据卡
+## Synthetic world data card
 
-公司×季度，整数货币会计恒等式（资产=负债+权益、收入=成本+利润）；公司价格含独立冲击与公告效应；作者立场是独立隐变量，不等同于营收方向。每个 family 保存文本、holder、target、单位/尺度、真实/记录时间、五类编辑及其真值。时间是相对 cutoff 的季度索引，非历史日期。
+Company × quarter, with integer-currency accounting identities (assets = liabilities + equity, revenue = cost + profit); company prices contain independent shocks and announcement effects; author stance is an independent latent variable and is not the same as the revenue direction. Each family stores the text, holder, target, unit/scale, true/recorded time, five kinds of edits and their ground truth. Time is a quarter index relative to the cutoff, not a historical date.
 
-污染只对真实可得时间>0的文档将记录时间改为0。固定 seed 下字节一致；精确 k 与会计恒等式由测试检查。价格过程仅为模拟环境，不作投资推断。本次消融 k=0；污染机制在独立测试中验证，不混入评测任务。
+Contamination sets the recorded time to 0 only for documents whose true availability time is >0. Output is byte-identical under a fixed seed; the exact k and the accounting identities are checked by tests. The price process is only a simulated environment and supports no investment inference. In this ablation k=0; the contamination mechanism is verified in separate tests and is not mixed into the evaluation task.
 
-文本仅三套模板、单位仅USD、未模拟真实报表重述/多币种/复杂比较基准。生成器是可控测试装置，不能估计自然文本解析错误率、真实污染率或真实投资表现。
+The text uses only three template sets, the only unit is USD, and real filing restatements / multiple currencies / complex comparison baselines are not simulated. The generator is a controllable test rig; it cannot estimate the parsing error rate on natural text, the real contamination rate, or real investment performance.
 
-## 门槛状态
+## Gate status
 
-WP0.5 核心机制已实现并测试，模板迁移未验证；WP0.2 离线 smoke 完成，真实/较难任务结论缺失；WP0.1 旧24M簇区间与三条真实基线未完成。**G0 不通过，G1 暂不决策。**
+The WP0.5 core mechanism is implemented and tested; template transfer is not verified. The WP0.2 offline smoke test is complete; conclusions on real/harder tasks are missing. The WP0.1 cluster intervals for the old 24M model and the three real baselines are not done. **G0 not passed; no decision on G1 yet.**

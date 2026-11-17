@@ -60,14 +60,14 @@ def main():
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     from matplotlib.font_manager import FontProperties
-    font_path=os.environ.get('T1B_FONT_PATH','C:/Windows/Fonts/msyh.ttc')
+    font_path=os.environ.get('T1B_FONT_PATH','C:/Windows/Fonts/arial.ttf')
     font=FontProperties(fname=font_path) if Path(font_path).exists() else FontProperties(family='sans-serif')
     plt.rcParams.update({'axes.unicode_minus':False,'pdf.fonttype':42,'svg.fonttype':'none'})
     fig,ax=plt.subplots(figsize=(11.7,6.3),layout='constrained')
     colors=['#254B65','#4A8E84','#4A8E84','#AD7551','#C48662','#254B65']
     heights=[n,dup,sums,ref,invalid+uncertain,keep]
     bottoms=[0,stages[1],stages[2],stages[3],keep,0]
-    labels=['原始候选','重复披露\n收紧','增加加总\n约束','参考答案\n不相容','语义复核\n排除','最终保留']
+    labels=['Original candidates','Duplicate disclosure\ntightening','Add sum\nconstraints','Reference answer\nincompatible','Semantic review\nexclusions','Final retained']
     for i,(h,b,col) in enumerate(zip(heights,bottoms,colors)):
         if h:ax.bar(i,h,bottom=b,width=.64,color=col,zorder=3)
         else:ax.plot([i-.32,i+.32],[b,b],color=col,lw=3,zorder=3)
@@ -77,46 +77,46 @@ def main():
     levels=[n,stages[1],stages[2],stages[3],keep]
     for i,level in enumerate(levels):ax.plot([i+.32,i+.68],[level,level],color='#A5ADB3',lw=1)
     ax.axhline(58,color='#966E35',ls='--',lw=1.4,zorder=2)
-    ax.text(.65,61,'保留门槛：58 道 / 1,147',fontproperties=font,color='#966E35',fontsize=10)
+    ax.text(.65,61,'Retention threshold: 58 / 1,147',fontproperties=font,color='#966E35',fontsize=10)
     ax.set_xticks(range(6),labels,fontproperties=font,fontsize=11)
-    ax.set_ylabel('题数',fontproperties=font,fontsize=11)
+    ax.set_ylabel('Questions',fontproperties=font,fontsize=11)
     ax.set_ylim(0,220);ax.set_xlim(-.6,5.6)
     ax.set_yticks([0,50,100,150,200]);ax.grid(axis='y',alpha=.15,zorder=0)
     for side in ('top','right'):ax.spines[side].set_visible(False)
     ax.spines['left'].set_color('#CBD1D5');ax.spines['bottom'].set_color('#CBD1D5')
     ax.tick_params(axis='both',length=0)
-    fig.suptitle(f'T1B：收紧并复核后，{keep} 道题仍有容差内外两种可行值',fontproperties=font,fontsize=17,color='#203C50')
-    ax.set_title(f'占测试集 {keep}/1,147 = {keep/1147:.2%}；1% 为审计容差',fontproperties=font,fontsize=11,loc='left',pad=20,color='#53616B')
-    fig.supxlabel('范围：FinQA 完整题目上下文。语义复核共发现 37 道明确问题、20 道存疑；其中 1 道已在重复披露阶段移除。',fontproperties=font,fontsize=9,color='#53616B')
+    fig.suptitle(f'T1B: after tightening and review, {keep} questions still have feasible values both inside and outside the tolerance',fontproperties=font,fontsize=17,color='#203C50')
+    ax.set_title(f'{keep}/1,147 = {keep/1147:.2%} of the test set; 1% is the audit tolerance',fontproperties=font,fontsize=11,loc='left',pad=20,color='#53616B')
+    fig.supxlabel('Scope: full FinQA question context. Semantic review found 37 questions with clear problems and 20 doubtful ones; 1 of them was already removed at the duplicate-disclosure stage.',fontproperties=font,fontsize=9,color='#53616B')
     for suffix in ('png','pdf','svg'):fig.savefig(out/f'waterfall.{suffix}',dpi=200,facecolor='white')
     svg=out/'waterfall.svg'
     svg.write_bytes(('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf8').splitlines())+'\n').encode('utf8'))
     plt.close(fig)
-    one=f'''# T1B 一页结论：结论保留，比例从 17.09% 降至 {keep/1147:.2%}
+    one=f'''# T1B one-page summary: the conclusion holds; the fraction falls from 17.09% to {keep/1147:.2%}
 
-**最终保留 {keep}/1,147 = {keep/1147:.2%}，超过任务门槛 58 道。** 对每个保留题，都保存了两组严格位于舍入区间内部、精确满足全部已确认线性约束的有理数输入：一组结果在 gold 的 1% 容差内，另一组在外。这是存在性结论，不是模型通常答错的概率，也不是基准标注错误率。
+**Finally retained: {keep}/1,147 = {keep/1147:.2%}, above the task threshold of 58 questions.** For each retained question we saved two sets of rational inputs that lie strictly inside the rounding intervals and exactly satisfy all confirmed linear constraints: one gives a result inside the gold's 1% tolerance, the other outside. This is an existence result, not the probability that models usually answer wrongly, and not the benchmark's annotation error rate.
 
-范围经用户确认：FinQA 提供的完整表格与正文；不覆盖原始年报其他页面。只针对 T1 的 196 个 test 见证，不外推未审查题目的语义正确性。
+Scope confirmed by the user: the complete tables and text provided by FinQA; other pages of the original annual reports are not covered. Only T1's 196 test witnesses are covered; the semantic correctness of unreviewed questions is not extrapolated.
 
-|顺序归因（互斥）|题数|
+|Sequential attribution (mutually exclusive)|Questions|
 |---|---:|
-|仍有容差内外可行值|{keep}|
-|重复披露使数值区间进入容差|{dup}|
-|进一步加总使区间进入容差|{sums}|
-|收紧后全区间与 gold 不相容|{ref}|
-|其余题意、绑定或数量类型明确有问题|{invalid}|
-|其余语义无法确认，保守剔除|{uncertain}|
-|合计|196|
+|Still has feasible values both inside and outside the tolerance|{keep}|
+|Duplicate disclosures move the numeric interval inside the tolerance|{dup}|
+|Further sum constraints move the interval inside the tolerance|{sums}|
+|After tightening, the whole interval is incompatible with gold|{ref}|
+|Of the rest, clear problems with question meaning, binding or quantity type|{invalid}|
+|Of the rest, semantics cannot be confirmed; conservatively removed|{uncertain}|
+|Total|196|
 
-唯一由重复披露数值上收紧的 MSI/2008/page_69.pdf-2，本身也存在“损失下降/增长”的语义疑问；语义复核总计因此是 **37 明确问题 + 20 存疑**，不能再把它重复扣一次。CME/2010/page_69.pdf-2 只有额外假设列出的分项穷尽总授信额，才出现区间与 gold 不相容；原文“including”不足以支持这一假设，因此仅保存为敏感性分析，不进入主计数。
+The only question tightened numerically by duplicate disclosures, MSI/2008/page_69.pdf-2, also has a semantic doubt of its own ("decrease in loss" versus "growth"); the semantic review total is therefore **37 clear problems + 20 doubtful**, and that question must not be deducted a second time. CME/2010/page_69.pdf-2 becomes incompatible with gold only under the additional assumption that the listed components exhaust the total credit facilities; the original "including" is not enough to support this assumption, so it is kept only as a sensitivity analysis and does not enter the main count.
 
-**抽样复核：** 固定种子 20261116 抽取 40 题，27 通过、8 明确问题、5 存疑。明确错误为20%；把存疑也算入风险则为32.5%，超过四分之一。按保守口径执行修正：核查单位、年份、经济角色、精确值/舍入值、程序覆盖与分母方向；将全部196题逐条复核，剔除全部57个非通过题，并对原始1147题重跑T1，确认原196队列可重现。未静默修正gold，也未声称另外951题已通过语义审查。
+**Sample review:** with fixed seed 20261116, 40 questions were sampled: 27 passed, 8 had clear problems, 5 were doubtful. Clear errors are 20%; counting the doubtful ones as risk too, 32.5%, more than a quarter. The fix was carried out under the conservative convention: check units, years, economic roles, exact vs. rounded values, program coverage and denominator direction; review all 196 questions one by one, remove all 57 non-passing questions, and rerun T1 on the original 1147 questions to confirm that the original cohort of 196 is reproducible. gold was not silently corrected, and we do not claim that the other 951 questions passed semantic review.
 
-**计算与复核：** {s['duplicate_disclosures']} 条同事实追加披露，{s['reviewed_equations']} 条已确认线性关系；{s['questions_with_shrunk_input_box']} 题输入盒因重复披露变窄，{s['questions_with_shrunk_output_after_sums']} 题输出范围因加总进一步收窄。{s['exact_final_ranges']}/196 个最终范围达到精确极值，其余如有则使用已证明外包络。588 个阶段证书与 {keep} 对内外见证独立重放通过。
+**Computation and review:** {s['duplicate_disclosures']} additional disclosures of the same fact, {s['reviewed_equations']} confirmed linear relations; for {s['questions_with_shrunk_input_box']} questions the input box narrowed because of duplicate disclosures, and for {s['questions_with_shrunk_output_after_sums']} questions the output range narrowed further because of sums. {s['exact_final_ranges']}/196 final ranges reach exact extrema; the rest, if any, use proven outer envelopes. 588 stage certificates and {keep} inside/outside witness pairs passed independent replay.
 
-本次逐条语义复核由AI代理执行并交叉检查，**不是独立人类签字验收**。数学证明以列出的来源绑定、舍入模型及约束清单为条件；不声称穷尽文档所有可能的非线性语义约束。FinQA 可把显示数字本身定义为算术输入，故本结果仍不取代 T1C 的模型判分实验。
+This item-by-item semantic review was performed and cross-checked by AI agents and **is not an independent human sign-off**. The mathematical proofs are conditional on the listed source bindings, rounding model and constraint inventory; we do not claim to exhaust all possible nonlinear semantic constraints in the documents. FinQA can define the displayed numbers themselves as arithmetic inputs, so this result still does not replace T1C's model-scoring experiment.
 
-[瀑布图](results/waterfall.png) · [完整报告](REPORT.md) · [逐题摘要](results/question_summary.csv) · [40题复核](results/sample40_review.csv) · [逐题证书](results/per_question.jsonl)
+[Waterfall chart](results/waterfall.png) · [Full report](REPORT.md) · [Per-question summary](results/question_summary.csv) · [40-question review](results/sample40_review.csv) · [Per-question certificates](results/per_question.jsonl)
 '''
     (HERE/'FABLE_ONE_PAGE.md').write_text(one,encoding='utf8')
     import scipy,sympy

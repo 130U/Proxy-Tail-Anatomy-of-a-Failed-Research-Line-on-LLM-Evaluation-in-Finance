@@ -1,63 +1,63 @@
-# T1.1 构造检查：运行记录与结果边界
+# T1.1 construction checks: run record and limits of the results
 
-2026-11-16，第五轮。来源层级：**我们的有限构造检查**；附带的真实日期计数只是对上轮公开来源审计JSON的再汇总。本轮无联网、私有行读取、主线模型训练或性能评测。预算在 [PROTOCOL](PROTOCOL.md) 中先写定，数学陈述在 [PNI1–PNI6](../theory/pit_noninterference.md)，实现见 [README](README.md)。
+2026-11-16, round five. Source level: **our finite construction checks**; the attached real-date counts are only a re-summary of the previous round's public provenance-audit JSON. This round had no network access, no reading of private rows, no main-line model training and no performance evaluation. The budget was written down first in [PROTOCOL](PROTOCOL.md), the mathematical statements are in [PNI1–PNI6](../theory/pit_noninterference.md), and the implementation is in [README](README.md).
 
-## 被检查的命题
+## Proposition checked
 
-同一完整可见版本投影、固定配置/seed/cutoff，应给出同一历史快照与全部下游产物。可见性由knowledge_time决定，保留的record_time不具有优先权。有限检查验证参考程序是否违反这一构造；不能据此为真实时间声明赋予零错误概率。
+The same complete visible version projection, with fixed configuration/seed/cutoff, should give the same historical snapshot and all the same downstream products. Visibility is determined by knowledge_time; the retained record_time has no priority. The finite checks test whether the reference program violates this construction; they cannot be used to assign a zero error probability to real time declarations.
 
-## 预算与运行身份
+## Budget and run identity
 
-执行前CPU目标≤60秒，规模≤1,000版本事件，内存目标≤100MB；无GPU/API/主线训练token。实际主世界4家公司×10期，共40个版本事件；扩展包含修订、删除、重复与不透明未来载荷。主检查首次用时1.468044秒，最新复跑值在 [results.json](results.json)；峰值内存未测，不能声称实测满足100MB。
+Pre-execution targets: CPU ≤60 seconds, scale ≤1,000 version events, memory ≤100MB; no GPU/API/main-line training tokens. The actual main world had 4 companies × 10 periods, 40 version events in total; the extensions include revisions, deletions, duplicates and opaque future payloads. The main check first took 1.468044 seconds; the latest rerun value is in [results.json](results.json); peak memory was not measured, so we cannot claim to have measured that 100MB was met.
 
-代码基于分支research/certifiable，base commit为8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254，新增文件仍未提交。运行器记录Python、平台、pipeline/runner/seed-check/world/协议的SHA256。所有稳定产物直接逐字节比较；hash只用于索引，没有用hash相等替代字节相等。运行耗时、源码身份等操作信息在results中，不进入待比较的历史产物。
+The code is based on branch research/certifiable, base commit 8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254; the new files are still uncommitted. The runner records Python, platform, and the SHA256 of pipeline/runner/seed-check/world/protocol. All stable products are compared directly byte by byte; hashes are only used for indexing, and hash equality is not used in place of byte equality. Operational information such as run time and source identity is in results and does not enter the historical products being compared.
 
-## 预定主检查
+## Pre-specified main check
 
-两套冻结配置、三个管线seed（11/130/2026）、五个cutoff（−5/−2/0/2/4），构成30个历史基例。每例比较七种输入：完整已有日志、逆序日志、未来修订及元数据变化、未来墓碑、未来副本、合法头但不透明未来载荷及重复event_id、组合扩展。共210次整条管线比较、2,100次稳定产物字节比较，全部相同。最后截止日的“已有未来”可以为空；因此这些是有限比较次数，不是210个独立非空未来场景，更不是统计样本量。
+Two frozen configurations, three pipeline seeds (11/130/2026) and five cutoffs (−5/−2/0/2/4) make 30 historical base cases. Each case compares seven inputs: the complete existing log, the reversed log, future revisions and metadata changes, future tombstones, future copies, valid headers with opaque future payloads and duplicate event_ids, and combined extensions. In total there were 210 whole-pipeline comparisons and 2,100 byte comparisons of stable products, all identical. At the last cutoff the "existing future" can be empty; so these are finite comparison counts, not 210 independent non-empty future scenarios, and still less a statistical sample size.
 
-10个产物包含配置、完整可见历史、活动快照、过滤、去重、抽样、train/dev划分、全部候选词表与开发分数、所选词表和产物摘要表。30个基例中29个具有开发文档，至少覆盖了真实的开发选择分支；空开发分支另有固定首候选规则和单元测试。这里的开发目标是未知词比例＋事前容量代价，不是金融分类性能。
+The 10 products are the configuration, the complete visible history, the active snapshot, filtering, deduplication, sampling, the train/dev split, all candidate vocabularies with their development scores, the selected vocabulary, and the product digest table. 29 of the 30 base cases have development documents, so at least the real development-selection branch is covered; the empty-development branch has a separate fixed first-candidate rule and unit tests. The development objective here is the unknown-word rate + an ex-ante capacity cost, not financial classification performance.
 
-独立实现测试另有18项，覆盖cutoff边界、历史/未来版本、墓碑、同时间并列、去重桥、未来坏载荷、空状态、train-only词表和手工快照的类型一致性。测试内有限扩展与主runner存在重叠，不能把次数相加当独立证据。
+The independent implementation tests add another 18 items, covering cutoff boundaries, historical/future versions, tombstones, ties at the same time, deduplication bridges, bad future payloads, empty state, train-only vocabulary, and type consistency of hand-made snapshots. The finite extensions in the tests overlap with the main runner, so the counts cannot be added up as independent evidence.
 
-## 三类必要负对照
+## Three required negative controls
 
-| 故意错误的程序 | 实际观察 | 否定的错误推断 |
+| Deliberately wrong program | Actual observation | Wrong inference refuted |
 |---|---|---|
-| 全库先建词表再按日期取样 | 新未来词改变词表 | 正文过滤过就足够 |
-| 全库先选最新重复代表再过滤 | 未来副本挤掉历史代表 | 先去重后截断不会改变过去 |
-| 按全日志长度选择一份旧文档 | 新增未来行改变所选旧ID | 最终输入全是旧文档就没有选择泄漏 |
+| Build the vocabulary on the whole corpus first, then sample by date | New future words change the vocabulary | Filtering the body text is enough |
+| Choose the latest duplicate representative on the whole corpus first, then filter | A future copy pushes out the historical representative | Deduplicating first and truncating afterwards does not change the past |
+| Choose one old document by the full-log length | Newly added future rows change the selected old ID | If the final input is all old documents, there is no selection leakage |
 
-三个错误函数只作为负对照，不被主管线调用。结果完整保存在results.json。有限反例可以推翻相应普遍主张；正确程序的有限通过不能反向证明任意输入安全。
+The three wrong functions serve only as negative controls and are not called by the main pipeline. The results are saved in full in results.json. A finite counterexample can overturn the corresponding universal claim; finite passes of the correct program cannot conversely prove safety for arbitrary inputs.
 
-## 时间真值未被检查器识别
+## The checker does not recognize the truth of times
 
-在已知潜在真值的合成世界中植入3条错标：真实可得时间在cutoff=0之后，但记录/声称知识时间被置为0。adapter只读取id、recorded_time、text，不读取available_time/contaminated等潜在真值；运行器的独立oracle才读取真值检查植入数。
+In the synthetic world, where the latent truth is known, 3 mislabelled records were planted: their true availability time is after cutoff=0, but their recorded/claimed knowledge time was set to 0. The adapter only reads id, recorded_time and text, and does not read latent truth such as available_time/contaminated; only the runner's independent oracle reads the truth to check the planted count.
 
-结果是**3条错标全部被管线纳入，同时未来追加不变性仍通过**。这不是程序bug：它严格遵守了给定时间。它证明本检查器没有认证时间真实性，历史证书仍需外部来源/审计证据。未来加入什么都不改变过去，并不能纠正过去时间字段已经说错。
+The result is that **all 3 mislabelled records were taken in by the pipeline, while invariance under future appends still passed**. This is not a program bug: it strictly follows the given times. It shows that this checker does not certify the truth of times, and a historical certificate still needs external provenance/audit evidence. That nothing added in the future changes the past cannot correct a past time field that was already wrong.
 
-## 随机性假设的精确反例
+## Exact counterexample for the randomness assumption
 
-独立审查指出，仅说seed与未来边际独立不充分。历史H与未来B独立均匀，seed=H xor B，则seed与B边际独立，输出H xor seed却等于B。需要的是给定历史后的条件独立，或seed独立整个数据世界。可测函数复合和固定seed非干扰本身并不需要这个独立性；三种陈述必须分开。
+The independent review pointed out that saying only that the seed is marginally independent of the future is not sufficient. If history H and future B are independent and uniform and seed=H xor B, then the seed is marginally independent of B, yet the output H xor seed equals B. What is needed is conditional independence given the history, or a seed independent of the whole data world. Composition of measurable functions and fixed-seed non-interference do not themselves need this independence; the three statements must be kept apart.
 
-[seed_checks.py](seed_checks.py)对独立均匀H、B上的全部16个确定性布尔seed映射做Fraction精确核对：6个边际独立，4个条件独立；另外2个恰是XOR/XNOR。这是有限数学反例验证，不是对本项目实际seed生成过程的统计检验。总笔记Markdown和TeX中的旧简写已修正。
+[seed_checks.py](seed_checks.py) checks exactly with Fraction all 16 deterministic boolean seed maps on independent uniform H, B: 6 are marginally independent and 4 are conditionally independent; the other 2 are exactly XOR/XNOR. This is a finite mathematical counterexample verification, not a statistical test of the project's actual seed-generation process. The old shorthand in the overall notes in Markdown and TeX has been corrected.
 
-## 与真实本地材料的关系
+## Relation to real local material
 
-对上轮非随机选定的10份FOMC来源审计记录重汇总，无新增原始数据读取：
+A re-summary of the 10 FOMC provenance-audit records selected non-randomly in the previous round, with no new reading of raw data:
 
-| 截止日 | 声称发布日期≤截止日 | 声称本地获取日≤截止日 | 已证明相应历史字节版本 |
+| Cutoff | Claimed publication date ≤ cutoff | Claimed local retrieval date ≤ cutoff | Corresponding historical byte version proven |
 |---|---:|---:|---:|
 | 2015-12-31 | 3 | 0 | 0 |
 | 2020-12-31 | 6 | 0 | 0 |
 | 2025-12-31 | 10 | 0 | 0 |
 
-获取声明为2026年，先前核对的日期和当前字节hash一致；这仍没有证明历史年份已存在同一字节。**缺少历史字节证据不等于那些内容当年不可得。** 该表也不能估计120份来源总体的错误率，不是新来源审计或真实文本PIT运行。原JSON的hash保存在本轮结果中。
+The retrieval declarations are from 2026; the dates checked earlier agree with the current byte hashes; this still does not prove that the same bytes existed in the historical year. **Lacking historical byte evidence does not mean those contents were unavailable at the time.** This table also cannot estimate the error rate for the population of 120 sources, and it is not a new provenance audit or a PIT run on real text. The hash of the original JSON is saved in this round's results.
 
-## 审查与开放义务
+## Review and open obligations
 
-独立审查实际复现了初版快照校验漏洞：dataclass相等会把False与0、True与1混同，导致伪造snapshot被接受而序列化字节改变。修复改为严格类型约束和重建规范字节比较；三个原反例现在都拒绝，已加入回归测试。详见 [独立审查](../reports/pit_review.md)。
+The independent review actually reproduced a snapshot-validation flaw in the first version: dataclass equality conflates False with 0 and True with 1, so a forged snapshot was accepted while the serialized bytes changed. The fix switched to strict type constraints and a comparison of rebuilt canonical bytes; all three original counterexamples are now rejected and have been added to the regression tests. Details in the [independent review](../reports/pit_review.md).
 
-数学审查还区分了信息可测性与来源准入：未来才公开的常量文本、事后固定的checkpoint都可能在所选概率空间里可测；这不证明当时真的可构造或允许使用。必须固定事前算法、跨世界解释和实际版本准入契约。PNI6给出同一观测日志的两世界例子，清洁accuracy分别0/1，任何同时可靠的确定性闭区间只能覆盖[0,1]。
+The mathematical review also separated information measurability from provenance admission: constant text that only becomes public in the future, or a checkpoint fixed after the fact, can both be measurable in the chosen probability space; this does not prove that they could really be constructed or were allowed to be used at the time. The ex-ante algorithm, the cross-world interpretation and the actual version-admission contract must be fixed. PNI6 gives a two-world example with the same observed log, with clean accuracy 0 and 1 respectively; any deterministic closed interval that is reliable in both can only cover [0,1].
 
-完成范围是PIT参考组件和对应条件证明/有限检查。没有实现防篡改存储、可信时间服务、第三方训练程序的全域验证，未完成真实历史证书、G0/G1或最终顶层仓库迁移。这些通用数学事实也不被声明为本项目原创贡献。
+The completed scope is the PIT reference components and the corresponding conditional proofs/finite checks. Tamper-proof storage, a trusted time service and global verification of third-party training programs are not implemented; the real historical certificate, G0/G1 and the final top-level repository migration are not done. These general mathematical facts are also not claimed as original contributions of this project.

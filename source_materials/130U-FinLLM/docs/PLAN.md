@@ -1,111 +1,111 @@
-# 130U-FinLLM｜130U 金融大语言模型：执行计划
+# 130U-FinLLM | 130U Financial Large Language Model: execution plan
 
-> 本文保留开工前冻结的 v1.1 设计和证据边界，不是当前完成情况清单。仓库已进入实现阶段；实际交付、测试和未完成实验请以 [STATUS.md](STATUS.md) 与 [HANDOFF.md](HANDOFF.md) 为准。文中“尚未创建仓库/代码”等叙述描述计划形成时的状态。
+> This document keeps the v1.1 design and evidence limits that were frozen before work started; it is not a list of what is currently complete. The repository has entered implementation; for actual deliverables, tests and unfinished experiments, [STATUS.md](STATUS.md) and [HANDOFF.md](HANDOFF.md) are authoritative. Statements in the text such as "repository/code not yet created" describe the state at the time the plan was written.
 
-版本：v1.1 · 2026-10-09；下一对话实施的唯一主规范。
-项目名称：**130U-FinLLM｜130U 金融大语言模型**。英文展开：130U Financial Large Language Model。首版模型标识：`130U-FinLLM-24M`。建议仓库名：`130U-FinLLM`（尚未创建，也未核实名称可用性）。
-执行环境：Google Colab，单张 Tesla T4；用户截图显示总显存约 14.56 GiB。
-文档状态：研究与实施计划。已核查公开源码、资料并计算参数及预算；尚未安装训练环境、下载完整数据集或在用户 GPU 上运行。所有效果目标与时间表均为规划，不是已完成结果。
+Version: v1.1 · 2026-10-09; the single main specification for implementation in the next conversation.
+Project name: **130U-FinLLM | 130U Financial Large Language Model** (the original Chinese name has the same meaning). English expansion: 130U Financial Large Language Model. First model identifier: `130U-FinLLM-24M`. Suggested repository name: `130U-FinLLM` (not yet created; availability of the name not checked).
+Execution environment: Google Colab, a single Tesla T4; the user's screenshot shows total GPU memory of about 14.56 GiB.
+Document status: research and implementation plan. Public source code and materials have been checked, and parameters and budgets computed; the training environment has not been installed, full datasets have not been downloaded, and nothing has been run on the user's GPU. All performance targets and timelines are plans, not completed results.
 
-**阅读与规范优先级：**下一对话先读本文件，再读《START_HERE_下一对话启动.md》。本文件覆盖旧 v1.0 主计划及各研究附件中的不同建议。附件用于追溯来源，不是另一套实施规范。尤其以本文件的四分区、校准集内部二分、标签语义审核、SFT/DPO 仅标签监督和唯一 next-token 移位方式为准。
+**Reading order and precedence:** the next conversation reads this file first, then the note "START_HERE: starting the next conversation". This file supersedes the old v1.0 main plan and the differing suggestions in the research attachments. The attachments are for tracing sources; they are not a separate implementation specification. In particular, this file's four partitions, the internal two-way split of the calibration set, the semantic review of labels, label-only supervision in SFT/DPO, and the single next-token shift take precedence.
 
 ## Charter
 
-- 目标：交付能在下一段对话开始实施的完整训练规范，明确代码来源、材料、用户与代理分工、Colab 执行方式及逐阶段验收。
-- 知识深度：working。已有模型、数据和训练源码核查；真实语料权限、标签质量、用户运行时连接和吞吐仍未实测。
-- Scope / Object / Subject：从零训练金融专用语言模型 / 单 T4 上的 24M 英文目标资产立场模型 / MiniMind 固定源码、tokenizer、数据分片、全参数训练及 GitHub–Colab–Drive 协作。
-- 类型：描述性研究与实施交接；本轮只写计划，不创建远程仓库、安装依赖或启动训练。
-- Q1：参考哪些仓库、复用什么？Q2：完整流程和验收如何落实？Q3：哪些材料必须由用户提供？Q4：怎样在当前工具条件下让代码进入 Colab 并取回结果？
-- 完成条件：Q1–Q4 有可执行步骤与边界；新对话能直接从第 13–15 节开始；未解决事项有独立关闭关卡。
+- Goal: deliver a complete training specification that can be implemented at the start of the next conversation, stating the code sources, materials, the division of work between user and agent, how to run on Colab, and stage-by-stage acceptance.
+- Knowledge depth: working. Existing models, data and training source code have been checked; real corpus permissions, label quality, connection to the user's runtime and throughput have not been measured.
+- Scope / Object / Subject: training a finance-specific language model from scratch / a 24M English target-asset stance model on a single T4 / MiniMind pinned source, tokenizer, data shards, full-parameter training and GitHub–Colab–Drive collaboration.
+- Type: descriptive research and implementation handoff; this round only writes the plan and does not create a remote repository, install dependencies or start training.
+- Q1: which repositories to reference and what to reuse? Q2: how to carry out the complete workflow and acceptance? Q3: which materials must the user provide? Q4: under the current tool conditions, how to get the code into Colab and get the results back?
+- Done when: Q1–Q4 have executable steps and limits; a new conversation can start directly from sections 13–15; unresolved items have their own closing gates.
 
 ## Canonical sources
 
-| 优先级 | 来源 | 用途 |
+| Priority | Source | Use |
 |---|---|---|
-| 1 原作者源码 | [MiniMind 固定提交](https://github.com/jingyaogong/minimind/tree/f659b55761b754d306bd140573493a6543cafd7f)及[许可证](https://github.com/jingyaogong/minimind/blob/f659b55761b754d306bd140573493a6543cafd7f/LICENSE) | 主架构、预训练/SFT/DPO 与改造边界，Apache-2.0 |
-| 1 原作者仓库 | [LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch)、[nanoGPT](https://github.com/karpathy/nanoGPT)、[Tokenizers](https://github.com/huggingface/tokenizers) | 教学、训练循环与分词器工具；不把多套模型拼接 |
-| 1–2 Google 官方 | [Colab FAQ](https://research.google.com/colaboratory/faq.html)、[GitHub notebook 示例](https://raw.githubusercontent.com/googlecolab/colabtools/main/notebooks/colab-github-demo.ipynb) | 云端运行时、持久化、公开/私有 GitHub notebook 打开方式 |
-| 1–2 方法及数据原始来源 | 文末 S2–S12；此前已核查的原论文、数据卡、SEC 和平台条款 | 数据可用条件、DPO、校准和评估依据；尚未取得的数据不视为已获授权 |
-| 项目输入 | 用户确认的英文、目标资产看多/看空/中性、10–30M、T4 截图与既有研究附件 | 需求与算术预算，不是模型效果证据 |
+| 1 original author's source | [MiniMind pinned commit](https://github.com/jingyaogong/minimind/tree/f659b55761b754d306bd140573493a6543cafd7f) and [license](https://github.com/jingyaogong/minimind/blob/f659b55761b754d306bd140573493a6543cafd7f/LICENSE) | Main architecture, pretraining/SFT/DPO and the limits of modification, Apache-2.0 |
+| 1 original authors' repositories | [LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch), [nanoGPT](https://github.com/karpathy/nanoGPT), [Tokenizers](https://github.com/huggingface/tokenizers) | Teaching, training loop and tokenizer tools; several model codebases are not spliced together |
+| 1–2 Google official | [Colab FAQ](https://research.google.com/colaboratory/faq.html), [GitHub notebook example](https://raw.githubusercontent.com/googlecolab/colabtools/main/notebooks/colab-github-demo.ipynb) | Cloud runtime, persistence, how to open public/private GitHub notebooks |
+| 1–2 original sources for methods and data | S2–S12 at the end; original papers, data cards, SEC and platform terms checked earlier | Conditions of data use, basis for DPO, calibration and evaluation; data not yet obtained are not treated as licensed |
+| Project input | User-confirmed English, target-asset bullish/bearish/neutral, 10–30M, T4 screenshot and existing research attachments | Requirements and arithmetic budget, not evidence of model performance |
 
 ## Findings ledger
 
-| 编号 | 核查结果 | 证据与性质 | 对应问题 |
+| ID | Finding | Evidence and nature | Question |
 |---|---|---|---|
-| F1 | MiniMind 有预训练、全参数 SFT、DPO 实现；当前主线默认约 64M，需自定义为约 24M | 固定源码 S1；原作者 README。事实，修改尚未实施 | Q1、Q2 |
-| F2 | nanoGPT README 已标 deprecated；LLMs-from-scratch 有预训练、分类、指令与 DPO 教学 | 上表原作者仓库，2026-10-09 核查。只保留为辅助参考 | Q1 |
-| F3 | 8192 词表、6 层、512 hidden、8Q/4KV、1664 FFN、共享 embedding 对应 24,255,744 参数 | S1 源码及《训练工程核查》算术；实施时再次计数 | Q2 |
-| F4 | 125M uint16 token IDs 主体约 250MB；可分片按需读取 | 《语料准备与内存空间预算》与 HF/NumPy 官方资料；计算不是峰值实测 | Q2、Q3 |
-| F5 | 8k–12k 合格目标级标签尚未取得，公开通用 positive/negative 标签不能直接当成本任务真值 | 《数据与来源核查》、第 4–5 节及 S7–S9；权限和补标仍有条件 | Q2、Q3 |
-| F6 | Colab 可打开 GitHub notebook；私有仓库可由用户在浏览器授权；共享 notebook 不共享其虚拟机 | Google FAQ 和 GitHub 官方示例；详见《Colab与GitHub协作核查》 | Q3、Q4 |
-| F7 | 当前没有验证过与用户 Colab kernel 的直接连接；浏览器工具的存在不证明能操作其 GPU | 本会话工具与操作记录；未访问/运行用户 notebook。能力边界 | Q4 |
-| F8 | 旧附件中有与主规范不同的切分、标签映射、EOS 监督建议；MiniMind 内置 shift 与外部 shift 不可叠加 | 子代理只读一致性审查、S1 源码、语料预算附件 | Q2 |
-| F9 | 模型效果、持续可用时长、实际 RAM/VRAM 和训练时间仍未知 | 用户只提供 GPU 可用性截图；本次没有训练测量。已知缺口 | Q2、Q3 |
+| F1 | MiniMind has pretraining, full-parameter SFT and DPO implementations; the current main-line default is about 64M and must be customized to about 24M | Pinned source S1; original author's README. Fact; the modification is not yet done | Q1, Q2 |
+| F2 | The nanoGPT README is marked deprecated; LLMs-from-scratch has teaching material on pretraining, classification, instruction tuning and DPO | Original authors' repositories in the table above, checked 2026-10-09. Kept only as auxiliary references | Q1 |
+| F3 | An 8192 vocabulary, 6 layers, hidden size 512, 8Q/4KV, FFN 1664 and shared embeddings give 24,255,744 parameters | S1 source and the arithmetic in "Training engineering check"; count again during implementation | Q2 |
+| F4 | 125M uint16 token IDs take about 250MB for the main payload; they can be sharded and read on demand | "Corpus preparation and memory/space budget" and official HF/NumPy materials; a calculation, not a measured peak | Q2, Q3 |
+| F5 | 8k–12k qualified target-level labels have not been obtained; public generic positive/negative labels cannot be used directly as ground truth for this task | "Data and source check", sections 4–5 and S7–S9; permissions and additional labeling remain conditional | Q2, Q3 |
+| F6 | Colab can open GitHub notebooks; private repositories can be authorized by the user in the browser; a shared notebook does not share its VM | Google FAQ and official GitHub example; details in "Colab and GitHub collaboration check" | Q3, Q4 |
+| F7 | No direct connection to the user's Colab kernel has been verified; the existence of browser tools does not prove they can operate its GPU | Tools and operation record of this session; the user's notebook was not accessed or run. Capability limit | Q4 |
+| F8 | The old attachments contain split, label-mapping and EOS-supervision suggestions that differ from the main specification; MiniMind's built-in shift and an external shift must not be stacked | Read-only consistency review by a subagent, S1 source, corpus budget attachment | Q2 |
+| F9 | Model performance, sustained availability, actual RAM/VRAM and training time are still unknown | The user only provided a GPU availability screenshot; no training measurements this time. Known gap | Q2, Q3 |
 
 ## Scope filter
 
-本项目限定英文短文本对指定资产的立场判断。去掉与目标无关的多模态、联网抓取、自由聊天、交易执行、PPO/GRPO 和在线服务；保留从零预训练、全参数 SFT 和 DPO 学习实验。不把上游的训练价格/耗时转用于用户 T4，也不把金融情绪分类分数称为上涨概率。
+This project is limited to stance judgments on a specified asset in short English texts. Removed as unrelated to the goal: multimodality, web crawling, free chat, trade execution, PPO/GRPO and online serving. Kept: pretraining from scratch, full-parameter SFT and DPO learning experiments. Upstream training cost/time figures are not transferred to the user's T4, and financial sentiment classification scores are not called probabilities of a price rise.
 
 ## Object filter
 
-默认 64M、中文 tokenizer 和现成上游语料不直接适用；改用固定源码、自建英文 8K tokenizer 和本任务材料。通用情感数据必须做目标与语义审核。Notebook 分享链接不等于内核连接；协作方式以第 14 节的实际联通检查为准。F5、F7、F9 保持为待关闭事项，不用估计代替验证。
+The default 64M model, the Chinese tokenizer and the ready-made upstream corpora do not apply directly; instead, use the pinned source, a self-built English 8K tokenizer and material for this task. Generic sentiment data must go through target and semantic review. A notebook share link is not a kernel connection; the collaboration method is decided by the actual connectivity check in section 14. F5, F7 and F9 remain open items; estimates do not replace verification.
 
 ## Conclusions
 
-- 以 MiniMind 为主实现参考、LLMs-from-scratch 为教学参考、nanoGPT 为简洁训练/数据读取参考；自己的 tokenizer 与随机权重完成全部训练阶段。[F1–F3]
-- 分片、微批次、断点恢复使本配置具备合理的 T4 起步条件；先跑短实验才能给实际资源预算。[F3、F4、F9]
-- 用户无需先买服务器、提供 API key 或一次准备几千条标签；先完成账号登录和小批数据审核，正式任务能力验收仍依赖合格数据。[F5–F7]
-- 本文对工程开工已给出明确规范；真实任务质量与无人值守执行尚不具备保证。下一对话可先完成独立本地工作，并验证 Colab 协作路径。[F5、F7–F9]
+- Use MiniMind as the main implementation reference, LLMs-from-scratch as the teaching reference, and nanoGPT as a reference for a concise training/data-reading setup; complete all training stages with our own tokenizer and random weights. [F1–F3]
+- Sharding, micro-batches and checkpoint resume give this configuration reasonable starting conditions on a T4; only short experiments can give the actual resource budget. [F3, F4, F9]
+- The user does not need to buy a server, provide an API key, or prepare thousands of labels up front. First complete account sign-in and the review of a small data batch; acceptance of formal task ability still depends on qualified data. [F5–F7]
+- This document gives a clear specification for starting engineering work; real task quality and unattended execution are not yet guaranteed. The next conversation can first complete independent local work and verify the Colab collaboration path. [F5, F7–F9]
 
 ## Implementation steps / Acceptance criteria
 
-以下为完整实施规范。第 1–12 节规定产品、数据、模型和验收；第 13–15 节规定材料、联通、开工顺序和当前状态。建议值不是已测结果。
+The following is the complete implementation specification. Sections 1–12 specify the product, data, model and acceptance; sections 13–15 specify materials, connectivity, start order and current status. Suggested values are not measured results.
 
-## 1. 项目目标与边界
+## 1. Project goal and boundaries
 
-从随机权重构建一个约 24M 参数的英文自回归语言模型，完成自建分词器、通用预训练、金融领域继续预训练、监督微调（SFT）、偏好后训练（DPO）、概率校准和评估，最后提供批量处理金融短文本的 Notebook。
+Build an English autoregressive language model of about 24M parameters from random weights, completing a self-built tokenizer, general pretraining, financial-domain continued pretraining, supervised fine-tuning (SFT), preference post-training (DPO), probability calibration and evaluation, and finally provide a notebook for batch-processing short financial texts.
 
-最终输入为“文本＋指定资产”，输出文本对该资产表达的看多、看空或中性立场，以及情绪方向分数。用户已确认采用这一目标条件化定义。例如，`Long $AAPL, short $TSLA.` 对 AAPL 和 TSLA 应得到不同结果。
+The final input is "text + specified asset"; the output is the bullish, bearish or neutral stance the text expresses toward that asset, plus a sentiment direction score. The user has confirmed this target-conditioned definition. For example, `Long $AAPL, short $TSLA.` should give different results for AAPL and TSLA.
 
-首版建议聚焦英文、单条短文本、明确指定的美股/ETF 标的；这是减少标注歧义的工作范围，不限制后续扩展到其他资产。输入可以来自用户有权处理的推文、新闻短句或自有文本。模型不负责自动登录 X、抓取全网、预测未来价格或执行交易。
+The first version should focus on English, single short texts and explicitly specified US stocks/ETFs. This is a working scope that reduces labeling ambiguity, not a restriction on later extension to other assets. Input can come from tweets, short news sentences or own texts that the user has the right to process. The model does not log in to X automatically, crawl the web, predict future prices or execute trades.
 
-这是一个使用 LLM 训练方法的专用小型语言模型项目。完成全流程与达到成熟金融分类器的精度，是两个分别验收的目标。主模型各阶段均训练全部参数，不加载其他模型的预训练权重，也不以 LoRA 替代全参数训练。FinBERT 仅作为外部比较基线。
+This is a project for a small specialized language model using LLM training methods. Completing the full workflow and reaching the accuracy of a mature financial classifier are two goals that are accepted separately. The main model trains all parameters at every stage, does not load pretrained weights from other models, and does not replace full-parameter training with LoRA. FinBERT serves only as an external comparison baseline.
 
-## 2. 训练阶段究竟如何划分
+## 2. How exactly the training stages are divided
 
 ```mermaid
 flowchart LR
-    A[获准使用的数据与标签规则] --> B[自建英文 BPE 分词器]
-    B --> C[随机权重初始化]
-    C --> D[通用英文预训练]
-    D --> E[金融领域继续预训练]
-    E --> F[监督微调 SFT]
-    F --> G[DPO 偏好训练对照]
-    F --> H[开发集选择模型]
+    A[Data and label rules approved for use] --> B[Self-built English BPE tokenizer]
+    B --> C[Random weight initialization]
+    C --> D[General English pretraining]
+    D --> E[Financial-domain continued pretraining]
+    E --> F[Supervised fine-tuning SFT]
+    F --> G[DPO preference training comparison]
+    F --> H[Model selection on development set]
     G --> H
-    H --> I[独立校准集拟合温度]
-    I --> J[锁定测试集评估]
-    J --> K[批量标签与分数输出]
+    H --> I[Fit temperature on independent calibration set]
+    I --> J[Evaluate on locked test set]
+    J --> K[Batch labels and score output]
 ```
 
-“普通训练”不是独立、统一的技术阶段。本计划把它具体落实为金融领域继续预训练和 SFT。SFT 本身已经属于后训练；DPO 是后训练中的另一种方法。完整流程可以包含 DPO，但不要求再加入 PPO、奖励模型和在线强化学习。DPO 原始方法使用偏好对与固定参考策略，不需要另行训练奖励模型。[S3]
+"Ordinary training" is not an independent, unified technical stage. This plan implements it concretely as financial-domain continued pretraining and SFT. SFT itself is already post-training; DPO is another method within post-training. The complete workflow can include DPO but does not require adding PPO, a reward model or online reinforcement learning. The original DPO method uses preference pairs and a fixed reference policy and does not need a separately trained reward model. [S3]
 
-| 阶段 | 学习材料 | 要学会什么 | 主要目标函数 |
+| Stage | Learning material | What it should learn | Main objective |
 |---|---|---|---|
-| 分词器 | 训练分区中的英文与金融文本 | 把文字稳定转换为 token | BPE 词表训练 |
-| 通用预训练 | 连续英文文本 | 基本语言结构与续写 | 下一 token 交叉熵 |
-| 金融继续预训练 | 金融文本＋少量通用回放 | 金融词汇、句式和表达 | 下一 token 交叉熵 |
-| SFT | 文本、目标资产、人工标签 | 按固定任务判断立场 | 正确标签 token 的交叉熵 |
-| DPO | 同一输入的正确/较优与错误/较差答案 | 强化困难案例中的标签偏好 | 相对 SFT 参考策略的 DPO 损失 |
-| 校准 | 保留的带标签数据 | 改善概率数值的可信程度 | 温度参数的负对数似然 |
+| Tokenizer | English and financial text in the training partition | Convert text to tokens stably | BPE vocabulary training |
+| General pretraining | Continuous English text | Basic language structure and continuation | Next-token cross-entropy |
+| Financial continued pretraining | Financial text + a little general replay | Financial vocabulary, sentence patterns and expressions | Next-token cross-entropy |
+| SFT | Text, target asset, human label | Judge stance on a fixed task | Cross-entropy of the correct label token |
+| DPO | Correct/better and wrong/worse answers to the same input | Strengthen the label preference on hard cases | DPO loss relative to the SFT reference policy |
+| Calibration | Held-out labeled data | Make probability values more trustworthy | Negative log-likelihood as a function of the temperature parameter |
 
-## 3. 产品输出与分数的精确定义
+## 3. Exact definition of the product output and the score
 
-首版只要求输入一个目标资产；多资产文本由调用程序逐目标运行。需要事先准备稳定的资产 ID、ticker 和名称映射，避免把 `CAT` 等普通英文词误认成股票。
+The first version requires only one target asset per input; multi-asset texts are run once per target by the calling program. A stable mapping of asset ID, ticker and name must be prepared in advance, so that ordinary English words such as `CAT` are not mistaken for stocks.
 
-**目标关联门控由输入层负责。**V1 要求文本或获准提供的元数据中存在可核验的目标 cashtag、公司名或别名；裸普通英文词不能直接当 ticker。无明确关联或关系有歧义时，返回空标签/分数并请求复核，不能声称三类 logits 自动识别了“不相关”。`target_not_supported` 是保守的输入规则状态，不是训练出的第四类。正式数据中保留关联证据或字符位置，以便审核和目标基线使用。
+**The target-link gate is the responsibility of the input layer.** V1 requires a verifiable target cashtag, company name or alias in the text or in metadata approved for use; a bare ordinary English word cannot be taken directly as a ticker. When there is no clear link or the relation is ambiguous, return an empty label/score and request review; do not claim that the three-class logits automatically recognize "unrelated". `target_not_supported` is a conservative input-rule status, not a trained fourth class. Formal data keep the link evidence or character positions, for review and for use by the target baseline.
 
-以下为人工构造的格式示例，不是训练结果：
+The following is a hand-constructed format example, not a training result:
 
 ```json
 {
@@ -119,252 +119,252 @@ flowchart LR
 }
 ```
 
-模型在固定答案位置输出三个专用标签 token 的 logits。取这三个位置的值并经温度缩放：
+At a fixed answer position, the model outputs logits for three dedicated label tokens. Take the values at these three positions and apply temperature scaling:
 
 \[
 p_k=\frac{\exp(z_k/T)}{\sum_{j\in\{bearish,neutral,bullish\}}\exp(z_j/T)},\quad T>0.
 \]
 
-这是在预定义三类输出空间内的概率归一化。模型通过 SFT 学习这一标签空间；校准只在最终选择的模型上进行。[S4] 程序生成 JSON 并计算数值，避免让模型自由生成小数和字段。
+This is probability normalization within a predefined three-class output space. The model learns this label space through SFT; calibration is done only on the finally selected model. [S4] The program generates the JSON and computes the values, so the model does not freely generate decimals and fields.
 
 \[
 \text{sentiment\_score}=100(p_{bullish}-p_{bearish}),\qquad
 \text{confidence}=\max_k p_k.
 \]
 
-这个分数是本项目把三类编码为 −1、0、+1 后直接计算的方向期望。它不是实际收益率、上涨概率，也不是独立测量的情绪强度。若后续需要与人工连续强度评分对应，应另建回归目标和验证实验，不能直接把两者等同。
+This score is the expected direction computed directly once this project encodes the three classes as −1, 0, +1. It is not an actual return, not a probability of a price rise, and not an independently measured sentiment intensity. If it later needs to correspond to human continuous intensity ratings, a separate regression target and validation experiment are needed; the two cannot be equated directly.
 
-| 概率分布（看空／中性／看多） | 分数 | 应如何理解 |
+| Probability distribution (bearish / neutral / bullish) | Score | How to read it |
 |---|---:|---|
-| 0.05／0.90／0.05 | 0 | 很可能是中性 |
-| 0.50／0.00／0.50 | 0 | 方向非常不确定 |
-| 0.05／0.15／0.80 | 75 | 偏看多，仍有分类不确定性 |
+| 0.05 / 0.90 / 0.05 | 0 | Very likely neutral |
+| 0.50 / 0.00 / 0.50 | 0 | Direction very uncertain |
+| 0.05 / 0.15 / 0.80 | 75 | Leans bullish, with some classification uncertainty |
 
-低置信度时保留候选标签并显示 `needs_review=true`；目标无法解析、文本截断丢失关键内容或语言不支持时，允许 `label=null, sentiment_score=null` 并给出原因。目标本身合法但文本及获准输入的元数据无法支持其与该目标的关系时，返回 `status=target_not_supported` 和空标签/分数，不归入 neutral。不要用“中性”代替“无法判断”。复核准则在开发阶段预登记；最终模型固定后，将 calibration 分区再按组拆为温度拟合集和阈值选择集，前者拟合 T，后者选择复核阈值。数据太少则固定并公示阈值，报告覆盖率曲线；不能查看最终测试标签后调整。
+At low confidence, keep the candidate label and show `needs_review=true`. When the target cannot be resolved, truncation of the text loses key content, or the language is unsupported, `label=null, sentiment_score=null` is allowed, with a reason. When the target itself is valid but the text and approved metadata cannot support its relation to that target, return `status=target_not_supported` with an empty label/score; do not classify it as neutral. Do not use "neutral" in place of "inconclusive". The review criteria are pre-registered during development. After the final model is fixed, the calibration partition is split again by group into a temperature-fitting set and a threshold-selection set: the first fits T, the second selects the review threshold. If there are too few data, fix and publish the threshold and report the coverage curve; it cannot be adjusted after looking at the final test labels.
 
-## 4. 标签规则：先定义判断对象，再准备大量数据
+## 4. Labeling rules: define the object of judgment first, then prepare large amounts of data
 
-首版判断“文本中可直接支持的、针对指定资产的投资立场或前景倾向”。不依据后来股价补标签，也不根据宏观常识擅自推断作者没有表达的资产观点。
+The first version judges "the investment stance or outlook toward the specified asset that the text directly supports". Labels are not filled in from later stock prices, and asset views that the author did not express are not inferred from general macro knowledge.
 
-| 类别/状态 | 标注原则 | 人工构造示例 |
+| Class/status | Labeling principle | Hand-constructed example |
 |---|---|---|
-| Bullish | 对目标表达正面前景、买入/做多或上涨预期 | `Still bullish on $MSFT after this guidance.` |
-| Bearish | 对目标表达负面前景、做空或下跌预期 | `I am short $TSLA; margins look unsustainable.` |
-| Neutral | 提及目标但不表达明确投资方向 | `$AAPL reports earnings on Thursday.` |
-| 需要复核 | 讽刺、引述归属不清、矛盾立场、缺少上下文 | `Great, another flawless quarter...` |
+| Bullish | Expresses a positive outlook, buying/going long, or an expected rise for the target | `Still bullish on $MSFT after this guidance.` |
+| Bearish | Expresses a negative outlook, shorting, or an expected fall for the target | `I am short $TSLA; margins look unsustainable.` |
+| Neutral | Mentions the target but expresses no clear investment direction | `$AAPL reports earnings on Thursday.` |
+| Needs review | Sarcasm, unclear attribution of quotes, contradictory stance, missing context | `Great, another flawless quarter...` |
 
-`Shares rose 5% yesterday.` 是历史行情陈述；在这套“投资立场”规则下默认中性，除非文本另外表达方向。若采用的公开数据把这种句子标为积极，应保留原标签，并经审核重标后才进入主任务。不能把所有来源的 positive 自动等同于 bullish。
+`Shares rose 5% yesterday.` is a statement about past price movement; under this "investment stance" rule it is neutral by default unless the text also expresses a direction. If an adopted public dataset labels such a sentence as positive, keep the original label; the sentence enters the main task only after review and relabeling. Positive labels from every source cannot automatically be equated with bullish.
 
-先标 200 条，检查否定、条件句、反讽、多资产和引述规则；再扩展到至少 500 条规则验证样本。理想情况下由第二人独立复核至少 20%；若只有一人，采用延时复标并如实报告，不能称为双人独立标注。记录分歧与裁决理由。未裁决样本不强行填入三分类金标准。
+First label 200 rows and check the rules for negation, conditionals, irony, multiple assets and quotation; then extend to at least 500 rule-validation samples. Ideally a second person independently reviews at least 20%; if there is only one person, use delayed relabeling and report it truthfully; it cannot be called two-person independent annotation. Record disagreements and the reasons for adjudication. Samples without adjudication are not forced into the three-class gold standard.
 
-## 5. 数据方案与取得权限
+## 5. Data plan and permissions
 
-本项目区分三种材料：无标签预训练文本、带标签 SFT 样本、偏好对。数量均是计划目标，实际必须在取得文件后按固定 revision 重新计数和去重。
+This project distinguishes three kinds of material: unlabeled pretraining text, labeled SFT samples, and preference pairs. All quantities are planning targets; actual numbers must be recounted and deduplicated at a fixed revision after the files are obtained.
 
-| 数据来源 | 建议用途 | 已核查信息与接入边界 |
+| Data source | Suggested use | Checked information and access limits |
 |---|---|---|
-| FineWeb-Edu 的受控英文子集 | 通用预训练 | 数据卡提供流式读取，标示 ODC-By，且受 Common Crawl 条款约束；保存版本、来源及适用条款，不下载完整库。[S5] |
-| SEC 英文金融教育材料、财报正文 | 金融继续预训练 | 需提取正文、去重、分段；财报语言与推文存在领域差异，不能代替推文任务标注。[S6] |
-| SemEval-2017 Task 5 | 目标条件化金融情绪参考、评分/评测研究 | 原任务针对公司/cashtag，并有 −1 到 +1 连续分数。文件取得和 data release agreement 须先完成；本次没有确认完整训练许可。部分标签依赖外链语境，接入时须复核是否仅凭本项目输入可支持，不能只按分数阈值转标签。[S7] |
-| FiQA 2018 | 目标与方面相关的金融情绪参考 | 原任务包含 target/aspect 与连续分数；官网对训练/测试集列有非商业限制，完整文件尚未在本次读取。[S8] |
-| zeroshot/twitter-financial-news-sentiment | 有条件的辅助标注来源 | 只有 text、label，缺少目标资产与连续强度；需重新核查实际计数、来源及可用权限，并补目标/审核语义。[S9] |
-| 用户自有、明确获准训练的英文金融短文本 | 主任务 SFT、DPO、独立测试 | 按本文规则标注，记录来源、许可范围、时间、目标、重复簇与标注人。 |
+| Controlled English subset of FineWeb-Edu | General pretraining | The data card offers streaming reads, states ODC-By, and is subject to Common Crawl terms; save the version, source and applicable terms; do not download the full corpus. [S5] |
+| SEC English financial education material, filing full text | Financial continued pretraining | Full text must be extracted, deduplicated and segmented; filing language differs in domain from tweets and cannot replace tweet task labels. [S6] |
+| SemEval-2017 Task 5 | Reference for target-conditioned financial sentiment, scoring/evaluation research | The original task targets companies/cashtags and has continuous scores from −1 to +1. Obtaining the files and the data release agreement must be completed first; full training permission was not confirmed this time. Some labels depend on context from external links; at intake, check whether they can be supported from this project's input alone; do not convert scores to labels by a threshold only. [S7] |
+| FiQA 2018 | Reference for target- and aspect-related financial sentiment | The original task includes target/aspect and continuous scores; the official site lists non-commercial restrictions for the train/test sets; the full files were not read this time. [S8] |
+| zeroshot/twitter-financial-news-sentiment | Conditional auxiliary labeling source | Only text and label, with no target asset or continuous intensity; actual counts, source and usable permissions must be re-checked, and target/review semantics added. [S9] |
+| English short financial texts owned by the user and explicitly approved for training | Main-task SFT, DPO, independent testing | Label by the rules in this document; record source, license scope, time, target, duplicate cluster and annotator. |
 
-X 的现行开发者协议对使用其 API 或内容训练/微调 foundation/frontier models 有限制；企业协议的 AI 训练限制还可能更宽。适用条款与明确授权应在取得数据时确认。公开可见、用户能复制、或第三方镜像声明 MIT，都不足以单独证明可用于本项目训练。具体定位为开发者协议 III.A(k)，与企业 MLA §4.1(k) 的适用范围分别核查。[S12] 没有明确训练权限的 X 内容不进入预训练、SFT 或 DPO；可先用有权使用的英文金融材料和自编样本完成流程。此处不对未取得的数据作许可结论。
+X's current developer agreement restricts using its API or content to train/fine-tune foundation/frontier models; the AI-training restrictions in the enterprise agreement may be broader. The applicable terms and explicit authorization should be confirmed when data are obtained. Being publicly visible, copyable by the user, or declared MIT by a third-party mirror is not by itself enough to prove the data can be used for training in this project. The specific locations are Developer Agreement III.A(k) and Enterprise MLA §4.1(k); their scopes are checked separately. [S12] X content without explicit training permission does not enter pretraining, SFT or DPO; the workflow can first be completed with English financial material we have rights to and with self-written samples. No licensing conclusion is drawn here for data not yet obtained.
 
-### 数据量的首轮预算
+### First-round data budget
 
-- **通用预训练：累计处理 100M tokens。** 首先做 1M-token 技术试跑，检查通过后扩展。数据来自冻结清单，不要求一次性装入内存。
-- **金融继续预训练：累计处理 25M tokens。** 初始混合建议为 80% 金融、20% 通用回放，即约 20M 金融＋5M 通用；这是待验证的实验配比。
-- **目标条件化标注：规划 8,000–12,000 条合格样本。** 数量不足时先做 500–1,000 条小实验，按实际样本量报告，不把合成数据算成人工真实样本。
-- **DPO：500–2,000 对。** 仅由训练分区和额外获准训练的材料构造；优先选择 SFT 容易混淆的目标、否定与条件表达，经人工核查偏好。
+- **General pretraining: 100M tokens processed cumulatively.** First a 1M-token technical trial run, then expand after the checks pass. Data come from a frozen manifest and need not fit into memory at once.
+- **Financial continued pretraining: 25M tokens processed cumulatively.** Suggested initial mix: 80% finance, 20% general replay, i.e. about 20M finance + 5M general; this ratio is an experimental setting still to be validated.
+- **Target-conditioned labels: plan 8,000–12,000 qualified samples.** If there are not enough, first run a small experiment with 500–1,000 samples, report by the actual sample count, and do not count synthetic data as real human samples.
+- **DPO: 500–2,000 pairs.** Built only from the training partition and additional material approved for training; prefer targets, negations and conditional expressions that SFT easily confuses, with the preferences checked by a human.
 
-“累计处理 tokens”包括重复遍历；同时报告去重后的独立文本量、独立 token 数和重复次数。100M＋25M 是可调整的首轮计算预算，不代表充分训练标准。若验证仍改善且资源允许，再按预先记录的实验将预算扩大，而不是一开始扩大模型。
+"Tokens processed cumulatively" includes repeated passes; also report the deduplicated amount of independent text, the number of independent tokens and the number of repetitions. 100M + 25M is an adjustable first-round compute budget, not a standard for sufficient training. If validation is still improving and resources allow, enlarge the budget through a pre-recorded experiment, rather than enlarging the model from the start.
 
-### 切分与泄漏控制
+### Splitting and leakage control
 
-1. 保存文本来源、时间、原始 ID、目标资产、来源许可、内容哈希、重复/事件簇 ID、标签与裁决记录。
-2. 主任务按时间规划约 70% train、10% development、10% calibration、10% test。比例是目标；实际数量由组约束和类别分布决定。
-3. 同一推文的不同目标、转推、近重复文本、同一事件改写不能跨分区。先设时间边界，再剔除跨界污染或将整个簇留到后面的分区，不能把未来文本挪入训练区。
-4. 缺少可靠时间戳的来源只做分组划分，并明确标为“非时间外推评估”；保留官方测试分区，不将其回流训练。
-5. 在分词器训练和所有预训练前，冻结 development、calibration、test 数据，并从训练语料剔除其原文及近重复项。无法排除公共网络预训练污染时，披露检测范围，并以另采的新文本测试补充。
-6. 单独做未见资产或未见作者的压力测试；不宣称仅凭时间切分就证明跨资产泛化。
+1. Save the text source, time, original ID, target asset, source license, content hash, duplicate/event cluster ID, label and adjudication record.
+2. Plan the main task by time as about 70% train, 10% development, 10% calibration, 10% test. The proportions are targets; actual counts are decided by group constraints and the class distribution.
+3. Different targets of the same tweet, retweets, near-duplicate texts and rewrites of the same event must not cross partitions. Set the time boundary first, then remove cross-boundary contamination or keep the whole cluster in the later partition; future texts must not be moved into the training partition.
+4. Sources without reliable timestamps are split only by group and explicitly marked as "not a temporal extrapolation evaluation"; keep the official test partition and do not feed it back into training.
+5. Before tokenizer training and all pretraining, freeze the development, calibration and test data, and remove their texts and near-duplicates from the training corpus. Where contamination from public web pretraining cannot be ruled out, disclose the scope of detection and add a test on newly collected text.
+6. Run a separate stress test on unseen assets or unseen authors; do not claim that a time split alone proves cross-asset generalization.
 
-正式预训练开跑前至少要封存评测分区的**原文池**，标签可稍后补齐。后续新增训练数据逐批排除与封存池的哈希和近重复碰撞，并记录检测方法及阈值。尚无正式数据时，自编样本只用于 `smoke` 技术验证；其 tokenizer、数据和权重置于独立目录，不作为正式训练的初始化检查点。主任务 development/calibration/test 均不用于预训练 loss 调参；另设只用于预训练诊断的保留文本。
+Before formal pretraining starts, at least the **text pool** of the evaluation partitions must be sealed; labels can be completed later. Training data added later are checked batch by batch for hash and near-duplicate collisions with the sealed pool, recording the detection method and threshold. While there is no formal data, self-written samples are used only for `smoke` technical verification; their tokenizer, data and weights live in separate directories and are not used as the initialization checkpoint for formal training. The main task's development/calibration/test partitions are not used to tune pretraining loss; a separate held-out text set is used only for pretraining diagnostics.
 
-## 6. 模型与工程选择
+## 6. Model and engineering choices
 
-主工程采用 **MiniMind 的固定源码作为改造起点**，用自己的分词器、数据、配置和随机模型权重。固定参考提交：`f659b55761b754d306bd140573493a6543cafd7f`。它已有预训练、全参数 SFT 和 DPO 路径；当前主线默认配置和早期 26M 教程不同。[S1]
+The main engineering uses **MiniMind's pinned source as the starting point for modification**, with our own tokenizer, data, configuration and random model weights. Pinned reference commit: `f659b55761b754d306bd140573493a6543cafd7f`. It already has pretraining, full-parameter SFT and DPO paths; the current main-line default configuration differs from the early 26M tutorial. [S1]
 
-| 项目 | 主规格 |
+| Item | Main specification |
 |---|---:|
-| 架构 | Decoder-only Transformer，MiniMind 的稠密模型，关闭 MoE |
-| 词表 | 8,192，包含所有特殊 token 和三个标签 token |
-| 层数 | 6 |
-| 隐藏维度 | 512 |
+| Architecture | Decoder-only Transformer, MiniMind's dense model, MoE off |
+| Vocabulary | 8,192, including all special tokens and three label tokens |
+| Layers | 6 |
+| Hidden size | 512 |
 | Query heads / KV heads | 8 / 4 |
-| FFN 中间维度 | 1,664 |
-| 输入与输出 embedding | 共享权重 |
-| Q/K 归一化 | 开启，与固定提交的计数口径一致；其余有效配置完整导出 |
-| 总参数 | **24,255,744，约 24.26M**，按固定源码的默认归一化等部件计算 |
-| 预训练上下文 | 先 256 做试跑，再固定 512 |
-| GPU 计算 | FP16 autocast＋GradScaler；优化器主权重保持 FP32 |
-| 初始 micro-batch / 累积步数 | 4 / 8；OOM 时先减 micro-batch，再按有效 token 数调整累积 |
+| FFN intermediate size | 1,664 |
+| Input and output embedding | Shared weights |
+| Q/K normalization | On, matching the counting convention of the pinned commit; all other effective configuration exported in full |
+| Total parameters | **24,255,744, about 24.26M**, computed with the pinned source's default normalization and other components |
+| Pretraining context | 256 for the trial run first, then fixed at 512 |
+| GPU compute | FP16 autocast + GradScaler; optimizer master weights kept in FP32 |
+| Initial micro-batch / accumulation steps | 4 / 8; on OOM, reduce the micro-batch first, then adjust accumulation by effective token count |
 
-同样配置升到 7 层约为 27.60M，可作为后续对照。实现时以 `sum(p.numel() for p in model.parameters())` 再核验；词表大小、特殊 token 或网络部件变化都会改变参数计数。
+The same configuration with 7 layers is about 27.60M and can serve as a later comparison. During implementation, re-verify with `sum(p.numel() for p in model.parameters())`; changes in vocabulary size, special tokens or network components all change the parameter count.
 
-这一步会比上一轮建议 nanoGPT 多一些配置整理，但能复用现有 SFT/DPO 结构，更符合本次“完整训练链”的目标。代码和架构来源应在最终项目 README 中注明；自训练权重不等于发明了新的架构。
+This step needs somewhat more configuration work than the nanoGPT suggestion of the previous round, but it reuses the existing SFT/DPO structure and fits this round's goal of a "complete training chain" better. Code and architecture sources should be credited in the final project README; self-trained weights do not mean a new architecture was invented.
 
-### 必须安排的源码改造
+### Required source modifications
 
-这些是待实现工作，不是上游仓库已经开箱支持的功能，详见同目录《训练工程核查》。
+These are work items still to be implemented, not features the upstream repository supports out of the box; for details see the companion note "Training engineering check" in the same directory.
 
-- 统一模型配置和 tokenizer 路径。现有 CLI 没有完整暴露自建 8K tokenizer 所需参数；不能只替换 tokenizer 文件、保留默认 6,400 词表。
-- 固定英文任务模板，去掉本项目不需要的随机中英 system 和空思考模板。分词器训练仅用训练文本；保存特殊 token ID 和版本哈希。[S2]
-- 预训练完整分段/打包，文档之间插入 EOS；V1 允许普通因果注意力跨文档边界，不实现块对角注意力。长文尾部不得静默丢弃；语料尾段通过保留/遮蔽 padding 处理并统计有效 token。
-- **唯一移位方案：**每个预训练样本读 513 个 IDs，`x=ids[:-1]`、`y=ids[1:]`；调用模型只取 logits，**不传 `labels`**，在外部计算 `CE(logits,y)`，因此不触发 MiniMind 内部 shift。SFT/DPO 直接取完整 prompt 最后位置预测标签的 logits，不再对标签做第二次 shift。SFT 的标签 CE 仍覆盖完整词表；DPO 使用同样位置的完整词表 log-softmax。用人工短序列核对目标索引。
-- SFT 不对 prompt 计算 loss，只在 prompt 末位 logits 上计算正确标签的完整词表交叉熵；全模型参数仍参与更新。三个预留标记 `<|bearish|>`、`<|neutral|>`、`<|bullish|>` 必须各占一个 token，每个有效样本恰有一个标签监督项。推理使用同一位置的三类 logits，再在三类内归一化。若后续改用仅三类交叉熵，记录为单独实验。
-- SFT/DPO 中 EOS、prompt、padding 均不承担本任务的监督损失；模板确定后训练与推理一致。超长任务输入先拒绝/复核，不静默截掉资产或标签。磁盘 uint16 只保存非负 IDs；运行时需要的 `-100` labels 只能在有符号 int64 张量中构造。
-- DPO 的 chosen/rejected 使用相同 prompt 和单标签答案，只计算该预测位置的两个标签 log probability；保持参考模型固定、无梯度、eval 状态。逐样本断言两个标签有效、不同且监督项存在，不能让 prompt/padding/EOS 差异决定偏好损失。每个原始输入限制 pair 数或按原始输入加权，避免一条帖子因多次配对被过度计算。
-- 统一输出、加载和恢复路径。上游存在固定相对目录，不能认为改 `save_dir` 就同时解决所有检查点位置。
-- 在 optimizer update 完成且梯度清零后的边界保存 FP32 主权重、优化器、scheduler、GradScaler、RNG、数据位置、累计 tokens、配置及数据/tokenizer 哈希。单独保留 best 和 latest，避免只保存推理用半精度权重。
-- scheduler 只随成功的 optimizer 更新前进；分别记录累计处理 tokens、溢出跳步和成功更新数。初期 `num_workers=0`，恢复 cursor 指向下一批尚未消费的数据。Drive 备份先复制为临时文件，核对 hash 后写完成标记；恢复只接受清单与 hash 一致的完整版本，不能只看文件名存在。
-- 默认关闭 compile，先使用 PyTorch SDPA 可用路径；不要求单独安装外部 FlashAttention。逐阶段检查 CUDA/PyTorch、依赖与数据格式兼容性。
+- Unify the model configuration and tokenizer path. The existing CLI does not fully expose the parameters needed for a self-built 8K tokenizer; we cannot just replace the tokenizer file and keep the default 6,400 vocabulary.
+- Fix the English task template and remove the random Chinese/English system prompts and empty thinking templates this project does not need. Train the tokenizer only on training text; save the special token IDs and the version hash. [S2]
+- Pretraining does full segmentation/packing with EOS inserted between documents; V1 allows ordinary causal attention across document boundaries and does not implement block-diagonal attention. The tail of a long document must not be silently dropped; the corpus tail is handled by keeping/masking padding, and effective tokens are counted.
+- **Single shift scheme:** each pretraining sample reads 513 IDs, `x=ids[:-1]`, `y=ids[1:]`; the model is called only for logits, **without passing `labels`**, and `CE(logits,y)` is computed outside, so MiniMind's internal shift is not triggered. SFT/DPO take the logits that predict the label directly at the last position of the full prompt and do not shift the label a second time. The SFT label CE still covers the full vocabulary; DPO uses the full-vocabulary log-softmax at the same position. Check the target indices with hand-made short sequences.
+- SFT computes no loss on the prompt; it computes the full-vocabulary cross-entropy of the correct label only on the logits at the last prompt position; all model parameters are still updated. The three reserved tokens `<|bearish|>`, `<|neutral|>`, `<|bullish|>` must each be a single token, and each valid sample has exactly one label supervision term. Inference uses the three-class logits at the same position, normalized within the three classes. If we later switch to three-class-only cross-entropy, record it as a separate experiment.
+- In SFT/DPO, EOS, prompt and padding carry no supervision loss for this task; once the template is fixed, training and inference are consistent. Over-long task inputs are first rejected/sent for review; the asset or label is never silently truncated. On-disk uint16 stores only non-negative IDs; the `-100` labels needed at runtime can only be built in signed int64 tensors.
+- DPO's chosen/rejected use the same prompt and single-label answers and compute only the two label log probabilities at that prediction position; the reference model is kept fixed, gradient-free and in eval mode. Assert per sample that the two labels are valid and different and that the supervision term exists; differences in prompt/padding/EOS must not decide the preference loss. Limit the number of pairs per original input or weight by original input, so that one post is not overcounted through many pairings.
+- Unify the output, load and resume paths. Upstream has fixed relative directories; do not assume that changing `save_dir` solves all checkpoint locations at once.
+- At the boundary after an optimizer update completes and gradients are zeroed, save the FP32 master weights, optimizer, scheduler, GradScaler, RNG, data position, cumulative tokens, configuration and data/tokenizer hashes. Keep best and latest separately; do not save only half-precision inference weights.
+- The scheduler advances only with successful optimizer updates; record cumulative processed tokens, overflow-skipped steps and successful updates separately. Initially `num_workers=0`, and the resume cursor points to the next batch not yet consumed. A Drive backup is first copied as a temporary file, the hash is checked, and then a completion marker is written; resume accepts only a complete version whose manifest and hashes agree, not merely the presence of a file name.
+- Compile is off by default; use the available PyTorch SDPA path first; a separate installation of external FlashAttention is not required. Check CUDA/PyTorch, dependency and data-format compatibility stage by stage.
 
-## 7. 各训练阶段的执行计划
+## 7. Execution plan for each training stage
 
-下面的学习率是预先给定的起始实验值，需用开发数据和 loss/梯度诊断调整；不是上游为金融推文验证过的最优值。
+The learning rates below are preset starting values for experiments and must be tuned with development data and loss/gradient diagnostics; they are not optima that upstream validated for financial tweets.
 
-| 阶段 | 初始训练设置 | 交付物与关卡 |
+| Stage | Initial training setup | Deliverables and gates |
 |---|---|---|
-| P0：任务、来源与基线 | 标注规则 v1、数据清单、小样本审核；多数类与 TF-IDF＋线性分类器 | 明确任务口径、权限与切分；基线可重复 |
-| P1：tokenizer 与模型 | Byte-level BPE，8K 词表；随机初始化；完成前向、反向和保存恢复试跑 | 可往返编码 cashtag/数字/标点；参数约 24.26M；固定 token IDs |
-| P2：通用预训练 | 1M-token 试跑后 100M-token 总预算；AdamW，峰值 LR 起点 3e-4，warmup 约前 2%，随后余弦下降；梯度裁剪 1.0 | 英文保留集 loss 改善；保存学习曲线与固定 prompt 续写 |
-| P3：金融继续预训练 | 从 P2 最佳权重继续；25M-token 总预算、80/20 混合；LR 起点 1e-4，重新设置该阶段调度 | 同时测金融与通用保留集；记录领域收益和通用退化 |
-| P4：SFT | 所有参数可训练；LR 起点 1e-5–5e-5；最多先试 1–3 epochs，以 dev macro-F1 选检查点 | 标签映射/遮蔽正确；输出模型三类概率；形成 SFT 基线 |
-| P5：DPO | 从同一 SFT 检查点启动；冻结该 SFT 参考模型；LR 起点 1e-6–1e-5，beta 起点 0.1，先 1 epoch，micro-batch 从 1 对开始 | 完成偏好学习实验；与 SFT、继续训练同等新增标签数据的 SFT 对照比较 |
-| P6：选择与校准 | development 选择 SFT 或 DPO；锁定后在 calibration 的温度子集拟合 T，再在独立阈值子集选择复核阈值 | 最终模型、温度、复核阈值、配置冻结 |
-| P7：最终测试与演示 | test 仅做最终报告；离线批量 CSV/JSONL | 标签、分数、置信度、复核标记、错误分析与模型卡 |
+| P0: task, sources and baselines | Labeling rules v1, data manifest, small-sample review; majority class and TF-IDF + linear classifier | Clear task convention, permissions and splits; baselines reproducible |
+| P1: tokenizer and model | Byte-level BPE, 8K vocabulary; random initialization; trial runs of forward, backward, save and resume | Round-trip encoding of cashtags/numbers/punctuation; about 24.26M parameters; fixed token IDs |
+| P2: general pretraining | A 1M-token trial run, then a 100M-token total budget; AdamW, peak LR starting at 3e-4, warmup over about the first 2%, then cosine decay; gradient clipping 1.0 | English held-out loss improves; save learning curves and fixed-prompt continuations |
+| P3: financial continued pretraining | Continue from the best P2 weights; 25M-token total budget, 80/20 mix; LR starting at 1e-4, with a new schedule for this stage | Measure both financial and general held-out sets; record domain gain and general degradation |
+| P4: SFT | All parameters trainable; LR starting at 1e-5–5e-5; try at most 1–3 epochs first; select the checkpoint by dev macro-F1 | Label mapping/masking correct; the model outputs three-class probabilities; SFT baseline established |
+| P5: DPO | Start from the same SFT checkpoint; freeze that SFT reference model; LR starting at 1e-6–1e-5, beta starting at 0.1, 1 epoch first, micro-batch starting at 1 pair | Preference learning experiment completed; compared with SFT and with an SFT control trained further on the same amount of new label data |
+| P6: selection and calibration | Choose SFT or DPO on development; after locking, fit T on the temperature subset of calibration, then select the review threshold on the independent threshold subset | Final model, temperature, review threshold and configuration frozen |
+| P7: final test and demo | Test used only for the final report; offline batch CSV/JSONL | Labels, scores, confidence, review flags, error analysis and model card |
 
-预训练验证使用固定保留文本与同一 tokenizer；不同 tokenizer 的 perplexity 不能直接横比。P3 的领域收益不能只看金融 loss，必须同时看通用 loss 和后续任务表现。
+Pretraining validation uses fixed held-out text and the same tokenizer; perplexities under different tokenizers cannot be compared directly. The domain gain in P3 cannot be judged by financial loss alone; general loss and later task performance must also be examined.
 
-DPO 在本项目中是需要完成的学习实验，但是否用作最终模型取决于开发集证据。对于单标签三分类，它本质上强化类别偏好，未必优于监督分类；不能把 DPO 的文本生成研究结果直接当成金融分类提升保证。[S3] 若 DPO 更差，交付仍包含 DPO 检查点、训练记录和负结果，最终推理选择 SFT。校准必须作用于最后选定的检查点，不能沿用 SFT 的温度去校准改变后的 DPO 模型。单一正温度 T 保持 argmax，因此不会提高固定 argmax 分类的 F1；它改变的是概率数值及由阈值决定的复核行为。[S4]
+In this project DPO is a learning experiment that must be completed, but whether it is used as the final model depends on development-set evidence. For single-label three-class classification, it essentially strengthens a class preference and is not necessarily better than supervised classification; DPO results from text-generation research cannot be taken directly as a guarantee of improvement in financial classification. [S3] If DPO is worse, the deliverables still include the DPO checkpoint, the training records and the negative result, and final inference uses SFT. Calibration must be applied to the finally selected checkpoint; SFT's temperature cannot be reused to calibrate a DPO model that has changed. A single positive temperature T preserves the argmax, so it does not improve the F1 of a fixed-argmax classification; what it changes is the probability values and the review behavior that thresholds determine. [S4]
 
-## 8. T4、Colab 和时间预算
+## 8. T4, Colab and time budget
 
-截图证明 GPU 可用，没有提供此模型的训练吞吐。24.26M 模型的 FP32 参数、梯度和 Adam 两组状态按 16 bytes/参数粗算约 0.36 GiB；实际训练还需要激活、logits、工作区和 CUDA 缓存，DPO 还有参考模型及成对输入，因此这个数不是峰值显存。
+The screenshot proves that a GPU is available; it provides no training throughput for this model. For the 24.26M model, FP32 parameters, gradients and the two Adam states come to roughly 0.36 GiB at 16 bytes/parameter; actual training also needs activations, logits, workspace and CUDA cache, and DPO adds a reference model and paired inputs, so this number is not peak memory.
 
-每个阶段先跑 50 个前向/反向微批次热身，再测约 200 个微批次，累计梯度更新照常进行；这些是 micro-batches，不能误写为 250 次 optimizer updates。排除验证与保存的耗时，记录有效非 padding tokens/s、峰值 allocated/reserved 显存、梯度溢出/跳步数。另记录包含评估和保存的端到端速度，报告测试实际消耗的 tokens。预训练、SFT、DPO 分别测量；试跑和正式预算分开记账。
+Each stage first runs 50 forward/backward micro-batches as warmup, then measures about 200 micro-batches, with gradient-accumulation updates proceeding as usual; these are micro-batches and must not be written up as 250 optimizer updates. Excluding validation and saving time, record effective non-padding tokens/s, peak allocated/reserved memory, and gradient overflows/skipped steps. Also record end-to-end speed including evaluation and saving, and report the tokens actually consumed by the test. Pretraining, SFT and DPO are measured separately; trial runs and the formal budget are accounted for separately.
 
-在单卡、micro-batch 4、长度 512、累积 8 的满长度预训练配置下，每个 optimizer step 处理 16,384 tokens。100M 和 25M token 预算分别约 6,104、1,526 次更新；按实际有效 tokens 计数停止。
+In the full-length pretraining configuration with a single GPU, micro-batch 4, length 512 and accumulation 8, each optimizer step processes 16,384 tokens. The 100M and 25M token budgets correspond to about 6,104 and 1,526 updates respectively; stopping is by actual effective token count.
 
-以下仅为公式推演的场景，不是 T4 实测：
+The following are scenarios derived from the formula only, not T4 measurements:
 
-| 假设实测吞吐 | 125M tokens 的纯训练时间 |
+| Assumed measured throughput | Pure training time for 125M tokens |
 |---|---:|
-| 1,000 tokens/s | 约 34.7 小时 |
-| 3,000 tokens/s | 约 11.6 小时 |
-| 6,000 tokens/s | 约 5.8 小时 |
+| 1,000 tokens/s | about 34.7 hours |
+| 3,000 tokens/s | about 11.6 hours |
+| 6,000 tokens/s | about 5.8 hours |
 
-公式为 `小时 = 累计训练 tokens / 实测 tokens_per_second / 3600`。表中不含数据处理、验证、保存、SFT/DPO、掉线等待和重跑。Colab 资源、会话时长和 GPU 分配没有持续保证；不能把整个项目安排为一场必然连续完成的长任务。[S10]
+The formula is `hours = cumulative training tokens / measured tokens_per_second / 3600`. The table excludes data processing, validation, saving, SFT/DPO, waiting after disconnects and re-runs. Colab resources, session duration and GPU allocation have no sustained guarantee; the whole project cannot be scheduled as one long task that is sure to finish without interruption. [S10]
 
-计划不预设购买算力或付费 API。数据在本地运行盘分片读取，定期把完整检查点同步到 Drive，并验证可重新加载；同时保留本地与持久化路径对应表。用剩余算力预算决定扩大 token 数或模型，而非以显存空余作为唯一依据。
+The plan does not assume buying compute or paid APIs. Data are read in shards from the local runtime disk, complete checkpoints are synced to Drive regularly and verified to reload, and a mapping table between local and persistent paths is kept. Whether to enlarge the token count or the model is decided by the remaining compute budget, not by free GPU memory alone.
 
-## 9. 实验比较与验收
+## 9. Experimental comparisons and acceptance
 
-### 比较组
+### Comparison groups
 
-| 编号 | 模型/实验 | 回答的问题 |
+| ID | Model/experiment | Question answered |
 |---|---|---|
-| B0 | 多数类 | 类别不平衡下的最低参考 |
-| B1 | 目标感知 TF-IDF＋线性分类器：当前资产替换为 TARGET、其他资产为 OTHER_ASSET，包含词 bigram 与目标局部窗口特征 | 简单监督方法能做到多少；不只在全文前拼一个 ticker |
-| B2 | FinBERT 原始输出及明确披露的适配版本 | 成熟金融情绪模型的比较参考；不是主模型初始化来源 [S11] |
-| A0 | 同架构随机模型直接 SFT，小规模对照 | 预训练是否带来任务收益 |
-| A1 | 通用预训练→SFT | 通用预训练基线 |
-| A2 | 通用预训练→金融继续预训练→SFT | 金融继续预训练的增量价值 |
-| A3 | A2→DPO | 偏好训练是否改善困难样本 |
-| A4 | A2 继续 SFT，使用 DPO 新增样本的正确标签 | 区分“更多标注数据”与“DPO 方法”本身的收益 |
+| B0 | Majority class | Lowest reference under class imbalance |
+| B1 | Target-aware TF-IDF + linear classifier: the current asset replaced by TARGET, other assets by OTHER_ASSET, with word bigrams and local-window features around the target | How far a simple supervised method gets; not just a ticker prepended to the full text |
+| B2 | FinBERT raw output and a clearly disclosed adapted version | Comparison reference from a mature financial sentiment model; not an initialization source for the main model [S11] |
+| A0 | Random model of the same architecture with direct SFT, small-scale control | Whether pretraining brings a task gain |
+| A1 | General pretraining → SFT | General pretraining baseline |
+| A2 | General pretraining → financial continued pretraining → SFT | Incremental value of financial continued pretraining |
+| A3 | A2 → DPO | Whether preference training improves hard samples |
+| A4 | A2 with continued SFT on the correct labels of the samples added for DPO | Separates the gain from "more labeled data" from that of the DPO method itself |
 
-B2 的通用情绪定义与目标条件化立场可能不同，须标注比较限制。统一比较时使用同一测试口径，固定 label 名称映射，不能比较来源中编码不同的整数 label。初期预训练只有单 seed，明确报告；资源允许时优先复跑 SFT/DPO 的 3 个 seed，不能把它说成整个预训练流程的独立重复。
+B2's generic sentiment definition may differ from target-conditioned stance; the limits of the comparison must be stated. In a unified comparison, use the same test convention and a fixed label-name mapping; integer labels encoded differently in the sources cannot be compared. Early pretraining has a single seed, which is reported explicitly; if resources allow, priority goes to re-running SFT/DPO with 3 seeds, which cannot be described as independent repetitions of the whole pretraining workflow.
 
-### 指标与建议关卡
+### Metrics and suggested gates
 
-- 主指标：三类 macro-F1；附每类 precision/recall/F1、混淆矩阵及 balanced accuracy。
-- 概率指标：NLL、三类 Brier score、可靠性图和注明分箱规则的 ECE。校准集用于拟合，测试集用于报告。[S4]
-- 分数指标：首版检查方向、一致性和分布；仅当取得符合本任务语义的连续人工金标准时，另测 MAE、Spearman 等，不把三分类期望分数冒充强度回归结果。
-- 分片：否定、条件句、多目标、反讽、引述、未见 ticker、非英文、缺上下文、重复营销文本；报告每片样本量。
-- 复核机制：报告不同阈值下的覆盖率与被接受样本错误率；低置信度标记本身不证明能识别所有域外输入。
-- 不确定性：在去重/事件分组单位上做 bootstrap 区间，避免把同一事件的多条帖子当成独立样本。
+- Primary metric: three-class macro-F1; with per-class precision/recall/F1, confusion matrix and balanced accuracy.
+- Probability metrics: NLL, three-class Brier score, reliability diagram and ECE with the binning rule stated. The calibration set is for fitting, the test set for reporting. [S4]
+- Score metrics: the first version checks direction, consistency and distribution; only if a continuous human gold standard matching this task's semantics is obtained are MAE, Spearman etc. measured separately; the three-class expected score is not passed off as an intensity regression result.
+- Slices: negation, conditionals, multiple targets, irony, quotation, unseen tickers, non-English, missing context, repeated marketing text; report the sample size of each slice.
+- Review mechanism: report coverage and the error rate of accepted samples under different thresholds; a low-confidence flag by itself does not prove that all out-of-domain inputs can be recognized.
+- Uncertainty: bootstrap intervals over deduplicated/event-grouped units, so that several posts about the same event are not treated as independent samples.
 
-**训练工程完成关卡：** 各阶段均实际执行、日志和检查点齐全；权重可恢复；输出映射、score 公式、模板与数据边界通过检查。数值续训验证应记录允许误差和环境，不声称跨硬件逐位一致。
+**Training engineering completion gate:** every stage actually executed, with complete logs and checkpoints; weights restorable; output mapping, score formula, templates and data boundaries pass the checks. Numerical verification of continued training should record the allowed tolerance and the environment and should not claim bitwise identity across hardware.
 
-**任务能力关卡（暂定工程目标，非文献保证）：** 主模型争取 macro-F1 ≥ 0.70，且比 B1 高至少 0.03；每类 recall 争取 ≥ 0.60。这些阈值在 P0 看到训练/开发分区的样本分布与标注一致性后冻结，最终测试前不得反复修改。开发集达标用于选型，最终使用验收必须由封存 test 按同一预登记口径确认，并报告样本量和差异区间。若未达标，项目仍可以“完整训练实验”交付，但不能称为已通过实际使用验收。
+**Task ability gate (provisional engineering target, not a guarantee from the literature):** the main model aims for macro-F1 ≥ 0.70 and at least 0.03 above B1; per-class recall aims for ≥ 0.60. These thresholds are frozen in P0 after seeing the sample distribution and annotation agreement in the train/development partitions, and cannot be changed repeatedly before the final test. Meeting them on the development set is for model selection; final acceptance for use must be confirmed on the sealed test set with the same pre-registered convention, reporting the sample size and the interval for the difference. If they are not met, the project can still be delivered as a "complete training experiment", but it cannot be said to have passed acceptance for practical use.
 
-**DPO 选择关卡：** 预先以开发集 macro-F1 为主比较，不以训练 preference accuracy 代替；同时检查各类 recall、NLL 和复核覆盖率。结果接近且证据不足时保留较简单的 SFT。最终模型冻结后才查看 test；若决定继续开发，把已查看的 test 降为开发材料并取得新的最终测试数据。
+**DPO selection gate:** the comparison is decided in advance to be primarily by development macro-F1; training preference accuracy does not substitute for it. Also check per-class recall, NLL and review coverage. When results are close and evidence is insufficient, keep the simpler SFT. Look at the test set only after the final model is frozen; if development continues, demote the viewed test set to development material and obtain new final test data.
 
-## 10. 排期与第一天行动
+## 10. Schedule and first-day actions
 
-下表是个人项目的组织建议，假设数据取得和标注能按计划推进；四周不是训练质量或算力可用性的承诺。
+The table below is an organizational suggestion for a personal project, assuming data acquisition and labeling proceed as planned; four weeks is not a promise of training quality or compute availability.
 
-| 时间 | 工作重点 | 可验收产物 |
+| Time | Focus | Outputs that can be accepted |
 |---|---|---|
-| 第 1 周 | 标签手册、来源与切分、基线、自建 tokenizer、MiniMind 配置整理、T4 试跑 | 数据清单、约 24M 模型、可恢复的短训练 |
-| 第 2 周 | 通用预训练、金融继续预训练；同步补充人工标注 | 两阶段权重与学习曲线、实际算力账本 |
-| 第 3 周 | SFT、错误分析、困难案例和偏好对、有限消融 | SFT 基线、冻结的偏好数据、类别指标 |
-| 第 4 周 | DPO 对照、模型选择、校准、最终测试和批量 Notebook | 最终模型、评分接口、评测报告、模型卡 |
+| Week 1 | Labeling handbook, sources and splits, baselines, self-built tokenizer, MiniMind configuration cleanup, T4 trial run | Data manifest, a model of about 24M, resumable short training |
+| Week 2 | General pretraining, financial continued pretraining; human labeling in parallel | Weights and learning curves of both stages, actual compute ledger |
+| Week 3 | SFT, error analysis, hard cases and preference pairs, limited ablations | SFT baseline, frozen preference data, per-class metrics |
+| Week 4 | DPO comparison, model selection, calibration, final test and batch notebook | Final model, scoring interface, evaluation report, model card |
 
-**第一天优先顺序：** 固定输入与标签规则；审核 200 条候选样本和数据权限；记录 Colab 环境；创建小型 tokenizer/模型；完成一次前向、反向、保存、恢复及吞吐测量。第一天的成功标准是训练链的最小部分可验证运行，而不是宣称金融判断已经可靠。若主数据尚不可用，可用自编短样本做技术试跑，并单独标明。
+**First-day priorities:** fix the input and label rules; review 200 candidate samples and the data permissions; record the Colab environment; create a small tokenizer/model; complete one forward pass, backward pass, save, resume and throughput measurement. The first day's success criterion is that the minimal part of the training chain runs verifiably, not a claim that financial judgment is already reliable. If the main data are not yet available, self-written short samples can be used for a technical trial run, labeled separately as such.
 
-## 11. 预期交付物
+## 11. Expected deliverables
 
-后续实现建议单独建立项目目录，以下是拟议结构，不表示文件已经实现：
+Later implementation should set up a separate project directory; the following is a proposed structure and does not mean the files have been implemented:
 
 ```text
 130U-FinLLM/
   README.md
-  configs/                 # 各阶段配置、上游 commit、环境锁定
-  data/                    # 来源清单、切分索引、标注手册；大数据不直接入 Git
-  tokenizer/               # 自建 BPE 与固定 special token IDs
-  notebooks/               # 环境/数据、预训练、SFT、DPO、评测、批量预测
-  src/                     # 数据、训练、标签概率与分数计算
-  checkpoints/             # base、finance、sft、dpo；best/latest 分开
-  evaluation/              # 指标、分片、校准、错误分析、算力记录
+  configs/                 # per-stage configs, upstream commit, environment lock
+  data/                    # source manifest, split indices, labeling handbook; large data not committed to Git
+  tokenizer/               # self-built BPE and fixed special token IDs
+  notebooks/               # environment/data, pretraining, SFT, DPO, evaluation, batch prediction
+  src/                     # data, training, label probability and score computation
+  checkpoints/             # base, finance, sft, dpo; best/latest kept separately
+  evaluation/              # metrics, slices, calibration, error analysis, compute records
   model_card.md
 ```
 
-最终演示应能读取含 `text,target` 的 CSV/JSONL，为每个有效输入输出三类概率、方向分数、置信度和复核标记。保存模型权重和 tokenizer 仍不足以复现结果，还需保存模板、标签映射、温度、阈值、代码版本和数据版本。
+The final demo should read a CSV/JSONL with `text,target` and output, for each valid input, the three-class probabilities, direction score, confidence and review flag. Saving the model weights and tokenizer is still not enough to reproduce the results; the template, label mapping, temperature, threshold, code version and data version must also be saved.
 
-## 12. 当前结论与尚待验证项
+## 12. Current conclusions and items still to verify
 
-推荐以 **约 24.26M MiniMind 稠密模型＋自建 8K 英文词表＋全参数训练** 完成完整链，首先按 100M 通用＋25M 金融阶段 tokens 的预算组织实验。模型在小批量和短上下文下具备合理的 T4 起步条件；最终峰值显存和运行速度仍以试跑为准。
+Recommended: complete the full chain with **a MiniMind dense model of about 24.26M + a self-built 8K English vocabulary + full-parameter training**, organizing experiments first around a budget of 100M general + 25M financial-stage tokens. With small batches and a short context, the model has reasonable starting conditions on a T4; final peak memory and speed depend on the trial runs.
 
-主要未决项是：符合训练用途的数据权限与可取得数量、目标条件化标签的一致性、当前 Colab 环境兼容性、T4 实测吞吐，以及从零小模型相对简单基线的真实收益。这些分别由 P0 的来源审核、标注试验、P1/P2 的试跑和 P4–P7 的对照评测关闭。
+The main open items are: data permissions suitable for training and the obtainable quantity, consistency of target-conditioned labels, compatibility with the current Colab environment, measured T4 throughput, and the real gain of a small model trained from scratch over simple baselines. These are closed, respectively, by the source review in P0, the labeling trial, the trial runs in P1/P2 and the controlled evaluations in P4–P7.
 
-本次已完成的是计划、原始来源调查、固定源码的配置核查和算术预算。未承诺模型质量、投资价值或当天完成全部训练。
+What has been completed this time is the plan, the investigation of original sources, the configuration check of the pinned source and the arithmetic budget. No promise is made about model quality, investment value or finishing all training in one day.
 
-## 13. GitHub 参考仓库与代码交付
+## 13. GitHub reference repositories and code delivery
 
-| 仓库 | 本项目怎样使用 | 不直接沿用什么 |
+| Repository | How this project uses it | What is not reused directly |
 |---|---|---|
-| [jingyaogong/minimind](https://github.com/jingyaogong/minimind) | **主实现参考**。取固定 commit 的稠密模型、预训练、全参数 SFT、DPO 代码，按第 6 节整理配置与训练循环 | 现成权重、默认 64M 配置、默认 tokenizer、中文模板和上游完整语料 |
-| [rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | **教学与交叉核对参考**。解释注意力、随机初始化、下一 token 训练、分类与 DPO；优先引用，不默认复制代码 | 不再创建第二套并行主模型，避免架构与 checkpoint 格式混杂 |
-| [karpathy/nanoGPT](https://github.com/karpathy/nanoGPT) | **辅助工程参考**。借鉴清晰训练循环、二进制 token 与小批次读取；实施时固定实际引用版本 | 仓库已标 deprecated，不把它作为本项目持续维护保障，不复制旧环境安装命令 |
-| [huggingface/tokenizers](https://github.com/huggingface/tokenizers) | **工具依赖**。训练与保存自己的英文 byte-level BPE 词表 | 不加载其他大模型的现成 tokenizer 作为本项目自建词表 |
+| [jingyaogong/minimind](https://github.com/jingyaogong/minimind) | **Main implementation reference.** Take the dense model, pretraining, full-parameter SFT and DPO code from the pinned commit, and reorganize the configuration and training loop per section 6 | Ready-made weights, the default 64M configuration, the default tokenizer, Chinese templates and the full upstream corpus |
+| [rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | **Teaching and cross-check reference.** Explains attention, random initialization, next-token training, classification and DPO; cite it first, do not copy code by default | No second parallel main model is created, to avoid mixing architectures and checkpoint formats |
+| [karpathy/nanoGPT](https://github.com/karpathy/nanoGPT) | **Auxiliary engineering reference.** Borrow the clear training loop, binary token files and small-batch reading; pin the version actually referenced during implementation | The repository is marked deprecated; it is not treated as a maintenance guarantee for this project, and its old environment install commands are not copied |
+| [huggingface/tokenizers](https://github.com/huggingface/tokenizers) | **Tool dependency.** Train and save our own English byte-level BPE vocabulary | Ready-made tokenizers of other large models are not loaded as this project's self-built vocabulary |
 
-工程以 PyTorch 为主，只接入所需依赖；不同时装上游全部演示、Agent、MoE 或 UI 包。检查 Colab 的现有 CUDA/PyTorch，验证兼容后锁定 Python 与依赖版本。首次环境记录保存为 `environment.json`/锁定依赖文件；不先盲目替换 Colab 自带 CUDA。
+The engineering is mainly PyTorch, with only the dependencies that are needed; upstream demos, Agent, MoE or UI packages are not all installed. Check Colab's existing CUDA/PyTorch, and lock the Python and dependency versions after verifying compatibility. The first environment record is saved as `environment.json` / a locked dependency file; Colab's bundled CUDA is not replaced blindly at the start.
 
-源码注明参考项目、固定 commit、修改范围和许可证。保留 MiniMind Apache-2.0 许可及适用 NOTICE；从其他仓库复制具体代码前核对该文件许可。自训练权重和数据的使用条件单独记录，代码许可证不自动覆盖数据与模型权重。
+The source code credits the reference projects, pinned commits, scope of modification and licenses. Keep MiniMind's Apache-2.0 license and the applicable NOTICE; check the license of a file before copying specific code from other repositories. Usage conditions for self-trained weights and data are recorded separately; the code license does not automatically cover the data and model weights.
 
-拟议仓库内容包括：
+The proposed repository contents include:
 
 ```text
 130U-FinLLM/
-  README.md                         # 中文开工说明＋英文项目简介
+  README.md                         # start-up notes in Chinese + English project summary
   LICENSE / THIRD_PARTY_NOTICES.md
   pyproject.toml / requirements-colab.txt
-  configs/                          # smoke、正式24M、各阶段及已解析有效配置
-  src/finllm/                       # model、tokenizer、data、training、inference
-  scripts/                          # 数据校验、分片、训练、评估和恢复入口
+  configs/                          # smoke, formal 24M, per-stage and resolved effective configs
+  src/finllm/                       # model, tokenizer, data, training, inference
+  scripts/                          # entry points for data validation, sharding, training, evaluation and resume
   notebooks/
     00_setup_and_smoke.ipynb
     01_prepare_data.ipynb
@@ -373,94 +373,94 @@ B2 的通用情绪定义与目标条件化立场可能不同，须标注比较�
     04_sft.ipynb
     05_dpo.ipynb
     06_evaluate_and_predict.ipynb
-  data/manifests/                   # 来源、版本、hash、分区索引；无私有原文
-  docs/                            # 本计划、标注手册、操作说明、模型卡
-  tests/                           # 下文列出的必要正确性检查
-  reports/                         # 许可允许公开的汇总结果与图表
+  data/manifests/                   # sources, versions, hashes, partition indices; no private text
+  docs/                            # this plan, labeling handbook, operating notes, model card
+  tests/                           # the necessary correctness checks listed below
+  reports/                         # summary results and figures that the licenses allow to be published
 ```
 
-上述文件都尚待实现。大型语料、私人文本、训练检查点、凭据和用户 notebook 的敏感输出不提交 Git。Notebook 作为薄操作界面调用同一套脚本，避免每本 notebook 复制一套训练逻辑。公开发布时另审模型/数据许可，清理 notebook 输出。
+All the files above are still to be implemented. Large corpora, private texts, training checkpoints, credentials and sensitive outputs of user notebooks are not committed to Git. Notebooks act as thin operating interfaces that call the same set of scripts, so that each notebook does not copy its own training logic. For a public release, review the model/data licenses separately and clear the notebook outputs.
 
-## 14. 用户需要准备什么，以及怎样与 Colab 协作
+## 14. What the user needs to prepare, and how to collaborate through Colab
 
-### 材料与责任
+### Materials and responsibilities
 
-| 材料 | 现在是否必须 | 用户怎么帮助 | 代理负责什么 |
+| Material | Required now? | How the user helps | What the agent is responsible for |
 |---|---|---|---|
-| Google 账号与 Colab | 开始 GPU 试跑时必须 | 在自己的浏览器登录、选 T4、完成必要交互授权 | 编写 notebook、检查环境输出、安排短训练与恢复验证 |
-| Google Drive | 长训练前建议具备 | 登录并为项目准备目录；建议有约 10GB 可用配额，实际检查后调整 | 分片/检查点清单、备份校验与恢复代码；运行环境工作盘另外检查 |
-| GitHub 账号与仓库 | 可在工程搭建后补上 | 已建则提供链接；未建可先不用建，下一对话明确仓库创建/推送范围 | 本地先做好代码；有可用认证时执行已授权 GitHub 操作，无认证时提供源码包 |
-| 一小批真实任务样本 | 技术 smoke 不需要；正式任务必需 | 最初建议给 20–50 条有训练使用权的英文短文本、target、来源与时间；未知字段留空不编造 | 建立标注表、查公开候选、清洗、去重、预标和统计 |
-| 标签审核 | 在确定任务规则及正式效果验收前需要 | 审核首批约 200 条并说明分歧；可分多次进行 | 给标签定义、难例解释、复核表；AI 预标与人工确认分别记录 |
-| 8k–12k 合格样本 | 正式数据目标，不要求用户开工前一次交齐 | 协助提供有权使用的来源，审核关键分歧 | 检查公开文件与条件、整理 target、建立真实数据清单；不足时如实缩小实验 |
-| API key、X 登录或付费 GPU | 首版不作为前提 | 无需在聊天里提供密码、cookie、PAT 或 API key | 默认使用正常账号授权、许可明确的数据与现有 Colab；额外付费另行决定 |
+| Google account and Colab | Required when GPU trial runs start | Sign in in their own browser, select T4, complete the necessary interactive authorizations | Write the notebooks, check the environment output, arrange short training and resume verification |
+| Google Drive | Recommended before long training | Sign in and prepare a project directory; about 10GB of free quota is recommended, adjusted after an actual check | Shard/checkpoint manifests, backup verification and resume code; the runtime working disk is checked separately |
+| GitHub account and repository | Can be added after the engineering is set up | If already created, provide the link; if not, there is no need to create it yet; the next conversation will make the scope of repository creation/push explicit | Prepare the code locally first; with usable authentication, perform authorized GitHub operations; without it, provide a source bundle |
+| A small batch of real task samples | Not needed for the technical smoke test; required for the formal task | Initially, ideally 20–50 English short texts with training rights, with target, source and time; leave unknown fields empty, do not invent them | Build the labeling table, look up public candidates, clean, deduplicate, pre-label and count |
+| Label review | Needed before the task rules are fixed and before formal performance acceptance | Review the first ~200 rows and explain disagreements; can be done over several sessions | Provide label definitions, explanations of hard cases and a review table; AI pre-labels and human confirmations are recorded separately |
+| 8k–12k qualified samples | Formal data target; the user is not required to deliver everything before work starts | Help provide sources we have the right to use; review key disagreements | Check public files and their conditions, organize targets, build the real data manifest; when there is not enough, shrink the experiment and say so |
+| API key, X login or paid GPU | Not a prerequisite for the first version | No need to provide passwords, cookies, PATs or API keys in chat | By default use normal account authorization, clearly licensed data and the existing Colab; any extra payment is decided separately |
 
-最小样本字段为 `id,text,target,source,created_at,rights_note`；有标签再加 `label,annotator,adjudication_note`。可用 CSV 或 JSONL，字段缺失如实标记。`rights_note` 是来源记录，不能自行取代真实授权；公开候选尚未下载核准时标为 pending。`Long $AAPL, short $TSLA.` 需生成两个目标样本，并保留同一个原始 id/重复簇。
+The minimal sample fields are `id,text,target,source,created_at,rights_note`; with labels, add `label,annotator,adjudication_note`. CSV or JSONL is fine; mark missing fields truthfully. `rights_note` is a record of the source and cannot by itself replace real authorization; public candidates not yet downloaded and approved are marked pending. `Long $AAPL, short $TSLA.` must produce two target samples that keep the same original id/duplicate cluster.
 
-### 推荐连接方式：GitHub 管代码，Colab 运行，Drive 保存成果
+### Recommended connection: GitHub manages code, Colab runs, Drive keeps results
 
-这是一条文件与版本协作路径，不意味着当前代理已经连入用户 GPU。
+This is a file and version collaboration path; it does not mean the current agent is already connected to the user's GPU.
 
-1. 代理在独立 `130U-FinLLM` 本地目录准备可检查的脚本、测试和 notebook，产出固定 commit 的源码包。
-2. 有仓库时，由用户登录 GitHub/Colab 打开 notebook。公开源码可按固定 commit 在运行时下载；私有 notebook 可使用 Google 官方 GitHub 打开页的 `Include Private Repos` 并由用户浏览器授权。
-3. **私有 notebook 的浏览器 OAuth 不等于运行时 git 已获私有仓库权限。**首轮采用简单办法：用户从已登录 GitHub 下载指定版本源码 ZIP，放到 Drive 或通过 Colab 上传；运行时核对归档 hash/版本清单后解压。没有远程仓库也可上传代理交付的同类源码包，不阻塞 smoke。
-4. 用户在 Colab 选择 GPU，并在 notebook 正常授权界面挂载 Drive。训练热数据复制到 `/content/130U-FinLLM`，不逐批远程读取 Drive 上大量小文件。Drive 使用 `MyDrive/130U-FinLLM/`，包含 data、checkpoints、runs 和 source-bundles。
-5. 先执行环境诊断：GPU/CUDA/PyTorch、RAM、磁盘/Drive 余量、路径可写和版本 hash。此时才给出可采用的实际 micro-batch 和资源预算。
-6. 跑短训练、保存完整检查点、断开/重启运行环境后重装已锁定依赖、恢复检查点，再跑下一批。验证成功后才进入长阶段。
-7. 每阶段导出 `run_summary.json`、`metrics.csv`、环境信息、代码/数据/tokenizer hash、检查点清单。结果可经用户上传回当前对话，或通过本任务已授权且实际可读的文件/浏览器路径读取；不假设仅发一个 Drive 链接就自动具有访问权。
+1. The agent prepares inspectable scripts, tests and notebooks in a separate local `130U-FinLLM` directory and produces a source bundle at a pinned commit.
+2. Once there is a repository, the user signs in to GitHub/Colab and opens the notebook. Public source can be downloaded at runtime by pinned commit; a private notebook can use `Include Private Repos` on Google's official GitHub opening page, authorized in the user's browser.
+3. **Browser OAuth for a private notebook does not mean that git at runtime has access to the private repository.** The first round uses a simple method: the user downloads a source ZIP of the specified version from the signed-in GitHub and puts it in Drive or uploads it through Colab; the runtime checks the archive hash/version manifest before unpacking. Without a remote repository, a similar source bundle delivered by the agent can be uploaded instead, so the smoke test is not blocked.
+4. The user selects a GPU in Colab and mounts Drive through the notebook's normal authorization interface. Hot training data are copied to `/content/130U-FinLLM`; large numbers of small files on Drive are not read remotely batch by batch. Drive uses `MyDrive/130U-FinLLM/`, containing data, checkpoints, runs and source-bundles.
+5. First run environment diagnostics: GPU/CUDA/PyTorch, RAM, disk/Drive headroom, writable paths and version hashes. Only then are the usable micro-batch and resource budget given.
+6. Run a short training, save a complete checkpoint, disconnect/restart the runtime, reinstall the locked dependencies, restore the checkpoint and run the next batch. Move on to long stages only after this succeeds.
+7. Each stage exports `run_summary.json`, `metrics.csv`, environment information, code/data/tokenizer hashes and a checkpoint manifest. Results can be uploaded by the user back into the current conversation, or read through file/browser paths that are authorized for this task and actually readable; it is not assumed that sending a Drive link automatically grants access.
 
-若下一对话的浏览器工具能访问已登录 notebook，可协助执行可见操作；需要登录和授权时由用户完成。若浏览器不可用，则由用户点击 notebook 单元格运行，代理根据返回的日志修复并提供新版。**Notebook 分享不共享正在运行的虚拟机；当前没有已验证的直接 Colab kernel 连接，也不承诺跨会话无人值守或后台持续控制。**依据为 Google 官方 FAQ/示例与本会话实际能力状态。[F6、F7]
+If the browser tools in the next conversation can access the signed-in notebook, they can help perform visible operations; sign-in and authorization are done by the user. If the browser is not available, the user clicks to run the notebook cells, and the agent fixes problems from the returned logs and provides a new version. **Sharing a notebook does not share the running VM; there is currently no verified direct Colab kernel connection, and no promise of unattended or persistent background control across sessions.** The basis is Google's official FAQ/example and the actual capability status of this session. [F6, F7]
 
-仓库建议名称 `130U-FinLLM`，开发阶段建议 Private；是否公开由用户决定。用户不必 fork 整个 MiniMind。若用户愿意先建，可建空仓库后提供链接；不用先手工放数据或配置复杂服务。代理后续是否可代建，取决于下一对话实际可用的已认证 GitHub 工具/CLI，不能预先保证。
+The suggested repository name is `130U-FinLLM`, Private during development; whether to make it public is the user's decision. The user does not need to fork all of MiniMind. If the user wishes to create it first, they can create an empty repository and provide the link; there is no need to place data manually or configure complex services first. Whether the agent can create it later depends on the authenticated GitHub tools/CLI actually available in the next conversation and cannot be guaranteed in advance.
 
-## 15. 下一对话开工顺序、验收与当前状态
+## 15. Start order for the next conversation, acceptance and current status
 
-### 按依赖推进的里程碑
+### Milestones by dependency
 
-| 关卡 | 可以立即做的工作 | 通过条件 / 有依赖时怎样继续 |
+| Gate | Work that can be done immediately | Pass condition / how to continue when there are dependencies |
 |---|---|---|
-| M0 本地工程 | 读取本文件；建立独立目录、上游来源记录、配置、数据 schema、标签手册和 notebook 骨架 | 不修改当前工作区其他简历/研究文件；源码结构完整；不依赖 Colab 登录 |
-| M1 最小训练链 | 自编明确标为 smoke 的样本、tokenizer、随机模型、预训练/SFT/DPO 极小运行及保存恢复 | 必要 CPU/本地检查通过；参数计算准确；输出概率/分数正确；所有 smoke 文件独立于正式数据 |
-| M2 Colab 联通 | 源码包上传/拉取、T4 环境记录、少量 GPU 训练、Drive 完整备份、运行时重启恢复 | 从恢复点继续成功；报告真实吞吐与峰值；接入问题不阻止继续准备本地代码和数据 |
-| M3 正式材料 | 核对数据取得条件、审核 200 条规则样本、封存 eval 原文池、切分/去重、训练正式 tokenizer | 数据清单可追溯；train/dev/cal/test 无已检测重复；合法目标和标签一致；未取得数据不虚报完成 |
-| M4 两阶段预训练 | 先 1M-token 正式配置试跑，再按预算通用与金融预训练 | loss/数值正常、完整 checkpoint 可恢复、吞吐账本齐全、正式与 smoke 不混用 |
-| M5 SFT/DPO | 全参数 SFT、构造并审核偏好对、DPO 及同新增样本的 SFT 对照 | 各阶段真正执行、有检查点与开发集结果；DPO 差时保留负结果，不能略去该学习阶段 |
-| M6 最终交付 | 开发集选择、独立校准、冻结阈值、一次最终测试、批量预测 notebook、模型卡 | 工程完成与任务效果分别报告；不达效果门槛时如实交付实验状态 |
+| M0 Local engineering | Read this file; set up a separate directory, upstream source records, configuration, data schema, labeling handbook and notebook skeletons | Other resume/research files in the current workspace are not modified; source structure complete; no dependence on Colab sign-in |
+| M1 Minimal training chain | Self-written samples clearly marked as smoke, tokenizer, random model, tiny pretraining/SFT/DPO runs, and save/resume | Necessary CPU/local checks pass; parameter count correct; output probabilities/scores correct; all smoke files kept separate from formal data |
+| M2 Colab connectivity | Upload/pull of the source bundle, T4 environment record, a little GPU training, complete Drive backup, resume after runtime restart | Continuation from the resume point succeeds; real throughput and peaks reported; connection problems do not stop continued preparation of local code and data |
+| M3 Formal materials | Check the conditions for obtaining data, review 200 rule samples, seal the eval text pool, split/deduplicate, train the formal tokenizer | Data manifest traceable; no detected duplicates across train/dev/cal/test; valid targets and labels consistent; data not obtained are not reported as done |
+| M4 Two-stage pretraining | First a 1M-token trial run in the formal configuration, then general and financial pretraining per the budget | Loss/numerics normal, complete checkpoints restorable, throughput ledger complete, formal and smoke runs not mixed |
+| M5 SFT/DPO | Full-parameter SFT, building and reviewing preference pairs, DPO and the SFT control with the same added samples | Each stage actually executed, with checkpoints and development results; if DPO is worse, keep the negative result; this learning stage cannot be omitted |
+| M6 Final delivery | Development-set selection, independent calibration, frozen thresholds, one final test, batch prediction notebook, model card | Engineering completion and task performance reported separately; if the performance gate is not met, deliver the experimental status truthfully |
 
-M1 的极小 DPO 运行只能证明路径能执行；不能代替 M5 正式 DPO 实验。M0–M2 可用自编样本开工，M4 正式数据训练取决于 M3。数据不足时可以继续小规模实验并写明规模，不能把 smoke 宣称成完整预算训练结果。时间按实测吞吐与人工标注进度估算，不承诺一天/四周内达到指定精度。
+The tiny DPO run in M1 only proves that the path can execute; it cannot replace the formal DPO experiment in M5. M0–M2 can start with self-written samples; formal-data training in M4 depends on M3. When data are insufficient, small-scale experiments can continue with their scale stated; a smoke run cannot be claimed as a full-budget training result. Time is estimated from measured throughput and human labeling progress; there is no promise of reaching a specified accuracy within one day/four weeks.
 
-### 必须验证的正确性
+### Correctness that must be verified
 
-- 三个标签各是单 token；tokenizer 在保留 cashtag、数字、否定词时可往返；8192 已包含特殊 token。
-- 人工短序列证明 next-token 对齐只移位一次；预训练长文最后一段确实进入样本；prompt/pad/EOS 不贡献 SFT/DPO 任务 loss。
-- DPO 的 policy 有梯度，reference 参数和梯度均不变化；chosen/rejected 标签有效且不同；初始相同策略的损失与预期一致。
-- 同推文多 target、近重复簇不能跨 split；目标切换的基线和主模型输入确实不同；无法关联目标和超长输入返回明确状态。
-- FP16 AMP 溢出时不误推进 scheduler；保存于规定边界；检查点 restore 后数据游标、优化器/调度器和累计计数一致。小段不中断与中断恢复训练在记录的容差内对照，不要求跨硬件逐位相等。
-- JSON 字段稳定、三类概率和为 1、分数位于 [-100,100] 且按指定公式计算；temperature/threshold 对应最终模型和 tokenizer hash。
+- Each of the three labels is a single token; the tokenizer round-trips while preserving cashtags, numbers and negation words; the 8192 already include the special tokens.
+- Hand-made short sequences prove that the next-token alignment shifts only once; the last segment of a long pretraining document really enters the samples; prompt/pad/EOS contribute no SFT/DPO task loss.
+- In DPO the policy has gradients, and the reference parameters and gradients do not change; chosen/rejected labels are valid and different; the loss for an initially identical policy matches the expected value.
+- Multiple targets of the same tweet and near-duplicate clusters cannot cross splits; inputs to the baseline and to the main model really differ when the target is switched; targets that cannot be linked and over-long inputs return explicit statuses.
+- On FP16 AMP overflow, the scheduler is not advanced by mistake; saving happens at the specified boundary; after a checkpoint restore, the data cursor, optimizer/scheduler and cumulative counts agree. A short uninterrupted run and an interrupted-and-resumed run are compared within the recorded tolerance; bitwise equality across hardware is not required.
+- JSON fields are stable, the three-class probabilities sum to 1, scores lie in [-100,100] and are computed by the specified formula; temperature/threshold correspond to the final model and tokenizer hash.
 
-这些是训练正确性与数据边界测试，不为可逆的文档/格式变化额外建立测试。锁定环境后运行必要测试；失败修复后复验对应项。GPU 测试只有在用户 Colab 上实际执行后才记录通过。
+These are tests of training correctness and data boundaries; no extra tests are built for reversible documentation/format changes. Run the necessary tests after the environment is locked; after a failure is fixed, re-verify the corresponding item. GPU tests are recorded as passed only after they have actually been run on the user's Colab.
 
-### 已完成、未完成与接手原则
+### Done, not done, and principles for taking over
 
-- **已完成：**需求定义、命名、来源核查、固定模型规格、算术预算、阶段设计、代码改造清单、材料分工、协作路径与验收标准。
-- **尚未完成：**项目代码和 notebooks、GitHub 仓库、合格正式语料及标签、用户 Colab 连接验证、训练、测量、真实效果评估。
-- **开工时不重新询问已确定事项：**英文、目标条件化三分类、从随机初始化、约 24M、T4、自训 tokenizer、全参数预训练/SFT/DPO、score 公式均已确定。只有会改变执行的真实缺口再询问。
-- **独立推进：**等待用户登录、上传日志或补充材料时，继续不依赖这些信息的代码、检查和文档工作。需要用户手动操作时给一个具体动作及原因。
-- **延续记录：**实施后维护 `docs/HANDOFF.md` 和 `runs/<run_id>/run_summary.json`，记录实际代码版本、已通过项、未决项和下一步；不把计划状态改写成实际完成状态。
+- **Done:** requirement definition, naming, source checks, fixed model specification, arithmetic budget, stage design, list of code modifications, division of materials, collaboration path and acceptance criteria.
+- **Not yet done:** project code and notebooks, GitHub repository, qualified formal corpus and labels, verification of the connection to the user's Colab, training, measurement, real performance evaluation.
+- **Do not re-ask settled matters when starting:** English, target-conditioned three classes, random initialization, about 24M, T4, self-trained tokenizer, full-parameter pretraining/SFT/DPO and the score formula are all settled. Ask only about real gaps that would change execution.
+- **Work independently:** while waiting for the user to sign in, upload logs or add material, continue with code, check and documentation work that does not depend on this information. When the user needs to do something manually, give one specific action and the reason for it.
+- **Continuity record:** after implementation starts, maintain `docs/HANDOFF.md` and `runs/<run_id>/run_summary.json`, recording the actual code version, items passed, open items and next steps; do not rewrite planned status as actual completion.
 
-## 原始来源与核查附件
+## Original sources and check attachments
 
-- **S1** [MiniMind 固定提交](https://github.com/jingyaogong/minimind/tree/f659b55761b754d306bd140573493a6543cafd7f)：模型、预训练、SFT、DPO、数据 loader 和恢复实现。逐项说明见《训练工程核查.md》。
-- **S2** [Hugging Face Tokenizers Quicktour](https://huggingface.co/docs/tokenizers/quicktour)：BPE 训练和 tokenizer 保存/使用。
-- **S3** [Direct Preference Optimization，原论文](https://arxiv.org/abs/2305.18290)；[TRL DPOTrainer 官方文档](https://huggingface.co/docs/trl/dpo_trainer)：偏好训练的方法与输入结构。本计划用 MiniMind 实现，TRL 仅作交叉参考。
-- **S4** [On Calibration of Modern Neural Networks，原论文](https://proceedings.mlr.press/v70/guo17a.html)：温度校准及可靠性评估。独立 calibration 分区是本项目的实验设计选择，不是论文强制条件。
-- **S5** [FineWeb-Edu 作者数据卡](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu)：数据、流式读取、许可与限制。
-- **S6** [SEC：Accessing EDGAR Data](https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data)；[SEC：Beginners’ Guide to Financial Statements](https://www.sec.gov/about/reports-publications/beginners-guide-financial-statements)。
-- **S7** [SemEval-2017 Task 5 原论文](https://aclanthology.org/S17-2089/)：金融微型文本与新闻的细粒度情绪任务。实际下载和许可状态见数据附件。
-- **S8** [FiQA 2018 官方任务页](https://sites.google.com/view/fiqa/home)：目标、方面与情绪评分。接入前需核查原任务文件和非商业使用条件。
-- **S9** [zeroshot/twitter-financial-news-sentiment 数据卡](https://huggingface.co/datasets/zeroshot/twitter-financial-news-sentiment)：字段、标签与卡片声明。计数冲突及权利核查边界见数据附件。
-- **S10** [Google Colab FAQ](https://research.google.com/colaboratory/faq.html)：运行时、资源和持久化限制。
-- **S11** [ProsusAI/FinBERT](https://github.com/ProsusAI/finBERT)；[模型卡](https://huggingface.co/ProsusAI/finbert)：外部比较基线。
-- **S12** [X Developer Agreement](https://docs.x.com/developer-terms/agreement)，2026-04-27 更新，III.A(k)；[X Enterprise Master License Agreement](https://legal.x.com/data-terms/us/mla.html)，§4.1(k)。适用协议和授权范围须分别确认。
+- **S1** [MiniMind pinned commit](https://github.com/jingyaogong/minimind/tree/f659b55761b754d306bd140573493a6543cafd7f): model, pretraining, SFT, DPO, data loader and resume implementation. Item-by-item notes are in the attachment "Training engineering check".
+- **S2** [Hugging Face Tokenizers Quicktour](https://huggingface.co/docs/tokenizers/quicktour): BPE training and saving/using a tokenizer.
+- **S3** [Direct Preference Optimization, original paper](https://arxiv.org/abs/2305.18290); [TRL DPOTrainer official documentation](https://huggingface.co/docs/trl/dpo_trainer): method and input structure of preference training. This plan uses the MiniMind implementation; TRL is only a cross-reference.
+- **S4** [On Calibration of Modern Neural Networks, original paper](https://proceedings.mlr.press/v70/guo17a.html): temperature calibration and reliability evaluation. A separate calibration partition is an experimental design choice of this project, not a requirement of the paper.
+- **S5** [FineWeb-Edu authors' data card](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu): data, streaming reads, license and limitations.
+- **S6** [SEC: Accessing EDGAR Data](https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data); [SEC: Beginners' Guide to Financial Statements](https://www.sec.gov/about/reports-publications/beginners-guide-financial-statements).
+- **S7** [SemEval-2017 Task 5 original paper](https://aclanthology.org/S17-2089/): fine-grained sentiment task on financial microblogs and news. The actual download and license status are in the data attachment.
+- **S8** [FiQA 2018 official task page](https://sites.google.com/view/fiqa/home): targets, aspects and sentiment scores. The original task files and the non-commercial use conditions must be checked before intake.
+- **S9** [zeroshot/twitter-financial-news-sentiment data card](https://huggingface.co/datasets/zeroshot/twitter-financial-news-sentiment): fields, labels and the card's statements. Count conflicts and the limits of the rights check are in the data attachment.
+- **S10** [Google Colab FAQ](https://research.google.com/colaboratory/faq.html): runtime, resource and persistence limits.
+- **S11** [ProsusAI/FinBERT](https://github.com/ProsusAI/finBERT); [model card](https://huggingface.co/ProsusAI/finbert): external comparison baseline.
+- **S12** [X Developer Agreement](https://docs.x.com/developer-terms/agreement), updated 2026-04-27, III.A(k); [X Enterprise Master License Agreement](https://legal.x.com/data-terms/us/mla.html), §4.1(k). The applicable agreement and the scope of authorization must be confirmed separately.
 
-同目录研究附件：`数据与来源核查.md`、`训练工程核查.md`、`后训练与评测核查.md`。浏览器自动化两次连接超时，本次来源通过网页读取和官方代码接口核查；未把浏览器失败解释成资料不存在。
+Research attachments in the same directory (Markdown files): "Data and source check", "Training engineering check", "Post-training and evaluation check". Browser automation timed out twice when connecting; the sources this time were checked by reading web pages and through official code interfaces; the browser failures were not interpreted as the materials not existing.

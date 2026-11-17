@@ -1,85 +1,85 @@
-# 固定测试集上的集体 accuracy 与 macro-F1 包络
+# Collective accuracy and macro-F1 envelopes on a fixed test set
 
-日期：2026-11-15。状态：下述有限组合命题给出完整纸笔证明；例子经 Python 标准库 `Fraction` 离线穷举核对。没有联网、没有训练、没有真实数据；不作新颖性声明。本文件扩展 [T1.3–T1.5](notes.md)，专门处理共同受影响分片与不可加的 macro-F1。
+Date: 2026-11-15. Status: the finite combinatorial propositions below have complete pen-and-paper proofs; the examples were checked offline by exhaustive enumeration with the Python standard-library `Fraction`. No internet access, no training, no real data; no novelty claim is made. This file extends [T1.3–T1.5](notes.md) and deals specifically with jointly affected shards and with macro-F1, which is not additive.
 
-## 1. 对象、假设与“紧”的含义
+## 1. Objects, assumptions, and what "tight" means
 
-固定测试集有 J≥1 个编号样本、m≥1 个分片头、K≥1 个类别。投票矩阵 V∈{0,…,K−1}^{J×m}，真标签 y_j∈{0,…,K−1}。每个头权重相同，获胜者为票数最多的类别，平局选最小编号。k 是非负整数，记 b_max=min(k,m)。类别列表在计算前固定，不随某个候选预测是否出现该类别而改变。
+The fixed test set has J≥1 indexed examples, m≥1 shard heads, and K≥1 classes. The vote matrix is V∈{0,…,K−1}^{J×m}, and the true labels are y_j∈{0,…,K−1}. Every head has equal weight; the winner is the class with the most votes, and ties go to the smallest index. k is a nonnegative integer, and we write b_max=min(k,m). The class list is fixed before computation and does not change depending on whether a candidate prediction contains a given class.
 
-威胁模型：同一个头集合 B⊆{1,…,m} 对全部测试点共同生效，|B|≤b_max。B 外的投票固定；B 内每个头在每个测试点的投票可以任意指定，并可在不同点自由变化。允许 B 中部分投票保留原值，所以 B 是“允许受影响”的集合，不强制所有成员发生变化。
+Threat model: a single head set B⊆{1,…,m} acts jointly on all test points, with |B|≤b_max. Votes outside B are fixed; the vote of each head in B at each test point can be set arbitrarily and can vary freely across points. Some votes in B are allowed to keep their original values, so B is the set of heads that are "allowed to be affected"; not every member is required to change.
 
-这比真实重训练更宽松：一个改动后的确定性模型必须在相同输入上产生相同输出，且输出要能由训练过程实现。本模型不施加这些限制，甚至允许两个编号测试点拥有相同输入却获得不同改动票。因此以下“精确”“紧”只指这个明示的外放松威胁模型，**不表示对真实训练过程的最紧证书**。删除至多 k 篇文档能否落入这个威胁模型，仍取决于 T1.3 的固定 ID、本片确定性训练和未受污染共享骨干等前提。
+This is looser than real retraining: a modified deterministic model must produce the same output on the same input, and the output must be realizable by the training process. This model imposes neither restriction; it even allows two indexed test points with the same input to receive different modified votes. Hence "exact" and "tight" below refer only to this explicitly stated outer-relaxation threat model and **do not mean the tightest certificate for the real training process**. Whether deleting at most k documents falls inside this threat model still depends on the premises of T1.3: fixed IDs, deterministic per-shard training, and an uncontaminated shared backbone.
 
-测试样本、真标签、各类支持数和分母 J 固定。不会重划测试集、重定义类别、重算依赖预测的筛选集。这是测试集统计量包络，不是总体泛化区间，也不约束收益或投资回报。
+The test examples, true labels, per-class supports, and the denominator J are fixed. We do not re-split the test set, redefine classes, or recompute filtered sets that depend on predictions. This is an envelope on a test-set statistic, not a population generalization interval, and it does not constrain returns or investment performance.
 
-## 2. 固定 B 的精确可达标签集合
+## 2. Exact reachable label set for a fixed B
 
-令 b=|B|，未改动票数为
+Let b=|B|, and let the unmodified vote counts be
 
 \[
 u_{jc}(B)=\#\{h\notin B:V_{jh}=c\}.
 \]
 
-定义
+Define
 
 \[
 R_j(B)=\left\{c:\ \forall d\ne c,\quad
 u_{jc}(B)+b\ge u_{jd}(B)+\mathbf1\{d<c\}\right\}.
 \]
 
-**命题 CM1。** R_j(B) 恰为威胁模型在固定 B 时第 j 个点的可达获胜类别，并且任意向量 (c₁,…,c_J)∈∏_jR_j(B) 都可同时实现。
+**Proposition CM1.** R_j(B) is exactly the set of winning classes reachable at the j-th point under the threat model with B fixed, and every vector (c₁,…,c_J)∈∏_jR_j(B) can be realized simultaneously.
 
-**证明。** 如果 c 能在某种改动下获胜，其总票数至多为 u_jc+b，其他类别 d 的总票数至少为 u_jd。获胜要求对 d<c 严格多一票、对 d>c 至少持平，故集合条件必要。反之，把 B 中全部 b 个投票都改为 c，就使其总票为 u_jc+b，所有对手票为 u_jd，因此集合条件充分。最后，对每个点 j，让 B 中每个头都输出所选 c_j；跨点自由的假设保证这些选择能共同实现。证毕。
+**Proof.** If c can win under some modification, its total vote count is at most u_jc+b, and every other class d has a total of at least u_jd. Winning requires strictly one more vote than each d<c and at least a tie with each d>c, so the set condition is necessary. Conversely, changing all b votes in B to c gives c a total of u_jc+b and leaves every competitor at u_jd, so the set condition is sufficient. Finally, for each point j, let every head in B output the chosen c_j; the assumption of freedom across points ensures that these choices can be realized jointly. ∎
 
-R_j(B) 始终非空：保留全部原票是允许的改动，其原获胜者可达。b=0 时 R_j(B) 是原获胜者单点集。
+R_j(B) is always nonempty: keeping all original votes is an allowed modification, so the original winner is reachable. When b=0, R_j(B) is the singleton containing the original winner.
 
-**为什么不只用票数差？** 固定 B 后，必须知道哪些头投了哪类。只有总票数的逐点公式会抹掉不同测试点之间的头身份关联；共同 B 正是集体收紧的信息来源。
+**Why not just use vote margins?** Once B is fixed, one must know which heads voted for which class. A pointwise formula based only on total vote counts erases the correlation of head identities across test points; the common B is exactly the source of information for the collective tightening.
 
-## 3. 只枚举最大预算集合即可
+## 3. Enumerating only maximum-budget sets suffices
 
-**命题 CM2。** B⊆B' 蕴含 R_j(B)⊆R_j(B')。因此，对任意固定测试集统计量 S，威胁模型在 |B|≤b_max 下的最大/最小值，等于只在 |B|=b_max 下优化的最大/最小值。
+**Proposition CM2.** B⊆B' implies R_j(B)⊆R_j(B'). Hence, for any fixed test-set statistic S, the maximum/minimum under the threat model with |B|≤b_max equals the maximum/minimum obtained by optimizing only over |B|=b_max.
 
-**证明。** 在 B'\B 中保留原票，可原样复现 B 允许的任何投票。集合嵌套逐点成立，而且整张投票矩阵的可行域也嵌套。任意小集合都能扩充到 b_max 个头，故≤预算的可行域并集等于恰好最大预算的并集。证毕。
+**Proof.** Keeping the original votes in B'\B reproduces exactly any vote pattern allowed by B. The set inclusion holds pointwise, and the feasible region for the whole vote matrix is nested as well. Any smaller set can be enlarged to b_max heads, so the union of feasible regions over budgets ≤ b_max equals the union over sets of exactly the maximum budget. ∎
 
-这一约简依赖“至多受影响”的含义。若另一威胁模型要求被选中的每个头必须在每个点真正改票，就不能直接使用。
+This reduction relies on the "at most affected" meaning. If another threat model requires every selected head to actually change its vote at every point, the reduction cannot be used directly.
 
-## 4. Accuracy 的紧集体包络
+## 4. Tight collective envelope for accuracy
 
-固定 B，定义
+For fixed B, define
 
 \[
 L_{\rm acc}(B)=\frac1J\sum_{j=1}^J\mathbf1\{R_j(B)=\{y_j\}\},\qquad
 U_{\rm acc}(B)=\frac1J\sum_{j=1}^J\mathbf1\{y_j\in R_j(B)\}.
 \]
 
-**命题 CM3。** 这两个数是固定 B 下 accuracy 的精确最小值与最大值。全威胁模型的精确极值为
+**Proposition CM3.** These two numbers are the exact minimum and maximum of accuracy for fixed B. The exact extremes under the full threat model are
 
 \[
 L_{\rm acc}^{\rm coll}=\min_{|B|=b_{\max}}L_{\rm acc}(B),\qquad
 U_{\rm acc}^{\rm coll}=\max_{|B|=b_{\max}}U_{\rm acc}(B).
 \]
 
-**证明。** 对每个点，只有其可达集合恰为真标签单点集时，最坏预测仍必定正确；只要真标签可达，就存在正确预测。CM1 保证分别选择这些最坏/最好标签可以跨点同时实现。有限个 B 上取极值，再由 CM2，得到全威胁模型的精确极值。证毕。
+**Proof.** At each point, the worst-case prediction is guaranteed correct only when the reachable set is exactly the singleton of the true label; whenever the true label is reachable, a correct prediction exists. CM1 guarantees that these worst/best labels can be chosen simultaneously across points. Taking extremes over the finitely many B and applying CM2 gives the exact extremes under the full threat model. ∎
 
-对通常的逐点放松，令 R_j^union=∪_{|B|≤b_max}R_j(B)，再允许每个点独立从该并集中选择标签。因为它允许不同点使用不同的 B，这个可行域包含集体可行域，因此
+For the usual pointwise relaxation, let R_j^union=∪_{|B|≤b_max}R_j(B) and let each point choose its label independently from this union. Because it allows different points to use different B, this feasible region contains the collective feasible region, so
 
 \[
 L_{\rm acc}^{\rm union}\le L_{\rm acc}^{\rm coll}\le
 U_{\rm acc}^{\rm coll}\le U_{\rm acc}^{\rm union}.
 \]
 
-收紧可能是严格的，见第 7 节。Accuracy 可逐点相加，正是 CM3 精确分解的原因；下面的 macro-F1 不能这样处理。
+The tightening can be strict; see Section 7. Accuracy is additive over points, which is exactly why CM3 decomposes exactly; macro-F1 below cannot be treated this way.
 
-## 5. Macro-F1：分量式安全外包络
+## 5. Macro-F1: a componentwise safe outer envelope
 
-固定类别 c，令 a_c=Σ_j1{y_j=c} 为固定实际支持数。候选预测向量 z 的真阳性、假阳性为
+Fix a class c, and let a_c=Σ_j1{y_j=c} be the fixed actual support. For a candidate prediction vector z, the true positives and false positives are
 
 \[
 t_c=\sum_j\mathbf1\{y_j=c,z_j=c\},\qquad
 f_c=\sum_j\mathbf1\{y_j\ne c,z_j=c\}.
 \]
 
-采用固定 K 类宏平均、`zero_division=0` 约定：
+We use the fixed-K-class macro average with the `zero_division=0` convention:
 
 \[
 F_c(t_c,f_c)=
@@ -91,9 +91,9 @@ F_c(t_c,f_c)=
 F_{\rm macro}=K^{-1}\sum_cF_c.
 \]
 
-a_c=0 时 t_c 必为 0，类别 F1 恒为 0，包括完全没有预测该类的情形。这里不会把无支持类别从 K 中删去。不同库的自动标签推断可能采用不同分母，因此必须显式传固定类别列表并设定零分母约定。
+When a_c=0, t_c must be 0 and the class F1 is identically 0, including the case where the class is never predicted. Classes without support are not removed from K here. Automatic label inference in different libraries may use different denominators, so the fixed class list must be passed explicitly and the zero-denominator convention must be set.
 
-对固定 B 的可达集合，定义整数端点
+For the reachable sets with B fixed, define the integer endpoints
 
 \[
 \begin{aligned}
@@ -104,95 +104,95 @@ f_c^{\max}(B)&=\#\{j:y_j\ne c,\ c\in R_j(B)\}.
 \end{aligned}
 \]
 
-令
+Let
 
 \[
 \ell_c(B)=F_c(t_c^{\min},f_c^{\max}),\qquad
 u_c(B)=F_c(t_c^{\max},f_c^{\min}),
 \]
 
-并作类别平均，得到 L_macro^comp(B)=K⁻¹Σ_cℓ_c(B)、U_macro^comp(B)=K⁻¹Σ_cu_c(B)。
+and average over classes to obtain L_macro^comp(B)=K⁻¹Σ_cℓ_c(B) and U_macro^comp(B)=K⁻¹Σ_cu_c(B).
 
-**命题 CM4。** 对固定 B 下任何可达预测向量，
+**Proposition CM4.** For every reachable prediction vector with B fixed,
 
 \[
 L_{\rm macro}^{\rm comp}(B)\le F_{\rm macro}\le U_{\rm macro}^{\rm comp}(B).
 \]
 
-在所有 |B|=b_max 上分别取最小下界和最大上界，仍是完整威胁模型的安全包络，但一般不是精确极值。
+Taking the smallest lower bound and the largest upper bound over all |B|=b_max still gives a safe envelope for the full threat model, but in general not the exact extremes.
 
-**证明。** 根据可达集合定义，t_c 和 f_c 分别落入所列整数端点区间。a_c>0 时，2t/(a_c+t+f) 关于 t 单调不减，关于 f 单调不增：对应偏导为 2(a_c+f)/(a_c+t+f)²≥0 和 −2t/(a_c+t+f)²≤0。因此每类都落入 [ℓ_c,u_c]。a_c=0 时所有可行 t=0，整项恒 0，零分母约定给同一结论。对每类求和即得包络。任意实际共同 B 至少被对应包络包含，在 B 上再取外侧极值仍然安全。证毕。
+**Proof.** By the definition of the reachable sets, t_c and f_c lie in the listed integer endpoint intervals. When a_c>0, 2t/(a_c+t+f) is nondecreasing in t and nonincreasing in f: the corresponding partial derivatives are 2(a_c+f)/(a_c+t+f)²≥0 and −2t/(a_c+t+f)²≤0. Hence each class lies in [ℓ_c,u_c]. When a_c=0, every feasible t=0, the term is identically 0, and the zero-denominator convention gives the same conclusion. Summing over classes gives the envelope. Every actual common B is contained in its corresponding envelope, so taking the outer extremes over B is still safe. ∎
 
-**单类精确不等于宏平均精确。** 对某个固定 c，t 的选择只涉及真标签为 c 的点，f 的选择只涉及其他点，二者使用互不重叠的样本；CM1 保证 (t_min,f_max) 和 (t_max,f_min) 分别可以实现。因此 ℓ_c、u_c 是单个类别 F1 的精确极值。然而，不同 c 的极值往往要求同一个错误样本同时预测成多个互斥类别，不能共同达到。第 8 节给出分量包络严格比真正宏平均范围宽的例子。
+**Exact per class does not mean exact for the macro average.** For a fixed c, the choice of t involves only points whose true label is c, and the choice of f involves only the other points, so the two use disjoint examples; CM1 guarantees that (t_min,f_max) and (t_max,f_min) can each be realized. Hence ℓ_c and u_c are the exact extremes of the single-class F1. However, the extremes for different c often require the same misclassified example to be predicted as several mutually exclusive classes at once, so they cannot be attained jointly. Section 8 gives an example where the componentwise envelope is strictly wider than the true macro-average range.
 
-若改用 R_j^union 计算同样的分量界，由集合嵌套可见每个 B 的 t_min≥union 的 t_min、t_max≤union 的 t_max、f_min≥union 的 f_min、f_max≤union 的 f_max。因此集体分量包络也不会比使用并集的同类分量包络更宽。但不要把分量包络的宽度与另一种 exact oracle 的宽度混称为“集体优化的紧度”。
+If the same componentwise bounds are computed with R_j^union instead, set inclusion shows that for each B, t_min ≥ the union t_min, t_max ≤ the union t_max, f_min ≥ the union f_min, and f_max ≤ the union f_max. Hence the collective componentwise envelope is never wider than the corresponding componentwise envelope built from the union. But do not conflate the width of the componentwise envelope with the width of a separate exact oracle under the label "tightness of collective optimization".
 
-## 6. 小规模 macro-F1 的精确 oracle
+## 6. Exact oracle for small-scale macro-F1
 
-### 混淆矩阵 DP
+### Confusion-matrix DP
 
-固定 B，令 C∈N^{K×K} 为混淆计数矩阵，行是真标签，列是预测标签。初始化 D₀={零矩阵}。逐点处理：
+Fix B, and let C∈N^{K×K} be the confusion count matrix, with rows indexed by the true label and columns by the predicted label. Initialize D₀={zero matrix}. Process the points one at a time:
 
 \[
 D_j=\{C+E_{y_j,c}:C\in D_{j-1},\ c\in R_j(B)\},
 \]
 
-其中 E_rc 只在 (r,c) 位置为 1；相同计数矩阵去重。最终对所有 C∈D_J 计算
+where E_rc is 1 only at position (r,c); identical count matrices are deduplicated. Finally, for every C∈D_J compute
 
 \[
 F_{\rm macro}(C)=\frac1K\sum_c
 \frac{2C_{cc}}{a_c+\sum_rC_{rc}},
 \]
 
-分母为零的项取 0，再取最小和最大。
+with terms whose denominator is zero set to 0, and take the minimum and maximum.
 
-**命题 CM5。** 此 DP 的终态恰为固定 B 下全部可达混淆矩阵，因而它求得 macro-F1 的精确极值。进一步枚举 B 得到完整外放松威胁模型下的精确集体极值。
+**Proposition CM5.** The final states of this DP are exactly all reachable confusion matrices for fixed B, so it computes the exact extremes of macro-F1. Further enumerating B gives the exact collective extremes under the full outer-relaxation threat model.
 
-**证明。** 归纳 j。零点时只有零矩阵。每个可行 j 点预测向量都由一个可行前 j−1 点向量和一个允许标签 c∈R_j(B) 组成，DP 恰好添加其计数。反方向，每个 DP 转移选的标签都允许，且由 CM1 可跨点同时实现。因此无漏项、无多项；状态去重不改变可达计数。统计量仅依赖 C，所以末态优化精确。证毕。
+**Proof.** Induction on j. At zero points there is only the zero matrix. Every feasible prediction vector on the first j points consists of a feasible vector on the first j−1 points and an allowed label c∈R_j(B), and the DP adds exactly its counts. Conversely, every label chosen by a DP transition is allowed and, by CM1, can be realized jointly across points. Hence nothing is missed and nothing extra is added; deduplicating states does not change the reachable counts. The statistic depends only on C, so optimizing over the final states is exact. ∎
 
-### 足够统计量 DP（同样精确）
+### Sufficient-statistic DP (also exact)
 
-仅计算 macro-F1 时，可把状态压缩成 (t₀,…,t_{K−1},p₀,…,p_{K−1})，其中 p_c 是预测为 c 的数量。选择 c 时令 p_c+=1，若 c=y_j 再令 t_c+=1。最终计算 K⁻¹Σ_c 2t_c/(a_c+p_c)。相同状态的任意前缀具有相同未来可行转移，因为本威胁模型的 R_j(B) 不依赖历史预测，所以状态合并仍然精确。
+When only macro-F1 is needed, the state can be compressed to (t₀,…,t_{K−1},p₀,…,p_{K−1}), where p_c is the number of points predicted as c. Choosing c sets p_c+=1, and if c=y_j also sets t_c+=1. At the end compute K⁻¹Σ_c 2t_c/(a_c+p_c). Any two prefixes with the same state have the same feasible future transitions, because in this threat model R_j(B) does not depend on past predictions, so merging states remains exact.
 
-### 复杂度、超限与数值
+### Complexity, limits, and numerics
 
-- 枚举最大预算 B 的数量是 binom(m,b_max)；按“至多”直算则是 Σ_{b≤b_max}binom(m,b)，后者可用 CM2 避免。
-- 每个 B 的可达集合直接计算为 O(JK²)，若每次重新扫描未改头还需 O(Jm) 计数。Accuracy 与 macro 分量式统计随后为 O(JK)。
-- DP 单步从每个状态最多扩展 K 个标签。混淆矩阵总状态上界为 ∏_r binom(a_r+K−1,K−1)，实际由 R 限制；这已可能很大。压缩 (t,p) 终态数量至多 (J+1)^K·binom(J+K−1,K−1)，仍不能假定真实测试集可承受。
-- “小规模 oracle”是精确验证参考，不是 T4/CPU 大规模可行性的保证。若设状态或子集数上限，必须明确返回未完成/外包络模式；只枚举部分 B 后的最小、最大值一般是内侧估计，不能冒充完整认证包络。
-- 所有计数是整数，每项 F1 与 accuracy 是有理数。证明级数值应使用整数交叉乘法或 `fractions.Fraction` 比较与输出约分后的 numerator/denominator。十进制小数只是展示；若使用浮点结果作界，必须向外舍入，而非只保留若干小数位。
+- The number of maximum-budget sets B to enumerate is binom(m,b_max); computing directly under "at most" would take Σ_{b≤b_max}binom(m,b), which CM2 avoids.
+- Computing the reachable sets directly for each B takes O(JK²), plus O(Jm) for counting if the unmodified heads are rescanned each time. Accuracy and the macro componentwise statistics then take O(JK).
+- Each DP step expands each state by at most K labels. The total number of confusion-matrix states is bounded by ∏_r binom(a_r+K−1,K−1), and in practice is limited by R; this can already be large. The number of compressed (t,p) final states is at most (J+1)^K·binom(J+K−1,K−1), and one still cannot assume a real test set is tractable.
+- The "small-scale oracle" is an exact verification reference, not a guarantee of large-scale feasibility on a T4/CPU. If a cap on states or subsets is set, the code must explicitly return an incomplete/outer-envelope mode; the minimum and maximum after enumerating only part of the B sets are in general inner estimates and must not be passed off as a complete certified envelope.
+- All counts are integers, and each F1 term and accuracy is rational. Proof-grade numerics should use integer cross-multiplication or `fractions.Fraction` for comparisons and output the reduced numerator/denominator. Decimals are for display only; if floating-point results are used as bounds, they must be rounded outward, not merely truncated to a few decimal places.
 
-## 7. 集体约束严格收紧两端的例子
+## 7. An example where the collective constraint strictly tightens both ends
 
-令 K=2、m=2、k=1，J=4，平局选类别 0：
+Let K=2, m=2, k=1, J=4, with ties going to class 0:
 
-| 点 j | 头 1 | 头 2 | 真标签 |
+| point j | head 1 | head 2 | true label |
 |---:|---:|---:|---:|
 | 1 | 0 | 1 | 0 |
 | 2 | 1 | 0 | 0 |
 | 3 | 0 | 1 | 1 |
 | 4 | 1 | 0 | 1 |
 
-B={头1} 时，四个 R_j 依次为 {0,1}、{0}、{0,1}、{0}。B={头2} 时，依次为 {0}、{0,1}、{0}、{0,1}。每个点的逐点并集都是 {0,1}。
+With B={head 1}, the four R_j are, in order, {0,1}, {0}, {0,1}, {0}. With B={head 2}, they are {0}, {0,1}, {0}, {0,1}. The pointwise union at every point is {0,1}.
 
-逐点放松可以把所有点判对，也可全部判错，故 accuracy 和 macro-F1 的 exact 逐点范围都是 [0,1]。但任何共同 B 都固定住一个真 0 和一个真 1 的点，且两者预测均为 0。集体 accuracy 因而为 [1/4,3/4]。
+The pointwise relaxation can make every point correct, or every point wrong, so the exact pointwise ranges of both accuracy and macro-F1 are [0,1]. But every common B pins down one point with true label 0 and one with true label 1, and both are predicted as 0. The collective accuracy is therefore [1/4,3/4].
 
-以 B={头1} 为例，只有第 1 和第 3 个点可选，它们对应四种预测向量：
+Take B={head 1}: only points 1 and 3 have a choice, and they give four prediction vectors:
 
-| 全部预测向量 | accuracy | macro-F1 |
+| full prediction vector | accuracy | macro-F1 |
 |---|---:|---:|
 | (0,0,0,0) | 1/2 | 1/3 |
 | (0,0,1,0) | 3/4 | 11/15 |
 | (1,0,0,0) | 1/4 | 1/5 |
 | (1,0,1,0) | 1/2 | 1/2 |
 
-另一个 B 由对称性得到同样范围。因此 exact 集体 macro-F1 包络是 [1/5,11/15]。本例的分量式包络恰好达到同样两端，但这不是一般性质。
+The other B gives the same range by symmetry. Hence the exact collective macro-F1 envelope is [1/5,11/15]. In this example the componentwise envelope happens to attain the same two endpoints, but this is not a general property.
 
-另一个零支持检查例：只保留上表第 1、2 行，即 y=(0,0)，固定 K=2。集体 accuracy=[1/2,1]；类别 1 无实际支持，其 F1 恒为 0，集体 macro-F1=[1/3,1/2]，不是把缺失类别删去后的 [2/3,1]。
+A further zero-support check: keep only rows 1 and 2 of the table above, i.e. y=(0,0), with K=2 fixed. The collective accuracy is [1/2,1]; class 1 has no actual support and its F1 is identically 0, so the collective macro-F1 is [1/3,1/2], not the [2/3,1] obtained by dropping the missing class.
 
-## 8. 分量式 macro-F1 界不紧的明确例子
+## 8. An explicit example where the componentwise macro-F1 bound is not tight
 
-令 K=3、m=5、k=1、y=(0,1,2)：
+Let K=3, m=5, k=1, y=(0,1,2):
 
 \[
 V=\begin{pmatrix}
@@ -202,30 +202,30 @@ V=\begin{pmatrix}
 \end{pmatrix}.
 \]
 
-改变前三个头中的任意一个时，可达集合为 ({1,2},{1},{2})；改变最后两个头中的任意一个时，为 ({1},{1},{2})。所以首点必错，另两点必对，accuracy 恒为 2/3。
+Changing any one of the first three heads gives reachable sets ({1,2},{1},{2}); changing either of the last two heads gives ({1},{1},{2}). So the first point is always wrong and the other two are always right, and accuracy is identically 2/3.
 
-首点预测成 1 时，三类 F1 为 (0,2/3,1)；预测成 2 时，为 (0,1,2/3)。无论哪一种，macro-F1 都等于 5/9，故真正集体范围是 [5/9,5/9]。
+When the first point is predicted as 1, the three class F1 values are (0,2/3,1); when it is predicted as 2, they are (0,1,2/3). Either way, macro-F1 equals 5/9, so the true collective range is [5/9,5/9].
 
-但对有 R₁={1,2} 的 B，分量式下界让类别 1、2 都承担这个错误点的假阳性，给 (0+2/3+2/3)/3=4/9；分量式上界又让二者都不承担它，给 (0+1+1)/3=2/3。最终分量集体包络为 [4/9,2/3]。这两个虚拟极值无法共同实现，却仍安全地包住 5/9。
+But for a B with R₁={1,2}, the componentwise lower bound makes both classes 1 and 2 absorb the false positive from this misclassified point, giving (0+2/3+2/3)/3=4/9; the componentwise upper bound lets neither absorb it, giving (0+1+1)/3=2/3. The final componentwise collective envelope is [4/9,2/3]. These two fictitious extremes cannot be realized jointly, yet the envelope still safely contains 5/9.
 
-因此实现输出必须区分 `component_outer_bound` 与 `exact_relaxed_oracle`，并明确某个界是否来自完整 B 枚举。不能仅因每类的端点精确就给整个 macro-F1 打上 exact 标签。
+Implementation output must therefore distinguish `component_outer_bound` from `exact_relaxed_oracle`, and must state whether a bound comes from a complete enumeration of B. The whole macro-F1 must not be labelled exact merely because the per-class endpoints are exact.
 
-## 9. 预算饱和、审计组合与停止条件
+## 9. Budget saturation, combination with audits, and stopping conditions
 
-- k≥m 时一律归一为 b_max=m，只有一个最大集合 B=全部头；所有 R_j 都是全部 K 类。
-- 若 K≥2，则 accuracy 的完整威胁模型范围为 [0,1]。macro-F1 的范围为 [0,s/K]，其中 s=#{c:a_c>0}：全部预测正确达到每个有支持类 F1=1，无支持类恒 0；把每点改成任意错误标签可使所有真阳性为 0。此时区间不是总为 [0,1]，因为固定类别的零支持约定会限制宏平均最大值。
-- K=1 时所有点及预测都为唯一类别，J≥1 保证 accuracy=macro-F1=1。J=0、m=0、非法标签或负预算应拒绝，不能靠零分母约定掩盖没有评测对象。
-- 给定审计上界 K_u，把本包络用于预算 min(K_u,m)，在 T1.5 的其他条件都成立时，得到置信水平至少 1−α 的清洁比较器测试集包络。Accuracy 与 macro-F1 都是同一“真实影响片数不超过预算”事件的确定性后果，因此同时报告二者不需再为每个指标另支付 α。审计或总体泛化的其他失败事件仍按其有效保证组合。
-- 不确定的真实标签、评测样本选择偏差、受污染共享骨干和不可测的 ID/选择规则没有被这些组合公式修复。原始训练中是否只有 k 个头可变，需要另行证据。
+- When k≥m, always normalize to b_max=m; there is only one maximum set, B = all heads, and every R_j is the set of all K classes.
+- If K≥2, the accuracy range under the full threat model is [0,1]. The macro-F1 range is [0,s/K], where s=#{c:a_c>0}: predicting everything correctly gives F1=1 for every supported class, while unsupported classes are identically 0; changing every point to any wrong label makes all true positives 0. In this case the interval is not always [0,1], because the zero-support convention for fixed classes limits the maximum of the macro average.
+- When K=1, all points and predictions are the single class, and J≥1 guarantees accuracy = macro-F1 = 1. J=0, m=0, invalid labels, or a negative budget should be rejected; the zero-denominator convention must not be used to mask the absence of anything to evaluate.
+- Given an audit upper bound K_u, applying this envelope with budget min(K_u,m), when the other conditions of T1.5 all hold, gives a clean-comparator test-set envelope at confidence level at least 1−α. Accuracy and macro-F1 are both deterministic consequences of the same event "the true number of affected shards does not exceed the budget", so reporting both does not require paying α again for each metric. Other failure events, for the audit or for population generalization, are still combined according to their valid guarantees.
+- Uncertain true labels, selection bias in the evaluation examples, a contaminated shared backbone, and unmeasurable ID/selection rules are not repaired by these combinatorial formulas. Whether only k heads could change in the original training requires separate evidence.
 
-## 10. 复核与交付判据
+## 10. Review and deliverable criteria
 
-以上三组例子的数字已在本地用整数枚举头集合、逐点可达标签笛卡尔积与 `Fraction` 计算逐项核对；无抽样误差，不报告置信区间。程序层面的期望验收是：
+The numbers in the three groups of examples above were checked locally item by item by enumerating head sets with integers, taking the Cartesian product of pointwise reachable labels, and computing with `Fraction`; there is no sampling error, and no confidence intervals are reported. The expected acceptance criteria at the program level are:
 
-1. 在小 J,m,K 上，公式 R_j(B) 与枚举 B 中全部改票一致；任意实现不得漏掉可达类别。
-2. Accuracy 的集体公式与全量改票/标签枚举一致。
-3. Macro 分量式包络包含 exact DP/oracle 的所有值，并重现第 8 节的严格松弛。
-4. exact oracle 与直接枚举小规模预测向量一致；零支持、k=0、k≥m、K=1 均按本文件约定处理。
-5. 超出子集/状态预算时不返回伪 exact 结果；有理数原始输出可重算，小数显示不被当作未经舍入控制的严格端点。
+1. On small J, m, K, the formula R_j(B) agrees with enumerating all vote changes within B; no implementation may miss a reachable class.
+2. The collective formula for accuracy agrees with full enumeration of vote changes/labels.
+3. The macro componentwise envelope contains every value of the exact DP/oracle, and reproduces the strict looseness of Section 8.
+4. The exact oracle agrees with direct enumeration of small-scale prediction vectors; zero support, k=0, k≥m, and K=1 are all handled according to the conventions of this file.
+5. When the subset/state budget is exceeded, no pseudo-exact result is returned; raw rational outputs can be recomputed, and decimal displays are not treated as strict endpoints without rounding control.
 
-这是一组可执行证书需要的数学接口，不是“已在真实金融模型上取得非空证书”的证据。下一步的研究问题可写为：在固定数据来源和审计置信水平下，实际票矩阵的共同头结构能把审计成本—统计区间宽度前沿改善多少？本文件只使这个问题的目标量与正确性标准明确。
+This is a set of mathematical interfaces needed by an executable certificate, not evidence that "a non-vacuous certificate has been obtained on a real financial model". The next research question can be stated as: for a fixed data source and audit confidence level, how much can the common-head structure of the actual vote matrix improve the frontier between audit cost and statistical interval width? This file only makes the target quantity and the correctness criteria of that question explicit.

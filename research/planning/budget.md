@@ -1,9 +1,9 @@
-# 精确审计量前沿：运行前预算
+# Exact audit-size frontier: pre-run budget
 
-日期：2026-11-15。范围：理论数值检查，不是Phase 1模型训练。
+Date: 2026-11-15. Scope: theoretical numeric checks, not Phase 1 model training.
 
-- 设备：本地CPU；Python标准库，不联网。
-- 预算：预计运行小总体穷举及离散前沿不超过30秒；内存低于128MiB，GPU显存0，训练token0。
-- 输入：人工设定N、票数和有理数alpha；不填任何真实SEC语料数量。
-- 检查：最小n与已有audit_upper的零发现门等价；小N穷举、单调性、全体审计、平局和无效输入。
-- 解释预注册：模型、总体、票差和审计设计先冻结；前沿条件于未来抽样发现零错误，不保证会观察零错误。若x>0，应按实际x重算固定n上界。不得重复抽样到零发现。
+- Device: local CPU; Python standard library, no network.
+- Budget: small-population exhaustion and the discrete frontier expected to take no more than 30 seconds; memory below 128MiB, 0 GPU memory, 0 training tokens.
+- Inputs: hand-set N, vote counts and rational alpha; no real SEC corpus counts are filled in.
+- Checks: the minimum n is equivalent to the zero-finding gate of the existing audit_upper; small-N exhaustion, monotonicity, full audit, ties and invalid inputs.
+- Pre-registered interpretation: the model, population, vote margins and audit design are frozen first; the frontier is conditional on the future sample finding zero errors and does not guarantee that zero errors will be observed. If x>0, the upper bound for the fixed n should be recomputed with the actual x. Resampling until zero findings is not allowed.

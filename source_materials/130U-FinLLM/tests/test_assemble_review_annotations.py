@@ -19,8 +19,8 @@ def fixture_files(tmp_path):
     source = tmp_path / "input.jsonl"
     source.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
     annotation = tmp_path / "draft.tsv"
-    annotation.write_text("1\tbullish\tBuy ABC\t明确建议买入。\tcompany\teasy\tmedium\n"
-                          "2\tneutral\tnet profit increased\t仅报告利润增长。\tcompany\teasy\tlow\n", encoding="utf-8")
+    annotation.write_text("1\tbullish\tBuy ABC\tExplicitly recommends buying.\tcompany\teasy\tmedium\n"
+                          "2\tneutral\tnet profit increased\tOnly reports profit growth.\tcompany\teasy\tlow\n", encoding="utf-8")
     return source, annotation, tmp_path / "output.jsonl"
 
 
@@ -35,9 +35,9 @@ def test_literal_proposals_remain_unapproved_and_rerun_is_readonly(tmp_path):
 
 
 @pytest.mark.parametrize("replacement", [
-    "1\tbullish\tinvented quote\t说明。\tcompany\teasy\tlow\n",
-    "1\tbullish\tBuy ABC\t说明。\tcompany\teasy\tlow\n" * 2,
-    "9\tbullish\tBuy ABC\t说明。\tcompany\teasy\tlow\n",
+    "1\tbullish\tinvented quote\tExplanation.\tcompany\teasy\tlow\n",
+    "1\tbullish\tBuy ABC\tExplanation.\tcompany\teasy\tlow\n" * 2,
+    "9\tbullish\tBuy ABC\tExplanation.\tcompany\teasy\tlow\n",
 ])
 def test_invented_evidence_duplicate_and_unknown_ids_fail_before_export(tmp_path, replacement):
     source, annotation, output = fixture_files(tmp_path)

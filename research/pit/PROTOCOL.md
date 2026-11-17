@@ -1,31 +1,31 @@
-# T1.1 历史非干扰：构造与反例检查协议
+# T1.1 historical non-interference: construction and counterexample check protocol
 
-2026-11-16，执行前记录。来源层级：本轮将运行的数字均为“我们的有限构造检查”，不是金融实证或来源审计。工作仅在本地；不下载、不联网、不读取私有文本、不训练主线模型。G0保持未通过，本轮推进已允许提前进行的定理及其构造性组件检查。
+2026-11-16, recorded before execution. Source level: the numbers this round will produce are all "our finite construction checks", not financial empirics or a provenance audit. Work is local only: no downloads, no network, no reading of private text, no main-line model training. G0 stays not passed; this round advances the theorem and its constructive component checks, which were already allowed to proceed early.
 
-## 目标与范围
+## Goal and scope
 
-导师WP1.2要求每个组件显式接受截止日，未来追加不改变过去输出。这里将要求写成可核对的数学接口：完整版本日志先投影为知识截止时点的快照，之后的过滤、去重、采样、验证集划分、词表拟合和超参选择只能读取该快照。新增研究稿应区分历史等价非干扰、因子化与未来追加不变，以及这些结论所需的合法输入域。
+The advisor's WP1.2 requires every component to take the cutoff date explicitly, so that future appends do not change past outputs. Here the requirement is written as a checkable mathematical interface: the complete version log is first projected to a snapshot at the knowledge cutoff, and the later filtering, deduplication, sampling, validation-split, vocabulary fitting and hyperparameter selection may only read that snapshot. The new research manuscript should distinguish historically equivalent non-interference, factorization and invariance under future appends, and the valid input domain these conclusions need.
 
-只用记录时间投影可以证明**相对于给定记录的非干扰**；它不认证记录时间真实、旧版本当年已公开、标签当时已可得或规则确实当时制定。真实历史性仍需要来源证据。源码/配置/随机种子也是输入，必须固定并由历史可测信息或独立外生机制决定。不能把今天选择了较好的配置伪装成历史配置。
+Projecting by recorded time alone can prove **non-interference relative to the given records**; it does not certify that the recorded times are true, that old versions were public at the time, that labels were available at the time, or that rules were really set at the time. Real historicity still needs provenance evidence. Source code/configuration/random seeds are also inputs; they must be fixed and determined by historically measurable information or by an independent exogenous mechanism. A configuration chosen today because it works better cannot be disguised as a historical configuration.
 
-## 构造契约
+## Construction contract
 
-1. 文档以版本/事件为单位，保留稳定文档ID、内容哈希、知识时间、来源与核心标记；修订和删除不能回写旧事件。文档事件时间不替代知识时间。标签、角色和其他影响训练的元数据一并进入版本有效性范围。
-2. 先按知识时间投影，再选可见版本、执行过滤和去重。未来同ID修订、未来墓碑、未来近重复桥均不得改变过去组件。输入外层时间类型等合法域检查与未来载荷访问要区分；不承诺对任意损坏数据库都返回模型结果。
-3. 各组件产出确定的规范字节。固定seed、规范排序、精确并列规则；不以完整日志长度、hash、未来排除数量或系统时钟决定样本、词表或候选。
-4. 全日志指纹、处理耗时、未来记录数等操作性信息若需记录，只放在独立audit envelope；它们不属于声称不变的历史产物。历史稳定hash只能绑定可见投影及固定外生输入。
-5. 词表候选仅在历史train拟合，按历史dev的未知词比例及预固定容量代价作确定选择。这里只检验完整超参选择依赖链，不训练金融分类器或语言模型，不把该词表选择目标当科研性能贡献。空历史/空开发分区采用提前写定的默认行为，不能借未来数据补足。
-6. 单条未来追加检验只有在合法投影/扩展闭包等条件下才能迭代成全部有限追加；有限运行通过不证明全域条件。代码、纸笔证明和有限反例检查分别报告。
+1. Documents are handled per version/event, keeping a stable document ID, content hash, knowledge time, source and core marker; revisions and deletions must not be written back into old events. A document's event time does not replace its knowledge time. Labels, roles and other metadata that affect training all fall within the scope of version validity.
+2. Project by knowledge time first, then choose the visible version, filter and deduplicate. Future revisions of the same ID, future tombstones and future near-duplicate bridges must not change past components. Valid-domain checks such as the outer time type of the input are to be distinguished from access to future payloads; there is no promise to return a model result for an arbitrarily corrupted database.
+3. Each component produces deterministic canonical bytes. Fixed seeds, canonical ordering, exact tie rules; samples, vocabularies or candidates are not determined by the full log's length, hash, number of future exclusions or the system clock.
+4. Operational information such as a full-log fingerprint, processing time or the number of future records, if it needs to be recorded, goes only into a separate audit envelope; it is not part of the historical product claimed to be invariant. A historical stable hash may only bind the visible projection and the fixed exogenous inputs.
+5. Vocabulary candidates are fitted only on the historical train split and chosen deterministically by the unknown-word rate on the historical dev split and a pre-fixed capacity cost. This only tests the full dependency chain of hyperparameter selection; no financial classifier or language model is trained, and this vocabulary-selection objective is not treated as a research performance contribution. Empty historical/empty development partitions use default behaviour written down in advance and cannot be filled in with future data.
+6. A test of a single future append can be iterated to all finite appends only under conditions such as a valid projection/extension closure; passing finite runs does not prove the global conditions. Code, pen-and-paper proofs and finite counterexample checks are reported separately.
 
-## 运行前预算与判断规则
+## Pre-run budget and decision rules
 
-- CPU标准库，GPU/API/模型训练token数为0；构造测试与预定示例合计目标≤60秒。
-- 主示例使用既有WP0.5世界的小规模切片，最多1,000个版本事件；另外使用人工最小反例和有限枚举。真实私有语料不进入本轮。
-- 预计内存≤100MB，但若没有测量则不声称实际达标；记录实际wall time、Python/平台、代码与配置hash。
-- 必须覆盖六个指定组件，含未来版本、删除、内容、元数据与排列变化；不只比较最终hash而漏掉中间阶段。
-- 否决/修复条件：任何合法未来扩展改变任一稳定组件；未来隐藏输入影响候选或分区；实际版本不在截止日前；承诺比实现/输入域更强。发现失败先记录并修复，不挑掉失败场景。
-- 反例实现应实际展示“先全库处理再过滤”的失败；不把正确实现通过和错误实现失败当成新颖性证据。
+- CPU, standard library; 0 GPU/API/model-training tokens; target ≤60 seconds for construction tests and pre-specified examples combined.
+- The main example uses a small slice of the existing WP0.5 world, at most 1,000 version events; hand-made minimal counterexamples and finite enumerations are also used. Real private corpora do not enter this round.
+- Expected memory ≤100MB, but without a measurement no claim is made that it was actually met; record the actual wall time, Python/platform, and code and configuration hashes.
+- All six specified components must be covered, including changes in future versions, deletions, content, metadata and permutations; do not compare only the final hash and miss the intermediate stages.
+- Rejection/fix conditions: any valid future extension changes any stable component; a hidden future input affects candidates or partitions; the actual version is not before the cutoff; a promise is stronger than the implementation/input domain. When a failure is found, record and fix it first; do not drop failing scenarios.
+- The counterexample implementation should actually demonstrate the failure of "process the whole corpus first, then filter"; the correct implementation passing and the wrong one failing is not to be taken as evidence of novelty.
 
-## 待交付
+## To deliver
 
-条件命题与证明、规范化快照/六组件参考实现、边界与反例测试、带hash的运行汇总、独立审查与修复记录。产物暂置research/pit，最终仓库顶层布局迁移仍单独验收。此组件不能代替真实可信核心、时间戳审计、分片训练或非空历史回测证书。
+Conditional propositions and proofs, a canonical snapshot / reference implementation of the six components, boundary and counterexample tests, a run summary with hashes, an independent review and a fix record. The products are placed in research/pit for now; migration to the final top-level repository layout is still accepted separately. This component cannot replace a real trusted core, a timestamp audit, shard training or a non-empty historical backtest certificate.

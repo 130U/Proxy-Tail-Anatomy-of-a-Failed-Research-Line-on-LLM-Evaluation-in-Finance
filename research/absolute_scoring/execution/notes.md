@@ -1,9 +1,9 @@
-# 执行说明
+# Execution notes
 
-主调度代理在已经保存 223 次有效调用之后返回 `Bad Request`；尝试恢复该调度代理时再次返回同一错误。它们是两次调度请求错误，不是标题评分返回失败。此时第七轮最后两个评分代理均已完成并返回 `Saved`，主代理检查完成状态后直接接收其原输出，没有重新评分。接收后共 225 次有效调用。
+The main scheduling agent returned `Bad Request` after 223 valid calls had already been saved; an attempt to resume that scheduling agent returned the same error again. These were two scheduler request errors, not failures of headline scoring returns. At that point the last two scoring agents of round seven had both finished and returned `Saved`; the main agent checked their completion status and accepted their original outputs directly, without rescoring. After this there were 225 valid calls in total.
 
-第八轮由主代理接管调度，仍逐批创建全新评分代理，使用同一 `gpt-6-sol`、`reasoning_effort=low`、`fork_turns=none`、任务模板、原输入和校验程序。评分代理不继承调度者的研究上下文。调度任务路径因此由 `/root/absolute_scoring_runner/...` 改为 `/root/abs_r08_...`，均记录于 calls.jsonl。此前最多两个评分代理并行，接管后最多三个并行；冻结协议没有固定并发数，但这项宿主执行条件变化仍在此披露。未更改有效分数、提示、重复次数或分析规则。
+The main agent took over scheduling for round eight. It still created a fresh scoring agent for each batch, using the same `gpt-6-sol`, `reasoning_effort=low`, `fork_turns=none`, task template, original inputs and validation program. The scoring agents did not inherit the scheduler's research context. The scheduling task path therefore changed from `/root/absolute_scoring_runner/...` to `/root/abs_r08_...`; both are recorded in calls.jsonl. Before the takeover at most two scoring agents ran in parallel, and after it at most three. The frozen protocol did not fix the concurrency, but this change in host execution conditions is still disclosed here. Valid scores, the prompt, the number of repeats and the analysis rules were not changed.
 
-字段检查时，主代理曾看到源测试文件首行，包含该行旧标签；没有据此挑选样本或打分。抽样程序只以预先固定的种子、族和 ID 选择记录，评分代理输入仅含 ID、实体、标题和固定锚点。因此可以称选择程序不使用标签、评分代理不接触标签，不能称所有参与代理从未见过任何源标签。
+During the field check, the main agent saw the first row of the source test file, including that row's old label; it did not use it to select the sample or to score. The sampling program selects records only by the pre-fixed seed, families and IDs, and the scoring agents' inputs contain only the ID, entity, headline and fixed anchors. So we can say that the selection program does not use labels and that the scoring agents had no contact with labels, but we cannot say that no participating agent ever saw any source label.
 
-分数文件由记录工具按原始字节保存。记录的 completed_utc 是接收和校验完成时间，包含调度等待，不是精确模型推理时长。服务内部温度、随机种子和模型快照没有暴露，不能据会话新建与同一模型名称证明独立、同分布误差。
+The score files are saved as raw bytes by the recording tool. The recorded completed_utc is the time when receipt and validation finished, which includes scheduling waits; it is not the exact model inference time. The service's internal temperature, random seed and model snapshot were not exposed, so a new session and the same model name cannot prove independent, identically distributed errors.

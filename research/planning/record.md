@@ -1,73 +1,73 @@
-# 理论数值检查：观测票差对应的精确审计量前沿
+# Theoretical numeric check: exact audit-size frontier for observed vote margins
 
-日期：2026-11-15。状态：离线数学组件已实现并检查；不是Phase 1模型训练或真实语料证书。
+Date: 2026-11-15. Status: the offline mathematical component is implemented and checked; this is not Phase 1 model training or a real-corpus certificate.
 
-## 问题与预算
+## Question and budget
 
-给定固定模型的实际票差可以容忍多少污染，再反求在零发现情形下最少需要审计多少文档。预算开跑前写在 [budget.md](budget.md)：CPU、标准库、预计30秒内、0显存、0训练token。
+Given how much contamination the actual vote margins of a fixed model can tolerate, work backwards to the minimum number of documents that must be audited in the zero-finding case. The budget was written in [budget.md](budget.md) before the run: CPU, standard library, expected within 30 seconds, 0 GPU memory, 0 training tokens.
 
-## 定义与计算
+## Definition and computation
 
-固定N篇可疑文档、错误概率预算alpha，审计n篇且观察x=0。既有精确反演器定义
+Fix N suspect documents and an error-probability budget alpha, audit n documents, and observe x=0. The existing exact inverter defines
 
-`K_u(0) = max{K: P_Hyp(N,K,n)(X<=0) > alpha}`。
+`K_u(0) = max{K: P_Hyp(N,K,n)(X<=0) > alpha}`.
 
-对非负整数B<N，超几何CDF随K单调不增，故
+For a non-negative integer B<N, the hypergeometric CDF is non-increasing in K, so
 
 \[
 K_u(0)\le B \iff
 \frac{\binom{N-(B+1)}{n}}{\binom Nn}\le\alpha.
 \]
 
-右侧随n单调不增，二分搜索返回第一个成立的整数。搜索上端N−B使零发现概率为0。B≥N则n=0；负B、非整数B/N或无效alpha拒绝。使用整数comb与Fraction，无概率浮点近似；当K=B+1<n时用等价式 `comb(N-n,K)/comb(N,K)` 减少组合数计算。覆盖输出再次调用既有 `audit_upper`，同时核查n通过、n−1不通过。
+The right-hand side is non-increasing in n, and binary search returns the first integer for which it holds. The upper end of the search, N−B, makes the zero-finding probability 0. If B≥N then n=0; negative B, non-integer B/N or invalid alpha are rejected. Integer comb and Fraction are used, with no floating-point approximation of probabilities; when K=B+1<n, the equivalent form `comb(N-n,K)/comb(N,K)` is used to reduce binomial-coefficient computation. The coverage output calls the existing `audit_upper` again and checks both that n passes and that n−1 does not.
 
-对第j点，设最小编号平局规则的赢家为a_j，定义
+For the j-th point, let a_j be the winner under the smallest-index tie rule, and define
 
 \[
 r_j=\left\lfloor\frac{\min_{d\ne a_j}(n_{a_j}-n_d-\mathbf1\{d<a_j\})}{2}\right\rfloor.
 \]
 
-该点满足票差证书当且仅当给定整数片预算不超过r_j。欲认证比例q∈(0,1]，令r=ceil(qJ)，B取全部r_j降序排列后的第r个，再求最小n。覆盖层级按r/J离散，不强行插值；平台段保留在输出中。
+The point satisfies the vote-margin certificate if and only if the given integer shard budget is at most r_j. To certify a fraction q∈(0,1], let r=ceil(qJ), take B as the r-th of all r_j sorted in descending order, and then find the minimum n. Coverage levels are discrete in r/J and are not forcibly interpolated; plateau segments are kept in the output.
 
-**这是条件规划。** 不知道真实K时，不能保证审计发现零错误，也不能把 `P_(K=B+1)(X=0)` 当成实际获得证书的概率。任何x>0必须按实际x重新反演。模型/总体及抽样机制先固定；本程序不是anytime-valid规则。
+**This is conditional planning.** Without knowing the true K, there is no guarantee that the audit will find zero errors, and `P_(K=B+1)(X=0)` must not be taken as the probability of actually obtaining a certificate. Any x>0 must be inverted again with the actual x. The model/population and the sampling mechanism are fixed first; this program is not an anytime-valid rule.
 
-## 实际配置
+## Actual configuration
 
-- 当前基础仓库与新组件身份由本轮总报告的commit及 [source_hashes.json](source_hashes.json)绑定；新增规划代码执行时尚未单独提交。
-- Python 3.12.14，Windows本地CPU；无随机模拟，因此无seed。
-- 输入：脚本内人工设定的4组总体/投票场景；完全不是EDGAR测量数量。
-- 生成全部前沿用时0.730秒；8项unittest用时0.086秒且全部通过。来源层级：**我们的实验 planning**。
+- The identity of the current base repository and the new components is bound by the commit in this round's overall report and by [source_hashes.json](source_hashes.json); the new planning code had not been committed separately at execution time.
+- Python 3.12.14, local Windows CPU; no random simulation, hence no seed.
+- Input: 4 population/vote scenarios set by hand in the script; these are not EDGAR measured counts at all.
+- Generating all frontiers took 0.730 seconds; the 8 unittests took 0.086 seconds and all passed. Source level: **our experiment planning**.
 
-## 结果
+## Results
 
-alpha=1/20，以下全部是人工设定参数下的精确整数输出：
+alpha=1/20; everything below is exact integer output under hand-set parameters:
 
-| 假设总体N | 分片m | 目标覆盖q | 所需预算B | 零发现时的最小固定审计n |
+| Hypothetical population N | Shards m | Target coverage q | Required budget B | Minimum fixed audit n with zero findings |
 |---:|---:|---:|---:|---:|
-| 1000 | 11 | 1/6、1/3 | 5 | 393 |
+| 1000 | 11 | 1/6, 1/3 | 5 | 393 |
 | 1000 | 11 | 1/2 | 3 | 527 |
 | 1000 | 11 | 2/3 | 1 | 777 |
-| 1000 | 11 | 5/6、1 | 0 | 950 |
-| 10000 | 31 | 1/6、1/3 | 15 | 1707 |
+| 1000 | 11 | 5/6, 1 | 0 | 950 |
+| 10000 | 31 | 1/6, 1/3 | 15 | 1707 |
 | 10000 | 31 | 1/2 | 10 | 2383 |
 | 10000 | 31 | 2/3 | 6 | 3481 |
 | 10000 | 31 | 5/6 | 3 | 5271 |
 | 10000 | 31 | 1 | 0 | 9500 |
 | 20 | 2 | 1/2 | 1 | 16 |
 | 20 | 2 | 1 | 0 | 19 |
-| 0 | 2 | 1/2、1 | 1、0 | 0 |
+| 0 | 2 | 1/2, 1 | 1, 0 | 0 |
 
-完整输入票数、每点r_j、精确分数门概率、n与n−1反演结果见 [frontier_results.json](frontier_results.json)。票差为0的点需要K_u=0；N=1000且alpha=.05时只抽950篇并零发现，恰可排除K=1，因为漏掉单个错误的概率=(1000−950)/1000=.05。这是统计排除，并不证明总体事实上没有错误。
+The full input vote counts, the r_j of each point, the exact fractional gate probabilities, and the inversion results for n and n−1 are in [frontier_results.json](frontier_results.json). A point with vote margin 0 needs K_u=0; with N=1000 and alpha=.05, sampling only 950 documents with zero findings is exactly enough to exclude K=1, because the probability of missing a single error is (1000−950)/1000=.05. This is a statistical exclusion and does not prove that the population in fact has no errors.
 
-## 检查覆盖
+## Check coverage
 
-1. N=0,…,18、B=0,…,N+1、alpha∈{1/20,1/2,3/4}，逐n穷举，门条件与既有audit_upper一致；最小n完全一致。
-2. N<10所有K/n，双式零发现概率相等；空总体和全体审计边界正常。
-3. N≤30检查B增加时n不增、alpha更严格时n不减、N增加时n不减。
-4. m≤8所有三类票数构成，在r_j预算处使用独立可达标签枚举检查赢家唯一。
-5. m=2时全投最小编号类的半数平局例外；相比全投另一类有不同半径。
-6. qJ非整数时向上取整；前沿n随目标覆盖不减；拒绝非法矩阵、浮点alpha/q、布尔值与负预算。
+1. N=0,…,18, B=0,…,N+1, alpha∈{1/20,1/2,3/4}, exhaustive over n: the gate condition agrees with the existing audit_upper, and the minimum n agrees exactly.
+2. For all K/n with N<10, the two forms of the zero-finding probability are equal; the empty-population and full-audit boundaries behave correctly.
+3. For N≤30, check that n does not increase when B increases, does not decrease when alpha is stricter, and does not decrease when N increases.
+4. For all three-class vote compositions with m≤8, an independent reachable-label enumeration checks that the winner is unique at the r_j budget.
+5. For m=2, the half-and-half tie exception when all votes go to the smallest-index class; compared with all votes going to the other class, the radius differs.
+6. Non-integer qJ is rounded up; the frontier n does not decrease with target coverage; invalid matrices, floating-point alpha/q, booleans and negative budgets are rejected.
 
-## 结论与限制
+## Conclusion and limits
 
-这个组件把近似的“3N/n”筛查替换为具体票差下的精确整数审计设计，并揭示高覆盖可能由少数零票差点决定。它没有改变污染模型、共享核心假设或统计覆盖定义，也不证明任何真实任务有用。实际可疑窗口规模、模型票差、时间戳审计质量与审计成本仍需要独立证据。本轮遵守外联限制，没有联系外部或下载数据。
+This component replaces the approximate "3N/n" screen with an exact integer audit design under concrete vote margins, and shows that high coverage can be determined by a few points with zero vote margin. It does not change the contamination model, the shared-core assumption or the definition of statistical coverage, and it does not prove usefulness for any real task. The actual size of the suspect window, the model's vote margins, the quality of the timestamp audit and the audit cost still need independent evidence. This round respected the outreach restriction and did not contact anyone externally or download data.

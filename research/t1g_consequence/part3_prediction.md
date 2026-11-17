@@ -1,25 +1,25 @@
-# TAT-QA 冻结预测：尚未计算实测
+# TAT-QA frozen prediction: measurement not yet computed
 
-来源层级：我们的实验（仅点值、显示精度与答案分布；本文件生成时未计算任何 TAT-QA 舍入盒值域）。
+Source level: our experiment (point values, displayed precision, and answer distribution only; no TAT-QA rounding-box range had been computed when this file was generated).
 
-输入：官方 TAT-QA 固定版本 `870accc41953dcde885aabeb963d94aabdc0fbc3`，train/dev/test_gold。6,960 道算术题；保守绑定 5661 道；预测定义覆盖 5261 道。
+Input: the official pinned TAT-QA version `870accc41953dcde885aabeb963d94aabdc0fbc3`, train/dev/test_gold. 6,960 arithmetic questions; 5661 conservatively bound; the prediction definition covers 5261.
 
-| 类型 | 题数 | 预测 1% 越界率 |
+| Type | Questions | Predicted 1% out-of-tolerance rate |
 |---|---:|---:|
 | growth | 1349 | 27.464491% |
 | difference | 2308 | 31.181029% |
 | ratio | 515 | 12.252849% |
 | sum | 1089 | 12.433881% |
-| 合计（预测适用总体） | 5261 | 24.494607% |
+| Total (population the prediction applies to) | 5261 | 24.494607% |
 
-增长率沿用 T1a：有效位数对的经验联合分布与增长幅度边际独立，基期 mantissa 在 [1,10) 上 log-uniform，积分精确两数增长规则。比率用同一 mantissa 模型，固定比率幅度，积分其同号绝对量的误差规则。预测函数不接收逐题 mantissa。
+Growth rates follow T1a: the empirical joint distribution of significant-digit pairs is taken as independent of the growth-magnitude marginal, the base-period mantissa is log-uniform on [1,10), and the exact two-number growth rule is integrated. Ratios use the same mantissa model with the ratio magnitude fixed, integrating the error rule for same-sign absolute quantities. The prediction function does not receive per-question mantissas.
 
-差值与线性和的半径由显示半末位和已知线性系数确定；将半径的经验分布与答案绝对值的经验分布独立混合，计算 R > 0.01 |y| 的比例，不读取逐题对应关系。该扩展的独立性是假设，未拟合任何参数。
+The radius of differences and linear sums is determined by the displayed half last-digit units and the known linear coefficients; the empirical distribution of radii is mixed independently with the empirical distribution of absolute answer values to compute the share with R > 0.01 |y|, without reading the per-question correspondence. The independence in this extension is an assumption; no parameter was fitted.
 
-另 400 道已绑定的非标准/非线性题无冻结的总体预测，后续仍审计并单独报告。不能将适用总体通过门槛写成全部算术题通过。
+Another 400 bound non-standard/nonlinear questions have no frozen population prediction; they are still audited later and reported separately. Passing the threshold on the applicable population must not be written up as all arithmetic questions passing.
 
-主比较使用同一预测适用总体，先对程序中心值定义 1% 容差（预测假设标准答案等于显示数计算值），同时报告标注答案为中心的敏感性结果。输出量级仅按 percent/明确单位换算；标注与中心偏移保留。
+The main comparison uses the same applicable population, first defining the 1% tolerance on the program center value (the prediction assumes the standard answer equals the value computed from the displayed numbers), and also reports a sensitivity result with the annotated answer as the center. Output magnitude is converted only by percent/explicit units; offsets between the annotation and the center are kept.
 
-来源绑定：逐个公式数值对应单一表格格子；无表格匹配时用相关段落单一数字。相同公式数字只有在对应单一来源时共享变量；来源重复或精度冲突排除。公式缺失来源的 0–10、12、100 和十进制单位倍数按显式结构常数处理，其余排除。这个口径是条件性舍入审计，未声称所有整数均实际被舍入。
+Source binding: each number in a formula corresponds to a single table cell; when there is no table match, a single number in the relevant paragraph is used. Identical formula numbers share a variable only when they correspond to a single source; duplicate sources or precision conflicts are excluded. Formula numbers without a source that are 0–10, 12, 100, or decimal unit multiples are treated as explicit structural constants; the rest are excluded. This convention is a conditional rounding audit and does not claim that all integers were actually rounded.
 
-验收冻结：总体预测与实测差不超过 5 个百分点，且同一总体一阶判定一致率至少 95%。各运算型差值、全绑定总体、全部算术题覆盖均同时报告。
+Acceptance, frozen: the population prediction and the measurement differ by no more than 5 percentage points, and the first-order decision agreement rate on the same population is at least 95%. Per-operation-type differences, the fully bound population, and coverage of all arithmetic questions are all reported at the same time.

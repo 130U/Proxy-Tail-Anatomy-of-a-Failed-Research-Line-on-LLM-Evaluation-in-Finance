@@ -1,56 +1,56 @@
-# 第一部分：可见差异存在，但未达到预设后果门槛
+# Part One: visible discrepancies exist, but the preset consequence threshold was not reached
 
-本节全部计数为**我们的实验**，来自固定版本 FinQA 全 train/dev/test 与 TAT-QA 全 train/dev/test_gold。表格按 FinQA filename / TAT-QA table uid 去重；问答按题 ID 计数。
+All counts in this section are **our experiment**, from the pinned versions of the full FinQA train/dev/test and the full TAT-QA train/dev/test_gold. Tables are deduplicated by FinQA filename / TAT-QA table uid; QA items are counted by question ID.
 
-| 指标 | FinQA | TAT-QA |
+| Metric | FinQA | TAT-QA |
 |---|---:|---:|
-| 检出的变化表格 / 候选行关系 | 95 / 917 | 296 / 2,956 |
-| 可比较且舍入盒相容的差额行 | 158 | 824 |
-| 差额不等：理论 / 实测 | 25% / **0/158** | 25% / **0/824** |
-| 可比较且相容的百分比变化行 | 573 | 950 |
-| 重算后舍入到印值位数仍不等 | **10/573 = 1.75%** | **58/950 = 6.11%** |
-| 同一均匀模型逐行预测的平均不等率 | 8.85% | 12.70% |
-| 印值与重算值相对差 >1% | 320/573 = 55.85% | 324/950 = 34.11% |
-| Δ<100 的百分比行不等 | **3/185 = 1.62%** | **37/164 = 22.56%** |
-| 标准解法重算、另有印值的已绑定题 | 5 | 51 |
-| 印值不通过官方数值评分 / 求变化分母 | **5/3,265 = 0.153%** | **16/4,524 = 0.354%** |
+| Detected change tables / candidate row relations | 95 / 917 | 296 / 2,956 |
+| Comparable difference rows compatible with the rounding box | 158 | 824 |
+| Differences unequal: theory / measured | 25% / **0/158** | 25% / **0/824** |
+| Comparable compatible percentage-change rows | 573 | 950 |
+| Still unequal after rounding the recomputed value to the printed digit | **10/573 = 1.75%** | **58/950 = 6.11%** |
+| Mean per-row predicted inequality rate under the same uniform model | 8.85% | 12.70% |
+| Relative difference between printed and recomputed value >1% | 320/573 = 55.85% | 324/950 = 34.11% |
+| Percentage rows with Δ<100 unequal | **3/185 = 1.62%** | **37/164 = 22.56%** |
+| Bound questions whose standard solution recomputes a change that is also printed | 5 | 51 |
+| Printed value fails official numeric scoring / change-question denominator | **5/3,265 = 0.153%** | **16/4,524 = 0.354%** |
 
-差额行包含 16 条百分点相减（FinQA 2、TAT-QA 14），其余 **966** 行为金额等水平差额，仍为 **0/966** 不等。全部差额行三个显示末位相同，1/4 模型适用其数值格式；它不证明这些实际财报采用独立随机舍入。两数据集的百分比行合计 **68/1,523 = 4.46%** 不等；Δ<100 合计 **40/349 = 11.46%**。无论分数据集还是合计，都未超过 30%。官方评分影响也都远低于 5%。**判定：文档内差异存在但很少，不触发模型答题。**
+The difference rows include 16 percentage-point subtractions (FinQA 2, TAT-QA 14); the remaining **966** rows are level differences such as amounts, and are still **0/966** unequal. In every difference row the three displayed last digits are the same, so the 1/4 model applies to their numeric format; this does not prove that these actual filings used independent random rounding. Across both datasets the percentage rows are **68/1,523 = 4.46%** unequal; for Δ<100 the combined figure is **40/349 = 11.46%**. Neither by dataset nor combined does this exceed 30%. The official scoring impact is also far below 5%. **Verdict: in-document discrepancies exist but are rare; model answering is not triggered.**
 
-## 这里的三种“不一致”不能混用
+## The three kinds of "inconsistency" here must not be mixed up
 
-两个水平为 44,400 与 43,700，表里印 2%；重算得到 1.6018…%。这两个数不精确相等、相对差超过 1%，但重算后舍入到整百分点就是 2%。这是较粗输出位数造成的数值评分差异，不是证据表明公司用了不同的未舍入真值。TAT-QA 问题 `e474d265-184e-407c-a961-a7e398a0a1fc` 的标准答案是 1.6，印值为 2，正是此例。〔数据集正文；计数与解释：我们的实验〕
+Two levels are 44,400 and 43,700, and the table prints 2%; the recomputation gives 1.6018…%. These two numbers are not exactly equal and their relative difference exceeds 1%, but the recomputed value rounded to a whole percentage point is 2%. This is a numeric scoring difference caused by coarser output digits, not evidence that the company used different unrounded true values. The standard answer to TAT-QA question `e474d265-184e-407c-a961-a7e398a0a1fc` is 1.6 and the printed value is 2; this is exactly that example. [dataset full text; counts and interpretation: our experiment]
 
-本轮确认的 **21 道官方评分分歧题中，全部在印出变化的精度上相等**。因此没有发现一题同时满足“该表行在相同位数仍有差异”且“标准解法正计算这一变化并导致官方评分分歧”。不能把 21 道都写成“公司泄露了更准确真值，模型被错判”。第一部分行级确有 68 个相容的同位数不等例，但没有在本识别范围内连接到这样的 QA 评分后果。〔我们的实验〕
+**All 21 official scoring disagreements confirmed in this round are equal at the precision of the printed change.** So we found no question that satisfies both "this table row still differs at the same digit" and "the standard solution computes exactly this change and causes the official scoring disagreement". The 21 questions must not all be written up as "the company leaked a more accurate true value and the model was wrongly marked". At the row level Part One does have 68 compatible cases unequal at the same digit, but within this identification scope none of them connects to such a QA scoring consequence. [our experiment]
 
-FinQA 三种评分：官方数值规则不一致 5 题；1% 规则 2 题；人工答案显示精度的接受区间 2 题。若把“显示位数”解释为表中变化的位数，5 题均一致，已另外报告，避免混淆。TAT-QA 官方标量规范化不一致 16 题，1% 对照 5 题。每题的印值、重算值、gold、尺度和三种规则在 `part1_questions.csv`。FinQA 使用官方最终 `round(value,5)` 后与 `exe_ans` 判等；TAT-QA 直接执行固定官方 `get_answer_str` 函数作同量级标量规范化。这里只适配数值输出，不声称完成 FinQA 符号 program accuracy 评估。〔我们的实验；官方代码正文〕
+Three FinQA scoring rules: 5 questions disagree under the official numeric rule; 2 under the 1% rule; 2 under the acceptance interval of the human answer's displayed precision. If "displayed digits" is interpreted as the digits of the change in the table, all 5 questions agree; this is reported separately to avoid confusion. Under TAT-QA's official scalar normalization 16 questions disagree, and 5 under the 1% comparison. Each question's printed value, recomputed value, gold, scale, and the three rules are in `part1_questions.csv`. FinQA uses the official final `round(value,5)` and then tests equality with `exe_ans`; TAT-QA directly runs the pinned official `get_answer_str` function for scalar normalization at the same magnitude. This only adapts numeric outputs; it does not claim to complete a FinQA symbolic program accuracy evaluation. [our experiment; official code full text]
 
-5 道 FinQA 题与 T1c/T1d 的 392 题样本**交集为 0**，没有可读取的对应旧模型回答；不据此推测模型会选哪一个数。已保存零交集结果和重跑代码。〔我们的实验〕
+The 5 FinQA questions have **zero intersection** with the 392-question T1c/T1d sample, so there are no corresponding old model answers to read; we do not use this to guess which number a model would choose. The zero-intersection result and the rerun code are saved. [our experiment]
 
-## 1/4 的推导与真实数据检验
+## Derivation of 1/4 and test on real data
 
-以末位单位为 1，两水平真实误差 U,V 独立 U(−1/2,1/2)，真实差由相同两水平相减再就近舍入。差额印值与显示中心差不等，恰好在 |U−V|>1/2 的区域；两个角三角形各面积 1/8，合计 **1/4**。第三个舍入误差是前两个误差的函数，不是独立第三次随机抽样。“三个都各自舍入”不能误写成“三个误差互相独立且保持恒等式”。〔我们的推导〕
+Take the last-digit unit as 1, and let the true errors U,V of the two levels be independent U(−1/2,1/2); the true difference is obtained by subtracting the same two levels and then rounding to nearest. The printed difference differs from the difference of displayed centers exactly in the region |U−V|>1/2; the two corner triangles each have area 1/8, for a total of **1/4**. The third rounding error is a function of the first two errors, not an independent third random draw. "All three are rounded separately" must not be miswritten as "the three errors are mutually independent and the identity holds". [our derivation]
 
-实测 0/982 明显不符合这个生成模型的 25% 预测。可能解释包括差额从显示值计算、披露数字受协调约束、精确计数或其他非均匀机制；本数据没有未舍入底稿，**无法在这些解释间识别原因**。这限制的是独立均匀概率模型，不能单凭零残差否定半末位盒作为外包范围。逐行百分比概率通过有理数多边形面积积分求出，没有按实测拟合参数。〔我们的实验〕
+The measured 0/982 clearly does not fit this generative model's 25% prediction. Possible explanations include the difference being computed from displayed values, disclosed numbers being subject to reconciliation constraints, exact counts, or other non-uniform mechanisms; these data have no unrounded working papers, so **we cannot identify the cause among these explanations**. What this limits is the independent uniform probability model; zero residuals alone cannot reject the half-last-digit-unit box as an outer range. Per-row percentage probabilities are obtained by integrating rational polygon areas, with no parameters fitted to the measurements. [our experiment]
 
-位置图还揭示一个原任务表述需要修正的地方：百分比印值代表的区间虽与精确范围相交，其**中心不一定在范围内**。1,523 行中 **1,093 行（71.77%）**中心在范围外，通常因为百分比输出比输入范围粗得多。因此图保留 <0 与 >1 两栏，没有把它们丢弃或夹到边界。图同时画出独立均匀输入加输出舍入的模拟分布；不能期待变换后的百分比位置服从均匀分布。〔我们的实验〕
+The position plot also reveals a point where the original task wording needs correcting: although the interval represented by a printed percentage intersects the exact range, its **center is not necessarily inside the range**. Of 1,523 rows, **1,093 (71.77%)** have the center outside the range, usually because the percentage output is much coarser than the input range. The plot therefore keeps the <0 and >1 bins rather than dropping them or clamping them to the boundary. The plot also draws the simulated distribution of independent uniform inputs plus output rounding; the position of the transformed percentage cannot be expected to be uniformly distributed. [our experiment]
 
-## 不相交行与逐行阅读
+## Non-intersecting rows and row-by-row reading
 
-3,873 个候选行关系中，**2,839** 行三个数字可解析并可算有限范围；其中 **286/2,839 = 10.07%** 的印值区间与统一公式不相交，完整保留 `box_status`。表头明确 adjusted、constant currency、comparable 等不同基数的候选共有 316 行（含非数值行），不论碰巧相交与否均不进入主统计。经过这一语义排除后，仍有 **127** 个普通变化列不相交；它们也不进入主统计。〔我们的实验〕
+Of 3,873 candidate row relations, **2,839** rows have three parsable numbers and a computable finite range; among them, the printed interval of **286/2,839 = 10.07%** does not intersect the uniform formula, with `box_status` kept in full. There are 316 candidates (including non-numeric rows) whose headers explicitly state a different base such as adjusted, constant currency, or comparable; whether or not they happen to intersect, none enters the main statistics. After this semantic exclusion, **127** ordinary change columns still do not intersect; they also do not enter the main statistics. [our experiment]
 
-按种子 1729 从原始 286 行抽 50 行，逐条读表头与原行：**21/50=42%** 是汇率/可比口径等调整基数；**20/50=40%** 是负基期采用绝对值分母或改善方向；**6/50=12%** 是费用减少量等反向符号定义；**3/50=6%** 尚不能由现有表格解释，可能是不同基数或源表示错误。后三类均没有靠挑一个能对上的公式重新纳入主统计。50 行正文及分类见 `part1_nonintersection_review50.csv`；这是 **AI 阅读，不是人类人工审阅**。〔我们的实验〕
+Fifty rows were drawn from the original 286 with seed 1729, and the header and original row were read for each: **21/50=42%** are adjusted bases such as exchange-rate/comparable conventions; **20/50=40%** use an absolute-value denominator or improvement direction with a negative base period; **6/50=12%** use a reversed sign definition, such as the amount of an expense decrease; **3/50=6%** cannot yet be explained by the existing table and may be a different base or an error in the source representation. None of the last three classes was brought back into the main statistics by picking a formula that happens to match. The 50 rows and their classification are in `part1_nonintersection_review50.csv`; this is **AI reading, not human review**. [our experiment]
 
-检出程序曾暴露多层表头、重复年份/季度、金额列误继承邻列百分号的问题；依据表头结构修复后重新计算，未通过“哪一方向能对上”选择列。最终算法支持相邻/交错年份、明确年份对、括号负数、单元格数量级、混合金额/百分比列；n/m、破折号和空白保留为不可数值化。纯“% of revenue”等份额列不是变化列。剩余抽取误差和漏检仍是限制：扫描覆盖全部已公开表格，**不等于人工穷尽确认了每条变化关系**。
+The detection program once exposed problems with multi-level headers, repeated years/quarters, and amount columns wrongly inheriting the percent sign of a neighboring column; these were fixed based on header structure and then recomputed, and columns were not chosen by "which direction matches". The final algorithm supports adjacent/staggered years, explicit year pairs, negative numbers in parentheses, cell magnitudes, and mixed amount/percentage columns; n/m, dashes, and blanks are kept as non-numeric. Pure share columns such as "% of revenue" are not change columns. Remaining extraction errors and missed detections are still a limitation: the scan covers all published tables, **which is not the same as manually and exhaustively confirming every change relation**.
 
-## T1b 的 511 条加总关系
+## The 511 sum relations from T1b
 
-从 T1b 已确认关系恢复原始显示中心，而非使用冗余约束收紧后的中点；混合量级先按关系系数统一单位，残差以最大的归一化末位单位计。511 条中 **504 条残差为 0，7 条非零（1.37%）**；按文档和来源去重后只有 **338** 个关系，因此不能当 511 个独立样本。506 条满足同末位模型（精确计数/零项不加随机误差），其非零残差为 **2/506=0.40%**；相应 Irwin–Hall 分布预测 **32.38%**。其余 5 条异精度/加权关系用加权均匀和的精确容斥 CDF，再按合计的显示网格舍入，未套同精度理论；全部 511 条的平均预测为 **33.03%**。完整 PMF、原来源、重复标记和残差在 `part1_sum_residuals.json`。T1b 本来就选取语义成立的加总关系，且可能偏向显示值能加合的行；这不是随机财报加总样本，故这里只作该既有集合的对照。〔我们的实验〕
+The original displayed centers are recovered from T1b's confirmed relations, rather than using midpoints tightened by redundant constraints; mixed magnitudes are first put in one unit by the relation coefficients, and the residual is measured in the largest normalized last-digit unit. Of the 511, **504 have residual 0 and 7 are nonzero (1.37%)**; after deduplicating by document and source there are only **338** relations, so they cannot be treated as 511 independent samples. 506 satisfy the same-last-digit model (exact counts/zero terms get no random error), and their nonzero-residual rate is **2/506=0.40%**; the corresponding Irwin–Hall distribution predicts **32.38%**. The other 5 mixed-precision/weighted relations use the exact inclusion–exclusion CDF of a weighted uniform sum, then round on the displayed grid of the total, without applying the same-precision theory; the average prediction over all 511 is **33.03%**. The full PMFs, original sources, repeat flags, and residuals are in `part1_sum_residuals.json`. T1b selected semantically valid sum relations to begin with, and may be biased toward rows whose displayed values add up; this is not a random sample of filing sums, so here it serves only as a comparison for that existing set. [our experiment]
 
-## 分母、覆盖和来源
+## Denominators, coverage, and sources
 
-FinQA“求变化”分母按已有 T1 程序分类的 growth/difference 定义（3,265），不以是否成功绑定或是否找到印值缩小分母。TAT-QA 分母为带实际减法结构的算术推导（4,524）；有负系数的多步推导也在内。每题都在 `part1_question_denominators.csv`，另保留问句关键词标记，便于改用更窄的自然语言口径。若用关键词分母，先前扫描为 FinQA 3,041、TAT-QA 4,472，仍远低于 5%，不改变判定。〔我们的实验〕
+The FinQA "change question" denominator follows the growth/difference definition of the existing T1 program classification (3,265); it is not narrowed by whether binding succeeded or whether a printed value was found. The TAT-QA denominator is arithmetic derivations with an actual subtraction structure (4,524); multi-step derivations with negative coefficients are included. Every question is in `part1_question_denominators.csv`, which also keeps a question-keyword flag so that a narrower natural-language convention can be used instead. With the keyword denominator, the earlier scan gave FinQA 3,041 and TAT-QA 4,472, still far below 5%, which does not change the verdict. [our experiment]
 
-匹配要求标准表达式与同一行两个来源的差/增长率符号等价；先用前轮保守绑定，失败时只接受表中两单元格数值唯一的绑定。TAT-QA 一题净资产与权益重复同值，按问句明确的“net assets”限定到净资产行，语义覆盖写在代码中；没有按答案接近度选行。其他未匹配题不计为已证实“无影响”，主计数应读为这套公开规则确认的发生率。〔我们的实验〕
+Matching requires the standard expression to be symbolically equivalent to the difference/growth rate of two sources in the same row; the previous round's conservative bindings are used first, and on failure only a binding where the two cell values in the table are unique is accepted. In one TAT-QA question, net assets and equity repeat the same value; following the question's explicit "net assets", it is restricted to the net-assets row, and this semantic override is written in the code; no row was chosen by closeness to the answer. Other unmatched questions are not counted as confirmed "no impact"; the main counts should be read as the incidence confirmed by this set of public rules. [our experiment]
 
-数据与评分主源：[FinQA 固定数据](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset)、[FinQA 官方执行器](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/code/evaluate/evaluate.py)、[TAT-QA 固定数据](https://github.com/NExTplusplus/TAT-QA/tree/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw)、[TAT-QA 官方评分](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/tatqa_metric.py)。这些是数据集提供的文档表示，未逐页回原始 PDF 核对。
+Primary data and scoring sources: [pinned FinQA data](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset), [FinQA official executor](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/code/evaluate/evaluate.py), [pinned TAT-QA data](https://github.com/NExTplusplus/TAT-QA/tree/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw), [TAT-QA official scoring](https://github.com/NExTplusplus/TAT-QA/blob/870accc41953dcde885aabeb963d94aabdc0fbc3/tatqa_metric.py). These are the document representations provided by the datasets; they were not checked page by page against the original PDFs.

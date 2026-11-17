@@ -1,26 +1,26 @@
-# 理论笔记独立审阅
+# Independent review of the theory notes
 
-日期：2026-11-15。审阅对象：[notes.md](notes.md)；审阅者：独立 foundation 子代理。方法：逐式纸笔复查，未联网、未调用外部文献、未修改被审阅文件。此审阅不是形式化证明或新颖性认证。
+Date: 2026-11-15. Object of review: [notes.md](notes.md); reviewer: an independent foundation subagent. Method: pen-and-paper recheck formula by formula, with no internet access, no external literature consulted, and no changes to the reviewed file. This review is not a formal proof or a novelty certification.
 
-结论：**在文中列出的假设和适用范围内，未发现影响主要结论的数学错误。** 下列关键修正及常数成立。
+Conclusion: **within the assumptions and scope listed in the file, no mathematical error affecting the main conclusions was found.** The key corrections and constants below hold.
 
-| 对象 | 审阅结果 |
+| Object | Review result |
 |---|---|
-| T1.2 DP group / TV | group δ 的几何和与增删邻接吻合。对事件及补事件分别应用双向DP不等式后相加，确实得到 `(e^a−1+2b)/(e^a+1)`；截断到1正确。该结论只界训练随机律的期望差，不能直接认证一个固定checkpoint，文中已说明。 |
-| T1.2 GDP group | 对邻接律事件概率的变换 `p→Φ(Φ⁻¹(p)+μ)` 迭代k次确实为kμ；这是数据组隐私路径，不是k个独立机制的组合。最小两类错误和为 `2Φ(−kμ/2)`，故TV上界 `2Φ(kμ/2)−1` 正确。 |
-| T1.4 hypergeometric | 单调反演的严格 `F_K(x)>α` 与失败事件 `F_K*(X)≤α` 配套，覆盖率证明正确；n=0和全体审计的边界也正确。零发现rule-of-three被正确限定为小抽样比例的上界尺度。 |
-| T1.4 tie / audit gate | m=2k、全票给最小编号类确为原必要条件的反例。票差预算B与 `F_(B+1)(0)≤α` 的等价关系正确；有限整数门比连续近似可靠。单点预测稳健与统计包络非空泛并不等价，给出的三类反例成立。 |
-| T1.5 certificate chain | 固定核心、固定分片ID、本片确定训练下，删除K篇最多影响K片。固定测试点/标签/分母及可加有界统计量使逐项包络成立；加入独立iid测试集的Hoeffding推广方向与α+β合并正确。macro-F1等非可加统计量被明确排除。 |
-| T2.2 monotone head | 只增加M中坐标、固定其余坐标和c时，残差抵消h的最坏下降。对η的端点及中间类概率导数幅值都不超过1/4，因此各指定坐标的概率Greeks上界λ/2正确；去残差后λ/4正确。中间类不要求单调，文中未错误要求。 |
-| T2.3 units | 正域上 `ker D` 完整基确实分离单位变换轨道；无表达力损失不能推广到任意不完整比值集合。零、负值、文本单位词及上下文旁路限制已披露。 |
-| T3.1 convex order / ES | 子集质量的uncrossing保持所有Bernoulli边际，凸目标不降，二次次目标严格增加，故极值支持可取嵌套链；簇间独立允许逐簇替换。对每个t的stop-loss目标有序，取inf仍有序，ES最坏值结论成立。VaR反例正确。 |
+| T1.2 DP group / TV | The geometric sum for the group δ is consistent with add/remove adjacency. Applying the two-sided DP inequality to an event and to its complement and adding them does give `(e^a−1+2b)/(e^a+1)`; truncation at 1 is correct. This result bounds only the difference in expectation under the training randomness and cannot directly certify a fixed checkpoint, as the file states. |
+| T1.2 GDP group | Iterating the transformation `p→Φ(Φ⁻¹(p)+μ)` of event probabilities under adjacent distributions k times does give kμ; this is a data-group privacy path, not a composition of k independent mechanisms. The minimum sum of the two error types is `2Φ(−kμ/2)`, so the TV upper bound `2Φ(kμ/2)−1` is correct. |
+| T1.4 hypergeometric | The strict `F_K(x)>α` of the monotone inversion matches the failure event `F_K*(X)≤α`, and the coverage proof is correct; the boundary cases n=0 and a full audit are also correct. The zero-finding rule of three is correctly restricted to an upper-bound scale for small sampling fractions. |
+| T1.4 tie / audit gate | m=2k with all votes going to the smallest-index class is indeed a counterexample to the original necessary condition. The equivalence between the vote-margin budget B and `F_(B+1)(0)≤α` is correct; the finite integer gate is more reliable than the continuous approximation. Single-point prediction robustness and a non-vacuous statistical envelope are not equivalent, and the three counterexamples given hold. |
+| T1.5 certificate chain | With a fixed core, fixed shard IDs, and deterministic per-shard training, deleting K documents affects at most K shards. Fixed test points/labels/denominator and an additive bounded statistic make the termwise envelope valid; the direction of the Hoeffding extension with an added independent iid test set and the α+β combination are correct. Non-additive statistics such as macro-F1 are explicitly excluded. |
+| T2.2 monotone head | When only coordinates in M increase, with the remaining coordinates and c fixed, the residual cancels the worst-case decrease of h. The magnitudes of the probability derivatives with respect to η, for both the endpoint classes and the middle classes, do not exceed 1/4, so the upper bound λ/2 on the probability Greeks for each designated coordinate is correct; after removing the residual, λ/4 is correct. Middle classes are not required to be monotone, and the file does not wrongly require this. |
+| T2.3 units | On the positive domain, a complete basis of `ker D` does separate the orbits of unit transformations; no loss of expressiveness cannot be extended to an arbitrary incomplete set of ratios. The limitations for zeros, negative values, textual unit words, and context bypasses are disclosed. |
+| T3.1 convex order / ES | Uncrossing of subset masses preserves all Bernoulli marginals, the convex objective does not decrease, and the quadratic secondary objective strictly increases, so the extremal support can be taken as a nested chain; independence across clusters allows cluster-by-cluster replacement. The stop-loss objective is ordered for each t, and taking the inf preserves the order, so the worst-case ES conclusion holds. The VaR counterexample is correct. |
 
-仍应保留的限制：
+Limitations that should be kept:
 
-- “已证明”只指条件式数学推导。实现可靠性、机器舍入、审计正确性和核心无污染仍是独立前提，不能由有限测试转成失败概率0。
-- T1.4中的序贯过程只明确构造零发现路径，定义到其给定有效期限；一般非零发现的完整置信序列与代码尚未提供，文中已标未部署。不可把固定n计算器称作anytime-valid工具。
-- GDP以已给定的文档级隐私保证为起点；没有证明原24M训练满足该前提。ES以真实逐点边际及簇间独立为起点；校准分数不能自动提供它们。
-- 标准参数范围可在正式论文中统一列出：ε≥0、δ∈[0,1]、μ≥0、ES水平β∈(0,1)，避免依赖读者惯例；这属于表述补全，不改变当前推导。
-- 以上审阅不支持真实金融数据上的非空证书或G0/G1已通过。有关新颖性与来源逐条核验仍应单列。
+- "Proved" refers only to conditional mathematical derivations. Implementation reliability, machine rounding, audit correctness, and an uncontaminated core remain separate premises, and finite tests cannot turn them into a failure probability of 0.
+- The sequential procedure in T1.4 explicitly constructs only the zero-finding path and is defined up to its given validity horizon; a complete confidence sequence and code for general non-zero findings have not been provided, and the file marks this as not deployed. A fixed-n calculator must not be called an anytime-valid tool.
+- GDP starts from a given document-level privacy guarantee; it has not been proved that the original 24M training satisfies this premise. ES starts from true pointwise marginals and independence across clusters; calibrated scores do not automatically provide them.
+- Standard parameter ranges can be listed together in a formal paper: ε≥0, δ∈[0,1], μ≥0, ES level β∈(0,1), to avoid relying on reader conventions; this is a completion of the presentation and does not change the current derivations.
+- This review does not support a non-vacuous certificate on real financial data or G0/G1 having passed. Novelty and item-by-item source verification should still be listed separately.
 
-本次没有建议回滚主要定理；建议按当前假设边界继续实现与反例测试。
+No rollback of the main theorems is recommended this time; the recommendation is to continue implementation and counterexample testing within the current assumption boundaries.

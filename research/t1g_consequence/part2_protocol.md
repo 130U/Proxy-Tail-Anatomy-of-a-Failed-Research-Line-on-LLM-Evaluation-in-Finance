@@ -1,17 +1,17 @@
-# 比较题识别与判定规则（测量前固定）
+# Comparison-question identification and decision rules (fixed before measurement)
 
-来源层级：我们的实验方案。此文件在第二部分计算之前写入；TAT-QA 的任何区间计算等第三部分预测单独提交之后才启动。
+Source level: our experimental plan. This file was written before the Part Two computation; any TAT-QA interval computation starts only after the Part Three prediction has been committed on its own.
 
-FinQA 的全集是 `greater(` 程序或任一标准答案字段为 yes/no 的题。最终比较操作的操作数若引用算术子程序，则属于“比较算出来的量”；两个操作数都直接来自披露值或明确阈值，则属于直接比较。多层比较、不可执行的 yes/no 标注另列，不静默删除。
+The FinQA universe is questions with a `greater(` program, or with any standard answer field equal to yes/no. If an operand of the final comparison operation refers to an arithmetic subprogram, the question "compares computed quantities"; if both operands come directly from disclosed values or explicit thresholds, it is a direct comparison. Multi-level comparisons and non-executable yes/no annotations are listed separately, not silently deleted.
 
-TAT-QA 的候选全集是 `req_comparison=true`、推导包含 `<`/`>`/`≤`/`≥`，或问句包含 highest/largest/lowest/smallest/more/less/higher/lower/greater/faster/most/least/exceed/increase/decrease 等比较词且答案为非算术跨度/yes/no。年份、类别或 yes/no 为答案，且选择取决于算术推导或问句明确比较增长/变化/比率/利润率，进入计算比较候选；直接披露水平或排序已披露的百分比单列。比较词匹配仅用于宽召回，不能独立证明属于计算比较。给出所有候选及排除理由。
+The TAT-QA candidate universe is questions with `req_comparison=true`, a derivation containing `<`/`>`/`≤`/`≥`, or a question containing comparison words such as highest/largest/lowest/smallest/more/less/higher/lower/greater/faster/most/least/exceed/increase/decrease with an answer that is a non-arithmetic span/yes/no. When the answer is a year, a category, or yes/no, and the choice depends on an arithmetic derivation or the question explicitly compares growth/change/ratio/margin, the question enters the computed-comparison candidates; directly disclosed levels, or rankings of already disclosed percentages, are listed separately. Comparison-word matching serves only for broad recall and cannot on its own prove that a question is a computed comparison. All candidates and exclusion reasons are given.
 
-固定种子 20261117，对识别结果分层抽取 40 条 TAT-QA 题进行逐条语义阅读（计算比较候选优先、其余从直接比较候选抽取）；不足 40 时全读。该核对由 AI 阅读完成，不冒称人类人工审阅。报告抽样层和各层正确数；它不建立全数据集召回率。
+With fixed seed 20261117, 40 TAT-QA questions are drawn from the identification results by stratum for item-by-item semantic reading (computed-comparison candidates first, the rest drawn from direct-comparison candidates); if there are fewer than 40, all are read. This check is done by AI reading and is not passed off as human review. The sampling strata and the number correct in each stratum are reported; this does not establish a recall rate for the full dataset.
 
-数字按原始表格或相关段落的显示精度绑定，半宽为半个末位单位。单位换算须同步换算半宽。常量阈值若为问题设定的精确数则固定；年、计数、已声明精确量不自动施加舍入。相同来源的多次出现使用同一变量，无法确定来源时明确保留未支持状态。
+Numbers are bound at the displayed precision of the original table or the relevant paragraph, with a half-width of half a last-digit unit. A unit conversion must convert the half-width at the same time. A constant threshold is fixed if it is an exact number set by the question; years, counts, and quantities declared exact do not automatically get rounding. Repeated appearances of the same source use the same variable; when the source cannot be determined, the unsupported status is kept explicitly.
 
-对于 `A > B`，在同一输入盒上分析 `D=A-B`，不能以 A、B 分别范围相交作为可翻转的证据。稳定性用精确有理区间、单调性或坐标线性分式极值认证；翻转需给出单个联合输入向量，逐项位于舍入盒内部，并在原始 DAG 上重算得到相反结论。排序需对获胜者与每个竞争者比较。闭盒边界上的唯一并列不当成严格翻转；单列 boundary-only，不假定财报的半舍入规则。
+For `A > B`, analyze `D=A-B` on the same input box; intersecting separate ranges of A and B cannot be used as evidence of flippability. Stability is certified by exact rational intervals, monotonicity, or extrema of coordinate-wise linear-fractional functions; a flip requires a single joint input vector, with each entry inside the rounding box, that yields the opposite conclusion when recomputed on the original DAG. A ranking requires comparing the winner with each competitor. A unique tie on the boundary of the closed box is not treated as a strict flip; it is listed separately as boundary-only, without assuming the filing's half-rounding rule.
 
-概率在相互独立均匀舍入假设下计算。可解析的直接差使用精确体积，复杂算术使用固定种子 Sobol 准蒙特卡洛，报告样本量及重复抽样差异；无翻转样本不能替代稳定认证。标注本身与中心值不一致另列，禁止算作舍入翻转。
+Probabilities are computed under the assumption of mutually independent uniform rounding. Analytically tractable direct differences use exact volume; complex arithmetic uses fixed-seed Sobol quasi-Monte Carlo, reporting the sample size and the variation across repeated sampling; a lack of flipping samples cannot replace stability certification. Annotations that disagree with the center value are listed separately and must not be counted as rounding flips.
 
-门槛按任务：计算比较题中严格可翻转比例超过 10% 才达到比例门槛；两个数据集合计不足 100 道时必须同时明确样本太少。缺少绑定或推导的题不算已认证稳定，并分别报告可分析分母与候选全集分母。
+Thresholds follow the task: the share threshold is reached only if more than 10% of computed-comparison questions are strictly flippable; if the two datasets together have fewer than 100 questions, it must also be stated explicitly that the sample is too small. Questions lacking a binding or derivation are not counted as certified stable, and the analyzable denominator and the candidate-universe denominator are reported separately.

@@ -1,191 +1,191 @@
-# 第八轮独立反方审查：位置结构与总污染数门
+# Round 8 independent adversarial review: localization structure and the total-contamination-count gate
 
-审查者：内部 AI 子代理 `localization_reviewer`，不是 Fable，不代表外部同行意见。范围为本地理论、协议和有限标准库计算；不联网、不训练、不发送外部消息。应用本地“学术研究-组织反方研究审查”技能。所有新增构造与比较均为探索性，不能改称预先确认结果，也不声称新颖性。
+Reviewer: internal AI subagent `localization_reviewer`, not Fable; this does not represent the opinion of outside peers. Scope: local theory, protocol and finite computations with the standard library. No network access, no training, no outside messages. The local skill "academic research - organize an adversarial research review" was applied. All new constructions and comparisons are exploratory. They cannot be relabeled as pre-confirmed results, and no novelty is claimed.
 
-**统一复现状态补充：** 下文第一次 48 行成功执行及独立核对是真实历史结果。随后统一复现进程实际以退出码 1 结束，原因是 Windows 在替换结果 JSON 时返回 WinError 5。该失败记录已单独保留；作者增加有界 I/O 重试后，受影响的 48 行 runner 已全部重新完成，退出码 0，执行源哈希稳定。本审查在收到成功通知后才读取新 JSON，并再次通过独立全表核对；最终记录见第8节。不将工程失败解释成数学反例，也不静默抹去失败。
+**Addendum on the unified reproduction status:** The first successful execution of the 48 rows and the independent check described below are real historical results. The subsequent unified reproduction process actually ended with exit code 1, because Windows returned WinError 5 when replacing the results JSON. That failure record is kept separately. After the author added bounded I/O retries, the affected 48-row runner was rerun to completion, with exit code 0 and stable execution-source hashes. This review read the new JSON only after receiving the success notice, and the new JSON again passed the independent full-table check; the final record is in Section 8. The engineering failure is not interpreted as a mathematical counterexample, and the failure is not silently erased either.
 
-## 计算前预算（2026-11-16，首次执行独立脚本之前写入）
+## Pre-computation budget (2026-11-16, written before the independent script was first run)
 
-- 独立脚本仅写于 `research/reports/localization_review_checks.py`；使用 Python 标准库，无模型、数据下载或网络调用。
-- 风险核对：层数 1–3、层大小各取 1–3，枚举所有固定配额和全部合法计数；另核对 4 层、每层 2 篇。总计最多 10,000 个风险比较、100,000 个计数向量评估。
-- 结构核对：每层两篇、全层合取阈值，层数 2–8；按排序配额枚举，总计不超过 500,000 个额外计数向量评估。用有理数核对闭式最优值及 direct 最优成本。该上限在首次运行前按排序元组数乘计数网格大小计算设定。
-- 时间上限 60 秒；脚本自身设检查预算并失败退出，不将未完成枚举报为最优。
-- 作者实现出现后，只读核对其协议、理论及实现，并复用已冻结的小检查输入。任何超出本预算的探索另行登记。
+- The independent script is written only to `research/reports/localization_review_checks.py`. It uses the Python standard library, with no model, no data download and no network call.
+- Risk check: 1–3 layers, each layer of size 1–3; enumerate all fixed quotas and all valid counts; also check 4 layers with 2 documents each. At most 10,000 risk comparisons and 100,000 count-vector evaluations in total.
+- Structure check: two documents per layer, all-layer conjunction threshold, 2–8 layers; enumerate over sorted quotas, with no more than 500,000 additional count-vector evaluations in total. Check the closed-form optimum and the direct optimal cost with rational numbers. This cap was set before the first run, computed as the number of sorted tuples times the size of the count grid.
+- Time limit 60 seconds. The script sets its own check budget and exits with failure; it does not report an unfinished enumeration as optimal.
+- Once the author's implementation appeared, its protocol, theory and implementation were checked read-only, reusing the frozen small check inputs. Any exploration beyond this budget is registered separately.
 
-本节记录的是运行前预算，不是预注册研究假设。后文结果在预算写入后取得。
+This section records the pre-run budget, not a pre-registered research hypothesis. The results below were obtained after the budget was written.
 
-## 1. 当前判断与关键问题
+## 1. Current judgment and key issues
 
-**总 K 门并不普遍等价于位置结构；前轮 IA7 的同质 `d=2r−1` 族只能有严格小于 2 的成本比，但这一尖锐常数收益相对 `min(Box, Total K)` 同样成立，可渐近节省 50%。一般同质阈值族允许 `r=d` 时，对总 K 门确有每篇文档都相关的线性分离，但简单 Box 已能复现。** 这些是数学范围的实质澄清；尚不证明原创性、现实模型中的出现频率，或研究项目已经达到独立强论文标准。
+**The total-K gate is not in general equivalent to localization structure. The homogeneous `d=2r−1` family of last round's IA7 can only have a cost ratio strictly below 2, but this sharp constant gain also holds relative to `min(Box, Total K)`, with an asymptotic saving of 50%. When the general homogeneous threshold family allows `r=d`, there is indeed a linear separation from the total-K gate in which every document is relevant, but a simple Box already reproduces it.** These are substantive clarifications of the mathematical scope. They do not yet prove originality, how often the structure occurs in real models, or that the research project has reached the standard of an independent strong paper.
 
-| 编号 | 重要性 | 独立审查结论 |
+| ID | Importance | Independent review conclusion |
 |---|---|---|
-| LR01 | 关键算法边界，初始判断已修正 | prefix-greedy 风险算法正确。direct 的首项乘积风险不能用于总 K；但等 N/等成本且 k≤d 时，前 k 项枚举和尾部压平经新增证明也适用于总 K。当前作者完整 d 元组枚举正确，尚非最紧维度约简。 |
-| LR02 | 关键贡献边界 | 原 `d=2r−1` 同质族中 `C_K/C_I<2`；该常数渐近可逼近。不能用该族原来的 Ω(r) 矩形分离代替与最强总 K 门的比较。 |
-| LR03 | 有效的新候选范围 | `N=2,r=d` 全层合取族有 `C_I=2`、`C_K=Θ(d)`，每篇文档均在某个极小坏配置中。精确实现需要额外可信固定头，不能省略此结构假设。 |
-| LR04 | 贡献与现实性仍开放 | 排除无关文档 padding 比前轮更强，但“所有文档都相关”本身不等同于自然模型或新理论。全层合取要求高冗余、可信固定头；星形结构要求共同瓶颈或影响异质性。 |
-| LR05 | 局部实现健壮性，源代码修复已核对 | 初版 `_exact` 在 `Fraction(value)` 后检查位数，短指数记数字符串可在检查前构造巨大整数。作者已在解析前白名单限制为整数、p/q、有限十进制；本审查核对解析前拒绝路径，未把危险输入交给 Fraction。 |
-| LR06 | 重要的正面证据与报告平衡 | 4 个 bounds-only 行不能被 44 个 exact 行的摘要掩盖。在 `r=N²` 路径中 Box 成本为 Θ(N³)，最优 Total K 不超过 Θ(N²)，所以组合基线最终选择 Total K；相对组合基线的成本比趋于 2。N=32 的已证节省下界为 449/1008。 |
+| LR01 | Key algorithmic boundary; initial judgment corrected | The prefix-greedy risk algorithm is correct. The first-factor product risk of the direct method cannot be used for total K. However, with equal N/equal cost and k≤d, a newly added proof shows that enumerating the first k entries and flattening the tail also apply to total K. The author's current full enumeration of d-tuples is correct, but it is not yet the tightest dimension reduction. |
+| LR02 | Key boundary on the contribution | In the original homogeneous `d=2r−1` family, `C_K/C_I<2`, and this constant can be approached asymptotically. The family's original Ω(r) rectangle separation cannot substitute for a comparison with the strongest total-K gate. |
+| LR03 | Valid new candidate scope | The all-layer conjunction family with `N=2,r=d` has `C_I=2` and `C_K=Θ(d)`, and every document lies in some minimal bad configuration. The exact realization needs additional trusted fixed heads; this structural assumption cannot be omitted. |
+| LR04 | Contribution and realism still open | Ruling out padding with irrelevant documents is stronger than last round, but "every document is relevant" is not by itself the same as a natural model or a new theory. The all-layer conjunction needs high redundancy and trusted fixed heads; the star structure needs a common bottleneck or heterogeneous impact. |
+| LR05 | Local implementation robustness; source fix checked | The first version of `_exact` checked the digit count after `Fraction(value)`, so a short string in exponent notation could build a huge integer before the check. The author now applies a whitelist before parsing that allows only integers, p/q and finite decimals. This review checked the pre-parse rejection path without passing dangerous inputs to Fraction. |
+| LR06 | Important positive evidence and balance of reporting | The 4 bounds-only rows must not be hidden by the summary of the 44 exact rows. On the `r=N²` path the Box cost is Θ(N³) and the optimal Total K is at most Θ(N²), so the combined baseline eventually chooses Total K, and the cost ratio relative to the combined baseline tends to 2. The proved lower bound on the saving at N=32 is 449/1008. |
 
-本审查首先独立提出 greedy 的正段前缀证明、原族常数界、星形候选及全层合取候选，随后与内部理论代理交叉核对。理论代理给出的更强 `<2` 界及逼近构造已经独立检查。此合作不构成外部同行审查，全部新构造均保留探索性标签。
+This review first independently proposed the positive-segment prefix proof for greedy, the constant bound for the original family, the star candidate and the all-layer conjunction candidate, and then cross-checked them with the internal theory agent. The stronger `<2` bound and the approaching construction given by the theory agent were checked independently. This collaboration does not constitute outside peer review, and all new constructions keep the exploratory label.
 
-## 2. prefix-greedy 正确性的独立证明与实现边界
+## 2. Independent proof of prefix-greedy correctness, and implementation boundaries
 
-记一层漏检率 `p_h(q)=C(N_h−q,n_h)/C(N_h,n_h)`。在正概率段，连续乘数为
+Write the miss rate of one layer as `p_h(q)=C(N_h−q,n_h)/C(N_h,n_h)`. On the positive-probability segment, the successive factors are
 
-`f_h(j)=(N_h−n_h−j)/(N_h−j)`, `0≤j<N_h−n_h`。
+`f_h(j)=(N_h−n_h−j)/(N_h−j)`, `0≤j<N_h−n_h`.
 
-当 `n_h>0` 时这些乘数随 j 非增；`n_h=0` 时均为 1。达到 `q>N_h−n_h` 后漏检率为 0，不能继续把带负分子的表达式当成概率乘数。把剩余合法 j 的乘数定义成 0，仍得到非增序列。
+When `n_h>0` these factors are non-increasing in j; when `n_h=0` they all equal 1. Once `q>N_h−n_h`, the miss rate is 0, and the expression with a negative numerator can no longer be treated as a probability factor. Defining the factors for the remaining valid j as 0 still gives a non-increasing sequence.
 
-任意 `Σq_h=k` 的合法污染分配对应从每层选长度 q_h 的前缀，共选 k 个乘数。将全部乘数按从大到小排列，最前 k 个的乘积是对任何 k 项选择的上界。每层非增保证可以将边界的并列项按层内顺序破同分，使这 k 项是各层前缀之并；因此上界能由合法分配达到。每次从各层尚未取出的首项中取最大项，恰好实现这个排列，故 greedy 精确。
+Any valid contamination allocation with `Σq_h=k` corresponds to choosing a prefix of length q_h from each layer, k factors in total. Sort all factors from largest to smallest. The product of the first k is an upper bound over any choice of k factors. Because each layer is non-increasing, ties at the boundary can be broken in within-layer order, so that these k factors form a union of per-layer prefixes; hence the upper bound is attained by a valid allocation. Taking, at each step, the largest among the first not-yet-taken factors of the layers realizes exactly this ordering, so greedy is exact.
 
-若只存正乘数而不存零，在未取满 k 项时堆已空，则任何 k 项合法选择都含零，其最大乘积为 0。作者实现使用这一处理。`k=0` 风险为 1；`k>ΣN_h` 的排除域为空，风险为 0，这两者不能混用。
+If only positive factors are stored and zeros are not, and the heap empties before k factors have been taken, then every valid choice of k factors contains a zero, and the maximum product is 0. The author's implementation handles it this way. For `k=0` the risk is 1. For `k>ΣN_h` the excluded region is empty and the risk is 0. These two cases must not be confused.
 
-固定 n 的风险可按 heap 做到 `O(d+k log d)` 算术操作，**这不使对所有 n 的成本优化成为多项式问题**。不同总体、不同成本时坐标不可直接排序；同总体、同成本才可使用非降配额对称约简。
+For a fixed n, the risk can be computed with a heap in `O(d+k log d)` arithmetic operations. **This does not make cost optimization over all n a polynomial problem.** With different populations or different costs, the coordinates cannot be sorted directly. Only with the same population and the same cost can the symmetric reduction to non-decreasing quotas be used.
 
-为什么不能直接使用 IA8 的风险函数：`N=20,r=2,d=3` 的 direct 配额 `(0,19,19)` 风险为 1/20，但总 K 门可以把两篇污染都放入第一层，风险为 1。位置算法只关心不同层的一次污染，总 K 算法还需排除重复集中于同层的污染。
+Why the IA8 risk function cannot be used directly: for `N=20,r=2,d=3`, the direct quota `(0,19,19)` has risk 1/20, but against the total-K gate both contaminated documents can be placed in the first layer, giving risk 1. The localization algorithm only cares about one contamination in each distinct layer. The total-K algorithm must also exclude contamination concentrated repeatedly in the same layer.
 
-**重要更正：尾部压平本身可保留。** 初审把“不可以移植首项乘积”过宽地说成“不可以做前 k 坐标约简”；理论代理提出下列论证后，审查者独立核对并更正。设各层同 N、同成本、`1≤k≤d` 且 n 已排序。前 k 条链的首项均至少为 `x_k=1−n_k/N`，所以全体乘数中第 k 大值至少为 x_k。把尾层 `h>k` 的样本数降低到 n_k 后，这些层的所有新乘数都不大于 x_k；因此全局前 k 大乘数的值及其乘积不变（并列和零也成立），而成本不增。于是只须枚举前 k 个非降整数配额，复制第 k 项至尾部，成本为 `Σ_{i<k}n_i+(d−k+1)n_k`。风险仍须计算各前缀链的 top-k 乘数，不能换成前 k 个首项的乘积。`k>d` 时此论证不能减少 d 维。
+**Important correction: tail flattening itself can be kept.** The initial review overstated "the first-factor product cannot be carried over" as "the first-k coordinate reduction cannot be done". After the theory agent proposed the argument below, the reviewer checked it independently and corrected the statement. Suppose all layers have the same N and the same cost, `1≤k≤d`, and n is sorted. The first factor of each of the first k chains is at least `x_k=1−n_k/N`, so the k-th largest factor overall is at least x_k. After lowering the sample sizes of the tail layers `h>k` to n_k, all new factors of these layers are at most x_k. Therefore the values of the global top-k factors and their product are unchanged (this also holds with ties and zeros), while the cost does not increase. So it suffices to enumerate the first k non-decreasing integer quotas and copy the k-th entry to the tail, with cost `Σ_{i<k}n_i+(d−k+1)n_k`. The risk must still be computed from the top-k factors of the prefix chains; it cannot be replaced by the product of the first factors of the first k chains. When `k>d` this argument cannot reduce the d dimensions.
 
-## 3. 同质阈值族的常数上界及其尖锐性
+## 3. Constant upper bound for homogeneous threshold families, and its sharpness
 
-设 d 层每层 N 篇、同成本，坏配置是至少 r 层含污染，`1≤r≤d`。`C_I` 是直接门最优固定配额成本，`C_K` 是全零时承诺 `K≤r−1` 的最优固定配额成本。因为 r 篇分处不同层即可坏，`K≤r−1` 是任何只承诺总 K 上界的最大安全门。
+Suppose there are d layers with N documents each and equal costs, and a configuration is bad when at least r layers contain contamination, `1≤r≤d`. `C_I` is the optimal fixed-quota cost of the direct gate. `C_K` is the optimal fixed-quota cost of committing to `K≤r−1` when every finding is zero. Since r documents in different layers are already enough to be bad, `K≤r−1` is the largest safe gate among all gates that commit only to an upper bound on total K.
 
-取一个 direct 最优配额并排序 `n_1≤...≤n_d`。其可行性给出
+Take a direct optimal quota and sort it as `n_1≤...≤n_d`. Its feasibility gives
 
-`(1−n_r/N)^r ≤ ∏_{i=1}^r(1−n_i/N) ≤ α`。
+`(1−n_r/N)^r ≤ ∏_{i=1}^r(1−n_i/N) ≤ α`.
 
-均衡配额 `(n_r,...,n_r)` 对总 K 门同样可行：每层多篇污染的漏检乘数不超过第一项，k=r 的最坏配置由 r 个不同层各一篇达到。因此
+The balanced quota `(n_r,...,n_r)` is also feasible for the total-K gate: the miss factors for several contaminated documents in one layer are no larger than the first factor, and the worst configuration for k=r is attained by one document in each of r different layers. Therefore
 
-`C_K ≤ d*n_r`, 而 `C_I ≥ (d−r+1)*n_r`。
+`C_K ≤ d*n_r`, while `C_I ≥ (d−r+1)*n_r`.
 
-可行设计有 `n_r>0`（否则 r 个未审层给风险 1），所以
+A feasible design has `n_r>0` (otherwise r unaudited layers give risk 1), so
 
-`1 ≤ C_K/C_I ≤ d/(d−r+1)`。
+`1 ≤ C_K/C_I ≤ d/(d−r+1)`.
 
-这一般上界涵盖 `r=1` 时的等价，并在 IA7 `d=2r−1` 时给 `C_K/C_I≤(2r−1)/r<2`。这里比较的是两边都允许不等配额的最优值，没有用均衡类最优值冒充最强基线。
+This general upper bound covers the equivalence at `r=1`, and for IA7's `d=2r−1` it gives `C_K/C_I≤(2r−1)/r<2`. The comparison here is between optimal values where both sides allow unequal quotas. The optimum of the balanced class is not passed off as the strongest baseline.
 
-**常数 2 可渐近逼近。** 固定 α，令 N→∞、r=N²、d=2r−1，并令 k 为满足 `(1−1/N)^k≤α` 的最小正整数；k=O(N)，最终 k≤r。取 r−k 层零审、余下 r+k−1 层各审一篇，direct 风险恰为该 k 次幂，故 `C_I≤r+k−1`。总 K 门若有 u 个零审层且 `uN≥r`，就能将 r 篇污染全部藏入这些层，风险 1。因此 `u≤floor((r−1)/N)=N−1`，从而 `C_K≥d−u≥2N²−N`。与上界夹逼得 `C_K/C_I→2`。
+**The constant 2 can be approached asymptotically.** Fix α, let N→∞, r=N², d=2r−1, and let k be the smallest positive integer with `(1−1/N)^k≤α`; then k=O(N), and eventually k≤r. Audit no documents in r−k layers and one document in each of the remaining r+k−1 layers. The direct risk is exactly that k-th power, so `C_I≤r+k−1`. If the total-K gate has u zero-audit layers and `uN≥r`, all r contaminated documents can be hidden in those layers, with risk 1. Therefore `u≤floor((r−1)/N)=N−1`, and hence `C_K≥d−u≥2N²−N`. Squeezing against the upper bound gives `C_K/C_I→2`.
 
-这说明“不存在阶数收益”不等于“位置完全没有收益”；该族最坏可以接近两倍。但阈值、层数和 N 的共同增长必须明示。
+This shows that "no gain in asymptotic order" is not the same as "localization gives no gain at all"; in the worst case this family comes close to a factor of two. But the joint growth of the threshold, the number of layers and N must be stated explicitly.
 
-**前轮具体尺度 `N=r²` 的更强负结果。** 写 `a=log(1/α)`、`M=C_I`。若 `M<rN`，排序给 `n_r≤M/r` 和 `Σ_{i≤r}n_i≤rM/d`。由 `−log(1−x)≤x/(1−M/(rN))`（这里 `x≤M/(rN)<1`），可行性推出
+**A stronger negative result at last round's specific scaling `N=r²`.** Write `a=log(1/α)` and `M=C_I`. If `M<rN`, sorting gives `n_r≤M/r` and `Σ_{i≤r}n_i≤rM/d`. From `−log(1−x)≤x/(1−M/(rN))` (here `x≤M/(rN)<1`), feasibility implies
 
-`a ≤ rM/[dN(1−M/(rN))]`，故 `M ≥ N a d r/(r²+a d)`。
+`a ≤ rM/[dN(1−M/(rN))]`, hence `M ≥ N a d r/(r²+a d)`.
 
-若 `M≥rN`，同一下界自动成立。均衡总 K 可行成本不超过 `d(Na/r+1)`，从而
+If `M≥rN`, the same lower bound holds automatically. The feasible balanced total-K cost is at most `d(Na/r+1)`, so
 
-`C_K/C_I ≤ (1+r/(Na))*(1+a d/r²)`。
+`C_K/C_I ≤ (1+r/(Na))*(1+a d/r²)`.
 
-固定 α、`d=2r−1,N=r²` 时此上界趋于 1，加上 `C_K≥C_I` 得比值趋于 1。也就是说，前轮展示矩形 Ω(r) 代价的那一具体尺度上，最强总 K 门和直接法渐近等价。前述逼近 2 的尺度是相反的 `r=N²`，两者不可互换。
+With α fixed and `d=2r−1,N=r²`, this upper bound tends to 1, and together with `C_K≥C_I` the ratio tends to 1. In other words, at the specific scaling where last round showed the Ω(r) rectangle cost, the strongest total-K gate and the direct method are asymptotically equivalent. The scaling above that approaches 2 is the opposite one, `r=N²`. The two cannot be interchanged.
 
-## 4. 一般阈值族的非空相关性阶数分离
+## 4. An order separation with non-vacuous relevance for general threshold families
 
-取 `d=r≥2,N=2,α=1/20`。每层两篇文档，均只影响各自的一个可变头；另有 d−1 个不受这些文档影响的可信固定头，总头数 `m=2d−1`。所有观测票正确，目标仍可用固定 accuracy 区间 `[9/10,1]`。任意测试点上，少于 d 个可变头受影响时仍有至少 d 个固定正确票；d 个可变头全部受影响时可共同投错。因此坏性恰为每个层都含污染。
+Take `d=r≥2,N=2,α=1/20`. Each layer has two documents, and both affect only that layer's single variable head. There are also d−1 trusted fixed heads that these documents do not affect, for a total of `m=2d−1` heads. All observed votes are correct, and the target can still be the fixed accuracy interval `[9/10,1]`. At any test point, when fewer than d variable heads are affected, there are still at least d votes fixed at the correct answer; when all d variable heads are affected, they can jointly vote wrong. So a configuration is bad exactly when every layer contains contamination.
 
-每篇文档在给定外放松影响模型中都相关：取其他 d−1 层各一篇，并加上指定文档，恰好得到一个极小坏集。没有空影响集合、被永远忽略的层，或人为加入与失败无关的文档。这不是对真实重训敏感度的测量。此处固定头是额外可信结构，不能误写成所有头都来自待审文档的同质多数投票。
+Every document is relevant in the given outer-relaxation impact model: taking one document from each of the other d−1 layers and adding the given document gives exactly a minimal bad set. There are no empty impact sets, no layers that are always ignored, and no artificially added documents unrelated to failure. This is not a measurement of real retraining sensitivity. The fixed heads here are additional trusted structure. This must not be misdescribed as a homogeneous majority vote in which all heads come from the documents under audit.
 
-**Direct 精确成本为 2。** 普查任意一层即可使所有坏配置被检出，成本 2。成本小于 2 的设计至多审一篇，坏配置的漏检概率至少 1/2，大于 1/20，因此下界达到。
+**The exact direct cost is 2.** A census of any one layer detects every bad configuration, at cost 2. A design with cost below 2 audits at most one document, so the miss probability for a bad configuration is at least 1/2, which exceeds 1/20. Hence the lower bound is attained.
 
-**总 K 门精确成本。** 令 a,b,c 分别为审 0、1、2 篇的层数，`a+b+c=d`。正 greedy 乘数是 2a 个 1、b 个 1/2。边界 k=d 的风险为：
+**Exact cost of the total-K gate.** Let a,b,c be the numbers of layers in which 0, 1 and 2 documents are audited, `a+b+c=d`. The positive greedy factors are 2a ones and b halves. The risk at the boundary k=d is:
 
-- `d≤2a` 时为 1；
-- `2a<d≤2a+b` 时为 `2^{−(d−2a)}`；
-- `d>2a+b` 时为 0。
+- 1 when `d≤2a`;
+- `2^{−(d−2a)}` when `2a<d≤2a+b`;
+- 0 when `d>2a+b`.
 
-后一情况等价于 `c>a`，成本 `b+2c=d−a+c≥d+1`，可以达到。正概率可行则要求 `d−2a≥5`，因为 `2^-4>1/20≥2^-5`；其成本至少 `d−a≥ceil((d+5)/2)`，取 `a=floor((d−5)/2),c=0` 可达到。于是
+The last case is equivalent to `c>a`, with cost `b+2c=d−a+c≥d+1`, which can be attained. Feasibility with positive probability requires `d−2a≥5`, because `2^-4>1/20≥2^-5`. Its cost is at least `d−a≥ceil((d+5)/2)`, attained by `a=floor((d−5)/2),c=0`. Therefore
 
-`C_K = d+1` 当 `2≤d<5`；`C_K=ceil((d+5)/2)` 当 `d≥5`。
+`C_K = d+1` when `2≤d<5`; `C_K=ceil((d+5)/2)` when `d≥5`.
 
-故 `C_K/C_I~d/4`，是线性阶数分离。该结论与第3节不矛盾：此处 `r=d`，一般上界为 d；前轮族 `d=2r−1` 的上界小于 2。
+So `C_K/C_I~d/4`, a linear order separation. This does not contradict Section 3: here `r=d` and the general upper bound is d, while for last round's family `d=2r−1` the upper bound is below 2.
 
-**更简单的结构感知对照同样达到该收益。** 普查任意一层并报告该层污染数为零、其他层全范围，就是安全的单矩形门，成本同样为 2。因此此构造证明的是总 K 聚合丢失结构的代价，不证明复杂 direct 优化器必需，或 direct 优于所有简单结构感知规则。星形候选也有同样限制：只认证中心层干净即可达到 direct 最优。应同时报告 `Direct=Box=2`，不能只展示 Total K 这一不利基线。
+**A simpler structure-aware control attains the same gain.** Taking a census of any one layer, and reporting zero contamination for that layer and the full range for the other layers, is a safe single-rectangle gate, also with cost 2. So this construction proves the cost of the structure that total-K aggregation loses. It does not prove that a complex direct optimizer is necessary, or that direct beats all simple structure-aware rules. The star candidate has the same limitation: certifying only that the center layer is clean already attains the direct optimum. `Direct=Box=2` should be reported alongside; one cannot show only the unfavorable Total K baseline.
 
-这是有限组合的存在性构造，仍未证明实际模型有足够多可信固定头或近合取的 failure geometry。若目标是算法/理论论文，需要进一步说明何类可检验结构导致此几何、何时能有效求解，以及与已有文献的精确差异。内部审查不把这个新构造自动升级为发表级创新。
+This is an existence construction for a finite combinatorial setting. It still does not prove that real models have enough trusted fixed heads or a nearly conjunctive failure geometry. If the goal is an algorithms/theory paper, one would further need to explain which kinds of testable structure lead to this geometry, when it can be solved efficiently, and exactly how it differs from the existing literature. The internal review does not automatically promote this new construction to a publication-level innovation.
 
-## 5. 实际执行的独立核对
+## 5. Independent checks actually run
 
-独立脚本不调用作者优化或风险函数，使用 `Fraction` 和组合数直接枚举。
+The independent script does not call the author's optimization or risk functions. It enumerates directly with `Fraction` and binomial coefficients.
 
-- 900 个固定设计，共 6,788 个 k 的风险比较；greedy 与全部合法计数的精确最大值一致。
-- 风险部分实际评估 31,820 个计数向量，包含不等层大小、零抽样、普查、零概率和 k=0。
-- 全层合取 d=2..8 按完整排序配额穷举，评估 401,031 个计数向量，得到 direct 成本均为 2；总 K 成本依次为 `3,4,5,5,6,6,7`，逐项符合闭式。
-- 首次执行退出码 0，脚本内部计时约 3.873 秒；这些只是本机此轮运行时间，不是复杂度或普遍性能承诺。
-- 新增尾部压平证明后，在同一冻结输入域补充 688 个压平不变性检查，全部通过。第二次完整运行退出码 0，约 4.031 秒；未扩大样本格或提高既有枚举上限。
+- 900 fixed designs, with risk comparisons at 6,788 values of k in total. Greedy matches the exact maximum over all valid counts.
+- The risk part actually evaluated 31,820 count vectors, including unequal layer sizes, zero sampling, census, zero probability and k=0.
+- The all-layer conjunction for d=2..8 was enumerated exhaustively over the full sorted quotas, evaluating 401,031 count vectors. The direct cost is 2 in every case. The total-K costs are `3,4,5,5,6,6,7` in order, matching the closed form term by term.
+- The first run exited with code 0, with internal script timing of about 3.873 seconds. These are only this machine's run times for this round, not statements about complexity or general performance.
+- After the tail-flattening proof was added, 688 flattening-invariance checks were added on the same frozen input domain, and all pass. The second full run exited with code 0 in about 4.031 seconds. The sample grid was not enlarged and the existing enumeration caps were not raised.
 
-脚本路径：`research/reports/localization_review_checks.py`。以上一般命题依赖明确证明，有限核对仅用于发现实现/边界错误，不能以测试数量代替证明。
+Script path: `research/reports/localization_review_checks.py`. The general propositions above rely on explicit proofs. The finite checks only serve to find implementation/boundary errors; the number of tests cannot substitute for a proof.
 
-## 6. 作者协议和最终版本复审
+## 6. Review of the author's protocol and the final version
 
-**整表复审追加运行前预算：** 在收到最终 JSON 后，复用已独立证明及小域验证的前 k 条链风险算法，独立枚举原 20 格的全部排序 k 前缀，仅检查比返回成本更低的设计是否可行；不调用作者实现。最多 500,000 个前缀、100,000 次风险调用、15 秒墙钟。另用二元闭式枚举核对 16 个 Star 格、合取闭式核对 8 格、解析公式核对 4 个 bounds 行，并检查文件哈希和摘要算术。本检查是对已经公开结果的独立复算，不是确认性发现；若超限则只报告未完成。
+**Additional pre-run budget for the full-table review:** After receiving the final JSON, reuse the first-k-chains risk algorithm that was independently proved and validated on a small domain; independently enumerate all sorted k-prefixes for the original 20 cells; and check only whether designs cheaper than the returned cost are feasible, without calling the author's implementation. At most 500,000 prefixes, 100,000 risk calls and 15 seconds of wall-clock time. In addition, check the 16 Star cells by enumerating a two-variable closed form, the 8 conjunction cells against their closed form, and the 4 bounds rows against the analytic formulas, and check the file hashes and the summary arithmetic. This check is an independent recomputation of results that were already public, not a confirmatory finding. If the budget is exceeded, only "not completed" is reported.
 
-已只读核对 `research/planning/LOCALIZATION_PROTOCOL.md`。其明确固定原阈值 20 格、合取 8 格、Star 16 格及 4 个仅作解析界核对的尖锐序列；同时报告 `min(Box,TotalK)`，不在每例中挑较弱基线。冻结时间发生于看到旧结果和讨论新构造之后，文件明确称为执行范围冻结而非事前确认性预注册，措辞适当。预算失败、原 JSON 保留、无外部消息与无训练限制均有记录。审查未发现需要阻断这一有限执行的问题。
+`research/planning/LOCALIZATION_PROTOCOL.md` was checked read-only. It explicitly fixes the original 20 threshold cells, the 8 conjunction cells, the 16 Star cells, and 4 sharp sequences that are checked only against analytic bounds. It also reports `min(Box,TotalK)` and does not pick the weaker baseline case by case. The freeze took place after the old results had been seen and new constructions discussed. The file explicitly calls it a freeze of the execution scope rather than a confirmatory pre-registration made in advance, which is appropriate wording. Budget failure, retention of the original JSON, no outside messages and the no-training restriction are all recorded. The review found no issue that would require blocking this finite execution.
 
-尖锐序列 N≥16 时层数超过一般优化器默认输入上限；协议限定它只计算已证明的构造与界是合理的。结果不得将这些行标为全局精确最优。
+For the sharp sequences with N≥16, the number of layers exceeds the default input limit of the general optimizer. It is reasonable for the protocol to restrict these rows to computing the proved constructions and bounds. The results must not label these rows as global exact optima.
 
-已完成 `research/theory/localization_value.md` 全文审查：LV1 最大安全门、LV2 贪心、LV3 降尾、无位置价值充分条件、LV4 比值界/两个不同渐近尺度、LV5 合取闭式、Star 两配额式和末尾 10/11/12 例均未发现数学反例或缺失量词。反馈的 `\qquad` 格式错误和共同成本单位未明两处已修；“每篇文档相关”已限定为外放松模型。有限 sharpness 构造现在明确要求 `k_N≤r`，避免在小 N 时产生负数个零审层。
+A full-text review of `research/theory/localization_value.md` is complete. No mathematical counterexample or missing quantifier was found in LV1 (largest safe gate), LV2 (greedy), LV3 (tail lowering), the sufficient condition for no localization value, LV4 (ratio bounds / two different asymptotic scalings), LV5 (conjunction closed form), the two-quota formula for Star, or the 10/11/12 examples at the end. The two reported issues, a `\qquad` formatting error and an unstated common cost unit, have been fixed. "Every document is relevant" is now restricted to the outer-relaxation model. The finite sharpness construction now explicitly requires `k_N≤r`, to avoid a negative number of zero-audit layers at small N.
 
-对 `total_count_design.py` 静态复核：正因子 heap、独立组合数 DP、正成本剪枝、同 N/同成本完整 d 坐标排序及超预算抛错均与其契约一致。实现保留完整 d 维，不声称已经实现新的前 k 约简。初版关于“短前缀约简不适用”的过宽注释已改；数字文本在 Fraction 解析前禁止指数语法的修复亦已核对。审查者未实际执行可能造成指数爆炸的输入。
+Static review of `total_count_design.py`: the positive-factor heap, the independent binomial-coefficient DP, positive-cost pruning, full sorting of the d coordinates for equal N/equal cost, and raising an error on budget overrun are all consistent with its contract. The implementation keeps all d dimensions and does not claim to implement the new first-k reduction. The overly broad comment in the first version saying "the short-prefix reduction does not apply" has been changed. The fix that forbids exponent syntax in numeric text before Fraction parsing has also been checked. The reviewer did not actually run inputs that could cause an exponential blow-up.
 
-对最终结果执行 `python research/reports/localization_review_checks.py --verify-results`，**退出码 0**，最终脚本内部计时约 0.585 秒：
+Running `python research/reports/localization_review_checks.py --verify-results` on the final results gave **exit code 0**, with final internal script timing of about 0.585 seconds:
 
-- 不调用作者函数，完整枚举 20 个阈值问题的 309,349 个非降 k 前缀，对其中 20,083 个更便宜设计独立计算精确风险；没有发现比报告更低的可行总 K 配额。返回配额自身也逐个通过风险复算。
-- 16 个 Star 格用独立的 a,b 二元枚举核对最优总 K 成本；8 个合取格与闭式一致；4 个 sharpness 行与解析上下界、最小 k_N 一致，全部保留 `bounds_only` 和未计算全局精确最优标签。
-- 原 direct 成本和矩形成本逐行对照旧 JSON；新总 K 的最优性由本次独立前缀枚举复核，不借用作者的搜索输出作为自身证明。旧 direct 的最优性仍引用上一轮已审结果，本轮只独立重算其风险/对照成本，未重跑旧优化器。
-- 48/48 计划行完整；最终执行源、协议、旧 JSON 的哈希与运行记录前后完全相符，运行时记录的理论稿哈希也与本次最终被审稿完全一致。
-- 作者完整表记录约 1.476 秒、未超时；这是作者运行记录。本审查自己的计时和枚举量如上，二者不混报。峰值内存未测量。
+- Without calling the author's functions, all 309,349 non-decreasing k-prefixes of the 20 threshold problems were enumerated, and the exact risk was computed independently for the 20,083 cheaper designs among them. No feasible total-K quota cheaper than the reported one was found. Each returned quota itself also passes the risk recomputation.
+- For the 16 Star cells, the optimal total-K cost was checked by an independent enumeration over the two variables a,b. The 8 conjunction cells agree with the closed form. The 4 sharpness rows agree with the analytic upper and lower bounds and the minimal k_N, and all keep the `bounds_only` label and the label that the global exact optimum was not computed.
+- The original direct costs and rectangle costs were compared row by row with the old JSON. The optimality of the new total K was reviewed by this independent prefix enumeration, without borrowing the author's search output as its own proof. The optimality of the old direct results still relies on the result reviewed last round. This round only recomputed their risk/control costs independently and did not rerun the old optimizer.
+- 48/48 planned rows are complete. The hashes of the final execution sources, the protocol and the old JSON match the run record exactly before and after. The hash of the theory draft recorded at run time is also exactly the same as that of the final draft reviewed here.
+- The author's full table records about 1.476 seconds and no timeout; that is the author's run record. This review's own timings and enumeration counts are given above, and the two are not reported together. Peak memory was not measured.
 
-完整结果的主要含义如下：
+The main implications of the full results are as follows:
 
-| 家族 | 完整格数 | 相对最优总 K 有严格节省 | 相对 min(Box, Total K) 有严格节省 | 相对组合基线的中位节省 | 最大节省 |
+| Family | Cells in full | Strict saving vs. optimal Total K | Strict saving vs. min(Box, Total K) | Median saving vs. combined baseline | Largest saving |
 |---|---:|---:|---:|---:|---:|
-| 原阈值族 | 20 | 14 | 5 | 0 | 1/11，约 9.09% |
-| 全层合取 | 8 | 8 | 0 | 0 | 0 |
+| Original threshold family | 20 | 14 | 5 | 0 | 1/11, about 9.09% |
+| All-layer conjunction | 8 | 8 | 0 | 0 | 0 |
 | Star | 16 | 16 | 0 | 0 | 0 |
 
-原阈值族中对组合基线的 5 个非零格为 `(r,N)=(4,10),(5,5),(5,10),(5,20),(6,2)`，节省依次为 `1/40,2/25,1/22,1/43,1/11`。原主例 `(6,20)` 仍是 `Direct=88, Total K=88, Box=114`，组合基线已复现全部原主例收益。不能把与总 K 的 14/20 或合取/Star 的巨大差距替换成对组合基线的成绩。
+In the original threshold family, the 5 cells with a nonzero saving against the combined baseline are `(r,N)=(4,10),(5,5),(5,10),(5,20),(6,2)`, with savings `1/40,2/25,1/22,1/43,1/11` respectively. The original main example `(6,20)` is still `Direct=88, Total K=88, Box=114`; the combined baseline already reproduces the whole gain of the original main example. The 14/20 against Total K, or the large gaps for conjunction/Star, cannot be substituted for the result against the combined baseline.
 
-**必须单独保留的 4 行解析正面证据。** 上表只汇总 44 个精确求解点；它不涵盖协议另列的 4 个 `bounds_only` 点。令 `C_S=min(C_box,C_K)`。在 `r=N²,d=2r−1` 路径上，Box 的精确成本为 `r*ceil(N(1−α))=Θ(N³)`，而全部层各审一篇给总 K 可行上界 `C_K≤d=Θ(N²)`（充分大 N 时风险 `≤exp(−N)≤α`）。因此最终 `C_S=C_K`，第3节的夹逼同样给 `C_S/C_I→2`、节省 `1−C_I/C_S→1/2`。对本轮 α 和四个 N，Box 已逐项超过总 K 的可行上界，故下列组合基线界均严格成立：
+**Four rows of analytic positive evidence that must be kept separately.** The table above summarizes only the 44 exactly solved points. It does not cover the 4 `bounds_only` points listed separately in the protocol. Let `C_S=min(C_box,C_K)`. On the `r=N²,d=2r−1` path, the exact Box cost is `r*ceil(N(1−α))=Θ(N³)`, while auditing one document in every layer gives the feasible total-K upper bound `C_K≤d=Θ(N²)` (for sufficiently large N the risk is `≤exp(−N)≤α`). So eventually `C_S=C_K`, and the squeeze in Section 3 also gives `C_S/C_I→2` and a saving `1−C_I/C_S→1/2`. For this round's α and the four values of N, Box already exceeds the feasible total-K upper bound in every row, so all of the following combined-baseline bounds hold strictly:
 
-| N | r | 直接最优成本已证区间 | 组合基线最优成本已证区间 | Box 精确成本 | 直接法相对组合基线的节省下界 |
+| N | r | Proved interval for the direct optimal cost | Proved interval for the combined-baseline optimal cost | Exact Box cost | Lower bound on the direct method's saving vs. the combined baseline |
 |---:|---:|---:|---:|---:|---:|
-| 4 | 16 | [16,26] | [28,31] | 64 | 1/14，约 7.14% |
-| 8 | 64 | [64,86] | [120,127] | 512 | 17/60，约 28.33% |
-| 16 | 256 | [256,302] | [496,511] | 4096 | 97/248，约 39.11% |
-| 32 | 1024 | [1024,1118] | [2016,2047] | 31744 | 449/1008，约 44.54% |
+| 4 | 16 | [16,26] | [28,31] | 64 | 1/14, about 7.14% |
+| 8 | 64 | [64,86] | [120,127] | 512 | 17/60, about 28.33% |
+| 16 | 256 | [256,302] | [496,511] | 4096 | 97/248, about 39.11% |
+| 32 | 1024 | [1024,1118] | [2016,2047] | 31744 | 449/1008, about 44.54% |
 
-这里的节省下界用 `1−直接可行成本上界/组合基线必要成本下界` 计算；它比较两边的全局最优值，但没有声称精确求解这些大问题，也不是实际审计节省。尤其 N=32 的下界远强于精确小网格中的 10 对 11，不能只引用后者来否认方法对该组合基线的实质数学优势。反过来，这些探索性解析构造仍不追认原先的确认性 20% 门或真实任务效果。
+The saving lower bound here is computed as `1 − (upper bound on the feasible direct cost)/(lower bound on the necessary combined-baseline cost)`. It compares the global optima of the two sides, but it does not claim that these large problems were solved exactly, and it is not an actual audit saving. In particular, the lower bound at N=32 is much stronger than the 10 vs 11 in the exact small grid. One cannot cite only the latter to deny the method's substantive mathematical advantage over this combined baseline. Conversely, these exploratory analytic constructions still do not retroactively pass the original confirmatory 20% gate, and they say nothing about effects on a real task.
 
-初版整表复审未把这 4 行对组合基线的含义单独展开；经作者提醒后，本审查独立核对 Box 公式、逐行上界比较和全部节省分数，并补足本节。新增证明解释不改变既有数值执行输入。理论稿新增 §8 的最终哈希为 `3187fd0cfb9b39e9ff797b295557841fc59b16fd1e09d3f385edb076bea2015f`；先前运行支持稿的 `d403...` 哈希保留为历史记录，不回写伪造旧执行记录。
+The first version of the full-table review did not spell out separately what these 4 rows mean for the combined baseline. After the author pointed this out, this review independently checked the Box formula, the row-by-row upper-bound comparison and all the saving fractions, and completed this section. The added proof explanation does not change the existing numerical execution inputs. The final hash of the theory draft with the new §8 is `3187fd0cfb9b39e9ff797b295557841fc59b16fd1e09d3f385edb076bea2015f`. The `d403...` hash of the draft that supported the earlier run is kept as a historical record and is not written back to fake the old execution record.
 
-## 7. 结论与剩余研究义务
+## 7. Conclusion and remaining research obligations
 
-**本轮条件数学与有限实现通过本地独立审查；已经证明对组合基线的非平凡、尖锐常数优势，但“复杂结构优化器必需/强论文创新已成立”的主张仍没有通过。** 当前进展同时包含负面边界和正面分离：原 `N=r²` 路径的优势消失，反向 `r=N²` 路径则能相对同一强组合基线趋近 50% 节省。所有新结果应继续作为探索性技术补充，而不是将内部通过、精确优化器或更多构造当作原创性和真实价值的代理。
+**This round's conditional mathematics and finite implementation passed the local independent review. A non-trivial, sharp constant advantage over the combined baseline has been proved, but the claim that "a complex structural optimizer is necessary / a strong paper-level innovation is established" still has not passed.** The current progress contains both a negative boundary and a positive separation: the advantage disappears on the original `N=r²` path, while the opposite `r=N²` path can approach a 50% saving relative to the same strong combined baseline. All new results should remain exploratory technical supplements. Passing an internal review, having an exact optimizer or adding more constructions must not be used as a proxy for originality and real value.
 
-下一轮若要主张复杂优化器必要，仍需针对比 `min(Box, Total K)` 更广且明确定义的简单策略给出实质理论增量，或证明某类自然且可核验的影响结构满足有意义的收益条件。现有 sharpness 构造本身有简单的解析可行配额，显著节省不自动证明复杂优化计算不可替代。10 对 11 与至少 44.54% 的解析下界应各按其正确证据类型保留，均不能独自追认原确认性投入门。没有验证历史来源、真实审计标签、训练模型效用或外部先例差异；G0/G1 不因本报告而改变。
+If the next round wants to claim that a complex optimizer is necessary, it still needs either a substantive theoretical increment against a broader, explicitly defined class of simple strategies than `min(Box, Total K)`, or a proof that some class of natural and verifiable impact structures satisfies a meaningful gain condition. The existing sharpness construction itself has a simple analytic feasible quota, so a large saving does not automatically prove that complex optimization is irreplaceable. The 10 vs 11 result and the analytic lower bound of at least 44.54% should each be kept with its correct type of evidence; neither one alone can retroactively pass the original confirmatory investment gate. Historical sources, real audit labels, the utility of trained models and the difference from outside prior work have not been verified. G0/G1 are not changed by this report.
 
-固定分层配额限制在这里有实质影响，不能只作为脚注省略。若允许对完整总体 `M=dN` 做均匀无放回抽样 m 篇（各层审计数量随抽样随机），总 K 门排除 `s=r` 的最坏漏检率为 `C(M−s,m)/C(M,m)≤exp(−ms/M)`。因此对充分大 N，取 `m=ceil((M/s)log(1/α))` 即足够；在 `r=N²,d=2r−1` 路径中这是 O(N)，小于本轮固定配额类的 Θ(N²)。这是**不同抽样程序类**的对照，不进入已冻结 48 行，也不反驳同类比较中的 sharp2；它明确说明已有 50% 渐近节省不能表述成对所有简单审计方法的优势。若应用中必须满足固定层配额，需要解释这一需求来源。
+The fixed per-layer quota restriction has a substantive effect here and cannot be left out as a footnote. If one may draw m documents uniformly without replacement from the full population `M=dN` (so that the per-layer audit counts are random), the worst-case miss rate of the total-K gate excluding `s=r` is `C(M−s,m)/C(M,m)≤exp(−ms/M)`. So for sufficiently large N, `m=ceil((M/s)log(1/α))` is enough. On the `r=N²,d=2r−1` path this is O(N), smaller than the Θ(N²) of this round's fixed-quota class. This is a comparison with a **different class of sampling procedures**. It does not enter the frozen 48 rows and does not refute sharp2 within the same-class comparison. It makes clear that the existing 50% asymptotic saving cannot be stated as an advantage over all simple audit methods. If an application must satisfy fixed layer quotas, the source of that requirement needs to be explained.
 
-第一次完整运行及独立复算对应的关键文件 SHA256（新 §8 理论哈希另列上文，旧记录保持历史含义）：
+SHA256 of the key files for the first complete run and the independent recomputation (the theory hash with the new §8 is listed separately above; the old records keep their historical meaning):
 
-| 文件 | SHA256 |
+| File | SHA256 |
 |---|---|
 | `research/theory/localization_value.md` | `d403a84db96a18d3ec5e98a1a18116cee0fd83dc7d43b388f8d7dc83a2b2669f` |
 | `research/planning/total_count_design.py` | `ac0d7f2b753c5747146aa36f4abd1b920d0d9568ec556f83186d68418c5aa209` |
 | `research/planning/localization_results.json` | `6924aa5d879e29b1378484e9c35bbccc6587bf8110cb0723a3159c7687a3a928` |
 | `research/reports/localization_review_checks.py` | `1cc5e1a6b5fa81f9ae252374a8ce5b001a97e78d5030562ce5d0c07fdeade70d` |
 
-## 8. 最后复现修复与冻结记录
+## 8. Final reproduction fix and freeze record
 
-初次统一复现的失败 snapshot、完整异常栈和 6 个未完成持久化的 case ID 已保存在 `research/planning/localization_io_failure.json`。只读复核显示，`run_localization.py` 仅对 Windows 错误码 5/32/33 的原子替换失败作最多 6 次尝试，间隔合计最多 0.775 秒；其他错误及持续失败仍抛出，不能将旧目标文件当成新完成结果。数学代码和比较范围没有因此改变。
+The failure snapshot of the first unified reproduction, the full exception stack and the 6 case IDs whose persistence did not complete are saved in `research/planning/localization_io_failure.json`. A read-only review shows that `run_localization.py` makes at most 6 attempts, and only for atomic-replacement failures with Windows error codes 5/32/33, with total waiting of at most 0.775 seconds. Other errors and persistent failures are still raised, and the old target file cannot be taken as a newly completed result. The mathematical code and the comparison scope did not change because of this.
 
-作者报告数学 10 项加 I/O 3 项共 13 项测试全过，unittest 计时约 0.413 秒；审查者静态阅读了 3 个新增回归，覆盖短暂锁后真实替换、持续锁保留旧内容、非白名单错误不重试。随后实际结果记录为 48/48 完成、worker 退出码 0、约 1.460 秒、无墙钟超限，全部执行源前后哈希一致。
+The author reports that all 13 tests pass (10 mathematical plus 3 I/O), with unittest timing of about 0.413 seconds. The reviewer statically read the 3 new regression tests. They cover real replacement after a brief lock, keeping the old content under a persistent lock, and no retry for non-whitelisted errors. The actual results were then recorded as 48/48 complete, worker exit code 0, about 1.460 seconds, no wall-clock overrun, with all execution-source hashes identical before and after.
 
-审查者对这份新结果再次执行独立 `--verify-results`，退出码 0、约 0.571 秒；309,349 个前缀与 20,083 个更便宜设计检查、44 个精确结果、4 个组合基线解析下界、执行源及最终理论稿哈希全部通过。4 行正面证据的新增断言在该最终脚本中直接验证，未只作文字补充。
+The reviewer ran the independent `--verify-results` again on this new result: exit code 0, about 0.571 seconds. The checks of the 309,349 prefixes and the 20,083 cheaper designs, the 44 exact results, the 4 analytic lower bounds against the combined baseline, the execution sources and the hash of the final theory draft all pass. The new assertions for the 4 rows of positive evidence are verified directly in this final script; they were not only added as text.
 
-最终冻结文件：
+Final frozen files:
 
-| 文件 | SHA256 |
+| File | SHA256 |
 |---|---|
 | `research/theory/localization_value.md` | `3187fd0cfb9b39e9ff797b295557841fc59b16fd1e09d3f385edb076bea2015f` |
 | `research/planning/run_localization.py` | `3ef2500be1cb9cafdd55456a0f83e6a3cfcf6709fc17eddb11ffd35934ddc617` |
@@ -193,26 +193,26 @@
 | `research/planning/localization_io_failure.json` | `dd3668f4a005bef1a228a27a1c18d9a958efcc98f5f028f1971551792c21ce6a` |
 | `research/reports/localization_review_checks.py` | `522643761737e5f1a92893904b825c59eff418030d1253a8dc6fea3adfdb4ed9` |
 
-## 9. 最终统一复现后的补充核对
+## 9. Supplementary check after the final unified reproduction
 
-收到最终统一复现结束通知后，只重跑审查者 `--verify-results`，不重跑作者实验。再次退出码 0，约 0.630 秒；48 行范围、源哈希、最终理论稿及所有数学检查继续一致。主结果 JSON 因正式重跑更新运行时间及旧 threshold JSON 来源哈希，其新哈希在下方最终表记录；先前哈希保留历史含义。
+After receiving the notice that the final unified reproduction had finished, only the reviewer's `--verify-results` was rerun; the author's experiments were not rerun. Exit code 0 again, about 0.630 seconds. The 48-row scope, the source hashes, the final theory draft and all mathematical checks remain consistent. The formal rerun updated the run time and the source hash of the old threshold JSON in the main results JSON. Its new hash is recorded in the final table below; the earlier hashes keep their historical meaning.
 
-追加单点核对预算（运行前写入）：只核对 `research/planning/pooled_scope_check.json` 中已有的 `N=32,d=2047,M=65504,s=1024,m=192`，采用 192 项有理乘积及组合数比双算，墙钟上限 2 秒；不搜索其他样本量、不扩原 48 格、不声称最优或确认性发现。
+Budget for an additional single-point check (written before running): check only the existing `N=32,d=2047,M=65504,s=1024,m=192` in `research/planning/pooled_scope_check.json`, computed two ways, as a 192-term rational product and as a ratio of binomial coefficients, with a wall-clock limit of 2 seconds. No search over other sample sizes, no extension of the original 48 cells, and no claim of optimality or of a confirmatory finding.
 
-实际执行 `--verify-pooled` 退出码 0，脚本内部计时约 0.001 秒。独立逐项相乘得到的概率与 `C(65504−1024,192)/C(65504,192)` 及结果文件中的精确分数完全相等，并用有理数确认不超过 1/20；展示用十进制约为 **0.04833363775444638**。192 是可行样本量，没有进行最小样本量搜索；固定配额 direct 下界 1024 仍成立。
+The actual run of `--verify-pooled` exited with code 0, with internal script timing of about 0.001 seconds. The probability obtained by independent term-by-term multiplication is exactly equal to `C(65504−1024,192)/C(65504,192)` and to the exact fraction in the results file, and rational arithmetic confirms that it is no greater than 1/20. The decimal value for display is about **0.04833363775444638**. 192 is a feasible sample size; no search for the minimum sample size was done. The fixed-quota direct lower bound of 1024 still holds.
 
-该证书合同是：抽样前冻结完整 M 篇文档总体、统一审计成本和正确判定标准，固定真实污染集合；从完整总体等概率、无放回抽取固定总量 192 篇，只有全零发现时报告总污染数不超过 1023。对任意至少 1024 篇污染的真配置，错误出证概率不超过上述值；更多污染由单调性只会降低漏检率。由于不足 1024 篇污染不可能触及 1024 个不同层，该总数门对当前阈值型最终统计目标安全。
+The contract of this certificate is as follows. Before sampling, freeze the full population of M documents, the uniform audit cost and the criterion for a correct judgment, and fix the true contamination set. Draw a fixed total of 192 documents from the full population with equal probability and without replacement. Report a total contamination count of at most 1023 only when there are zero findings. For any true configuration with at least 1024 contaminated documents, the probability of issuing a wrong certificate is no greater than the value above; by monotonicity, more contamination can only lower the miss rate. Since fewer than 1024 contaminated documents cannot reach 1024 different layers, this total-count gate is safe for the current threshold-type final statistical target.
 
-Pooled 抽样的各层配额是随机量，跨层分配也非事前固定，因此其覆盖保证针对完整随机抽样机制，不是条件于任意实现的配额向量之后仍满足本轮 fixed-quota 风险门。不能将 pooled 风险套用到固定分层设计，也不能将固定配额的 1024 下界说成一切审计方法的下界。**在允许这种 pooled 抽样且成本相同的应用中，192 篇的简单门已经严格便宜于任何本轮 fixed-quota direct 设计；为何必须固定层配额是主研究限制，不能以内部数学通过替代解释。** 此单点是类外范围检查，未新增实际审计、训练、48 格结果或确认性投入门。
+Under pooled sampling the per-layer quotas are random, and the allocation across layers is not fixed in advance either. Its coverage guarantee therefore refers to the full random sampling mechanism. It does not mean that the gate still satisfies this round's fixed-quota risk gate after conditioning on an arbitrary realized quota vector. The pooled risk cannot be applied to a fixed stratified design, and the fixed-quota lower bound of 1024 cannot be described as a lower bound for all audit methods. **In applications that allow this kind of pooled sampling at the same cost, the simple 192-document gate is already strictly cheaper than any fixed-quota direct design of this round. Why the layer quotas must be fixed is the main limitation of the research, and passing an internal mathematical review cannot substitute for an explanation.** This single point is an out-of-class scope check. It adds no actual audit, no training, no 48-cell results and no confirmatory investment gate.
 
-加入这一单点校验入口后，最终脚本的 `--verify-results` 亦再次返回成功；原 309,349 个前缀、20,083 个低成本设计检查及 48 行结果均不变。该轮没有重跑作者实验。
+After this single-point check entry was added, `--verify-results` of the final script also succeeded again. The original 309,349 prefixes, the 20,083 lower-cost design checks and the 48 rows of results are unchanged. That round did not rerun the author's experiments.
 
-最终统一复现后冻结的现行文件哈希（第8节的旧结果哈希保留为较早成功运行历史）：
+Current file hashes frozen after the final unified reproduction (the old result hashes in Section 8 are kept as the history of an earlier successful run):
 
-| 文件 | SHA256 |
+| File | SHA256 |
 |---|---|
 | `research/theory/localization_value.md` | `3187fd0cfb9b39e9ff797b295557841fc59b16fd1e09d3f385edb076bea2015f` |
 | `research/planning/localization_results.json` | `0e990e8ef2790e3b6edde983f399efdd5e667c21bea189fe642f925dd84b7c22` |
 | `research/planning/pooled_scope_check.json` | `38d4aa7867f4ad665a0425e47e22a4c3286f6111d0d50f9fb833aabf8445b43c` |
-| `research/planning/localization_io_failure.json`（历史失败记录，未变） | `dd3668f4a005bef1a228a27a1c18d9a958efcc98f5f028f1971551792c21ce6a` |
+| `research/planning/localization_io_failure.json` (historical failure record, unchanged) | `dd3668f4a005bef1a228a27a1c18d9a958efcc98f5f028f1971551792c21ce6a` |
 | `research/reports/localization_review_checks.py` | `ff78a96df7eba6841225f734872a4ed294f9d4583cebcb7ed6c9d42ca069f22f` |

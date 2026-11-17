@@ -1,48 +1,48 @@
-# P2语义集合包络：运行前问题、范围与预算
+# P2 semantic-set envelope: pre-run questions, scope and budget
 
-2026-11-16，第六轮。本轮研究解析歧义如何传播到数值证书，以及何时必须拒绝；不训练新模型、不读取私有原文、不联网。所有运行数值均属于“我们的数学构造检查”。G0/G1未通过，真实解析器、金标审计和完整金融证书不会由本轮替代。
+2026-11-16, round six. This round studies how parsing ambiguity propagates into numeric certificates, and when the system must refuse; no new model is trained, no private source text is read, and there is no network access. All numbers from the runs belong to "our mathematical construction checks". G0/G1 are not passed, and this round does not replace a real parser, a gold-standard audit or a complete financial certificate.
 
-## 要回答的数学问题
+## Mathematical questions to answer
 
-给定有限个语义候选，每个候选具有固定上下文/方向、正基准数值范围和一个明确的有序logit映射，什么是模型输出的最小逐坐标包络？候选集合多宽时，在规定宽度下保证覆盖全部候选只能拒绝？对简单数值比较，直接符号规则是否已经达到同样保证？
+Given finitely many semantic candidates, each with a fixed context/direction, a positive range for the base value, and an explicit ordered logit map, what is the smallest coordinate-wise envelope of the model output? How wide must the candidate set be before guaranteeing coverage of all candidates within a prescribed width is possible only by refusing? For a simple numeric comparison, does a direct symbolic rule already achieve the same guarantee?
 
-每个候选都针对**同一冻结目标、同一类标签语义与次序**；不同任务的概率不能放在同一坐标上取min/max。代码可以检查目标/schema声明一致，不能证明这些声明语义正确。数值包络包含的是模型在所列候选上的输出，不是实际标签、真实概率或经济Greeks。
+Every candidate refers to **the same frozen target and the same class-label semantics and order**; probabilities from different tasks cannot be put on the same coordinate for a min/max. The code can check that the target/schema declarations agree; it cannot prove that those declarations are semantically correct. The numeric envelope contains the model's outputs on the listed candidates, not the actual labels, true probabilities or economic Greeks.
 
-## 固定范围
+## Fixed scope
 
-- 数值用Fraction精确有理数；基准b区间严格为正，x可为负。独立矩形下x/b和x/b−1的极值从四角取得。若x与b共享依赖，这只是矩形外放松；不能冒称仍对原语义集合紧。
-- 每个分支为固定affine logit η=a·g+c和固定严格递增阈值。对η区间，首尾类概率单调，中间类概率的最大值可能在相邻阈值中点，不能仅取两端。
-- 对exp/sigmoid采用可证明的有理上下界；不以libm输出加一格nextafter冒充已认证超越函数误差。项数或数值域超过预算时明确失败，不输出未完成的窄区间。
-- 分支联合的最小逐坐标box不意味着box角点都在概率单纯形内或可同时达到。离散语义歧义不能被数值半径为0掩盖。
-- 宽度门分“已证可接受 / 已证超宽 / 数值精度不足以判断”。上包络宽于阈值不足以单独证明真实最小宽度超阈值。
-- 有限分支持久对应时，统一单调方向和Lipschitz界可传给上下包络；分支切换/消失可能导致跳变，局部Greeks不能覆盖这种改变。
-- 稳健宽度下界和最大接受率首先是相对于**要求全部覆盖的候选集合**的结论。若候选多报，仅说明当前抽象保守，不证明自然文本内禀不可识别。
-- 解析集合覆盖失败率与审计置信错误α分开；width接受规则固定后才能按接受子总体审计。没有真实语义审计，本轮不填写部署错误率。
+- Numbers are exact rationals via Fraction; the base-value interval for b is strictly positive, and x may be negative. Under an independent rectangle, the extremes of x/b and x/b−1 are attained at the four corners. If x and b share a dependence, this is only an outer relaxation by the rectangle; it must not be presented as still tight for the original semantic set.
+- Each branch is a fixed affine logit η=a·g+c with fixed strictly increasing thresholds. For an η interval, the probabilities of the first and last classes are monotone, but the maximum of a middle-class probability can be at the midpoint between adjacent thresholds, so taking only the two ends is not enough.
+- exp/sigmoid use provable rational upper and lower bounds; a libm output plus one nextafter step is not passed off as a certified transcendental-function error. When the number of terms or the numeric range exceeds the budget, the check fails explicitly and does not output an unfinished narrow interval.
+- The smallest coordinate-wise box over the union of branches does not mean that the box corners lie in the probability simplex or can be attained simultaneously. Discrete semantic ambiguity cannot be hidden by a numeric radius of 0.
+- The width gate distinguishes "proven acceptable / proven too wide / numeric precision insufficient to decide". An upper envelope wider than the threshold is not enough on its own to prove that the true minimum width exceeds the threshold.
+- When finitely many branches persist in correspondence, a common monotone direction and Lipschitz bound carry over to the upper and lower envelopes; branch switching/disappearance can cause jumps, and local Greeks cannot cover such changes.
+- The robust width lower bound and the maximum acceptance rate are first of all conclusions relative to **the candidate set that must be covered in full**. If candidates are over-reported, this only shows that the current abstraction is conservative; it does not prove that the natural text is intrinsically unidentifiable.
+- The parse-set coverage failure rate is kept separate from the audit confidence error α; only after the width acceptance rule is fixed can the accepted subpopulation be audited. There is no real semantic audit, so this round does not fill in a deployment error rate.
 
-## 预定对照与检查
+## Pre-specified controls and checks
 
-1. 中间类峰值落在区间内部的反例。
-2. 数值完全精确、语义分支不同，联合概率区间仍宽。
-3. 同一量x=b的精确关系，与丢失依赖后独立矩形的包络作比较。
-4. 同单位的x与b一起按正有理尺度变换，规范特征及全部计算包络不变；只检查元组变换，不冒充自然文本解析不变。
-5. 每个分支都单调，选择器却随输入切换而向下跳的反例。
-6. 符号sign(x−b)能一致判定的候选集，与必须拒绝的冲突候选集；不为保留学习头而更改任务。
-7. 对有限冻结候选任务的宽度—接受率表，保留数值未定格子，不挑选最好看的格子作为成功。
+1. A counterexample where the middle-class peak falls inside the interval.
+2. Numbers fully exact, semantic branches different, and the joint probability interval still wide.
+3. The exact relation x=b for the same quantity, compared with the envelope of the independent rectangle after the dependence is lost.
+4. When x and b in the same unit are scaled together by a positive rational factor, the canonical features and all computed envelopes are unchanged; this only checks the tuple transformation and does not claim invariance of natural-text parsing.
+5. A counterexample where every branch is monotone but the selector jumps downward as the input switches branches.
+6. A candidate set on which the symbol sign(x−b) decides consistently, and a conflicting candidate set that must be refused; the task is not changed in order to keep a learned head.
+7. A width–acceptance-rate table for the finite frozen candidate task, keeping numerically undecided cells, without picking the best-looking cells as success.
 
-这些是预先规定的数学对照，不是自然语料模型比赛。所有数值精确性、候选真值覆盖及经验有用性分别验收。
+These are pre-specified mathematical controls, not a model contest on a natural corpus. Numeric exactness, coverage of the candidate truth, and empirical usefulness are each accepted separately.
 
-## 预算
+## Budget
 
-纯标准库CPU，全部构造检查目标≤60秒；至多200个语义分支与256个额外有理网格点。无GPU/API/模型训练token。预计内存≤100MB，未实测时只记录为预算。默认端点容差1e−12、Taylor项数上限1,000、单次exp参数绝对值上限50；限制是检查器实现预算，不是数学定理的适用边界。实现可在更小内部容差下保证报告端点松弛，需给清楚证明。
+Pure standard library on CPU, target ≤60 seconds for all construction checks; at most 200 semantic branches and 256 extra rational grid points. No GPU/API/model-training tokens. Expected memory ≤100MB, recorded only as a budget unless measured. Default endpoint tolerance 1e−12, at most 1,000 Taylor terms, absolute value of a single exp argument at most 50; these limits are implementation budgets of the checker, not the domain of validity of the mathematical theorems. The implementation may guarantee loosening of the reported endpoints under a smaller internal tolerance, with a clear proof.
 
-停止/修复条件：任何解析后的支持点落在已计算区间外；中间峰漏包；超过数值预算仍返回成功；float/bool隐式变精确有理数；跨任务/schema拼接；将计算上包络宽度误作不可避免的精确宽度。发现问题保留反例和修复，必要时收窄声明，不静默删测试点。
+Stop/fix conditions: any parsed support point falls outside the computed interval; a middle peak is missed; success is still returned after the numeric budget is exceeded; float/bool is implicitly turned into an exact rational; tasks/schemas are spliced together; the computed upper-envelope width is mistaken for an unavoidable exact width. When a problem is found, keep the counterexample and the fix and narrow the claim if needed; do not silently delete test points.
 
-交付为条件证明、可执行有理包络检查器、冻结构造记录、独立审查与Fable新增问题。基础单调、区间运算、minimax半径等工具不据此声称原创。
+The deliverables are conditional proofs, an executable rational-envelope checker, a frozen construction record, an independent review, and new questions for Fable. No originality is claimed on this basis for basic tools such as monotonicity, interval arithmetic or the minimax radius.
 
-## 主运行冻结细节与检查预算补充
+## Main-run frozen details and check-budget supplement
 
-主运行采用r∈{0,1/10,1/2,1,2}、d∈{0,1/4,1,2,4}的完整25格：每格两个语义分支g∈[−r,r]，logit分别为g−d、g+d，固定三类阈值(−1,1)。所有格子等权，只汇总人工任务的候选相对接受率，不推断自然语料分布。主宽度门0.10，0.05/0.20仅为同时列出的敏感性列，绝不挑其中最好者宣布成功。另保留上述七类最小反例与对照。
+The main run uses the full 25-cell grid r∈{0,1/10,1/2,1,2}, d∈{0,1/4,1,2,4}: each cell has two semantic branches g∈[−r,r] with logits g−d and g+d, and fixed three-class thresholds (−1,1). All cells have equal weight; only the relative candidate acceptance rate of the hand-made task is summarized, and no distribution over a natural corpus is inferred. The main width gate is 0.10; 0.05/0.20 are only sensitivity columns listed alongside it, and the best of them is never picked to announce success. The seven kinds of minimal counterexamples and controls listed above are also kept.
 
-独立审查采用不同的有理缩放—平方实现核对主数值算法，实现单测另核对139个ratio/η网格点。为保留独立算法交叉证据，执行前将初稿256点的合并检查预算明确扩大为500点，主runner不另加稠密网格；数学任务与25格不变，CPU总目标仍≤60秒。该预算扩大在主runner和最终单元套件执行前记录，不根据任何金融性能选择案例。
+The independent review uses a different rational scaling–squaring implementation to check the main numeric algorithm, and the implementation's unit tests check another 139 ratio/η grid points. To keep cross-evidence from an independent algorithm, the combined check budget of 256 points in the first draft was explicitly enlarged to 500 points before execution; the main runner adds no extra dense grid; the mathematical task and the 25 cells are unchanged, and the total CPU target is still ≤60 seconds. This budget enlargement was recorded before the main runner and the final unit suite were executed, and no case was chosen based on any financial performance.
 
-审查后计数勘误：独立审查实际为24个分支×9点=216个内部支持点，因各分支K不同，共729个坐标包含检查。此前误以729/3计为243点，现修正；216+139=355点在扩大的500点预算内。仅修正计数，不删除或新增案例，首次主运行内容不变。
+Count erratum after review: the independent review actually used 24 branches × 9 points = 216 internal support points; because the branches have different K, there were 729 coordinate-containment checks in total. Earlier, 729/3 was wrongly counted as 243 points; this is now corrected; 216+139=355 points is within the enlarged 500-point budget. Only the count is corrected; no case is deleted or added, and the content of the first main run is unchanged.

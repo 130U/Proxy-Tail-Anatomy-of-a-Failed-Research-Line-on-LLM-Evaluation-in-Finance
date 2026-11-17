@@ -1,11 +1,11 @@
-# WP0.1 运行前预算
+# WP0.1 pre-run budget
 
-日期：2026-11-15；基线 commit：8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254。
+Date: 2026-11-15; base commit: 8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254.
 
-- 硬件：本机 CPU，NumPy；不使用 GPU。
-- 预计时间：混淆矩阵枚举、4 × 100,000 次多项式 bootstrap 和测试合计不超过 3 分钟。
-- 预计显存：0；预计内存低于 256 MiB。
-- 输入：已公开的 101 条开发集汇总，不读取或发布私有文本；没有训练 token。
-- 输出：所有与整数边际一致的矩阵、逐矩阵 95% percentile bootstrap 区间和可重复结果 JSON。
-- 数字来源层级：输入为仓库公开汇总（用户日志的二手记录）；计算输出为“我们的实验 wp0_1”。
-- 限制预注册：这是 IID 行 bootstrap 的敏感性重建，不是 family bootstrap，不纠正开发集选型偏差；不检验与 TF-IDF 的配对差异。缺配对预测和簇 ID 时不得判定显著/不显著。
+- Hardware: local CPU, NumPy; no GPU.
+- Expected time: confusion-matrix enumeration, 4 × 100,000 multinomial bootstrap draws and the tests take no more than 3 minutes in total.
+- Expected GPU memory: 0; expected RAM below 256 MiB.
+- Input: the published summary of the 101-row development set; no private text is read or published; no training tokens.
+- Output: all matrices consistent with the integer margins, a 95% percentile bootstrap interval for each matrix, and a reproducible results JSON.
+- Source level of numbers: the input is the repository's public summary (a second-hand record of the user's logs); the computed output is "our experiment wp0_1".
+- Pre-registered limits: this is a sensitivity reconstruction with an IID row bootstrap, not a family bootstrap; it does not correct the development-set model-selection bias; it does not test the paired difference against TF-IDF. Without paired predictions and cluster IDs, no significant/non-significant verdict may be made.

@@ -15,7 +15,7 @@ def row(number, title, decisions):
 
 class PreparationTests(unittest.TestCase):
     def test_duplicate_raw_and_normalized_keys_quarantine(self):
-        for raw in ["{'A':'positive','A':'negative'}", "{'A':'positive',' a ':'positive'}", "{'Ａ':'neutral','a':'neutral'}"]:
+        for raw in ["{'A':'positive','A':'negative'}", "{'A':'positive',' a ':'positive'}", "{'\uff21':'neutral','a':'neutral'}"]:
             with self.assertRaises(QuarantineError):
                 parse_decisions(raw)
 
@@ -91,7 +91,7 @@ class PreparationTests(unittest.TestCase):
         self.assertEqual(stats["quarantine_reasons"], {"duplicate_source_id": 2})
 
     def test_groups_and_splits_do_not_depend_on_order_or_labels(self):
-        titles = ["a b c d", "a b c d e", "x y z", "Ａ   gains"]
+        titles = ["a b c d", "a b c d e", "x y z", "\uff21   gains"]
         mapping, _, _ = group_titles(titles)
         reversed_mapping, _, _ = group_titles(list(reversed(titles)))
         self.assertEqual(mapping, reversed_mapping)
@@ -100,7 +100,7 @@ class PreparationTests(unittest.TestCase):
         left, _, _ = prepare_records(records)
         right, _, _ = prepare_records(changed)
         self.assertEqual([(r["id"], r["family_id"], r["split"]) for r in left], [(r["id"], r["family_id"], r["split"]) for r in right])
-        self.assertEqual(normalized("Ａ   gains"), "a gains")
+        self.assertEqual(normalized("\uff21   gains"), "a gains")
         self.assertTrue(all(split_for_family(f) in {"train", "development", "test"} for f in mapping.values()))
 
 

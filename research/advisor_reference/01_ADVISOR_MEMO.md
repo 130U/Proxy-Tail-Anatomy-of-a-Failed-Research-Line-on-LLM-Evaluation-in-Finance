@@ -1,269 +1,269 @@
-# 导师备忘：为什么重做、做什么、先做什么
+# Advisor memo: why redo it, what to do, what to do first
 
-致 Codex。
+To Codex.
 
-工作包和问题清单告诉你**做什么**。这份备忘解释**为什么**，这样在我没写到的地方，你也能做出和我一致的判断。读完它，你应该能回答三个问题：这个项目的贡献是什么？为什么是我们来做？如果时间只够做一件事，做哪件？
-
----
-
-## 1. 诊断：这个项目为什么看起来像玩具
-
-玩具项目的特征不是规模小，而是两点：它回答的问题已经有更好的答案；它的设计里没有任何东西是必须的。
-
-用这个标准看现状：
-
-- **问题已有更好的答案。** 标题三分类情感，开源大模型零样本或少样本就做得很好。
-- **设计不是必须的。** 从零训练对这个任务没有任何好处。24M 的规模是算力限制的结果，不是问题本身的需要。
-- **证据分不清"有效"和"噪声"。** 0.655 对 0.609 的差距，在 bearish 只有 10 条的开发集上，很可能在抽样误差之内。WP0.1 会量化这一点。
-- **工程投入和研究投入失衡。** 仓库里大量代码是 Colab / Kaggle 搬运、notebook 生成器和导出脚本。这些是必要的卫生，但不是贡献。
-
-但有三样东西是好的，而且正好是新方向需要的：
-
-1. **`as_of` 字段和"先划分 family、再派生视图"的纪律。** 这是信息集证书的数据前提。
-2. **确定性训练、断点恢复语义、全局分母记账。** 分片聚合证书要求每个分片的训练是其数据的确定性函数。之前做的工程，正好是证书成立的前提条件。
-3. **Semantic permissions。** 这是敏感度规范的雏形。
-
-所以这次重做不是推倒重来，而是**把已有的工程卫生，提升为证书的前提条件**。这一点在写作时要讲清楚，它让旧工作有了新的意义。
+The work packages and question list tell you **what** to do. This memo explains **why**, so that where I have not written something down, you can still make the same judgment I would. After reading it you should be able to answer three questions: what is this project's contribution? Why are we the ones to do it? If there is only time for one thing, which one?
 
 ---
 
-## 2. 选题逻辑：三个过滤器
+## 1. Diagnosis: why this project looks like a toy
 
-**过滤器 1：必要性。** 只保留"必须从零训练一个小模型才能回答"的问题。这样的问题只有四类：
+What marks a toy project is not small scale. It is two things: the question it answers already has better answers, and nothing in its design is necessary.
 
-- 控制信息集：预训练模型见过未来，事后无法去除。
-- 控制架构：Lipschitz 约束、精确不变性、单调性，必须在训练前写进架构。
-- 控制数字和单位的表示：改 tokenizer 和 embedding，只有从零训练才自由。
-- 完全可检查：小模型可以做完整的机制分析，训练数据完全已知。
+Looked at by this standard, the current state is:
 
-**过滤器 2：比较优势。** Theodore 的其他工作全部是 certified bounds。新方向应当让这套方法直接复用：定义一个量，证明一个界，给出可执行的证书，在真实数据上说明界不空。
+- **The question already has better answers.** For three-class headline sentiment, open-source large models already do well zero-shot or few-shot.
+- **The design is not necessary.** Training from scratch brings no benefit for this task. The 24M scale is a result of compute limits, not something the problem itself needs.
+- **The evidence cannot tell "effective" from "noise".** The gap between 0.655 and 0.609, on a dev set with only 10 bearish items, is very likely within sampling error. WP0.1 will quantify this.
+- **Engineering and research investment are out of balance.** A large amount of the code in the repository is Colab / Kaggle plumbing, notebook generators and export scripts. These are necessary hygiene, but they are not contributions.
 
-**过滤器 3：不怕算力竞争。** 贡献必须在别人算力翻倍时不会被轻易超过。"更大的模型更准"会被超过；"这个界在这些假设下成立"不会。
+But three things are good, and they happen to be exactly what the new direction needs:
 
-三个过滤器的交集是：**可认证的金融语言模型（Certifiable FinLM）**。
+1. **The `as_of` field and the discipline of "split families first, then derive views".** This is the data precondition for the information-set certificate.
+2. **Deterministic training, checkpoint-resume semantics, global denominator bookkeeping.** The shard-aggregation certificate requires each shard's training to be a deterministic function of its data. The earlier engineering is exactly the precondition for the certificate to hold.
+3. **Semantic permissions.** This is an early form of the sensitivity specification.
 
----
-
-## 3. 核心论点
-
-**论点：** 对小型金融语言模型，有价值的进步不是让它更准，而是让关于它的结论可以被检验。小规模让证书算得动，从零训练让证书的前提可控。
-
-三个研究问题（RQ1 信息集、RQ2 敏感度、RQ3 部署风险）见 `00_CODEX_BRIEF.md` 第 2.2 节。
+So this redo does not tear everything down and start over. It **raises the existing engineering hygiene to the status of preconditions for certificates**. Make this point clearly in the writing; it gives the old work a new meaning.
 
 ---
 
-## 4. 统一框架：证书链
+## 2. Topic-selection logic: three filters
 
-这是整个项目的中心概念，请先理解它。
+**Filter 1: necessity.** Keep only questions that "can only be answered by training a small model from scratch". There are only four kinds of such questions:
 
-任何关于模型的结论，都依赖一串环节。比如这句话：
+- Controlling the information set: a pretrained model has seen the future, and this cannot be removed afterward.
+- Controlling the architecture: Lipschitz constraints, exact invariance and monotonicity must be written into the architecture before training.
+- Controlling the representation of numbers and units: changing the tokenizer and embedding is only free when training from scratch.
+- Full inspectability: a small model allows complete mechanistic analysis, and its training data is fully known.
 
-> "模型在 2019 年之后的事件上，回测命中率是 0.58，而且没有前视偏差。"
+**Filter 2: comparative advantage.** All of Theodore's other work is certified bounds. The new direction should let this method be reused directly: define a quantity, prove a bound, give an executable certificate, and show on real data that the bound is non-vacuous.
 
-它依赖四个环节：
+**Filter 3: robust to compute competition.** The contribution must not be easily overtaken when others double their compute. "A bigger model is more accurate" will be overtaken; "this bound holds under these assumptions" will not.
 
-1. 数据管线只放入时间戳 ≤ t 的文档。这是**构造性环节**，靠代码审计和测试保证。
-2. 时间戳本身是对的，或者错得不多。这是**统计环节**，靠抽样审计估计。
-3. 少量错标的文档对模型输出的影响有界。这是**界环节**，靠定理保证。
-4. 测试统计量本身的抽样不确定性。这又是一个**统计环节**。
-
-**结论的强度由最弱的环节决定。** 确定性环节的失败概率是 0；统计环节的失败概率 α 相加（union bound）。
-
-这个框架有三个用处：
-
-- **统一叙事。** P1、P2、P3 是同一件事在三个对象上的应用。论文和仓库因此有一个中心概念，而不是一堆技巧。
-- **分配精力。** 永远去加强最弱的环节。花一个月把一个本来就很强的环节变得更强，是浪费。
-- **产生研究问题。** 现实中哪个环节最弱？能否通过数据选择或架构设计，把一个统计环节变成确定性环节？
-
-我预期一个关键发现（需要你验证）：在 P1 里，最弱的环节不是模型，而是时间戳审计。见 5.1 节的"审计分辨率极限"。
+The intersection of the three filters is: **a certifiable financial language model (Certifiable FinLM)**.
 
 ---
 
-## 5. 两条主线和一条支线
+## 3. Core thesis
 
-### 5.1 P1 信息集证书（主线，旗舰候选）
+**Thesis:** for small financial language models, valuable progress is not making them more accurate but making the conclusions about them testable. Small scale makes certificates computable, and training from scratch makes the premises of the certificates controllable.
 
-**现状。** 现有 point-in-time 模型（ChronoGPT、DatedGPT）给出的保证是"训练数据按时间过滤过"。这是一个流程陈述，不是证书。它没有回答三件事：
-
-- (a) tokenizer、超参数、去重模型、指令数据，是否也只用了 t 之前的信息？
-- (b) 如果时间戳本身错了怎么办？
-- (c) 如果错了 k 篇，回测结论最多会偏多少？
-
-FinDendro（2026-11）进一步表明，模型对自身知识截止日的自我报告不能用来认证回测。
-
-**我的思路，分四步：**
-
-1. **定义** F_t-可测的训练管线。要求覆盖所有组件，不只是数据。这是构造性环节。
-2. **把"k 篇污染文档"转成回测统计量的界。** 有两条路线：
-   - **DP 路线：** 文档级差分隐私 → group privacy → 期望偏移的界。我预期它对 k > 1 基本是空的，作用是当基线。
-   - **分片聚合路线：** 把可疑窗口的文档按哈希分到 m 个分片，每个分片训练一个小分类头，然后投票。k 篇文档最多影响 k 个分片，所以投票差距大于 2k 的预测被认证为不变。由此，整个回测统计量得到一个被证明的区间。小模型让这条路线很便宜：分片头可以是冻结骨干特征上的逻辑回归，CPU 就能训练几百个。
-3. **审计。** 抽查 n 篇文档的真实可得时间，得到错标数量的置信上界，再换算成 k。
-4. **接成证书链。** 最终结论的形式是：以至少 1−α 的概率，**无泄漏的回测统计量**落在 [L, U] 之内。这和 Theodore 在期权定价里给出"被证明的价格区间"，是同一种结论。
-
-**审计分辨率极限（我认为最值得写成命题的一点，T1.4）。** 在大小为 N_W 的可疑窗口里抽查 n 篇、发现零错标时，能认证的错标数量上界约为 N_W·ln(1/α)/n。α = 0.05 时约为 3N_W/n，即 rule of three。而分片聚合至少需要 m ≥ 2k+1 个分片。
-
-所以：**如果可疑窗口很大，不管模型多好，证书都必然是空的。** 例如 N_W = 10⁵、n = 1000 时，k ≈ 300，需要 600 多个分片，每个分片只分到约 160 篇文档。
-
-**推论：证书是否非空，主要由语料选择决定，而不是模型。** 应该优先使用有**权威机器时间戳**的语料：EDGAR 的 acceptance datetime、FOMC 的发布时间、Federal Register 的发布日。这样大部分数据的时间戳环节成为确定性环节，可疑窗口被压到很小。
-
-这就是**信任分层**的设计：
-
-- **可信核心**（权威时间戳）：训练共享骨干和 tokenizer。
-- **可疑边缘**（时间戳不可靠的来源）：分片训练小头，由分片聚合给出证书。
-
-**这条线的贡献：** 一个形式定义 + 证书链定理 + 审计分辨率极限命题 + 一个在真实数据上算出的非空证书 + 合成世界中植入污染的验证。
-
-**风险：**
-
-- 已经有人做过。Q3 和 Q29 会查。
-- 即使用权威时间戳，现实的 k 仍然让 m 不可行。
-- 分片后的小头太弱，几乎所有预测都不被认证。这一条**不是**否决条件——"要拿到证书需要付出多少准确率"本身就是结果——但必须报告。
-
-### 5.2 P2 敏感度证书："模型的 Greeks"（主线，最可能最快出结果）
-
-**现状。** 现有的 semantic permissions 是软损失：它让模型"倾向于"不变或响应，但不保证。对一般的文本编辑做硬保证很难，因为编辑是离散的、长度可变的。但对**数字**和**单位**可以做到精确，因为它们是连续的、有结构的。
-
-**设计（每一步都需要你验证）：**
-
-1. **数字通道。** 文本里的数字换成占位符；数值本身走一个单独的连续通道（参考 xVal、FoNE、BitTokens，见 Q12）。
-2. **量纲。** 只把**无量纲组**送进数字通道：同单位数量的比值、增长率、占比。根据 Buckingham Pi 定理（Villar 等，JMLR 2023），这样模型对货币重计价和报告尺度（千元 / 百万元）**精确不变**。这是构造性证书（T2.3）。
-3. **有序单调头。** metric direction 这类标签是有序的（down < flat < up），用累积 logit 模型。潜变量写成 η = h(g, c) + λ·g，其中 h 对 g 是 λ-Lipschitz 的（Kitouni 等的单调网络）。于是：
-   - ∂η/∂g ∈ [0, 2λ]；
-   - g 增大时，输出分布按一阶随机占优上移；
-   - |∂P(up)/∂g| ≤ λ/2。
-
-   这就是被证明的"模型的 Greeks"：方向被证明，大小有界（T2.2）。
-4. **实体槽位。** 目标实体和其他实体都换成槽位，于是模型对实体身份精确不变（T2.4）。代价另外测量。
-
-**这条线为什么适合 Theodore：** 它把衍生品的语言直接带进来——Delta 有界、方向被证明。还有一个额外收获：原来说不清的"标签保持 vs 分布保持"，在有序模型里变成一阶随机占优的序约束，有了干净的形式化（T2.1）。
-
-**需要你认真对待的两个反对意见：**
-
-- **"如果数字已经抽出来了，metric direction 不就是对 g 设阈值吗？"** 对，所以最干净的应用场景不是"有完整比较基准的数字"，而是：文本里只有部分数字、比较基准隐含在文字里，或者数字只是 stance 判断的证据之一。请在 T2.6 里认真讨论这个问题。
-- **"对数值单调"作为 stance 的规范是否合理？** 逆向投资者、"预期已被定价"都是反例。单调性规范需要论证。但即使单调性不适用，**Lipschitz 界本身仍有价值**：它给出"数字被四舍五入或尺度解析出错 δ 时，输出最多变化多少"的证书。
-
-**证书链在这里同样适用。** 所有证书都条件于"数字和单位被正确解析"。解析是一个统计环节（Q32、WP2.1）。如果解析错误率太高，证书没有意义。这是 P2 的主要风险。
-
-**这条线的贡献：** 一个金融语言模型的数字通道架构；三类构造性证书（单位不变、单调、Greeks 有界）；一个软约束与硬约束的对比——它顺便回答了"permission 损失到底有没有用"；一个解析环节的误差界。
-
-### 5.3 支线 P3：部署风险证书（快赢，投入不超过 10%）
-
-模型校准之后，每条预测有一个错误概率 p_i。一批新样本按事件成簇，簇内依赖未知。
-
-在固定边际分布下，**簇内同单调（comonotone）耦合在凸序意义下最大化错误总数**（Dhaene 等 2002）。因此，最坏情形的方差和 ES 都有可以精确计算的形式。
-
-VaR 不是凸序单调的，所以最坏情形 VaR 不由同单调给出，需要用 rearrangement 一类的方法——这正是 Theodore ES 论文所用的语言。
-
-注意区分两件事：在测试集上估计总体准确率时，如果簇已知且数量足够多，簇 bootstrap 已经处理了簇内未知依赖。P3 的价值在**部署时的前瞻风险**：下一批 n 个事件里错误数的尾部风险是多少。
-
-这可能是已知结果（Q20 会查）。即使已知，它也是 Phase 0 评测地基里应该用的方法。
+The three research questions (RQ1 information set, RQ2 sensitivity, RQ3 deployment risk) are in section 2.2 of `00_CODEX_BRIEF.md`.
 
 ---
 
-## 6. 回答 Theodore 最初的四个问题
+## 4. Unifying framework: the certificate chain
 
-Theodore 问过：在架构、核心逻辑、功能、研究上，有没有实质性的创新？
+This is the central concept of the whole project. Please understand it first.
 
-| 维度 | 实质内容 | 对应 |
+Any conclusion about a model depends on a chain of links. Take this sentence:
+
+> "On events after 2019, the model's backtest hit rate is 0.58, with no look-ahead bias."
+
+It depends on four links:
+
+1. The data pipeline admits only documents with timestamp ≤ t. This is a **constructive link**, guaranteed by code audit and tests.
+2. The timestamps themselves are correct, or not wrong by much. This is a **statistical link**, estimated by a sampling audit.
+3. The effect of a small number of mislabeled documents on the model's output is bounded. This is a **bound link**, guaranteed by a theorem.
+4. The sampling uncertainty of the test statistic itself. This is another **statistical link**.
+
+**The strength of the conclusion is set by the weakest link.** A deterministic link has failure probability 0; the failure probabilities α of the statistical links add up (union bound).
+
+The framework has three uses:
+
+- **A unified narrative.** P1, P2 and P3 are the same idea applied to three objects. The paper and the repository therefore have one central concept, not a pile of tricks.
+- **Allocating effort.** Always strengthen the weakest link. Spending a month making an already strong link stronger is waste.
+- **Generating research questions.** Which link is weakest in practice? Can a statistical link be turned into a deterministic link through data selection or architecture design?
+
+I expect one key finding (you need to verify it): in P1, the weakest link is not the model but the timestamp audit. See the "audit resolution limit" in section 5.1.
+
+---
+
+## 5. Two main lines and one side line
+
+### 5.1 P1 information-set certificate (main line, flagship candidate)
+
+**Current state.** The guarantee given by existing point-in-time models (ChronoGPT, DatedGPT) is "the training data was filtered by time". This is a statement about a procedure, not a certificate. It does not answer three things:
+
+- (a) Did the tokenizer, hyperparameters, dedup model and instruction data also use only information from before t?
+- (b) What if the timestamps themselves are wrong?
+- (c) If k documents are wrong, how far can the backtest conclusion shift at most?
+
+FinDendro (2026-11) further shows that a model's self-report of its own knowledge cutoff cannot be used to certify a backtest.
+
+**My approach, in four steps:**
+
+1. **Define** an F_t-measurable training pipeline. It must cover all components, not just the data. This is the constructive link.
+2. **Turn "k contaminated documents" into a bound on the backtest statistic.** There are two routes:
+   - **DP route:** document-level differential privacy → group privacy → a bound on the expected shift. I expect it to be essentially vacuous for k > 1; its role is to serve as a baseline.
+   - **Shard-aggregation route:** hash the documents in the suspect window into m shards, train a small classification head on each shard, then vote. k documents can affect at most k shards, so predictions whose vote margin exceeds 2k are certified as unchanged. From this, the whole backtest statistic gets a proven interval. A small model makes this route cheap: a shard head can be logistic regression on frozen backbone features, and a CPU can train hundreds of them.
+3. **Audit.** Spot-check the true availability time of n documents to get a confidence upper bound on the number of mislabels, then convert it into k.
+4. **Connect into a certificate chain.** The final conclusion has the form: with probability at least 1−α, the **leakage-free backtest statistic** lies in [L, U]. This is the same kind of conclusion as the "proven price interval" Theodore gives in option pricing.
+
+**Audit resolution limit (the point I think most deserves to be written as a proposition, T1.4).** When n documents are spot-checked in a suspect window of size N_W and zero mislabels are found, the upper bound on the mislabel count that can be certified is about N_W·ln(1/α)/n. For α = 0.05 this is about 3N_W/n, the rule of three. Shard aggregation needs at least m ≥ 2k+1 shards.
+
+So: **if the suspect window is large, the certificate is necessarily vacuous, no matter how good the model is.** For example, with N_W = 10⁵ and n = 1000, k ≈ 300, which needs more than 600 shards, each getting only about 160 documents.
+
+**Corollary: whether the certificate is non-vacuous is determined mainly by corpus selection, not by the model.** Corpora with **authoritative machine timestamps** should be preferred: EDGAR's acceptance datetime, FOMC release times, Federal Register publication dates. Then the timestamp link for most of the data becomes a deterministic link, and the suspect window is squeezed to be very small.
+
+This is the design of **trust tiers**:
+
+- **Trusted core** (authoritative timestamps): trains the shared backbone and the tokenizer.
+- **Suspect edge** (sources with unreliable timestamps): small heads trained on shards, with the certificate given by shard aggregation.
+
+**Contribution of this line:** a formal definition + a certificate-chain theorem + the audit-resolution-limit proposition + a non-vacuous certificate computed on real data + validation with planted contamination in a synthetic world.
+
+**Risks:**
+
+- Someone has already done it. Q3 and Q29 will check.
+- Even with authoritative timestamps, the realistic k still makes m infeasible.
+- The small heads after sharding are too weak, and almost no predictions are certified. This is **not** a kill condition ("how much accuracy must be paid to obtain a certificate" is itself a result), but it must be reported.
+
+### 5.2 P2 sensitivity certificate: "the model's Greeks" (main line, most likely to give results fastest)
+
+**Current state.** The existing semantic permissions are a soft loss: they make the model "tend to" be invariant or respond, but guarantee nothing. Hard guarantees for general text edits are difficult, because edits are discrete and of variable length. But for **numbers** and **units** exactness is achievable, because they are continuous and structured.
+
+**Design (you need to verify every step):**
+
+1. **Numeric channel.** Numbers in the text are replaced by placeholders; the values themselves go through a separate continuous channel (see xVal, FoNE, BitTokens; see Q12).
+2. **Dimensions.** Only **dimensionless groups** are fed into the numeric channel: ratios of quantities with the same unit, growth rates, shares. By the Buckingham Pi theorem (Villar et al., JMLR 2023), the model is then **exactly invariant** to currency redenomination and reporting scale (thousands of yuan / millions of yuan). This is a constructive certificate (T2.3).
+3. **Ordered monotone head.** Labels such as metric direction are ordered (down < flat < up); use a cumulative logit model. Write the latent variable as η = h(g, c) + λ·g, where h is λ-Lipschitz in g (the monotone networks of Kitouni et al.). Then:
+   - ∂η/∂g ∈ [0, 2λ];
+   - as g increases, the output distribution shifts up in first-order stochastic dominance;
+   - |∂P(up)/∂g| ≤ λ/2.
+
+   These are the proven "model's Greeks": the direction is proven and the magnitude is bounded (T2.2).
+4. **Entity slots.** The target entity and other entities are all replaced by slots, so the model is exactly invariant to entity identity (T2.4). The cost is measured separately.
+
+**Why this line suits Theodore:** it brings the language of derivatives in directly: bounded Delta, proven direction. There is an extra gain: the previously vague "label-preserving vs. distribution-preserving" becomes an order constraint of first-order stochastic dominance in the ordered model, with a clean formalization (T2.1).
+
+**Two objections you need to take seriously:**
+
+- **"If the numbers have already been extracted, isn't metric direction just a threshold on g?"** Yes. So the cleanest application is not "numbers with a complete comparison baseline", but cases where the text contains only some of the numbers, the comparison baseline is implicit in the wording, or the numbers are only one piece of evidence for a stance judgment. Please discuss this question seriously in T2.6.
+- **Is "monotone in the numbers" a reasonable specification for stance?** Contrarian investors and "already priced in" are counterexamples. The monotonicity specification needs to be argued for. But even if monotonicity does not apply, **the Lipschitz bound itself still has value**: it gives a certificate for "how much the output can change at most when a number is rounded or its scale is misparsed by δ".
+
+**The certificate chain applies here too.** All certificates are conditional on "numbers and units are parsed correctly". Parsing is a statistical link (Q32, WP2.1). If the parsing error rate is too high, the certificates are meaningless. This is the main risk of P2.
+
+**Contribution of this line:** a numeric-channel architecture for financial language models; three kinds of constructive certificates (unit invariance, monotonicity, bounded Greeks); a comparison of soft and hard constraints, which incidentally answers "is the permission loss useful at all"; and an error bound for the parsing link.
+
+### 5.3 Side line P3: deployment-risk certificate (quick win, at most 10% of effort)
+
+After the model is calibrated, each prediction has an error probability p_i. A batch of new samples is clustered by event, with unknown within-cluster dependence.
+
+With fixed marginal distributions, **the within-cluster comonotone coupling maximizes the total number of errors in convex order** (Dhaene et al. 2002). So the worst-case variance and ES both have exactly computable forms.
+
+VaR is not monotone in convex order, so the worst-case VaR is not given by the comonotone coupling and needs methods of the rearrangement type. That is exactly the language used in Theodore's ES paper.
+
+Note the distinction between two things. When estimating overall accuracy on a test set, if the clusters are known and numerous enough, the cluster bootstrap already handles the unknown within-cluster dependence. The value of P3 is in **forward-looking risk at deployment time**: what is the tail risk of the number of errors among the next batch of n events?
+
+This may be a known result (Q20 will check). Even if it is known, it is the method that should be used in the Phase 0 evaluation foundation.
+
+---
+
+## 6. Answering Theodore's four original questions
+
+Theodore asked: is there substantive innovation in architecture, core logic, functionality or research?
+
+| Dimension | Substance | Corresponds to |
 |---|---|---|
-| 架构创新 | 无量纲数字通道 + 有序单调头；信任分层（可信核心训练骨干，可疑边缘分片训练小头） | P2、P1 |
-| 核心逻辑创新 | 证书链；审计分辨率极限；"标签保持 / 分布保持"形式化为随机占优 | 第 4 节、P1、P2 |
-| 功能 | 每个输出附带证书：信息集是否合规、对数字的敏感度上界、回测统计量的被证明区间 | P1、P2 |
-| 研究 | 2–3 个定理或命题 + 一个真实数据上的非空证书 + 一篇技术报告 | 全部 |
+| Architecture innovation | Dimensionless numeric channel + ordered monotone head; trust tiers (the trusted core trains the backbone, small heads are trained on shards of the suspect edge) | P2, P1 |
+| Core logic innovation | Certificate chain; audit resolution limit; "label-preserving / distribution-preserving" formalized as stochastic dominance | Section 4, P1, P2 |
+| Functionality | Every output comes with certificates: whether the information set is compliant, an upper bound on the sensitivity to numbers, a proven interval for the backtest statistic | P1, P2 |
+| Research | 2–3 theorems or propositions + a non-vacuous certificate on real data + a technical report | All |
 
-同时要说清楚**什么不算创新**：模型更准、规模更大、在某个 benchmark 上分数更高。
+Also make clear **what does not count as innovation**: a more accurate model, a larger scale, a higher score on some benchmark.
 
 ---
 
-## 7. 工作重心与投入比例
+## 7. Work focus and allocation of effort
 
-| 阶段 | 建议时长 | 重心 | 投入分配 |
+| Phase | Suggested duration | Focus | Allocation of effort |
 |---|---|---|---|
-| Phase 0 地基 | 约 2 周 | WP0.1–WP0.6 | 工程 70%，理论 30% |
-| Phase 1 可行性 | 约 3–4 周 | 两条主线的数值可行性 + 原型 | P1 40%，P2 35%，文献 15%，P3 10% |
-| 决策门 G1 | — | 选旗舰 | — |
-| Phase 2 旗舰 | 约 6–8 周 | 旗舰的完整证书 | 前期：旗舰 70%，另一条 20%，写作 10%；后期写作升到 40% |
-| Phase 3 收尾 | 约 2 周 | 仓库重组、README、技术报告 | — |
+| Phase 0 foundation | about 2 weeks | WP0.1–WP0.6 | Engineering 70%, theory 30% |
+| Phase 1 feasibility | about 3–4 weeks | Numerical feasibility of the two main lines + prototypes | P1 40%, P2 35%, literature 15%, P3 10% |
+| Decision gate G1 | — | Choose the flagship | — |
+| Phase 2 flagship | about 6–8 weeks | The flagship's complete certificate | Early: flagship 70%, the other line 20%, writing 10%; later, writing rises to 40% |
+| Phase 3 closeout | about 2 weeks | Repository reorganization, README, technical report | — |
 
-时长是建议，不是承诺。Theodore 的时间安排优先。
-
----
-
-## 8. 决策门
-
-### G0：Phase 0 结束时
-
-必须满足：
-
-- 评测地基到位：当前 24M 的结果有按 family 成簇的 bootstrap 置信区间，有三条基线。
-- permission 损失的消融有结果，不论正负。
-- 合成世界 v0 能按指定数量植入污染。
-
-不满足，就不进 Phase 1 的实验。文献题和推导题不受此限。
-
-### G1：Phase 1 结束时，选旗舰
-
-按四个标准打分，权重从高到低：
-
-1. **新颖性：** 文献题确认"未见"或"只部分做过"。
-2. **非空性：** 在现实参数下（真实语料规模、T4 预算），证书不是空的。
-3. **可行性：** T4 预算内可以完成。
-4. **叙事契合：** 和 Theodore 的 certified bounds 研究是同一种风格。
-
-决策规则：
-
-- P1 新颖且非空 → P1 做旗舰，P2 做成第二篇或附录。
-- P1 已被做过，或者是空的 → P2 做旗舰。P1 降为一篇短文：负结果 + 审计分辨率极限。
-- 两条都不行 → 交回导师重新选题。备选是把 P3 扩成独立工作。
-
-### G2：Phase 2 中期
-
-证书在真实数据上算出来了吗？没有，就**缩小**范围（减少语料、减少证书种类），不要扩大。
+The durations are suggestions, not commitments. Theodore's schedule takes priority.
 
 ---
 
-## 9. 风险与否决条件
+## 8. Decision gates
 
-| 风险 | 早期信号 | 应对 | 否决条件 |
+### G0: at the end of Phase 0
+
+Must satisfy:
+
+- The evaluation foundation is in place: the current 24M results have bootstrap confidence intervals clustered by family, and three baselines.
+- The permission-loss ablation has results, whether positive or negative.
+- Synthetic world v0 can plant a specified amount of contamination.
+
+If these are not satisfied, do not start the Phase 1 experiments. Literature and derivation questions are not subject to this restriction.
+
+### G1: at the end of Phase 1, choose the flagship
+
+Score on four criteria, in descending order of weight:
+
+1. **Novelty:** the literature questions confirm "not found" or "only partly done".
+2. **Non-vacuity:** under realistic parameters (real corpus size, T4 budget), the certificate is not vacuous.
+3. **Feasibility:** it can be completed within the T4 budget.
+4. **Narrative fit:** it is the same style as Theodore's certified-bounds research.
+
+Decision rules:
+
+- P1 novel and non-vacuous → P1 is the flagship, and P2 becomes a second paper or an appendix.
+- P1 has already been done, or is vacuous → P2 is the flagship. P1 is downgraded to a short paper: negative result + audit resolution limit.
+- Neither works → return to the advisor to choose a new topic. The alternative is to expand P3 into a standalone piece of work.
+
+### G2: mid-way through Phase 2
+
+Has the certificate been computed on real data? If not, **narrow** the scope (fewer corpora, fewer kinds of certificates); do not expand it.
+
+---
+
+## 9. Risks and kill conditions
+
+| Risk | Early signal | Response | Kill condition |
 |---|---|---|---|
-| P1 已有人做 | Q3、Q29 找到对学习得到的模型参数给出的可证明 look-ahead 界 | 改做差异化部分（审计极限、信任分层），或者 P2 转旗舰 | 已有工作覆盖证书链的全部三环 |
-| P1 的界是空的 | T1.4 的数值表明现实 k 需要 m > 1000 | 换权威时间戳语料，缩小可疑窗口 | 用 EDGAR 这类语料后，仍然无法对 k ≥ 1 给出非空证书 |
-| P2 已有人做 | Q10、Q31 找到语言模型上的可认证数值单调性 | 聚焦无量纲和金融规范部分 | 金融文本上的同类工作已发表 |
-| P2 解析环节太弱 | WP2.1 的解析准确率低于约 95% | 限定在 inline XBRL 对齐的文本上 | 在任何可获得的文本上，解析错误都主导证书 |
-| 合成世界的结论迁移不到真实数据 | 合成世界和真实数据上的结果方向相反 | 把合成世界只用于验证"证书成立"，不用来论证"准确率" | — |
-| 算力不够 | 单次实验超过 T4 约 6 小时 | 缩小模型；改用冻结骨干特征 | — |
+| P1 has already been done | Q3 or Q29 finds a provable look-ahead bound on learned model parameters | Switch to the differentiated parts (audit limit, trust tiers), or make P2 the flagship | Existing work covers all three links of the certificate chain |
+| P1's bound is vacuous | The numbers from T1.4 show that a realistic k needs m > 1000 | Switch to corpora with authoritative timestamps and shrink the suspect window | Even with corpora like EDGAR, no non-vacuous certificate can be given for k ≥ 1 |
+| P2 has already been done | Q10 or Q31 finds certifiable numeric monotonicity for language models | Focus on the dimensionless and financial-specification parts | Similar work on financial text has been published |
+| P2's parsing link is too weak | Parsing accuracy in WP2.1 is below about 95% | Restrict to text aligned with inline XBRL | On any obtainable text, parsing errors dominate the certificate |
+| Conclusions from the synthetic world do not transfer to real data | Results on the synthetic world and on real data point in opposite directions | Use the synthetic world only to verify "the certificate holds", not to argue about "accuracy" | — |
+| Not enough compute | A single experiment exceeds about 6 hours on a T4 | Shrink the model; switch to frozen backbone features | — |
 
 ---
 
-## 10. 不做什么，以及为什么
+## 10. What not to do, and why
 
-| 不做 | 原因 |
+| Not doing | Reason |
 |---|---|
-| 追 FinBen 之类的榜单分数 | 不满足过滤器 1 和 3 |
-| R1 式的推理蒸馏加 GRPO | 需要 7B 以上的底座，违背算力约束，而且不需要从零训练 |
-| K 线 / 订单流基础模型（Kronos、MarS、TradeFM 一类） | 需要大量数据和算力，而且不是语言模型 |
-| LLM alpha 挖掘 agent | 与"从零训练语言模型"无关；回测结论容易过拟合 |
-| 扩大 2.4B 私有模型 | 公开证据无法支持；在证书框架里不需要大模型 |
-| 改网站 | Theodore 明确要求不动 |
+| Chasing leaderboard scores such as FinBen | Fails filters 1 and 3 |
+| R1-style reasoning distillation plus GRPO | Needs a base model of 7B or more, violates the compute constraint, and does not need training from scratch |
+| Candlestick / order-flow foundation models (the Kronos, MarS, TradeFM kind) | Need large amounts of data and compute, and are not language models |
+| LLM alpha-mining agents | Unrelated to "training a language model from scratch"; backtest conclusions overfit easily |
+| Scaling up the private 2.4B model | The public evidence cannot support it; a large model is not needed in the certificate framework |
+| Changing the website | Theodore explicitly asked that it not be touched |
 
 ---
 
-## 11. 研究纪律
+## 11. Research discipline
 
-1. **每个数字都可追溯：** commit、config、seed、硬件、数据版本。
-2. **先写定理陈述，再写代码。** 代码的作用是检验定理的前提，以及界的紧度。
-3. **负结果照常报告。** "这个界在现实参数下是空的，原因是 X"是可以发表的结论。
-4. **不在开发集上反复选型之后，再报告开发集上的分数。**
-5. **区分三种陈述：** 导师的假设、文献的结论、我们自己的结果。
-6. **小步提交。** 每个工作包一个 PR 草稿，不合并。
+1. **Every number is traceable:** commit, config, seed, hardware, data version.
+2. **Write the theorem statement first, then the code.** The role of the code is to test the theorem's premises and the tightness of the bound.
+3. **Report negative results as usual.** "This bound is vacuous under realistic parameters, because of X" is a publishable conclusion.
+4. **Do not report dev-set scores after repeated model selection on the dev set.**
+5. **Distinguish three kinds of statements:** the advisor's hypotheses, conclusions from the literature, and our own results.
+6. **Commit in small steps.** One draft PR per work package, not merged.
 
 ---
 
-## 12. 产出形态
+## 12. Form of the outputs
 
-- **技术报告 1（旗舰），暂定题目二选一：**
+- **Technical report 1 (flagship), with one of two tentative titles:**
   - "Certifying Look-Ahead Freedom: A Certificate Chain for Point-in-Time Language Models"
   - "Model Greeks: Certified Numeric Sensitivity for Financial Language Models"
-- **技术报告 2，或作为附录：** 另一条主线。
-- **仓库：** 可执行的证书命令，例如 `python -m finllm certify --config ...`，输出一个 JSON 证书，包含结论、全部假设、各环节的 α、检查器版本。
-- **README：** 新定位。需要 Theodore 批准。旧 Trial 移到 `legacy/`，并如实标注。
+- **Technical report 2, or as an appendix:** the other main line.
+- **Repository:** an executable certificate command, for example `python -m finllm certify --config ...`, which outputs a JSON certificate containing the conclusion, all assumptions, the α of each link and the checker version.
+- **README:** the new positioning. Needs Theodore's approval. The old Trial is moved to `legacy/` and labeled truthfully.

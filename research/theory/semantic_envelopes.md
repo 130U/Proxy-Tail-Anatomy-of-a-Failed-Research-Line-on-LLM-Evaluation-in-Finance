@@ -1,186 +1,186 @@
-# 有限语义分支的数值包络、接受率边界与解析风险
+# Numerical envelopes over finite semantic branches, acceptance-rate limits, and parsing risk
 
-日期：2026-11-16。状态：条件数学与完整纸笔证明，非形式证明助手核验。本轮只写本文件，不改模型、不训练、不联网、不使用自然文本金标。依据本地 [PATH_02](../paths/PATH_02_numeric_sensitivity.md)、[PATH_05](../paths/PATH_05_proof_carrying_numeric_reasoning.md) 与 [T2.2](notes.md) 收紧接口。以下主要是区间极值、部分识别、符号比较、Lipschitz 包络和固定风险审计的已有数学工具组合，**没有完成新颖性核验，不声称原创理论**。
+Date: 2026-11-16. Status: conditional mathematics with complete pen-and-paper proofs, not verified by a formal proof assistant. This round writes only this file; it does not change models, does no training, uses no internet access, and uses no natural-text gold labels. The interface is tightened on the basis of the local [PATH_02](../paths/PATH_02_numeric_sensitivity.md), [PATH_05](../paths/PATH_05_proof_carrying_numeric_reasoning.md), and [T2.2](notes.md). What follows is mainly a combination of existing mathematical tools: interval extrema, partial identification, sign comparison, Lipschitz envelopes, and fixed-risk audits. **No novelty check has been completed, and no original theory is claimed**.
 
-这里的证书对象首先是“给定真实语义时模型会输出什么”，不是模型概率已等于真实类别概率，更不是投资收益。若任务只要求数值高低关系，另用第5节的符号 oracle，允许它完全替代学习头。
+The object of certification here is first of all "what the model will output given the true semantics", not that the model's probabilities equal the true class probabilities, still less investment returns. If the task only requires the high/low relation between numbers, the sign oracle of Section 5 is used instead, and it is allowed to replace the learned head entirely.
 
-## 1. 共同任务、分支与范围约定
+## 1. Common task, branches, and scope conventions
 
-对固定观测文本/证据 $O$，解析器给出非空有限分支集合 $\mathcal B(O)$。每分支固定实体、指标、期间、口径、单位规范、比较基准语义、上下文 $c_b$、方向声明及头部参数。分支内允许连续数值不确定性。空分支集合必须拒绝；不能用空集的真空覆盖给出零宽证书。
+For a fixed observed text/evidence $O$, the parser gives a nonempty finite set of branches $\mathcal B(O)$. Each branch fixes the entity, metric, period, convention, unit normalization, baseline semantics, context $c_b$, direction declaration, and head parameters. Continuous numerical uncertainty is allowed within a branch. An empty branch set must be rejected; the vacuous coverage of the empty set cannot be used to give a zero-width certificate.
 
-**共同输出契约 A0。** 所有被合并分支必须针对同一冻结目标、同一计量尺度、同一有序类别定义和同一 $K\ge2$。同为三维向量但一个指“数值高低”、另一个指“投资立场”，不能逐坐标合并。检查器能验证 schema 声明一致，不能证明自然文本确实符合该语义。
+**Common output contract A0.** All merged branches must target the same frozen objective, the same measurement scale, the same ordered class definition, and the same $K\ge2$. If both are three-dimensional vectors but one means "high/low numerical value" and the other "investment stance", they cannot be merged coordinatewise. The checker can verify that the schema declarations agree; it cannot prove that the natural text really matches these semantics.
 
-每分支有独立矩形
+Each branch has an independent rectangle
 
 $$x\in[x_-,x_+],\qquad b\in[b_-,b_+],\qquad 0<b_-\le b_+,$$
 
-其中 $x_-\le x_+$，数值有限，$x$ 允许为负或零；规范化特征 $g=x/b-1$。两变量量纲相同且单位转换一致。若原始语义额外约束 $x,b$ 的联合取值，该矩形只能是外放松，下面“紧”只相对于该矩形；不能因边际区间正确便声称对原耦合集合精确。
+where $x_-\le x_+$, the values are finite, and $x$ may be negative or zero; the normalized feature is $g=x/b-1$. The two variables have the same dimension and consistent unit conversion. If the original semantics additionally constrains the joint values of $x,b$, the rectangle can only be an outer relaxation, and "tight" below is only relative to the rectangle; one cannot claim exactness for the original coupled set just because the marginal intervals are correct.
 
-有序头固定阈值 $\theta_{b,1}<\cdots<\theta_{b,K-1}$，不随本次被认证数值变化。令 $\sigma(v)=1/(1+e^{-v})$，
+The ordered head has fixed thresholds $\theta_{b,1}<\cdots<\theta_{b,K-1}$, which do not change with the values being certified. Let $\sigma(v)=1/(1+e^{-v})$,
 
 $$q_{b,1}(\eta)=\sigma(\theta_{b,1}-\eta),$$
 $$q_{b,i}(\eta)=\sigma(\theta_{b,i}-\eta)-\sigma(\theta_{b,i-1}-\eta),\quad 1<i<K,$$
 $$q_{b,K}(\eta)=\sigma(\eta-\theta_{b,K-1}).$$
 
-这些坐标非负且和为1。分支上下文和阈值可以彼此不同，但类别语义须满足A0。参考检查器可用仿射潜在值 $\eta=a_bg+d_b$；更一般的 T2.2 头也可输入经过证明的潜在值区间，但要区分精确值域与松的外区间。
+These coordinates are nonnegative and sum to 1. Branch contexts and thresholds may differ from one another, but the class semantics must satisfy A0. The reference checker can use the affine latent value $\eta=a_bg+d_b$; a more general T2.2 head can also take a proved interval of latent values as input, but the exact range must be distinguished from a loose outer interval.
 
-## 2. SE1：正基准比值与仿射潜在值的紧区间
+## 2. SE1: tight intervals for positive-baseline ratios and affine latent values
 
-**命题 SE1。** 在上述独立闭矩形上，$g$ 的精确值域是闭区间 $[g_-,g_+]$，端点为四角 $x_\pm/b_\pm-1$ 的最小/最大值。仿射头的精确值域为
+**Proposition SE1.** On the independent closed rectangle above, the exact range of $g$ is the closed interval $[g_-,g_+]$, whose endpoints are the minimum/maximum of the four corners $x_\pm/b_\pm-1$. The exact range of the affine head is
 
 $$\eta_-=\min(a_bg_-+d_b,a_bg_++d_b),\qquad
 \eta_+=\max(a_bg_-+d_b,a_bg_++d_b).$$
 
-**证明。** 对固定 $b>0$，$x/b-1$ 严格随 $x$ 增大，所以最小/最大可分别在 $x_-,x_+$ 取得。对任一个固定端点 $x$，函数对 $b$ 的导数是 $-x/b^2$：$x>0$ 时非增，$x<0$ 时非降，$x=0$ 时常数。因此该边上的极值在 $b_-,b_+$ 取得，四角包含全局极值。紧矩形及连续性保证极值存在；矩形连通，其连续实值像也连通，所以整个值域就是这两个端点之间的区间。仿射映射的最大/最小在区间端点取得，常数斜率 $a_b=0$ 也包括在内。证毕。
+**Proof.** For fixed $b>0$, $x/b-1$ is strictly increasing in $x$, so the minimum/maximum are attained at $x_-,x_+$ respectively. For any fixed endpoint $x$, the derivative of the function with respect to $b$ is $-x/b^2$: nonincreasing when $x>0$, nondecreasing when $x<0$, constant when $x=0$. Hence the extrema on that edge are attained at $b_-,b_+$, and the four corners contain the global extrema. The compact rectangle and continuity guarantee that the extrema exist; the rectangle is connected, and so is its continuous real-valued image, so the whole range is the interval between these two endpoints. The maximum/minimum of an affine map are attained at the interval endpoints, including the constant-slope case $a_b=0$. ∎
 
-若已知 $x_-\ge0$，可简化为 $[x_-/b_+-1,x_+/b_--1]$；负数时不能照抄这两个位置。若 $b_-=0$，定义/有界性可能失败，应拒绝本接口；不能用很小正数偷偷替代0。若真实约束为 $x=b\in[1,2]$，真实 $g$ 恒0，而独立矩形给 $[-1/2,1]$，这是“边际区间不等于联合紧度”的直接反例。
+If $x_-\ge0$ is known, this simplifies to $[x_-/b_+-1,x_+/b_--1]$; for negative values these two positions cannot be copied. If $b_-=0$, definedness/boundedness may fail, and this interface should reject; a very small positive number must not be silently substituted for 0. If the true constraint is $x=b\in[1,2]$, the true $g$ is identically 0, while the independent rectangle gives $[-1/2,1]$; this is a direct counterexample to "marginal intervals equal joint tightness".
 
-正比例单位变换 $(x,b)\mapsto(sx,sb)$、$s>0$，严格保持 $g$ 及其精确矩形像。但完整输出不变还需上下文、方向、阈值和后处理不受单位词旁路影响；比值恒等式不能证明解析器满足该契约。
+The proportional unit transformation $(x,b)\mapsto(sx,sb)$, $s>0$, strictly preserves $g$ and its exact rectangle image. But invariance of the full output also requires that the context, direction, thresholds, and post-processing not be affected by a bypass through unit words; the ratio identity cannot prove that the parser satisfies this contract.
 
-## 3. SE2：有序概率的精确坐标极值
+## 3. SE2: exact coordinate extrema of ordered probabilities
 
-固定一个分支，略去下标 $b$，设允许潜在值为整个闭区间 $[L,U]$，允许 $L=U$。记 $Q_i(v)=q_i(v)$。
+Fix one branch and drop the subscript $b$; let the allowed latent values be the whole closed interval $[L,U]$, with $L=U$ allowed. Write $Q_i(v)=q_i(v)$.
 
-**命题 SE2。** 两端类别的精确范围为
+**Proposition SE2.** The exact ranges of the two end classes are
 
 $$q_1([L,U])=[\sigma(\theta_1-U),\sigma(\theta_1-L)],$$
 $$q_K([L,U])=[\sigma(L-\theta_{K-1}),\sigma(U-\theta_{K-1})].$$
 
-对中间类别 $1<i<K$，令 $m_i=(\theta_{i-1}+\theta_i)/2$，$v_i^*=\min(U,\max(L,m_i))$，则
+For a middle class $1<i<K$, let $m_i=(\theta_{i-1}+\theta_i)/2$ and $v_i^*=\min(U,\max(L,m_i))$; then
 
 $$q_i([L,U])=\left[\min\{q_i(L),q_i(U)\},\ q_i(v_i^*)\right].$$
 
-**证明。** $\sigma$ 严格递增，因此首类随 $\eta$ 下降、末类上升，端点公式成立。中间类导数为
+**Proof.** $\sigma$ is strictly increasing, so the first class decreases in $\eta$ and the last class increases, and the endpoint formulas hold. The derivative of a middle class is
 
 $$q_i'(\eta)=\sigma'(\theta_{i-1}-\eta)-\sigma'(\theta_i-\eta),\qquad
 \sigma'(v)=\frac1{2+2\cosh v}.$$
 
-这个导数核关于0偶对称，并随 $|v|$ 严格递减。$\eta<m_i$ 时，$|\theta_{i-1}-\eta|<|\theta_i-\eta|$，所以 $q_i'>0$；$\eta>m_i$ 时相反，$q_i'<0$；中点导数0。因此 $q_i$ 单峰，闭区间上最小值在两个端点之一，最大值在中点投影 $v_i^*$。连续性保证端点之间所有概率值均可达到；单点区间公式亦成立。证毕。
+This derivative kernel is even about 0 and strictly decreasing in $|v|$. When $\eta<m_i$, $|\theta_{i-1}-\eta|<|\theta_i-\eta|$, so $q_i'>0$; when $\eta>m_i$ the reverse holds and $q_i'<0$; the derivative is 0 at the midpoint. Hence $q_i$ is unimodal; on a closed interval its minimum is at one of the two endpoints and its maximum at the projection $v_i^*$ of the midpoint. Continuity guarantees that every probability value between the endpoints is attained; the formula also holds for a single-point interval. ∎
 
-若区间包含中点，峰值为 $\sigma((\theta_i-\theta_{i-1})/2)-\sigma(- (\theta_i-\theta_{i-1})/2)$。所以只检查区间两端会漏掉中间类别最大值。例如阈值 $(-1,1)$、$\eta\in[-2,2]$，中间类别峰在0，两个端点都严格较小。**有序分布的上尾单调不意味着中间类别概率单调。**
+If the interval contains the midpoint, the peak value is $\sigma((\theta_i-\theta_{i-1})/2)-\sigma(- (\theta_i-\theta_{i-1})/2)$. So checking only the two ends of the interval misses the maximum of a middle class. For example, with thresholds $(-1,1)$ and $\eta\in[-2,2]$, the middle class peaks at 0, and both endpoints are strictly smaller. **Monotonicity of the upper tails of an ordered distribution does not mean that middle-class probabilities are monotone.**
 
-设分支精确坐标范围为 $[\ell_{b,i},u_{b,i}]$。全分支联合输出集的最小轴对齐盒为
+Let the exact coordinate ranges of the branches be $[\ell_{b,i},u_{b,i}]$. The smallest axis-aligned box containing the joint output set over all branches is
 
 $$\boxed{\ell_i=\min_b\ell_{b,i},\qquad u_i=\max_bu_{b,i}.}$$
 
-证明：每个分支的每个坐标都在该盒内；任一覆盖联合集的盒，其第 $i$ 个下端不得高于联合最小值、上端不得低于联合最大值。有限分支和紧区间保证这些极值实现，因此不能再收紧任何一个面。证毕。该盒的角点通常不能由同一个分支/潜在值联合实现，也不必满足概率和为1。它不是联合可达集合、不是分支概率混合。
+Proof: every coordinate of every branch lies in this box; for any box covering the joint set, its $i$-th lower end cannot be higher than the joint minimum, and its upper end cannot be lower than the joint maximum. Finitely many branches and compact intervals guarantee that these extrema are attained, so no face can be tightened further. ∎ The corners of this box usually cannot be realized jointly by a single branch/latent value, and they need not sum to 1 as probabilities. It is not the jointly reachable set, and not a mixture over branch probabilities.
 
-若输入 $[L,U]$ 只是潜在值的安全外界，上述公式只对**放松的完整标量区间**紧。例如实际潜在值只可能取 $-2,2$，把它包成 $[-2,2]$ 后中间类峰0是新增可行点；不能称最终概率上界对原集合精确。有限分支应尽量保留分离，而不是提前合并潜在值区间后丢掉结构。
+If the input $[L,U]$ is only a safe outer bound on the latent values, the formulas above are tight only for the **relaxed full scalar interval**. For example, if the actual latent value can only be $-2$ or $2$, wrapping it as $[-2,2]$ makes the middle-class peak at 0 a newly added feasible point; one cannot claim that the final probability upper bound is exact for the original set. Finite branches should be kept separate where possible, rather than merging latent-value intervals early and losing structure.
 
-### 严格数值检查器的接口
+### Interface for a rigorous numerical checker
 
-有理数负责比值、仿射端点、阈值与中点；指数/ sigmoid 用经过证明的向外有理 bracket。若两个 sigmoid 各在 $[l_a,u_a]$、$[l_b,u_b]$，其差可靠区间为 $[l_a-u_b,u_a-l_b]\cap[0,1]$。不能用中心值相减冒充下界。
+Rationals handle ratios, affine endpoints, thresholds, and midpoints; exponentials/sigmoids use proved outward rational brackets. If two sigmoids lie in $[l_a,u_a]$ and $[l_b,u_b]$ respectively, a sound interval for their difference is $[l_a-u_b,u_a-l_b]\cap[0,1]$. Subtracting central values must not be passed off as a lower bound.
 
-对有限候选值，min 的 bracket 为 $[\min l_j,\min u_j]$，max 为 $[\max l_j,\max u_j]$。中间类别的下极值只需两个端点，上极值检查端点与区间内中点；即使数值 bracket 无法判定哪个候选严格最大，仍可安全取上述 max。每个 sigmoid bracket 宽度≤$\varepsilon$，则差的宽度≤$2\varepsilon$；min/max及跨分支取包络不放大最大单项数值不确定性。
+For finitely many candidate values, the bracket of the min is $[\min l_j,\min u_j]$, and that of the max is $[\max l_j,\max u_j]$. The lower extremum of a middle class needs only the two endpoints; the upper extremum checks the endpoints and the midpoint inside the interval; even if the numerical brackets cannot decide which candidate is strictly largest, the max above can still be taken safely. If each sigmoid bracket has width ≤$\varepsilon$, the width for the difference is ≤$2\varepsilon$; min/max and taking envelopes across branches do not amplify the largest single-term numerical uncertainty.
 
-应把精确实数范围与数值外包络分别命名。若每个极值 bracket 宽度≤$\delta$，输出的最终坐标外区间相较精确宽度最多多 $2\delta$。对于宽度阈值 $w$，设精确下/上极值分别被 $[\ell_-,\ell_+]$、$[u_-,u_+]$ 包住，则精确宽度被
+The exact real range and the numerical outer envelope should be named separately. If each extremum bracket has width ≤$\delta$, the final output coordinate outer interval is at most $2\delta$ wider than the exact width. For a width threshold $w$, suppose the exact lower/upper extrema are enclosed by $[\ell_-,\ell_+]$ and $[u_-,u_+]$ respectively; then the exact width is enclosed by
 
 $$[\max(0,u_--\ell_+),\ u_+-\ell_-]$$
 
-包住。上端≤$w$ 可认证通过；下端>$w$ 可认证未通过；其余为 **未判定**，需提高精度或按预算保守拒绝。等号附近不能以近似中心值通过，也不能把预算耗尽的未判定说成已证明失败。
+An upper end ≤$w$ certifies a pass; a lower end >$w$ certifies a fail; everything else is **undecided**, requiring higher precision or conservative rejection according to the budget. Near equality, an approximate central value cannot be used to pass, and an undecided result due to an exhausted budget cannot be described as a proved failure.
 
-## 4. SE3：候选直径、点估计与冻结任务的接受率上界
+## 4. SE3: candidate diameter, point estimates, and an upper bound on the acceptance rate for frozen tasks
 
-令非空紧标量候选集 $\mathcal V(O)$ 由全部分支输出的并组成，且所有值具有相同任务语义和尺度。记 $v_-=\min\mathcal V$、$v_+=\max\mathcal V$、$D=v_+-v_-$。
+Let the nonempty compact scalar candidate set $\mathcal V(O)$ be the union of all branch outputs, with all values having the same task semantics and scale. Write $v_-=\min\mathcal V$, $v_+=\max\mathcal V$, $D=v_+-v_-$.
 
-**命题 SE3。** 对要求覆盖所有候选的规范，任一健全闭区间宽度至少为 $D$；$[v_-,v_+]$ 达到下界。任一点报告 $a$ 的最坏绝对误差为
+**Proposition SE3.** For a specification that requires covering all candidates, every sound closed interval has width at least $D$; $[v_-,v_+]$ attains the lower bound. The worst-case absolute error of any point report $a$ is
 
 $$\sup_{v\in\mathcal V}|a-v|=\max(|a-v_-|,|a-v_+|)
 =D/2+|a-(v_-+v_+)/2|,$$
 
-故最小最坏误差为 $D/2$，由中点报告达到。
+so the minimum worst-case error is $D/2$, attained by reporting the midpoint.
 
-**证明。** 区间必须包含实际可达的两个端点，因此宽度至少为其差；最小包络覆盖所有中间候选。对任意候选 $v\in[v_-,v_+]$，$|a-v|$ 最大不超过两个端点距离的较大者，而端点本身可行，得到等式。把中心平移到0即可验证最后表达式，最小化得结论。证毕。
+**Proof.** The interval must contain both actually reachable endpoints, so its width is at least their difference; the minimal envelope covers all intermediate candidates. For any candidate $v\in[v_-,v_+]$, $|a-v|$ is at most the larger of the distances to the two endpoints, and the endpoints themselves are feasible, which gives the equality. Translating the center to 0 verifies the last expression, and minimizing gives the result. ∎
 
-再固定有限任务 $i=1,\ldots,M$，事前权重 $w_i\ge0$、$\sum_iw_i=1$，阈值 $w\ge0$ 和各自候选集。接受意味着必须输出宽度≤$w$ 的全候选健全区间，则最大可能稳健接受质量恰为
+Next fix finitely many tasks $i=1,\ldots,M$, with weights $w_i\ge0$ set in advance, $\sum_iw_i=1$, a threshold $w\ge0$, and their respective candidate sets. If acceptance means that an interval of width ≤$w$ that is sound for all candidates must be output, then the largest possible robust acceptance mass is exactly
 
 $$\boxed{A_{\max}(w)=\sum_{i=1}^M w_i\mathbf1\{D_i\le w\}.}$$
 
-证明：$D_i>w$ 的任务由前述下界不可能被接受；其余输出最小包络即可同时接受，达到上界。随机接受也不能越过该上界，只要每次实际接受仍须全候选健全。证毕。此为信息/规范层面的最优值；受计算预算、数值未判定或额外质量要求限制的实际检查器可能更低。固定任务权重不代表自然文本总体概率。
+Proof: by the lower bound above, tasks with $D_i>w$ cannot be accepted; for the rest, outputting the minimal envelope accepts them all simultaneously and attains the upper bound. Random acceptance cannot exceed this upper bound either, as long as every actual acceptance must still be sound for all candidates. ∎ This is the optimum at the level of information/specification; an actual checker limited by compute budget, undecided numerics, or additional quality requirements may be lower. Fixed task weights do not represent population probabilities of natural text.
 
-**候选相对不等于内禀不可识别。** 如果解析器把一个语义上不合法的额外分支也列入集合，$D$ 增大只是这个解析器的保守性成本。只有逐一证明这些分支是同一可观测证据下真实可容许且不可区分的世界，才能把此下界解释为观测信息的识别限制。反之漏掉真实分支会使盒变窄，却可能不可靠。增加候选集合只会使 $D$ 不减、$A_{\max}$ 不增，这本身既不证明语言歧义真实存在，也不证明应删掉难分支。
+**Relative to the candidates does not mean intrinsically unidentifiable.** If the parser also lists a semantically invalid extra branch in the set, the increase in $D$ is merely the cost of this parser's conservatism. Only by proving one by one that these branches are truly admissible and indistinguishable worlds under the same observable evidence can this lower bound be interpreted as an identification limit of the observed information. Conversely, missing a true branch makes the box narrower but possibly unsound. Enlarging the candidate set can only make $D$ not decrease and $A_{\max}$ not increase; this by itself neither proves that linguistic ambiguity really exists nor proves that hard branches should be deleted.
 
-## 5. SE4：方向任务的符号 oracle 与多标签最坏错误
+## 5. SE4: the sign oracle for direction tasks, and worst-case multi-label error
 
-若冻结任务定义就是比较 $x$ 与 $b$，令 $f(x,b)=\operatorname{sign}(x-b)\in\{-1,0,1\}$。在同单位输入上，矩形差值精确范围为 $[x_--b_+,x_+-b_-]$；包含哪些符号直接由该区间与负半轴、零、正半轴是否相交决定。若任务有容差带，必须事先规定对应阈值，不能结果出来后增加neutral宽度。
+If the frozen task definition is exactly comparing $x$ with $b$, let $f(x,b)=\operatorname{sign}(x-b)\in\{-1,0,1\}$. On inputs in the same units, the exact range of the difference over the rectangle is $[x_--b_+,x_+-b_-]$; which signs are included is determined directly by whether this interval intersects the negative half-line, zero, and the positive half-line. If the task has a tolerance band, the corresponding threshold must be specified in advance; the neutral width cannot be increased after the results are in.
 
-**命题 SE4。** 全分支可行标签集合 $\mathcal L$ 为单点，当且仅当存在一个确定点标签对所有分支都正确；该标签可由符号规则完全给出，无需学习头。若 $s=|\mathcal L|\ge2$，任何确定预测的最坏0–1损失为1。若预测器先给分布、真实候选在看到分布但未看到随机抽样结果前选择，则最小最坏错误概率为 $1-1/s$，由在 $\mathcal L$ 上均匀抽样达到。
+**Proposition SE4.** The set $\mathcal L$ of feasible labels over all branches is a singleton if and only if there is one deterministic point label that is correct for all branches; this label can be given entirely by the sign rule, with no learned head needed. If $s=|\mathcal L|\ge2$, the worst-case 0–1 loss of any deterministic prediction is 1. If the predictor first gives a distribution, and the true candidate is chosen after seeing the distribution but before seeing the result of the random draw, then the minimum worst-case error probability is $1-1/s$, attained by sampling uniformly on $\mathcal L$.
 
-**证明。** 单点时输出唯一元素对所有候选正确；非单点时，对任何固定预测至少有一个不同的可行标签。随机预测对每个可行标签的正确概率为其分配质量 $p_\ell$，而 $\sum_{\ell\in\mathcal L}p_\ell\le1$，故最小正确概率≤$1/s$，最坏错误≥$1-1/s$。均匀分配使每个可行标签正确概率都为 $1/s$，达到下界。证毕。
+**Proof.** In the singleton case, outputting the unique element is correct for all candidates; in the non-singleton case, for any fixed prediction there is at least one different feasible label. A randomized prediction is correct for each feasible label with probability equal to the mass $p_\ell$ it assigns, and $\sum_{\ell\in\mathcal L}p_\ell\le1$, so the minimum probability of being correct is ≤$1/s$, and the worst-case error is ≥$1-1/s$. The uniform assignment makes the probability of being correct equal to $1/s$ for every feasible label, attaining the lower bound. ∎
 
-这是无分支概率假设的稳健结论；如果有经过验证的分支概率或额外语义证据，目标可以改变，但不能默默用模型自信度替代它。正确元组已知后的比较任务，由规则按定义解决；“基准需要从语言中找出”可能说明解析困难，不证明下游有序头、LLM或从零训练必要。不同程序可能产生同一数值/方向，输出一致也不证明程序语义忠实。
+This is a robust conclusion without assumptions on branch probabilities; if there are validated branch probabilities or additional semantic evidence, the objective can change, but model confidence must not be silently substituted for it. Once the correct tuple is known, the comparison task is solved by the rule by definition; "the baseline has to be found in the language" may indicate parsing difficulty, but does not prove that a downstream ordered head, an LLM, or training from scratch is necessary. Different programs may produce the same value/direction, and agreement of outputs does not prove that the program semantics are faithful.
 
-## 6. SE5：固定对应分支的单调与Lipschitz包络
+## 6. SE5: monotone and Lipschitz envelopes for fixed corresponding branches
 
-在一个共同编辑域上，分支索引集合 $\mathcal B$ 固定。对每个 $b$，上下文、方向、阈值及原始输入到特征的映射保持预定对应；不是仅保留相同branch名称。对有序类别 $k=2,\ldots,K$，定义上尾
+On a common edit domain, the branch index set $\mathcal B$ is fixed. For each $b$, the context, direction, thresholds, and the map from raw input to features keep a pre-specified correspondence; it is not enough to keep the same branch name. For ordered classes $k=2,\ldots,K$, define the upper tails
 
 $$T_{b,k}(z)=P_b(Y\ge k\mid z)=\sigma(\eta_b(z)-\theta_{b,k-1}).$$
 
-假定沿本次共同编辑顺序 $z\preceq z'$，**每个分支**均有 $\eta_b(z)\le\eta_b(z')$。同一声明的负方向可先把轴取反；未声明的坐标与上下文固定。分支阈值不随 $z$ 改变。
+Assume that along the order $z\preceq z'$ of this common edit, **every branch** has $\eta_b(z)\le\eta_b(z')$. A declared negative direction can first be handled by reversing the axis; undeclared coordinates and the context are fixed. Branch thresholds do not change with $z$.
 
-**命题 SE5。** $\underline T_k(z)=\min_bT_{b,k}(z)$ 与 $\overline T_k(z)=\max_bT_{b,k}(z)$ 都沿上述顺序非降。若每个 $f_b$ 对同一距离满足 $|f_b(z)-f_b(z')|\le L_b d(z,z')$，有限分支的min/max包络均为 $L=\max_bL_b$-Lipschitz。此处 $f_b$ 可取固定类别概率或上尾，不要求类别概率单调。
+**Proposition SE5.** $\underline T_k(z)=\min_bT_{b,k}(z)$ and $\overline T_k(z)=\max_bT_{b,k}(z)$ are both nondecreasing along the order above. If every $f_b$ satisfies $|f_b(z)-f_b(z')|\le L_b d(z,z')$ for the same distance, the min/max envelopes over finitely many branches are both $L=\max_bL_b$-Lipschitz. Here $f_b$ can be a fixed class probability or an upper tail; class probabilities are not required to be monotone.
 
-**证明。** 取在 $z'$ 达到最小的分支 $b'$，有 $\min_bT_b(z)\le T_{b'}(z)\le T_{b'}(z')=\min_bT_b(z')$。取在 $z$ 达到最大者同理得max非降。Lipschitz方面，逐分支 $f_b(z)\le f_b(z')+Ld$；取max得到 $\max_bf_b(z)\le\max_bf_b(z')+Ld$，交换两个点即得绝对差界。min可对 $-f_b$ 应用同一论证。证毕。
+**Proof.** Take the branch $b'$ attaining the minimum at $z'$; then $\min_bT_b(z)\le T_{b'}(z)\le T_{b'}(z')=\min_bT_b(z')$. Taking the branch attaining the maximum at $z$ likewise shows the max is nondecreasing. For the Lipschitz part, branch by branch $f_b(z)\le f_b(z')+Ld$; taking the max gives $\max_bf_b(z)\le\max_bf_b(z')+Ld$, and swapping the two points gives the bound on the absolute difference. For the min, apply the same argument to $-f_b$. ∎
 
-有序logit对 $\eta$ 的每类概率及每个上尾都为 $1/4$-Lipschitz：首末类来自 $0\le\sigma'\le1/4$；中间类导数为两个在 $[0,1/4]$ 中的数之差，幅值仍≤$1/4$，不是$1/2$。因此固定仿射分支对 $g$ 可取 $L_b=|a_b|/4$；T2.2的 $2\lambda$ 潜在值界给 $\lambda/2$。包络可能在最大/最小分支切换处不可微；有限增量界处处成立，导数界只在导数存在处。在实区间内部或开欧氏域上，Lipschitz条件保证几乎处处可微；任意抽象编辑域上不额外声称存在导数。
+Every class probability and every upper tail of an ordered logit is $1/4$-Lipschitz in $\eta$: for the first and last classes this comes from $0\le\sigma'\le1/4$; the derivative of a middle class is the difference of two numbers in $[0,1/4]$, so its magnitude is still ≤$1/4$, not $1/2$. Hence a fixed affine branch can take $L_b=|a_b|/4$ with respect to $g$; the $2\lambda$ latent-value bound of T2.2 gives $\lambda/2$. The envelope may be non-differentiable where the maximizing/minimizing branch switches; the finite-increment bound holds everywhere, and the derivative bound holds only where the derivative exists. Inside a real interval or on an open Euclidean domain, the Lipschitz condition guarantees differentiability almost everywhere; on an arbitrary abstract edit domain no existence of derivatives is additionally claimed.
 
-相对于原始 $x,b$ 还需传递比值映射。在 $b,b'\ge b_{\min}>0$、$|x|,|x'|\le M$ 时，
+With respect to the raw $x,b$, the ratio map must also be propagated. When $b,b'\ge b_{\min}>0$ and $|x|,|x'|\le M$,
 
 $$|x/b-x'/b'|\le |x-x'|/b_{\min}+M|b-b'|/b_{\min}^2.$$
 
-证明为分拆成 $(x-x')/b+x'(1/b-1/b')$ 后取绝对值。分母接近0时无统一原始数值Greeks。只改变 $x$、固定正 $b$ 时方向简单；同时改变基准并不保证 $g$ 随 $x$ 同向。
+The proof splits the difference into $(x-x')/b+x'(1/b-1/b')$ and takes absolute values. When the denominator approaches 0 there are no uniform Greeks in terms of raw values. The direction is simple when only $x$ changes with positive $b$ fixed; changing the baseline at the same time does not guarantee that $g$ moves in the same direction as $x$.
 
-**三项限制。**
+**Three limitations.**
 
-1. 包络各自非降不等于任取两个不同分支的新旧输出都满足随机序。若新旧真实分支不能对应，确保所有候选都上移的一项充分条件是对每个尾 $k$，$\underline T_k(z')\ge\overline T_k(z)$。常数尾0.2和0.8构成的固定集合上下包络都不变，但旧选0.8、新选0.2仍下降。
-2. 固定分支集合下的min/max交叉只可能造成折点，仍保Lipschitz；**分支随输入出现/消失**不同。令两个分支分别恒有尾 $\sigma(1)$ 与 $\sigma(-1)$，各自0-Lipschitz且非降。若 $z<0$ 只留高分支、$z\ge0$ 只留低分支，输出向下跳，既不单调也无任何全局有限Lipschitz常数。保留两个分支但让高分支在0消失，也可使上包络向下跳。
-3. 数字编辑改变上下文、方向选择、阈值或分支参数时，不满足配对契约。局部分支的正确导数不能遮盖整体动态选择；同理，多方向分支混合的包络可以安全覆盖，但没有单向Greeks保证。
+1. Each envelope being nondecreasing does not mean that the old and new outputs of two arbitrarily chosen different branches satisfy stochastic order. If the old and new true branches cannot be put in correspondence, a sufficient condition ensuring that all candidates move up is, for each tail $k$, $\underline T_k(z')\ge\overline T_k(z)$. For a fixed set made of the constant tails 0.2 and 0.8, both the lower and upper envelopes are unchanged, but choosing 0.8 before and 0.2 after is still a decrease.
+2. Crossings of the min/max under a fixed branch set can only create kinks and still preserve Lipschitz continuity; **branches appearing/disappearing with the input** are different. Let two branches have constant tails $\sigma(1)$ and $\sigma(-1)$ respectively, each 0-Lipschitz and nondecreasing. If only the high branch is kept for $z<0$ and only the low branch for $z\ge0$, the output jumps down, and it is neither monotone nor Lipschitz with any finite global constant. Keeping both branches but letting the high branch disappear at 0 can also make the upper envelope jump down.
+3. When a numerical edit changes the context, the direction choice, the thresholds, or the branch parameters, the pairing contract is not satisfied. Correct derivatives of local branches cannot mask dynamic selection at the global level; likewise, the envelope of a mixture of branches with multiple directions can cover safely, but carries no one-directional Greeks guarantee.
 
-## 7. SE6：固定接受规则下的解析覆盖风险与审计置信度
+## 7. SE6: parsing coverage risk under a fixed acceptance rule, and audit confidence
 
-固定解析器、分支集合规则、头参数、计算器及接受事件 $A=A(O)\in\{0,1\}$；宽度门属于这个事前冻结规则。设真实完整语义为 $Z^*$，$C=\{Z^*\in\mathcal Z(O)\}$ 是解析集合覆盖事件。这里 $Z^*$ 包含实体、指标、期间、单位、基准、方向及正确任务语义；只核对数字不足。
+Fix the parser, the branch-set rule, the head parameters, the calculator, and the acceptance event $A=A(O)\in\{0,1\}$; the width gate is part of this rule frozen in advance. Let the true complete semantics be $Z^*$, and let $C=\{Z^*\in\mathcal Z(O)\}$ be the event that the parsed set covers it. Here $Z^*$ includes the entity, metric, period, unit, baseline, direction, and the correct task semantics; checking only the numbers is not enough.
 
-假设在 $A=1$ 且 $C$ 成立时，数学/计算器对全部分支健全，输出区间必包含目标 $u^*=f(Z^*)$。令 $E$ 为输出漏掉 $u^*$ 的事件，$a=P(A=1)>0$。
+Assume that when $A=1$ and $C$ holds, the mathematics/calculator are sound for all branches, so the output interval necessarily contains the target $u^*=f(Z^*)$. Let $E$ be the event that the output misses $u^*$, and $a=P(A=1)>0$.
 
-**命题 SE6。**
+**Proposition SE6.**
 
 $$P(E\mid A=1)\le r_C:=P(C^c\mid A=1).$$
 
-若另有计算失败或模型假设失效事件 $B_1,\ldots,B_s$，且 $A\cap E\subseteq A\cap(C^c\cup\bigcup_jB_j)$，则
+If there are further events $B_1,\ldots,B_s$ of computation failure or model-assumption failure, and $A\cap E\subseteq A\cap(C^c\cup\bigcup_jB_j)$, then
 
 $$P(E\mid A=1)\le\min\left(1,r_C+\sum_jP(B_j\mid A=1)\right).$$
 
-**证明。** 第一式由 $A\cap E\subseteq A\cap C^c$ 两边除以 $a$ 得到；第二式先取并集界再除以同一个 $a$。一般不是等号，因为解析集合漏真分支时，输出区间可能偶然仍覆盖正确数值。证毕。
+**Proof.** The first inequality follows from $A\cap E\subseteq A\cap C^c$ by dividing both sides by $a$; the second first applies the union bound and then divides by the same $a$. In general equality does not hold, because when the parsed set misses the true branch, the output interval may still happen to cover the correct value. ∎
 
-若只知道无条件 $P(C^c)\le\varepsilon$，能推出的只有
+If only the unconditional $P(C^c)\le\varepsilon$ is known, all that follows is
 
 $$P(E\mid A=1)\le P(C^c\mid A=1)\le\min(1,\varepsilon/a).$$
 
-反例：解析恰在占总体1%的集合上失败，而接受器只接受这一集合，则无条件覆盖99%，接受样本失败率却为100%。$a=0$ 时条件风险未定义，只能报告接受质量为0。接受率、联合错误接受率和接受后风险三个分母必须分开。
+Counterexample: parsing fails on exactly a set making up 1% of the population, and the acceptor accepts only this set; then the unconditional coverage is 99%, but the failure rate among accepted examples is 100%. When $a=0$ the conditional risk is undefined, and one can only report an acceptance mass of 0. The three denominators of acceptance rate, joint error-and-acceptance rate, and post-acceptance risk must be kept separate.
 
-**固定审计的两层概率。** 若审计单位独立且具有代表性地取自目标分布条件于固定 $A=1$，人工判定正确，固定审计 $n\ge1$ 个单位的覆盖失败数 $X\sim\operatorname{Bin}(n,r_C)$，且 $0<\alpha<1$。单侧精确上置信界 $U_\alpha(X,n)$ 满足
+**Two layers of probability in a fixed audit.** Suppose the audit units are drawn independently and representatively from the target distribution conditional on the fixed $A=1$, human judgements are correct, the number of coverage failures among a fixed audit of $n\ge1$ units is $X\sim\operatorname{Bin}(n,r_C)$, and $0<\alpha<1$. The one-sided exact upper confidence bound $U_\alpha(X,n)$ satisfies
 
 $$P_{\rm audit}\{r_C\le U_\alpha(X,n)\}\ge1-\alpha.$$
 
-对 $x<n$，令 $U_\alpha(x,n)$ 为 $F_p(x):=P_p(X\le x)=\alpha$ 的唯一解；$x=n$ 时取1。对 $x<n$，$F_p(x)$ 连续且在 $p\in(0,1)$ 严格下降，从1降到0，故解存在唯一。固定真率 $p=r_C$，对 $x<n$ 有 $U_\alpha(x,n)<p$ 当且仅当 $F_p(x)<\alpha$；$x=n$ 不导致失覆盖。由于 $F_p(x)$ 随整数 $x$ 非降，失覆盖计数集合为空或形为 $\{0,\ldots,k\}$，其概率为 $F_p(k)<\alpha$。边界 $p=0,1$ 也直接满足覆盖（$p=1$ 时 $X=n$）。于是得到所述至少 $1-\alpha$ 的审计覆盖概率，并结合 SE6 传递到未来接受样本的包络风险。这里没有根据审计中间结果提前停止。
+For $x<n$, let $U_\alpha(x,n)$ be the unique solution of $F_p(x):=P_p(X\le x)=\alpha$; for $x=n$ take 1. For $x<n$, $F_p(x)$ is continuous and strictly decreasing in $p\in(0,1)$, going from 1 down to 0, so the solution exists and is unique. With the true rate $p=r_C$ fixed, for $x<n$ we have $U_\alpha(x,n)<p$ if and only if $F_p(x)<\alpha$; $x=n$ does not lead to miscoverage. Since $F_p(x)$ is nondecreasing in the integer $x$, the set of miscoverage counts is empty or of the form $\{0,\ldots,k\}$, with probability $F_p(k)<\alpha$. The boundary cases $p=0,1$ also satisfy coverage directly ($X=n$ when $p=1$). This gives the stated audit coverage probability of at least $1-\alpha$, which, combined with SE6, transfers to the envelope risk on future accepted examples. There is no early stopping based on intermediate audit results here.
 
-若没有接受审计单位，即 $n=0$，约定 $U_\alpha(0,0)=1$，只给平凡风险界，不求解上述二项方程。它与总体接受率 $a=0$ 是不同情况：可能系统接受一些输入，但尚未审计任何一个。
+If no accepted audit units exist, i.e. $n=0$, the convention is $U_\alpha(0,0)=1$, which gives only the trivial risk bound, and the binomial equation above is not solved. This is a different case from a population acceptance rate $a=0$: the system may accept some inputs while none has yet been audited.
 
-**$r_C$ 与 $\alpha$ 不可混同。** 前者是固定管线在目标接受分布上的真实失败率，后者是审计程序上界未覆盖该率的频率。不是每条预测都以概率 $1-\alpha$ 正确，也不能把通过本次审计当作已知逐点正确概率。若多个风险分别审计，可对各自置信失败预算作并集组合；这仍不同于把预测风险和审计置信错误混写成一个数。
+**$r_C$ and $\alpha$ must not be confused.** The former is the true failure rate of the fixed pipeline on the target acceptance distribution; the latter is the frequency with which the audit procedure's upper bound fails to cover that rate. It is not the case that each prediction is correct with probability $1-\alpha$, and passing this audit cannot be treated as a known pointwise probability of being correct. If several risks are audited separately, their respective confidence failure budgets can be combined by a union bound; this is still different from merging prediction risk and audit confidence error into one number.
 
-若用审计结果选择宽度阈值、删除难分支、重调接受规则，以上固定规则推断不再直接适用；需重新独立审计或采用适当同时有效方法。文档内片段相关、人工参照错误、未知事件依赖或部署漂移也需独立处理。10,000次bootstrap不能自动替代这里的有限样本抽样前提。冻结有限语料上的无放回审计应使用对应有限总体反演，不能冒称未来总体风险。
+If the audit results are used to choose the width threshold, delete hard branches, or retune the acceptance rule, the fixed-rule inference above no longer applies directly; a new independent audit or an appropriate simultaneously valid method is needed. Correlation between fragments within a document, errors in human references, unknown event dependence, or deployment drift also need separate treatment. 10,000 bootstrap replicates cannot automatically replace the finite-sample sampling premise here. An audit without replacement on a frozen finite corpus should use the corresponding finite-population inversion and cannot be passed off as a future population risk.
 
-## 8. 证明边界与后续实现核对
+## 8. Proof boundaries and checks for later implementation
 
-| 义务 | 闭合位置 | 保留的前提 |
+| Obligation | Where closed | Premises retained |
 |---|---|---|
-| 正基准归一化与仿射范围 | SE1，CLOSED-LOCAL | 独立矩形/放松身份明确，正分母 |
-| 类别极值与联合最小坐标盒 | SE2，CLOSED-LOCAL | 共同输出schema、固定阈值、完整潜在区间 |
-| 直径与最大稳健接受质量 | SE3，CLOSED-LOCAL | 对指定候选全部覆盖，不冒称内禀歧义 |
-| 方向规则与分类最坏损失 | SE4，CLOSED-LOCAL | 目标确实定义为符号比较，随机对手量词固定 |
-| 单调与Lipschitz上下包络 | SE5，CLOSED-LOCAL | 固定分支对应、全分支同向、无数值旁路 |
-| 条件风险与审计概率分层 | SE6，CLOSED-LOCAL | 固定接受规则、适用抽样与正确审计参照 |
+| Positive-baseline normalization and affine range | SE1, CLOSED-LOCAL | Independent rectangle / relaxation status made explicit, positive denominator |
+| Class extrema and the smallest joint coordinate box | SE2, CLOSED-LOCAL | Common output schema, fixed thresholds, full latent interval |
+| Diameter and maximum robust acceptance mass | SE3, CLOSED-LOCAL | Full coverage of the specified candidates, no false claim of intrinsic ambiguity |
+| Direction rule and worst-case classification loss | SE4, CLOSED-LOCAL | The target really is defined as a sign comparison; the quantifiers for the random adversary are fixed |
+| Monotone and Lipschitz upper/lower envelopes | SE5, CLOSED-LOCAL | Fixed branch correspondence, all branches in the same direction, no numerical bypass |
+| Layering of conditional risk and audit probability | SE6, CLOSED-LOCAL | Fixed acceptance rule, applicable sampling, and a correct audit reference |
 
-数值程序应逐项检查或拒绝不支持的域，并把数学通过、数学未通过与数值预算未判定分开。严格exp/sigmoid的实现证明和实际CPU记录由单独检查器负责；本文件没有运行结果，不以有限成功样例代替以上一般证明。真实文本是否产生完整合法分支、是否共享正确目标、能否得到足够窄且覆盖足够高的区间，仍是未解决的弱环。
+A numerical program should check item by item or reject unsupported domains, and should keep mathematical pass, mathematical fail, and undecided-within-numerical-budget separate. The implementation proof for rigorous exp/sigmoid and the actual CPU records are the responsibility of a separate checker; this file has no run results and does not let finitely many successful examples replace the general proofs above. Whether real text produces complete, valid branches, whether they share the correct target, and whether intervals that are narrow enough with high enough coverage can be obtained remain unresolved weak links.
 
-这份结果可以作为P2/P05的理论接口与否决装置。若方向任务经完整语义解析后被符号比较完全解决，应保留解析研究并删除冗余学习头；若候选分支过宽，先查分支合法性与可补充语义证据，而不是仅扩模型。G0/G1、自然文本解析风险和论文增量均没有因本稿完成而通过。
+This result can serve as a theoretical interface and veto device for P2/P05. If a direction task is solved completely by sign comparison after full semantic parsing, the parsing research should be kept and the redundant learned head deleted; if the candidate branches are too wide, first check branch validity and semantic evidence that could be added, rather than only enlarging the model. G0/G1, the risk of natural-text parsing, and the paper's incremental contribution have not passed because this draft is complete.

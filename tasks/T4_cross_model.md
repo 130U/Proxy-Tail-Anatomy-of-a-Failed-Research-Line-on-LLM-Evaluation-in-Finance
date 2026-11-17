@@ -1,27 +1,27 @@
-# T4：便宜模型与贵模型的头部重合（补完原问题）
+# T4: Top-list overlap between a cheap model and an expensive model (finishing the original question)
 
-## 问题
+## Question
 
-最初的问题是：便宜模型当筛子，会漏掉贵模型头部的多少？前几轮因为测量不稳定没有测成。现在逐条打分的做法已经稳定，而且贵模型（Sol）在 1,000 条上的 8 轮分数已经有了，补上便宜模型就能回答。
+The original question was: if a cheap model is used as a filter, how much of the expensive model's top list will it miss? Earlier rounds could not measure this because the measurement was unstable. The per-item scoring method is now stable, and the expensive model (Sol) already has 8 rounds of scores on 1,000 items, so adding the cheap model is enough to answer it.
 
-## 做法
+## Method
 
-1. 用 `research/absolute_scoring/` 里完全相同的 1,000 条、相同的提示和分批方式，让便宜一档的模型（Luna，或当前可用的更便宜配置）打 4 轮。约 100 次调用。
-2. 贵模型用已有的 8 轮分数，取平均作为参考。
+1. Using exactly the same 1,000 items in `research/absolute_scoring/`, the same prompt and the same batching, have the cheaper model tier (Luna, or the cheapest configuration currently available) score 4 rounds. About 100 calls.
+2. For the expensive model, use the existing 8 rounds of scores and take their average as the reference.
 
-## 分析
+## Analysis
 
-1. 跨模型相关（正态分数上）。再按两边各自的重测信度做衰减校正，得到"去掉打分噪声后"的相关。
-2. 对 p = 20%、10%、5%，上下两端：便宜模型的最高 p 与贵模型的最高 p 的重合；找回贵模型头部 90% 所需的放大倍数。
-3. 与高斯基准比较：用跨模型相关预测重合率和放大倍数，不调参。
-4. 把跨模型的重合率与贵模型自己的重合率（已知，约 90%–92%）放在一起看。两者的差才是"便宜模型真正漏掉的"。
-5. 列出被便宜模型漏掉的贵模型头部标题的 ID，人工看 20 条，写三句话：它们有没有共同特征（多实体、否定、数字、隐含比较）。
+1. Cross-model correlation (on normal scores). Then apply an attenuation correction using each side's own test-retest reliability, to get the correlation "with scoring noise removed".
+2. For p = 20%, 10%, 5%, at both ends: the overlap between the cheap model's top p and the expensive model's top p; the widening factor needed to recover 90% of the expensive model's top list.
+3. Compare with the Gaussian benchmark: use the cross-model correlation to predict the overlap rate and widening factor, with no tuning.
+4. Look at the cross-model overlap rate side by side with the expensive model's own overlap rate (known, about 90%–92%). The difference between the two is "what the cheap model really misses".
+5. List the IDs of the expensive model's top-list headlines that the cheap model missed, look at 20 of them by hand, and write three sentences: do they share any features (multiple entities, negation, numbers, implicit comparison).
 
-## 判定
+## Decision
 
-- **继续：** 跨模型重合明显低于高斯预测（差 10 个百分点以上），或者两端明显不同，或者漏掉的标题有清晰的共同特征。
-- **放弃：** 与高斯预测吻合、两端对称、漏掉的标题看不出规律。这时原问题正式结束。
+- **Continue:** the cross-model overlap is clearly below the Gaussian prediction (by more than 10 percentage points), or the two ends differ clearly, or the missed headlines share clear features.
+- **Abandon:** agrees with the Gaussian prediction, the two ends are symmetric, and no pattern is visible in the missed headlines. In that case the original question is formally closed.
 
-## 说明
+## Note
 
-文献核查已经做过（见 `research/tail_screening/literature.md`），这一题不用再查。它的目的是给原问题一个确定的答案，不是找新理论。
+The literature check has already been done (see `research/tail_screening/literature.md`), so this task does not need to search again. Its purpose is to give the original question a definite answer, not to find new theory.

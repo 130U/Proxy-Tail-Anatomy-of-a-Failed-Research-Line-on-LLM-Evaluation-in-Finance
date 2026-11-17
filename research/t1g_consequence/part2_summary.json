@@ -13,7 +13,7 @@
   "uncertain_fraction": 0.08,
   "expected_flip_count": 0.27817300746792795,
   "expected_flip_fraction": 0.011126920298717117,
-  "decision": "很少；合计计算比较题不足100道",
+  "decision": "rare; fewer than 100 computed-comparison questions in total",
   "all_witnesses_verified": true,
   "pairwise_n": 35,
   "first_order_agreement": 1.0,

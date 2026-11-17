@@ -1,27 +1,27 @@
-# 五条研究路径的独立反方审查
+# Independent adversarial review of the five research paths
 
-审查日期：2026-11-15（任务研究日期）。审查者：内部 AI 子代理 `fresh_reviewer`。不是 Fable、指定资深助手或人类专家的意见。没有参与五份路径报告的撰写；收到的是研究任务、审查要求和材料位置，未预设排名。全程离线，未访问外部服务、未联系人、未读取或输出私有原始新闻，未修改作者原报告。
+Review date: 2026-11-15 (the study date of the task). Reviewer: internal AI subagent `fresh_reviewer`. This is not the opinion of Fable, the designated senior assistant, or a human expert. The reviewer took no part in writing the five path reports; it received the research task, the review requirements, and the locations of the materials, with no preset ranking. Fully offline: no external services accessed, no people contacted, no private raw news read or output, and the authors' original reports not modified.
 
-**结论：五份报告作为探索性研究备忘录可以保留；尚不能汇总成“五条已经可行或已确认原创的研究主线”。未发现所列条件命题的实质数学错误，但有七项 important 问题影响投入次序和下一阶段验收。最明确的新增否决证据是：P04 当前统计入口在现有 FOMC 文档数下无法给出 beta=.95 的非空泛界。若严格坚持“必须从零训练才能回答”，当前没有三条通过，连 P01 也只有实现便利而非普遍必要性。**
+**Conclusion: the five reports can be kept as exploratory research memos; they cannot yet be summarized as "five research main lines that are already feasible or confirmed original". No substantive mathematical error was found in the listed conditional propositions, but seven important issues affect the order of investment and next-stage acceptance. The clearest new kill evidence is that P04's current statistical entry point cannot give a non-vacuous bound at beta=.95 with the current number of FOMC documents. If "the question can only be answered by training from scratch" is strictly enforced, no three paths currently pass; even P01 has only implementation convenience, not general necessity.**
 
-本审查不把作者已明确承认的未知重新包装成“发现造假”；下面的 important 多数是进入下一阶段前必须关闭的研究门，而不是要求删除探索报告。没有发现需要撤回当前条件命题的 critical 错误。若把这些条件结果改写为真实历史、自然语言语义或部署风险已经获证，则相应问题会升级为 critical。
+This review does not repackage unknowns that the authors already admitted as "discovered fabrication"; most of the important items below are research gates that must be closed before entering the next stage, not demands to delete the exploratory reports. No critical error requiring withdrawal of the current conditional propositions was found. If these conditional results were rewritten as having established real history, natural-language semantics, or deployment risk, the corresponding issues would be upgraded to critical.
 
-## 1. 实际检查范围与能力边界
+## 1. Actual scope of checking and limits of capability
 
-完整阅读：[研究约定](STUDY_CHARTER.md)、五份 PATH 报告、[本地数据盘点](../reports/local_data_inventory.md)、[文献台账](../literature/literature_review.md)、[文献覆盖矩阵](../literature/question_status.md)、[集体统计量证明 CM1–CM5](../theory/collective_metrics.md)、既有[理论复查](../theory/independent_review.md)。另定向核对 `notes.md` 的 T1.3–T1.5、T2.1–T2.4、T3.1 及反例。没有重新打开全部原论文；“某部件已有”的判断依赖已存台账所记的全文/摘要层级，不能据此确认新的投稿级差异。
+Read in full: the [study charter](STUDY_CHARTER.md), the five PATH reports, the [local data inventory](../reports/local_data_inventory.md), the [literature ledger](../literature/literature_review.md), the [literature coverage matrix](../literature/question_status.md), the [collective-statistic proofs CM1–CM5](../theory/collective_metrics.md), and the existing [theory review](../theory/independent_review.md). Also checked in a targeted way: T1.3–T1.5, T2.1–T2.4, T3.1 and the counterexamples in `notes.md`. Not all original papers were reopened; judgments that "some component already exists" rely on the full-text/abstract level recorded in the saved ledger, and cannot be used to confirm a new submission-level difference.
 
-独立纸笔复核 P1-A、D1/D2、P02 解析集合包络与接受样本统计扩展、P04 R1/R2/R3 及簇集中界、P05 AST 归纳与风险合并。新运行了 [review_checks.py](review_checks.py)，结果见 [review_checks.json](review_checks.json)：
+Independent pen-and-paper review of P1-A, D1/D2, the P02 parse-set envelope and its accepted-sample statistical extension, P04 R1/R2/R3 and the cluster concentration bound, and the P05 AST induction and risk combination. Newly ran [review_checks.py](review_checks.py); results in [review_checks.json](review_checks.json):
 
-- 用 `Fraction` 检查 1,008 个群体大小/均值/尾部水平组合，R1 的共同 U 构造均达到显示锐界；这检查可达性，不替代全域上界证明。
-- 穷举六记录、两固定层的 1,024 个污染配置/样本量组合，直接数漏检抽样结果，与 D1 的组合数乘积完全一致；没有因此声称检查所有自适应抽样机制。
-- 精确计算 N=120 时固定零发现审计门；计算接受风险的零失败二项预算和 P04 半径门。
-- 活跃 Python 环境没有 SciPy，未安装依赖，未运行 R2 LP；R2 的正确性只作解析复核，没有伪称数值求解成功。
+- Using `Fraction`, checked 1,008 combinations of group size / mean / tail level; the common-U construction of R1 attains the displayed sharp bound in every case. This checks attainability and does not replace the proof of the upper bound over the whole domain.
+- Exhaustively enumerated 1,024 combinations of contamination configuration / sample size for six records in two fixed strata, counting missed-detection samples directly; the counts match D1's product of binomial coefficients exactly. This is not taken as a check of all adaptive sampling mechanisms.
+- Computed exactly the fixed zero-finding audit gate at N=120; computed the zero-failure binomial budget for acceptance risk and the P04 radius gate.
+- The active Python environment has no SciPy; no dependencies were installed and the R2 LP was not run. The correctness of R2 was only reviewed analytically, with no false claim of a successful numeric solve.
 
-没有重跑全部仓库训练/单元测试，没有审计原始 HTML 历史版本、人工金标或 checkpoint，也没有形式化证明、真实研究结果或完整新颖性认证。已有 36 项测试、100,000 点检查、120 份原文及哈希等数字来自被明确标注的已有材料；本次新增证据只有上列数学复核和有限检查。
+Not done: rerunning all repository training/unit tests; auditing historical versions of the raw HTML, human gold labels, or checkpoints; formal proofs, real research results, or a complete novelty certification. Numbers such as the existing 36 tests, the 100,000-point check, and the 120 original texts and their hashes come from clearly labeled existing material; the only new evidence from this review is the mathematical review and finite checks listed above.
 
-Git HEAD 为 `8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`；检查时 `research/` 未跟踪，故没有可声称的已提交审查区间。所审 PATH 版本 SHA256 如下（后续作者回应应另存，修订后须标明）：
+Git HEAD is `8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`; at the time of checking, `research/` was untracked, so there is no committed review range that can be claimed. The SHA256 of the reviewed PATH versions is as follows (later author responses should be saved separately, and revisions must be marked):
 
-| 路径 | SHA256 |
+| Path | SHA256 |
 |---|---|
 | 01 | `7e6562b8be3b37c30a541831e005197e7bd4a84ceaa148de2dde0f8d11444cfa` |
 | 02 | `0ec5a73b8de32b8b5b0f7204564bef93ab409f934c214c4d9738dd70ee2fb563` |
@@ -29,144 +29,144 @@ Git HEAD 为 `8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`；检查时 `research/` 
 | 04 | `cab25e2a13413650b65ede657f31b4ae7fc730cf2b344fa64f505e25caa87ccd` |
 | 05 | `d5594c42212e9b086e72943eecd2d9d2d7db91ba12bb5df1d0bd1995aa0b53f9` |
 
-## 2. 经反证攻击后仍成立的部分
+## 2. Parts that still hold after attempted refutation
 
-| 对象 | 独立判断及适用边界 |
+| Object | Independent judgment and scope of validity |
 |---|---|
-| P01 P1-A | 审计事件 K*≤K_u 与可靠训练影响外包络组合正确。同一事件覆盖 accuracy 和固定类别 macro-F1，不必为指标数再分 alpha。这里是删除比较器的固定测试统计量，不是历史最佳模型或未来总体性能。CM1 的共同头集合和 CM5 的 DP 精确性只相对于明示的外放松成立。 |
-| P03 D1 | I、分层、n_h 在审计抽样前固定时有效。可先用已经固定的观测模型/票矩阵设计 I，因为覆盖随机性来自后续审计；这不构成自动泄漏。不能先看抽中的记录身份或判定，再从多个 I 中挑最容易通过者。零发现报 I，否则全范围/弃权，恰好使不覆盖事件受坏配置漏检概率控制。 |
-| P03 D2 | 在真正的同时覆盖事件上取任意停止时刻有效。它是传递引理；有效 G_t 的存在与计算仍未解决。固定 n 反演不能承担该角色。 |
-| P02 包络 | 在 z*∈Z、离散语义和 c 共同固定、全部数值通路受控时，lambda·rho/2 常数成立。认证的是正确元组对应的模型输出，不是模型正确率。FOSD 的逐集合有序条件确实比中心有序强。 |
-| P02 接受样本统计 | 固定管线与 A 后，直接来自使用分布条件于 A=1 的 iid 审计样本可作二项上界。作者正确区分 alpha 与目标失败率 u。若校准后再选 A，或同文档片段充当 iid 点，则该结论不能沿用。 |
-| P04 R1 | 群体均值约束下上界逐组成立；共同 U 上各组错误同步，尾部质量集中 U≤1−beta，可同时达到所有组上界。即使某组 u_g>1−beta 也成立，并非只能处理小 u。 |
-| P04 R2 | 固定 q 时 z 正是 ES 的风险包络；对 q,z 联合最大化得到 sup_Q ES，无须错误地交换 inf_t 与 sup_Q。q=0 的状态由 z≤q/(1−beta) 自动强制 z=0。前提是附加约束确实描述可信联合律，而不是直接塞入未认证点估计。 |
-| P04 校准/R3 | 固定计数且独立簇下的加权 Hoeffding 常数正确。条件化计数时须继续保持簇条件独立；不能任意条件化后援引无条件独立。S∈[0,B] 时 stop-loss 振幅≤B，R3 的 B·rho/(1−beta) 有效。 |
-| P05 健全性 | AST 归纳正确，受保护除法、外舍入和程序语义等价前提齐全。union bound 不要求事实错误与程序错误独立，但两者必须指向同一抽样/接受机制。类型正确绝不推出程序语义正确，作者已给出有效反例。 |
+| P01 P1-A | The combination of the audit event K*≤K_u with a reliable outer envelope of training influence is correct. The same event covers accuracy and fixed-class macro-F1, so alpha need not be split further by the number of metrics. This is a fixed test statistic of the deletion comparator, not the historically best model or future population performance. CM1's joint head set and CM5's DP exactness hold only relative to the stated outer relaxation. |
+| P03 D1 | Valid when I, the strata, and n_h are fixed before audit sampling. I can be designed first using the already fixed observed model / vote matrix, because the coverage randomness comes from the later audit; this does not constitute automatic leakage. One cannot first look at the identities or judgments of the drawn records and then pick, from several I, the one that passes most easily. Reporting I on zero findings, and the full range / abstention otherwise, is exactly what makes the non-coverage event controlled by the miss probability of bad configurations. |
+| P03 D2 | Taking an arbitrary stopping time on a genuine simultaneous-coverage event is valid. It is a transfer lemma; the existence and computation of a valid G_t remain unsolved. Fixed-n inversion cannot play that role. |
+| P02 envelope | When z*∈Z, the discrete semantics and c are jointly fixed, and all numeric paths are controlled, the lambda·rho/2 constant holds. What is certified is the model output at the correct tuple, not model accuracy. The set-wise ordering condition for FOSD is indeed stronger than ordering of centers. |
+| P02 accepted-sample statistics | With the pipeline and A fixed, iid audit samples drawn directly from the usage distribution conditional on A=1 can give a binomial upper bound. The authors correctly separate alpha from the target failure rate u. If A is chosen after calibration, or passages from the same document serve as iid points, the conclusion cannot be carried over. |
+| P04 R1 | Under the group-mean constraints the upper bound holds group by group; on a common U the errors of all groups are synchronized, with the tail mass concentrated on U≤1−beta, so all group upper bounds can be attained simultaneously. This holds even if some group has u_g>1−beta; it is not limited to small u. |
+| P04 R2 | For fixed q, z is exactly the risk envelope of ES; joint maximization over q,z gives sup_Q ES, with no need to wrongly swap inf_t and sup_Q. For states with q=0, z≤q/(1−beta) automatically forces z=0. The premise is that the additional constraints really describe a credible joint law, rather than stuffing in uncertified point estimates directly. |
+| P04 calibration/R3 | The weighted Hoeffding constant with fixed counts and independent clusters is correct. When conditioning on counts, the clusters must remain conditionally independent; one cannot condition arbitrarily and then invoke unconditional independence. With S∈[0,B], the stop-loss amplitude is ≤B, and R3's B·rho/(1−beta) is valid. |
+| P05 soundness | The AST induction is correct, and the premises of guarded division, outward rounding, and program semantic equivalence are all present. The union bound does not require fact errors and program errors to be independent, but both must refer to the same sampling/acceptance mechanism. Being well typed never implies that the program semantics are correct; the authors gave a valid counterexample. |
 
-## 3. 按严重度列出的实质问题
+## 3. Substantive issues by severity
 
-### I01 — important：P04 的具体统计入口在当前 FOMC 规模下必然空泛
+### I01 — important: P04's concrete statistical entry point is necessarily vacuous at the current FOMC scale
 
-证据：[P04 §4，第 60–77 行](PATH_04_dependence_robust_risk.md) 的半径，以及 §7 的 120 文档起点。令 G=1、alpha=.05、delta=0，最乐观地把全部 120 文档均作独立校准簇。由 Σ_c w_c²≥1/C，任何簇大小配置都有
+Evidence: the radius in [P04 §4, lines 60–77](PATH_04_dependence_robust_risk.md), and the 120-document starting point in §7. Let G=1, alpha=.05, delta=0, and, most optimistically, treat all 120 documents as independent calibration clusters. Since Σ_c w_c²≥1/C, every cluster-size configuration has
 
-`r ≥ sqrt(log(20)/(2×120)) = 0.1117238462`。
+`r ≥ sqrt(log(20)/(2×120)) = 0.1117238462`.
 
-即使观察到零错误，u≥.1117；beta=.95 时 R1 必为 B。均衡独立簇至少需要 600 个，才能仅使半径低于 .05；训练/开发占用文档、非零错误、组数增加、簇不均衡和漂移只会使门更高。120 文档是否独立本身也没有证据，这已经是偏乐观计算。
+Even if zero errors are observed, u≥.1117; at beta=.95, R1 must equal B. At least 600 balanced independent clusters are needed just to get the radius below .05; documents used for training/development, nonzero errors, more groups, unbalanced clusters, and drift only raise the bar. There is also no evidence that the 120 documents are independent, so this is already an optimistic calculation.
 
-修补：把该量化否决门加入阶段一、在真实训练前执行。允许的下一步是研究更紧但有效的有限样本入口、可信额外依赖约束或不同的事先合理风险目标；不得为让界非空而事后降低 beta。这个结论否决的是“当前 Hoeffding 入口 + 当前 FOMC + beta=.95”，不是证明所有风险证书不可能。若改作每文档一个 Bernoulli 目标，零失败 n=120 的精确 95% 上界约 .02466，但这已改变抽样对象/统计入口，不能直接代换任意大小簇的段落均值。
+Fix: add this quantitative kill gate to stage one and run it before any real training. Allowed next steps are to study a tighter but valid finite-sample entry point, credible additional dependence constraints, or a different risk target that is reasonable in advance; beta must not be lowered after the fact to make the bound non-vacuous. What this conclusion kills is "the current Hoeffding entry point + the current FOMC data + beta=.95"; it does not prove that all risk certificates are impossible. If one switches to one Bernoulli target per document, the exact 95% upper bound with zero failures at n=120 is about .02466, but that changes the sampling object / statistical entry point and cannot be directly substituted for passage means over clusters of arbitrary size.
 
-### I02 — important：五份报告的投入门仍缺少最低有用数值，容易在看到数据后移动目标
+### I02 — important: the investment gates of the five reports still lack minimum useful values, which makes it easy to move the target after seeing data
 
-证据：P01 三阶段、P02/P05 阶段三使用“预注册最小效应”“足够窄”；P03 用 w 但没有为具体任务选值；P04 尚未冻结 beta、U/B、依赖信息获得成本。作为探索备忘录可接受，作为选题通过依据尚不足。
+Evidence: P01's three stages and stage three of P02/P05 use "pre-registered minimum effect" and "narrow enough"; P03 uses w but has not chosen a value for a concrete task; P04 has not yet frozen beta, U/B, or the cost of obtaining dependence information. Acceptable for an exploratory memo, not yet sufficient as a basis for passing topic selection.
 
-修补：先冻结一张“目标量、最低有用宽度/覆盖、风险上限、最强基线差异、资源上限、失败即停止”的表。数值可在独立探索子集后设定，但不能再用同一子集确认通过。P02/P05 应给风险水平下的覆盖，而非单独挑最优覆盖/最优风险；P01 应给接纳边缘相对 core-only 的效用或成本改善；P03 应给相同 w、alpha 下的严格改进和至少一个最坏配置；P04 应先通过 I01 的解析可行门。
+Fix: first freeze a table of "target quantity, minimum useful width/coverage, risk cap, difference from the strongest baseline, resource cap, stop on failure". The values can be set after an independent exploration subset, but the same subset cannot then be used to confirm a pass. P02/P05 should give coverage at a risk level, not separately pick the best coverage / best risk; P01 should give the utility or cost improvement of admitting the periphery relative to core-only; P03 should give a strict improvement at the same w and alpha, plus at least one worst-case configuration; P04 should first pass the analytic feasibility gate of I01.
 
-一个量级检查：iid 接受样本中零错误，要以 95% 单侧置信把错误率控制到 1%，需至少 299 个独立接受样本；5% 需 59 个。n=120 时仍只能到约 2.47%。这些仅为零错误最好情况，不是把 120 文档自动当成 120 个可用校准点，也不是建议人为把成功标准设成 5%。
+An order-of-magnitude check: with zero errors among iid accepted samples, controlling the error rate to 1% at 95% one-sided confidence needs at least 299 independent accepted samples; 5% needs 59. At n=120 one can still only reach about 2.47%. These are only the best case of zero errors; they do not automatically treat 120 documents as 120 usable calibration points, nor do they suggest artificially setting the success criterion at 5%.
 
-### I03 — important：P01 的原料可用性不能替代审计真值，完整历史旗舰暂不具备执行前提
+### I03 — important: availability of P01's raw material cannot replace audit ground truth; the full historical flagship does not yet meet the preconditions for execution
 
-证据：[P01 的本地数据与最弱链环](PATH_01_audited_information_set.md)、盘点 §4 明确只有 2026 抓取的版本，未独立重建历史内容；未提供一个已认可的真实历史版本判定流程。现有证明恰恰要求该真值、历史选择规则和共享核心都可靠。这个问题被作者承认，但排序时不能因数学已完整而把其执行风险降成普通标注工时。
+Evidence: [P01's local data and weakest link](PATH_01_audited_information_set.md) and inventory §4 state clearly that only versions scraped in 2026 exist, and historical content has not been independently reconstructed; no accepted procedure for judging real historical versions is provided. The existing proofs require exactly this ground truth, the historical selection rule, and the shared core to all be reliable. The authors admit this, but when ranking, its execution risk cannot be downgraded to ordinary annotation hours just because the mathematics is complete.
 
-修补：先做十份记录的证据类型/可判定性试验，冻结“干净、污染、未知”处理；未知不得算零发现。可以把未知作保守坏项或保留条件式版本，但必须写清目标和覆盖事件。若只证明删除指定坏记录后的稳定性，应保留“条件式删除鲁棒证书”名称。N=120 时，零发现下要排除哪怕一份污染（K_u=0），95% 置信需审计 114 份；容许预算 B=2、5、10 时分别需 76、47、28 份。这说明可信核心零污染审计和边缘总量审计的成本很不同，普查是强竞争者。
+Fix: first run an evidence-type/decidability trial on ten records and freeze the handling of "clean, contaminated, unknown"; unknown must not count as zero findings. Unknowns can be treated as conservative bad items, or a conditional version can be kept, but the target and the coverage event must be written out. If only stability after deleting specified bad records is proven, the name "conditional deletion-robustness certificate" should be kept. At N=120, ruling out even a single contaminated document (K_u=0) under zero findings needs an audit of 114 documents at 95% confidence; tolerated budgets B=2, 5, 10 need 76, 47, and 28 documents respectively. This shows that a zero-contamination audit of the trusted core and an audit of the total in the periphery have very different costs, and a census is a strong competitor.
 
-### I04 — important：P02 当前唯一完整包络避开了其最重要的语言歧义，且学习头必要性仍未成立
+### I04 — important: P02's only complete envelope avoids its most important linguistic ambiguity, and the necessity of a learned head is still not established
 
-证据：[P02 候选命题及两个子研究，第 54–93 行](PATH_02_numeric_sensitivity.md)：候选 Z 要共享实体、指标、期间、基准语义、符号/零模式、c；不唯一即 abstain。最难的自然文本情况正是这些离散绑定有歧义。新增理论若仅保留这个命题，处理的是数值半径传播，尚未处理语言模块的主要失败原因。任务若为“低于/高于基准”，正确元组后的符号规则已是 oracle。
+Evidence: [P02's candidate proposition and two sub-studies, lines 54–93](PATH_02_numeric_sensitivity.md): the candidates Z must share entity, metric, period, baseline semantics, sign/zero pattern, and c; if not unique, abstain. The hardest natural-text cases are exactly those where these discrete bindings are ambiguous. If the new theory keeps only this proposition, it handles propagation of the numeric radius, not the main failure cause of the language module. If the task is "below/above the baseline", a symbolic rule applied after the correct tuple is already an oracle.
 
-修补：在写新模型前，二选一并冻结：(a) 解析候选联合包络，允许多个离散语义分支并严格控制其覆盖/宽度，删除没有必要的学习头；(b) 有外生依据的随机有序目标，给出必须学习分布且方向假设合理的任务与数据。不能用“基准藏在文本里”论证第二箭头要用神经网络。若 (a) 成立，应与 P05 共用解析风险研究，避免重复计算两条独立机会。
+Fix: before writing a new model, choose one of two options and freeze it: (a) a joint envelope over parse candidates, allowing several discrete semantic branches and strictly controlling their coverage/width, with the unnecessary learned head removed; (b) a stochastic ordinal target with an exogenous basis, giving a task and data where the distribution must be learned and the direction assumption is reasonable. "The baseline is hidden in the text" cannot be used to argue that the second arrow needs a neural network. If (a) holds, it should share the parsing-risk study with P05, to avoid double-counting it as two independent opportunities.
 
-### I05 — important：P05 的统计保证要固定“错误接受”的分母，程序语义前提尚未转化为可审计机制
+### I05 — important: P05's statistical guarantee must fix the denominator of "false acceptance", and the program-semantics premise has not yet been turned into an auditable mechanism
 
-证据：[P05 第 55–78、104 行](PATH_05_proof_carrying_numeric_reasoning.md)。固定 e=e* 的归纳定理正确，但问题难点都进入 e*、事实绑定与候选覆盖前提。第 66 行的 epsilon_f+epsilon_s 是同一机制下的总失败界；第 104 行同时要求错误接受率，却未明确它是 Pr(A且错) 还是 Pr(错|A)。两者有实质差异。
+Evidence: [P05 lines 55–78 and 104](PATH_05_proof_carrying_numeric_reasoning.md). The induction theorem with fixed e=e* is correct, but all the difficulty of the problem goes into the premises about e*, fact binding, and candidate coverage. The epsilon_f+epsilon_s in line 66 is a total failure bound under one mechanism; line 104 also requires a false-acceptance rate, but does not say whether it is Pr(A and wrong) or Pr(wrong|A). The two differ substantively.
 
-修补：并列报告接受率 a、联合错误接受率 j、选择风险 r=j/a。若 epsilon 只控制全样本失败，则条件错误率最多能从 `(epsilon_f+epsilon_s)/a` 推出；要直接控制接受样本风险，必须在固定 A 后审计该条件分布。对候选程序 E 的覆盖，明确审计对象是存在至少一个语义正确程序，还是提议器选中的程序正确。最终只需答案包含时可能偶然覆盖错误程序，但任务研究仍须分别计量语义错误，不能把偶然数值相同算“理解正确”。先用金标事实/程序的交叉消融定位缺口，再考虑语言训练。
+Fix: report side by side the acceptance rate a, the joint false-acceptance rate j, and the selection risk r=j/a. If epsilon controls only failure over all samples, the conditional error rate can at best be derived from `(epsilon_f+epsilon_s)/a`; to control the accepted-sample risk directly, that conditional distribution must be audited with A fixed. For coverage of the candidate programs E, state explicitly whether the audit target is that at least one semantically correct program exists, or that the program selected by the proposer is correct. If in the end only answer containment is needed, a wrong program may cover the answer by chance, but the task study must still measure semantic errors separately and cannot count an accidental numeric match as "understood correctly". First use cross ablations with gold facts/programs to locate the gap, then consider language training.
 
-### I06 — important：P03 目前没有可归属的新结果，且“理论前沿”与“实际节省成本”不能混算
+### I06 — important: P03 currently has no attributable new result, and "theoretical frontier" and "actual cost saving" must not be mixed
 
-证据：[P03 D1/D2 与已有实现](PATH_03_audit_design_frontier.md)、L08/L09。D1 是有效的复合零发现检验，D2 是同时置信集的直接映射。作者未声称原创，这是正确的；但尚未给严格优于最强固定分层/现有审计设计的实例族、近似保证或下界。零发现下的最小确定成本，也不是观察到非零错误后的期望停止成本。
+Evidence: [P03 D1/D2 and the existing implementation](PATH_03_audit_design_frontier.md), L08/L09. D1 is a valid composite zero-finding test, and D2 is a direct mapping of simultaneous confidence sets. The authors do not claim originality, which is correct; but they have not yet given a family of instances, an approximation guarantee, or a lower bound that strictly beats the strongest fixed stratification / existing audit designs. The minimum deterministic cost under zero findings is also not the expected stopping cost after nonzero errors are observed.
 
-修补：只选一个窄的理论子问题，例如固定影响图类上 D1 相对最优矩形置信集合的审计复杂度分离，并把比较方法的可见信息、alpha、w、成本函数全部对齐。先做小规模穷举与反例；若无严格结构优势，收作 P01 附录。真实成本表要包含无法判定、重新检索、人工复核和算法时间；不只比较 n。对 N=120 普查可能更便宜，扩大假想 N 的图不能解决实际必要性。
+Fix: choose only one narrow theoretical subproblem, for example the separation in audit complexity between D1 and the optimal rectangular confidence set on a fixed class of influence graphs, and align the visible information, alpha, w, and cost function of the compared methods. First do small-scale exhaustive enumeration and counterexamples; if there is no strict structural advantage, fold it into a P01 appendix. The real cost table must include undecidable items, re-retrieval, human review, and algorithm time; do not compare only n. At N=120 a census may be cheaper, and plots with an enlarged hypothetical N cannot settle practical necessity.
 
-### I07 — important：当前五项并非五个独立研究机会，也不能通过从零训练硬门
+### I07 — important: the current five items are not five independent research opportunities, and they cannot pass the training-from-scratch hard gate
 
-证据：[Charter 的 Scope/评价规则](STUDY_CHARTER.md) 与各报告“从零训练”部分。P03 是 P01 的数学分支；P02/P05 都依赖同一未解决的真实元组/基准/作用域解析。P04 与模型来源无关。P01 的必要条件是完整历史依赖控制，固定词法特征或来源已合规的冻结编码器同样可满足。
+Evidence: [the Charter's Scope/evaluation rules](STUDY_CHARTER.md) and the "training from scratch" sections of each report. P03 is a mathematical branch of P01; P02/P05 both depend on the same unsolved parsing of real tuples/baselines/scope. P04 has nothing to do with where the model comes from. P01's necessary condition is complete control of historical dependence, which fixed lexical features or a frozen encoder with compliant sources can satisfy just as well.
 
-修补：比较报告应称“五个候选分析、约三个共享风险簇”，不要按标题数宣称研究分散化。若“必须从零训练”是字面硬门，结论为没有三项已通过，不能为了凑 Top 3 放宽口径而不披露。若用户允许把“可由完全受控训练实现”作为工程选择，则可继续 P01，但要把范围变化与数学必要性分开。
+Fix: the comparative report should say "five candidate analyses, about three shared risk clusters", and should not claim research diversification by counting titles. If "must train from scratch" is a literal hard gate, the conclusion is that no three items have passed, and the criterion must not be loosened without disclosure just to fill a Top 3. If the user allows "can be achieved by fully controlled training" as an engineering choice, P01 can continue, but the change in scope must be kept separate from mathematical necessity.
 
-## 4. Minor 项
+## 4. Minor items
 
-- **M01 — minor：** P04 第 134、148 行的“P3”沿用旧三路径编号，容易与本轮 PATH_03 混淆。应写“旧 P3／本轮 PATH_04”或统一用新编号。
-- **M02 — minor：** P04 第 60 行“条件化后的计数”建议补“且给定这些计数后簇仍独立”。固定计数版本已成立，这个补充防止实现随意条件化破坏前提。
-- **M03 — minor：** P02/P05 的“证书覆盖率”宜拆成“真元组/正确程序进入候选集合的概率”“计算包络包含率”“接受率”；三者不能共用 coverage 一个数字。
+- **M01 — minor:** The "P3" in P04 lines 134 and 148 follows the old three-path numbering and is easily confused with this round's PATH_03. Write "old P3 / this round's PATH_04", or use the new numbering throughout.
+- **M02 — minor:** For "counts after conditioning" in P04 line 60, suggest adding "and the clusters remain independent given these counts". The fixed-count version already holds; this addition prevents an implementation from conditioning arbitrarily and breaking the premise.
+- **M03 — minor:** The "certificate coverage" of P02/P05 should be split into "probability that the true tuple / correct program enters the candidate set", "containment rate of the computed envelope", and "acceptance rate"; the three cannot share a single coverage number.
 
-## 5. 独立投入推荐与保留分歧
+## 5. Independent investment recommendation and remaining disagreements
 
-这里排序的是**下一笔有限研究时间投向哪里**，不是论文等级，也不是已证实新颖性的排名。若需要五项顺序，我给 **03 → 01 → 05 → 02 → 04**，但实际以三个相互依赖的工作包执行：
+What is ranked here is **where the next block of limited research time should go**, not paper quality and not a ranking of established novelty. If an order of the five is needed, I give **03 → 01 → 05 → 02 → 04**, but in practice they would be executed as three interdependent work packages:
 
-1. **先做 P03 的窄结构问题，同时开 P01 的来源/任务门。** P03 有精确对象、固定设计和可枚举反例，最容易在不训练的情况下迅速决定是否有真正数学差异；它应作为 P01 的子问题。P01 是最贴近“历史信息集可认证模型”的上位问题，但先决条件比作者给出的“数学与原型高可行”更值得优先否决。来源门失败时，不能因 P03 有漂亮定理而声称历史旗舰仍已可执行。
-2. **第二投入 P05 的语义候选/计算对象，P02 暂作同一包内的敏感度分支。** 这是一个有意保留的分歧：我暂把 P05 放在 P02 之前，因为它允许直接删去冗余有序头，目标对象也更贴近可检查数值任务。但 P05 先例覆盖更薄，若查明完全被已有方法覆盖，或规则枚举已解决，即刻降级。两条不能同时以同一解析 gold set 的失败/成功算两份独立证据。
-3. **P04 暂只保留短理论/识别边界工作。** R1/R2 正确且适合反驳“校准分数就能给部署尾部证书”，但当前入口在本地数据预算下直接失败，额外依赖矩又缺可识别数据来源。我不会优先花模型训练或大量模拟预算；先证明明确结构下的可识别性/计算差异，否则保持附录或负结果。
+1. **First do P03's narrow structural question, and at the same time open P01's source/task gate.** P03 has an exact object, fixed designs, and enumerable counterexamples, so it is the easiest to decide quickly, without training, whether there is a real mathematical difference; it should be a subproblem of P01. P01 is the parent question closest to "a model certifiable on a historical information set", but its preconditions deserve to be tested for a kill first, ahead of the authors' "mathematics and prototype highly feasible". If the source gate fails, one cannot claim that the historical flagship is still executable just because P03 has a nice theorem.
+2. **Second, invest in P05's semantic candidates / computation object, with P02 provisionally a sensitivity branch in the same package.** This is a deliberately retained disagreement: I provisionally put P05 ahead of P02 because it allows the redundant ordinal head to be removed directly, and its target object is closer to checkable numeric tasks. But P05's prior-work coverage is thinner; if it turns out to be fully covered by existing methods, or already solved by rule enumeration, downgrade it immediately. The two cannot both count failure/success on the same parsing gold set as two independent pieces of evidence.
+3. **For now, keep only short theory / identification-boundary work for P04.** R1/R2 are correct and well suited to refuting "calibration scores alone can give a deployment tail certificate", but the current entry point fails outright under the local data budget, and the additional dependence moments lack an identifiable data source. I would not prioritize spending model-training or large simulation budgets; first prove identifiability / a computational difference under an explicit structure, otherwise keep it as an appendix or negative result.
 
-这个推荐不等于要求作者接受“03 是最可能投稿”的结论。使我改变次序的证据包括：P01 得到可信历史版本判定且 core-only 被公平击败；P02 找到语义合理、确需学习概率的有序目标；P05 给出规则无法解决且候选集合覆盖/宽度均可审计的任务；P04 取得合法的额外依赖信息及与现有矩问题不同的锐界/复杂度结果。当前没有这些证据。
+This recommendation does not require the authors to accept the conclusion that "03 is the most likely to be submitted". Evidence that would make me change the order includes: P01 obtaining credible judgments of historical versions, with core-only beaten fairly; P02 finding a semantically sound ordinal target that really needs learned probabilities; P05 giving a task that rules cannot solve and where both candidate-set coverage and width are auditable; P04 obtaining legitimate additional dependence information and a sharp-bound/complexity result different from existing moment problems. None of this evidence exists now.
 
-如研究风格仅按纯数学问题选择，P04 的识别下界可以比 P02/P05 更值得短期推导；我仍不据此推荐其当前真实部署实验。这样区分数学兴趣与实证执行可行性，避免用一个总分掩盖关键失败条件。
+If the research style selects purely by mathematical questions, P04's identification lower bound may be more worth deriving in the short term than P02/P05; I still would not recommend its current real-deployment experiment on that basis. Separating mathematical interest from empirical feasibility this way avoids hiding key failure conditions behind a single total score.
 
-## 6. 交给作者和资深助手的待答事项
+## 6. Open items for the authors and the senior assistant
 
-作者回应应逐项引用 I01–I07，分为“接受并修订”“保留为条件限制”“不同意且给证据”，不删除原审查或悄悄改动被审版本。最需要资深助手判断的是：(1) P01 的删除比较器是不是值得回答的对象；(2) P03 的固定影响图差异是否超出已有审计框架直接实例化；(3) 是否允许解除从零训练硬门；(4) P02 是否还存在不被符号下游替代的有序目标；(5) P05 的语义候选覆盖问题是否有足够理论增量；(6) P04 是否有值得新增依赖信息的实际决策任务。
+The author response should cite I01–I07 item by item, sorted into "accept and revise", "keep as a conditional limitation", and "disagree, with evidence", without deleting the original review or quietly changing the reviewed versions. What most needs the senior assistant's judgment: (1) whether P01's deletion comparator is an object worth answering about; (2) whether the fixed-influence-graph difference in P03 goes beyond a direct instantiation of existing audit frameworks; (3) whether the training-from-scratch hard gate may be lifted; (4) whether P02 still has an ordinal target that a symbolic downstream cannot replace; (5) whether P05's semantic candidate coverage question has enough theoretical increment; (6) whether P04 has a real decision task for which new dependence information is worth obtaining.
 
-**审查处置：探索性分析可交付；没有一条获“完整研究已通过”的印章。** 数学条件命题在本次能力范围内通过反证复查；七项 important 仍须在选择并启动确认性研究前处理。指定资深助手的实际反馈尚未收到，本文件不能代替那一步。
+**Review disposition: the exploratory analyses can be delivered; none receives a "complete research passed" stamp.** The conditional mathematical propositions passed the refutation review within the capabilities of this review; the seven important items must still be handled before a confirmatory study is selected and started. Actual feedback from the designated senior assistant has not yet been received, and this file cannot replace that step.
 
-## 7. 收到下一轮门槛提案后的补充复核
+## 7. Supplementary review after receiving the next-round threshold proposal
 
-主代理随后提交了 [DECISION_CRITERIA.md](DECISION_CRITERIA.md)。本节为追加回应记录，不改写上面基于所列 SHA256 的原始审查。
+The main agent then submitted [DECISION_CRITERIA.md](DECISION_CRITERIA.md). This section is an appended response record and does not rewrite the original review above, which is based on the listed SHA256 values.
 
-该页对 I02 的**设计文档缺口已给出实质修补**：分别固定宽度、风险、接受率、相对基线差异和 P04 风险比例；明确为未来研究者选择的筛选线，没有追认既有例子或冒充行业标准。P02/P05 风险目标明确到接受样本，亦修补 I05 的指标分母问题；完整审计机制与实际风险仍未建立。
+That page **gives a substantive fix for the design-document gap of I02**: it fixes width, risk, acceptance rate, difference relative to the baseline, and the P04 risk ratio separately; it states clearly that these are screening lines chosen by the future researcher, without retroactively endorsing existing examples or posing as industry standards. The P02/P05 risk targets are stated explicitly for accepted samples, which also fixes the metric-denominator problem of I05; the complete audit mechanism and actual risk are still not established.
 
-独立重新计算确认：零失败 n=59 的精确单侧 95% 上界为 .04950761；n=299 时为 .00996915。P04 若要求 beta=.95 时 U≤.8B，在零错误、无漂移、G=1、均衡独立簇条件下需 r≤.04；`log(20)/(2×.04²)=936.1663355`，故至少 937 簇。600 与 937 分别对应非空泛和 .8B 门，不能混同。该页对此划分正确。
+Independent recomputation confirms: the exact one-sided 95% upper bound with zero failures at n=59 is .04950761; at n=299 it is .00996915. If P04 requires U≤.8B at beta=.95, then under zero errors, no drift, G=1, and balanced independent clusters it needs r≤.04; `log(20)/(2×.04²)=936.1663355`, so at least 937 clusters are needed. 600 and 937 correspond to the non-vacuous gate and the .8B gate respectively, and must not be confused. The page draws this distinction correctly.
 
-新增联合预算提醒：若一份文档仅贡献一个独立可审计样本，先使用 12–20 份探索后，120 份中只余 100–108 份；接受率恰好 50% 时只有 50–54 个接受样本，不够零失败 59 个门。获得 59 个需至少约 54.6%–59% 的接受率，且这些剩余文档尚未给训练/开发/最终评价另留空间。这是条件式预算核算，不是声称 FOMC 文档必独立或实际接受率就是 50%。下一轮应先作文档用途分账，再承诺风险目标；多个相关问题不能免费增加独立样本数。
+New joint-budget reminder: if each document contributes only one independent auditable sample, then after 12–20 are used for exploration, only 100–108 of the 120 remain; at an acceptance rate of exactly 50% there are only 50–54 accepted samples, not enough for the zero-failure gate of 59. Getting 59 needs an acceptance rate of at least about 54.6%–59%, and these remaining documents have not yet set aside room for training/development/final evaluation. This is a conditional budget calculation, not a claim that FOMC documents must be independent or that the actual acceptance rate is 50%. The next round should first allocate documents to uses, and only then commit to a risk target; several correlated questions cannot add independent samples for free.
 
-因此，I02 可标记为“已补下一轮提案，待正式冻结与数据预算验收”，I05 的分母子项可标记为“已澄清”；其余研究机制和实证门继续开放。后续 PATH 作者新增专节不在原 SHA256 审查快照内，须由作者回应明确列出修订内容，不能凭本节视为全部再次审过。
+So I02 can be marked "next-round proposal added; pending formal freeze and acceptance of the data budget", and the denominator sub-item of I05 can be marked "clarified"; the remaining research mechanisms and empirical gates stay open. New sections added later by the PATH authors are not in the original SHA256 review snapshot; the author response must list the revisions explicitly, and this section cannot be taken as a re-review of all of them.
 
-## 8. 五份作者修订后的限定增量复核
+## 8. Limited incremental review after the five author revisions
 
-本节是在收到“五份 PATH 修订完成”的通知后追加。仅复核新增命题、统计入口、量化门及比较报告的回应；没有重跑第 1 节有限检查、没有新增训练/数据审计/外部访问，也没有把此前未执行事项提升为已完成研究。阅读了修订后的 01/03 判定专节、02/05 回应及新命题、04 全零入口与独立性限制、完整 [COMPARATIVE_ANALYSIS.md](COMPARATIVE_ANALYSIS.md) 和更新后的 [DECISION_CRITERIA.md](DECISION_CRITERIA.md)。根代理将另写作者回应；本节不预先认证尚未读取的回应文件。
+This section was appended after receiving the notice that "the five PATH revisions are complete". It reviews only the new propositions, statistical entry points, quantitative gates, and the response in the comparative report; it did not rerun the finite checks of Section 1, did no new training/data audit/external access, and did not upgrade previously unexecuted items to completed research. Read: the revised decision sections of 01/03, the responses and new propositions of 02/05, the all-zero entry point and independence limits of 04, the full [COMPARATIVE_ANALYSIS.md](COMPARATIVE_ANALYSIS.md), and the updated [DECISION_CRITERIA.md](DECISION_CRITERIA.md). The root agent will write the author response separately; this section does not certify in advance a response file it has not read.
 
-**增量结论：未发现新增段落中的实质数学错误。说明和设计缺口得到明显修补，但没有一条真实数据、原创性或旗舰科学门因此通过。**
+**Incremental conclusion: no substantive mathematical error was found in the new paragraphs. The gaps in explanation and design are clearly repaired, but no real-data, originality, or flagship scientific gate passes as a result.**
 
-### 新命题和量化门的核对
+### Check of the new propositions and quantitative gates
 
-- **P2-L：成立于所写精确、有限的语义配对模型。** 真实配对在 R 保证 R 非空；UP 对全部可行解释成立，等价于每个共同有序尾部的最小差值非负。对指定尾部变化的任何区间必须包含所有可行 d_rk，故其宽度至少为极差，端点包络达到该界。保持同一语义世界的配对限制是必要的，随意做候选笛卡尔积会添加虚假歧义。作者也正确指出：数值外包络跨零只说明当前充分证据不足，不能当作已找到负尾差反例。这个有限 min/max 命题是有效的问题界定，没有证明自然语言 R 可完整构造或其新颖性。
-- **P5-L：成立于同一观察 O、有限且定义良好的语义世界集合。** 同一 O 的确定性输出若要同时健全，必须包含所有 a_w；最小闭区间是其极值包络。所有答案相同恰为精确点答案可识别的条件；不同程序偶然同值不推出忠实程序语义已识别。作者未故意将任务规范已经排除的程序继续计入歧义，这是正确边界。新增 a、j、r=j/a 和全样本 epsilon/a 限制明确；a=0 的风险未定义也已处理。集合中存在正确程序与被选中程序正确被区分，修补了 I05 的统计对象说明。
-- **P04 全零上界：有效，且不是任意簇均值的完整二项区间。** 对独立 X_c∈[0,1]，有 E X_c≤Pr(X_c>0)，所以 Pr(全零)≤∏(1−mu_c)≤(1−bar_mu)^C。若 bar_mu>u_0=1−alpha^(1/C)，规则“全零报 u_0，其余报 1”的失败概率≤alpha；否则无失败。此论证不要求同分布，要求等权目标、独立簇和固定设计。作者明确限定全零路径，非零路径未给非平凡界；不等簇大小的行加权风险不能沿用等权 59 门。随机计数条件化后仍独立的要求也已补齐。它说明 I01 的 600 门仅针对 Hoeffding 入口，不能当所有有效统计方法的下界；没有现实独立性、金标、全零观测和迁移依据时，也不能据新入口宣布本地证书可行。
-- **P01：量化门与现有证书语义相容。** alpha 总预算、accuracy 宽度 .10、非零影响预算、冻结常数基线与 core-only 比较都分清；测试集 40 事件只被解释为计数步长≤2.5 个百分点，没有伪称功效或独立性保证。真实审计 K_u=0 与预定非零预算压力验证没有混同。来源未知、错误共享组件、内侧搜索结果都不能通过正确性硬门。没有新的已通过实验。
-- **P03：比较规则现在可被实际否决。** 明确同目标 w=.10、同信息/失败预算、最强预定义固定设计、事前完整结构族、逐实例不退化、等权中位节省≥20%、其他族失败与求解成本全部报告。小域 w=1/4 只用于实现检查，不能代替主门。零发现固定成本和序贯期望成本已经分开。20% 仍是待冻结的资源门，不是普遍数学优势或已取得结果；共同判定表中的“节省≥20%”应按该专节的中位数与完整族规则理解。
-- **联合样本预算：已补说明，未解决数据不足。** DECISION_CRITERIA 已将 50% 接受率下 50–54 个接受单位明确为数量期望，并说明期望 59 也不保证实际 59；各用途分账不能创造跨文档独立性。02/05 的具体流程仍需给出不可重用的文档 ID、审计机制和实际标签。59/299、600/937 为条件设计值，仍不是数据充分性结论。
+- **P2-L: holds for the exact, finite semantic-pair model as written.** The true pair being in R guarantees that R is nonempty; UP holding for all feasible interpretations is equivalent to the minimum difference being nonnegative at every shared ordinal tail. Any interval for a specified tail change must contain all feasible d_rk, so its width is at least the range, and the endpoint envelope attains this bound. The restriction to pairs within the same semantic world is necessary; an arbitrary Cartesian product of candidates would add spurious ambiguity. The authors also correctly point out that a numeric outer envelope crossing zero only shows that the current evidence is insufficient for the sufficient condition, and cannot be taken as having found a counterexample with a negative tail difference. This finite min/max proposition is a valid framing of the problem; it does not show that a natural-language R can be fully constructed, nor its novelty.
+- **P5-L: holds for a finite, well-defined set of semantic worlds with the same observation O.** For the deterministic output on one O to be sound for all of them at once, it must contain every a_w; the minimal closed interval is their extreme-value envelope. All answers being equal is exactly the condition for an exact point answer to be identifiable; different programs coinciding in value by chance do not imply that faithful program semantics have been identified. The authors do not deliberately keep counting programs already excluded by the task specification as ambiguity; this is the right boundary. The new a, j, r=j/a and the all-sample epsilon/a limit are explicit; the undefined risk at a=0 is also handled. "A correct program exists in the set" and "the selected program is correct" are distinguished, which repairs the statement of the statistical object in I05.
+- **P04 all-zero upper bound: valid, and not a full binomial interval for arbitrary cluster means.** For independent X_c∈[0,1], E X_c≤Pr(X_c>0), so Pr(all zero)≤∏(1−mu_c)≤(1−bar_mu)^C. If bar_mu>u_0=1−alpha^(1/C), the rule "report u_0 when all are zero, otherwise report 1" has failure probability ≤alpha; otherwise there is no failure. This argument does not require identical distributions; it requires an equal-weight target, independent clusters, and a fixed design. The authors explicitly restrict it to the all-zero path, and give no nontrivial bound on the nonzero path; row-weighted risk with unequal cluster sizes cannot reuse the equal-weight gate of 59. The requirement that clusters remain independent after conditioning on random counts has also been added. This shows that the 600 gate in I01 applies only to the Hoeffding entry point and cannot be taken as a lower bound for all valid statistical methods; without real independence, gold labels, all-zero observations, and a basis for transfer, the new entry point also cannot be used to declare local certificates feasible.
+- **P01: the quantitative gates are compatible with the existing certificate semantics.** The total alpha budget, accuracy width .10, nonzero influence budget, frozen constant baseline, and the core-only comparison are all kept distinct; the 40 test-set events are interpreted only as a counting step of ≤2.5 percentage points, with no false claim of power or independence guarantees. The real audit with K_u=0 is not confused with the stress validation at a pre-set nonzero budget. Unknown sources, wrong shared components, and inner-search results cannot pass the correctness hard gate. There is no newly passed experiment.
+- **P03: the comparison rules can now actually kill the path.** They state explicitly: the same target w=.10, the same information/failure budget, the strongest pre-defined fixed design, complete structure families fixed in advance, no degradation on any instance, equal-weight median saving ≥20%, and full reporting of failures in other families and of solve cost. The small-domain w=1/4 is used only as an implementation check and cannot replace the main gate. The zero-finding fixed cost and the sequential expected cost are now kept apart. 20% is still a resource gate to be frozen, not a general mathematical advantage or an obtained result; the "saving ≥20%" in the shared decision table should be read according to that section's median and complete-family rules.
+- **Joint sample budget: explanation added; the data shortage is not solved.** DECISION_CRITERIA now states explicitly that the 50–54 accepted units at a 50% acceptance rate are an expected count, and that an expectation of 59 does not guarantee an actual 59; separate accounts by use cannot create cross-document independence. The concrete procedures of 02/05 still need to give non-reusable document IDs, an audit mechanism, and actual labels. 59/299 and 600/937 are conditional design values, still not conclusions about data sufficiency.
 
-### 文档问题关闭到什么程度
+### How far the documentation issues are closed
 
-| 原审查项 | 本次可关闭的说明/设计问题 | 仍开放的科学门 |
+| Original review item | Explanation/design issues that can be closed now | Scientific gates still open |
 |---|---|---|
-| I01 | 已补 120/600 门及更强合法全零入口；未把某个松界失败写成普遍不可能 | 实际独立校准信息、错误金标、非空风险界、额外依赖约束的可识别性 |
-| I02 | 已提供具体有用性阈值、分母、比较基线和共同样本预算的未来提案 | 正式冻结、真实任务意义、实际样本/功效与一次独立确认 |
-| I03 | 来源未知、普查不消除历史真值缺口、条件式命名和 core-only 对照已明写 | 历史内容版本及选择规则证据；真实任务与审计结果 |
-| I04 | 已承认单上下文包络未解决解析；P2-L 给出明确有限候选问题及可反驳条件 | 真实 R 的覆盖、非冗余有序目标、有效覆盖/宽度、新颖性 |
-| I05 | a/j/r、epsilon/a、集合覆盖与所选程序、答案同值与语义正确已澄清 | W(O)/事实/程序金标、自动管线的独立接受风险审计及优于规则的证据 |
-| I06 | 已限定固定设计比较、完整结构族和收益/成本判据 | 新的结构优势、匹配下界或可归属算法；真实人工节省 |
-| I07 | 比较稿明示严格从零训练门无三项通过，01/03从属、02/05共享风险 | 是否修改原硬筛选条件的研究决策；不能标为已获资深助手同意 |
+| I01 | The 120/600 gates and a stronger valid all-zero entry point have been added; the failure of one loose bound is not written up as general impossibility | Actual independent calibration information, error gold labels, a non-vacuous risk bound, identifiability of additional dependence constraints |
+| I02 | A future proposal with concrete usefulness thresholds, denominators, comparison baselines, and a shared sample budget has been provided | Formal freeze, real task significance, actual samples/power, and one independent confirmation |
+| I03 | Unknown sources, the fact that a census does not remove the historical ground-truth gap, conditional naming, and the core-only comparison are now written out | Evidence on historical content versions and selection rules; real task and audit results |
+| I04 | It is admitted that the single-context envelope does not solve parsing; P2-L gives an explicit finite candidate problem and refutation conditions | Coverage of a real R, a non-redundant ordinal target, valid coverage/width, novelty |
+| I05 | a/j/r, epsilon/a, set coverage vs. the selected program, and equal answers vs. semantic correctness have been clarified | Gold labels for W(O)/facts/programs, an independent acceptance-risk audit of the automatic pipeline, and evidence that it beats rules |
+| I06 | The fixed-design comparison, complete structure families, and gain/cost criteria have been specified | A new structural advantage, a matching lower bound, or an attributable algorithm; real human-effort saving |
+| I07 | The comparative draft states that no three items pass the strict training-from-scratch gate, that 01/03 are subordinate, and that 02/05 share risk | The research decision on whether to change the original hard screening condition; it cannot be marked as approved by the senior assistant |
 
-M01 旧 P3 编号在修订后已被本轮路径编号澄清；M02 条件独立限制已补；M03 中 P05 风险分母与02候选覆盖/接受/计算包含性的区分已有实质澄清。后续执行仍须保持这些术语，不能在结果表里再合成一个 coverage 数字。
+M01: the old P3 numbering has been clarified by this round's path numbering after revision; M02: the conditional-independence restriction has been added; M03: the P05 risk denominator and the distinction in 02 between candidate coverage / acceptance / computational containment have been substantively clarified. Later execution must keep these terms and must not merge them back into one coverage number in results tables.
 
-### 比较稿对分歧的呈现
+### How the comparative draft presents the disagreements
 
-COMPARATIVE_ANALYSIS 第 8 节完整保留我的 **03→01→05→02→04** 顺序，解释根代理为何仍把02放在05之前、把04视为第三独立理论候选，也写明这属于投入判断而非已验证科学结论。没有把不同排序改成一致意见；内部 AI 审查与指定资深助手实际反馈被区分。四个研究家族与我所称约三个共享风险簇是不同分类：比较稿明确承认02/05共享解析风险，因此不构成伪称独立风险分散。
+Section 8 of COMPARATIVE_ANALYSIS keeps my **03→01→05→02→04** order in full, explains why the root agent still puts 02 ahead of 05 and treats 04 as a third independent theory candidate, and states that this is an investment judgment, not a verified scientific conclusion. It does not rewrite the different orderings as a consensus; the internal AI review and the actual feedback of the designated senior assistant are kept distinct. The four research families and what I call about three shared risk clusters are different classifications: the comparative draft explicitly admits that 02/05 share parsing risk, so it does not amount to a false claim of independent risk diversification.
 
-我保留原投入排序及保留意见。新有限识别命题使02/05的研究对象更清楚，但尚不足以改变排序；P04 新入口修正的是“只能用松的 Hoeffding”这一潜在误读，并没有提供其现实数据前提。
+I keep my original investment ranking and reservations. The new finite identification propositions make the research objects of 02/05 clearer, but are not yet enough to change the ranking; P04's new entry point corrects the potential misreading that "only the loose Hoeffding bound can be used", but does not provide its real-data premises.
 
-### 本次增量复核后的五文件快照
+### Snapshot of the five files after this incremental review
 
-| 路径 | 本次 SHA256 |
+| Path | SHA256 at this review |
 |---|---|
 | 01 | `5deeacf9f788da417937a8f77ef50655f6180b20948a9ff4670ef16b710cf265` |
 | 02 | `6c15e6c726b062a6167292330aed57c4eb3ae8563bde847feddffa636ceb674e` |
@@ -174,4 +174,4 @@ COMPARATIVE_ANALYSIS 第 8 节完整保留我的 **03→01→05→02→04** 顺�
 | 04 | `69f3d8e0d56f11581fa5b65473b0a20ada44c3c24d14a1ca4091fb4499004cba` |
 | 05 | `d8ab1d1ea660def53c80e1266dd3bb7ed5ba11d9adaa942420ea735d029b0008` |
 
-**最终增量处置：本轮要求的说明和设计修订可作为已回应记录；所有实际科学验证门仍按上表开放。** 条件式数学推导通过本次限定纸笔复核，既不等于形式化认证，也不等于真实数据非空、原创性、从零训练必要性或旗舰选定获通过。
+**Final incremental disposition: the explanation and design revisions required this round can be recorded as responded to; all actual scientific validation gates remain open as in the table above.** The conditional mathematical derivations passed this limited pen-and-paper review; this is neither a formal certification nor a pass on non-vacuous real data, originality, the necessity of training from scratch, or flagship selection.

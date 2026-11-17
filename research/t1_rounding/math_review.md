@@ -1,139 +1,139 @@
-# T1 数学审查：哪些“越界”可以被认证
+# T1 mathematical review: which "out-of-tolerance" cases can be certified
 
-日期：2026-11-16（America/New_York）。范围：任务定义、舍入模型、增长率推导和执行算法；本文件不包含 FinQA/TAT-QA 的测量结果。数学证明采用假设、量词、常数逐项核查；下列推导为本次独立检查，不作为数学新颖性主张。
+Date: 2026-11-16 (America/New_York). Scope: the task definition, the rounding model, the growth-rate derivation and the execution algorithm; this file contains no FinQA/TAT-QA measurement results. The mathematical proofs were checked assumption by assumption, quantifier by quantifier and constant by constant; the derivations below are an independent check done here, and are not a claim of mathematical novelty.
 
-## 结论
+## Conclusion
 
-T1 可以形成有意义的基准敏感性审计，但“区间算术外包络超过容差”不能直接计为“答案未被文档确定”。建议分别报告：**已认证容差内、已有一致输入越界见证、尚未解决**。最强可支持的首轮结论是“在已声明的舍入盒模型下，标准答案对源数字隐藏末位的变化不稳健”，并不自动等于标注错误、整份报告信息不足，或任何模型都无法回答。
+T1 can produce a meaningful benchmark sensitivity audit, but "the interval-arithmetic outer envelope exceeds the tolerance" cannot be counted directly as "the answer is not determined by the document". We recommend reporting separately: **certified inside the tolerance, has a consistent out-of-tolerance input witness, not yet resolved**. The strongest first-round conclusion that can be supported is "under the stated rounding-box model, the reference answer is not robust to changes in the hidden last digits of the source numbers". That does not automatically mean an annotation error, insufficient information in the whole report, or that no model could answer.
 
-## 1. 必须分开的三个对象
+## 1. Three objects that must be kept apart
 
-显示数值向量记为 x，金标准程序为 f，显示数字的直接运算结果为 f(x)，已存金标准为 y_gold。假设每个真实源量位于其舍入区间，且除明确合并的同源量外没有其他约束，得到盒 B。真实可达答案集合是 R = {f(z): z∈B，程序在 z 上有定义}。普通区间执行得到 I，满足 R⊆I。
+Write x for the vector of displayed values, f for the gold program, f(x) for the result of direct computation on the displayed numbers, and y_gold for the stored gold answer. Assume each true source quantity lies in its rounding interval, and that there are no other constraints apart from explicitly merged same-source quantities; this gives the box B. The set of truly reachable answers is R = {f(z): z∈B, the program is defined at z}. Ordinary interval execution gives I, with R⊆I.
 
-对固定判分接受集 C：
+For a fixed scoring acceptance set C:
 
-- I⊆C：足以证明 B 中全部有定义答案均通过。
-- 找到 z∈B 且 f(z)∉C：足以证明存在越界答案。
-- I⊄C 但找不到见证：只能记为未解决，不能计入已证实越界数。
+- I⊆C: enough to prove that every defined answer in B passes.
+- Finding z∈B with f(z)∉C: enough to prove that an out-of-tolerance answer exists.
+- I⊄C but no witness found: can only be recorded as unresolved, and cannot be counted among proven out-of-tolerance cases.
 
-反例：同一源量 X∈[9.5,10.5]，f(X)=X/X 恒等于 1。朴素区间得到 [9.5/10.5,10.5/9.5]，会越过 1% 容差，但不存在任何一致输入见证。对于同源 X−X 也一样。维持同一变量的身份只解决标量见证的一致性；普通区间求值仍可能丢失依赖，不能宣称已经消除外包络膨胀。
+Counterexample: one source quantity X∈[9.5,10.5], with f(X)=X/X identically 1. Naive intervals give [9.5/10.5,10.5/9.5], which crosses the 1% tolerance, but no consistent input witness exists. The same holds for same-source X−X. Keeping the identity of one variable only ensures consistency of scalar witnesses; ordinary interval evaluation can still lose dependencies, so we cannot claim to have removed outer-envelope inflation.
 
-此外，R⊄C_gold 仅说明这个金标准中心不能保证通过。它不等价于“不存在任何一个预测值能同时满足所有可能真实值的容差”。后者是另一个量词更强的问题，需要对全部候选预测的接受区间取交集。
+Also, R⊄C_gold only says that this gold center cannot be guaranteed to pass. It is not equivalent to "no single predicted value can satisfy the tolerance for all possible true values". The latter is a different question with stronger quantifiers, and requires intersecting the acceptance intervals over all candidate predictions.
 
-## 2. 舍入盒是条件模型
+## 2. The rounding box is a conditional model
 
-对末位单位 u 的四舍五入显示数 d，取闭包 [d−u/2,d+u/2] 作为安全外包络。实际 tie 规则会让一个或两个端点不属于该显示数的原像。因此用端点寻找越界后，应把见证向区间内部收缩并确认仍越界；只发生在不可取端点的越界不能算实证。
+For a rounded displayed number d with last-digit unit u, take the closure [d−u/2,d+u/2] as a safe outer envelope. The actual tie rule means that one or both endpoints are not in the preimage of that displayed number. So after using endpoints to find an out-of-tolerance case, the witness should be shrunk into the interior of the interval and checked to still be out of tolerance; an out-of-tolerance case that occurs only at an unattainable endpoint does not count as empirical evidence.
 
-应从**原始文档字符串及单位**恢复 u，不能从解析后的浮点数、程序中的归一化常量或 exe_ans 推回精度。
+u should be recovered from **the original document string and its unit**; precision cannot be inferred back from the parsed float, normalized constants in the program, or exe_ans.
 
-| 情况 | 处理 |
+| Case | Handling |
 |---|---|
-| “12.3 百万” | 金额区间为 [12.25,12.35] 百万；统一到元后半宽为 50,000 元 |
-| “1.0%” | 半宽是 0.05 个百分点；若程序用比例，则是 0.0005 |
-| 年份、题目要求的年数、项目计数、程序 const_100 | 应根据语义设为精确量；不因为没有小数就自动加减 0.5 |
-| 同一源量被程序引用多次 | 所有引用绑定同一个变量，见证中共享一个取值 |
-| 两个不同单元格恰巧都显示 10 | 不能仅按数字相等合并为同一变量 |
-| 括号负数、破折号、脚注、缺失值 | 明确解析规则；无法区分零和缺失时留作未解析 |
-| 总计、分项、非负性等已知约束 | 若忽略，盒是文档可行域的外扩；报告必须保留这一限定 |
+| "12.3 million" | The amount interval is [12.25,12.35] million; converted to dollars, the half-width is 50,000 dollars |
+| "1.0%" | The half-width is 0.05 percentage points; if the program uses a ratio, it is 0.0005 |
+| Years, the number of years the question asks for, item counts, the program's const_100 | Should be exact quantities according to their semantics; do not automatically add or subtract 0.5 just because there is no decimal |
+| The same source quantity referenced several times by the program | All references are bound to one variable and share one value in the witness |
+| Two different cells that happen to both display 10 | Cannot be merged into one variable merely because the numbers are equal |
+| Parenthesized negatives, dashes, footnotes, missing values | Explicit parsing rules; when zero and missing cannot be distinguished, leave as unparsed |
+| Known constraints such as totals, components, non-negativity | If ignored, the box is an outward expansion of the document's feasible region; the report must keep this qualification |
 
-“独立”在此是笛卡尔积可行域假设，不是随机独立。舍入区间本身没有给出均匀分布，也不允许把某个端点的可能性解释成概率。
+"Independent" here is the assumption of a Cartesian-product feasible region, not random independence. A rounding interval does not by itself give a uniform distribution, and does not allow the possibility of some endpoint to be interpreted as a probability.
 
-同一量在多处以不同精度披露时，只有实体、指标、期间、币种、合并范围和单位一致，才可合并为同一源量。正确的联合信息是统一单位后**取区间交集**。交集为空应记为披露/映射不一致；不能直接取并集。分别选取不同出现位置计算的结果跨界，是“来源选择敏感性”，不等于整份文档仍然不确定。仅数值相近不足以确认同一量。
+When the same quantity is disclosed in several places at different precisions, it can be merged into one source quantity only if the entity, metric, period, currency, consolidation scope and unit all agree. The correct joint information is to convert to a common unit and **take the interval intersection**. An empty intersection should be recorded as a disclosure/mapping inconsistency; one cannot just take the union. A crossing obtained by computing separately with different locations of occurrence is "source-choice sensitivity", not the same as the whole document still being indeterminate. Close values alone are not enough to confirm the same quantity.
 
-## 3. 判分规则不能写错
+## 3. The scoring rule must not be misstated
 
-本次核对的 FinQA 官方 `eval_program` 对数值最终执行五位小数舍入；`evaluate_result` 将这个结果与 `qa.exe_ans` 直接比较。代码包含 add、subtract、multiply、divide、exp、greater 和四种 table 操作。它不是相对误差 1% 判分，也不是按人工答案字符串的显示位数判分。[官方代码，固定版本](https://github.com/czyssrs/FinQA/blob/dfc5b72c01ee17c442d28d5201b82a1f4e95d5af/code/evaluate/evaluate.py)
+The official FinQA `eval_program` checked here rounds the final numeric result to five decimal places; `evaluate_result` compares that result directly with `qa.exe_ans`. The code includes add, subtract, multiply, divide, exp, greater and four table operations. It is not scoring by 1% relative error, nor scoring by the displayed digits of the human answer string. [Official code, pinned version](https://github.com/czyssrs/FinQA/blob/dfc5b72c01ee17c442d28d5201b82a1f4e95d5af/code/evaluate/evaluate.py)
 
-因此 T1 所要求两套规则应称为本研究的两套容差敏感性分析，不能称为 FinQA 原生规则：
+So the two rule sets required by T1 should be called this study's two tolerance-sensitivity analyses, not FinQA's native rules:
 
-1. 金标准为基准的相对误差：C_rel=[y_gold−0.01|y_gold|,y_gold+0.01|y_gold|]。y_gold=0 时这是单点 {0}，应单列零答案组，不能事后补一个 epsilon 改写门槛。
-2. 按金标准原始显示格式取 d 位小数：通过条件为 Q_d(y)=Q_d(y_gold)，并冻结 half-even、half-up 等 tie 约定。如果答案是百分数，必须在显示百分数尺度上判定，或把整个接受格同时变换到比例尺度。已经转成 float 的 1.20 无法恢复其两位小数格式。
+1. Relative error with the gold as reference: C_rel=[y_gold−0.01|y_gold|,y_gold+0.01|y_gold|]. When y_gold=0 this is the single point {0}; zero answers should be listed as a separate group, and an epsilon cannot be added after the fact to rewrite the threshold.
+2. d decimal places according to the gold's original display format: the pass condition is Q_d(y)=Q_d(y_gold), with the tie convention (half-even, half-up, etc.) frozen. If the answer is a percentage, the decision must be made on the displayed percentage scale, or the whole acceptance cell must be transformed to the ratio scale together. A 1.20 that has already been converted to a float cannot recover its two-decimal format.
 
-可另报 FinQA 原生五位小数规则，保留它与人工答案格式的区别。Python 二进制浮点舍入与精确十进制 tie 规则在边界可能不同；声称复现原生规则时需要调用原实现核对，不应把精确有理数版称作逐位等同。
+FinQA's native five-decimal rule can be reported in addition, keeping its distinction from the human answer format. Python binary floating-point rounding and the exact decimal tie rule can differ at the boundary; a claim to reproduce the native rule should be checked against the original implementation, and an exact-rational version should not be called bit-for-bit identical.
 
-正式归因于输入舍入之前，先检查中心 f(x) 是否满足相应 gold 规则。中心已经不一致的题应单列为基线不一致，否则其越界不能归因于隐藏末位变化。
+Before formally attributing anything to input rounding, first check whether the center f(x) satisfies the corresponding gold rule. Questions whose center is already inconsistent should be listed separately as baseline-inconsistent; otherwise their out-of-tolerance status cannot be attributed to changes in hidden last digits.
 
-## 4. 增长率：精确结果与半单位因子
+## 4. Growth rate: exact result and the half-unit factor
 
-设 g(a,b)=(b−a)/a=b/a−1，a≠0。真实输入为 a+δa、b+δb，满足 |δa|≤h_a、|δb|≤h_b 且 h_a<|a|。则直接通分给出
+Let g(a,b)=(b−a)/a=b/a−1, a≠0. The true inputs are a+δa and b+δb, with |δa|≤h_a, |δb|≤h_b and h_a<|a|. Putting over a common denominator directly gives
 
 \[
 g(a+\delta a,b+\delta b)-g(a,b)
 =\frac{a\delta b-b\delta a}{a(a+\delta a)}.
 \]
 
-在独立矩形盒上，精确最坏绝对偏差为
+On an independent rectangular box, the exact worst-case absolute deviation is
 
 \[
 E_{\max}=\frac{|a|h_b+|b|h_a}{|a|(|a|-h_a)}.
 \]
 
-证明：三角不等式与 |a+δa|≥|a|−h_a 给出上界。取 δa=−sign(a)h_a，使分母绝对值最小；当 b≠0 时取 δb=sign(b)h_b，分子两项方向一致，达到该界；b=0 时任选 δb=±h_b。若源舍入端点排除，则这是可达上确界，内部点可逼近。
+Proof: the triangle inequality and |a+δa|≥|a|−h_a give the upper bound. Take δa=−sign(a)h_a to minimize the absolute value of the denominator; when b≠0 take δb=sign(b)h_b, so that the two numerator terms point in the same direction and the bound is attained; when b=0 choose either δb=±h_b. If the source rounding excludes the endpoints, this is an attainable supremum that interior points approach.
 
-一阶项为
+The first-order term is
 
 \[
 E_{\mathrm{first}}=\frac{|a|h_b+|b|h_a}{a^2},\qquad
 E_{\max}=\frac{E_{\mathrm{first}}}{1-h_a/|a|}.
 \]
 
-两输入有相同**完整舍入单位** u 时，h_a=h_b=u/2，因而
+When the two inputs have the same **full rounding unit** u, h_a=h_b=u/2, and therefore
 
 \[
 E_{\mathrm{first}}=\frac{u}{2}\frac{|a|+|b|}{a^2}.
 \]
 
-任务中的表达式若“舍入单位”指完整末位单位，缺少 1/2；若其本意是半宽则正确。这个表达式是绝对敏感度乘扰动幅度，并非无量纲相对条件数。相对于增长率本身的同半宽一阶误差为
+If "rounding unit" in the task's expression means the full last-digit unit, the expression is missing a factor of 1/2; if it was meant as the half-width, it is correct. The expression is the absolute sensitivity times the perturbation size, not a dimensionless relative condition number. The first-order error relative to the growth rate itself, with equal half-widths, is
 
 \[
 \frac{E_{\mathrm{first}}}{|g|}
 =h\frac{|a|+|b|}{|a|\,|b-a|},\quad b\ne a.
 \]
 
-若两输入各受相对误差 ε 的约束，分量相对条件数则为 2|b|/|b−a|。当增长接近零时，相对容差失败可能非常多，即使绝对误差很小；必须同时报告绝对百分点宽度。
+If each input is constrained by a relative error ε, the componentwise relative condition number is 2|b|/|b−a|. When growth is close to zero, relative-tolerance failures can be very numerous even if the absolute error is small; the absolute width in percentage points must be reported as well.
 
-完整可达区间为四个顶点值 `(b±h_b)/(a±h_a)−1` 的最小值和最大值。证明：固定 a 时关于 b 单调；固定 b 时关于 a 的导数为 −b/a²，不变号；分母区间不经过零，所以逐坐标将极值移到顶点。在 a>h_a 且 b−h_b≥0 时可简写为
+The full reachable interval is given by the minimum and maximum of the four vertex values `(b±h_b)/(a±h_a)−1`. Proof: for fixed a the function is monotone in b; for fixed b its derivative with respect to a is −b/a², which does not change sign; the denominator interval does not pass through zero, so the extrema move to the vertices coordinate by coordinate. When a>h_a and b−h_b≥0 this simplifies to
 
 \[
 g_{\min}=\frac{b-h_b}{a+h_a}-1,\qquad
 g_{\max}=\frac{b+h_b}{a-h_a}-1.
 \]
 
-人工例子（非数据结果）：a=100、b=110、h_a=h_b=0.5，显示增长率为 10%，真实增长范围为 [6/67,22/199]≈[8.9552%,11.0553%]。该例子说明差值小于数值规模时的放大，并不提供 FinQA 发生率证据。公式经 80 组含正、负和零 b 的精确有理数设定、每组 441 个内部点检查通过；这仅为代数检查，证明仍以上述论证为准。
+Hand-made example (not a data result): a=100, b=110, h_a=h_b=0.5. The displayed growth rate is 10%, and the true growth range is [6/67,22/199]≈[8.9552%,11.0553%]. The example shows the amplification when the difference is small relative to the scale of the values; it provides no evidence about frequency in FinQA. The formula passed checks on 80 exact-rational settings with positive, negative and zero b, with 441 interior points each; this is only an algebraic check, and the proof still rests on the argument above.
 
-## 5. 一天内可实现的认证方法
+## 5. Certification methods that can be implemented within a day
 
-1. 用十进制原始字符串构造 `Fraction`，半宽和接受边界也使用有理数。输入数值、源位置和程序引用分开保存。
-2. 构建 DAG；同一源变量和中间节点被重复使用时保留身份。先求中心，核对基线结果。
-3. 使用精确有理数区间加减乘除得到外包络。若整个包络在接受集内，认证安全。除法分母外包络包含零时不能直接报一个有限范围，也不能直接计为不稳定：这可能是依赖膨胀造成的假奇点。
-4. 对变量数较少的题，在同一源变量体系中枚举内部近顶点（例如半宽乘 999/1000）并精确标量执行。一个越界见证足以认证存在性；保存该输入向量和输出供重算。没有见证不证明安全。
-5. 对增长率使用上节精确公式。对一般有理函数，仅当证明单调性、或化简后分子分母均为逐变量一次且分母整个盒上不变号时，才能把顶点枚举提升为完整极值证明。一般 DAG 不满足该条件：例如 x(1−x) 在 [0,1] 的最大值在内部。
-6. 仍未解决的题可分裂输入盒，重新做区间认证；达到计算限额就保留未解决。非整数幂需要另外的可靠区间实现，不能用普通浮点 `pow` 冒充有理数证书。布尔比较和不支持的 table 操作应独立统计，不能悄悄放进数值安全分母。
+1. Build `Fraction` objects from the original decimal strings, and use rationals for half-widths and acceptance boundaries too. Store input values, source locations and program references separately.
+2. Build a DAG; keep identities when the same source variable or intermediate node is reused. Compute the center first and check the baseline result.
+3. Use exact rational interval addition, subtraction, multiplication and division to get the outer envelope. If the whole envelope is inside the acceptance set, safety is certified. When the outer envelope of a division's denominator contains zero, we can neither report a finite range directly nor count it directly as unstable: this may be a spurious singularity caused by dependency inflation.
+4. For questions with few variables, enumerate near-vertex interior points (for example half-width times 999/1000) within the same source-variable system and execute exactly as scalars. One out-of-tolerance witness is enough to certify existence; save that input vector and output for recomputation. The absence of a witness does not prove safety.
+5. For growth rates, use the exact formula of the previous section. For a general rational function, vertex enumeration can be promoted to a complete proof of the extrema only when monotonicity is proven, or when after simplification the numerator and denominator are both of degree one in each variable and the denominator does not change sign on the whole box. A general DAG does not satisfy this condition: for example, the maximum of x(1−x) on [0,1] is in the interior.
+6. Questions still unresolved can have their input boxes split and be interval-certified again; when the computation limit is reached, keep them as unresolved. Non-integer powers need a separate reliable interval implementation; ordinary floating-point `pow` cannot pass for a rational certificate. Boolean comparisons and unsupported table operations should be counted separately, and must not be quietly put into the denominator of numeric safety.
 
-代数约分必须保留原程序的定义域。例如 x/x 可化为 1，但原程序在 x=0 未定义；不能通过约分把这个点自动补上。源量对应关系仍然是算法外的语义前提，严格算术不会修正错误映射。
+Algebraic cancellation must preserve the domain of the original program. For example, x/x can be simplified to 1, but the original program is undefined at x=0; cancellation must not automatically fill in that point. The correspondence of source quantities is still a semantic premise outside the algorithm, and strict arithmetic does not correct a wrong mapping.
 
-## 6. “百万改成千”是哪一种实验
+## 6. What kind of experiment "changing millions to thousands" is
 
-纯粹改单位：把数值及其半宽同时乘 1,000，增长率及其可达区间完全不变。它没有增加信息。
+A pure unit change: multiply the value and its half-width both by 1,000, and the growth rate and its reachable interval are completely unchanged. It adds no information.
 
-提高披露精度：金额仍表示相同真实量，但固定小数位、把披露单位从百万改成千，则真实金额的半宽缩小 1,000 倍；小扰动下上述绝对不确定性近似缩小 1,000 倍。实际新披露中心通常也会变化，旧粗精度数据不能恢复被丢弃的三个数字。
+Raising disclosure precision: the amount still represents the same true quantity, but with the number of decimals fixed and the disclosure unit changed from millions to thousands, the half-width of the true amount shrinks 1,000-fold; under small perturbations, the absolute uncertainty above shrinks approximately 1,000-fold. In an actual new disclosure the center usually also changes, and old coarse-precision data cannot recover the three discarded digits.
 
-将旧中心固定、只把半宽除以 1,000，是明确的假设敏感性分析，不能称为真实重新披露后的验证。要验证预测，需要真实更精细的同源披露，或从足够精细的原始数值开始人为量化。若接受集固定、盒按同一中心嵌套缩小，可证明不稳健题数单调不增；若随之重新计算 gold 和显示格式，这个单调结论不自动成立。
+Fixing the old center and only dividing the half-width by 1,000 is an explicit assumption-sensitivity analysis, and cannot be called validation after a real re-disclosure. Validating the prediction requires real, more precise same-source disclosures, or artificial quantization starting from sufficiently precise original values. If the acceptance set is fixed and the boxes shrink in a nested way around the same center, one can prove that the number of non-robust questions is monotonically non-increasing; if the gold and display format are recomputed along with it, this monotonicity does not automatically hold.
 
-## 7. 比例与决策门
+## 7. Fractions and decision gates
 
-令 N 为预先定义的全部目标数值题数，W 为有模型内见证的题数，S 为已经认证安全的题数，U=N−W−S（含未解析、未支持或未认证）。在模型和映射均正确的前提下，不稳健比例满足
+Let N be the pre-defined total number of target numeric questions, W the number of questions with an in-model witness, S the number already certified safe, and U=N−W−S (including unparsed, unsupported or uncertified). If the model and the mapping are both correct, the non-robust fraction satisfies
 
 \[
 W/N\le p\le 1-S/N.
 \]
 
-应同时给出已解析子集比例及全体上下界；只报告成功解析题上的比例可能有选择偏差。模型内见证仍不是文档语义层面的无条件证书。子组按预先固定的程序结构分类，给出分母；多标签组可以重叠，但不能伪装成互斥分解。输入精度除“有效位数”外宜报告 h/|x|，因为取消误差也由 |b−a| 决定。
+Both the fraction on the parsed subset and the bounds over the whole set should be given; reporting only the fraction on successfully parsed questions may have selection bias. An in-model witness is still not an unconditional certificate at the level of document semantics. Subgroups are classified by program structure fixed in advance, with denominators given; multi-label groups may overlap, but must not be dressed up as a mutually exclusive decomposition. For input precision, besides "significant digits" it is advisable to report h/|x|, because cancellation error is also determined by |b−a|.
 
-任务文字中的“总体 <2% 放弃”和“某类 ≥15% 继续”可同时满足。建议在看结果前冻结为：**任一继续条件成立优先继续；否则若全体上界 <2% 则放弃；其余保留中间或无法判定状态**。这是对原文重叠的明确解释，不是原任务已经写明的优先级。继续门应使用已证实比例下界，放弃门使用未稳健比例上界；只靠膨胀外包络跨线不宜作继续决策。
+The task text's "abandon if overall <2%" and "continue if some category ≥15%" can hold at the same time. We recommend freezing, before seeing results: **if any continue condition holds, continue takes priority; otherwise, abandon if the overall upper bound is <2%; in all other cases keep an intermediate or inconclusive status**. This is an explicit interpretation of the overlap in the original text, not a priority the original task already stated. The continue gate should use the lower bound of the proven fraction, and the abandon gate the upper bound of the non-robust fraction; crossing a line only with an inflated outer envelope is not a sound basis for a continue decision.
 
-这些数是特定公开数据集的审计比例。若要外推到未来报告或总体金融问答，需要另行抽样论证；同一公司报告内的多道题也不能默认独立。
+These numbers are audit fractions for a specific public dataset. Extrapolating to future reports or to financial QA in general requires a separate sampling argument; multiple questions within the same company report also cannot be assumed independent by default.
 
-## 已核验与未核验
+## Verified and not verified
 
-已核验：区间外包络的量词问题、增长率常数与精确端点、单位变换、FinQA 官方评测代码。尚未核验：源数字映射准确率、原报告全部约束、基准发生率、TAT-QA 实际格式、新颖性与足以发表的贡献。以上未核验项不能由本数学审查替代。
+Verified: the quantifier issue of interval outer envelopes, the growth-rate constants and exact endpoints, unit transformations, and the official FinQA evaluation code. Not yet verified: the accuracy of source-number mapping, all constraints in the original reports, the benchmark frequency, TAT-QA's actual format, novelty, and whether the contribution is enough to publish. This mathematical review cannot substitute for the unverified items above.

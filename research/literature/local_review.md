@@ -1,57 +1,57 @@
-# 本地地基代码与报告独立复核
+# Independent review of the local foundation code and reports
 
-日期：2026-11-15 · 方法：只读代码/JSON/报告、离线独立小域核查 · 没有新增网络请求。
+Date: 2026-11-15 · Method: read-only review of code/JSON/reports, offline independent small-domain checks · No new network requests.
 
-审查对象：`research/local/world.py`、`audit.py`、`ablation.py`、`write_report.py`；并读 `research/evaluation/evaluate.py` 与相应测试、实验 JSON。以下行号针对首轮审查快照；主代理随后进行了修复，状态记录在各项中。
+Under review: `research/local/world.py`, `audit.py`, `ablation.py`, `write_report.py`; also read `research/evaluation/evaluate.py` with the corresponding tests and experiment JSON. The line numbers below refer to the snapshot from the first review round; the main agent then made fixes, and the status is recorded under each item.
 
-## 需要修正的事项
+## Items that needed correction
 
-### R1：统计区间的浮点端点可能向内舍入
+### R1: floating-point endpoints of statistic intervals may round inward
 
-**修复后状态：已解决并独立复核。** 当前实现用 Fraction 按输入浮点的精确二进制值累加，保存精确分数字符串，并在 float 转换后用 Fraction 比较、必要时 nextafter 向外移动。独立重跑下面反例，lower≤精确值≤upper，且两个精确端点均等于真值；更新的 JSON 已带算术说明。该修改足以解决本项，不依赖增加任意容差。
+**Status after the fix: resolved and independently reviewed.** The current implementation uses Fraction to accumulate the exact binary values of the input floats, saves exact fraction strings, and after converting to float compares with Fraction and moves outward with nextafter when needed. An independent rerun of the counterexample below gives lower≤exact value≤upper, and both exact endpoints equal the true value; the updated JSON includes an arithmetic note. This change is enough to resolve the item and does not rely on adding an arbitrary tolerance.
 
-首轮 `audit.py:69` 使用 `sum(lo)/len(lo)` 与 `sum(hi)/len(hi)`，不能保证浮点结果仍包住数学上的区间。反例：三条单类固定预测，逐条分数分别为 `1.0, 1e-16, 1e-16`；普通浮点和丢失小项，输出点区间 `0.3333333333333333`。若输入浮点数被视为对应精确实数，真实均值严格大于该 upper。
+In the first round, `audit.py:69` used `sum(lo)/len(lo)` and `sum(hi)/len(hi)`, which cannot guarantee that the floating-point result still contains the mathematical interval. Counterexample: three single-class fixed predictions with per-item scores `1.0, 1e-16, 1e-16`; ordinary floating-point summation loses the small terms and outputs the point interval `0.3333333333333333`. If the input floats are taken to be the corresponding exact reals, the true mean is strictly greater than that upper bound.
 
-这不影响本轮只使用 0/1 且均值恰为 1 的两个演示，但会影响一般有界分数的“数值证书”主张。建议定义输入数值语义，以 Fraction 精确累加，并输出精确分数及向外舍入的浮点端点；或者将现接口明确降级为非认证数值近似。优先级：在接口作为证书使用前必须解决。
+This does not affect the two demonstrations in this round, which use only 0/1 scores with a mean of exactly 1, but it does affect the claim of a "numeric certificate" for general bounded scores. Recommendation: define the semantics of the input values, accumulate exactly with Fraction, and output the exact fraction together with outward-rounded floating-point endpoints; or explicitly downgrade the current interface to a non-certified numeric approximation. Priority: must be resolved before the interface is used as a certificate.
 
-### R2：报告生成器包含与 JSON 脱离的硬编码结论
+### R2: the report generator contains hard-coded conclusions detached from the JSON
 
-**修复后状态：已解决并复核。** 参数量已从 JSON 读；守卫覆盖步数、seed 数、配对零差及零区间、original/edited/permissions 的完美分类、edited/permissions 的所有违反率为零、shuffle 有分类错误。关键静态叙事不再仅依赖配对零差。该脚本仍是冻结首轮实验的报告渲染器；遇到新结果时拒绝沿用解释，是合适的边界。
+**Status after the fix: resolved and reviewed.** The parameter count is now read from the JSON; guards cover the number of steps, the number of seeds, zero paired differences and zero intervals, perfect classification for original/edited/permissions, all violation rates being zero for edited/permissions, and shuffle having classification errors. The key static narrative no longer depends only on zero paired differences. The script is still a report renderer for the frozen first-round experiment; refusing to reuse the interpretation when new results appear is an appropriate boundary.
 
-首轮 `write_report.py:14,25` 将参数量 13,739、250 步、三 seed 差均为 0 和配对区间 [0,0] 写成常量，另有“打乱造成约一条误判”等固定文字。当前 JSON 的确支持这些数值：所有参数量是 13,739；三个配对 macro-F1 差与区间均为 0；三个 shuffle 运行均正确 119/120。
+In the first round, `write_report.py:14,25` wrote as constants the parameter count of 13,739, 250 steps, differences of 0 for all three seeds and the paired interval [0,0], plus fixed text such as "shuffling causes about one misclassification". The current JSON does support these values: every parameter count is 13,739; all three paired macro-F1 differences and intervals are 0; all three shuffle runs get 119/120 correct.
 
-问题在于改 seed/配置/数据重跑后，报告仍会断言旧结果。建议直接从 JSON 动态生成；无法动态写出的限定结论须断言当前结果满足前提，否则失败并要求复核。优先级：作为可复现入口交接前解决。
+The problem is that after rerunning with a different seed/configuration/data, the report would still assert the old results. Recommendation: generate the report dynamically from the JSON; qualified conclusions that cannot be written dynamically must assert that the current results satisfy their premises, and otherwise fail and require review. Priority: resolve before handing it over as a reproducible entry point.
 
-### R3：打乱许可对照有失效梯度，需明确解释
+### R3: the shuffled-permission control has dead gradients and needs a clear explanation
 
-**修复后状态：已披露，作为限定接受。** 更新报告已明确 REL 在相同标签对上是常数且梯度为零，并写明不属于等强度纯错配对照。无需重跑去追求显著性；下一轮若研究该机制，须预注册有区分力的控制设计。
+**Status after the fix: disclosed; accepted with qualification.** The updated report now states clearly that REL is constant with zero gradient on pairs with the same labels, and that it is not a pure mismatched-pair control of equal strength. There is no need to rerun in pursuit of significance; if the next round studies this mechanism, it must pre-register a control design with discriminating power.
 
-首轮 `ablation.py:66–68,104` 将许可类型打乱，但保留原对的 `ya,yb`。当 INV/LBL 对被分到 REL 时，`ya==yb`，log-odds 差恒为 0，因此 REL loss 为固定 margin，梯度为 0。这是实际打乱设计的结果，不能解读为具有相同有效约束强度的纯语义标签负对照。
+In the first round, `ablation.py:66–68,104` shuffled the permission types but kept the original pair's `ya,yb`. When an INV/LBL pair is assigned to REL, `ya==yb`, the log-odds difference is always 0, so the REL loss is a fixed margin and its gradient is 0. This is a consequence of the actual shuffle design and cannot be read as a pure semantic-label negative control with the same effective constraint strength.
 
-不要求为了“公平”重新调参得到想要结果；保留这一对照即可，但应输出交叉类型计数、失活 REL 数与解释。最重要的比较仍是相同编辑曝光下的 permissions vs edited_ce，本轮未观察到额外增益。报告已谨慎否定增益主张，修复重点是把对照机制说完整。
+There is no requirement to retune for "fairness" to obtain a desired result; keeping this control is enough, but it should output the cross-type counts, the number of inactive REL pairs and an explanation. The most important comparison is still permissions vs edited_ce under the same edit exposure, where this round observed no additional gain. The report already cautiously rejects the claim of a gain; the point of the fix is to describe the control mechanism completely.
 
-## 数学实现复核
+## Review of the mathematical implementation
 
-`audit_upper` 使用整数二项式系数及有理 α 比较。对固定 N,n、完美判错和均匀无放回样本，CDF 随 K 单调下降，二分的 `[x,N−n+x]` 搜索域正确；K=x 始终被接受。严格 `P(X≤x)>α` 的边界与覆盖定义一致。全查时返回 x，零抽样返回 N。
+`audit_upper` uses integer binomial coefficients and a rational α comparison. For fixed N,n, perfect labelling of errors and a uniform sample without replacement, the CDF decreases monotonically in K, and the bisection search domain `[x,N−n+x]` is correct; K=x is always accepted. The boundary of the strict `P(X≤x)>α` agrees with the definition of coverage. A full inspection returns x; zero sampling returns N.
 
-本次独立运行：N≤10 的所有 N,n,K，并取 α∈{0.01,0.05,0.2,0.5,0.9}，精确分数计算欠覆盖概率，全部不超过 α。检查由 `python -B` 离线执行，未写结果文件或缓存。这是实现测试，不能替代理论证明，也不能保证真实审计标签无误。
+This independent run: all N,n,K with N≤10, and α∈{0.01,0.05,0.2,0.5,0.9}; the under-coverage probability was computed with exact fractions and never exceeds α. The check was run offline with `python -B`, writing no result files or caches. This is an implementation test; it cannot replace a theoretical proof, nor can it guarantee that real audit labels are error-free.
 
-`reachable` 的逻辑正确：对候选类别 c，若有 a 个外来投票全部改投 c，c 达到 count+a；其他类别须削减到不超过该数，较小编号类别必须再少 1。各类别最少削减数之和≤a，且 a≤m−count，恰可实现。任何把投票从 c 移出的攻击都可改成更有利于 c 的攻击，故此搜索无损。其预算是受影响分片投票数，不一定是文档修改数。
+The logic of `reachable` is correct: for a candidate class c, if a outside votes are all changed to c, c reaches count+a; every other class must be cut to no more than that number, and a class with a smaller index must have one fewer. The sum of the minimum cuts over classes is ≤a, and a≤m−count, so this is exactly achievable. Any attack that moves votes away from c can be changed into an attack more favourable to c, so the search loses nothing. Its budget is the number of votes from affected partitions, which is not necessarily the number of document modifications.
 
-独立穷举四类投票、1≤m≤4、0≤k≤m+1，共 362 个计数组合/预算，与穷举全部逐票替换所得胜者集合完全一致。平局反例 `[2,0,0],k=1` 仅可达类别 0；`[0,2,0],k=1` 可达 0、1。没有发现超几何上界或可达标签核心算法错误。
+Independently enumerated four-class votes with 1≤m≤4 and 0≤k≤m+1, 362 count combinations/budgets in total; the results agree exactly with the winner sets obtained by enumerating all vote-by-vote replacements. Tie counterexamples: `[2,0,0],k=1` can reach only class 0; `[0,2,0],k=1` can reach 0 and 1. No error was found in the hypergeometric upper bound or the core reachable-label algorithm.
 
-## 必须保留的统计与数据限定
+## Statistical and data qualifications that must be kept
 
-- 这些 bootstrap 区间是给定已训练模型、给定生成设置的近似测试不确定性，不是有限样本证书，也没有把训练 seed 不确定性合并进去。
-- 完美分类时经验 bootstrap [1,1]、差值 [0,0] 和零违反率 [0,0] 都不能证明总体风险为零。当前报告已经正确解释，必须保留。
-- company 整簇重采样比把每条季度样本当 IID 更谨慎；它依赖公司簇具有代表性及可适用的独立性假设。shared holder 名称只是本生成器中的确定性词，不包含随机公共冲击，但真实数据不能照搬。
-- 训练/测试使用相同公司与相同三种模板，只有季度切分；不支持新公司、新模板或自然语言迁移。报告已经承认任务饱和。
-- 所有模式词表都来自训练原文及训练编辑。没有读测试词汇，未发现测试集泄漏；但 `original_ce` 也知道编辑词表，不能描述为在所有处理环节只接触原文。共享词表用于隔离优化目标是可以接受的设计，应披露。
-- 训练季度截止 16 与污染时间 cutoff=0 不是同一个门槛：当前模型训练包含相对时间>0的行。本次是 k=0 的 stance smoke，未声称 P1 时间合规，因此不是当前训练泄漏错误；未来不能直接拿此划分当无前视管线。
-- INV 的理想真值是确定性标签下相同输出分布，但与 LBL 在合成真值上缺乏真实置信度变化区分；当前试验无法充分识别两种许可规范的价值差异。
-- `independent shards` 建议写成“各分片训练依赖功能上隔离”。DPA 界不要求投票统计独立，要求未改变分片的预测函数不变。
-- 生成器的会计恒等式与精确污染实现符合当前定义；固定 seed 的逐位复现限于锁定 Python/环境，价格高斯采样及浮点不代表跨版本跨平台保证。
+- These bootstrap intervals are approximate test uncertainty for a given trained model under a given generation setting; they are not finite-sample certificates, and they do not incorporate training-seed uncertainty.
+- Under perfect classification, the empirical bootstrap [1,1], the difference [0,0] and the zero violation rate [0,0] cannot prove that the population risk is zero. The current report already explains this correctly, and it must be kept.
+- Resampling whole company clusters is more cautious than treating each quarterly sample as IID; it depends on the company clusters being representative and on an applicable independence assumption. The shared holder names are only deterministic words in this generator and contain no random common shock; real data cannot be treated the same way.
+- Training and test use the same companies and the same three templates, with only a quarterly split; this does not support transfer to new companies, new templates or natural language. The report already acknowledges that the task is saturated.
+- All pattern vocabularies come from the original training text and the training edits. Test vocabulary was not read and no test-set leakage was found; but `original_ce` also knows the edit vocabulary, so it cannot be described as having seen only the original text at every processing step. A shared vocabulary used to isolate the optimization target is an acceptable design and should be disclosed.
+- The training quarter cutoff of 16 and the contamination time cutoff=0 are not the same threshold: the current model's training includes rows with relative time >0. This run is a stance smoke test with k=0 and does not claim P1 temporal compliance, so this is not a current training-leakage error; in future, this split cannot be used directly as a look-ahead-free pipeline.
+- The ideal ground truth for INV is the same output distribution under deterministic labels, but on the synthetic ground truth it is not distinguished from LBL by any real change in confidence; the current experiment cannot adequately identify the difference in value between the two permission specifications.
+- `independent shards` should be written as "the training dependencies of the partitions are functionally isolated". The DPA bound does not require the vote statistics to be independent; it requires the prediction functions of unchanged partitions to stay unchanged.
+- The generator's accounting identities and exact contamination implementation match the current definitions; bit-for-bit reproduction with a fixed seed is limited to a locked Python/environment, and the Gaussian price sampling and floating point do not imply a cross-version, cross-platform guarantee.
 
-## 复核结论
+## Review conclusion
 
-当前地基具有可检查的数学组件与诚实的负结果。没有发现能把现有两条演示推翻的整数计算错误；一般分数端点的向内舍入已经修复，打乱许可的失活梯度已经披露，报告关键静态叙事已受显式守卫保护。**本轮审查提出的三个事项均已处理，限定范围内复核通过。** 这仍然只足以支持本地 smoke 与组件健全性，不能据此通过真实数据 G0/G1，或声称已经得到可认证金融语言模型。
+The current foundation has checkable mathematical components and honest negative results. No integer computation error was found that would overturn the two existing demonstrations; the inward rounding of general score endpoints has been fixed, the dead gradients of the shuffled permissions have been disclosed, and the key static narrative of the report is now protected by explicit guards. **All three items raised in this review have been addressed, and the review passes within the qualified scope.** This is still only enough to support the local smoke test and the soundness of the components; it cannot be used to pass G0/G1 on real data, or to claim that a certifiable financial language model has been obtained.

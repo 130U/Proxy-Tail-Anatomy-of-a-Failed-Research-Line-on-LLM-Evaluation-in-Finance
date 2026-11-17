@@ -1,8 +1,8 @@
-# WP0.4 离线检查预算
+# WP0.4 offline check budget
 
-日期：2026-11-15。状态：运行前填写。
+Date: 2026-11-15. Status: filled in before the run.
 
-- CPU，Python标准库，预计不足10秒；GPU显存0，训练token0，内存预计低于64MiB。
-- 数据：人工编写的微型 XML fixture，明确为synthetic；不使用真实SEC文件，不请求任何网络端点。
-- 检查对象：受限非分数事实域的unit、scale、sign、decimals和context解析；明确拒绝超出支持范围的格式。
-- 不据此估算真实解析准确率、时间戳可靠率、文本覆盖率或每年数据量。
+- CPU, Python standard library, expected under 10 seconds; 0 GPU memory, 0 training tokens, memory expected below 64MiB.
+- Data: a hand-written miniature XML fixture, explicitly synthetic; no real SEC files are used and no network endpoint is requested.
+- Checked: parsing of unit, scale, sign, decimals and context in the restricted non-fraction fact domain; explicit rejection of formats outside the supported scope.
+- This is not used to estimate real parsing accuracy, timestamp reliability, text coverage or yearly data volume.

@@ -1,38 +1,38 @@
-# 离线复现
+# Offline reproduction
 
-第9轮默认集成包含125项单元测试和13条子命令，最终已全部通过；来源解析10项自测另计。新增 `python -m research.planning.run_randomization` 按[协议](planning/RANDOMIZATION_PROTOCOL.md)重算32个同质阈值构造，输入第八轮当前JSON，输出精确风险/少一篇风险/最小样本量及hash；没有训练、私有原文或网络。单独运行时先确保已有完整第八轮结果，统一脚本已按依赖顺序执行。首次表0.643217秒，最终集成表0.651663秒，峰值内存未测。
+The round 9 default integration run contains 125 unit tests and 13 subcommands, and all of them finally passed; the 10 source-parsing self-tests are counted separately. The new `python -m research.planning.run_randomization` recomputes the 32 homogeneous threshold constructions according to the [protocol](planning/RANDOMIZATION_PROTOCOL.md). It takes the current round 8 JSON as input and outputs the exact risk, the risk with one document fewer, the minimum sample size and hashes; it involves no training, no private source text and no network. When running it on its own, first make sure the complete round 8 results exist; the unified script already runs things in dependency order. The first table took 0.643217 seconds and the final integration table 0.651663 seconds; peak memory was not measured.
 
-独立核对命令为 `python research/reports/randomization_review_checks.py --verify-results`，不导入作者内核，检查总体≤10的709个预算格及主表32行；只用标准库。报告见[独立审查](reports/randomization_review.md)。每次重跑会刷新耗时/输入hash，历史审查hash只绑定其明确版本；不应为凑旧hash修改实际结果。第九轮定理的自适应与期望预算扩展是纸笔证明，当前采样器只实现固定样本量构造。
+The independent check command is `python research/reports/randomization_review_checks.py --verify-results`. It does not import the author's kernel, checks the 709 budget cells with population ≤10 and the 32 rows of the main table, and uses only the standard library. The report is in the [independent review](reports/randomization_review.md). Every rerun refreshes the timing and input hashes; the historical review hashes are bound only to their stated versions. Actual results should not be changed to match old hashes. The adaptive and expected-budget extensions of the round 9 theorem are pen-and-paper proofs; the current sampler only implements the fixed-sample-size construction.
 
-在本工作区根目录执行；Python 3.12.14、NumPy 2.5.3、PyTorch 2.14.1+cpu 是本次实际环境。理论检查器主要用标准库，评测用NumPy，合成训练用PyTorch；第四轮真实基线及其构造测试还使用SciPy 1.18.1、scikit-learn 1.9.1、joblib 1.6.0、threadpoolctl 3.7.0。无需GPU、API key或下载。
+Run from the root of this workspace. Python 3.12.14, NumPy 2.5.3 and PyTorch 2.14.1+cpu are the actual environment used here. The theory checkers mainly use the standard library, evaluation uses NumPy, and synthetic training uses PyTorch; the round 4 real baseline and its construction tests also use SciPy 1.18.1, scikit-learn 1.9.1, joblib 1.6.0 and threadpoolctl 3.7.0. No GPU, API key or download is needed.
 
-归档中的 `research/` 可独立解压；从其父目录用 `python research/reproduce.py` 运行新代码。下面旧指标重建命令额外读取原仓库 `docs/experiment-results.md` 的哈希，须在本包注明的基线仓库中执行；现成的重建JSON已随包提供。没有在归档内复制整个旧仓库或任何私有材料。
+The `research/` folder in the archive can be unzipped on its own; run the new code from its parent directory with `python research/reproduce.py`. The old-metric reconstruction command below additionally reads the hash of `docs/experiment-results.md` in the original repository, so it must be run inside the baseline repository named in this package; the ready-made reconstruction JSON is already included in the package. The archive does not copy the whole old repository or any private material.
 
 ```powershell
 & '..\130U-FinLLM\.venv\Scripts\python.exe' research/reproduce.py
 ```
 
-重跑四配置三seed合成训练：
+Rerun the four-configuration, three-seed synthetic training:
 
 ```powershell
 & '..\130U-FinLLM\.venv\Scripts\python.exe' research/reproduce.py --train
 ```
 
-其他机器可在已具备上述依赖的环境中把解释器换成 `python`。脚本不自动安装依赖、不联网、不下载权重。原环境路径只是本机便利用法，不包含在可移植代码逻辑内。
+On other machines, replace the interpreter with `python` in an environment that already has the dependencies above. The script does not install dependencies, does not go online and does not download weights. The original environment path is only a local convenience and is not part of the portable code logic.
 
-旧公开指标的汇总重建：
+Summary reconstruction of the old public metrics:
 
 ```powershell
 python -m research.evaluation.reconstruct
 ```
 
-`research/reproduction_log.json` 记录本机检查命令、退出码与输出。理论JSON只是数学组件示例；真实模型、真实解析和可信核心前提未被这些命令验证。合成实验报告的叙事被固定到本轮配置，修改配置后需人工复核结论。
+`research/reproduction_log.json` records the check commands run on this machine, their exit codes and their output. The theory JSON files are only examples of mathematical components; the premises of a real model, real parsing and a trusted core are not verified by these commands. The narrative of the synthetic experiment report is pinned to this round's configuration; if the configuration is changed, the conclusions need manual review.
 
-第2轮加入 `certificates/` 的共同分片accuracy/macro-F1检查器和 `planning/` 的精确审计量前沿。集成命令会运行两套新测试、手工票型示例、规划前沿及条件审计链示例。`certificates/` 输入为每个头的类别预测；`planning/` 输入为每类票数，具体schema请读各自README，不能互换。
+Round 2 added the shared-shard accuracy/macro-F1 checker in `certificates/` and the exact audit-size frontier in `planning/`. The integration command runs the two new test suites, a hand-made vote-pattern example, the planning frontier and an example of the conditional audit chain. The input to `certificates/` is the per-head class predictions; the input to `planning/` is the vote counts per class. Read the respective README for the exact schema; the two are not interchangeable.
 
-第3轮集成命令还包含影响图审计8项、阈值设计5项（单元测试合计49项），日期绑定解析器10项自测，以及20格固定阈值族扫描。来源审计的10份真实文件重读需原仓库本地数据，另按 `data/source_audit.md` 的 `--source-root` 命令执行；主集成命令只运行其可移植自测，不会寻找或下载原始数据。
+The round 3 integration command also includes 8 impact-graph audit tests and 5 threshold-design tests (49 unit tests in total), 10 self-tests of the date-binding parser, and a scan of the 20-cell fixed-threshold family. Rereading the 10 real files for the source audit needs the original repository's local data and is run separately with the `--source-root` command in `data/source_audit.md`; the main integration command runs only its portable self-tests and does not look for or download raw data.
 
-第4轮加入原生三类标签评测、真实基线准备/训练/联合预测接口的构造测试和私有归档排除测试，当轮共74项集成单元测试；来源解析10项自测另计。默认命令只在人工构造行上验证新训练器，不读取私有真实来源，也不重复真实9次拟合。真实运行另按以下显式命令进行；运行前读 `real_baseline/PROTOCOL.md`，结果和局限见 `experiments/real_baseline/report.md`。
+Round 4 added evaluation with native three-class labels, construction tests for the real-baseline preparation/training/joint-prediction interfaces, and a test that private archives are excluded, for 74 integration unit tests in that round; the 10 source-parsing self-tests are counted separately. The default command validates the new trainer only on hand-made rows; it does not read the private real source and does not repeat the 9 real fits. The real run is done separately with the explicit commands below. Before running, read `real_baseline/PROTOCOL.md`; results and limitations are in `experiments/real_baseline/report.md`.
 
 ```powershell
 python -m research.real_baseline.prepare --source '../130U-FinLLM/data/raw/candidates/sentfin/SEntFiN.csv'
@@ -40,26 +40,26 @@ python -m research.real_baseline.train_baselines --input research/private/real_b
 python -m research.real_baseline.bootstrap_results --predictions research/private/real_baseline/trained/predictions_test.jsonl
 ```
 
-准备/训练命令写入同名本地产物；保留旧运行时应先复制整个工作目录再执行。原CSV、逐行派生数据、词表和模型不在归档中；未持有匹配哈希的本地原始CSV时，只能执行公开构造测试并检查已有汇总，不能声称独立重跑了真实成绩。训练器会核验输入指纹；本机Windows中文DLL路径后备修复只在进程内生效，不更改已安装库。线程证据是库自报配置，峰值内存未实测。
+The preparation and training commands write local artifacts with the same names; to keep an old run, copy the whole working directory before running. The original CSV, row-level derived data, vocabularies and models are not in the archive. Without a local raw CSV with a matching hash, one can only run the public construction tests and check the existing summaries, and cannot claim to have independently rerun the real scores. The trainer verifies the input fingerprint. The fallback fix for the Chinese-character DLL path on this Windows machine takes effect only inside the process and does not change installed libraries. The thread evidence is the configuration reported by the libraries themselves; peak memory was not measured.
 
-路径比较轮的独立审查另有标准库检查（已加入第3轮集成命令，但不计入49项单元测试，也没有重新训练）：
+The independent review in the path-comparison round has an additional standard-library check (it was added to the round 3 integration command, but it is not counted among the 49 unit tests and involves no retraining):
 
 ```powershell
 python research/paths/review_checks.py
 ```
 
-标准输出应与 `paths/review_checks.json` 对应：1,008个R1有理可达性例、1,024个D1分层漏检概率例，以及理想条件样本预算。脚本只输出JSON，不修改记录；没有执行R2线性规划，不使用真实模型结果。数学有限检查不替代定理证明。
+The standard output should match `paths/review_checks.json`: 1,008 R1 rational reachability cases, 1,024 D1 stratified miss-probability cases, and the sample budget under ideal conditions. The script only outputs JSON and does not modify records; it does not run the R2 linear program and does not use real model results. Finite mathematical checks do not replace proofs of the theorems.
 
-`theory/notes.tex` 尚未编译；可读证明在 `theory/notes.md`，本包没有冒充编译后的PDF。
+`theory/notes.tex` has not been compiled; the readable proofs are in `theory/notes.md`, and this package does not pass anything off as a compiled PDF.
 
-第5轮加入18项PIT构造测试，当前共92项集成单元测试、10项来源解析自测；统一脚本包含10条子命令，均已通过。最后的 `python -m research.pit.run_checks` 对30个历史基例做210次整链/2100次字节比较，还包含3类故意错误程序、3条错标时间边界、16个布尔seed映射和旧公开来源元数据再汇总。该运行器只有标准库依赖，不读取私有语料、不训练模型。结果写 `pit/results.json`，运行环境/时间与历史稳定产物分开；详见 `pit/record.md`。旧公开source_audit.json已随包提供，不需原始FOMC文件即可重算本轮元数据表。
+Round 5 added 18 PIT construction tests, for a current total of 92 integration unit tests and 10 source-parsing self-tests; the unified script has 10 subcommands, all of which passed. The last one, `python -m research.pit.run_checks`, makes 210 full-chain and 2100 byte comparisons on 30 historical base cases, and also includes 3 classes of deliberately faulty programs, 3 mislabeled-time boundaries, 16 boolean seed mappings and a re-summary of the old public source metadata. This runner depends only on the standard library, reads no private corpus and trains no model. Results are written to `pit/results.json`, with the run environment and timing kept separate from the historically stable artifacts; see `pit/record.md`. The old public source_audit.json is included in the package, so this round's metadata table can be recomputed without the raw FOMC files.
 
-第6轮加入14项语义包络单测，当轮共106项集成单元测试、10项来源解析自测；统一脚本11条子命令均已通过。`python -m research.numeric.run_checks` 重算严格有理数包络、25格人工宽度门和各反例，结果写 `numeric/results.json`。它不调用自然文本解析器、不训练模型，不将模型概率当真实概率；详见 `numeric/record.md`。源码、配置及外部依赖未变时，复跑产生的耗时字段仍可变化，历史审查报告的快照hash只绑定当时版本。
+Round 6 added 14 semantic-envelope unit tests, for 106 integration unit tests in that round plus 10 source-parsing self-tests; all 11 subcommands of the unified script passed. `python -m research.numeric.run_checks` recomputes the strict rational envelopes, the 25-cell hand-made width gate and each counterexample, and writes the results to `numeric/results.json`. It does not call a natural-text parser, does not train a model, and does not treat model probabilities as real probabilities; see `numeric/record.md`. Even when the source code, configuration and external dependencies are unchanged, the timing fields produced by a rerun can still change; the snapshot hashes in historical review reports are bound only to the version at that time.
 
-第8轮加入10项最强总数门测试和第12条子命令 `python -m research.planning.run_localization`。该命令按[冻结执行范围](planning/LOCALIZATION_PROTOCOL.md)重算20个原阈值比较、8个合取、16个star及4个仅含解析界的sharp构造，最长墙钟60秒；没有主线训练、真实审计或联网。完整记录写`planning/localization_results.json`，包含源码/输入哈希、每格状态和`min(Box,TotalK)`强简单对照；不得将4个bounds-only行当成全局最优数值解。统一复跑会先刷新原阈值JSON的时间字段，新记录绑定其当前哈希；历史报告仍只描述当时运行。
+Round 8 added 10 tests of the strongest total-count gate and a 12th subcommand, `python -m research.planning.run_localization`. Following the [frozen execution scope](planning/LOCALIZATION_PROTOCOL.md), this command recomputes the 20 original threshold comparisons, 8 conjunctive, 16 star and 4 sharp constructions that have analytic bounds only, with a maximum wall clock of 60 seconds; there is no main-line training, no real audit and no network access. The complete record is written to `planning/localization_results.json`, including source/input hashes, the status of each cell and the strong simple control `min(Box,TotalK)`. The 4 bounds-only rows must not be treated as globally optimal numeric solutions. A unified rerun first refreshes the time fields of the original threshold JSON, and the new record is bound to its current hash; the historical reports still describe only the runs at that time.
 
-独立反方核对另可执行 `python research/reports/localization_review_checks.py`；加`--verify-results`复核完整表及最终推导hash，不调用作者风险或优化内核。这些是有限数学检查，不是新颖性或真实模型效果验收。第7轮10页PDF的本地重建说明见[构建记录](paper/BUILD_RECORD.md)，它不属于数学批量复现命令。
+The independent adversarial check can also be run with `python research/reports/localization_review_checks.py`; adding `--verify-results` rechecks the complete table and the final derivation hashes without calling the author's risk or optimization kernels. These are finite mathematical checks, not acceptance of novelty or of real model effects. Instructions for rebuilding the 10-page round 7 PDF locally are in the [build record](paper/BUILD_RECORD.md); it is not part of the batch commands for mathematical reproduction.
 
-本轮未运行原仓库完整训练/全部原有测试，因为未修改原应用代码。只运行与新增研究代码相关的检查。
+This round did not run the original repository's full training or all of its original tests, because the original application code was not modified. Only the checks related to the new research code were run.
 
-第8轮曾在第12条命令的原子结果替换遇到Windows共享错误，失败快照保存在`planning/localization_io_failure.json`。修复后新增3项I/O回归测试，最终统一复跑为119项单元测试、12条命令全部通过；10项来源自测另计。`python research/reports/localization_review_checks.py --verify-pooled`还可独立核对类外pooled抽样的单点计算；该点不属于48行固定配额主表。私有原始文本和模型训练未在这些检查中读取或重跑。
+In round 8, the atomic result replacement in the 12th command hit a Windows sharing error; the failure snapshot is saved in `planning/localization_io_failure.json`. After the fix, 3 I/O regression tests were added, and the final unified rerun passed all 119 unit tests and 12 commands; the 10 source self-tests are counted separately. `python research/reports/localization_review_checks.py --verify-pooled` can also independently check the single-point computation for out-of-class pooled sampling; that point is not part of the 48-row fixed-quota main table. Private raw text and model training were not read or rerun in these checks.

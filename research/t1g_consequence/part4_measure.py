@@ -32,15 +32,15 @@ p35438 p38465 p38471 p40065 p40504 p40525 p42138 p42162 p42184
 p42221 p42877 p43832 p43904 p43991 p44013 p44265 p44290 p44316
 p44384 p44402 p44833 p44856 p45821 p46253 p46292 p46783 p46829
 p46854 p48875 p49835 p49859'''.split())
-UNRESOLVED={'p02283':'同一证券的原始发行额与年末余额；期间不变尚无证据。','p12933':'正文retained interests可能比表内interest-only范围更宽，不能只凭名称认同量。'}
+UNRESOLVED={'p02283':'Original issue amount and year-end balance of the same security; there is no evidence yet that the period is the same.','p12933':"The full text's retained interests may be broader in scope than the table's interest-only; the quantities cannot be identified as the same from the names alone."}
 REASONS={
-'p12603':'表为减去贷款损失准备后的账面净额，正文为公允价值。',
-'p12650':'相邻业务段2015年税前收益，不能跨业务段绑定到本表。',
-'p37885':'正文1.7m为减值毛额，另收回1.0m；表651k为净额。',
-'p39462':'正文三年依次为2019、2018、2017；102.4m属于2018，不是2017。',
-'p40065':'同表2019所得税费用与正文2019所得税费用，单位由表头in thousands确立；保留任何精度不相容。',
-'p42076':'同一2018年Brink收购或有对价公允价值调整；450k与0.5m处于粗盒边界，未筛掉。',
-'p24717':'脚注明确2018年厂房启动成本被重分类，表仍列原2018年Plant start-up costs，脚注(2)同指。',
+'p12603':'The table gives the net carrying amount after the allowance for loan losses; the full text gives fair value.',
+'p12650':'2015 pre-tax earnings of an adjacent business segment; cannot be bound across segments to this table.',
+'p37885':"The full text's 1.7m is the gross impairment, with a separate recovery of 1.0m; the table's 651k is the net amount.",
+'p39462':"The full text's three years are 2019, 2018, 2017 in that order; 102.4m belongs to 2018, not 2017.",
+'p40065':'2019 income tax expense in the table and 2019 income tax expense in the full text; the unit is established by the header in thousands; any precision incompatibility is kept.',
+'p42076':'The same 2018 fair-value adjustment of contingent consideration for the Brink acquisition; 450k and 0.5m sit on the boundary of the coarse box and were not filtered out.',
+'p24717':'A footnote states explicitly that 2018 plant start-up costs were reclassified; the table still lists the original 2018 Plant start-up costs, and footnote (2) refers to the same item.',
 }
 
 def loadrows(path):
@@ -65,11 +65,11 @@ def reviewed():
         if stratum:
             r['review_stratum']=stratum
             if r['pair_id'] in SINGLE_YES|COPULA_YES:
-                r['status']='confirmed';r['reason']=REASONS.get(r['pair_id'],'已核对同一指标、期间和范围；原表单位/语句见本行证据。')
+                r['status']='confirmed';r['reason']=REASONS.get(r['pair_id'],"Checked: same metric, period, and scope; the original table unit/sentence is in this row's evidence.")
             elif r['pair_id'] in UNRESOLVED:
                 r['status']='unresolved';r['reason']=UNRESOLVED[r['pair_id']]
             else:
-                r['status']='rejected';r['reason']=REASONS.get(r['pair_id'],'正文提名金额属于子项、变化额、其他指标/期间或口径，与该表格量不同；不是依据数值差拒绝。')
+                r['status']='rejected';r['reason']=REASONS.get(r['pair_id'],'The amount named in the full text is a sub-item, a change amount, or a different metric/period or convention, and differs from the table quantity; the rejection is not based on the numeric difference.')
     imported=[]
     for c,status,reason in old_review():
         key=(c['filename'],int(c['row']),int(c['column']),c['table_unit_candidate'],c['text_location'],c['text_mention'])
@@ -244,7 +244,7 @@ def measure(rows):
         r['question_binding_status']='matched' if matched else 'no_unique_bound_arithmetic_input_for_this_pair'
     jsonl(ROOT/'part4_confirmed_pairs.jsonl',[r for r in rows if r['status']=='confirmed'])
     jsonl(ROOT/'part4_question_results.jsonl',results);jsonl(ROOT/'part4_substitution_exclusions.jsonl',exclusions)
-    joint=dict(dataset='finqa',question_id='PNC/2014/page_111.pdf-1',pair_ids=['p19818','p19821'],original_program='subtract(2.6, 2.6)',separate_role_fine_program='subtract(2.616, 2.572)',coarse_answer='0',fine_answer='11/250',relative_difference_to_fine='1',coarse_joint_range=['-1/10','1/10'],fine_answer_contained=True,note='两种年份角色同时替换；仅作补充，不叠加进单输入替换分母。')
+    joint=dict(dataset='finqa',question_id='PNC/2014/page_111.pdf-1',pair_ids=['p19818','p19821'],original_program='subtract(2.6, 2.6)',separate_role_fine_program='subtract(2.616, 2.572)',coarse_answer='0',fine_answer='11/250',relative_difference_to_fine='1',coarse_joint_range=['-1/10','1/10'],fine_answer_contained=True,note='Both year roles are substituted at the same time; supplementary only, not added to the single-input substitution denominator.')
     (ROOT/'part4_two_role_case.json').write_text(json.dumps(joint,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     return results
 

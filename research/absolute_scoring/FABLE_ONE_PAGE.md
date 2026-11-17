@@ -1,21 +1,21 @@
-# 致 Fable：绝对评分复现的一页结论
+# To Fable: one-page summary of the absolute-scoring replication
 
-2026-11-16｜**正式判定：无法判断（触发预先规定的并列门）。** 1,000 个新词法族、八轮，250 次真实评分调用全部完成。保存 8,000 个主分数和 2,000 个对照伴随分数；控制比较只用预定 100 个目标的 200 个分数。固定 gpt-6-sol、low、全新上下文，无付费模型 API、无训练。
+2026-11-16 | **Formal verdict: inconclusive (the pre-registered ties gate was triggered).** 1,000 new lexical families, eight rounds, all 250 real scoring calls completed. 8,000 main scores and 2,000 companion control scores were saved; the control comparison uses only the 200 scores of the 100 pre-specified targets. Fixed gpt-6-sol, low, fresh context, no paid model API, no training.
 
-| 平均次数 m | 最高 10% 重合 | 最低 10% 重合 | 固定高斯预测（双端相同） |
+| Number of averaged scores m | Top 10% overlap | Bottom 10% overlap | Fixed Gaussian prediction (same for both tails) |
 |---|---:|---:|---:|
 | 1 | 84.1%–87.2% | 81.3%–86.1% | 84.3% |
 | 2 | 85.6%–88.1% | 86.3%–88.0% | 88.8% |
 | 4 | 91.1%–92.0% | 90.1%–91.0% | 92.1% |
 
-范围来自两个参考方向，不是置信区间。**在本样本中，四次平均的双端点估计首次都达到 90%；相应四个 95% 区间均包含低于 90% 的值，不能承诺总体稳定超过 90%。** [完整图](results/stability.png) · [统计与区间](results/tables.csv)
+The ranges come from the two reference directions; they are not confidence intervals. **In this sample, with four-score averages the point estimates for both tails reach 90% for the first time; the corresponding four 95% intervals all contain values below 90%, so we cannot promise that the population overlap stays above 90%.** [Full figure](results/stability.png) · [Statistics and intervals](results/tables.csv)
 
-无法判定的直接原因：第六、七轮正面 10% 的边界同分组均为 **22 人 > 20 人**；虽然名单额外扩张仅 18、17 人，新门检查的是整个同分组。不能用四次平均的较细分辨率事后豁免单次门。每轮用了 77–80 个分值；5% 处也有多项失格。
+Direct reason for the inconclusive verdict: in rounds six and seven, the boundary tie group in the positive 10% tail has **22 items > 20 items**. The extra expansion of the list was only 18 and 17 items, but the new gate checks the whole tie group. The finer resolution of the four-score average cannot be used after the fact to waive the single-round gate. Each round used 77–80 distinct score values; several boundaries at 5% also failed.
 
-单次信度均值 **0.9748**，28 对范围 0.9715–0.9777。10% 处全部重合点估计与公式相差不超过 3.3 个百分点，但差值区间较宽，未证明预定的 ±5 个百分点实用等价；双端差异也无清晰证据。5% 放行倍数出现局部偏差，详见完整报告，不能称公式处处吻合。
+Mean single-round reliability is **0.9748**, with a range of 0.9715–0.9777 over the 28 pairs. At 10%, every overlap point estimate is within 3.3 percentage points of the formula, but the difference intervals are wide and do not prove the pre-registered ±5 percentage point practical equivalence; there is also no clear evidence of a difference between the two tails. The 5% widening factors show local deviations (see the full report), so we cannot say the formula fits everywhere.
 
-同批相关 **0.9852**，异批 **0.9713**；配对差 **0.0139**，95% 区间 **[0.004, 0.028]**。这支持批次敏感性，不能识别其占总噪声的百分比。
+Same-batch correlation **0.9852**, different-batch **0.9713**; paired difference **0.0139**, 95% interval **[0.004, 0.028]**. This supports batch sensitivity, but it cannot identify its share of the total noise.
 
-**建议：本轮收束为不可判定的复现结果，不升级为新尾部定律，不在这 1,000 条上改量表重跑。** 若继续，应先由 Fable 明确新测量协议及剩余机制问题，并使用新样本。自我一致性不等于正确性，也尚未解决重复与加宽的经济预算选择。
+**Recommendation: close this round as an inconclusive replication result. Do not upgrade it to a new tail law, and do not change the scale and rerun on these 1,000 items.** If the work continues, Fable should first specify a new measurement protocol and the remaining mechanism questions, and use a new sample. Self-consistency is not correctness, and the economic budget choice between repetition and widening is still unresolved.
 
-[完整版与全部细节入口](FABLE_REPORT.md) · [冻结协议](protocol.md) · [复算说明](REPRODUCE.md) · [文献门](PRECHECK_FOR_FABLE.md)。评分无失败或重试；两次调度请求错误已接管恢复，见[执行说明](execution/notes.md)。
+[Full version and entry point to all details](FABLE_REPORT.md) · [Frozen protocol](protocol.md) · [Recomputation notes](REPRODUCE.md) · [Literature gate](PRECHECK_FOR_FABLE.md). Scoring had no failures or retries; two scheduler request errors were recovered by the main agent taking over, see the [execution notes](execution/notes.md).

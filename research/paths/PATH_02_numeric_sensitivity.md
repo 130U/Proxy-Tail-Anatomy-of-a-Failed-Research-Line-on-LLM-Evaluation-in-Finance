@@ -1,150 +1,150 @@
-# 路径 02：把解析误差纳入无量纲、有序单调模型的敏感度证书
+# Path 02: Sensitivity certificates for dimensionless, ordinal monotone models that account for parsing error
 
-**2026-11-16第六轮更新：** 已完成[SE1–SE6](../theory/semantic_envelopes.md)及[严格有理包络检查器](../numeric/record.md)，把下文候选接口推进到有限分支、仿射有序头的可执行条件组件；中间类别内部峰、离散语义联合、候选相对最小宽度、符号方向oracle及接受后风险分别处理。25格人工规范在0.10宽度门下3通过、22超宽，不是自然语料接受率。真实解析器/语义覆盖、受约束训练和新颖性仍未完成；以下2026-11-15原分析保留为选题依据，未据本轮自动过门。[独立审查](../reports/numeric_envelope_review.md)
+**2026-11-16 round 6 update:** [SE1–SE6](../theory/semantic_envelopes.md) and the [strict rational envelope checker](../numeric/record.md) are complete. They push the candidate interface below to an executable conditional component for finite-branch, affine ordinal heads. Interior peaks of middle categories, discrete semantic unions, candidate-relative minimum width, the sign-direction oracle, and post-acceptance risk are each handled separately. Of 25 hand-written specification cells, 3 pass and 22 are too wide under the 0.10 width gate; this is not an acceptance rate on natural text. A real parser / semantic coverage, constrained training, and novelty are still not done. The original 2026-11-15 analysis below is kept as the basis for choosing the topic; it does not automatically pass any gate because of this round. [Independent review](../reports/numeric_envelope_review.md)
 
-日期：2026-11-15。作者身份：内部AI研究助手（路径作者）。性质：供资深导师审议的候选路径报告，不是 Fable 的意见，也不是已经通过 G1 的项目。此次完全离线，没有新增文献访问、数据采集或训练；数字分别标为已有实验、已有本地盘点或未来预算估计。
+Date: 2026-11-15. Author: internal AI research assistant (path author). Nature: a candidate path report for review by the senior advisor. It is not Fable's opinion, and it is not a project that has already passed G1. This round was fully offline, with no new literature access, data collection, or training. Numbers are labeled as existing experiments, existing local inventory, or future budget estimates.
 
 ## Charter
 
-本路径要回答一个比“金融模型懂数字吗”更窄的问题：**当金融或政策文本中的实体、指标、期间和比较基准被识别后，能否给预测分布的单位变换、方向变化和误差传播提供可检查的保证，并诚实计入解析错误？** 目标量是固定任务上的证书覆盖率、被接受证书的错误风险、区间宽度，以及真实任务效用。方向性只针对预先声明的指标轴，不针对一切情绪、市场反应或作者立场。
+This path asks a narrower question than "do financial models understand numbers?": **once the entity, metric, period, and comparison baseline in a financial or policy text have been identified, can we give checkable guarantees for how the predictive distribution behaves under unit transformations, directional changes, and error propagation, while honestly accounting for parsing errors?** The target quantities are certificate coverage on a fixed task, the error risk of accepted certificates, interval width, and real task utility. Directionality applies only to a pre-declared metric axis, not to all sentiment, market reactions, or author stance.
 
-领域是可认证金融文本建模；对象是“解析器—规范化表示—受约束预测头”链；研究单位是带来源跨度的数值元组及其成对编辑。研究类型为探索性选题加最小验证设计。知识深度为 working：基础数学组件及反例已核验，端到端自然文本证据不足。本报告完成条件是给出可证伪目标、含完整前提的候选命题、最强竞争解释和可停止的验证路线，不要求本轮训练新模型。
+The field is certifiable financial text modeling. The object is the chain "parser → normalized representation → constrained prediction head". The unit of study is a numeric tuple with its source span, together with paired edits of it. The research type is exploratory topic selection plus a minimal validation design. Knowledge depth is working: the basic mathematical components and counterexamples have been verified, but end-to-end evidence on natural text is insufficient. This report is complete when it gives a falsifiable target, a candidate proposition with its full premises, the strongest competing explanation, and a validation route that can be stopped. It does not require training a new model this round.
 
 ## Canonical sources
 
-沿用已经完成的 [17 项文献台账](../literature/literature_review.md)，不把本轮离线阅读台账冒充重新精读论文。优先级为原论文已核验内容、项目证明与可执行检查、真实语料盘点，最后才是新的研究假说。
+We reuse the completed [17-item literature ledger](../literature/literature_review.md) and do not present this round's offline reading ledger as a fresh close reading of the papers. Priority order: verified content of the original papers, project proofs and executable checks, real-corpus inventory, and only then new research hypotheses.
 
-| 证据 | 已有读取深度 | 本路径的用途 |
+| Evidence | Depth already read | Use in this path |
 |---|---|---|
-| L05 [Lipschitz Monotonic Networks](https://arxiv.org/html/2112.00038v2)；L06 [Expressive Monotonic Neural Networks](https://arxiv.org/abs/2307.07512) | L05 全文；L06 摘要 | 单调残差和受约束网络已有，不可声称新架构原理 |
-| L07 [Dimensionless machine learning](https://www.jmlr.org/papers/v24/22-0680.html) | 全文 | 量纲零特征及单位等变已有 |
-| L10 [Isotonic distributional regression](https://arxiv.org/html/1909.03725v3) | 全文 | 分布随机序是已有统计对象 |
-| L11 [xVal](https://arxiv.org/html/2310.02989v2) | 全文 | 连续数值表示已有；数字进入主干不自动满足独立上下文契约 |
-| L13 [FiNER](https://arxiv.org/abs/2203.06482)；L14 [TAT-QA](https://aclanthology.org/2021.acl-long.254/) | 均为摘要 | 数字语义依赖上下文，抽取加符号计算已有；不能引用其任务分数替代解析全元组正确率 |
-| [T2.1–T2.4](../theory/notes.md)、[数学检查记录](../checks/record.md) | 本地证明与我们的实验 | 已证明的条件式结构性质，以及尚未覆盖的解析环节 |
-| [本地真实语料盘点](../reports/local_data_inventory.md) | 本地文件与元数据核验 | 真实 FOMC 起点与缺金标、缺 XBRL 的边界 |
+| L05 [Lipschitz Monotonic Networks](https://arxiv.org/html/2112.00038v2); L06 [Expressive Monotonic Neural Networks](https://arxiv.org/abs/2307.07512) | L05 full text; L06 abstract | Monotone residuals and constrained networks already exist; we cannot claim a new architectural principle |
+| L07 [Dimensionless machine learning](https://www.jmlr.org/papers/v24/22-0680.html) | Full text | Dimension-zero features and unit equivariance already exist |
+| L10 [Isotonic distributional regression](https://arxiv.org/html/1909.03725v3) | Full text | Stochastic order of distributions is an existing statistical object |
+| L11 [xVal](https://arxiv.org/html/2310.02989v2) | Full text | Continuous numeric representations already exist; feeding numbers into the backbone does not automatically satisfy the independent-context contract |
+| L13 [FiNER](https://arxiv.org/abs/2203.06482); L14 [TAT-QA](https://aclanthology.org/2021.acl-long.254/) | Abstracts only | Numeric semantics depend on context, and extraction plus symbolic computation already exists; their task scores cannot be cited in place of full-tuple parsing accuracy |
+| [T2.1–T2.4](../theory/notes.md), [math check record](../checks/record.md) | Local proofs and our experiment | Proven conditional structural properties, and the parsing stages not yet covered |
+| [Local real-corpus inventory](../reports/local_data_inventory.md) | Verification of local files and metadata | The real FOMC starting point, and the limits set by missing gold labels and missing XBRL |
 
 ## Findings ledger
 
-| 编号 | 可支持的主张 | 证据及强度 |
+| ID | Supportable claim | Evidence and strength |
 |---|---|---|
-| P2-F1 | 基础单位不变、Lipschitz 单调、有序分布组件已经存在；组合不自动构成理论创新 | L05、L07、L10，全文 |
-| P2-F2 | 固定上下文下的有序头可给有限增量和几乎处处导数界；数值旁路会推翻结论 | T2.2–T2.3，本地证明及显式反例 |
-| P2-F3 | 本地有 120 份非合成 FOMC 文本及匹配的 HTML 快照；没有数字/单位/基准全元组金标，未发现可直接使用的 XBRL 对齐材料 | local_data_inventory，本地盘点；未重做外部来源核验 |
-| P2-F4 | 100,000 个数值点和 27 个有理单位变换通过有限检查；这是已知线性头的例子，不是自然文本模型 | checks/record，我们的实验 WP0.3 |
-| P2-F5 | 受限 iXBRL 原型能保守拒绝不支持字段，但只检查了手工样例 | [xbrl/README](../xbrl/README.md)，我们的实验 WP0.4 |
-| P2-F6 | 合成 permission 消融中，相同编辑曝光的 CE 已与 permission 配置共同达到饱和；没有观察到 permission 的额外增益 | [local_foundations/report](../experiments/local_foundations/report.md)，我们的实验 WP0.2；不是 P2 硬头训练 |
+| P2-F1 | Basic unit-invariant, Lipschitz-monotone, and ordinal-distribution components already exist; combining them is not automatically a theoretical innovation | L05, L07, L10, full text |
+| P2-F2 | Under a fixed context, the ordinal head gives finite-increment and almost-everywhere derivative bounds; a numeric bypass overturns the conclusion | T2.2–T2.3, local proofs and explicit counterexamples |
+| P2-F3 | There are 120 non-synthetic FOMC texts locally, with matching HTML snapshots; there are no full-tuple gold labels for number/unit/baseline, and no directly usable XBRL alignment material was found | local_data_inventory, local inventory; external sources not re-verified |
+| P2-F4 | 100,000 numeric points and 27 rational unit transformations pass finite checks; this is an example with a known linear head, not a natural-text model | checks/record, our experiment WP0.3 |
+| P2-F5 | The restricted iXBRL prototype conservatively rejects unsupported fields, but only hand-made examples were checked | [xbrl/README](../xbrl/README.md), our experiment WP0.4 |
+| P2-F6 | In the synthetic permission ablation, CE with the same edit exposure already saturates together with the permission configuration; no extra gain from permission was observed | [local_foundations/report](../experiments/local_foundations/report.md), our experiment WP0.2; not P2 hard-head training |
 
 ## Scope filter
 
-删除“营收变好意味着作者更看多”“政策利率变高意味着市场价格必定下降”的普遍规范。它们混淆指标、立场和市场结果，在金融语境中可被预期差、风险、估值与逆向观点推翻。把方向性限定为任务定义的一条轴，例如**同一指标、同一基准、同一语义上下文下的数值比较关系**。若目标标签完全由该轴的阈值决定，规则模型应被允许直接胜出。
+Drop universal norms such as "better revenue means the author is more bullish" or "a higher policy rate means market prices must fall". They conflate metric, stance, and market outcome, and in financial contexts they can be overturned by expectation gaps, risk, valuation, and contrarian views. Restrict directionality to one axis defined by the task, for example **the numeric comparison relation for the same metric, the same baseline, and the same semantic context**. If the target label is fully determined by a threshold on that axis, a rule model should be allowed to win outright.
 
 ## Object filter
 
-把“模型 Greeks”收窄为模型输出对规范化输入的数学敏感度，不能叫真实资产的经济 Greeks。去掉“必须从零训练”的必要性：冻结的已有文本编码器只要收到数值无关的规范化上下文，也能接同样的硬头。若数字词、单位文本、解析状态或缓存进入上下文，局部头的界无法覆盖端到端系统。把真实语料可读与解析真值已知分开，拒绝用合成通过率外推自然文本风险。
+Narrow "model Greeks" to the mathematical sensitivity of the model output to the normalized input; these must not be called the economic Greeks of a real asset. Drop the claim that training from scratch is necessary: an existing frozen text encoder can feed the same hard head, as long as it receives a normalized context that does not depend on the numbers. If number words, unit text, parse state, or caches enter the context, the local head's bound cannot cover the end-to-end system. Keep "the real corpus is readable" separate from "the parsing ground truth is known", and refuse to extrapolate natural-text risk from synthetic pass rates.
 
 ## Conclusions
 
-**值得验证的剩余问题，是解析不确定性如何决定最终证书的宽度、覆盖率和任务价值；不是再次证明单调残差或量纲不变。** 语言模块的候选价值限于规则难以处理的语义解析，而这仍不足以证明需要学习一个有序头。只有对同一解析输入的符号下游也建立比较，才能辨认学习模块到底在哪一环不可替代。当前证据支持基础构造可做，不支持这一增量已经成立，更不支持“已形成理论创新”（P2-F1–F6）。
+**The remaining question worth testing is how parsing uncertainty determines the width, coverage, and task value of the final certificate; it is not to prove monotone residuals or dimensional invariance again.** The candidate value of the language module is limited to semantic parsing that rules handle poorly, and even that does not show that a learned ordinal head is needed. Only by also comparing against a symbolic downstream on the same parsed input can we tell at which stage the learned module is irreplaceable. Current evidence supports that the basic construction is feasible. It does not support that this increment has been established, much less that "a theoretical innovation has been formed" (P2-F1–F6).
 
-### 精确目标量与任务界面
+### Exact target quantities and task interface
 
-令文本 t 的目标元组为 z=(entity, metric, period, value, unit, baseline, scope)。解析器 P 可以输出规范化上下文 c、可行元组集合 Z 和接受标记 A，也可以 abstain。模型输出有序概率 q(g,c)，其中 g 是从 Z 形成的无量纲特征。必须提前定义标签的顺序，例如“低于、接近、高于指定比较基准”，而不是事后把 sentiment 标签强行排成同一经济轴。
+Let the target tuple of text t be z=(entity, metric, period, value, unit, baseline, scope). The parser P can output a normalized context c, a feasible tuple set Z, and an acceptance flag A, or it can abstain. The model outputs ordinal probabilities q(g,c), where g is a dimensionless feature formed from Z. The label order must be defined in advance, for example "below, near, above the specified comparison baseline", instead of forcing sentiment labels onto one economic axis after the fact.
 
-至少分别报告：接受率 Pr(A=1)；接受样本的全元组错误率；有效方向证书率；每个概率坐标的区间宽度；有序损失或适当概率评分；按发布文档/时期分层的失效类型。单位改写对、数字变动对、语义基准变动对必须分别评测。违反率为零只能是所测样本的观察，不能当全域证明；形式保证来自计算图与解析契约。
+Report at least the following, separately: acceptance rate Pr(A=1); full-tuple error rate on accepted samples; rate of valid direction certificates; interval width of each probability coordinate; ordinal loss or a proper probability score; failure types stratified by released document / period. Unit-rewrite pairs, number-change pairs, and semantic-baseline-change pairs must be evaluated separately. A zero violation rate is only an observation on the tested samples, not a proof over the whole domain; the formal guarantee comes from the computation graph and the parsing contract.
 
-### 候选命题：带解析集合的敏感度包络
+### Candidate proposition: sensitivity envelope with a parse set
 
-状态：**可直接由现有界推出的候选组合命题，尚未作为新颖性贡献。** 设以下条件同时成立。
+Status: **a candidate composite proposition that follows directly from existing bounds; not yet a novelty contribution.** Assume all of the following hold.
 
-1. 固定输入 t 的真实元组 z* 位于解析器输出 Z；所有 z∈Z 具有同一实体、指标、期间、比较基准语义、符号/零模式和规范化上下文 c。若这些离散项不唯一，本命题的单一上下文版本必须 abstain。
-2. 规范化映射 φ:Z→R^d 已确定，所有除数离零至少 b_min>0；集合 G⊇φ(Z) 用精确有理数或向外舍入的区间运算构造。选 ĝ∈G，令 ρ≥sup_{g∈G}||g−ĝ||₁，ρ 有可检查的上界。
-3. 对每个固定 c，h(·,c) 是 ℓ₁ 下 λ-Lipschitz；η=h+λΣ_{r∈M}g_r；有序阈值 θ₁<…<θ_{K−1} 不依赖 g；Q_i=σ(θ_i−η)。全部数值通路经过 g，没有其他依赖 z 数值的输入。
-4. 证书计算对 h 的 Lipschitz 约束、概率函数及端点舍入作保守验证；不以少量梯度采样替代全域约束。
+1. For fixed input t, the true tuple z* lies in the parser output Z; all z∈Z share the same entity, metric, period, comparison-baseline semantics, sign/zero pattern, and normalized context c. If these discrete items are not unique, the single-context version of this proposition must abstain.
+2. The normalization map φ:Z→R^d is fixed, and every divisor is at least b_min>0 away from zero; the set G⊇φ(Z) is constructed with exact rationals or outward-rounded interval arithmetic. Pick ĝ∈G and let ρ≥sup_{g∈G}||g−ĝ||₁, where ρ has a checkable upper bound.
+3. For each fixed c, h(·,c) is λ-Lipschitz in ℓ₁; η=h+λΣ_{r∈M}g_r; the ordinal thresholds θ₁<…<θ_{K−1} do not depend on g; Q_i=σ(θ_i−η). Every numeric path goes through g; there is no other input that depends on the numeric values of z.
+4. The certificate computation conservatively verifies the Lipschitz constraint on h, the probability function, and endpoint rounding; it does not replace the whole-domain constraint with a small sample of gradients.
 
-则对每一类 i，真实规范元组对应的模型输出满足
+Then for every class i, the model output at the true normalized tuple satisfies
 
-`q_i(φ(z*),c) ∈ [max(0,q_i(ĝ,c)−λρ/2), min(1,q_i(ĝ,c)+λρ/2)]`。
+`q_i(φ(z*),c) ∈ [max(0,q_i(ĝ,c)−λρ/2), min(1,q_i(ĝ,c)+λρ/2)]`.
 
-证明只有两步：z*∈Z 蕴含 φ(z*)∈G；T2.2 给出每个概率坐标的 λ/2 有限增量界。这里包住的是**模型在正确元组上的输出**，不是标签真值、经济收益或已校准的真实类别概率。若仅有 φ 的 L_φ-Lipschitz 界和原始元组半径 r，可取 ρ=L_φ r，但临近零的分母会使界失去用途。
+The proof has only two steps: z*∈Z implies φ(z*)∈G; T2.2 gives the λ/2 finite-increment bound for each probability coordinate. What is enclosed here is **the model's output on the correct tuple**, not the true label, the economic return, or a calibrated true class probability. If we only have an L_φ-Lipschitz bound on φ and a raw tuple radius r, we can take ρ=L_φ r, but denominators near zero make the bound useless.
 
-对一对输入，若它们共享 c，所有非 M 坐标完全固定，且每一单调坐标满足 inf G'_r≥sup G_r，则任取真实 g∈G、g'∈G' 都具有上尾概率不减的 FOSD 证书。仅区间中心有序不够。对单位变换 U，若 P(Ut) 与 P(t) 的规范化上下文和集合 G 完全相同，且最终后处理也不变，则输出证书相同。这个前提是需要实现和审计的规范化契约，不能从模型头的设计反推解析器满足它。
+For a pair of inputs, if they share c, all non-M coordinates are fully fixed, and every monotone coordinate satisfies inf G'_r≥sup G_r, then any true g∈G and g'∈G' have an FOSD certificate that upper-tail probabilities do not decrease. Having ordered interval centers is not enough. For a unit transformation U, if P(Ut) and P(t) have exactly the same normalized context and set G, and the final post-processing is also unchanged, then the output certificates are the same. This premise is a normalization contract that must be implemented and audited; one cannot infer from the design of the model head that the parser satisfies it.
 
-统计扩展必须单独表述：固定管线与接受规则后，若审计样本独立同分布地来自未来使用分布条件于 A=1，人工审计正确，且逐项判断“真实元组是否被 Z 包含”，则可用固定样本二项上置信界 u_α(e,n) 控制该失败率。以至少 1−α 的审计覆盖概率，未来**接受样本**的包络失效率不超过 u_α；这不是每一条预测都以同一概率正确。文档内相关、人工错标、样本选择或时期漂移会破坏该解释，需改用合适的簇设计或缩小推断对象。α 是审计程序的覆盖错误，u 是目标分布的失败率，不能混成同一个概率。
+The statistical extension must be stated separately. With the pipeline and acceptance rule fixed, if the audit samples are i.i.d. draws from the future usage distribution conditional on A=1, the human audit is correct, and each item is judged on "is the true tuple contained in Z", then a fixed-sample binomial upper confidence bound u_α(e,n) can control this failure rate. With audit coverage probability at least 1−α, the envelope failure rate on future **accepted samples** is at most u_α; this does not mean every single prediction is correct with the same probability. Within-document correlation, human mislabeling, sample selection, or period drift break this interpretation; one then needs a suitable cluster design or a narrower inference target. α is the coverage error of the audit procedure and u is the failure rate of the target distribution; they must not be merged into one probability.
 
-### 会推翻不当版本的反例
+### Counterexamples that overturn improper versions
 
-`g=(x−b)/b` 在 b=0 无定义；b<0 时原始 x 增加可能使 g 下降；b 接近零时不存在固定的原始数值敏感度上界。若 c 保留 “million” 与 “thousand”，同一经济数值的单位改写会改变主干表示；即使 g 不变，输出也可不同。若错误地把本季度值配到去年另一指标，得到的 g 可能数值精确却语义错误。更强的反例是上下文旁路 c=g、h(g,c)=−2λc：对固定 c 的 h 是 0-Lipschitz，但整个实际输入路径 η=−λg，方向恰好反转。这些不是边角实现问题，而是决定证书是否成立的前提。
+`g=(x−b)/b` is undefined at b=0; when b<0, an increase in the raw x can make g decrease; when b is near zero there is no fixed upper bound on sensitivity to the raw number. If c keeps "million" and "thousand", a unit rewrite of the same economic value changes the backbone representation; even if g is unchanged, the output can differ. If the current quarter's value is wrongly paired with a different metric from last year, the resulting g can be numerically exact but semantically wrong. A stronger counterexample is the context bypass c=g, h(g,c)=−2λc: for fixed c, h is 0-Lipschitz, but along the actual input path η=−λg, so the direction is exactly reversed. These are not corner-case implementation issues; they are the premises that decide whether the certificate holds.
 
-### 与既有方法的增量边界及从零训练
+### Increment over existing methods, and training from scratch
 
-L05/L07/L10 已覆盖主要结构组件；L11 提醒连续数字表示并不自动构成受约束通路；L13/L14 显示语义抽取与符号计算已有先例。因此可讨论的理论增量必须落在更窄对象，如：含离散语义歧义的可计算联合包络；选择性解析下可审计的风险—覆盖关系；在单位轨道上处理负数/零、基准不确定性且仍紧的界。仅将这些已有工具串接起来，最多是方法复现或系统设计。
+L05/L07/L10 already cover the main structural components; L11 is a reminder that continuous numeric representations do not automatically form a constrained path; L13/L14 show that semantic extraction and symbolic computation have prior work. So any theoretical increment worth discussing must sit on a narrower object, such as: a computable joint envelope with discrete semantic ambiguity; an auditable risk–coverage relation under selective parsing; bounds on unit orbits that handle negatives/zero and baseline uncertainty and are still tight. Merely chaining these existing tools together is at most a method replication or a system design.
 
-本路径的数学性质**不要求从零训练**。若项目必须只保留从零训练不可替代的问题，P2 不能以当前理由独立过关。可以把“从零训练的小模型能否以更低成本达到同等有效覆盖”作为附属经验问题，但它不能替代理论贡献，也不能把计算预算劣势包装成研究优点。冻结编码器在本地是否已有可用权重尚未核实；这里只列对照设计，本轮没有下载或运行该基线。
+The mathematical properties of this path **do not require training from scratch**. If the project must keep only questions where training from scratch is irreplaceable, P2 cannot pass on its own on the current grounds. "Can a small model trained from scratch reach the same effective coverage at lower cost?" can be kept as a secondary empirical question, but it cannot replace a theoretical contribution, and a compute-budget disadvantage must not be dressed up as a research strength. Whether usable frozen-encoder weights are available locally has not been verified; this section only lists the comparison design, and this round did not download or run that baseline.
 
-### 为什么“基准隐含在文本里”仍不足以证明需要有序头
+### Why "the baseline is implicit in the text" still does not show that an ordinal head is needed
 
-把系统拆成 `文本→指标／基准／方向元组→任务输出` 后，可能的学习难点全部落在第一箭头。例如“超过分析师此前预计的水平”要求找到被指代的基准；一旦正确数值和比较关系已提取，`sign(x−b)` 或一个任务约定的容差阈值就能给出 metric direction。基准隐含只证明抽取可能困难，**不证明第二箭头需要神经网络，更不证明从零训练必要**。若以这种标签评测硬单调头，最好的符号 baseline 理论上已经达到 oracle 正确率；此时学到的头只能持平或引入误差。
+Once the system is split as `text → metric/baseline/direction tuple → task output`, all the plausible learning difficulty falls on the first arrow. For example, "above the level analysts had previously expected" requires finding the baseline being referred to; once the correct number and comparison relation are extracted, `sign(x−b)` or a task-specified tolerance threshold gives the metric direction. An implicit baseline only shows that extraction may be hard; **it does not show that the second arrow needs a neural network, much less that training from scratch is necessary**. If a hard monotone head is evaluated on such labels, the best symbolic baseline already reaches oracle accuracy in theory; a learned head can then only tie or add error.
 
-更一般地，模型可以从上下文选择指标、基准、作用对象和单调方向。令预先定义的语义规范给 `s(c)∈{−1,0,+1}^d`，其中 +1/-1 分别表示该坐标在此上下文的正／负方向，0 表示未承诺方向。固定 c 和固定 s 后，可对 u_r=s_r(c)g_r 的非零符号坐标应用原有单调构造，0 坐标只作 Lipschitz 约束。于是几乎处处有 `0≤s_r(c)∂η/∂g_r≤2λ`，相应上尾概率沿声明方向不减。这个计算只是坐标变换，仍不是新单调定理。
+More generally, the model may pick the metric, baseline, affected object, and monotone direction from the context. Let a pre-defined semantic specification give `s(c)∈{−1,0,+1}^d`, where +1/-1 means the coordinate has positive/negative direction in this context and 0 means no direction is committed. With c and s fixed, the original monotone construction can be applied to the nonzero-sign coordinates of u_r=s_r(c)g_r, and the 0 coordinates get only a Lipschitz constraint. Then almost everywhere `0≤s_r(c)∂η/∂g_r≤2λ`, and the corresponding upper-tail probabilities do not decrease along the declared direction. This computation is just a change of coordinates; it is still not a new monotonicity theorem.
 
-真正新的负担是 s(c) 的语义正确性。例如利率上升在“借款成本”指标上可规定成本增加，但不能据此规定作者立场或资产价格下降；“高于预期”的符号取决于指标、主体和问题目标。若 s(c) 由模型预测，则数学保证只说系统遵守**自己选定的方向**，不能证明选对了方向。审计事件必须把方向选择和指标／基准绑定一起计入，而不是只查数字和单位。若可行符号集合同时含 +1 和 −1，就不能对该坐标发布单向证书；可以分别计算后取联合包络，或拒绝。将多个不确定方向加权平均也不自动恢复一个有语义意义的单调结论。
+The genuinely new burden is the semantic correctness of s(c). For example, a rate increase can be specified as a cost increase on a "borrowing cost" metric, but that does not license specifying the author's stance or a fall in asset prices; the sign of "above expectations" depends on the metric, the subject, and the goal of the question. If s(c) is predicted by the model, the mathematical guarantee only says that the system follows **the direction it chose itself**; it cannot show that it chose the right direction. The audit event must count the direction choice together with the metric/baseline binding, not just check numbers and units. If the feasible sign set contains both +1 and −1, no one-directional certificate can be issued for that coordinate; one can compute each separately and take the joint envelope, or reject. A weighted average over several uncertain directions also does not automatically recover a semantically meaningful monotone conclusion.
 
-此外，必须确认 c 在被认证数值编辑下确实固定。如果模型随数字大小切换所选指标或 s(c)，则每个局部分支的单调头都正确，跨分支整体仍可能反向或不连续。不能用固定 c 的导数证书掩盖这样的动态选择。
+In addition, one must confirm that c really stays fixed under the certified numeric edits. If the model switches the chosen metric or s(c) as the number changes size, the monotone head can be correct on every local branch while the whole, across branches, is still reversed or discontinuous. A fixed-c derivative certificate must not be used to hide such dynamic selection.
 
-这留下两个不同的候选研究，必须由导师明确选择：一是**可审计语义抽取＋符号规则**，这里语言模块有潜在价值，但有序头可被删除；二是**有外生依据的随机有序目标**，如在明确限定状态和干预下具有可论证方向的分布预测，此时学习概率可能必要，但方向合理性与真实概率识别需要额外假设和证据。当前 FOMC 材料及既有实验尚未建立第二类任务。不能为了保住有序头，临时把简单比较标签换成无依据的市场结果。若第一类最终胜出，诚实结论是本项目应研究解析与程序证书，而不是强行保留一个冗余的模型头。
+This leaves two different candidate studies, and the advisor must choose explicitly. One is **auditable semantic extraction + symbolic rules**: here the language module has potential value, but the ordinal head can be removed. The other is **a stochastic ordinal target with an exogenous basis**, such as distributional prediction with an arguable direction under explicitly restricted states and interventions: here learned probabilities may be necessary, but the soundness of the direction and the identification of true probabilities need extra assumptions and evidence. The current FOMC material and existing experiments have not established a task of the second kind. One must not swap simple comparison labels for unfounded market outcomes just to keep the ordinal head. If the first kind wins in the end, the honest conclusion is that this project should study parsing and program certificates, not force-keep a redundant model head.
 
-### 已完成证据与未完成部分
+### Completed evidence and what remains
 
-已有 WP0.3 的 100,000 点检查观察到最大概率导数绝对值约 0.1875，低于该例声明界 0.25；27 次有理单位变换精确相等。这些是已知线性头的数学健全性检查，既不是训练成果，也不是自然语言正确性测试。已有 WP0.4 的人工 XML 夹具与 8 项单元测试，能识别有限 unit/scale/sign/decimals/context 组合并拒绝超出支持域的情况，但没有真实 XBRL 解析率。已有 WP0.2 三个 seed 的小模型在当前过易合成任务中没有显示 permission 相对 edited CE 的增益；它对本路径的价值是揭示任务退化风险，不是证明 P2 成功。
+The existing WP0.3 check on 100,000 points observed a maximum absolute probability derivative of about 0.1875, below the declared bound of 0.25 for that example; 27 rational unit transformations gave exactly equal outputs. These are mathematical soundness checks on a known linear head; they are neither training results nor tests of natural-language correctness. The existing WP0.4 hand-made XML fixtures and 8 unit tests recognize a limited set of unit/scale/sign/decimals/context combinations and reject cases outside the supported domain, but there is no parse rate on real XBRL. The existing WP0.2 small models with three seeds showed no gain of permission over edited CE on the current, too-easy synthetic task; its value for this path is to reveal the risk of task degeneracy, not to show that P2 succeeds.
 
-真实起点可选本地 120 份 FOMC 会议纪要的数值政策片段，研究百分数与基点、区间上下限、比较期间、实际值与预测值及叙述者归属。会议日期不能代替公布日期；这些是 2026 年抓取的版本，尚不能提供历史版本证书。当前没有这类片段的元组金标，不能假定能从每份文本中抽到某个固定数量。FOMC 也不能代替公司财务 XBRL 的单位/期间对齐证据。
+A real starting point could be the numeric policy passages in the 120 local FOMC meeting minutes, studying percentages and basis points, upper and lower bounds of ranges, comparison periods, actual versus projected values, and attribution to the speaker. The meeting date cannot stand in for the release date; these are versions scraped in 2026 and cannot yet provide a certificate for historical versions. There are currently no tuple gold labels for such passages, and one cannot assume that a fixed number of them can be extracted from each text. FOMC also cannot stand in for unit/period alignment evidence from corporate financial XBRL.
 
 ## Next steps / Risks
 
-### 三阶段最小验证及预算
+### Three-stage minimal validation and budget
 
-下表是执行前的**工作量估计和建议上限，不是实测或已承诺训练**。本轮只写计划；规模须在第一阶段盘点后冻结。
+The table below gives **pre-execution workload estimates and suggested caps, not measurements or committed training**. This round only writes the plan; the scale must be frozen after the stage-1 inventory.
 
-| 阶段 | 最小验证与验收对象 | 预算估计 | 进入下一阶段的条件 |
+| Stage | Minimal validation and acceptance target | Budget estimate | Condition to enter the next stage |
 |---|---|---|---|
-| 1：任务及解析契约 | 先选 12–20 份本地 FOMC 文档作探索，标注可识别数值元组和反例；另留未读时期；独立复核实体、指标、期间、单位、基准及跨度 | 人工约 1–3 个工作日；CPU 抽取预计分钟级、RAM≤2 GB；片段数未知，不把目标量当实际库存 | 找到规则不直接解决、标签语义仍可稳定标注的子任务；形成固定接受/拒绝规范 |
-| 2：最强小基线 | 固定开发/评测文档；规则解析＋符号比较、金标元组 oracle、线性有序回归/保序模型、可用冻结编码器＋同一硬头、软约束对照；只对必要小模型使用少量预注册 seeds | CPU 总预算建议≤2小时；无 GPU；人工约 1–2 日审计；若冻结权重本地不可用则明确缺项，不联网补齐 | 硬头有非空证书，解析错误能定位；语言模块在相同审计风险和评测分布下存在任务价值 |
-| 3：端到端外推检查 | 在未使用文档、时期及措辞上冻结评估；审计完整元组和输出证书，给风险—覆盖曲线、宽度分布与失败分类 | CPU 预计≤2小时；人工审计约 2–4 日；样本量由目标上界和簇结构反推，不由方便凑数 | 超过符号/规则基线的预注册最小效应，且证书仍足够窄；否则停止扩模 |
+| 1: Task and parsing contract | First pick 12–20 local FOMC documents for exploration, and annotate identifiable numeric tuples and counterexamples; hold out unread periods; independently review entity, metric, period, unit, baseline, and span | About 1–3 working days of human effort; CPU extraction expected to take minutes, RAM≤2 GB; number of passages unknown, so target quantities are not treated as actual inventory | Find a subtask that rules do not solve directly and whose label semantics can still be annotated stably; produce a fixed accept/reject specification |
+| 2: Strongest small baselines | Fix development/evaluation documents; rule parsing + symbolic comparison, gold-tuple oracle, linear ordinal regression / isotonic model, an available frozen encoder + the same hard head, soft-constraint control; use a few pre-registered seeds only for the small models that need them | Suggested total CPU budget ≤2 hours; no GPU; about 1–2 days of human audit; if frozen weights are not available locally, record this as a gap and do not fetch them online | The hard head has nonempty certificates and parsing errors can be located; the language module has task value under the same audit risk and evaluation distribution |
+| 3: End-to-end extrapolation check | Frozen evaluation on unused documents, periods, and wording; audit full tuples and output certificates; give risk–coverage curves, width distributions, and a failure taxonomy | CPU expected ≤2 hours; human audit about 2–4 days; sample size derived backward from the target upper bound and cluster structure, not padded for convenience | Exceeds the pre-registered minimum effect over the symbolic/rule baselines while certificates stay narrow enough; otherwise stop scaling up |
 
-最强 baseline 不是不受约束的小 transformer。应首先比较“人工金标元组＋规则”，它给出语言解析之外的性能上限；再比较完全规则的真实文本管线与基于同一元组的线性/有序统计模型。冻结编码器＋硬头检验从零训练是否必要；相同编辑曝光的 CE 检验软许可损失是否只是数据增强效应。各系统须用相同分组、相同输入信息和独立冻结评测集，按文档成簇估计配对差异；旧开发集饱和 bootstrap 不能承担新结论。
+The strongest baseline is not an unconstrained small transformer. First compare against "human gold tuples + rules", which gives the performance ceiling apart from language parsing; then compare a fully rule-based real-text pipeline and linear/ordinal statistical models built on the same tuples. Frozen encoder + hard head tests whether training from scratch is necessary; CE with the same edit exposure tests whether the soft permission loss is just a data-augmentation effect. All systems must use the same grouping, the same input information, and an independent frozen evaluation set, and must estimate paired differences clustered by document; a saturated bootstrap on the old development set cannot carry new conclusions.
 
-### 否决条件、负结果价值与最弱环节
+### Kill conditions, value of negative results, and the weakest link
 
-若目标被正确的阈值规则完全定义，而学习模型只增加误差，则停止“金融语言模型理论创新”的叙述。若合理语义标签本身不满足统一单调性，缩小规范或保留 FREE；不能为得到定理改变标注真值。若解析错误或基准不确定性让几乎所有样本拒绝，或区间普遍接近 [0,1]，则端到端证书没有实际信息量。若冻结编码器已给相同保证与效用，明确保留它、撤回从零训练必要性。
+If the target is fully defined by a correct threshold rule and the learned model only adds error, stop the "theoretical innovation in financial language models" narrative. If sound semantic labels do not themselves satisfy a uniform monotonicity, narrow the specification or keep FREE; do not change the annotation ground truth to obtain a theorem. If parsing errors or baseline uncertainty cause nearly all samples to be rejected, or intervals are generally close to [0,1], the end-to-end certificate carries no practical information. If a frozen encoder already gives the same guarantees and utility, keep it explicitly and withdraw the claim that training from scratch is necessary.
 
-这些负结果仍能交付有价值的“适用域与不可认证原因”地图：哪些数值任务由规则足够解决，哪些由语义歧义支配，哪些可用结构约束。**当前最弱环节是正确且可审计的语义解析，其次是任务的数学规范是否符合语义；头部常数不是主要风险。** 可行性判断为“基础构造高、真实解析与非退化任务中等且未测、独立理论新颖性低置信度”。这不是路径之间的预设排序。
+These negative results would still deliver a useful map of "scope of applicability and reasons certification fails": which numeric tasks rules solve well enough, which are dominated by semantic ambiguity, and which can use structural constraints. **The current weakest link is correct and auditable semantic parsing, followed by whether the task's mathematical specification matches its semantics; the head's constants are not the main risk.** Feasibility assessment: "basic construction high; real parsing and a non-degenerate task medium and untested; independent theoretical novelty low confidence". This is not a preset ranking among paths.
 
-### 交给资深导师的具体问题
+### Specific questions for the senior advisor
 
-1. 是否接受“正确元组下模型输出的区间”作为目标，还是必须认证经济标签/风险本身？后者需要额外生成或校准假设，不能沿用同一证书。
-2. 首个任务应是政策数值比较关系，还是公司财务比较？现有真实材料只足以启动前者，且它可能被规则充分解决。
-3. 在 L05/L07/L10 已有基础上，何种解析歧义传播结果才达到理论论文的增量门槛？纯组合命题是否只应放附录？
-4. 若冻结编码器＋硬头胜出，是否允许本路径退出“必须从零训练”的主线，作为 P1 的解析基础或独立小方法工作保留？
+1. Do we accept "the interval of the model output at the correct tuple" as the target, or must we certify the economic label/risk itself? The latter needs extra generative or calibration assumptions and cannot reuse the same certificate.
+2. Should the first task be numeric comparison relations in policy text, or corporate financial comparisons? The existing real material is only enough to start the former, and the former may be fully solved by rules.
+3. Given what L05/L07/L10 already provide, what kind of result on the propagation of parsing ambiguity would meet the increment threshold for a theory paper? Should purely compositional propositions go only in an appendix?
+4. If frozen encoder + hard head wins, may this path leave the "must train from scratch" main line and be kept as the parsing foundation for P1 or as a separate small methods piece?
 
-### 对独立审查的回应：把歧义问题变成下一条可否定命题
+### Response to the independent review: turning the ambiguity problem into the next falsifiable proposition
 
-接受审查意见：上文单上下文定理把实体、基准、方向等离散歧义全部要求固定，否则 abstain，因此**没有解决本路径最关键的解析问题**。现有成果只是正确解析条件下的 Lipschitz 包络；本地没有完成自然文本语义金标、联合候选集合构造或其覆盖审计。不能把这些缺口以“端到端证书已经可做”略过。
+We accept the review's point: the single-context theorem above requires all discrete ambiguities such as entity, baseline, and direction to be fixed, and otherwise abstains, so it **does not solve the most important parsing problem of this path**. The existing result is only a Lipschitz envelope conditional on correct parsing; locally we have not completed natural-text semantic gold labels, construction of joint candidate sets, or audits of their coverage. These gaps must not be skipped over by saying "end-to-end certificates are already feasible".
 
-下一条最小命题可明确为 **P2-L：有限语义歧义下，方向可认证的必要充分条件与不可消除宽度**。先限制在一个冻结的有限语法：固定文本编辑对的可行语义解释配对集合 R，每个配对 r 指定实体、指标、基准、方向及精确有理数值；R 必须保留同一语义世界的一致性，不能随意做两个候选集的笛卡尔积。假设真实配对在 R，且每个解释对应的概率向量 p_r、p'_r 可被精确评价，或有经过验证的数值包络。对每个有序尾部 k 定义 `d_rk=Σ_{i≥k}(p'_ri−p_ri)`。在精确可评价版本中，对所有可行解释共同发布 UP 证书，当且仅当 `min_{r∈R} d_rk≥0` 对全部 k 成立；任何包住该尾部变化的区间，宽度至少为 `max_r d_rk−min_r d_rk`，该极值包络达到下界。若包含正、负两种可行变化，单向结论不可由这些信息识别。
+The next minimal proposition can be stated as **P2-L: necessary and sufficient conditions for certifiable direction, and irreducible width, under finite semantic ambiguity**. First restrict to a frozen finite grammar: for a fixed text edit pair, take the set R of feasible paired semantic interpretations, where each pair r specifies entity, metric, baseline, direction, and exact rational values; R must preserve consistency within one semantic world and cannot be an arbitrary Cartesian product of two candidate sets. Assume the true pair is in R, and that the probability vectors p_r, p'_r for each interpretation can be evaluated exactly or have a verified numeric envelope. For each ordinal tail k define `d_rk=Σ_{i≥k}(p'_ri−p_ri)`. In the exactly evaluable version, a UP certificate can be issued jointly for all feasible interpretations if and only if `min_{r∈R} d_rk≥0` holds for every k; any interval that encloses this tail change has width at least `max_r d_rk−min_r d_rk`, and the extreme-value envelope attains this lower bound. If both positive and negative feasible changes are present, a one-directional conclusion is not identifiable from this information.
 
-这个有限命题是初等部分识别刻画，**不是我们声称原创的结果**。它比单上下文界更合适的地方是不会把离散歧义静默删除。下一次最小验证应先列出一个带相同文本观测、不同合法基准／方向的有限语法族，由独立标注或明确生成规范枚举 R，核查联合包络与上述上下界。一个被错误排除的合法解释即可否定当前候选集合的覆盖主张；一个可行解释出现负尾差即可否定该输入的 UP 证书。若只能依靠把正确解释事先喂入才能工作，或者下界已经超过有用宽度，则停止扩模。一般连续概率头只能给保守包络时，充分条件与不可认证结论须分开：数值下界跨零不等于已经找到真实反例，不能把求界松弛误当识别失败。
+This finite proposition is an elementary partial-identification characterization and **is not a result we claim as original**. Where it fits better than the single-context bound is that it does not silently drop discrete ambiguity. The next minimal validation should first list a finite grammar family with the same text observation but different legitimate baselines/directions, enumerate R by independent annotation or an explicit generative specification, and check the joint envelope against the upper and lower bounds above. One wrongly excluded legitimate interpretation is enough to refute the coverage claim of the current candidate set; one feasible interpretation with a negative tail difference is enough to refute the UP certificate for that input. If it only works when the correct interpretation is fed in beforehand, or if the lower bound already exceeds a useful width, stop scaling up. When a general continuous probability head can only give a conservative envelope, the sufficient condition and the not-certifiable conclusion must be kept apart: a numeric lower bound that crosses zero does not mean a real counterexample has been found, and looseness in the bounding must not be mistaken for an identification failure.
 
-真正可能有论文价值、但尚无实作和查重结论的延伸，是给一类自然文本语义规范构造覆盖完整的 R，并推导其宽度／拒绝率下界；有限集合取 min/max 本身没有这个增量。新增金标首先应检验 R 有没有漏掉真实解释，而不是只检验被选中解释的数字能否算对。
+The extension that might really be worth a paper, but has no implementation and no prior-art check result yet, is to construct a complete-coverage R for a class of natural-text semantic specifications and derive lower bounds on its width/rejection rate; taking min/max over a finite set does not by itself provide this increment. New gold labels should first test whether R misses true interpretations, not only whether the numbers of the chosen interpretation are computed correctly.
 
-### 有用性门槛及抽样前提
+### Usefulness thresholds and sampling premises
 
-采用 [下一轮可否决规则](DECISION_CRITERIA.md) 作为**待冻结的资源分配提案**：接受率至少 50%；接受样本证书失效风险的 95% 单侧上界不超过 5%；每条接受样本先取各概率坐标区间的最大宽度，该量的接受集 90% 分位数不超过 .10。与规则系统相比，应在相同风险和宽度限制下增加至少 10 个百分点的覆盖，并报告按文档组织的配对不确定性。标签由阈值完全决定时，即使通过这些门，也不能保留冗余学习头作为主结果。若概率输出根本不属于任务目标，则不能为了套用 .10 而人为添加概率头；应先另定任务相关的归一化宽度与风险事件。
+We adopt the [next-round falsifiable decision rules](DECISION_CRITERIA.md) as **a resource-allocation proposal to be frozen**: acceptance rate at least 50%; the one-sided 95% upper bound on the certificate failure risk of accepted samples at most 5%; for each accepted sample, first take the maximum interval width over its probability coordinates, and the 90th percentile of that quantity over the accepted set must be at most .10. Compared with the rule system, coverage should rise by at least 10 percentage points under the same risk and width limits, with paired uncertainty reported at the document level. When the label is fully determined by a threshold, a redundant learned head cannot be kept as the main result even if these gates are passed. If probability outputs are not part of the task target at all, a probability head must not be added artificially just to apply the .10 rule; a task-relevant normalized width and risk event should be defined first.
 
-这些阈值足以排除大量拒绝或近乎 [0,1] 的演示，但不证明具有实际政策价值，也不证明原创。接受率、分位数和配对差异都有抽样不确定性；确认集不能用来改门槛。相同风险／宽度下的 10 个百分点点估计若配对不确定性覆盖零，状态应是“尚不能判定增益”。多个风险、宽度及模型选择结论若要共同声明覆盖率，还需预先分配错误预算，不能把每项 95% 拼成联合 95%。
+These thresholds are enough to rule out demonstrations with heavy rejection or with intervals close to [0,1], but they do not show practical policy value, nor originality. Acceptance rate, quantiles, and paired differences all have sampling uncertainty; the confirmation set must not be used to change the gates. If the paired uncertainty of the 10-percentage-point point estimate under the same risk/width covers zero, the status should be "gain inconclusive so far". If several risk, width, and model-selection conclusions are to claim coverage jointly, an error budget must be allocated in advance; separate 95% statements cannot be stitched into a joint 95%.
 
-理想二项预算是固定管线、固定接受规则、具有代表性且独立的已接受审计单位中 **59 个零错误样本**，才使单侧 95% 精确错误率上界低于 5%；这是 DECISION_CRITERIA 的计算条件，不是现有实验结果，也不保证能观察零错误。文档内相关片段不能重复计为独立样本；每文档抽一条也不能自动消除跨文档的政策阶段相关。若审计的是一份冻结有限总体，可用相应无放回设计推断该总体，但不得改称未来使用分布风险。当前本地 120 份文档是库存数，不是已满足这 59 个独立接受单位的证据。**数学命题正确性、候选集合语义覆盖和经验有用性三个门必须分别通过。**
+The ideal binomial budget is **59 error-free samples** among representative, independent accepted audit units, with a fixed pipeline and a fixed acceptance rule, before the one-sided 95% exact upper bound on the error rate falls below 5%. This is a computational condition from DECISION_CRITERIA, not an existing experimental result, and it does not guarantee that zero errors will be observed. Correlated passages within a document cannot be counted repeatedly as independent samples; drawing one per document also does not automatically remove cross-document correlation from policy phases. If the audit is of a frozen finite population, a corresponding without-replacement design can be used to make inferences about that population, but this must not be relabeled as risk under the future usage distribution. The current 120 local documents are an inventory count, not evidence that these 59 independent accepted units exist. **The three gates (correctness of the mathematical proposition, semantic coverage of the candidate set, and empirical usefulness) must each be passed separately.**
 
-数据必须按探索、训练、开发／阈值选择、冻结风险审计分账，同一文档不能跨用途重用来制造独立确认。按当前估计先从 120 份取 12–20 份探索，最多余 100–108 份；即使理想化为每份一个独立审计单位，接受率恰为 50% 也只有 50–54 个接受单位，小于 59。单为凑够 59，所余文档的接受率至少需约 54.63%–59%，而此计算尚未留出训练和开发数据，也没有验证独立性。因此“50% 接受门”和“5% 风险上界门”在现有库存下并不自动兼容。若前提成立但样本不足，可诚实报告由实际 n、错误数得到的更宽上界，并将原风险门记为未通过；不能多抽同一文档段落凑 IID、重复利用调参材料，或事后放宽目标再称原计划成功。
+Data must be kept in separate accounts for exploration, training, development/threshold selection, and the frozen risk audit; the same document cannot be reused across purposes to manufacture independent confirmation. Under the current estimate, 12–20 of the 120 documents go to exploration first, leaving at most 100–108; even idealized as one independent audit unit per document, an acceptance rate of exactly 50% gives only 50–54 accepted units, fewer than 59. Just to reach 59, the remaining documents would need an acceptance rate of at least about 54.63%–59%, and this calculation has not yet set aside training and development data, nor verified independence. So the "50% acceptance gate" and the "5% risk upper-bound gate" are not automatically compatible with the current inventory. If the premises hold but the sample is too small, one can honestly report the wider upper bound obtained from the actual n and error count, and record the original risk gate as failed; one must not draw more passages from the same document to fake IID, reuse tuning material, or relax the target afterwards and then call the original plan a success.
 
-本次修订回应了独立审查提出的范围与阈值问题；原文证明、自然文本金标及新候选命题的实现状态没有因此升级。作者自检不代替独立审阅，也不代表 Fable 认可。
+This revision responds to the scope and threshold issues raised by the independent review; the status of the original proofs, the natural-text gold labels, and the implementation of the new candidate proposition is not upgraded by it. The author's self-check does not replace independent review and does not represent Fable's endorsement.

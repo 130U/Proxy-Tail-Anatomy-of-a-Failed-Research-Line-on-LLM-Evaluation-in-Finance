@@ -1,68 +1,68 @@
-# T1C：判分与归因的独立方法核查
+# T1C: independent method review of scoring and attribution
 
-核查日期：2026-11-16（America/New_York）。主体由独立代理在盲答结果生成前撰写，当时未查看模型回答。末尾“根代理补查”是在实验进行中追加的相邻文献核查；本文件不报告实验统计结果。
+Review date: 2026-11-16 (America/New_York). The main body was written by an independent agent before the blind answers were generated, without seeing any model answer. The "Root-agent follow-up check" at the end is an adjacent literature check added while the experiment was running; this file does not report experimental statistics.
 
-## 核心结论
+## Core conclusion
 
-实验可以执行，但须把三件事分开：**最终答案表达的舍入、模型算式的计算结果、原始披露输入的量化不确定性**。只有第三件事与 T1 的假说直接对应。普通区间算术外包界中的一个数也不能直接叫作“文档一致的正确答案”。
+The experiment can be run, but three things must be kept apart: **the rounding of how the final answer is expressed, the computed result of the model's formula, and the quantization uncertainty of the original disclosed inputs**. Only the third maps directly onto the T1 hypothesis. A number inside an ordinary interval-arithmetic outer enclosure also cannot be called a "document-consistent correct answer" outright.
 
-## 官方规则与本次接口
+## Official rules and this run's interface
 
-独立读取的 [FinQA 固定版 evaluate.py](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/code/evaluate/evaluate.py) 显示：`eval_program` 执行模型给出的程序、不逐步舍入，只在最后执行 `round(this_res, 5)`；`evaluate_result` 与 `qa.exe_ans` 直接判等。另有符号程序等价指标。因此原始官方任务是**程序执行评分**，不是自然语言答案字符串评分。
+An independent reading of the [pinned FinQA evaluate.py](https://github.com/czyssrs/FinQA/blob/0f16e2867befa6840783e58be38c9efb9229d742/code/evaluate/evaluate.py) shows: `eval_program` executes the program the model gives, with no step-by-step rounding, applying `round(this_res, 5)` only at the end; `evaluate_result` compares directly for equality with `qa.exe_ans`. There is also a symbolic program-equivalence metric. The original official task is therefore **program-execution scoring**, not scoring of natural-language answer strings.
 
-本次要求“最终数值＋简短算式”时，建议保留两条评分轨道：
+Since this run asks for "a final value + a short formula", we recommend keeping two scoring tracks:
 
-1. **最终数值轨道**：对模型实际写出的数值，统一单位后应用五位、1%、gold 显示位数三规则。五位规则称“官方数值规则迁移”，不要冒称完整官方执行准确率。
-2. **算式执行轨道**：仅执行模型实际提供的算式，保持其操作数和运算结构，禁止借 gold 修补公式；能转换为官方 DSL 的，直接调用官方执行器。算式不完整或歧义时记录不可执行，不用最终数值补造。
+1. **Final-value track**: for the value the model actually wrote, normalize the unit and then apply three rules: five decimals, 1%, and gold displayed digits. Call the five-decimal rule "official numeric rule carried over"; do not pass it off as full official execution accuracy.
+2. **Formula-execution track**: execute only the formula the model actually gave, keeping its operands and operation structure; using gold to patch a formula is forbidden. Formulas that convert to the official DSL go directly to the official executor. When a formula is incomplete or ambiguous, record it as non-executable; do not reconstruct one from the final value.
 
-例如模型写 `3.0%`，但其算式是 `(137-133)/133*100`。最终显示值可能五位不通过，而正确算式按官方程序执行可以通过。该差异属于**输出显示精度**，不能记为输入舍入使正确推理被官方判错。
+For example, the model writes `3.0%`, but its formula is `(137-133)/133*100`. The final displayed value may fail at five decimals, while the correct formula executed as an official program can pass. That difference belongs to **output displayed precision**; it must not be recorded as input rounding causing correct reasoning to be marked wrong by the official scorer.
 
-`qa.answer` 与 `qa.exe_ans` 的百分数尺度并不总相同：原 T1 已核验 `93.5% ↔ 0.935`，同时也有 `24.69% ↔ 24.69136`。尺度映射必须根据 gold 的既定编码与回答明确单位预先固定，不允许选择“最接近 gold”的 1/100/100 倍以救分。建议保留原数值、原单位、统一尺度、映射理由。详见 [T1 来源核验](https://github.com/130U/proxy-tail/blob/30acb8d/research/t1_rounding/sources.md) 与 [固定数据目录](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset)。
+`qa.answer` and `qa.exe_ans` do not always use the same percentage scale: the original T1 verified `93.5% ↔ 0.935`, and there is also `24.69% ↔ 24.69136`. The scale mapping must be fixed in advance from gold's established encoding and the answer's explicit unit; choosing the 1/100/100x factor "closest to gold" to rescue a score is not allowed. We recommend keeping the original value, original unit, normalized scale, and the reason for the mapping. See [T1 source verification](https://github.com/130U/proxy-tail/blob/30acb8d/research/t1_rounding/sources.md) and the [pinned data directory](https://github.com/czyssrs/FinQA/tree/0f16e2867befa6840783e58be38c9efb9229d742/dataset).
 
-按显示位数评分应冻结 tie 规则；负数、百分数、末尾零须保持。gold 显示格式不可解析时列 NA 并给分母，不能默认判错。1% 对零目标的接受域也须明确，建议本题沿用 T1 的相对规则而不临时增加绝对容差。
+Scoring by displayed digits should freeze a tie rule; negative numbers, percentages, and trailing zeros must be preserved. When the gold display format cannot be parsed, list it as NA and give the denominator; do not mark it wrong by default. The acceptance region of the 1% rule for a zero target must also be explicit; we recommend that this task keep T1's relative rule and not add an ad hoc absolute tolerance.
 
-## 区间归因必须证明可达
+## Interval attribution must prove reachability
 
-T1 的 `eval_interval` 文档明确将结果称为 **OUTER enclosure**；`classify` 的注释也明确完整角点搜索不等于完整值域分析。同一输入在计算图中多次出现会造成依赖膨胀，例如 `x-x` 的真实值域是 `{0}`，普通区间减法却可能输出非零宽度。因而应保留三个字段：外包区间命中、已证可达、未解决。
+The documentation of T1's `eval_interval` explicitly calls the result an **OUTER enclosure**; the comments in `classify` also state clearly that a full corner search is not a full range analysis. An input that appears several times in the computation graph causes dependency inflation; for example, the true range of `x-x` is `{0}`, but ordinary interval subtraction may output a nonzero width. Three fields should therefore be kept: hits the outer interval, proved reachable, unresolved.
 
-便于实现的充分证书：保留两个严格处于舍入盒内部的输入向量 `u,v`，精确计算 `f(u) ≤ y ≤ f(v)`（或反向），并用沿线段的区间执行证明各分母不跨零。盒凸且 `f` 沿该线段连续，中间值定理即证明某个合法输入产生模型值 `y`。不必找到闭式的原像。只存在数值优化近似解或命中外包区间时，仍为候选；别给已证标签。中心、T1 已有见证、其余内缩角点通常足以提供这些端点。
+A sufficient certificate that is easy to implement: keep two input vectors `u,v` strictly inside the rounding box, compute exactly `f(u) ≤ y ≤ f(v)` (or the reverse), and use interval execution along the segment to prove that no denominator crosses zero. Since the box is convex and `f` is continuous along that segment, the intermediate value theorem proves that some valid input produces the model value `y`. No closed-form preimage is needed. When there is only an approximate solution from numerical optimization, or only a hit on the outer interval, the case remains a candidate; do not give it the proved label. The center, existing T1 witnesses, and the remaining inset corners are usually enough to supply these endpoints.
 
-即便已证可达，也只能叫“**T1 独立舍入盒内相容**”。这不是“模型推理正确”的充分条件，也不是“与全文所有约束一致”：错误的年份或算式可能偶然落在盒内；T1B 的重复披露交集和会计约束还可能排除它。[XBRL Calculations 1.1](https://www.xbrl.org/Specification/calculation-1.1/REC-2023-02-22%2Bcorrected-errata-2024-02-14/calculation-1.1-REC-2023-02-22%2Bcorrected-errata-2024-02-14.html) §5.2、5.5、5.7 已规定报告精度区间、重复事实交集及区间运算；完整信息集合不能由单独输入盒替代。
+Even when reachability is proved, the case may only be called "**compatible within the T1 independent rounding box**". This is not a sufficient condition for "the model's reasoning is correct", nor does it mean "consistent with all constraints in the full text": a wrong year or formula can land inside the box by chance, and T1B's duplicate-disclosure intersections and accounting constraints may still exclude it. [XBRL Calculations 1.1](https://www.xbrl.org/Specification/calculation-1.1/REC-2023-02-22%2Bcorrected-errata-2024-02-14/calculation-1.1-REC-2023-02-22%2Bcorrected-errata-2024-02-14.html) §5.2, 5.5, and 5.7 already specify reported-precision intervals, intersection of duplicate facts, and interval arithmetic; the full information set cannot be replaced by a standalone input box.
 
-## 建议的归因记录
+## Recommended attribution record
 
-先存可重叠标记，再定互斥主归因，避免第一类吞掉其他原因：
+First store overlapping flags, then decide a mutually exclusive primary attribution, so that the first category does not swallow the other causes:
 
-- `output_rounding_only`：正确算式执行通过，但最终答案数值不通过。
-- `alternative_source_precision`：模型确实使用了文档另一处同实体、同时期、同口径的数字；保留出处与替换后算式。只有数值碰巧相等不足以说明来源选择。
-- `box_compatible_certified`：原始最终值或执行值具有上述可达性证书，且单独标注公式是否有效；不要自动标“正确”。
-- `reasonable_alternative_formula`：复核者明确指出问题措辞允许该口径。期末分母不是所有增长率问题都合理；存在含混才可接受。
-- `error` / `unresolved`：分别保留明确错误与证据不足，不强制把待定项归为正确。
+- `output_rounding_only`: the correct formula passes on execution, but the final answer value fails.
+- `alternative_source_precision`: the model really did use a number from elsewhere in the document with the same entity, same period, and same convention; keep the location and the substituted formula. A value that merely happens to be equal is not enough to establish the choice of source.
+- `box_compatible_certified`: the original final value or the executed value has the reachability certificate described above, with a separate flag for whether the formula is valid; do not label it "correct" automatically.
+- `reasonable_alternative_formula`: the reviewer states explicitly that the question's wording allows this convention. An end-of-period denominator is not reasonable for every growth-rate question; it is acceptable only when there is ambiguity.
+- `error` / `unresolved`: keep clear errors and insufficient evidence separately; do not force pending items into correct.
 
-应同时汇报按任务字面阈值计算的“盒内相容占被判错比例”和较严格的“有效来源/有效推理支持的误判比例”。若只前者超过 10%，结论是数值评分与宽松可行集合不一致，不能宣称输入舍入**导致**模型正确推理被判错。各规则的错误分母分别计算。
+Report both the "in-box compatible share of rejections", computed with the task's literal threshold, and the stricter "share of rejections supported by a valid source / valid reasoning". If only the former exceeds 10%, the conclusion is that numeric scoring disagrees with the loose feasible set; one cannot claim that input rounding **caused** correct model reasoning to be marked wrong. Compute the error denominator separately for each rule.
 
-## 分组、区间与有效数字
+## Groups, intervals, and significant digits
 
-196 见证题全部保留，稳定对照只从 T1 的 `certified_inside` 取，按同一 `category` 无放回匹配并冻结随机种子；不要以模型表现挑对照。报告匹配后类别数和文档簇数。若同一页包含两组题，bootstrap 应对联合样本的页 ID 抽样并同时携带该页全部两组记录，避免同页当作独立样本。只匹配运算类别尚未匹配算式长度、答案大小、检索难度；错误率差是关联，不是舍入导致错误的因果估计。公开数据污染可能不同程度地影响两组，不能未经验证声称抵消。
+Keep all 196 witness questions; take stable controls only from T1's `certified_inside`, match without replacement within the same `category`, and freeze the random seed; do not choose controls by model performance. Report the number of categories and document clusters after matching. If one page contains questions from both groups, the bootstrap should resample page IDs of the joint sample and carry all records of both groups on that page together, so that one page is not treated as independent samples. Matching only on operation category does not yet match formula length, answer size, or retrieval difficulty; the error-rate difference is an association, not a causal estimate of rounding causing errors. Public-data contamination may affect the two groups to different degrees; one cannot claim without verification that it cancels out.
 
-有效数字应从模型最终数值原字符串提取，记录尾零歧义；百分数的单位换算不改变有效数字数。T1A 近似位数预算是量级规律，存在首位数字与常数项，不能把负预算、跨零区间或 exact/near-zero 输出强行当普通有效数字。若使用独立的精确位数定义，应完整写出定义，报告为另一个指标而非冒称 T1A 定理；外包宽度仅给保守预算。
+Significant digits should be extracted from the original string of the model's final value, recording trailing-zero ambiguity; converting a percentage unit does not change the number of significant digits. The T1A approximate digit budget is a magnitude law with a leading-digit term and a constant term; negative budgets, intervals crossing zero, and exact/near-zero outputs must not be forced into ordinary significant digits. If an independent exact definition of digits is used, write the definition out in full and report it as a separate metric rather than passing it off as the T1A theorem; the outer-enclosure width gives only a conservative budget.
 
-## 定向查重
+## Targeted prior-art check
 
-本次在原 T1 查重之上补查 7 个查询：`FinQA rounding evaluation precision interval`、`FinQA rounding false correct`、`financial question answering input precision benchmark uncertainty`、`FinQA input rounding model evaluation`、`FinQA interval arithmetic model`、`FinVerBench rounding`、论文全名 `Characterizing Ambiguity in Financial Document Question Answering`。**未发现同样的 FinQA 舍入见证组与稳定匹配组盲答、再逐例证明输入舍入归因的测量。** 这是有限定向检索，不能表述为穷尽查新。
+On top of the original T1 prior-art check, this run added 7 queries: `FinQA rounding evaluation precision interval`, `FinQA rounding false correct`, `financial question answering input precision benchmark uncertainty`, `FinQA input rounding model evaluation`, `FinQA interval arithmetic model`, `FinVerBench rounding`, and the full paper title `Characterizing Ambiguity in Financial Document Question Answering`. **We found no measurement of the same kind: blind answers on a FinQA rounding-witness group and a matched stable group, followed by a case-by-case proof of input-rounding attribution.** This was a limited targeted search and must not be described as an exhaustive novelty check.
 
-- [FinVerBench 原文](https://arxiv.org/html/2605.29586) 研究财务一致性错误检出，明确比较 rounded/unrounded 呈现，并报告由舍入改变的检出表现。它已覆盖“财务显示精度影响模型评测”的大主题，但不是本题的 QA 参考计算与匹配分组实验。
-- [Characterizing Ambiguity in Financial Document Question Answering](https://aclanthology.org/2026.finnlp-1.37/) 人工标注 MultiHiertt 的文档/问题歧义并评测模型歧义检测；本次确认正式页面与摘要。PDF 本次获取超时，因此不把其中更细的容差结论当作本次独立核验事实。
-- 搜索还定位到 [RLM 作者的 FinQA 审计页](https://queelius.github.io/rlm/research-audit-2026-09-29/decomposition-and-transfer/)，摘要指出最终数值与算式执行的舍入差异。正文抓取失败，列作待跟进线索，不作为已读证据。这条线索进一步说明，单纯比较严格/宽松分数并不能构成独有贡献。
+- The [FinVerBench paper](https://arxiv.org/html/2605.29586) studies detection of financial consistency errors, explicitly compares rounded/unrounded presentations, and reports detection performance changed by rounding. It already covers the broad theme "financial displayed precision affects model evaluation", but it is not this task's experiment of QA reference computation with matched groups.
+- [Characterizing Ambiguity in Financial Document Question Answering](https://aclanthology.org/2026.finnlp-1.37/) hand-annotates document/question ambiguity in MultiHiertt and evaluates model ambiguity detection; this run confirmed the official page and the abstract. Fetching the PDF timed out this time, so its finer tolerance conclusions are not treated as facts independently verified here.
+- The search also located the [RLM author's FinQA audit page](https://queelius.github.io/rlm/research-audit-2026-09-29/decomposition-and-transfer/), whose summary points out the rounding difference between final values and formula execution. Fetching the full text failed; it is listed as a lead to follow up, not as evidence that was read. This lead further shows that simply comparing strict/loose scores cannot be a unique contribution.
 
-本核查建议保留 T1C 的原定检验，同时收紧结论措辞：区间相容性是数学事实；“推理正确”和“舍入造成实际误判”需要额外的公式与来源证据。
+This review recommends keeping T1C's planned test while tightening the wording of the conclusion: interval compatibility is a mathematical fact; "the reasoning is correct" and "rounding caused a real misjudgment" need additional formula and source evidence.
 
-## 根代理补查：标注问题不是新的发现
+## Root-agent follow-up check: annotation problems are not a new finding
 
-在本次盲答生成过程中，来源复核出现参考程序漏运算、错年份等情况，故补查这一相邻文献；没有据此更改样本或提示。
+While the blind answers were being generated, the source review found cases such as reference programs missing an operation and wrong years, so this adjacent literature was checked; the sample and the prompt were not changed because of it.
 
-- Mavi、Saparov、Zhao 的 [Retrieval-Augmented Chain-of-Thought in Semi-structured Domains（2023）](https://aclanthology.org/2023.nllp-1.18/) 已在附录 D.2、表 7 中人工检查 40 个 FinQA 样本，将 10 个错误案例中的 2 个归为 annotation error。[已读 PDF，第 186 页](https://aclanthology.org/anthology-files/pdf/nllp/2023.nllp-1.18.pdf#page=9)。因此，“FinQA 有标注问题”和“模型正确但参考答案有误”本身不宜作为 T1C 的新颖性主张。
-- 官方仓库 [issue #15](https://github.com/czyssrs/FinQA/issues/15) 于 2026-08-20 报告五年租赁付款平均值似乎除以 4 而非 5。核查时该 issue 开放且没有维护者回复；这里仅将它作为先前公开报告，不冒称维护者已确认或修复。
-- [Confidently Wrong，v2 §3（2026-10-13）](https://arxiv.org/html/2607.11414v2) 明确使用 2% 相对容差及多个单位缩放约定，并讨论判分器审核。该工作研究内部状态的错误检测，不是源输入舍入盒的匹配实验。它也说明，宽松数值评分与单位规范化必须有清晰口径；本实验没有选择最接近 gold 的缩放因子来救分。
+- Mavi, Saparov, and Zhao, [Retrieval-Augmented Chain-of-Thought in Semi-structured Domains (2023)](https://aclanthology.org/2023.nllp-1.18/), already hand-checked 40 FinQA samples in Appendix D.2, Table 7, and classed 2 of 10 error cases as annotation error. [PDF read, page 186](https://aclanthology.org/anthology-files/pdf/nllp/2023.nllp-1.18.pdf#page=9). Therefore "FinQA has annotation problems" and "the model is right but the reference answer is wrong" are not suitable as novelty claims for T1C on their own.
+- The official repository's [issue #15](https://github.com/czyssrs/FinQA/issues/15), on 2026-08-20, reported that an average of five years of lease payments seemed to be divided by 4 rather than 5. At the time of the check the issue was open with no maintainer reply; it is used here only as an earlier public report, without claiming that maintainers have confirmed or fixed it.
+- [Confidently Wrong, v2 §3 (2026-10-13)](https://arxiv.org/html/2607.11414v2) explicitly uses a 2% relative tolerance and several unit-scaling conventions, and discusses auditing the scorer. That work studies error detection from internal states; it is not a matched experiment on source-input rounding boxes. It also shows that loose numeric scoring and unit normalization need a clear convention; this experiment did not choose the scaling factor closest to gold to rescue scores.
 
-这一补查不构成同题同测量的重复，但要求把新贡献收窄到“输入精度状态与真实模型评分的关系、以及可证可达性与实际错误归因的区别”。参考标注问题只作为控制项和替代解释。
+This follow-up check does not amount to a duplicate of the same measurement on the same question, but it requires narrowing the new contribution to "the relation between input-precision status and real model scoring, and the distinction between provable reachability and the attribution of actual errors". Reference annotation problems serve only as a control item and an alternative explanation.

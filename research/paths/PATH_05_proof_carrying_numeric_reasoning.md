@@ -1,143 +1,143 @@
-# 路径 05：从财务／政策文本到可验证小程序的数值与区间回答
+# Path 05: Numeric and interval answers from financial/policy text via verifiable small programs
 
-**2026-11-16第六轮更新：** [SE1–SE6与实现](../numeric/record.md)补上本路径可复用的有限语义集合包络：候选全部覆盖规范下的必要宽度、保留共享依赖/离散分支的作用，以及接受后的风险分母。它不是自然文本程序提议器、完整DSL或语义正确性认证；正确算术仍不能代替正确题意，路径仍在探索位。[独立审查](../reports/numeric_envelope_review.md)
+**2026-11-16 round 6 update:** [SE1–SE6 and the implementation](../numeric/record.md) add a finite semantic-set envelope that this path can reuse: the necessary width under a specification whose candidates cover all interpretations, the role of keeping shared dependencies / discrete branches, and the risk denominator after acceptance. It is not a natural-text program proposer, a complete DSL, or a certification of semantic correctness; correct arithmetic still cannot replace a correct reading of the question, and the path remains in the exploratory slot. [Independent review](../reports/numeric_envelope_review.md)
 
-日期：2026-11-15。作者身份：内部AI研究助手（路径作者）。状态：**探索性候选，未证明新颖性或端到端可行性**。这是给资深导师的选题分析，不是 Fable 已批准的方案。本轮完全离线，无新增外部访问、训练、数据采集或发布。
+Date: 2026-11-15. Author: internal AI research assistant (path author). Status: **exploratory candidate; novelty and end-to-end feasibility not shown**. This is a topic analysis for the senior advisor, not a plan Fable has approved. This round was fully offline, with no new external access, training, data collection, or release.
 
 ## Charter
 
-精确问题是：对一个受限的财务／政策数值问题，语言模块只负责抽取带来源的事实并提议一个小型计算程序，确定性检查器能否给出有明确前提的答案区间，并识别何时应拒绝？目标不是输出一段看起来有推理的文字，而是一个可复查对象：问题规范、引用跨度、带类型的事实、程序 AST、每步运算的区间以及最终答案。数学上要控制的是**指定语义程序在真实输入上的值是否被输出区间包含**；实践上还要计量错误程序和错误提取造成的未被发现错误。
+The exact question: for a restricted financial/policy numeric question, where the language module is only responsible for extracting facts with their sources and proposing a small computation program, can a deterministic checker give an answer interval with explicit premises, and recognize when it should reject? The target is not a passage of text that looks like reasoning, but a re-checkable object: the question specification, cited spans, typed facts, the program AST, the interval at each operation, and the final answer. Mathematically, what must be controlled is **whether the value of the specified semantic program on the true input is contained in the output interval**; in practice we must also measure the undetected errors caused by wrong programs and wrong extraction.
 
-领域为可信金融数值推理；对象为“文本证据—事实绑定—程序选择—区间计算”链；研究单位为具有明确任务类型的单个问题及其来源文档。类型为探索性研究。知识深度为 working/局部：精确算术和类型检查可直接构建，本地解析仅有受限原型，任务语义与先例检索没有排尽。完成标准是辨认可被验证和不可被验证的环节、提出一个能被最强符号基线否决的计划，而不是先把 DSL 宣称为创新。
+The field is trustworthy financial numeric reasoning. The object is the chain "text evidence → fact binding → program selection → interval computation". The unit of study is a single question with an explicit task type, together with its source document. The type is exploratory research. Knowledge depth is working/partial: exact arithmetic and type checking can be built directly, local parsing exists only as a restricted prototype, and neither the task semantics nor the prior-work search has been exhausted. The completion criterion is to identify which stages can and cannot be verified and to propose a plan that the strongest symbolic baseline can kill, rather than first declaring the DSL an innovation.
 
 ## Canonical sources
 
-只沿用 [现有文献台账](../literature/literature_review.md) 与本地材料。L14 是已经核验的直接先例；FinQA、计算器辅助推理、程序生成和区间分析是必须正面比较的既有方向名称，但**当前台账没有 FinQA 的已读条目，也没有完成程序验证／区间分析专门综述**，因此不编造其版本、实验分数或新颖性比较结果。
+We use only the [existing literature ledger](../literature/literature_review.md) and local material. L14 is a verified direct precedent; FinQA, calculator-assisted reasoning, program generation, and interval analysis are names of existing directions that must be compared head-on, but **the current ledger has no read entry for FinQA, and no dedicated survey of program verification / interval analysis has been completed**, so we do not invent their versions, experimental scores, or novelty-comparison results.
 
-| 证据 | 来源层级及用途 |
+| Evidence | Source level and use |
 |---|---|
-| L14 [TAT-QA](https://aclanthology.org/2021.acl-long.254/) | 摘要；已支持表格／文本抽取加符号计算有先例，不支持本轮未核查的具体结果 |
-| L13 [FiNER](https://arxiv.org/abs/2203.06482) | 摘要；数字标签依赖语境，单纯识别数字不是完整语义抽取 |
-| L07 [Dimensionless machine learning](https://www.jmlr.org/papers/v24/22-0680.html) | 全文；单位与量纲方法已有，不把单位类型系统视为新发现 |
-| L12 [Inline XBRL Primer](https://www.xbrl.org/WGN/inlineXBRL-part0/WGN-2026-07-14/inlineXBRL-part0-WGN-2026-07-14.html) | 官方说明全文；scale/sign 等是结构化事实解释的一部分，非全部语义及历史证书 |
-| [受限 iXBRL 原型](../xbrl/README.md)、[样例结果](../xbrl/example_result.json) | 我们的实验 WP0.4；手工 synthetic，仅作计算链构件 |
-| [本地语料盘点](../reports/local_data_inventory.md)、[理论笔记](../theory/notes.md) | 本地核验／推导；实际可用数据和证书链边界 |
+| L14 [TAT-QA](https://aclanthology.org/2021.acl-long.254/) | Abstract; supports that table/text extraction plus symbolic computation has precedent; does not support specific results not checked this round |
+| L13 [FiNER](https://arxiv.org/abs/2203.06482) | Abstract; numeric labels depend on context, and merely recognizing numbers is not complete semantic extraction |
+| L07 [Dimensionless machine learning](https://www.jmlr.org/papers/v24/22-0680.html) | Full text; unit and dimension methods already exist, so a unit type system is not treated as a new finding |
+| L12 [Inline XBRL Primer](https://www.xbrl.org/WGN/inlineXBRL-part0/WGN-2026-07-14/inlineXBRL-part0-WGN-2026-07-14.html) | Full text of the official guide; scale/sign and similar attributes are part of the interpretation of structured facts, not the full semantics or a historical certificate |
+| [Restricted iXBRL prototype](../xbrl/README.md), [example result](../xbrl/example_result.json) | Our experiment WP0.4; hand-made synthetic, only a component of the computation chain |
+| [Local corpus inventory](../reports/local_data_inventory.md), [theory notes](../theory/notes.md) | Local verification/derivation; the actually usable data and the limits of the certificate chain |
 
 ## Findings ledger
 
-| 编号 | 发现 | 依据及限制 |
+| ID | Finding | Basis and limits |
 |---|---|---|
-| P5-F1 | “提取数值再符号计算”不是新的任务架构主张 | L14，摘要；本轮未读取完整方法与所有后续工作 |
-| P5-F2 | 当前 XML 原型可对受限十进制值作 scale/sign 转换和声明舍入包络，并拒绝未知格式 | WP0.4，我们的实验；不是真实 filing，也不证明原文声明真实 |
-| P5-F3 | 本地存在可用于数值政策片段研究的 120 份 FOMC 文本；缺完整抽取、问题与程序金标 | local_data_inventory，本地盘点 |
-| P5-F4 | 样本时间标签、内容版本和真实公开可得性是不同问题；算术检查不能弥补来源缺口 | T1.1、WP0.4 解释契约；条件推导 |
-| P5-F5 | 现有合成世界包含会计恒等式与精确数值，可产生受控测试，但没有真实自然语言推理验证 | [local_foundations/report](../experiments/local_foundations/report.md)，我们的实验 WP0.5 |
-| P5-F6 | 未执行本路径的问答／程序生成／校验消融，也未核验其相对 FinQA 等路线的新颖性 | 现有实验范围及文献台账；明确缺证 |
+| P5-F1 | "Extract numbers, then compute symbolically" is not a new task-architecture claim | L14, abstract; the full method and all follow-up work were not read this round |
+| P5-F2 | The current XML prototype can apply scale/sign conversions and declared-rounding envelopes to restricted decimal values, and rejects unknown formats | WP0.4, our experiment; not a real filing, and does not show that the original declarations are true |
+| P5-F3 | There are 120 FOMC texts locally that can be used to study numeric policy passages; complete extraction and gold labels for questions and programs are missing | local_data_inventory, local inventory |
+| P5-F4 | Sample time labels, content versions, and true public availability are different questions; arithmetic checks cannot fill a gap in the source | T1.1, WP0.4 interpretation contract; conditional derivation |
+| P5-F5 | The existing synthetic world contains accounting identities and exact numbers and can produce controlled tests, but there is no validation on real natural-language reasoning | [local_foundations/report](../experiments/local_foundations/report.md), our experiment WP0.5 |
+| P5-F6 | No question-answering / program-generation / checking ablation for this path has been run, and its novelty relative to FinQA and similar lines has not been verified | Scope of existing experiments and the literature ledger; explicitly missing evidence |
 
 ## Scope filter
 
-删除“计算过程可验证，所以回答一定正确”的结论。金融数字常有期间、币种、统计口径、名义／实际、流量／存量、预测／已实现及合并范围区别；量纲相同并不表示能相加或比较。政策文本中的条件情景与最终决议也不能混作同一事实。把初始任务限制为具有固定语义模板、有限运算符和清楚证据跨度的问题，避免假装一般金融分析都能化成一棵算术树。
+Drop the conclusion "the computation can be verified, so the answer must be correct". Financial numbers often differ in period, currency, statistical convention, nominal/real, flow/stock, projected/realized, and consolidation scope; having the same dimension does not mean two numbers can be added or compared. Conditional scenarios in policy text also cannot be merged with the final decision as one fact. Restrict the initial task to questions with a fixed semantic template, a finite set of operators, and clear evidence spans, so as not to pretend that general financial analysis can always be reduced to one arithmetic tree.
 
 ## Object filter
 
-把“proof-carrying”解释为答案携带**明确假设下可重放的计算证明对象**，而非自然语言语义已经形式化。单位检查、源码 hash、区间运算证明、人工金标验证各有不同职责。删除“从零训练能使解释忠实”的推断；一个随机初始化模型也可提出完全错误但类型正确的程序。保留语言模块的必要性为待检验假说，而不是研究的前提。
+Interpret "proof-carrying" as the answer carrying **a replayable computational proof object under explicit assumptions**, not as natural-language semantics having been formalized. Unit checks, source hashes, proofs of interval computation, and human gold-label verification each have different roles. Drop the inference "training from scratch makes explanations faithful"; a randomly initialized model can also propose a completely wrong but well-typed program. Keep the necessity of the language module as a hypothesis to be tested, not as a premise of the research.
 
 ## Conclusions
 
-**本路径更适合作为有停止条件的探索，当前不能与已经成立的理论主线等量齐观。** 最简单的可做版本是工程原型；要变成理论／AI 研究，必须解决超出已有抽取＋符号计算的具体缺口，例如对解析／程序歧义给出既有效又足够紧的联合证书，或证明某类可审计接受策略的风险—覆盖性质。即使做到这些，仍需核验现有程序验证、选择性预测和数值问答文献，不能以“我们还没查到”支持原创（P5-F1、F6）。
+**This path is better suited to exploration with stopping conditions; it currently cannot be put on a par with the theory main line that is already established.** The simplest feasible version is an engineering prototype; to become theory/AI research, it must solve a specific gap beyond existing extraction + symbolic computation, for example giving a joint certificate for parsing/program ambiguity that is both valid and tight enough, or proving risk–coverage properties of some class of auditable acceptance policies. Even if this is done, the existing literature on program verification, selective prediction, and numeric question answering still needs to be checked; "we have not found it yet" cannot support originality (P5-F1, F6).
 
-### 目标对象、输入输出与语言模块的职责
+### Target object, inputs and outputs, and the role of the language module
 
-先固定一个任务集合，例如：在同一政策口径下比较两个明确利率区间；把给定百分比差转换为基点；计算明确指定的同比百分比；对相同期间、相同口径的事实作比率。所有这些都可能被规则解决，必须让规则基线真正参与竞争。暂不允许开放式预测、因果解释、任意检索组合或隐含会计调整。
+First fix a task set, for example: compare two explicit interest-rate ranges under the same policy convention; convert a given percentage difference into basis points; compute an explicitly specified year-over-year percentage; take the ratio of facts with the same period and the same convention. All of these may be solved by rules, so the rule baseline must genuinely compete. Open-ended prediction, causal explanation, arbitrary retrieval combinations, and implicit accounting adjustments are not allowed for now.
 
-事实记录可取 `f=(value_interval, unit_dimension, entity, period, scope, status, source_span)`，其中 status 区分已实现／预测／条件场景。程序语言只含有理常数、事实引用、加减、乘法、受保护除法，以及明确的单位转换。加减须同量纲且满足任务要求的实体／期间／口径兼容；乘除更新量纲；不同币种需要显式汇率事实及对应时间，不能当作单位重命名。比较只有在区间严格分离或等号规则足够确定时才输出确定结论，否则返回范围或拒绝。
+A fact record can be `f=(value_interval, unit_dimension, entity, period, scope, status, source_span)`, where status distinguishes realized/projected/conditional scenario. The program language contains only rational constants, fact references, addition and subtraction, multiplication, guarded division, and explicit unit conversions. Addition and subtraction require the same dimension and the entity/period/convention compatibility that the task demands; multiplication and division update the dimension; different currencies need an explicit exchange-rate fact with its time, and cannot be treated as a unit rename. A comparison outputs a definite conclusion only when the intervals are strictly separated or the equality rule is determinate enough; otherwise it returns a range or rejects.
 
-输出应保存原始事实跨度和 hash、元组、带类型 AST、运算前提、逐节点区间、最终范围、接受／拒绝原因，以及哪些前提来自人工、哪些来自模型。检查器不运行任意生成代码，不接受模型通过自然语言声明“已验证”。提议器与检查器隔离带来可检查性，但隔离本身仍是设计原则，不是原创理论。
+The output should store the original fact spans and hashes, the tuples, the typed AST, operation premises, per-node intervals, the final range, the reason for acceptance/rejection, and which premises came from humans and which from the model. The checker does not run arbitrary generated code, and does not accept a model's natural-language claim that something is "verified". Separating the proposer from the checker brings checkability, but the separation itself is still a design principle, not an original theory.
 
-### 候选命题：固定语义程序的区间健全性
+### Candidate proposition: interval soundness of a fixed semantic program
 
-状态：**标准归纳式健全性命题的本任务实例，尚不主张理论创新。** 为避免模糊地把语义正确性藏进“验证通过”，完整前提如下。
+Status: **an instance, for this task, of a standard inductive soundness proposition; no theoretical innovation is claimed yet.** To avoid vaguely hiding semantic correctness inside "verification passed", the full premises are as follows.
 
-1. 问题 q 的目标语义已由外部规范固定为有限表达式 e*，而被提交程序 e 与 e* 对该任务等价。这项可以来自金标／人工确认；普通类型检查不证明它。
-2. 真实事实向量 z* 的每一坐标位于给定闭区间 I_j；实体、期间、口径、来源版本、单位映射与变量绑定正确。区间是事实不确定性或声明舍入的包络，不能只因提议器输出了两个端点就当真。
-3. e 仅使用已实现的算子；常数为精确有理数。加减乘除的区间扩展满足包含性；每次除法的分母区间不含零。数值端点运算精确，或每步严格向外舍入；显示值另行附带舍入误差。
-4. 对有限比较、分支或 min/max 的扩展，必须验证所有可达分支的包含性；初版可以直接不支持分支。缺前提时拒绝，不用一个未经证明的窄区间替代失败。
+1. The target semantics of question q has been fixed by an external specification as a finite expression e*, and the submitted program e is equivalent to e* for this task. This can come from gold labels / human confirmation; ordinary type checking does not prove it.
+2. Each coordinate of the true fact vector z* lies in a given closed interval I_j; entity, period, convention, source version, unit mapping, and variable binding are correct. The interval is an envelope of fact uncertainty or declared rounding; it cannot be taken as true just because the proposer output two endpoints.
+3. e uses only implemented operators; constants are exact rationals. The interval extensions of addition, subtraction, multiplication, and division satisfy inclusion; the denominator interval of every division excludes zero. Endpoint arithmetic is exact, or each step rounds strictly outward; displayed values carry their rounding error separately.
+4. For extensions with finite comparisons, branches, or min/max, inclusion must be verified for all reachable branches; the first version can simply not support branches. When a premise is missing, reject; do not replace failure with an unproven narrow interval.
 
-则检查器接受并输出 I_out 时，`e*(z*) ∈ I_out`。证明对 AST 归纳：叶节点由前提 2 包含真值，常数为点区间；每个内部节点由对应算子的包含性保留该性质；根节点成立，再由 e 与 e* 等价得到目标结论。
+Then whenever the checker accepts and outputs I_out, `e*(z*) ∈ I_out`. The proof is by induction on the AST: leaf nodes contain the true value by premise 2, and constants are point intervals; each internal node preserves this property by the inclusion property of its operator; so it holds at the root, and the equivalence of e and e* then gives the target conclusion.
 
-若全部事实是精确值、单位转换为精确有理比例、表达式定义良好，则可以输出精确有理答案；这只是特例。若事实区间只具有联合覆盖 `Pr(z*∈∏I_j)≥1−ε_f`，程序语义正确性有失效风险 ε_s，且这些概率指向同一明确样本机制，则在所有机械前提无误的条件下可用 union bound 得到总失效风险不超过 ε_f+ε_s。不要求两者独立，但 ε_f、ε_s 必须真的有可用证据。逐字段边际覆盖不等于全元组联合覆盖，未经审计的语言模型自报置信度不提供 ε_s。
+If all facts are exact values, unit conversions are exact rational ratios, and the expression is well defined, an exact rational answer can be output; this is only a special case. If the fact intervals only have joint coverage `Pr(z*∈∏I_j)≥1−ε_f`, program semantic correctness has failure risk ε_s, and these probabilities refer to the same explicit sampling mechanism, then, provided all mechanical premises are correct, a union bound gives a total failure risk of at most ε_f+ε_s. The two need not be independent, but ε_f and ε_s must really have usable evidence. Per-field marginal coverage is not full-tuple joint coverage, and the self-reported confidence of an unaudited language model does not provide ε_s.
 
-这条定理真正暴露了研究负担：区间算术部分容易保证，`e=e*` 和事实绑定正确才是最弱的环节。若只在金标程序、金标事实上展示区间包含，则完成的是计算器健全性验证，不能声称解决自然语言数值推理。
+This theorem really exposes the research burden: the interval-arithmetic part is easy to guarantee, while `e=e*` and correct fact binding are the weakest links. If interval inclusion is shown only on gold programs and gold facts, what has been done is a soundness check of a calculator; it cannot claim to solve natural-language numeric reasoning.
 
-### 必须保留的反例与更难的理论问题
+### Counterexamples that must be kept, and harder theoretical questions
 
-同一问题要求同比增长 `(current−prior)/prior`，提议器却输出 `current/prior`：单位类型都是无量纲，算术可完全正确，答案语义仍错。把政策利率上限误当下限，或把预测通胀误当已实现通胀，同样可通过所有局部算术检查。甚至资产、负债、权益同时按相同错误比例解析时，`资产=负债+权益` 仍成立；会计恒等式是一条一致性约束，不能独立证明三个数都来自正确事实。
+The question asks for year-over-year growth `(current−prior)/prior`, but the proposer outputs `current/prior`: both unit types are dimensionless, the arithmetic can be completely correct, and the semantics of the answer are still wrong. Mistaking the upper bound of the policy rate range for the lower bound, or projected inflation for realized inflation, also passes all local arithmetic checks. Even when assets, liabilities, and equity are all parsed with the same wrong scale factor, `assets=liabilities+equity` still holds; an accounting identity is a consistency constraint and cannot on its own prove that all three numbers come from the correct facts.
 
-紧度也不是自动获得的。若 x∈[1,2]，普通自然区间扩展给 `x−x∈[−1,1]`，而精确范围是 {0}；共享事实依赖可令证书宽得没有用途。分母区间含零时，普通有限比率包络不成立。可以探索保持同一事实身份的表达式化简、有限程序候选的联合集合、相关约束下更紧的界，但这些分别与已有符号计算、抽象解释、约束求解等方向重合。未完成相应文献核验前，只能把它们称为待查增量，不能宣布发现新定理。
+Tightness does not come automatically either. If x∈[1,2], the ordinary natural interval extension gives `x−x∈[−1,1]`, while the exact range is {0}; dependence on shared facts can make the certificate so wide that it is useless. When the denominator interval contains zero, the ordinary finite ratio envelope does not hold. One could explore expression simplification that preserves the identity of the same fact, joint sets of finite program candidates, and tighter bounds under correlation constraints, but these overlap with existing directions such as symbolic computation, abstract interpretation, and constraint solving, respectively. Until the corresponding literature check is done, they can only be called increments still to be checked, and no new theorem can be announced.
 
-更有辨识力的候选研究问题是：在预先限定的任务语法下，能否构建一个有限语义候选集合 E(t,q)，使正确程序进入集合的风险可审计；随后输出 `hull{eval(e,I):e∈E}`，并量化候选歧义导致的必然宽度？如果正确程序在 E 且事实区间有效，联合包络健全是直接推论；困难在于保证 E 的覆盖同时不把所有合法程序都装进去。该问题有真实理论形式，但尚未证明新颖性、可计算紧度或任务价值。
+A more discriminating candidate research question is: under a task grammar restricted in advance, can we build a finite semantic candidate set E(t,q) such that the risk of whether the correct program enters the set is auditable; then output `hull{eval(e,I):e∈E}` and quantify the unavoidable width caused by candidate ambiguity? If the correct program is in E and the fact intervals are valid, soundness of the joint envelope is a direct corollary; the difficulty is to guarantee E's coverage without putting every legitimate program into it. The question has a genuine theoretical form, but its novelty, computable tightness, and task value have not been shown.
 
-### 现有实验到底支持什么
+### What the existing experiments actually support
 
-WP0.4 原型的 4 个手工事实中，3 个按支持规范解析，1 个未知 transformation 被拒绝；8 项单元测试通过。数值例子包括 `123.40×10^6=123400000`、`−5.2×10^3=−5200`，以及声明 `decimals=3` 的 0.125 对应条件式舍入区间 [0.1245,0.1255]。来源是我们的实验，而非 SEC 统计。该程序没有自然语言问题、程序提议器或真实 XBRL 覆盖测量，也不证明发行人原值、taxonomy 语义或历史公开时间。
+Of the 4 hand-made facts in the WP0.4 prototype, 3 are parsed according to the supported specification and 1, with an unknown transformation, is rejected; 8 unit tests pass. Numeric examples include `123.40×10^6=123400000`, `−5.2×10^3=−5200`, and 0.125 declared with `decimals=3`, which maps to the conditional rounding interval [0.1245,0.1255]. The source is our experiment, not SEC statistics. This program has no natural-language questions, no program proposer, and no coverage measurement on real XBRL, and it does not prove the issuer's original values, taxonomy semantics, or historical public release times.
 
-WP0.5 合成世界保证预先定义的会计恒等式和污染机制，可为 AST 测试提供真值。但其模板有限、单位仅 USD，不能测出真实文本的程序选择错误。此前 permission 消融任务是立场分类，不是本路径问答，不应迁移它的宏 F1 当作此处性能。**本路径的端到端成功率、错误接受率、区间宽度与基线差异均未测。**
+The WP0.5 synthetic world guarantees the pre-defined accounting identities and contamination mechanism, and can provide ground truth for AST tests. But its templates are limited and its only unit is USD, so it cannot measure program-selection errors on real text. The earlier permission ablation task was stance classification, not this path's question answering, and its macro F1 should not be carried over as performance here. **This path's end-to-end success rate, false-acceptance rate, interval width, and differences from baselines have all not been measured.**
 
-本地 FOMC 是可立即开展真实文本准备的起点：可标注政策区间、百分比／基点转换、历史与当前比较及条件句作用域。仍需先确认其中实际可得问题类型和数量；120 份文档不等于 120 条可独立回答的问题。尚无问题—事实—程序三重金标。没有本地真实 XBRL 对齐材料，不能许诺用结构化财报自动获得金融全域真值。2026 抓取快照及其历史发布日期也不能直接证明当时版本可得性；这条路径的数值证书本身不解决 P1。
+The local FOMC material is a starting point where real-text preparation can begin right away: policy ranges, percentage/basis-point conversions, historical-versus-current comparisons, and the scope of conditional sentences can be annotated. The question types and numbers actually available in it must still be confirmed first; 120 documents are not 120 independently answerable questions. There are no question–fact–program triple gold labels yet. There is no local real XBRL alignment material, so we cannot promise to obtain ground truth over the whole financial domain automatically from structured filings. The 2026 scraped snapshots and their historical release dates also cannot directly prove the availability of the version at that time; this path's numeric certificates do not by themselves solve P1.
 
-### 从零训练是否必要及最强竞争方案
+### Is training from scratch necessary, and the strongest competing approaches
 
-不必要。规则提取器可以直接输出程序；冻结文本编码器或已有模型也可以只做事实定位与候选程序排序。若没有本地可用权重，不能为跑这个对照违反当前不联网边界，先列为未执行。随机初始化训练可以用于受控容量／数据量消融，但“程序输出可验证”来自检查器与前提，不来自权重初始化。
+It is not necessary. A rule extractor can output programs directly; a frozen text encoder or an existing model can also do only fact location and candidate-program ranking. If there are no usable weights locally, the current no-network boundary must not be broken to run this comparison; list it as not run for now. Training from random initialization can be used for controlled capacity/data-size ablations, but "the program output is verifiable" comes from the checker and its premises, not from weight initialization.
 
-最强基线应是：规则模板＋精确计算器；金标事实＋规则程序；金标程序＋自动提取；自动程序＋金标事实；有限类型程序穷举／排序；可用冻结编码器＋同一候选语法；直接答案模型。前四种拆开了“语言提取错”“程序选择错”和“算术错”，比只比较一个小模型和自由生成模型更有研究辨识力。对照都应共享任务信息、文档分组和最终评测集。若规则模板已经给同等正确接受率和覆盖率，则学习模块没有得到必要性证据。
+The strongest baselines should be: rule templates + exact calculator; gold facts + rule programs; gold programs + automatic extraction; automatic programs + gold facts; exhaustive enumeration/ranking of finite typed programs; an available frozen encoder + the same candidate grammar; a direct-answer model. The first four separate "language extraction error", "program selection error", and "arithmetic error", which gives more research discrimination than comparing only a small model with a free-generation model. All comparisons should share task information, document grouping, and the final evaluation set. If rule templates already give the same correct-acceptance rate and coverage, the learned module has no evidence of necessity.
 
 ## Next steps / Risks
 
-### 三阶段最小验证及预算
+### Three-stage minimal validation and budget
 
-以下是**未来执行估计**，不是已跑实验；没有据此请求外联、下载或训练。每阶段通过后才值得冻结下一阶段规模。
+The following are **estimates for future execution**, not experiments already run; no external access, download, or training was requested on this basis. Only after a stage passes is it worth freezing the scale of the next stage.
 
-| 阶段 | 动作与可检验产出 | 预算估计 | 停止／推进规则 |
+| Stage | Actions and testable outputs | Budget estimate | Stop/advance rule |
 |---|---|---|---|
-| 1：任务与 DSL 契约 | 从约 12–20 份本地 FOMC 探索任务类型；手工建立问题、来源事实、AST、不可答原因；定义算子、单位、期间和范围兼容规则 | 人工约 2–4 日；CPU 分钟级，RAM≤2 GB；片段数待盘点 | 若主要是复制数字或单一阈值，无语言推理难点，则降级为工具而非理论选题 |
-| 2：计算与拆分基线 | 实现独立检查器和错程序反例；用金标事实／程序作交叉消融；先跑规则与有限程序枚举，不默认训练模型 | CPU 建议≤1小时；人工与实现约 2–4 日；训练 token=0 的首轮即可回答是否退化 | 要求计算核无假接受反例，且明确错误集中在哪一环；规则足够时停止扩模 |
-| 3：受限语言提议器与冻结评测 | 仅在前两阶段显示必要性后，考虑本地可用冻结模型或小型监督提议器；以未用文档和措辞测试，分别审计事实覆盖、程序覆盖、错误接受及宽度 | CPU 总预算建议≤2小时；人工复核约 2–4 日；模型规模与训练 token 需另行预先预算，不作本报告执行承诺 | 同一风险水平下覆盖／宽度达到预注册增量，且新增理论问题未被现有方法覆盖；否则记录负结果 |
+| 1: Task and DSL contract | Explore task types in about 12–20 local FOMC documents; hand-build questions, source facts, ASTs, and reasons a question cannot be answered; define compatibility rules for operators, units, periods, and scope | About 2–4 days of human effort; CPU in minutes, RAM≤2 GB; number of passages still to be inventoried | If it is mostly copying numbers or a single threshold, with no language-reasoning difficulty, downgrade it to a tool rather than a theory topic |
+| 2: Computation and split baselines | Implement an independent checker and wrong-program counterexamples; run cross ablations with gold facts/programs; run rules and finite program enumeration first, with no default model training | Suggested CPU ≤1 hour; about 2–4 days of human effort and implementation; a first round with 0 training tokens can already answer whether the task degenerates | Requires that the computation core has no false-acceptance counterexample, and that it is clear at which stage the errors concentrate; stop scaling up if rules are enough |
+| 3: Restricted language proposer and frozen evaluation | Only after the first two stages show necessity, consider a locally available frozen model or a small supervised proposer; test on unused documents and wording, auditing fact coverage, program coverage, false acceptance, and width separately | Suggested total CPU budget ≤2 hours; human review about 2–4 days; model size and training tokens need a separate advance budget and are not an execution commitment of this report | Coverage/width reaches the pre-registered increment at the same risk level, and the new theoretical question is not covered by existing methods; otherwise record a negative result |
 
-报告指标应包括精确答案匹配，但不能只看它：偶然数值相等可能掩盖错误程序。必须同时计算完整事实绑定正确率、程序语义等价率、拒绝率、错误接受率及输出宽度；文档内多个问题相关，要按文档组织划分和统计。若金标程序有多个等价表达式，采用语义规范或可检查等价类，不能用字符串完全相同误判。解释者与审计者应尽可能独立，不能让同一模型生成答案又无外部证据地批准自己。
+Reported metrics should include exact answer match, but not only that: an accidental numeric equality can hide a wrong program. One must also compute the full fact-binding accuracy, the program semantic-equivalence rate, the rejection rate, the false-acceptance rate, and the output width; several questions within a document are correlated, so splits and statistics must be organized by document. If a gold program has several equivalent expressions, use a semantic specification or checkable equivalence classes; exact string identity must not be used to misjudge them. Interpreters and auditors should be as independent as possible; the same model must not generate an answer and then approve itself without external evidence.
 
-### 否决条件、负结果价值与最弱环节
+### Kill conditions, value of negative results, and the weakest link
 
-若在受限任务域内规则系统已经近乎解决问题，DSL 仅是原有计算器的包装，应停止将其称作 LM 研究。若错误程序经常类型正确且无可审计的选择保障，最终只能给很宽或大量拒绝的区间，则“proof-carrying”没有解决关键不确定性。若需要为每类题手写全部语义规则，且语言模块只是替规则做模糊匹配，研究价值可能主要是任务规范与数据集，而非模型理论。若新增命题仅为 AST 结构归纳和 union bound，不能单独作为理论创新成果。
+If the rule system already nearly solves the problem within the restricted task domain, the DSL is only a wrapper around an existing calculator, and we should stop calling it LM research. If wrong programs are often well typed and there is no auditable selection guarantee, so that in the end only very wide intervals or heavy rejection can be given, then "proof-carrying" has not solved the key uncertainty. If all semantic rules must be hand-written for each question type and the language module only does fuzzy matching for the rules, the research value may lie mainly in the task specification and dataset, not in model theory. If the new propositions are only structural induction on the AST and a union bound, they cannot stand alone as a theoretical innovation.
 
-负结果可以有三类实质交付：类型／单位校验究竟不能发现哪些金融语义错误；解析与程序歧义导致区间宽度的定量分解；在何种任务复杂度下学习模块才超过规则。这些比展示一段生成代码或几条成功算例更能帮助导师决定投入。**当前 weakest link 是正确问题语义与事实—程序绑定，其次是可审核金标和专门文献覆盖；算术核的可行性相对高。** 总体判断为“离线最小原型可行、自然文本研究价值未知、理论新颖性低置信度”，不把探索候选强凑为已可行旗舰。
+Negative results can have three kinds of substantive deliverable: which financial semantic errors type/unit checking cannot detect; a quantitative decomposition of the interval width caused by parsing and program ambiguity; and at what task complexity a learned module starts to beat rules. These help the advisor decide on investment more than showing a piece of generated code or a few successful examples. **The current weakest link is correct question semantics and fact–program binding, followed by auditable gold labels and coverage of the specialized literature; feasibility of the arithmetic core is relatively high.** Overall assessment: "offline minimal prototype feasible, research value on natural text unknown, theoretical novelty low confidence"; the exploratory candidate is not forced into an already feasible flagship.
 
-### 交给资深导师的具体问题
+### Specific questions for the senior advisor
 
-1. 哪类目标允许把语义程序作为外部规范固定？若一切问题都要求模型自行理解，能否接受只对计算阶段给条件证书？
-2. 候选程序集合的覆盖—宽度是否值得作为数学对象研究，还是已有验证／抽象解释工作足以完全覆盖？当前离线证据无法裁定。
-3. 若主结果是“符号规则足够，LM 无必要”，它应作为独立负结果、数据规范产物，还是直接否决这条路径？
-4. 首批 FOMC 题是否过窄，以至无法代表财务数值推理？若是，应在获取新本地材料前明确保留探索状态，而不是以合成报表替代真实证据。
+1. Which kinds of target allow the semantic program to be fixed as an external specification? If every question requires the model to understand it on its own, is it acceptable to give a conditional certificate only for the computation stage?
+2. Is the coverage–width trade-off of candidate program sets worth studying as a mathematical object, or does existing verification / abstract-interpretation work cover it completely? Current offline evidence cannot decide.
+3. If the main result is "symbolic rules are enough; the LM is unnecessary", should it be a standalone negative result, a data-specification product, or a direct kill of this path?
+4. Are the first FOMC questions too narrow to represent financial numeric reasoning? If so, the exploratory status should be kept explicitly until new local material is obtained, instead of substituting synthetic statements for real evidence.
 
-### 对独立审查的回应：不能用正确程序假设证明程序选择正确
+### Response to the independent review: the correct-program assumption cannot prove that program selection is correct
 
-接受审查意见：上文 `e=e*` 的假设把真正的题意识别困难放到了算术定理之外。其作用是界定已有计算核的责任，**不是解决了自然语言语义正确性**。当前没有本路径的问题—事实—程序金标、语言提议器或真实错误接受审计。金标程序实验只可验证计算／数值包含性，不能用来证明自动提议程序等于金标；金标事实实验也不能证明自动抽取正确。
+We accept the review's point: the assumption `e=e*` above places the real difficulty of understanding the question outside the arithmetic theorem. Its role is to delimit the responsibility of the existing computation core; **it does not solve natural-language semantic correctness**. There are currently no question–fact–program gold labels for this path, no language proposer, and no audit of real false acceptance. Gold-program experiments can only verify computational/numeric inclusion and cannot be used to show that automatically proposed programs equal the gold; gold-fact experiments also cannot show that automatic extraction is correct.
 
-下一条最小命题可转为 **P5-L：给定证据接口的答案可识别性与必要区间宽度**。固定检查器能看到的证据对象 O，包括问题表示、来源跨度及可用标注；令 W(O) 为所有与这些观察和预注册任务规范一致的语义世界，假设真实世界在 W(O)。每个世界 w 有确定的目标程序 e_w、有效事实 z_w 和答案 a_w=e_w(z_w)，所有答案以同一声明单位和标尺表示。先把语法及候选事实限制为可穷举的有限集合，并确保每个程序定义良好。则任何仅依赖 O、对 W(O) 中所有世界都健全的确定性区间检查器，若接受，输出必须包含全部 a_w；最小区间为 `[min_w a_w,max_w a_w]`。精确点答案可以被认证，当且仅当全部 a_w 相同。如果有两个不可区分世界的答案相差 δ，任何健全的接受区间宽度至少为 δ；否则须拒绝或获取能区分它们的新语义证据。
+The next minimal proposition can become **P5-L: answer identifiability and necessary interval width for a given evidence interface**. Fix the evidence object O that the checker can see, including the question representation, source spans, and available annotations; let W(O) be all semantic worlds consistent with these observations and the pre-registered task specification, and assume the true world is in W(O). Each world w has a definite target program e_w, valid facts z_w, and answer a_w=e_w(z_w), with all answers expressed in the same declared unit and scale. First restrict the grammar and candidate facts to a finite set that can be enumerated, and make sure every program is well defined. Then any deterministic interval checker that depends only on O and is sound for all worlds in W(O) must, if it accepts, output an interval containing every a_w; the minimal interval is `[min_w a_w,max_w a_w]`. An exact point answer can be certified if and only if all a_w are equal. If two indistinguishable worlds have answers differing by δ, every sound accepted interval has width at least δ; otherwise the checker must reject or obtain new semantic evidence that distinguishes them.
 
-证明是相同 O 导致检查器输出相同，而全域健全性要求同时覆盖每个可行世界；取端点即可达到有限集合下界。该命题仍是初等识别结果，**并非新的程序推理定理**。它给下一步一个可被推翻的具体对象：先用有限题型构造和审查 W(O)，例如同一数字对中的“比值”与“增长率”在规范不足时可能都合法；在规范明确排除其一时，不能故意保留它制造歧义。任一漏列的合法世界可推翻集合覆盖；任一被接受答案没有覆盖某个合法 a_w 可推翻检查器健全性。反过来，存在不同语法的程序但答案相同，只证明这个输入上答案可识别，不证明程序语义正确；若研究目标包括忠实程序，还必须另查语义等价性。
+The proof: the same O makes the checker output the same thing, and soundness over the whole domain requires covering every feasible world at once; taking the endpoints attains the lower bound for a finite set. This proposition is still an elementary identification result, **not a new theorem about program reasoning**. It gives the next step a concrete object that can be refuted: first construct and review W(O) for finite question types; for example, "ratio" and "growth rate" on the same pair of numbers may both be legitimate when the specification is insufficient, but when the specification explicitly excludes one of them, it must not be kept on purpose to create ambiguity. Any omitted legitimate world refutes set coverage; any accepted answer that fails to cover some legitimate a_w refutes checker soundness. Conversely, programs with different syntax but the same answer only show that the answer is identifiable on this input, not that the program semantics are correct; if the research goal includes faithful programs, semantic equivalence must be checked separately.
 
-最小下一步不是训练模型，而是为一组事前指定的有限题型给出这类成对不可区分实例、匹配的区间下界和可解除歧义的最少附加字段，并检查规则系统能否同样完成。只有当该对象超出既有部分识别／程序验证工具的直接应用，而且可在真实文本金标上形成有意义的覆盖—宽度关系，才考虑论文增量。目前既没有这项实现，也没有完成相关先例排查；不能因为写出 lemma 就提升路径成熟度。
+The minimal next step is not training a model, but giving, for a set of finite question types specified in advance, such pairs of indistinguishable instances, the matching interval lower bounds, and the minimal additional fields that resolve the ambiguity, and checking whether a rule system can do the same. Only if this object goes beyond a direct application of existing partial-identification / program-verification tools, and can yield a meaningful coverage–width relation on real-text gold labels, should a paper increment be considered. At present there is neither an implementation of this nor a completed search for related prior work; writing down a lemma does not raise the maturity of the path.
 
-### 有用性门槛及风险审计
+### Usefulness thresholds and risk audit
 
-采用 [下一轮可否决规则](DECISION_CRITERIA.md) 的待冻结提案：接受率至少 50%；接受样本语义／答案错误风险的 95% 单侧上界不超过 5%；精确事实任务要求精确答案，区间任务按事前确定、与问题语义一致的尺度将宽度归一化后不超过 .10。不能用某个近零、可事后选择的答案作归一化分母；可选预定正参考尺度，并把尺度写入任务定义。宽度门可直接作为固定接受规则的一部分，避免为难例任意扩大范围仍声称成功。与规则＋计算器比较，应在相同风险和宽度条件下覆盖增加至少 10 个百分点，配对不确定性仍跨零时只记“增益未判定”。这些是研究资源门槛，不是行业标准或原创性证据。
+We adopt the to-be-frozen proposal of the [next-round falsifiable decision rules](DECISION_CRITERIA.md): acceptance rate at least 50%; the one-sided 95% upper bound on the semantic/answer error risk of accepted samples at most 5%; exact-fact tasks require exact answers, and for interval tasks the width, normalized by a scale fixed in advance and consistent with the question semantics, must be at most .10. A near-zero answer that can be chosen after the fact must not be used as the normalizing denominator; a pre-set positive reference scale can be chosen and written into the task definition. The width gate can be made directly part of the fixed acceptance rule, to avoid arbitrarily widening the range for hard cases while still claiming success. Compared with rules + calculator, coverage should rise by at least 10 percentage points under the same risk and width conditions; if the paired uncertainty still crosses zero, record only "gain inconclusive". These are research-resource thresholds, not industry standards or evidence of originality.
 
-审计事件要明确包含错误实体／期间／口径／数值、错误程序语义以及答案区间漏真值；错误程序恰好得到同一数值，也不能被记为完整语义证书成功。各错误可以作为一个联合失败事件直接审计，避免只证明算术无错就忽略前端。人工参照须独立核对问题及来源，不能由同一提议器无外部依据地批准自己；AI 生成的程序不是未经复核即可使用的 gold。
+The audit event must explicitly include wrong entity/period/convention/value, wrong program semantics, and an answer interval that misses the true value; a wrong program that happens to give the same number also cannot be recorded as a success of a complete semantic certificate. The errors can be audited directly as one joint failure event, so that the front end is not ignored once the arithmetic is shown to be error-free. The human reference must check the question and sources independently; the same proposer must not approve itself without external grounds; AI-generated programs are not gold that can be used without review.
 
-明确三个分母：接受率 `a=Pr(A=1)`，联合错误接受率 `j=Pr(A=1 且失败)`，接受样本风险 `r=Pr(失败|A=1)=j/a`（a>0）。三者并列报告，a=0 时r未定义且没有部署覆盖。若前面的 epsilon_f+epsilon_s 只控制全样本失败，其对r只给出 `r≤min(1,(epsilon_f+epsilon_s)/a)`；不能省略除以a。此处5%门直接针对固定A后的条件风险r，故须有相匹配的审计设计。若输出候选程序集合，语义覆盖事件是“集合内存在至少一个与真值规范相容的程序”；若只输出所选程序，则审计该所选程序本身，不能用集合覆盖替代选择正确。
+Make the three denominators explicit: acceptance rate `a=Pr(A=1)`, joint false-acceptance rate `j=Pr(A=1 and failure)`, and accepted-sample risk `r=Pr(failure|A=1)=j/a` (a>0). Report all three side by side; when a=0, r is undefined and there is no deployment coverage. If the earlier epsilon_f+epsilon_s only controls failure over all samples, it gives only `r≤min(1,(epsilon_f+epsilon_s)/a)` for r; the division by a cannot be omitted. The 5% gate here targets the conditional risk r directly, given fixed A, so a matching audit design is needed. If a set of candidate programs is output, the semantic coverage event is "the set contains at least one program compatible with the ground-truth specification"; if only the selected program is output, audit that selected program itself, and do not substitute set coverage for correct selection.
 
-固定管线与接受规则后，**59 个独立、具有代表性的接受样本且零失败**，才对应单侧 95% 精确二项上界低于 5% 的理想预算。它既不是当前已获得的样本数，也不是未来会零失败的保证；一次非零失败、文档内依赖、跨文档政策相关、金标错误、多重比较或分布漂移都会改变结论。按文档成簇的报告可揭示不确定性，但不能仅凭 bootstrap 输出就宣称获得同样的有限样本风险证书。若实际可用证据仅支持冻结有限语料上的审计，必须按该总体报告，不外推新文档分布。当前 120 份 FOMC 文档不足以自动通过这些前提。
+With the pipeline and acceptance rule fixed, **59 independent, representative accepted samples with zero failures** is the ideal budget that corresponds to a one-sided 95% exact binomial upper bound below 5%. It is neither the number of samples currently obtained nor a guarantee of zero failures in future; a single nonzero failure, within-document dependence, cross-document policy correlation, gold-label errors, multiple comparisons, or distribution drift all change the conclusion. Reporting clustered by document can reveal uncertainty, but a bootstrap output alone cannot be used to claim the same finite-sample risk certificate. If the actually available evidence only supports an audit on a frozen finite corpus, the report must be about that population and must not extrapolate to the distribution of new documents. The current 120 FOMC documents are not enough to pass these premises automatically.
 
-探索、训练、开发／规则选择、冻结风险审计必须按文档分账，不能让产生 DSL 模板、挑选程序或调整拒绝阈值的材料再证明独立风险。若按计划先从 120 份取 12–20 份探索，余 100–108 份即使理想化为每份一个独立单位，50% 接受率也只产生 50–54 个接受单位。达到 59 个所需的接受率至少约 54.63%–59%，而训练、开发用途还未分配；现实语义金标和跨文档独立性也仍未建立。这个算账表明当前库存不能保证通过提案门槛。可以先报告实际样本设计支持的更宽风险上界，并把 5% 门明确记为未通过；不能通过同文档增加问题数量假装增加 IID 单位，也不能将 gold-program 计算实验挪作自动语义提议器的成功审计。
+Exploration, training, development/rule selection, and the frozen risk audit must be kept in separate accounts by document; material used to produce DSL templates, pick programs, or tune the rejection threshold must not then be used to show independent risk. If, as planned, 12–20 of the 120 documents first go to exploration, the remaining 100–108, even idealized as one independent unit each, give only 50–54 accepted units at a 50% acceptance rate. Reaching 59 needs an acceptance rate of at least about 54.63%–59%, and training and development uses have not yet been allocated; real semantic gold labels and cross-document independence have also not been established. This accounting shows that the current inventory cannot guarantee passing the proposed gates. One can first report the wider risk upper bound that the actual sample design supports, and record the 5% gate explicitly as failed; one must not pretend to add IID units by adding more questions from the same document, nor repurpose the gold-program computation experiment as a successful audit of the automatic semantic proposer.
 
-本修订回应独立审查，但不把新提出的识别命题、预计金标或门槛视为已完成成果。眼下可交付的仍是受限计算核和可否决研究设计；下一笔投入首先应检验语义证据是否足以识别答案，而不是扩张语言提议器。
+This revision responds to the independent review, but does not treat the newly proposed identification proposition, the planned gold labels, or the gates as completed results. What can be delivered now is still a restricted computation core and a falsifiable research design; the next investment should first test whether the semantic evidence is enough to identify the answer, not expand the language proposer.

@@ -1,9 +1,9 @@
-# 绝对评分运行进度
+# Absolute-scoring run progress
 
-更新时间（UTC）：2026-11-16T15:49:41.394031+00:00
+Updated (UTC): 2026-11-16T15:49:41.394031+00:00
 
-已保存并验证 250/250 次调用；主实验 200/200，对照 50/50。
-已保存 10000 个 ID 分数（重复不是新增独立标题）。
-下一待执行调用：无，评分完成。
+Saved and validated 250/250 calls; main experiment 200/200, controls 50/50.
+Saved 10000 ID scores (repeats are not new independent headlines).
+Next call to run: none, scoring complete.
 
-本页仅报告执行进度，不提前判定研究结论。
+This page reports only execution progress and does not judge the research conclusion in advance.

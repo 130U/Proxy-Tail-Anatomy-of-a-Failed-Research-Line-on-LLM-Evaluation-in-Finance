@@ -1,33 +1,33 @@
-# 实验 WP0.4-offline：受限数值与单位解析
+# Experiment WP0.4-offline: restricted numeric and unit parsing
 
-## 要检验的问题
+## Question to test
 
-只验证本地人工synthetic fixture的单位、scale、sign、decimals、context转换与失败时拒绝行为；不回答真实SEC语料是否足够支撑可信核心。
+Only verify the unit, scale, sign, decimals and context conversion, and the rejection behaviour on failure, for a local hand-made synthetic fixture; this does not answer whether the real SEC corpus is sufficient to support a trusted core.
 
-## 预算
+## Budget
 
-运行前记录见 [budget.md](budget.md)：CPU，预计10秒内，0显存、0训练token，无网络。
+The pre-run record is in [budget.md](budget.md): CPU, expected within 10 seconds, 0 GPU memory, 0 training tokens, no network.
 
-## 配置
+## Configuration
 
-- 基线commit：8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254；新增代码在research/xbrl/，运行时未提交。
-- Python 3.12.14，Windows AMD64 CPU，标准库；不需要随机seed。
-- 数据：`synthetic_fixture.xml`，SHA256见 [example_result.json](example_result.json)。事实结构由本轮手工指定。
-- 实际测试：8项unittest全部通过；测试框架计时0.006秒，解析+测试工具调用耗时约1.35秒（包含进程启动）。来源层级：**我们的实验 WP0.4-offline**。
+- Base commit: 8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254; the new code is in research/xbrl/ and was not committed at run time.
+- Python 3.12.14, Windows AMD64 CPU, standard library; no random seed needed.
+- Data: `synthetic_fixture.xml`, SHA256 in [example_result.json](example_result.json). The fact structure was specified by hand in this round.
+- Actual tests: all 8 unittests passed; the test framework timed 0.006 seconds, and the parse + test tool calls took about 1.35 seconds (including process start-up). Source level: **our experiment WP0.4-offline**.
 
-## 结果
+## Results
 
-| 条件 | 输出 | 解释 |
+| Condition | Output | Interpretation |
 |---|---|---|
-| 123.40 × 10^6 USD | 123400000 | scale精确换算 |
-| 5.2 × 10^3 USD，sign=- | -5200 | sign与scale分别应用 |
-| ratio=0.125，decimals=3 | 声明舍入区间[0.1245,0.1255] | 条件于准确度声明，不是真实值验证 |
-| unknown accounting transformation | 拒绝，保留reason | 不把(1,234)猜成可支持输入 |
-| missing unit/context、continuation、反向period、超域scale、缺decimals | 相应事实拒绝 | 不返回看似有效但无前提的数值 |
-| duplicate ID / DTD | 整文档拒绝 | 不选择含糊绑定 |
+| 123.40 × 10^6 USD | 123400000 | Exact scale conversion |
+| 5.2 × 10^3 USD, sign=- | -5200 | sign and scale applied separately |
+| ratio=0.125, decimals=3 | Declared rounding interval [0.1245,0.1255] | Conditional on the accuracy declaration; not verification of the true value |
+| unknown accounting transformation | Rejected, reason kept | (1,234) is not guessed to be a supported input |
+| missing unit/context, continuation, reversed period, out-of-domain scale, missing decimals | The corresponding facts are rejected | No value is returned that looks valid but lacks its premises |
+| duplicate ID / DTD | Whole document rejected | No ambiguous binding is chosen |
 
-完整JSON见 `example_result.json`，包含3条已解析事实、1条格式拒绝、`status=partial`及`timestamp_certificate=null`。这些计数是特定手工案例的确定性检查，不是随机样本，因此没有95%真实误差率区间。
+The full JSON is in `example_result.json`, with 3 parsed facts, 1 format rejection, `status=partial` and `timestamp_certificate=null`. These counts are deterministic checks of specific hand-made cases, not a random sample, so there is no 95% interval for the true error rate.
 
-## 结论和限制
+## Conclusion and limits
 
-本地文件→受限结构化数值的接口已可运行。真实SEC统计、calc覆盖、accepted精度、修正申报、inline文本对齐、每年监督规模均未测。原型不能证明真实无前视或单位解析在开放文本上正确，也不构成完整WP0.4验收。按用户要求没有新增外部访问。
+The interface from local files to restricted structured values runs. Real SEC statistics, calc coverage, accepted precision, amended filings, inline text alignment and yearly supervision scale were not measured. The prototype cannot prove real absence of look-ahead or correct unit parsing on open text, and it does not constitute full WP0.4 acceptance. As the user requested, no new external access was added.

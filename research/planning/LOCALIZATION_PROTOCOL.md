@@ -1,42 +1,42 @@
-# 第八轮：位置信息相对强简单审计基线的价值
+# Round eight: the value of position information relative to strong simple audit baselines
 
-日期：2026-11-16。上一轮为实质进展：统一稿、强基线反驳及PDF已经完成。本轮继续尚未完成的原研究目标，重点是数学贡献的必要性，不改变G0/G1，不进行主线训练、联网、获取权重或对外发送。
+Date: 2026-11-16. The previous round made substantive progress: the unified manuscript, the strong-baseline rebuttal and the PDF are complete. This round continues the original research goal that is not yet complete, focusing on the necessity of the mathematical contribution; it does not change G0/G1 and involves no main-line training, network access, weight downloads or external sending.
 
-## 1. 已知结果与研究性质
+## 1. Known results and nature of the research
 
-原阈值20格和38对48已经看过。本轮审查讨论又提出同质比值上界、合取族与star结构，属于探索性推导。以下冻结的是执行范围和完整报告规则，**不是对这些已知例子的事前确认性预注册**，也不追认任何旧20%投入门通过。
+The original threshold 20 cells and 38 versus 48 have already been seen. This round's review discussion also raised a homogeneous ratio upper bound, a conjunction family and a star structure; these are exploratory derivations. What is frozen below is the execution scope and the full reporting rules; this **is not an ex-ante confirmatory pre-registration of these already-known examples**, and it does not retroactively declare any old 20% investment gate passed.
 
-框架：有限总体、固定污染真值、固定分层均匀无放回抽样、层间独立、全零发现才出证、正确审计标签。训练随机性与评测对象事前冻结；无训练样本iid假设。所有数值输入都是明示人工数学构造，非真实模型、来源审计或历史证书。
+Framework: finite population, fixed true contamination, fixed stratified uniform sampling without replacement, independence across strata, certification only when all findings are zero, correct audit labels. Training randomness and the evaluation object are frozen in advance; no iid assumption on training samples. All numeric inputs are explicitly hand-made mathematical constructions, not real models, provenance audits or historical certificates.
 
-## 2. 核心问题和同条件比较
+## 2. Core questions and same-condition comparisons
 
-1. 给定层规模N_h、配额n_h及安全总数门K≤s−1，精确风险为所有总污染数s配置的最大漏检概率。实现非增乘子链的prefix-greedy，并用独立组合数DP和小域实际抽样枚举检查。
-2. 比较同一目标下：直接坏集合设计、最强联合零发现安全矩形、最强固定分层总K门。各自的输出承诺不同，要明确说明。
-3. 将`min(最强矩形成本, 最强总K成本)`也列为简单基线组合：在看审计结果前，按已冻结信息选择成本较低的有效设计，无需额外多重检验。不能每个例子只挑较弱的单一比较器。
-4. 对原d=2r−1阈值族，验证位置收益相对总数门的常数界及其尖锐性；原N=r²渐近路径与别的参数路径区分。
-5. 对全层合取及star结构，核对真正的阶数差异与最简单的达到构造。所有文档须属于某个极小坏配置，排除加无关文档制造优势；同时承认简单的单层清洁门可能已达直接最优。
+1. Given stratum sizes N_h, quotas n_h and the safe total-count gate K≤s−1, the exact risk is the maximum miss probability over all configurations with total contamination count s. Implement prefix-greedy over non-increasing multiplier chains, and check it with an independent binomial-coefficient DP and small-domain enumeration of actual sampling.
+2. Under the same target, compare: the direct bad-set design, the strongest joint zero-finding safe rectangle, and the strongest fixed-stratification total-K gate. Their output commitments differ, and this must be stated clearly.
+3. Also list `min(strongest rectangle cost, strongest total-K cost)` as a simple baseline combination: before looking at audit results, choose the valid design with the lower cost based on frozen information; no extra multiple testing is needed. One must not pick only the weaker single comparator for each example.
+4. For the original d=2r−1 threshold family, verify the constant bound on the position gain relative to the total-count gate and its sharpness; distinguish the original N=r² asymptotic path from other parameter paths.
+5. For the all-strata conjunction and the star structure, check the genuine order difference and the simplest attaining construction. Every document must belong to some minimal bad configuration, ruling out creating an advantage by adding irrelevant documents; also acknowledge that a simple single-stratum clean gate may already reach the direct optimum.
 
-不把非空数学差异等同于自然模型收益、算法新颖性或从零训练必要性。当前已有文献台账不足以给本轮窄定理作优先权判断。
+A non-empty mathematical difference is not equated with a natural-model gain, algorithmic novelty or the necessity of training from scratch. The current literature ledger is not enough to judge priority for this round's narrow theorem.
 
-## 3. 固定计算范围
+## 3. Fixed computation scope
 
-全部使用α=1/20，accuracy目标区间[9/10,1]，单位审计成本。
+Everything uses α=1/20, accuracy target interval [9/10,1], and unit audit cost.
 
-- 原同质阈值族：r∈{2,3,4,5,6}，N∈{2,5,10,20}，d=2r−1，完整20格。已有direct/box结果保留并核对；新增最优总K成本及与简单基线组合的差异。
-- 合取族：d=r∈{2,3,4,5,6,8,12,20}，N=2。d个单层影响头加d−1个可信固定正确头；坏当且仅当每层有污染。列出direct=box单层门及总K精确优化，与已证明闭式比较。
-- Star族：叶数L∈{1,2,5,10}，N∈{2,5,10,20}，共L+1层。中心影响L个头、每叶影响各自一头，另1可信固定正确头；坏当且仅当中心及至少一叶含污染。列出中心清洁门、最强总K及简单基线组合。
-- 尖锐常数序列：N∈{4,8,16,32}，r=N²，d=2r−1。只核对定理指定的可行构造及解析成本上下界，**不把它们称为全局精确最优的数值解**。最小k使(1−1/N)^k≤α以整数/有理比较反解，避免浮点根边界。
+- Original homogeneous threshold family: r∈{2,3,4,5,6}, N∈{2,5,10,20}, d=2r−1, the complete 20 cells. Existing direct/box results are kept and checked; new: the optimal total-K cost and the difference from the simple baseline combination.
+- Conjunction family: d=r∈{2,3,4,5,6,8,12,20}, N=2. d single-stratum influence heads plus d−1 trusted fixed-correct heads; bad if and only if every stratum has contamination. List the direct=box single-stratum gate and the exact total-K optimization, compared with the proven closed form.
+- Star family: number of leaves L∈{1,2,5,10}, N∈{2,5,10,20}, L+1 strata in total. The centre influences L heads, each leaf influences its own head, plus 1 trusted fixed-correct head; bad if and only if the centre and at least one leaf contain contamination. List the centre clean gate, the strongest total K and the simple baseline combination.
+- Sharp-constant sequence: N∈{4,8,16,32}, r=N², d=2r−1. Only check the feasible construction specified by the theorem and the analytic upper and lower cost bounds, **without calling them numerical solutions of the global exact optimum**. The smallest k with (1−1/N)^k≤α is solved by integer/rational comparison, avoiding floating-point root boundaries.
 
-所有格都报告，包括无改善和运行预算超限；超限不返回“最优”“无解”，也不得偷偷缩网格只保留成功项。探索性的不同α或别的结构不混入主表。
+All cells are reported, including no improvement and exceeded run budgets; an exceeded budget does not return "optimal" or "no solution", and the grid must not be quietly shrunk to keep only successful items. Exploratory different α values or other structures are not mixed into the main table.
 
-## 4. 算力和执行顺序
+## 4. Compute and execution order
 
-- 纯Python标准库，无GPU、模型训练或私有文本。已有捆绑/本地Python可用，不安装依赖。
-- 单元与独立小域核对预算：CPU墙钟10秒；首次完整表预算：60秒。峰值内存预计低于256MB，未实际测量则不报告为实测。
-- 一般优化单次累计上限：500,000搜索节点、250,000风险评估、2,000,000乘子步；DP最多200,000转移。输入有理数在解析前限制长度/语法，禁止科学记数法指数爆炸。超限显式失败。
-- 等规模同成本可使用已证明的k最小配额约简（k≤d）：尾部降至第k配额，风险仍必须计算各链前k大因子，不能套直接法的k个首项乘积。实现若保留全d排序枚举，同样有效但不能声称使用了约简。
-- 先完成代码与有意义小测，再运行完整固定范围，后由独立审查核对理论、实现、整表与科学主张；原JSON与原PDF保留，不覆写旧实验。
+- Pure Python standard library; no GPU, model training or private text. The existing bundled/local Python is available; no dependencies are installed.
+- Budget for unit and independent small-domain checks: 10 seconds of CPU wall clock; budget for the first full table: 60 seconds. Peak memory expected below 256MB; not reported as measured unless actually measured.
+- Cumulative limits for a single general optimization: 500,000 search nodes, 250,000 risk evaluations, 2,000,000 multiplier steps; the DP at most 200,000 transitions. Input rationals have length/syntax limits before parsing, and scientific-notation exponent blow-up is forbidden. Exceeding a limit fails explicitly.
+- For equal sizes and equal costs the proven k-smallest-quota reduction (k≤d) may be used: the tail is lowered to the k-th quota, but the risk must still compute the k largest factors of each chain and cannot reuse the direct method's product of the first k terms. If the implementation keeps the full d sorted enumeration, it is equally valid but cannot claim to use the reduction.
+- First finish the code and meaningful small tests, then run the complete fixed scope, then have an independent review check the theory, implementation, full table and scientific claims; the original JSON and original PDF are kept, and old experiments are not overwritten.
 
-## 5. 本轮交付与判定
+## 5. Deliverables and decision for this round
 
-交付完整条件证明、精确总数基线代码、完整结果JSON和分析、独立反方审查及Fable包更新。若简单基线组合已复现全部收益，应据实报告为方法必要性受挫；不能靠计算器复杂度、测试数量或更多构造宣称理论创新。原论文仅作为已有阶段稿，本轮首先提供补充材料，避免在未审查完之前重写为新主论文。
+Deliver complete conditional proofs, the exact total-count baseline code, the complete results JSON and analysis, an independent adversarial review, and an update of the Fable package. If the simple baseline combination already reproduces all the gains, this should be reported truthfully as a setback for the method's necessity; theoretical innovation must not be claimed on the strength of calculator complexity, the number of tests or more constructions. The original paper serves only as an existing stage manuscript; this round first provides supplementary material, to avoid rewriting it as a new main paper before the review is finished.

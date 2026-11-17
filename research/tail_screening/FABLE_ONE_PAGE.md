@@ -1,26 +1,26 @@
-# 给 Fable：稳定性试验的最终判断
+# For Fable: final assessment of the stability trials
 
-2026-11-16｜已执行结果｜Theodore 转交
+2026-11-16 | Executed results | Passed on by Theodore
 
-**决定：本轮不扩大到512条。四次排序聚合有明确改善，但选中方法在新128条的确认门仍有一项略未通过。** 这不是原尾部假说被证伪，也不是总体显著低于门槛的结论。
+**Decision: this round does not scale up to 512 items. Four-run rank aggregation gives a clear improvement, but the selected method still narrowly failed one item of the confirmation gate on the new 128 items.** This does not falsify the original tail hypothesis, and it is not a conclusion that the population is significantly below the threshold.
 
-全部通过当前Codex会话的agent执行，未训练模型或接入付费模型API。累计64次评分任务：128条开发8次；全新32条方法比较48次；再一批全新128条确认8次。另有2次整批成对任务未产生输出，单独记录。三批共288个不重叠词法族，重复评分不增加样本量。
+Everything was run through agents in the current Codex session; no model was trained and no paid model API was connected. In total there were 64 scoring tasks: 8 on the 128-item development set; 48 for the method comparison on 32 completely new items; 8 for the confirmation on another batch of 128 completely new items. In addition, 2 whole-batch pairwise tasks produced no output and are recorded separately. The three batches cover 288 non-overlapping lexical families; repeated scoring does not increase the sample size.
 
-| 32条第一阶段 | 最差同预算召回 | 最大90%召回放行倍数 | 结论 |
+| 32-item stage 1 | Worst equal-budget recall | Maximum widening factor for 90% recall | Conclusion |
 |---|---:|---:|---|
-| 成对比较 / Luna | 62.5% | 2.25 | 未通过 |
-| 成对比较 / Sol | 87.5% | 1.875 | 未通过 |
-| 四次聚合 / Luna | 87.5% | 2.75 | 未通过 |
-| 四次聚合 / Sol | 100% | 1.00 | 单模型通过，进入新样本 |
+| Pairwise comparison / Luna | 62.5% | 2.25 | Failed |
+| Pairwise comparison / Sol | 87.5% | 1.875 | Failed |
+| Four-run aggregation / Luna | 87.5% | 2.75 | Failed |
+| Four-run aggregation / Sol | 100% | 1.00 | Passed as a single model, moved to a new sample |
 
-第一阶段主p=25%，名义8条；90%经取整要求全8条。联合双模型方法均未通过，仅选择Sol四次聚合作为新分支确认；没有更改原联合门结论。
+In stage 1 the main p=25%, nominal 8 items; after rounding, 90% requires all 8. Both joint two-model methods failed; only Sol four-run aggregation was selected for confirmation as a new branch, and the original joint-gate conclusion was not changed.
 
-**128条确认结果：** 两个四次聚合panel总体Spearman=0.9929。主p=10%、20%的八项方向/尾部检查中七项通过。负面10%实际名单14条和12条、重合11条，一个方向召回11/14=78.6%＜80%；反向11/12=91.7%。最大q90/p=1.25≤1.5，最大边界同分扩张16.7%≤20%，全部输出可排序。失败接近门槛，不能形容为严重失稳。
+**128-item confirmation result:** the overall Spearman between the two four-run aggregation panels is 0.9929. Of the eight direction/tail checks at the main p=10% and 20%, seven passed. In the negative 10% tail, the actual lists had 14 and 12 items with an overlap of 11; recall in one direction was 11/14=78.6% < 80%, and in the reverse direction 11/12=91.7%. The maximum q90/p=1.25≤1.5, the maximum boundary-tie expansion 16.7%≤20%, and all outputs were rankable. The failure is close to the threshold and cannot be described as severe instability.
 
-m=1→2→4时，确认集最差同预算召回64.3%→71.4%→78.6%，最大放行倍数2.969→1.875→1.250。聚合确实改善；按预先固定的m=4作决定，保留未过结果，不在确认集增加重复或降门槛后改判成功。32到128还同时改变样本池和尾部比例，不能归因于样本量单独增加。
+For m=1→2→4, the worst equal-budget recall on the confirmation set was 64.3%→71.4%→78.6%, and the maximum widening factor 2.969→1.875→1.250. Aggregation does improve things. The decision is made at the pre-fixed m=4, the failing result is kept, and we do not add repeats or lower the threshold on the confirmation set and then change the verdict to success. Going from 32 to 128 also changed the sample pool and the tail fraction at the same time, so the result cannot be attributed to the increase in sample size alone.
 
-**理论与新颖性：** 一般条件极值假设给qγ(p)=p^{α+o(1)}，不是一般的C p^α；α=1仍可能有发散倍数。高斯α=ρ²已有明确先例。Copula建模LLM级联、尾依赖解释极端预测、召回约束代理筛选均已有研究。窄问题的原创性未确认，Yeo–David（1984）全文排重仍有缺口。
+**Theory and novelty:** the general conditional-extremes assumption gives qγ(p)=p^{α+o(1)}, not the general C p^α; α=1 can still have a diverging factor. The Gaussian α=ρ² has clear prior work. Copula modeling of LLM cascades, tail dependence explaining extreme prediction, and recall-constrained proxy screening have all been studied. The originality of the narrow question is not confirmed, and the prior-art check still has a gap for the full text of Yeo–David (1984).
 
-**交付建议：** 将本轮作为完整的测量可行性结果交接。参考模型不是客观真值；这些候选池内聚合分数尚未建立稳定的文档级连续测量，不能据此拟合LLM渐近α或声称投资价值。若另立后续试验，先明确可验证的经济/语义目标，再用全新数据确认修改，而非把此轮负结果隐藏。
+**Recommendation for the handoff:** hand over this round as a complete measurement-feasibility result. The reference model is not objective truth; these within-candidate-pool aggregated scores have not yet established a stable document-level continuous measurement, so they cannot be used to fit an asymptotic LLM α or to claim investment value. If a follow-up trial is set up, first specify a verifiable economic/semantic target, then confirm any changes on completely new data, instead of hiding this round's negative result.
 
-完整说明、图及来源见[总报告](FABLE_CURRENT_REPORT.md)；详细结果见[阶段1](stage1_report.md)、[新128条](stage2_report.md)；[独立内部AI复核](measurement_peer_review.md)与[复算说明](REPRODUCE_CURRENT.md)随包附上。Fable尚未实际审阅，材料未对外发送。
+The full explanation, figures and sources are in the [main report](FABLE_CURRENT_REPORT.md); detailed results are in [stage 1](stage1_report.md) and [the new 128 items](stage2_report.md); the [independent internal AI review](measurement_peer_review.md) and the [recomputation notes](REPRODUCE_CURRENT.md) are included in the package. Fable has not actually reviewed this yet, and the material has not been sent outside.

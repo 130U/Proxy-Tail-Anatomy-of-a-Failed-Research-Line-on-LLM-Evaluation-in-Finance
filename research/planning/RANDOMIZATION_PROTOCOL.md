@@ -1,44 +1,44 @@
-# 第九轮：允许随机配额后的审计极小极大问题
+# Round nine: the audit minimax problem when random quotas are allowed
 
-日期：2026-11-16。严格离线，无训练、来源抓取、真实标签审计或对外发送。由第八轮pooled反例引出；候选公式和旧结果已经见过，因此是探索性理论核对，不是盲预注册。原G0/G1不改变。
+Date: 2026-11-16. Strictly offline: no training, source scraping, real label audit or external sending. Prompted by the round eight pooled counterexample; the candidate formula and the old results have already been seen, so this is an exploratory theory check, not a blind pre-registration. The original G0/G1 do not change.
 
-## 1. 研究对象与非退化输出约定
+## 1. Object of study and the non-degenerate output convention
 
-有d层，每层N篇，单位审计成本。威胁族恰定义为在至少r个层各有一篇坏文档的集合。若它只是实际模型区间失效集合的外包络，最优性只针对这个保守威胁族，不能自动解释为真实模型最优。正确审计返回文档坏/好；真坏集必须在抽样随机性实现之前固定。允许任意分布选择恰m个不同文档，不要求各层配额固定，允许相关抽样。
+There are d strata of N documents each, with unit audit cost. The threat family is defined exactly as the sets that have one bad document in each of at least r strata. If it is only an outer envelope of the failure sets of the actual model interval, optimality applies only to this conservative threat family and cannot automatically be read as optimality for the real model. A correct audit returns bad/good for a document; the true bad set must be fixed before the sampling randomness is realized. Any distribution that selects exactly m distinct documents is allowed; per-stratum quotas need not be fixed, and correlated sampling is allowed.
 
-**全零发现必须输出固定I；任何发现则输出全范围。** 这一约定排除永不出证和额外随机弃权。如果只要求“只有零发现才能出证”，零成本永远弃权会使风险优化退化，以下最优性不成立。报告只在这个非退化输出类中讨论最坏错误出证概率，不声称覆盖一切置信程序。
+**When all findings are zero the output must be the fixed I; any finding outputs the full range.** This convention rules out never certifying and extra random abstention. If one only required "certify only on zero findings", zero-cost permanent abstention would make the risk optimization degenerate, and the optimality below would not hold. The report discusses the worst-case probability of an erroneous certificate only within this non-degenerate output class, and does not claim to cover all confidence procedures.
 
-候选最优策略随机选择若干整层普查，再在另一随机层抽查余数。先证明任意审计设计的下界，再验证策略达到；不能只比固定配额方案。核对全总体SRS的精确最小样本量，并保留它作为简单替代。
+The candidate optimal strategy randomly chooses some whole strata for a census, then spot-checks the remainder in another random stratum. First prove a lower bound for any audit design, then verify that the strategy attains it; comparing only fixed-quota schemes is not enough. Check the exact minimum sample size of SRS over the whole population, and keep it as a simple alternative.
 
-## 2. 固定范围与比较
+## 2. Fixed scope and comparisons
 
-全部α=1/20，坏集结构为同质r-of-d。沿用第八轮的32个适用案例：
+Everywhere α=1/20, and the bad-set structure is homogeneous r-of-d. The 32 applicable cases from round eight are reused:
 
-- threshold：r=2,3,4,5,6，N=2,5,10,20，d=2r−1，共20格。
-- and：d=r=2,3,4,5,6,8,12,20，N=2，共8格。
-- sharpness：N=4,8,16,32，r=N²，d=2r−1，共4格。
+- threshold: r=2,3,4,5,6, N=2,5,10,20, d=2r−1, 20 cells in total.
+- and: d=r=2,3,4,5,6,8,12,20, N=2, 8 cells in total.
+- sharpness: N=4,8,16,32, r=N², d=2r−1, 4 cells in total.
 
-第八轮16个star案例的层角色不对称，不在本定理范围；明确列为不适用，不能拿它们证明一般超图最优。
+The strata in the 16 star cases of round eight have asymmetric roles and are outside the scope of this theorem; they are explicitly listed as not applicable and cannot be used to prove optimality for general hypergraphs.
 
-每格列最优任意随机抽样成本、最优pooled SRS成本、返回风险及少一篇的风险。前两者都是精确整数最优。另证明均匀r文档先验给任何随机审计的总K门下界、pooled SRS达到，故此简单参照也允许任意随机配额。导入第八轮固定配额成本：前28格为精确，后4格保留上下界而不冒称精确。比较均标明设计类，人工构造不能解释为真实模型效用。
+For each cell, list the optimal arbitrary-random-sampling cost, the optimal pooled SRS cost, the returned risk, and the risk with one document fewer. The first two are both exact integer optima. Also prove that a uniform prior over r documents gives a lower bound on the total-K gate for any random audit, attained by pooled SRS, so this simple reference also allows arbitrary random quotas. Import the round eight fixed-quota costs: the first 28 cells are exact, and the last 4 keep their upper and lower bounds without claiming exactness. Every comparison states its design class; hand-made constructions cannot be read as utility for a real model.
 
-所有32格保留，失败/超时不丢弃。不得只报告有收益的格。原20%投入门不由本轮探索自动追认通过。
+All 32 cells are kept; failures/timeouts are not dropped. Reporting only the cells with a gain is not allowed. The original 20% investment gate is not automatically retroactively passed by this round's exploration.
 
-## 3. 算力与复核预算（运行前）
+## 3. Compute and review budget (before the run)
 
-- 标准库Python、CPU、无GPU/新增安装；主表墙钟预算30秒，目标<5秒；预计内存<128MB，未测不得称实测。
-- 作者单测预算10秒、预计内存<100MB；独立枚举总体≤10篇、枚举真实文档子集和最小坏集合，预算30秒、预计内存<128MB。
-- 单风险使用精确整数组合数或Fraction，二分样本量；最大主案例总人口65504、坏集大小1024。避免模拟覆盖率冒充精确证据。
-- 完整集成复现预算120秒，预计内存<512MB；主线模型训练不重跑。每条命令真实退出码登记。
+- Standard-library Python, CPU, no GPU/new installs; wall-clock budget for the main table 30 seconds, target <5 seconds; expected memory <128MB, not to be called measured unless measured.
+- Author unit-test budget 10 seconds, expected memory <100MB; the independent enumeration uses populations of ≤10 documents and enumerates the true document subsets and minimal bad sets, budget 30 seconds, expected memory <128MB.
+- Each single risk uses exact integer binomial coefficients or Fraction, with bisection over the sample size; the largest main case has total population 65504 and bad-set size 1024. Simulated coverage must not pass as exact evidence.
+- Budget for the complete integration reproduction 120 seconds, expected memory <512MB; main-line model training is not rerun. The real exit code of every command is logged.
 
-先写证明和核，再运行主表，最后由未导入作者内核的审查程序复核。源码、协议和旧输入hash写入结果。若只通过有限枚举，也只称实现支持；一般性依赖纸笔证明，不冒称形式验证。
+Write the proofs and the kernel first, then run the main table, and finally have it reviewed by a review program that does not import the author's kernel. Hashes of the source code, protocol and old inputs are written into the results. If something passes only finite enumeration, it is called only implementation support; generality relies on pen-and-paper proofs and is not claimed as formal verification.
 
-## 4. 必须回答的反方问题
+## 4. Adversarial questions that must be answered
 
-1. uniform最小坏集先验是否真的给任意随机设计下界？极端配额的风险能否通过对称化使每个坏集相同？
-2. r=1、N=1、m=0、满审计以及≤m硬预算是否正确？自适应的零结果路径是否改变下界？
-3. 坏集若可见抽样结果再选择、标签会错、层大小或成本不等，哪一部分不再成立？
-4. 全零必出证约定、实际发证概率与历史来源事实的边界是什么？
-5. 简单最优策略是否再次说明复杂审计框架并非必要？未联网不作新颖性判断，不把条件定理等同于完成金融语言模型。
+1. Does the uniform minimal-bad-set prior really give a lower bound for any random design? Can the risk of extreme quotas be made the same for every bad set by symmetrization?
+2. Are r=1, N=1, m=0, full audit and the ≤m hard budget handled correctly? Does the zero-result path of an adaptive design change the lower bound?
+3. If the bad set can be chosen after seeing the sampling result, if labels can be wrong, or if stratum sizes or costs are unequal, which parts no longer hold?
+4. What are the boundaries between the mandatory-certificate-on-all-zero convention, the actual certification probability and historical provenance facts?
+5. Does the simple optimal strategy show again that the complex audit framework is not necessary? With no network access, no novelty judgment is made, and the conditional theorem is not equated with a finished financial language model.
 
-交付证明、完整32行表、精确程序、独立审查与给Fable的结论修订。Fable尚未直接参与；内部AI评审必须如实标注。
+Deliver the proofs, the complete 32-row table, the exact program, an independent review and a revision of the conclusions for Fable. Fable has not yet taken part directly; internal AI review must be labelled as such.

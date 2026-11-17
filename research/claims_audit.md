@@ -1,139 +1,139 @@
-# WP0.6：公开声明与证据审计
+# WP0.6: Audit of public claims and evidence
 
-日期：2026-11-15。审计版本：`8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`。没有修改 README、docs 或既有代码，没有对外发布。
+Date: 2026-11-15. Audited version: `8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`. The README, docs and existing code were not modified, and nothing was published externally.
 
 ## Charter
 
-目标：区分公开代码实现、历史运行记录、仅方法设计和不可核实的效果；为重做研究定位提供可追溯基线。范围是此仓库的 README 与全部 docs，包含 PDF 的文字和图中文字。审计对象是可检验的事实/实现/效果主张；操作命令、任务定义和建议不自动当成完成声明。重复主张按下表合并，但每个来源文件在覆盖表中登记。研究类型：直接检查加描述性审计；不是对私有训练的外部复现，也不是新颖性判决。
+Goal: distinguish public code implementations, historical run records, method designs only, and unverifiable effects, and provide a traceable baseline for repositioning the redone research. The scope is this repository's README and all docs, including the text of the PDF and the text inside its figures. The audit object is testable claims of fact, implementation or effect; operating commands, task definitions and suggestions are not automatically treated as claims of completion. Repeated claims are merged as in the table below, but every source file is registered in the coverage table. Research type: direct inspection plus a descriptive audit. It is not an external reproduction of private training, nor a novelty verdict.
 
-本轮已读全部 Markdown 正文，并用本地 pypdf 提取 9 页项目 PDF 全文；没有对 PDF 做版面质量审查。联网核查和数据下载未用于本审计；用户最新要求不联系外部。原文中的外链及历史许可判断仅登记为历史记录，不重新背书。文件字节 SHA256 见 [claims_sources.json](claims_sources.json)。
+This round read all Markdown full text and used local pypdf to extract the full text of the 9-page project PDF; no review of the PDF's layout quality was done. Online verification and data downloads were not used for this audit; the user's latest request is not to contact external parties. External links and historical license judgments in the original text are only registered as historical records and are not re-endorsed. The SHA256 values of the file bytes are in [claims_sources.json](claims_sources.json).
 
 ## Canonical sources
 
-1. 精确 commit 下的代码与配置，用于判定公开实现。
-2. 仓库公开 `reports/*.json` 与 `docs/experiment-results.md`，用于判定存在什么历史记录；保留其“用户日志转录”“未下载 checkpoint”“本地替代测试”等原始限定。
-3. README、docs 和 PDF，是被审计主张，不是证明自身真实的独立证据。
-4. 导师快照用于提出问题；它未读代码，不能替代本轮检查。
+1. Code and configuration at the exact commit, used to decide what is publicly implemented.
+2. The repository's public `reports/*.json` and `docs/experiment-results.md`, used to decide which historical records exist; their original qualifiers, such as "transcribed from user logs", "checkpoint not downloaded" and "local substitute test", are kept.
+3. The README, docs and PDF are the audited claims, not independent evidence of their own truth.
+4. The advisor snapshot is used to raise questions. It did not read the code and cannot replace this round's checks.
 
-分类 **A 有公开证据**、**B 只有设计/代码，无所称运行或效果证据**、**C 无法核实**。A 只在列明的范围成立，例如“存在一份报告”不等于“独立核实了模型权重”；B 不代表设计有错；C 不代表事实为假。
+Categories: **A has public evidence**, **B has only design/code, with no evidence of the claimed run or effect**, **C cannot be verified**. A holds only within the stated scope; for example, "a report exists" does not mean "the model weights were independently verified". B does not mean the design is wrong. C does not mean the fact is false.
 
 ## Findings ledger
 
-### 2.4B 相关声明（单列）
+### Claims related to 2.4B (listed separately)
 
-| ID | 公开主张/位置 | 分类与证据 | 建议措辞 |
+| ID | Public claim/location | Category and evidence | Suggested wording |
 |---|---|---|---|
-| C01 | README:11、MODEL_CARD:3、INTRO:3、PDF p1：项目已有 private 2.4B model | C：未见该尺度 checkpoint、运行日志、任务预测或独立可核查的产物；公开代码和报告属于 24M | “项目公开了 24M Trial，并提出 2.4B 架构与训练方案；私有 2.4B 的执行状态尚无公开证据可核验。” |
-| C02 | MODEL_CARD 的 28层、hidden2560、Q20/KV4、词表65536、参数2,397,459,968 | A（架构算式）/B（实例运行）：按公开参数分解算式成立，不能证明曾完成模型训练 | “所列 2.4B 配置的理论参数量为……；运行状态另列。” |
-| C03 | PROJECT_OVERVIEW:21：2.4B 权重、词表、校准已重建 | C：缺实际词表 hash、weights hash、校准拟合记录 | “扩展到该尺度需要重新构建词表、权重与校准；完成与否待运行材料核验。” |
-| C04 | PROJECT_OVERVIEW:34：2.4B 能处理更复杂关系且资源可管理 | B：设计动机，缺匹配预算对照、任务效果和实际吞吐/显存证据 | “选择该尺度的目标是……；收益与资源需求尚待实测。” |
-| C05 | 32k gold，12k/4k/4k/4k/8k 划分 | B：原文已写 recipe allocation，未见实际 32k 库；不能算成已标注数量 | 保留“计划分配”，不要改写为“拥有/训练过 32k gold”。 |
-| C06 | 50B + 5B 输入 token，4B/.75B/.20B/.05B mixture | B：原文已写 recipe，未见消费日志；与实际24M的26,115,096监督位置不同 | “配方预算”；另列实际已消费位置与独立文档。 |
-| C07 | PDF p8：8k natural test + 3k family probes | B：图中附加 probe 规划；无对应测试预测 | “拟定测试与派生探针预算；探针不算新增独立样本。” |
-| C08 | ENGINEERING:27、PDF p6：38.36GB FP32主要训练状态 | A（算术）：2,397,459,968 × 16 bytes = 38,359,359,488 bytes；不是实际峰值 | “参数、梯度、双Adam状态的静态估算38.36 GB，尚不含激活等，也不是T4运行记录。” |
-| C09 | PROJECT_OVERVIEW:92、PDF p5：1GiB→0.5MiB输出张量 | A（算术）/B（该实现）：2×2048×65536×4 与2×65536×4字节正确；公开24M没有投影前gather | “理论张量尺寸对比；公开Trial仍投影全部位置，尚未测得此节省。” |
-| C10 | 2.4B serves private workflow / personalized standards learned | C：私有使用或效果不可由24M记录证明 | “目标用途为个人研究；个性化学习效果尚无公开独立评测。” |
+| C01 | README:11, MODEL_CARD:3, INTRO:3, PDF p1: the project already has a private 2.4B model | C: no checkpoint at that scale, run logs, task predictions or independently verifiable artifacts were found; the public code and reports belong to 24M | "The project has released the 24M Trial and proposed a 2.4B architecture and training plan; there is no public evidence that can verify the execution status of the private 2.4B." |
+| C02 | MODEL_CARD's 28 layers, hidden 2560, Q20/KV4, vocabulary 65536, parameters 2,397,459,968 | A (architecture arithmetic)/B (instance run): the arithmetic decomposition from the public parameters holds, but it cannot prove that model training was completed | "The theoretical parameter count of the listed 2.4B configuration is ...; the run status is listed separately." |
+| C03 | PROJECT_OVERVIEW:21: the 2.4B weights, vocabulary and calibration have been rebuilt | C: the actual vocabulary hash, weights hash and calibration fit records are missing | "Extending to that scale requires rebuilding the vocabulary, weights and calibration; whether this was completed awaits verification from run materials." |
+| C04 | PROJECT_OVERVIEW:34: 2.4B can handle more complex relations with manageable resources | B: design motivation; lacks a matched-budget comparison, task effects and evidence of actual throughput/memory | "The goal of choosing this scale is ...; the gains and resource requirements are yet to be measured." |
+| C05 | 32k gold, 12k/4k/4k/4k/8k split | B: the original text already says recipe allocation; no actual 32k set was found; it cannot be counted as an annotated quantity | Keep "planned allocation"; do not rewrite it as "has/trained on 32k gold". |
+| C06 | 50B + 5B input tokens, 4B/.75B/.20B/.05B mixture | B: the original text already says recipe; no consumption logs were found; it differs from the actual 24M's 26,115,096 supervised positions | "Recipe budget"; list the actually consumed positions and independent documents separately. |
+| C07 | PDF p8: 8k natural test + 3k family probes | B: an additional probe plan in a figure; no corresponding test predictions | "Planned test and derived-probe budget; probes do not count as new independent samples." |
+| C08 | ENGINEERING:27, PDF p6: 38.36GB of FP32 main training state | A (arithmetic): 2,397,459,968 × 16 bytes = 38,359,359,488 bytes; not the actual peak | "Static estimate of 38.36 GB for parameters, gradients and the two Adam states; it does not include activations and the like, and it is not a T4 run record." |
+| C09 | PROJECT_OVERVIEW:92, PDF p5: output tensor 1GiB→0.5MiB | A (arithmetic)/B (this implementation): 2×2048×65536×4 and 2×65536×4 bytes are correct; the public 24M has no gather before the projection | "Theoretical tensor-size comparison; the public Trial still projects all positions, and this saving has not been measured." |
+| C10 | 2.4B serves private workflow / personalized standards learned | C: private use or effects cannot be proven by the 24M records | "The intended use is personal research; the effect of personalized learning has no public independent evaluation yet." |
 
-### 方法与实现
+### Methods and implementation
 
-| ID | 主张 | 分类、公开证据与限制 | 建议措辞或保留条件 |
+| ID | Claim | Category, public evidence and limits | Suggested wording or conditions for keeping it |
 |---|---|---|---|
-| C11 | 金融语义许可：INV/LBL/relabel，配对一致性与log-odds margin | B：TRAINING_SYSTEM:23起有定义；`src/finllm/training.py` 的实际阶段为pretrain/domain/sft/dpo；全src及scripts未见对应permission损失或编辑对管线 | “提出了监督规范；公开24M尚未实现/验证该损失。” 不把 DPO 当作该损失。 |
-| C12 | 权限损失改善模型语义响应 | C：无同编辑样本CE对照或打乱许可对照 | “效果待匹配数据和预算消融”；本轮合成实验另报，不追溯替代历史结果。 |
-| C13 | stance、metric direction、personal judgment 分开建模 | B：任务定义明确；MODEL_CARD:23明确公开接口只支持stance | “三个任务在方案中区分；公开Trial只实现stance。” |
-| C14 | family先划分，再派生视图，避免事件泄漏 | A（部分构件）/B（完整方案）：`data.py:114–185` 联合id/group_id/event_id和词法去重后划分；没有通用QA/edit派生视图或family损失加权；TASK_REVIEW:23说旧数据event_id全空 | “实现了已知关系和词法重复分组；完整语义事件独立性尚未审计。” |
-| C15 | 多卡全局有效分母公式 | B：公式在梯度平均前提下合理；公开trainer无DDP/all_reduce/world_size路径；单设备 accumulation 有实际分母修正 | “多卡方法规格”；不可称公开Trial已多卡验证。 |
-| C16 | supervised hidden states在词表投影之前被选择 | B：公开`model.py:196`对全部位置lm_head；`training.py`之后才answer_logits筛选监督logits | “Trial在损失计算时选择答案位置，尚未实现投影前稀疏计算。” |
-| C17 | packing使用segmented causal attention | B：`model.py:170–196`只接受二维padding mask并加普通causal mask；`TokenBlockDataset`只有input_ids/labels，没有segment IDs | “分段packing是2.4B方案；公开Trial没有该接口。” EOS不等于attention隔离。 |
-| C18 | 24M random init、dense GQA/RoPE/RMSNorm/SwiGLU/QK norm、tied embedding | A：`model.py`、`configs/model_24m.json`，参数数有公开CPU检查报告；本次未重训 | 保留版本边界，不称架构机制本身原创。 |
-| C19 | 全词表CE，三标签条件概率另算 | A：`training.py:24–47`中的answer_logits/sft_loss；`inference.py`筛选标签logits；不是三类CE替代词表CE | 可保留。 |
-| C20 | 精确resume恢复optimizer/RNG/data cursor；新stage只移权重 | A（实现及历史局部测试）：`checkpoint.py`、`training.py`；`reports/expanded_continuation_checks_20261011.json`含同环境tiny CPU dropout逐位比较 | “在已验证硬件/软件/配置与输入契约内的恢复检查”；不推成任意硬件逐位确定性或所有分片训练证明。 |
-| C21 | tokenizer是自训8192 BPE | A：`tokenizer.py:40–88`和`reports/seed_data_preparation.json`记录hash/vocab；训练输入是seed train的455篇抽样，Wikipedia快照20231101 + FOMC 2021–2024会议文本 | 保留自训声明；其候选来源包含2025-01发布的minutes，实际455篇的最晚可得时间仍需逐条核查，因此不能直接用于此前历史cutoff证书。 |
-| C22 | tokenizer和LM训练排除评测文本 | A（机制）/C（全部事件无泄漏）：`preparation.py`冻结候选池、词法去重；SHA证明身份，不证明完全语义隔离 | “对冻结文本和指定近重复规则排除”；不称完整无泄漏证明。 |
-| C23 | inference：三类概率、direction score、review标记、拒绝非法输入 | A：`inference.py`、`tokenizer.py`、`evaluation.py`；所称score的算式可直接检查 | 保留；score不是收益率/价格预测，也不代表校准后的真实逐点错误概率。 |
-| C24 | temperature/threshold分开拟合且绑定权重、词表、target_mode | A（代码）：`evaluation.py`的assert_disjoint_calibration、validate_calibration、run_calibration；阈值选择显式说明是经验规则 | 保留；不得声称有限样本未来准确率保证。 |
-| C25 | DPO已实现 | A（代码/合成smoke）/B（真实训练）：`training.py`与`reports/cpu_smoke_check.json`；docs明确无真实金融DPO结果 | “有DPO路径和合成工程检查，未运行真实偏好实验。” |
-| C26 | Review workspace本地保存、人工确认与资产验证分开 | A（设计与实现）：`scripts/build_review_workspace.py`、`review_import.py`及相应tests；没有本轮浏览器运行 | “有本地工具及历史测试”；标签确认不建立事件/许可/证券身份。 |
-| C27 | 来源/权利字段、hash、固定revision保证可用数据 | A（字段检查）/C（法律或时间真实性）：`validate_training_row`检查元数据；库中历史来源审查记录存在，但本轮未重查外部条款 | “记录与校验来源声明”；不能把flag/机器时间戳当零错误事实。 |
-| C28 | MiniMind来源与修改、Apache-2.0代码 | A（仓库归属记录）：model.py头注、THIRD_PARTY_NOTICES固定revision、LICENSE；未外网重新diff上游 | 保留归属。数据/权重权利另行记录，不能由代码许可推出。 |
+| C11 | Financial semantic permissions: INV/LBL/relabel, pairwise consistency and log-odds margin | B: defined from TRAINING_SYSTEM:23 onward; the actual stages in `src/finllm/training.py` are pretrain/domain/sft/dpo; no corresponding permission loss or edit-pair pipeline was found anywhere in src or scripts | "Proposed a supervision specification; the public 24M has not implemented/verified this loss." Do not treat DPO as this loss. |
+| C12 | The permission loss improves the model's semantic responses | C: no CE control on the same edited samples and no shuffled-permission control | "The effect awaits an ablation with matched data and budget"; this round's synthetic experiment is reported separately and does not retroactively replace the historical results. |
+| C13 | stance, metric direction and personal judgment are modeled separately | B: the task definitions are clear; MODEL_CARD:23 explicitly says the public interface supports only stance | "The three tasks are distinguished in the plan; the public Trial implements only stance." |
+| C14 | Split by family first, then derive views, to avoid event leakage | A (some components)/B (full plan): `data.py:114–185` splits after joining id/group_id/event_id and lexical dedup; there are no general QA/edit derived views and no family loss weighting; TASK_REVIEW:23 says event_id in the old data is entirely empty | "Grouping by known relations and lexical duplicates is implemented; full semantic event independence has not been audited." |
+| C15 | Formula for the global effective denominator across multiple GPUs | B: the formula is reasonable under the gradient-averaging premise; the public trainer has no DDP/all_reduce/world_size path; single-device accumulation has an actual denominator correction | "Multi-GPU method specification"; it cannot be described as multi-GPU-verified in the public Trial. |
+| C16 | Supervised hidden states are selected before the vocabulary projection | B: the public `model.py:196` applies lm_head to all positions; `training.py` filters the supervised logits with answer_logits only afterward | "The Trial selects answer positions when computing the loss; sparse computation before the projection is not implemented." |
+| C17 | Packing uses segmented causal attention | B: `model.py:170–196` accepts only a 2D padding mask and adds an ordinary causal mask; `TokenBlockDataset` has only input_ids/labels and no segment IDs | "Segmented packing is part of the 2.4B plan; the public Trial does not have this interface." EOS is not attention isolation. |
+| C18 | 24M random init, dense GQA/RoPE/RMSNorm/SwiGLU/QK norm, tied embedding | A: `model.py`, `configs/model_24m.json`; the parameter count has a public CPU check report; not retrained this time | Keep the version boundary; do not call the architecture mechanisms themselves original. |
+| C19 | Full-vocabulary CE, with the three-label conditional probabilities computed separately | A: answer_logits/sft_loss in `training.py:24–47`; `inference.py` filters the label logits; it is not a three-class CE replacing the vocabulary CE | Can be kept. |
+| C20 | Exact resume restores optimizer/RNG/data cursor; a new stage carries over only the weights | A (implementation and historical local tests): `checkpoint.py`, `training.py`; `reports/expanded_continuation_checks_20261011.json` contains a bitwise comparison with tiny CPU dropout in the same environment | "Resume checks within the verified hardware/software/configuration and input contract"; do not extend it to bitwise determinism on arbitrary hardware or to a proof for all sharded training. |
+| C21 | The tokenizer is a self-trained 8192 BPE | A: `tokenizer.py:40–88` and `reports/seed_data_preparation.json` record the hash/vocab; the training input is a 455-document sample from seed train, Wikipedia snapshot 20231101 + FOMC 2021–2024 meeting texts | Keep the self-trained claim. Its candidate sources include minutes published in 2025-01, and the latest availability time of the actual 455 documents still needs item-by-item checking, so it cannot be used directly for a certificate with an earlier historical cutoff. |
+| C22 | Tokenizer and LM training exclude evaluation text | A (mechanism)/C (no leakage for all events): `preparation.py` freezes the candidate pool and does lexical dedup; SHA proves identity, not complete semantic isolation | "Excluded for the frozen text under the specified near-duplicate rule"; do not call it a complete no-leakage proof. |
+| C23 | Inference: three-class probabilities, direction score, review flag, rejection of invalid input | A: `inference.py`, `tokenizer.py`, `evaluation.py`; the formula of the claimed score can be checked directly | Keep. The score is not a return/price prediction and does not represent a calibrated true pointwise error probability. |
+| C24 | Temperature/threshold fitted separately and bound to the weights, vocabulary and target_mode | A (code): assert_disjoint_calibration, validate_calibration, run_calibration in `evaluation.py`; the threshold selection is explicitly described as an empirical rule | Keep; do not claim a finite-sample guarantee on future accuracy. |
+| C25 | DPO is implemented | A (code/synthetic smoke test)/B (real training): `training.py` and `reports/cpu_smoke_check.json`; the docs explicitly say there are no real financial DPO results | "Has a DPO path and synthetic engineering checks; no real preference experiment was run." |
+| C26 | The review workspace saves locally; human confirmation and asset verification are kept separate | A (design and implementation): `scripts/build_review_workspace.py`, `review_import.py` and the corresponding tests; no browser run this round | "Has local tools and historical tests"; label confirmation does not establish event/permission/security identity. |
+| C27 | Source/rights fields, hashes and fixed revisions guarantee usable data | A (field checks)/C (legal or temporal truth): `validate_training_row` checks the metadata; historical source review records exist in the repository, but the external terms were not rechecked this round | "Records and validates source claims"; flags/machine timestamps cannot be treated as error-free facts. |
+| C28 | MiniMind source and modifications, Apache-2.0 code | A (repository attribution records): the model.py header comment, the fixed revision in THIRD_PARTY_NOTICES, LICENSE; the upstream was not re-diffed online | Keep the attribution. Data/weight rights are recorded separately and cannot be inferred from the code license. |
 
-### 历史运行与结果
+### Historical runs and results
 
-| ID | 主张 | 分类与证据 | 限制/建议 |
+| ID | Claim | Category and evidence | Limits/suggestions |
 |---|---|---|---|
-| C29 | seed 300 updates、4,914,941有效token、loss5.5419 | A（公开转录）：`reports/colab_t4_continuation_20261011.json`；source_revision/torch/cuda为空，未独立下载cloud checkpoint | 必须写用户日志记录；不足以独立完整复现实验。 |
-| C30 | expansion1220、19,988,195、loss3.6929 | A（公开报告）：`reports/colab_t4_expanded_continuation_20261030.json`记历史notebook SHA和来源commit | 1220含610，不能相加；本轮未读取云权重。 |
-| C31 | domain74、1,211,960、loss3.2375，general retention变差 | A（公开转录）：domain报告记录来源、模型hash、runtime、输入hash；明确raw log未归档、未独立下载 | 保留“观测到”而非因果/显著性推断；不同验证集loss不可直接比较。 |
-| C32 | 合计26,115,096有效监督位置 | A：上述三个阶段相加一致 | 不是unique token/独立文档数量；不与2.4B 55B预算混用。 |
-| C33 | 初始SFT dev全部neutral，acc75.25%、F1.2863；test acc58.42%、F1.2458 | A（公开汇总）：`docs/experiment-results.md`；没有公开行级输出 | 保留“历史摘要”；不能称新holdout复验。 |
-| C34 | balanced SFT dev 79/101正确，F1.6549 | A（公开汇总，非权重独立核验）：相同报告的P/R/support可算回；本轮精确重建见WP0.1 | 明确开发集用于选型，无置信区间的点结果不能支持优于基线。 |
-| C35 | TF-IDF dev acc75.25%、F1.6087 | A（公开汇总/实现）：`baselines.py`以及balanced script的对照；无公开逐行配对 | 与.6549的差异显著性不可识别，不宣称正效应或零效应。 |
-| C36 | balanced增加17个方向正确、减少14个neutral正确 | A（算术）：对角5+12与62对照初始0+0与76 | 调整采样、epochs、updates、LR schedule一起变，不能归因采样本身。 |
-| C37 | 2000审核、1993确认、1879三类、1008pool、705训练 | A（公开审核汇总）：human_headline_review报告及TASK_REVIEW定义；人审本身为用户声明，未二次标注 | 池≠训练；上下文AI≠人工gold；资产/事件未验证。 |
-| C38 | 1473exposures/epoch、3epochs、4419label tokens、139updates | A（算术与日志摘要）：491×3×3=4419；script和experiment-results | 重采样曝光不是新增独立样本。 |
-| C39 | calibration T≈1.50634、threshold≈.57380且导出完成 | A（存在公开陈述）/C（独立核实实际产物）：export脚本可检查，未见该最终weights/calibration原件 | “用户提供运行输出报告已完成”；不是本轮下载核验。 |
-| C40 | FinBERT、重复seed、event bootstrap、独立新holdout | B/未完成：DATA_GUIDE结尾明确这些尚未执行，experiment-results同样说明 | 报告未完成，不用合成或历史dev替代。 |
-| C41 | 本地工程测试128/205/232/274等通过 | A（历史记录）：对应dated reports记录测试命令、hash、环境及local替代cloud；不是本轮重跑 | “当时报告通过”；局部固定案例不证明所有输入或所有运行环境。 |
-| C42 | 下载/预处理真实数量、tokenizer hash和shard数量 | A（历史aggregate）：seed/expansion preparation报告和源审查内hash；未再次读取语料原文 | 时间/日期按各历史阶段解释，不把早期“未训练”误当今日状态。 |
-| C43 | Kaggle full/lite迁移、原始四pool已验证 | A（代码、用户输出记录），lite明确不含旧pool、不能独立复核 | 说明full和lite验证能力差异；本轮不执行云迁移。 |
-| C44 | Wikipedia、FOMC、SEntFiN来源/许可/大小 | A（存在历史来源核查记录），当前外部事实C | 本轮不重新确认许可或最新状态；SEntFiN label不是stance，CSV无可靠逐条日期。 |
-| C45 | Eva-4B、FinanceParam、FinLCR/ARTS等引文与外部性能比较 | C（本审计范围内未联网复核）；这些引文不构成本项目创新或优越性的证据 | 仅作方法背景；具体结论交给独立文献核查并按实际访问层级标注。 |
-| C46 | 完成整个训练流程意味着production-ready、投资回报或金融能力 | C：仓库明确没有这种实证；反而多处主动限缩 | 继续保留这些限制，不在新定位中重新引入过强表述。 |
+| C29 | seed 300 updates, 4,914,941 effective tokens, loss 5.5419 | A (public transcription): `reports/colab_t4_continuation_20261011.json`; source_revision/torch/cuda are empty; the cloud checkpoint was not independently downloaded | Must be described as a record of user logs; not enough to reproduce the experiment fully and independently. |
+| C30 | expansion 1220, 19,988,195, loss 3.6929 | A (public report): `reports/colab_t4_expanded_continuation_20261030.json` records the historical notebook SHA and the source commit | 1220 includes the 610 and the two cannot be added; the cloud weights were not read this round. |
+| C31 | domain 74, 1,211,960, loss 3.2375, general retention got worse | A (public transcription): the domain report records the source, model hash, runtime and input hash; it states that the raw log was not archived and was not independently downloaded | Keep "observed", not a causal or significance inference; losses on different validation sets cannot be compared directly. |
+| C32 | A total of 26,115,096 effective supervised positions | A: the three stages above add up consistently | Not a count of unique tokens or independent documents; do not mix it with the 2.4B 55B budget. |
+| C33 | Initial SFT dev all neutral, acc 75.25%, F1 .2863; test acc 58.42%, F1 .2458 | A (public summary): `docs/experiment-results.md`; no public row-level output | Keep as a "historical summary"; it cannot be described as a new holdout re-check. |
+| C34 | Balanced SFT dev 79/101 correct, F1 .6549 | A (public summary, not independent verification of the weights): it can be recomputed from the P/R/support in the same report; this round's exact reconstruction is in WP0.1 | State clearly that the dev set was used for model selection; a point result without a confidence interval cannot support a claim of beating the baseline. |
+| C35 | TF-IDF dev acc 75.25%, F1 .6087 | A (public summary/implementation): `baselines.py` and the control in the balanced script; no public row-level pairing | The significance of the difference from .6549 cannot be identified; claim neither a positive effect nor a zero effect. |
+| C36 | Balanced gained 17 direction-correct and lost 14 neutral-correct | A (arithmetic): diagonal 5+12 and 62 vs. the initial 0+0 and 76 | Sampling, epochs, updates and the LR schedule changed together, so it cannot be attributed to the sampling alone. |
+| C37 | 2000 reviewed, 1993 confirmed, 1879 three-class, 1008 pool, 705 training | A (public review summary): the human_headline_review report and the TASK_REVIEW definitions; the human review itself is a user claim and was not double-annotated | Pool ≠ training; contextual AI ≠ human gold; assets/events not verified. |
+| C38 | 1473 exposures/epoch, 3 epochs, 4419 label tokens, 139 updates | A (arithmetic and log summary): 491×3×3=4419; script and experiment-results | Resampled exposures are not new independent samples. |
+| C39 | Calibration T≈1.50634, threshold≈.57380, and export completed | A (a public statement exists)/C (independent verification of the actual artifacts): the export script can be checked; the original final weights/calibration files were not found | "The run-output report provided by the user says it was completed"; not verified by download this round. |
+| C40 | FinBERT, repeated seeds, event bootstrap, an independent new holdout | B/not done: the end of DATA_GUIDE states that these have not been executed, and experiment-results says the same | Report them as not done; do not substitute synthetic or historical dev results. |
+| C41 | Local engineering tests 128/205/232/274 etc. passed | A (historical records): the corresponding dated reports record test commands, hashes, environments and the local substitution for cloud; not rerun this round | "Reported as passing at the time"; local fixed cases do not prove all inputs or all run environments. |
+| C42 | Real counts from download/preprocessing, tokenizer hash and shard count | A (historical aggregates): the seed/expansion preparation reports and the hashes inside the source review; the corpus text was not read again | Interpret times/dates by each historical stage; do not mistake an early "not trained" for today's state. |
+| C43 | Kaggle full/lite migration, original four pools verified | A (code, user output records); lite explicitly does not contain the old pools and cannot be independently re-checked | Explain the difference in verification capability between full and lite; no cloud migration was executed this round. |
+| C44 | Wikipedia, FOMC, SEntFiN sources/licenses/sizes | A (historical source check records exist); the current external facts are C | This round does not reconfirm licenses or the latest status; SEntFiN labels are not stance, and the CSV has no reliable per-item dates. |
+| C45 | Citations and external performance comparisons for Eva-4B, FinanceParam, FinLCR/ARTS etc. | C (not rechecked online within the scope of this audit); these citations are not evidence of this project's novelty or superiority | Use only as method background; specific conclusions go to an independent literature check and are labeled by the actual access tier. |
+| C46 | Completing the whole training pipeline means production-ready, investment returns or financial capability | C: the repository explicitly has no such evidence; on the contrary, it actively narrows its claims in many places | Keep these limits; do not reintroduce overly strong wording in the new positioning. |
 
-## README 与 docs 覆盖表
+## README and docs coverage table
 
-以下文件全部读取；PDF覆盖9页可提取文字，未核查视觉版式。每行的主张通过上表对应。操作流程只审查其“已存在实现/历史完成”的表达，不逐个重演云服务动作。
+All the files below were read. For the PDF, the 9 pages of extractable text were covered; the visual layout was not checked. The claims of each row map to the table above. For operating procedures, only their wording about "an implementation exists / was completed historically" was audited; the cloud-service actions were not re-enacted one by one.
 
-| 文件 | 对应主张 / 结论 |
+| File | Corresponding claims / conclusion |
 |---|---|
-| README.md | C01–C28、C33–C35；首屏2.4B完成状态需限缩 |
-| docs/130U-FinLLM.pdf | C01–C17、C33–C45；p8额外3k probes是计划 |
-| docs/DATA_EXPANSION.md | C20–C22、C27、C30、C41–C42；local/cloud证据分开 |
-| docs/DATA_GUIDE.md | C14、C21–C27、C40；规范不等于执行 |
-| docs/DATA_IMPORT.md | C20、C22、C29–C39；stage lineage与SHA限界 |
-| docs/DOMAIN_TRAINING.md | C20、C31–C32、C37、C41 |
-| docs/ENGINEERING.md | C08–C17、C20、C24、C33–C36 |
-| docs/ENTITY_SFT_PILOT.md | C22–C23、C33–C39、C41–C43 |
-| docs/EXPANDED_CONTINUATION.md | C20、C30、C41；累计计数/同环境恢复 |
-| docs/experiment-results.md | C33–C40；点估计与限制写明 |
-| docs/INTRO.zh-CN.md | C01、C03、C10–C17 |
-| docs/KAGGLE_LITE.md | C20、C22、C33–C39、C43 |
-| docs/KAGGLE_TRANSFER.md | C20、C22、C41、C43；单T4非双卡合并显存 |
-| docs/MAINTENANCE.md | C20–C25、C29–C43；缺原件则不可完整复现 |
-| docs/MODEL_CARD.md | C01–C10、C13、C18–C24、C28 |
-| docs/NOTEBOOK_RUNTIME.md | C20、C41、C43；本地替代测试不认证云服务 |
-| docs/PROJECT_OVERVIEW.md | C01–C19、C29–C45 |
-| docs/REVIEW_WORKSPACE.md | C26–C27、C37 |
-| docs/SEED_DATA.md | C21–C22、C29、C37、C41–C44 |
-| docs/STATUS.md | C01、C18–C25、C29–C43 |
-| docs/T4_PILOT.md | C20、C29、C41；峰值为PyTorch allocation，非总GPU占用 |
-| docs/TASK_REVIEW.md | C14、C26–C27、C37；明确event_id全空 |
-| docs/THIRD_PARTY_NOTICES.md | C28；固定上游归属记录存在，未重联网diff |
-| docs/TRAINING_LEDGER.md | C05–C06、C20、C29–C39 |
-| docs/TRAINING_SYSTEM.md | C05–C09、C11–C17、C19–C24 |
-| docs/TRIAL_GUIDE.md | C18–C25、C28、C33–C43 |
-| docs/TRIAL_SPEC.md | C18–C25、C28–C40 |
-| docs/research/20261031-posttraining-plan.md | C12、C24–C25、C34–C40、C44–C45 |
-| docs/research/corpus_sources_20261009.md | C21–C22、C27、C41–C44 |
-| docs/research/DATA_DECISIONS.md | C21–C22、C27、C37、C42–C44；按历史时点读 |
-| docs/research/expanded_corpus_sources_20261011.md | C20–C22、C27、C41–C44 |
-| docs/research/stance_sources_20261009.md | C27、C37、C41、C44；source sentiment不得自动改成stance |
+| README.md | C01–C28, C33–C35; the 2.4B completion status on the first screen needs narrowing |
+| docs/130U-FinLLM.pdf | C01–C17, C33–C45; the extra 3k probes on p8 are a plan |
+| docs/DATA_EXPANSION.md | C20–C22, C27, C30, C41–C42; local and cloud evidence kept separate |
+| docs/DATA_GUIDE.md | C14, C21–C27, C40; a specification is not execution |
+| docs/DATA_IMPORT.md | C20, C22, C29–C39; stage lineage and the limits of SHA |
+| docs/DOMAIN_TRAINING.md | C20, C31–C32, C37, C41 |
+| docs/ENGINEERING.md | C08–C17, C20, C24, C33–C36 |
+| docs/ENTITY_SFT_PILOT.md | C22–C23, C33–C39, C41–C43 |
+| docs/EXPANDED_CONTINUATION.md | C20, C30, C41; cumulative counts / same-environment resume |
+| docs/experiment-results.md | C33–C40; point estimates and limits are stated |
+| docs/INTRO.zh-CN.md | C01, C03, C10–C17 |
+| docs/KAGGLE_LITE.md | C20, C22, C33–C39, C43 |
+| docs/KAGGLE_TRANSFER.md | C20, C22, C41, C43; a single T4, not pooled memory across two GPUs |
+| docs/MAINTENANCE.md | C20–C25, C29–C43; without the originals, full reproduction is impossible |
+| docs/MODEL_CARD.md | C01–C10, C13, C18–C24, C28 |
+| docs/NOTEBOOK_RUNTIME.md | C20, C41, C43; local substitute tests do not certify the cloud services |
+| docs/PROJECT_OVERVIEW.md | C01–C19, C29–C45 |
+| docs/REVIEW_WORKSPACE.md | C26–C27, C37 |
+| docs/SEED_DATA.md | C21–C22, C29, C37, C41–C44 |
+| docs/STATUS.md | C01, C18–C25, C29–C43 |
+| docs/T4_PILOT.md | C20, C29, C41; the peak is the PyTorch allocation, not total GPU usage |
+| docs/TASK_REVIEW.md | C14, C26–C27, C37; states that event_id is entirely empty |
+| docs/THIRD_PARTY_NOTICES.md | C28; a fixed upstream attribution record exists; not re-diffed online |
+| docs/TRAINING_LEDGER.md | C05–C06, C20, C29–C39 |
+| docs/TRAINING_SYSTEM.md | C05–C09, C11–C17, C19–C24 |
+| docs/TRIAL_GUIDE.md | C18–C25, C28, C33–C43 |
+| docs/TRIAL_SPEC.md | C18–C25, C28–C40 |
+| docs/research/20261031-posttraining-plan.md | C12, C24–C25, C34–C40, C44–C45 |
+| docs/research/corpus_sources_20261009.md | C21–C22, C27, C41–C44 |
+| docs/research/DATA_DECISIONS.md | C21–C22, C27, C37, C42–C44; read as of the historical point in time |
+| docs/research/expanded_corpus_sources_20261011.md | C20–C22, C27, C41–C44 |
+| docs/research/stance_sources_20261009.md | C27, C37, C41, C44; source sentiment must not be turned into stance automatically |
 
 ## Scope filter
 
-不把工程可运行性推成任务有效性；不把定理风格设计或术语命名推成理论新颖性。把所有数据许可证/权利描述限制为历史记录，未进行新的法律判断。删除“24M已经实现完整semantic permission训练”的默认推断（C11–C17）；保留其可复用的训练、元数据和恢复构件。
+Do not extend engineering runnability to task validity, and do not extend theorem-style design or terminology to theoretical novelty. All descriptions of data licenses/rights are limited to historical records; no new legal judgment was made. Remove the default inference that "the 24M already implements full semantic permission training" (C11–C17); keep its reusable training, metadata and resume components.
 
 ## Object filter
 
-2.4B方案与24M公开实现必须分开。日期较早报告中的“尚未SFT”仅描述当时状态，不能覆盖后续日志摘要；后续摘要也不能替代当时缺失的原始checkpoint。样本来源是headline literal entity，不能自动迁移到证券代码、Twitter或投资决策。测试通过只覆盖所测试条件，不作为F_t可测或绝对确定性证明。
+The 2.4B plan and the 24M public implementation must be kept separate. "SFT not yet done" in earlier-dated reports describes only the state at that time and cannot override later log summaries; the later summaries also cannot replace the original checkpoint that was missing at that time. The sample source is literal entities in headlines, which cannot be transferred automatically to security tickers, Twitter or investment decisions. Passing tests covers only the tested conditions and is not a proof of F_t-measurability or of absolute determinism.
 
 ## Conclusions
 
-1. 公开资产有真实工程内容，但研究贡献尚缺对照与定理支持；“工程卫生”可成为未来证书的前提，不能直接升级成已成立的证书（C11–C28）。
-2. 2.4B的架构算式与recipe可审查；训练完成、私有应用效果仍无法从公开材料核实（C01–C10）。这不是对未公开工作的否定。
-3. 原 balanced SFT分数是小开发集的选型结果，统计优势未判定；用户确认不依赖旧产物，后续应冻结新的测试协议并从零生成证据（C33–C40、WP0.1）。
-4. 原tokenizer/来源记录不能直接承接历史无前视保证；缺cutoff覆盖、事件身份与逐内容版本可得时间核验（C14、C21–C22、C37、C44）。
+1. The public assets have real engineering content, but the research contribution still lacks controls and theorem support. "Engineering hygiene" can become a premise for future certificates, but it cannot be upgraded directly into an established certificate (C11–C28).
+2. The architecture arithmetic and recipe of the 2.4B model can be reviewed; training completion and the effects of the private application still cannot be verified from the public materials (C01–C10). This is not a negation of unpublished work.
+3. The original balanced SFT score is a model-selection result on a small dev set, and its statistical advantage is undetermined. The user has confirmed not depending on old artifacts, so the next step should freeze a new test protocol and generate evidence from scratch (C33–C40, WP0.1).
+4. The original tokenizer/source records cannot directly support a historical no-look-ahead guarantee; cutoff coverage, event identity and verification of per-content version availability times are missing (C14, C21–C22, C37, C44).
 
 ## Next steps / Risks
 
-本轮仅形成改写建议，README与docs原文保持不变。需要对外重定位时，先由PI审阅一份具体差异稿。研究应优先执行合成地基、完整假设推导与失败案例，再收集本地允许使用的真实数据。WP0.6的文档阅读和主要重复主张归并审计完成；它不等于所有历史运行、全部外部引用或私有资产获得独立认证。
+This round produced only rewriting suggestions; the README and docs text stay unchanged. If external repositioning is needed, the PI should first review a concrete diff draft. The research should first carry out the synthetic foundation, complete derivations of the assumptions and failure cases, and then collect real data that may be used locally. The document reading and the merging audit of the main repeated claims for WP0.6 are complete; this does not mean that all historical runs, all external citations or the private assets have been independently certified.

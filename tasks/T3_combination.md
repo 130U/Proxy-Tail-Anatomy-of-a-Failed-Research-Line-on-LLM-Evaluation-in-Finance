@@ -1,44 +1,44 @@
-# T3：模型怎样合并一好一坏两条消息
+# T3: How a model combines one good and one bad piece of news
 
-## 问题
+## Question
 
-一条标题里同时有一个好消息和一个坏消息，模型给的分数是怎么从两个单独的分数合成出来的？是相加，是取平均，还是坏消息占上风？
+When one headline contains both a piece of good news and a piece of bad news, how is the model's score composed from the two separate scores? Is it additive, an average, or does the bad news dominate?
 
-## 做法
+## Method
 
-1. 自造 30 条单一事实的短标题：10 条正面、10 条负面、10 条中性，强弱分散开。公司用同一个虚构名称。
-2. 先单独给这 30 条打分，重复 8 次取平均，得到每条的基准分 s。
-3. 把它们两两合并成一条标题，用 `; ` 或 `as` 连接。做三类组合：
-   - 正面 + 负面（100 对，全部组合）
-   - 正面 + 正面、负面 + 负面（各 45 对）
-   - 任意一条 + 中性（200 对）
-4. 每对两种先后顺序都做。每条合并标题重复 4 次以上。
+1. Write 30 short single-fact headlines: 10 positive, 10 negative, 10 neutral, spread across strengths. All use the same fictitious company name.
+2. First score these 30 on their own, repeat 8 times and average, to get each one's baseline score s.
+3. Combine them in pairs into one headline, joined by `; ` or `as`. Make three kinds of combinations:
+   - positive + negative (100 pairs, all combinations)
+   - positive + positive, negative + negative (45 pairs each)
+   - any one + neutral (200 pairs)
+4. Do both orders for each pair. Repeat each combined headline 4 or more times.
 
-## 分析
+## Analysis
 
-把分数换成离中性的偏离 d = s − 50。对合并标题的偏离 d(A,B)，比较三个模型：
+Convert scores to the deviation from neutral, d = s − 50. For the deviation of a combined headline d(A,B), compare three models:
 
-- **相加：** d(A,B) = d(A) + d(B)，再截断到量表范围。
-- **平均：** d(A,B) = w·d(A) + (1 − w)·d(B)。
-- **不对称：** 负面一项的权重乘以系数 λ。λ > 1 表示坏消息占上风。
+- **Additive:** d(A,B) = d(A) + d(B), then truncated to the range of the scale.
+- **Averaging:** d(A,B) = w·d(A) + (1 − w)·d(B).
+- **Asymmetric:** the weight of the negative item is multiplied by a coefficient λ. λ > 1 means bad news dominates.
 
-报告：
+Report:
 
-1. 哪个模型拟合最好，残差多大。
-2. λ 的估计和区间。
-3. 加一条中性消息会不会把分数拉向 50。相加模型预测不会，平均模型预测会。这是区分两者最干净的检验。
-4. 顺序效应：先说的那条和后说的那条权重是否不同。
-5. 两条同向消息合并后，是比单条更极端，还是介于两者之间。
+1. Which model fits best, and how large the residuals are.
+2. The estimate of λ and its interval.
+3. Whether adding a neutral item pulls the score towards 50. The additive model predicts it does not; the averaging model predicts it does. This is the cleanest test to tell the two apart.
+4. Order effects: whether the item stated first and the item stated second have different weights.
+5. Whether two items in the same direction, once combined, are more extreme than a single item, or fall between the two.
 
-## 判定
+## Decision
 
-- **继续：** λ 的区间明显不含 1，或者出现清晰的顺序效应，或者平均模型明显胜出（这意味着"加一条无关消息会冲淡坏消息"）。
-- **放弃：** 相加模型拟合良好、λ ≈ 1、没有顺序效应。
+- **Continue:** the interval for λ clearly excludes 1, or a clear order effect appears, or the averaging model clearly wins (which would mean "adding an irrelevant piece of news dilutes bad news").
+- **Abandon:** the additive model fits well, λ ≈ 1, no order effect.
 
-## 为什么值得一试
+## Why it is worth a try
 
-如果模型是取平均的，那么在一条坏消息后面添一句无关的中性话，分数就会回升。这对用模型读公告的人是一个可以被利用的漏洞，而且可以用一个系数说清楚。
+If the model averages, then adding an irrelevant neutral sentence after a piece of bad news will make the score recover. For people who use models to read announcements, this is an exploitable loophole, and it can be described with a single coefficient.
 
-## 先查
+## Check first
 
-检索信息整合理论（Anderson 的相加与平均模型）是否已被用于测 LLM，以及 LLM 情绪打分里的稀释效应、负面偏向、顺序效应。
+Search whether information integration theory (Anderson's additive and averaging models) has been used to test LLMs, and for dilution effects, negativity bias and order effects in LLM sentiment scoring.

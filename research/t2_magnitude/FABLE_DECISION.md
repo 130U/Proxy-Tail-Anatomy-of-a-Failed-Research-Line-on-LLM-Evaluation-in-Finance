@@ -1,74 +1,74 @@
-# T2 查重决策：停止原版立项，保留未验证的窄问题
+# T2 prior-art decision: stop the original project, keep an unverified narrow question
 
-日期：2026-11-16（America/New_York）。**结论：放弃原版 T2 作为独立创新题；本轮不进入评分实验。** 原因是核心响应曲线与正负不对称已有强先例，不是我们测出了“模型表现规矩”。尚不能声称三个实验逐项全部被做过。
+Date: 2026-11-16 (America/New_York). **Conclusion: drop the original T2 as an independent novel topic; this round does not enter the scoring experiment.** The reason is that the core response curve and the positive/negative asymmetry already have strong precedents, not that we measured "the model behaves well". We cannot yet claim that all three experiments have each been done.
 
 ## Charter
 
-- 目标：核对 T2 的贡献边界，在进入模型评分前给出继续／放弃判断。
-- 范围／对象／比较单位：LLM 数字行为／金融标题的数值—情绪映射／每篇研究的输入干预、评分构念、响应曲线、阈值、单位与重测控制。
-- 类型：探索式查重。开始时仅有题目概述，读过原对话、任务文件和原始文献后达到工作性理解。
-- Q1：原任务及此前约束是什么？Q2：哪些内容已有实质先例？Q3：剩余差异足够支撑原版继续吗？
-- 验收：决定性来源核验到正文；区分完整重复、核心重合、方法相邻；记录未决问题及实际执行状态。
-- 边界：只处理 T2。遵循本次“先查重、查到即停”的要求，不沿用旧题后来获准继续复现的例外。
+- Goal: check the boundary of T2's contribution and give a continue/drop judgement before entering model scoring.
+- Scope / object / unit of comparison: LLM numeric behaviour / the numeric-to-sentiment mapping of financial headlines / for each study, the input intervention, the scoring construct, the response curve, thresholds, units and retest controls.
+- Type: exploratory prior-art check. At the start there was only an outline of the topic; after reading the original conversation, the task file and the primary literature, a working understanding was reached.
+- Q1: What were the original task and the earlier constraints? Q2: What already has substantive precedent? Q3: Is the remaining difference enough to support continuing the original version?
+- Acceptance: decisive sources verified down to the full text; distinguish full duplication, core overlap and methodological adjacency; record open questions and actual execution status.
+- Boundary: T2 only. Follow this round's requirement "check prior art first, stop as soon as it is found"; do not carry over the exception under which the old topic was later allowed to continue with a replication.
 
 ## Canonical sources
 
-| 优先级 | 来源 | 用途／访问程度 |
+| Priority | Source | Use / extent of access |
 |---|---|---|
-| 1 | [原对话：构建可认证金融语言模型研究计划](codex://threads/01a1e210-7d43-7fc3-ad58-971124249a5d) | 已分页读至开头，核对用户消息与阶段结论；历史结论不替代本轮文献核验 |
-| 1 | [T2 固定版本](https://github.com/130U/proxy-tail/blob/8b89b7dc407c3e980416a87ae9d3fc3d4f1dff56/tasks/T2_magnitude.md) | 原任务；通过 GitHub 连接器读取，远端 main 提交为 `8b89b7d` |
-| 1 | Marks & Vollberg, [The psychophysics of affect in large language models](https://arxiv.org/abs/2610.40985)，2026-10-29，预印本 | 两个独立分支核验正文；主代理复核 [PDF](https://arxiv.org/pdf/2610.40985) 的方法、结果及补充模型比较 |
-| 1 | Atta-Duncan, [Same Quantity, Different Answer](https://arxiv.org/html/2609.25009v1)，预印本 | 已读正文 §§3–5、8；原网页日期为 2026-07-27，与编号月份不一致，未自行改正 |
-| 1 | 金融数值与量级表征近邻 | 原始来源、访问程度及排除理由见两份[金融查重](finance_prior_art.md)和[心理物理查重](psychophysics_prior_art.md)；不是额外独立复现 |
-| 3 | [本轮设计审查](design_audit.md)及[旧实验结论](../absolute_scoring/FABLE_ONE_PAGE.md) | 本地设计分析与历史记录；不视为新的 T2 实测 |
+| 1 | [Original conversation: research plan for building a certifiable financial language model](codex://threads/01a1e210-7d43-7fc3-ad58-971124249a5d) | Read page by page back to the beginning, checking the user's messages and phase conclusions; historical conclusions do not replace this round's literature check |
+| 1 | [T2 pinned version](https://github.com/130U/proxy-tail/blob/8b89b7dc407c3e980416a87ae9d3fc3d4f1dff56/tasks/T2_magnitude.md) | Original task; read through the GitHub connector, the remote main commit is `8b89b7d` |
+| 1 | Marks & Vollberg, [The psychophysics of affect in large language models](https://arxiv.org/abs/2610.40985), 2026-10-29, preprint | Full text verified by two independent branches; the main agent re-checked the methods, results and supplementary model comparison in the [PDF](https://arxiv.org/pdf/2610.40985) |
+| 1 | Atta-Duncan, [Same Quantity, Different Answer](https://arxiv.org/html/2609.25009v1), preprint | Full text §§3–5, 8 read; the original web page date is 2026-07-27, which does not match the month in the identifier; not corrected by us |
+| 1 | Near neighbours on financial numbers and magnitude representation | Primary sources, extent of access and reasons for exclusion are in the two files [finance prior-art check](finance_prior_art.md) and [psychophysics prior-art check](psychophysics_prior_art.md); these are not additional independent replications |
+| 3 | [This round's design audit](design_audit.md) and [the old experiment's conclusion](../absolute_scoring/FABLE_ONE_PAGE.md) | Local design analysis and historical record; not regarded as new T2 measurements |
 
 ## Findings ledger
 
-| ID | 发现／判断 | 证据定位与性质 | 回答 |
+| ID | Finding / judgement | Evidence location and nature | Answers |
 |---|---|---|---|
-| F1 | T2 结合幅度曲线、整数关口、等价表示和方向不对称；继续条件是任一异常超过重测噪声两倍。 | 任务“做法／分析／判定”；来源事实，等级 1 | Q1 |
-| F2 | 股票涨跌幅对应的连续情感曲线和正负不对称已被测量。 | Marks & Vollberg，Fig.3、Table 2、PDF pp.14–15；作者报告，等级 1 | Q2 |
-| F3 | 该研究还比较评分上下文和函数形状；“换成金融语境再画曲线”不足以区分 T2。 | 同文 Methods、补充 §S2；前半为来源事实，后半为贡献判断 | Q2–Q3 |
-| F4 | 第一人称感受并不等同于第三人称公司新闻情绪；已读研究未覆盖 T2 的精细关口及金额改写全套实验。 | 同文任务定义与 T2 对照；限于已读材料的差异判断 | Q2 |
-| F5 | 等值数值表示与单位不变性已有方法先例，但数学题正确率不同于情绪分差。 | Same Quantity，§§3、5、8；来源事实及适用性判断，等级 1 | Q2 |
-| F6 | 数字嵌入、数值分类与文本相似度研究不能自动算作 T2 连续情绪响应的重复。 | 两份查重分支的原文核验与对象对照；方法判断 | Q2 |
-| F7 | T2 的单位、阈值与经济语义尚未完全隔离，噪声与多项检验规则也需补充定义。 | design_audit.md；独立设计分析，等级 3 | Q3 |
-| F8 | 旧绝对评分实验正式结论为无法判断，不能作为 T2 现象成立的证据。 | 原对话末轮及旧 FABLE_ONE_PAGE；历史记录，等级 1/3 | Q1 |
+| F1 | T2 combines the magnitude curve, round-number thresholds, equivalent representations and directional asymmetry; the condition for continuing is that any anomaly exceeds twice the retest noise. | Task sections "method / analysis / decision"; source fact, level 1 | Q1 |
+| F2 | The continuous affect curve corresponding to stock price changes and the positive/negative asymmetry have already been measured. | Marks & Vollberg, Fig.3, Table 2, PDF pp.14–15; authors' report, level 1 | Q2 |
+| F3 | That study also compares scoring contexts and function shapes; "switch to a financial context and draw the curve again" is not enough to distinguish T2. | Same paper, Methods, supplement §S2; the first half is a source fact, the second half a contribution judgement | Q2–Q3 |
+| F4 | First-person feeling is not the same as third-person company-news sentiment; the studies read do not cover T2's fine-grained thresholds and the full set of amount-rewriting experiments. | Task definition of the same paper compared with T2; a difference judgement limited to the material read | Q2 |
+| F5 | Equivalent numeric representations and unit invariance have methodological precedents, but math-question accuracy is not the same as a sentiment score difference. | Same Quantity, §§3, 5, 8; source fact and applicability judgement, level 1 | Q2 |
+| F6 | Studies of number embeddings, numeric classification and text similarity cannot automatically count as duplicates of T2's continuous sentiment response. | Verification against the originals and object comparison in the two prior-art branches; methodological judgement | Q2 |
+| F7 | T2's units, thresholds and economic semantics are not yet fully isolated, and the noise and multiple-testing rules also need to be defined further. | design_audit.md; independent design analysis, level 3 | Q3 |
+| F8 | The formal conclusion of the old absolute-scoring experiment was inconclusive, and it cannot be used as evidence that the T2 phenomenon holds. | Last round of the original conversation and the old FABLE_ONE_PAGE; historical record, level 1/3 | Q1 |
 
-未决：未确认有人完整执行“公司标题 × 局部整数断点 × 等值单位 × 重测噪声”的组合；也未证明该组合有独立科学贡献。检索不到完整组合不等于它有新颖性。
+Open: it has not been confirmed that anyone has fully executed the combination "company headlines × local round-number breakpoints × equivalent units × retest noise"; nor has it been shown that this combination has an independent scientific contribution. Not finding the full combination in searches does not mean it is novel.
 
 ## Scope filter
 
-剔除“LLM 数字能力已有文献，因此所有数值情绪研究都重复”的推断（F5–F6）。算术正确性、嵌入几何、选择偏好与情绪评分是不同对象。论文报告的异常也不自动说明金融决策错误，更不能推出可交易收益。
+Reject the inference "there is literature on LLM numeric ability, so every numeric-sentiment study is a duplicate" (F5–F6). Arithmetic correctness, embedding geometry, choice preferences and sentiment scoring are different objects. Anomalies reported in papers also do not automatically indicate wrong financial decisions, still less imply tradable returns.
 
 ## Object filter
 
-将“完全撞题”收窄为“核心测量逻辑和拟议发现高度重合”（F2–F4）。保留第三人称新闻构念和关口／单位的未决空间；不把修改模型、公司名、取点数量或评分范围本身当作贡献。停止建议是基于用户优先筛掉重复方向的选题标准，并非证明所有子问题均无价值。
+Narrow "a complete collision with existing work" to "the core measurement logic and the proposed finding overlap strongly" (F2–F4). Keep the open space of the third-person news construct and thresholds/units; do not count changing the model, the company names, the number of points or the scoring range as a contribution in itself. The stop recommendation is based on the user's topic-selection standard of screening out duplicated directions first; it is not proof that every sub-question has no value.
 
 ## Conclusions
 
-**决策：停止原版 T2 的创新立项和原版评分计划。** 若现在测到曲线非线性或涨跌不对称，仅这一发现不足以通过查重；它已不再是足够区分既有工作的结果（F1–F4）。按本次止损要求，不为重现已知现象启动整套调用。
+**Decision: stop the original T2 as a novel project and stop the original scoring plan.** If we now measured a nonlinear curve or an up/down asymmetry, that finding alone would not pass the prior-art check; it is no longer a result that sufficiently distinguishes us from existing work (F1–F4). Following this round's stop-loss requirement, we do not launch the full set of calls to reproduce a known phenomenon.
 
-| T2 部分 | 查重判断 | 对当前决策的含义 |
+| T2 part | Prior-art judgement | Implication for the current decision |
 |---|---|---|
-| 幅度响应与曲线形状 | 核心强重合，具体构念和拟合族不同 | 仅凭曲线形状不足以支撑原版创新立项 |
-| 正负不对称 | 金融情境中已有直接相邻测量 | 不再作为独立“继续”理由 |
-| 10／50／100 局部关口 | 本轮未确认同构研究 | 未决，不能据此宣称首创 |
-| 同量不同单位／表示 | 方法已有强先例，情绪对象尚有差别 | 若保留，必须另立窄问题 |
+| Magnitude response and curve shape | Strong core overlap; the specific construct and fitted families differ | Curve shape alone is not enough to support the original version as a novel project |
+| Positive/negative asymmetry | A directly adjacent measurement already exists in a financial setting | No longer an independent reason to "continue" |
+| 10 / 50 / 100 local thresholds | No study with the same structure was confirmed in this round | Open; cannot be used to claim being first |
+| Same quantity, different units / representations | The method has strong precedents; the sentiment object still differs | If kept, it must be set up as a separate narrow question |
 
-任务的二元判定还缺少一种结果：区间过宽、噪声太大或无效干预时应为“无法判断”。未发现异常不能直接写成“光滑、单调、对称、单位不变”（F7）。本轮属于查重止损，既不是行为检验通过，也不是行为检验失败。
+The task's binary decision also lacks one outcome: when intervals are too wide, noise is too large or the intervention is ineffective, the result should be "inconclusive". Not finding an anomaly cannot be written up directly as "smooth, monotone, symmetric, unit-invariant" (F7). This round is a stop-loss after the prior-art check; it is neither a pass nor a fail of a behavioural test.
 
 ## Next steps / Risks
 
-给 Fable 的建议是归档原版 T2，把资源留给通过查重的独立题目。下面仅保留重启条件，不将其包装成已获认可的新题或已执行实验：
+The recommendation to Fable is to archive the original T2 and keep resources for independent topics that pass the prior-art check. Only the conditions for a restart are kept below; they are not packaged as an approved new topic or an executed experiment:
 
-- 必须先说明为什么“公司新闻情绪”具有不同于已有 affect 评分的可检验机制；若贡献仍只是更换标题，维持停止。
-- 若只保留单位问题，优先使用确实等量的金额表达，并固定事件、公司规模与比较基准。`profit rises 0.5%` 不能直接替换为 `rises 50 basis points`；百分比相对增长与率的绝对变化须分别定义。
-- 若只保留整数关口，需隔离真实经济阈值、显示精度和数字表示。正利润下降跨过 100% 会进入亏损；那里的跳变未必是数字认知偏差。局部有限差也不自动证明数学不连续。
-- 即使重新立题，仍需明确重测噪声的估计单位、同批与换批对照、效应区间、实用阈值及多项比较。具体建议见设计审查；当前均未执行。
+- It must first be explained why "company news sentiment" has a testable mechanism different from existing affect scoring; if the contribution is still only a change of headlines, the stop stands.
+- If only the units question is kept, prefer money expressions that are truly equal in quantity, and fix the event, company size and comparison baseline. `profit rises 0.5%` cannot be replaced directly with `rises 50 basis points`; relative percentage growth and an absolute change in a rate must be defined separately.
+- If only the round-number thresholds are kept, real economic thresholds, displayed precision and numeric representation must be isolated. A positive profit that falls by more than 100% becomes a loss; a jump there is not necessarily a numeric cognitive bias. Local finite differences also do not automatically prove a mathematical discontinuity.
+- Even if the topic is re-launched, the unit for estimating retest noise, same-batch and cross-batch controls, effect intervals, practical thresholds and multiple comparisons still need to be specified. Specific suggestions are in the design audit; none has been executed so far.
 
-检索边界：截至上述日期，使用公开网页检索、arXiv、ACL Anthology、作者资料和指定仓库；核心来源打开至正文，非仅依赖搜索摘要。另发现 Chicago Booth 的左位数／代理购买研究，但 SSRN 全文访问返回 403，仅作线索，不用于判定金融情绪关口已被做过。本轮发现足以改变决策的文献后提前收束，没有声称耗满半天或完成穷尽式系统综述。
+Search boundary: up to the date above, public web search, arXiv, ACL Anthology, author materials and the specified repository were used; core sources were opened down to the full text, not relying only on search snippets. A Chicago Booth study on left-digit / agent purchasing was also found, but access to the SSRN full text returned 403, so it is only a lead and is not used to judge that financial sentiment thresholds have been done. This round wrapped up early after finding literature sufficient to change the decision; it does not claim to have used up half a day or to have completed an exhaustive systematic review.
 
-实际执行：读取原对话与任务；两条独立文献支线；一份独立设计审查；主代理来源复核与综合。**新增模型评分 0 次，训练 0 次，作者实验复现 0 次。** 文献中的结果均属于作者报告。材料保存在本地仓库，未推送、未联系作者或 Fable。
+Actually executed: read the original conversation and the task; two independent literature branches; one independent design audit; source re-check and synthesis by the main agent. **New model scoring 0 times, training 0 times, replication of authors' experiments 0 times.** Results in the literature are all authors' reports. The material is saved in the local repository; nothing was pushed, and neither the authors nor Fable were contacted.
 
-研究进度：来源优先级、研究约定、证据账本、范围复核、对象复核、结论与风险六步均已完成。来源审核结论为“支持，但必须保留部分重合的限定”。
+Research progress: all six steps (source priority, research conventions, evidence ledger, scope review, object review, conclusions and risks) are complete. The source-audit conclusion is "supported, but the qualification of partial overlap must be kept".

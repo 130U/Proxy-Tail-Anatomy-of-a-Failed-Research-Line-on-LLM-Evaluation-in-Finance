@@ -5078,7 +5078,7 @@ tatqa,89f2121c-df16-4e60-b78a-1c7a2fac97e2,train,What was the change in Accounts
 tatqa,18d4ad7e-9514-4d25-af18-e24d66453b4f,train,"What is the change in the number of unvested shares between December 29, 2017 and December 28, 2018?","526,730-329,761",True
 tatqa,ae8bc910-fc90-4a92-91ed-46616f45b837,train,What was the change in Accrued severance and related costs in 2019 from 2018?,485-793,True
 tatqa,8c053240-2bcb-441c-a745-572db5adbc4c,train,What was the percentage change in Accrued severance and related costs in 2019 from 2018?,(485-793)/793,True
-tatqa,de96cfde-18fd-4770-a30f-b6b6a7ce2f7c,train,What is the overall increase，net in opening and closing balances from March 2018 to March 2019?,"9,351+5,366+2,836-2,674+14,596",True
+tatqa,de96cfde-18fd-4770-a30f-b6b6a7ce2f7c,train,"What is the overall increase,net in opening and closing balances from March 2018 to March 2019?","9,351+5,366+2,836-2,674+14,596",True
 tatqa,6c29f60e-4be1-4e9f-9f60-b68dd16c9f91,train,"What is the change in Inventories: Work in process from December 31, 2018 to 2019?",772.9-760.7,True
 tatqa,0045158d-99c6-4ccb-99d8-8eea8cace339,train,"What is the change in Inventories: Finished goods from year ended December 31, 2018 to 2019?",321.1-327.2,True
 tatqa,6a9f2292-decc-4392-b641-63753e7e75ea,train,What was the change in the balance at the beginning of period between 2018 and 2019?,"$1,868-$2,366",True

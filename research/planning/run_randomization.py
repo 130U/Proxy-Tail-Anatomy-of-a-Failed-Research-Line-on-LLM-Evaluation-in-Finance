@@ -102,12 +102,12 @@ def solve(row):
 
 
 def table(data):
-    lines = ['# 任意随机配额：完整32格结果', '',
-             '所有输入均为人工同质阈值结构，α=1/20；全零必须出固定区间，真坏集事先固定。',
-             '随机法是限定输出类内极小极大最优；pooled是全总体SRS类内最优。固定配额sharp行保留界。',
-             '来源：[JSON](randomization_results.json)，[协议](RANDOMIZATION_PROTOCOL.md)，[证明](../theory/randomized_audit.md)。',
-             f"JSON SHA256：`{hashlib.sha256(OUTPUT.read_bytes()).hexdigest()}`。", '',
-             '| 案例 | d | r | N | 随机最优 | pooled最优 | 固定direct最优或界 | 固定简单组合最优或界 | 随机法风险（约） |',
+    lines = ['# Arbitrary random quotas: complete 32-cell results', '',
+             'All inputs are hand-made homogeneous threshold structures, α=1/20; all zero findings must output the fixed interval, and the true bad set is fixed in advance.',
+             'The randomized method is minimax optimal within the restricted output class; pooled is optimal within the whole-population SRS class. The fixed-quota sharp rows keep their bounds.',
+             'Sources: [JSON](randomization_results.json), [protocol](RANDOMIZATION_PROTOCOL.md), [proof](../theory/randomized_audit.md).',
+             f"JSON SHA256: `{hashlib.sha256(OUTPUT.read_bytes()).hexdigest()}`.", '',
+             '| Case | d | r | N | Randomized optimum | pooled optimum | Fixed direct optimum or bounds | Fixed simple-combination optimum or bounds | Randomized-method risk (approx.) |',
              '|---|---:|---:|---:|---:|---:|---|---|---:|']
     for row in data['cases']:
         if row['status'] != 'complete':
@@ -119,8 +119,8 @@ def table(data):
                      f"{row['randomized_optimal']['audits']} | {row['pooled_srs_optimal']['audits']} | "
                      f"{display(row['fixed_direct_cost_bounds'])} | {display(row['fixed_simple_portfolio_cost_bounds'])} | "
                      f"{float(Fraction(row['randomized_optimal']['risk_exact'])):.8f} |")
-    lines += ['', '精确风险和少一篇的风险见JSON；小数仅展示，不用于判定。16个star结构不对称，明确不在本定理范围。',
-              '相对收益只描述人工结构与指定输出约定；不是自然模型证书、原创性或G0/G1通过。']
+    lines += ['', 'Exact risks and the risks with one document fewer are in the JSON; decimals are for display only and are not used for decisions. The 16 star structures are asymmetric and are explicitly outside the scope of this theorem.',
+              'Relative gains only describe the hand-made structures and the specified output convention; they are not a natural-model certificate, originality, or a G0/G1 pass.']
     (HERE/'randomization_table.md').write_text('\n'.join(lines)+'\n', encoding='utf-8')
 
 

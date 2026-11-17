@@ -23,7 +23,7 @@ summary={
     'uncertain_fraction':sum(r['status']=='unstable' for r in cohort)/len(cohort),
     'expected_flip_count':sum(r['probability'] for r in cohort),
     'expected_flip_fraction':sum(r['probability'] for r in cohort)/len(cohort),
-    'decision':'很少；合计计算比较题不足100道',
+    'decision':'rare; fewer than 100 computed-comparison questions in total',
     'all_witnesses_verified':True,
 }
 pairwise=[]

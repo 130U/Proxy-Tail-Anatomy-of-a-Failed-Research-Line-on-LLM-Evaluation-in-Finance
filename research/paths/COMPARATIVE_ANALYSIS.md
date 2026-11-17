@@ -1,118 +1,118 @@
-# 五份路径报告的比较：接下来把理论工作押在哪里
+# Comparing the five path reports: where to place the next theory work
 
-**第九轮证据更新（2026-11-16）：** [任意随机审计的完整条件解](../reports/2026-11-16-round9.md)去掉固定配额限制，在同质占用阈值族给出匹配下界及简单随机整层最优策略；总数门也允许同样的任意随机设计，由pooled SRS达到自己的下界。代表构造精确最小成本141对190，合取族却仍由旧单层普查达到相同最优。这是03更清楚的理论边界，不是复杂优化器必要性、原创性或真实语言模型贡献的证据。03继续作为P1的数学组件；需Fable判断与已有理论的关系以及能否找到真实非冗余任务，原Top3/G0/G1不自动升级。
+**Round 9 evidence update (2026-11-16):** [The complete conditional solution for arbitrary randomized audits](../reports/2026-11-16-round9.md) removes the fixed-quota restriction. On the homogeneous occupancy threshold family it gives a matching lower bound and shows that a simple randomized whole-stratum policy is optimal. The total-count gate also allows the same arbitrary randomized designs, and pooled SRS attains that gate's own lower bound. In the representative construction the exact minimum cost is 141 vs 190, yet on the conjunction family the old single-stratum census still attains the same optimum. This is a clearer theoretical boundary for 03. It is not evidence that a complex optimizer is necessary, nor evidence of originality or of a contribution for real language models. 03 stays as the mathematical component of P1. Fable needs to judge its relation to existing theory and whether a real non-redundant task can be found; the original Top3/G0/G1 are not upgraded automatically.
 
-**第八轮证据更新（2026-11-16）：** [新证明和完整对照](../reports/2026-11-16-round8.md)把03收窄为“坏配置结构与允许的审计设计共同决定成本”。原N=r²路径相对最优总数门的收益消失；反向r=N²路径对固定配额简单组合可有sharp常数优势，但更广的pooled随机抽样又可更便宜。当前缺少现实问题必须固定分层配额的证据，不能以该限制支撑旗舰创新。原20格对两种简单基线择优仅5格有收益、最大约9.09%、中位0；四个sharp行是解析界而非精确最优实验。投入建议应先要求现实设计约束与最强替代，不据更多人工构造升级G1。
+**Round 8 evidence update (2026-11-16):** [The new proofs and the complete comparison](../reports/2026-11-16-round8.md) narrow 03 to "the structure of bad configurations and the permitted audit designs jointly determine the cost". The gain of the original N=r² path over the optimal total-count gate disappears. The reverse r=N² path can have a sharp constant-factor advantage over a fixed-quota simple combination, but broader pooled random sampling can be cheaper still. There is currently no evidence that a realistic problem must use fixed stratified quotas, so this restriction cannot support a flagship innovation. On the original 20 cells, against the better of the two simple baselines, only 5 cells show a gain, the largest about 9.09%, the median 0; the four sharp rows are analytic bounds, not exact optimization experiments. The investment recommendation should first require realistic design constraints and the strongest alternative, and should not upgrade G1 on the basis of more hand-made constructions.
 
-**第七轮证据更新（2026-11-16）：** [集中技术稿](../paper/manuscript.md)与[独立论文审查](../reports/paper_review.md)进一步缩小了03的贡献范围：一般安全非矩形计数区域可复现直接法；简单总污染数门在均衡阈值族已实现88对114及Ω(r)矩形分离，因此这些例子不能证明影响位置模型必要。另一个审查后解析例才区分位置与固定总数门，成本38对48，仍属探索构造、先例未核验。原排序仅为研究投入建议，原创性与非冗余性门保持开放；[给Fable的短笺](../paper/FABLE_DECISION_NOTE.md)集中列出需要导师裁定的三个问题。
+**Round 7 evidence update (2026-11-16):** The [consolidated technical draft](../paper/manuscript.md) and the [independent paper review](../reports/paper_review.md) narrow the scope of 03's contribution further. A general safe non-rectangular count region reproduces the direct method. The simple total-contamination-count gate already achieves 88 vs 114 and an Ω(r) rectangular separation on the balanced threshold family, so these examples cannot prove that an influence-location model is necessary. Only one further analytic example, built after the review, separates the location gate from the fixed total-count gate, at cost 38 vs 48; it is still an exploratory construction, and its precedents have not been checked. The original ranking is only a research-investment recommendation, and the originality and non-redundancy gates stay open. The [short note to Fable](../paper/FABLE_DECISION_NOTE.md) lists in one place the three questions that need the advisor's ruling.
 
-**第六轮证据更新（2026-11-16）：** P2/P05现在有[有限语义集合的严格数值包络](../numeric/record.md)与[六项条件证明](../theory/semantic_envelopes.md)。它强化了两个筛选点：局部分支Greeks不能覆盖动态选支；sign(x−b)任务在语义一致时已被符号oracle解决。有限人工宽度表不是自然语料接受率，不能据此宣布P2通过或被否决。原排序保持；最值得继续验证的是解析集合的合法性/覆盖与必要宽度，而非默认保留学习头。
+**Round 6 evidence update (2026-11-16):** P2/P05 now have [rigorous numeric envelopes for finite semantic sets](../numeric/record.md) and [six conditional proofs](../theory/semantic_envelopes.md). They sharpen two screening points: local branch Greeks cannot cover dynamic branch selection; and when the semantics are consistent, the sign(x−b) task is already solved by a symbolic oracle. A finite table of hand-made widths is not an acceptance rate on a natural corpus, so P2 cannot be declared passed or rejected on this basis. The original ranking stays. What is most worth verifying next is the validity/coverage and the necessary width of the parsed sets, not keeping the learned head by default.
 
-日期：2026-11-15。面向 Theodore 与 Fable 的研究决策稿。本文区分导师原假设、已存文献结论、本地已执行结果和下一步提案；没有新增外联。**这是继续研究的投入优先级，不是五条路线都已获证实，更不是 G1 已选出旗舰。**
+Date: 2026-11-15. A research decision draft for Theodore and Fable. This document separates the advisor's original hypotheses, conclusions from existing literature, results executed locally, and proposals for the next step; no new outreach was made. **This is an investment priority for continued research. It does not mean that all five routes are confirmed, and still less that G1 has selected a flagship.**
 
-建议优先研究 **P1 中“为了保证最终统计量，需要多少审计信息”这个窄问题**，把完整历史信息集证书作为其应用目标；同时以较小投入验证 P2 的语义解析与约束是否有必要。部署风险值得作为第三个独立理论候选，但应先证明它需要什么可识别的依赖信息。数值程序验证排在探索位。
+The recommendation is to study first **the narrow question within P1, "how much audit information is needed to guarantee the final statistic"**, with a complete historical information-set certificate as its application target. In parallel, with a smaller investment, check whether P2's semantic parsing and constraints are necessary. Deployment risk deserves to be the third independent theory candidate, but it should first be shown what identifiable dependence information it needs. Numeric program verification takes the exploration slot.
 
-共有五份独立成文的分析报告，构成四个研究家族：路径03是01的数学分支，不能重复计算为另一个旗舰。02与05也共享语义解析风险，不能认为同时做它们就分散了风险。这样的拆分保留了用户要求的三至五个实质候选，也避免为凑五条而制造独立性。
+There are five separately written analysis reports, forming four research families. Path 03 is a mathematical branch of 01 and cannot be counted again as another flagship. 02 and 05 also share the semantic-parsing risk, so doing both does not spread the risk. This split keeps the three to five substantive candidates the user asked for, while avoiding manufactured independence just to reach five.
 
-## 1. 当前 Top 3，以及第四个探索备选
+## 1. Current Top 3, plus a fourth exploratory alternate
 
-| 投入优先级 | 研究方向与完整报告 | 真正可能产生的理论贡献 | 当前最大障碍 | 建议状态 |
+| Investment priority | Research direction and full report | Theoretical contribution it could really produce | Current biggest obstacle | Recommended status |
 |---|---|---|---|---|
-| Top 1 | [01 信息集证书](PATH_01_audited_information_set.md)，以 [03 审计成本—区间宽度](PATH_03_audit_design_frontier.md) 为数学切口 | 给定文档影响结构与目标统计量，刻画取得有用证书所需的最少审计信息；争取算法与下界，而非重复 rule of three | 新颖性未确认；真实历史内容版本与任务真值未建立；120份文档可能普查更划算 | 先做窄理论与真实来源可判定性检查；完整历史旗舰仍有条件 |
-| Top 2 | [02 解析不确定性下的数字敏感度](PATH_02_numeric_sensitivity.md) | 语义歧义如何限制单位不变、方向和敏感度的联合保证；可能的覆盖—宽度或不可能性刻画 | 正确元组已知后阈值规则可能完全解决任务；单调头可能冗余 | 先攻击必要性；保留解析/约束问题，不预先保留某个模型结构 |
-| Top 3 | [04 边际与依赖不确定下的部署风险](PATH_04_dependence_robust_risk.md) | 什么最小、可估计的额外信息可使最坏尾部风险严格非空；匹配样本复杂度或结构化锐界 | 校准不识别逐点风险，单批事件不识别共错分布，任意依赖下可能必然全批风险 | 数学支线，先做识别边界；升级独立旗舰需记录选题范围改变 |
-| Top 4 | [05 带可检查计算证明的数值推理](PATH_05_proof_carrying_numeric_reasoning.md) | 语义程序候选集合的覆盖与答案包络宽度；可拒绝的语义歧义传播 | 类型/算术正确不等于题意正确；现有抽取＋符号计算先例较多，专门综述未完整 | 小范围探索或02的验证工具，暂不大量投入提议模型 |
+| Top 1 | [01 Information-set certificate](PATH_01_audited_information_set.md), with [03 Audit cost vs interval width](PATH_03_audit_design_frontier.md) as the mathematical entry point | Given a document influence structure and a target statistic, characterize the minimum audit information needed to obtain a useful certificate; aim for algorithms and lower bounds rather than repeating the rule of three | Novelty not confirmed; real historical content versions and task ground truth not established; with 120 documents a census may be cheaper | First do the narrow theory and a check of whether real sources are decidable; the complete historical flagship remains conditional |
+| Top 2 | [02 Numeric sensitivity under parsing uncertainty](PATH_02_numeric_sensitivity.md) | How semantic ambiguity limits joint guarantees on unit invariance, direction, and sensitivity; a possible coverage–width or impossibility characterization | Once the correct tuple is known, a threshold rule may solve the task entirely; the monotone head may be redundant | Attack necessity first; keep the parsing/constraint question, but do not reserve a particular model structure in advance |
+| Top 3 | [04 Deployment risk under marginal and dependence uncertainty](PATH_04_dependence_robust_risk.md) | What minimal, estimable extra information makes the worst-case tail risk strictly non-vacuous; matching sample complexity or structured sharp bounds | Calibration does not identify pointwise risk, a single batch of events does not identify the joint-error distribution, and under arbitrary dependence the risk may necessarily be the whole batch | A mathematical side line; do the identification boundary first; upgrading it to an independent flagship requires recording the change of topic scope |
+| Top 4 | [05 Numeric reasoning with checkable computation proofs](PATH_05_proof_carrying_numeric_reasoning.md) | Coverage and answer-envelope width for sets of semantic program candidates; propagation of semantic ambiguity with rejection | Type/arithmetic correctness is not the same as matching the question's meaning; there is much prior work on extraction + symbolic computation, and a dedicated survey is not complete | Small-scale exploration or a verification tool for 02; do not invest heavily in the proposed model for now |
 
-“Top”是基于当前证据的资源顺序，不是客观排名。01与03一起列入第一优先；两篇分别回答“完整科学结论能否成立”和“最值得先研究的数学子问题”。四个家族里尚无一条完成发表级新颖性核验，排序主要依据问题可收窄程度、既有地基、关键假设的可检查性与导师研究风格。
+"Top" is a resource order based on current evidence, not an objective ranking. 01 and 03 are listed together as first priority; the two reports answer, respectively, "can the complete scientific conclusion hold" and "which mathematical sub-question is most worth studying first". None of the four families has finished a publication-grade novelty check. The order rests mainly on how far the question can be narrowed, existing foundations, whether the key assumptions can be checked, and the advisor's research style.
 
-## 2. 一个必须正面修订的原始筛选条件
+## 2. An original screening criterion that must be revised head-on
 
-导师提出“只保留必须从零训练才能回答的问题”。逐条分析后，这个命题不能原样作为已被证实的选题基础：
+The advisor proposed "keep only questions that can only be answered by training from scratch". After analyzing each path, this statement cannot be used as-is as a confirmed basis for topic selection:
 
-- 01真正需要的是**所有训练依赖的历史来源可控**。随机初始化有助于满足它，但固定词法特征或已有且来源完整可审的编码器也是可能实现；从零训练并不自动排除未来词表、标签或超参数泄漏。
-- 02的数学约束可以接在冻结的编码器后；03只需要影响结构与统计量；04是模型无关的风险问题；05的检查器也不依赖权重如何初始化。
+- What 01 really needs is that **the historical sources of everything training depends on are controllable**. Random initialization helps satisfy this, but fixed lexical features, or an existing encoder whose sources are complete and auditable, could also achieve it. Training from scratch does not automatically exclude leakage of future vocabulary, labels, or hyperparameters.
+- 02's mathematical constraints can sit on top of a frozen encoder; 03 only needs the influence structure and the statistic; 04 is a model-agnostic risk question; 05's checker also does not depend on how the weights were initialized.
 
-因此，如果把“随机初始化在逻辑上不可替代”坚持为字面硬门，**目前没有证据支持三条合格路径，连01也未证明这个普遍必要性**。不能为了回应 Top 3 而把它们说成全部过门。
+Therefore, if "random initialization is logically irreplaceable" is held as a literal hard gate, **there is currently no evidence for three qualifying paths, and not even 01 has been shown to have this general necessity**. They cannot be described as all passing the gate just to answer the request for a Top 3.
 
-本报告提出的替代标准是：研究对象需要哪些可控制、可审核的前提；去掉拟议组件后，最强简单方法是否已解决同一问题；是否有不会被扩大算力替代的数学结论。**这是交给 Fable 判断的修订提案，尚未被默认为原计划的一部分。** 用户要求从头重建实验继续有效，与“论文必须证明从头训练必要”是两件事。
+The replacement criterion proposed in this report is: what controllable, auditable premises the object of study needs; once the proposed component is removed, whether the strongest simple method already solves the same problem; and whether there is a mathematical conclusion that more compute cannot replace. **This is a revision proposal for Fable to judge; it has not been assumed to be part of the original plan.** The user's requirement to rebuild the experiments from scratch remains in force; that is a different thing from "the paper must prove that training from scratch is necessary".
 
-## 3. Top 1 为什么值得先做，以及何时应该停止
+## 3. Why Top 1 is worth doing first, and when to stop
 
-这条线与金融数学的联系最直接：固定一个不可直接观察的清洁比较器统计量，通过可核查前提给包含它的区间。已有计算器已把审计错误数连接到共同分片污染下的 accuracy 与 macro-F1；因此不用先训练大模型，便可提出清楚的数学问题。第二轮构造例子的共同头约束把 accuracy 的 `[0,1]` 收紧到 `[1/4,3/4]`，只说明这种约束有用的可能性，不说明真实任务足够紧。[已有结果](../experiments/collective_metrics/report.md)
+This line has the most direct link to financial mathematics: fix a clean comparator statistic that cannot be observed directly, and use checkable premises to give an interval that contains it. The existing calculator already connects the number of audit errors to accuracy and macro-F1 under shared shard contamination, so a clear mathematical question can be posed without first training a large model. In the round 2 constructed example, the shared-head-set constraint tightened accuracy from `[0,1]` to `[1/4,3/4]`. This only shows that such a constraint could be useful, not that it is tight enough on real tasks. [Existing results](../experiments/collective_metrics/report.md)
 
-下一命题不应是“审计后应用投票界”，因为这只是已有方法组合。较强的研究问题应固定影响图、误差概率、目标宽度和允许审计设计，研究最小成本；路径03的 D1 给出一个正确的复合坏配置检验接口。接下来需要可计算的坏配置结构、成本下界，或明确实例族上的阶数差异。如果只能改进一组手工票数的常数，不足以形成新的理论叙事。[D1与限制](PATH_03_audit_design_frontier.md)
+The next proposition should not be "apply a voting bound after the audit", because that only combines existing methods. A stronger research question would fix the influence graph, the error probabilities, the target width, and the permitted audit designs, and study the minimum cost; path 03's D1 gives a correct interface for testing composite bad configurations. What is needed next is a computable structure of bad configurations, cost lower bounds, or a difference in order on an explicit instance family. If all that can be done is improve the constant for a set of hand-picked vote counts, that is not enough to form a new theoretical narrative. [D1 and its limits](PATH_03_audit_design_frontier.md)
 
-有三个必须竞争的替代方案：完全丢弃可疑边缘，只用核心；对120份文档逐份审查；固定词法特征＋简单分片头。新方法必须解释何时比它们值得，而不能先假定昂贵语料、大窗口和复杂骨干都是必需的。逐份审查也可能得到“历史版本无法判定”，普查不等于历史真值自动可得。
+There are three alternatives that must be competed against: drop the suspect periphery entirely and use only the core; review all 120 documents one by one; fixed lexical features + a simple shard head. The new method must explain when it is worth more than these, rather than assume up front that an expensive corpus, a large window, and a complex backbone are all necessary. A document-by-document review may also conclude "the historical version cannot be determined"; a census does not make the historical ground truth available automatically.
 
-最大风险仍在真实结论名称。删除污染后的区间是一个鲁棒性结论；只有历史选择、共享核心、版本和预测输入也可得，才能升级为历史无前视结论。目前2026年保存的旧FOMC页面没有提供相同字节在历史年份可得的完整证据。[来源盘点](../reports/local_data_inventory.md) 若离线材料不足，继续做条件式数学完全合理，但必须停止宣称完整历史证书已成立。
+The biggest risk is still the name of the real conclusion. The interval after removing contamination is a robustness conclusion. It can be upgraded to a historical no-look-ahead conclusion only if the historical selection, the shared core, the versions, and the prediction inputs are also available. Currently, the old FOMC pages saved in 2026 do not give complete evidence that the same bytes were available in the historical years. [Source inventory](../reports/local_data_inventory.md) If offline material is insufficient, it is entirely reasonable to keep doing conditional mathematics, but claims that a complete historical certificate holds must stop.
 
-## 4. Top 2 为什么不能直接把单调头当贡献
+## 4. Why Top 2 cannot simply treat the monotone head as the contribution
 
-单位不变、单调残差与有序分布已有直接先例。现有头的方向与导数证明应保留为正确组件；下一步价值在“真实文本能否提供符合这些证明的输入”。正确数值、指标、基准和语义方向确定后，metric direction 往往直接由符号阈值决定。基准隐含只可能使抽取更难，不能证明下游还需要学习一个头。[完整必要性分析](PATH_02_numeric_sensitivity.md)
+Unit invariance, monotone residuals, and ordinal distributions all have direct precedents. The direction and derivative proofs of the existing head should be kept as correct components; the value of the next step lies in "whether real text can provide inputs that satisfy these proofs". Once the correct value, metric, benchmark, and semantic direction are determined, the metric direction is often decided directly by a sign threshold. An implicit benchmark can only make extraction harder; it cannot prove that a head still needs to be learned downstream. [Full necessity analysis](PATH_02_numeric_sensitivity.md)
 
-更有理论辨识力的是研究可观测语义等价类：如果同一规范化表示中存在相反的合理目标或方向，任何坚持同一输出的确定性模型都会失去信息。应先刻画这类冲突的不可避免代价，再问集合值解析能否以可审计风险保留足够窄的输出。现有单上下文命题通过拒绝离散歧义保持正确；它还没有解决这项更难的问题。
+What has more theoretical discriminating power is to study observable semantic equivalence classes: if the same normalized representation contains opposite plausible targets or directions, any deterministic model that insists on a single output loses information. One should first characterize the unavoidable cost of such conflicts, and then ask whether set-valued parsing can keep a sufficiently narrow output at auditable risk. The existing single-context proposition stays correct by rejecting discrete ambiguity; it has not yet solved this harder problem.
 
-第一轮最小试验应拆成金标元组＋规则、自动抽取＋相同规则、金标元组＋学习头，再加必要的硬/软约束比较。这样才能确定困难在语义绑定还是下游预测。若第一种已按任务定义完美，学习头无必要就是明确结果；不要改成无经济依据的市场方向标签来保住结构。
+The first minimal trial should be split into gold tuple + rule, automatic extraction + the same rule, and gold tuple + learned head, plus the necessary hard/soft constraint comparisons. Only then can one tell whether the difficulty lies in semantic binding or in downstream prediction. If the first already solves the task perfectly by its definition, "the learned head is unnecessary" is a clear result; do not switch to market-direction labels with no economic basis to save the structure.
 
-02与05可以共享事实/语义规范的准备，暂时不共享“已通过”结论。前者的证书包住模型在正确输入上的输出，不直接包住真实类别概率；后者包住正确程序在正确事实上的答案，两者都需要单列语义失败风险。
+02 and 05 can share the preparation of fact/semantic specifications, but for now they do not share a "passed" conclusion. The former's certificate bounds the model's output on correct inputs, not the true class probabilities directly; the latter bounds the answer of the correct program on correct facts. Both need to list semantic failure risk separately.
 
-## 5. Top 3 的数学潜力与数据上的短板
+## 5. Top 3's mathematical potential and its data weakness
 
-路径04已经提出一个可直接推导、但不声称原创的锐界。只知道未来第g组有b_g条、期望错误率不超过u_g，组间与组内任意依赖，则
+Path 04 already states a sharp bound that can be derived directly, without claiming originality. Knowing only that future group g has b_g items with expected error rate at most u_g, under arbitrary dependence across and within groups,
 
-`sup ES_beta(总错误数) = sum_g b_g min(1, u_g/(1-beta))`。
+`sup ES_beta(total error count) = sum_g b_g min(1, u_g/(1-beta))`.
 
-在 beta=.95 时，各组 u_g≥.05 就让上界达到整批大小 B。这里甚至没有估计误差，所以更精确地画校准曲线也救不了缺失的依赖信息。这个反例使研究问题比“把同单调公式应用到模型错误”更清楚：需要哪种能从数据估计的额外结构，才能严格收紧锐界？[R1–R3及候选问题](PATH_04_dependence_robust_risk.md)
+At beta=.95, u_g≥.05 in every group makes the upper bound reach the whole batch size B. There is not even estimation error here, so drawing the calibration curve more precisely cannot rescue the missing dependence information. This counterexample makes the research question clearer than "apply the comonotone formula to model errors": what extra structure that can be estimated from data is needed to strictly tighten the sharp bound? [R1–R3 and candidate questions](PATH_04_dependence_robust_risk.md)
 
-独立审查进一步指出特定有限样本入口的障碍：即使120个等权独立簇全零错、无漂移，文中 Hoeffding 半径约 .1117；95% ES 仍然平凡。600簇只是这个保守入口有可能非空的最低理想规模。作者修订同时给出全零样本的更紧合法界，避免误把一个松界的失败宣布为整个方向不可能。**结论应是必须比较最强统计入口，而且真实独立重复数据尚未建立。**
+The independent review further pointed out an obstacle for a specific finite-sample entry point: even if 120 equally weighted independent clusters all have zero errors with no drift, the Hoeffding radius in the text is about .1117, and the 95% ES is still trivial. 600 clusters is only the minimum ideal scale at which this conservative entry point could be non-vacuous. The author's revision also gives a tighter valid bound for the all-zero sample, so as not to declare the whole direction impossible because one loose bound fails. **The conclusion should be that the strongest statistical entry point must be compared, and that real independent repeated data have not been established.**
 
-它与用户已有风险界研究风格契合，但与“从零训练语言模型”的必要性最弱。若01/02失去新意或实证条件，04可以成为独立统计方向；在此之前按导师安排保留有限投入。原作者独立提出问题时把依赖识别排第一，说明它有理论吸引力；根代理将其投入次序排第三，是考虑当前数据与项目关联，不抹去这个分歧。[独立观点](INDEPENDENT_CHALLENGES.md)
+It fits the user's existing research style on risk bounds, but its link to the necessity of "training a language model from scratch" is the weakest. If 01/02 lose novelty or their empirical conditions, 04 can become an independent statistics direction; until then, it keeps limited investment as the advisor arranged. When the original author proposed questions independently, they ranked dependence identification first, which shows it has theoretical appeal. The root agent placed it third in investment order in view of the current data and its link to the project; this disagreement is not erased. [Independent view](INDEPENDENT_CHALLENGES.md)
 
-## 6. 第四个备选为什么暂时不升级
+## 6. Why the fourth alternate is not upgraded for now
 
-05能把答案拆成可检查事实、单位/期间类型、小程序和逐步区间。这是清楚的实现契约，但抽取＋符号计算、类型检查与区间包含性都已有方法。一个同比题被误写成当前值/去年值，仍可在单位、类型和算术上全部正确。正确程序等价于目标语义，是现有命题的外部前提，不能由检查通过反推。[05的反例与范围](PATH_05_proof_carrying_numeric_reasoning.md)
+05 can break an answer into checkable facts, unit/period types, a small program, and step-by-step intervals. This is a clear implementation contract, but extraction + symbolic computation, type checking, and interval inclusion all have existing methods. A year-over-year question mistakenly written as current value/last year's value can still be fully correct in units, types, and arithmetic. That the correct program is equivalent to the target semantics is an external premise of the existing propositions; it cannot be inferred backwards from passing the check. [05's counterexamples and scope](PATH_05_proof_carrying_numeric_reasoning.md)
 
-值得保留的窄问题是有限程序候选集合怎样同时获得覆盖与紧度；其直接联合包络健全性很容易，真正难点是正确程序会不会被漏掉，以及不漏掉时区间会不会失去信息。当前既没有三重金标，也没有完整核验程序验证与选择性预测先例，因此先按探索/工具处理。若规则计算器已达到相同风险—覆盖表现，就不投入生成模型。
+The narrow question worth keeping is how a finite set of program candidates can get both coverage and tightness. The soundness of their direct joint envelope is easy; the real difficulty is whether the correct program might be missed, and whether, when it is not missed, the interval loses its information. There are currently no triple gold labels, and no complete check of precedents in program verification and selective prediction, so for now it is treated as exploration/tooling. If a rule-based calculator already achieves the same risk–coverage performance, no generative model will be invested in.
 
-## 7. 下一轮的具体顺序
+## 7. Concrete order for the next round
 
-以下为待执行的小试，不是本轮已经完成的实验，也不绕过 G0 开始主线训练。
+The following are small trials still to be run, not experiments completed in this round, and they do not bypass G0 to start mainline training.
 
-1. **先给01/03写一页严格研究题。** 固定主统计量、影响图类、审计设计类和成本；在小规模上给直接坏配置门与最强已知基线同条件比较，争取一个能推广的差异族或不可能性边界。若没有差异，保留计算器即可。
-2. **并行做02的必要性否决。** 先以本地少量探索文档制定完整元组/方向规范，用金标元组＋符号规则检查目标是否退化；再决定需要的语言模块和独立标注量。未知标签不由模型自己批准为真。
-3. **给04做最小识别问题。** 先定义可观察的重复批次或结构模型，再写需要的共错约束；没有相应数据就只做数学边界与明确标识的模拟。不要从单批事件两两相乘伪造独立样本。
-4. **05只共用必要的语义契约。** 先实现/审查有限问题语法是否真的超出符号规则；不另开大规模模型训练。
+1. **First write a one-page rigorous research question for 01/03.** Fix the main statistic, the class of influence graphs, the class of audit designs, and the cost. At small scale, compare the direct bad-configuration gate with the strongest known baseline under the same conditions, aiming for a difference family that generalizes or an impossibility boundary. If there is no difference, keeping the calculator is enough.
+2. **In parallel, run the necessity rejection test for 02.** First use a small number of local exploratory documents to set a complete tuple/direction specification, and use gold tuple + symbolic rule to check whether the target degenerates; only then decide the language module and the amount of independent annotation needed. Unknown labels are not approved as true by the model itself.
+3. **Pose a minimal identification question for 04.** First define observable repeated batches or a structural model, then write down the joint-error constraints needed. Without matching data, do only mathematical bounds and clearly labelled simulations. Do not fabricate independent samples by multiplying single-batch events pairwise.
+4. **05 shares only the necessary semantic contract.** First implement/review whether the finite question grammar really goes beyond symbolic rules; do not open separate large-scale model training.
 
-[具体可否决阈值](DECISION_CRITERIA.md) 单列了有用宽度、接受风险、覆盖、审计成本和样本预算，且标明哪些是研究者的暂定小试线。未来确认数据使用前再冻结；任何改动留日志。建议把本轮下一步非训练理论精力主要放在01/03，02做同等严肃的否决检查，04保持支线；不把五条并行铺成五套工程。
+[Concrete rejection thresholds](DECISION_CRITERIA.md) lists separately the useful width, acceptance risk, coverage, audit cost, and sample budget, and marks which are the researcher's provisional trial lines. They will be frozen before any confirmation data are used; every change is logged. The recommendation is to put most of this round's next-step non-training theory effort on 01/03, give 02 an equally serious rejection check, and keep 04 as a side line; do not spread the five paths into five parallel engineering projects.
 
-## 8. 评审与外部助手状态
+## 8. Review and external-assistant status
 
-本轮由三个内部AI作者分别成文，再由未继承本轮讨论历史的内部AI审查员独立复核。数学反例、先例边界和有用性问题均须逐项回应；详情见 [独立审查](PEER_REVIEW.md) 与 [回应记录](REVIEW_RESPONSE.md)。这不是人类同行评审，也不是 Fable 已认可。
+In this round, three internal AI authors each wrote their reports, and an internal AI reviewer who did not inherit this round's discussion history reviewed them independently. Mathematical counterexamples, precedent boundaries, and usefulness questions all had to be answered item by item; see the [independent review](PEER_REVIEW.md) and the [response record](REVIEW_RESPONSE.md). This is not human peer review, and Fable has not endorsed it.
 
-**没有把分歧投票消掉。** 独立审查员的五项次序是03→01→05→02→04：同意先做P1的窄审计问题，但把可以删掉冗余头的05排在02之前，并把数据前提最弱的04放后。本报告保留02为第二比较对象，理由是它仍是导师原主线，先做必要性否决所需的改题较少；保留04为第三独立理论候选，理由是其部分识别目标更贴近用户已有风险界研究。两项都是投入判断，不是比审查员“更正确”的科学结论。若02找不到非退化任务，应采纳审查员建议把它收进05的语义/计算包；若04找不到可识别的新依赖信息，就只保留短负结果，不因数学形式漂亮继续铺实验。
+**Disagreements were not voted away.** The independent reviewer's order for the five was 03→01→05→02→04: they agreed to do P1's narrow audit question first, but put 05, which can drop the redundant head, before 02, and put 04, which has the weakest data premises, last. This report keeps 02 as the second comparison object, because it is still the advisor's original main line and its necessity rejection test needs fewer changes to the question. It keeps 04 as the third independent theory candidate, because its partial-identification target is closer to the user's existing research on risk bounds. Both are investment judgments, not scientific conclusions that are "more correct" than the reviewer's. If 02 cannot find a non-degenerate task, the reviewer's suggestion should be adopted and it should be folded into 05's semantic/computation package. If 04 cannot find identifiable new dependence information, keep only a short negative result, and do not keep running experiments because the mathematical form is elegant.
 
-本次审查新增了1,008个R1共同依赖构造的精确检查、1,024个D1分层漏检概率的穷举检查，均通过；未运行部署风险LP、训练或真实历史审计。[检查记录](review_checks.json) 这些支持限定的数学实现复核，不构成新颖性证据或自然数据有效性。
+This review added an exact check of 1,008 R1 common-dependence constructions and an exhaustive check of 1,024 D1 stratified miss probabilities; all passed. No deployment-risk LP, training, or real historical audit was run. [Check record](review_checks.json) These support a limited review of the mathematical implementation; they are not evidence of novelty or of validity on natural data.
 
-2026-11-16更新：用户确认所指资深助手为Fable。当前工具没有Fable直连能力，尚未向其发送材料或收到评语。已写好 [给Fable的八项具体疑问及转交附言](SENIOR_REVIEW_REQUEST.md)。与Fable实际讨论后，应把其异议与回应另行追加，不能拿内部共识替代那次讨论。
+2026-11-16 update: the user confirmed that the senior assistant referred to is Fable. The current tools have no direct connection to Fable; no material has been sent to Fable and no comments have been received. [Eight specific questions for Fable, with a cover note](SENIOR_REVIEW_REQUEST.md), have been written. After an actual discussion with Fable, Fable's objections and the responses should be appended separately; internal consensus cannot stand in for that discussion.
 
-本轮可交付的是五份分析、比较、独立审查与可复核的研究问题包。完整研究目标仍未完成：真实数据非空证书、原创性核验与旗舰选择仍是下一阶段必须拿出的证据。
+What this round can deliver is five analyses, a comparison, an independent review, and a package of research questions that can be reviewed. The full research goal is still not achieved: non-vacuous certificates on real data, an originality check, and a flagship choice are the evidence that the next phase must produce.
 
-## 9. 第四轮证据增量：真实简单基线已取得，必要性门仍开放
+## 9. Round 4 evidence increment: a real simple baseline obtained, the necessity gate still open
 
-2026-11-16。以上排序和决策门保持不变。第四轮按照执行前 [协议](../real_baseline/PROTOCOL.md)，从本地 SEntFiN 原始来源新建词法簇非时间划分，并从头训练词法线性模型。任务为 **source-native entity sentiment**：给定标题与指定实体，预测 negative/neutral/positive；这与旧投资立场任务不同，也没有恢复旧 24M 模型或其逐行预测。
+2026-11-16. The ranking and decision gates above stay unchanged. Round 4 followed the pre-execution [protocol](../real_baseline/PROTOCOL.md): it built a new lexical-cluster non-temporal split from the local SEntFiN raw source and trained lexical linear models from scratch. The task is **source-native entity sentiment**: given a headline and a specified entity, predict negative/neutral/positive. This differs from the old investment-stance task, and the old 24M model and its row-level predictions were not restored.
 
-在固定的 2,107 个测试实体行、1,570 个词法簇上，结果为：
+On the fixed set of 2,107 test entity rows and 1,570 lexical clusters, the results are:
 
-| 新训练系统 | 测试 macro-F1 | 本轮角色 |
+| Newly trained system | Test macro-F1 | Role in this round |
 |---|---:|---|
-| word TF-IDF+LR | 0.7920 | 预定主比较基线；C仅由开发集选择 |
-| char TF-IDF+LR | 0.7548 | 预定主比较对象；C仅由开发集选择 |
-| entity-only TF-IDF+LR | 0.5336 | 身份捷径诊断，不参与主结果选择 |
+| word TF-IDF+LR | 0.7920 | Pre-specified main comparison baseline; C chosen only on the dev set |
+| char TF-IDF+LR | 0.7548 | Pre-specified main comparison object; C chosen only on the dev set |
+| entity-only TF-IDF+LR | 0.5336 | Identity-shortcut diagnostic; not used to select the main result |
 
-证据为 [baseline_summary.json](../experiments/real_baseline/baseline_summary.json)。唯一主比较在真实准备/训练前已指定为 **char−word**，没有按测试成绩挑赢家或改成更容易胜出的多数类比较。差值为 **−0.03723**，10,000 次配对词法簇 bootstrap 的名义95%区间约 **[−0.05306,−0.02156]**。[bootstrap_summary.json](../experiments/real_baseline/bootstrap_summary.json) 这说明本轮指定比较中 word 表现较高；区间属于**固定训练与开发选择结果下的近似重采样描述**，不是有限样本证书。词法簇不保证真实事件独立，区间不覆盖训练/选择的全部不确定性、未知跨簇依赖或未来漂移。
+The evidence is [baseline_summary.json](../experiments/real_baseline/baseline_summary.json). The single main comparison was specified as **char−word** before the real preparation/training; no winner was picked by test score, and it was not switched to an easier-to-win majority-class comparison. The difference is **−0.03723**, and the nominal 95% interval from 10,000 paired lexical-cluster bootstrap resamples is about **[−0.05306,−0.02156]**. [bootstrap_summary.json](../experiments/real_baseline/bootstrap_summary.json) This shows that in this round's specified comparison, word performs better. The interval is an **approximate resampling description conditional on fixed training and dev-selection results**, not a finite-sample certificate. Lexical clusters do not guarantee that real events are independent, and the interval does not cover the full uncertainty from training/selection, unknown cross-cluster dependence, or future drift.
 
-entity-only 的 0.5336 是检验身份捷径的诊断信号，不能据其与 0.7920 的比值或差值分解“多少性能由身份解释”。宏平均F1是非线性统计量，模型和特征间也有交互。新结果不能与旧 **0.6549** 直接比较，因为任务标签、输入、清理和划分不相同；它更不能被填成 FinBERT 或 LLM 的缺失分数。
+The entity-only 0.5336 is a diagnostic signal for testing the identity shortcut; its ratio to or difference from 0.7920 cannot be used to decompose "how much performance is explained by identity". Macro-averaged F1 is a nonlinear statistic, and models and features also interact. The new result cannot be compared directly with the old **0.6549**, because the task labels, inputs, cleaning, and split are different; still less can it be filled in as a missing score for FinBERT or an LLM.
 
-对路径选择的增量是“我们已有真实、可重建的简单基线”，不是某条理论旗舰已经获得支持。对01/03，这些非时间情绪分数没有补齐历史版本、核心依赖或真实审计证书；对02/05，它们没有提供数值语义金标或证明约束头不可替代；对04，词法组 bootstrap 也没有识别未来共同错误的依赖分布。简单词法方法取得当前表现，使后续模型必须回答更精确的必要性问题，而不是继续以训练一个小金融模型本身为贡献。**本轮未证明需要 LLM、随机初始化编码器或从零语言预训练。**
+The increment for path selection is "we now have a real, rebuildable simple baseline", not that some theory flagship has gained support. For 01/03, these non-temporal sentiment scores do not fill in historical versions, core dependencies, or a real audit certificate. For 02/05, they provide no numeric-semantic gold labels and do not prove that the constraint head is irreplaceable. For 04, the lexical-group bootstrap does not identify the dependence distribution of future joint errors either. That a simple lexical method attains the current performance means later models must answer a more precise necessity question, rather than keep counting the training of a small financial model as the contribution in itself. **This round did not show that an LLM, a randomly initialized encoder, or language pretraining from scratch is needed.**
 
-交给 Fable 的核心决定仍待真实回应：是否接受“全新来源任务基线”作为 G0 重建/替代协议的一部分，哪些原门保留，以及必须补怎样的同任务强基线和非冗余任务证据。具体应先找到一个简单规则或词法模型不能按任务定义直接解决、又能连接拟议证书目标的问题，再明确能改变其必要性判断的最小对照；不能以本次分数替代这个论证。没有运行的 FinBERT/零样本 LLM 仍是原 G0 的缺口，G1 未选择旗舰。详见 [第四轮给Fable的问题](SENIOR_REVIEW_REQUEST.md)。**没有发送给 Fable，也没有收到其反馈。**
+The core decision for Fable still awaits a real response: whether to accept "a baseline on a task from a brand-new source" as part of the G0 rebuild/replacement protocol, which original gates to keep, and what same-task strong baselines and non-redundant-task evidence must be added. Concretely, one should first find a problem that a simple rule or lexical model cannot solve directly by the task definition and that can connect to the proposed certificate target, and then specify the minimal controls that could change the necessity judgment; this round's scores cannot replace that argument. The FinBERT/zero-shot LLM runs that were not done are still the gap in the original G0, and G1 has not selected a flagship. See [round 4 questions for Fable](SENIOR_REVIEW_REQUEST.md). **Nothing was sent to Fable, and no feedback has been received from Fable.**

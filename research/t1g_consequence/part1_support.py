@@ -107,20 +107,20 @@ def review():
     rows=json.loads((HERE/'part1_rows_all.json').read_text(encoding='utf-8'))
     non=[r for r in rows if r.get('box_status')=='nonintersection'];random.Random(1729).shuffle(non);sample=non[:50]
     # Read the actual headers and row strings before assigning these categories.
-    exceptional={8:('reversed_change_direction','同表支出以减少为正，印差为旧减新，与统一新减旧定义相反。'),
-        9:('unexplained_or_source_error','按表两水平重算约-17.49%，不落入-18%的半末位区间；材料无法区分印表错误、别的基数或预处理。'),
-        10:('reversed_change_direction','Selling expenses下降被印作正百分比；为费用减少量。'),
-        21:('unexplained_or_source_error','薪酬显示两水平对应约14.13%，不是13.75%；需原始薪酬基数解释，现有表不能支持舍入解释。'),
-        22:('reversed_change_direction','融资成本下降被列为正Change；符号定义相反。'),
-        30:('reversed_change_direction','同表融资成本下降被列为正Change。'),
-        34:('reversed_change_direction','BCE支出增长被列为负Change；符号定义相反。'),
-        35:('unexplained_or_source_error','8324/4706−1约76.88%，印67%；不可能由半末位舍入解释，未把疑似转录错误当已证实。'),
-        41:('reversed_change_direction','费用下降被印作正百分比。')}
+    exceptional={8:('reversed_change_direction','In the same table, expenditure decreases are shown as positive; the printed difference is old minus new, the opposite of the uniform new-minus-old definition.'),
+        9:('unexplained_or_source_error','Recomputing from the two levels in the table gives about -17.49%, which does not fall within the half-last-digit-unit interval of -18%; the material cannot distinguish a printing error in the table, a different base, or preprocessing.'),
+        10:('reversed_change_direction','The decrease in Selling expenses is printed as a positive percentage; it is the amount by which the expense decreased.'),
+        21:('unexplained_or_source_error','The two displayed compensation levels correspond to about 14.13%, not 13.75%; explaining it needs the original compensation base, and the existing table cannot support a rounding explanation.'),
+        22:('reversed_change_direction','The decrease in financing costs is listed as a positive Change; the sign definition is reversed.'),
+        30:('reversed_change_direction','In the same table, the decrease in financing costs is listed as a positive Change.'),
+        34:('reversed_change_direction','The increase in BCE expenditure is listed as a negative Change; the sign definition is reversed.'),
+        35:('unexplained_or_source_error','8324/4706−1 is about 76.88%, printed as 67%; this cannot be explained by half-last-digit-unit rounding; the suspected transcription error was not treated as confirmed.'),
+        41:('reversed_change_direction','The decrease in expenses is printed as a positive percentage.')}
     for i,r in enumerate(sample):
-        if r['status']=='different_basis_header':reason,note='adjusted_basis','表头明确Constant currency、Adjusted或Comp.；与未调整水平不是同一基数。'
+        if r['status']=='different_basis_header':reason,note='adjusted_basis','The header states Constant currency, Adjusted, or Comp. explicitly; this is not the same base as the unadjusted levels.'
         elif i in exceptional:reason,note=exceptional[i]
-        elif F(r['base'])<0:reason,note='negative_base_convention','负基期下印百分比使用幅度分母/改善方向；统一有符号分母公式反号。'
-        else:reason,note='unexplained_or_source_error','逐行阅读后不能由现有显示值与统一公式解释；不强行归因为舍入。'
+        elif F(r['base'])<0:reason,note='negative_base_convention','With a negative base period, the printed percentage uses a magnitude denominator / improvement direction; the uniform signed-denominator formula flips the sign.'
+        else:reason,note='unexplained_or_source_error','After row-by-row reading, it cannot be explained by the existing displayed values and the uniform formula; it is not forcibly attributed to rounding.'
         r.update(sample_index=i,reviewer='AI source reading; not human review',review_category=reason,review_note=note)
     dump(HERE/'part1_nonintersection_sample.json',sample);csvout(HERE/'part1_nonintersection_review50.csv',sample)
     summary=dict(n_numeric=sum(r.get('box_status') in ['compatible','nonintersection'] for r in rows),nonintersection=len(non),sample_n=len(sample),sample_categories=dict(Counter(r['review_category'] for r in sample)),remaining_comparable_nonintersection=sum(r['status']=='nonintersection' for r in rows))

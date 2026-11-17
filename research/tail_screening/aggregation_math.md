@@ -1,20 +1,20 @@
-# 固定32条的成对比较与多排序聚合
+# Pairwise comparison and multi-ranking aggregation on a fixed set of 32 items
 
-本备忘规定聚合量的数学含义，供本轮当前Codex agent比较使用。对象是同一固定集合 $D=\{1,\ldots,N\}$，$N=32$；两个模型配置分别记为 $M\in\{A,B\}$，每个方法保留两个panel，$h\in\{1,2\}$。分数越高表示越靠近本轮预先规定的排序正端，不代表校准概率或金融效用。
+This memo specifies the mathematical meaning of the aggregate quantities, for use in this round's comparison with current Codex agents. The object is one fixed set $D=\{1,\ldots,N\}$, $N=32$; the two model configurations are written $M\in\{A,B\}$, and each method keeps two panels, $h\in\{1,2\}$. A higher score means closer to the positive end of the ranking specified in advance for this round; it does not represent a calibrated probability or financial utility.
 
-**当前成对实现是批量判断：每个model × panel × orientation固定分成4个fresh agent，每个读取32条文本及124个指定对，总计返回496个判断。** 最初的496对单批尝试未产生完整输出，随后在正式评分前作了同构拆分。不是每对分别开启一个agent。因此同批的判断共享上下文，可能共同受文本列表、比较列表及先前生成内容影响。以下聚合公式仍成立，但不能冒充逐pair隔离请求的实现。具体任务判准、输入排列和失败处理采用本轮已确定的规则，本文不另增实验门。
+**The current pairwise implementation uses batched judgments: each model × panel × orientation is split into 4 fixed fresh agents, each reading the 32 texts and 124 specified pairs, returning 496 judgments in total.** The initial single-batch attempt with all 496 pairs did not produce complete output, and an isomorphic split was then made before formal scoring. An agent was not opened for each pair separately. So judgments in the same batch share context and may be jointly affected by the text list, the comparison list and earlier generated content. The aggregation formulas below still hold, but they cannot pose as an implementation with per-pair isolated requests. The specific task criteria, input permutations and failure handling follow the rules already fixed for this round; this document adds no extra experimental gate.
 
-## 1. 严格换位一致的成对偏好
+## 1. Pairwise preferences strictly consistent under swapping
 
-固定model与panel。每个无序对 $i<j$ 出现两次：orientation 1显示 $(i,j)$，orientation 2显示 $(j,i)$。先将每次输出转回**项目身份**，记
+Fix the model and the panel. Each unordered pair $i<j$ appears twice: orientation 1 shows $(i,j)$ and orientation 2 shows $(j,i)$. First map each output back to **item identity**, and write
 
 $$
-d_{ij}^{(o)}=1\ \text{表示偏好}i,\qquad
-d_{ij}^{(o)}=-1\ \text{表示偏好}j,\qquad
-d_{ij}^{(o)}=0\ \text{表示并列},\quad o\in\{1,2\}.
+d_{ij}^{(o)}=1\ \text{means preference for }i,\qquad
+d_{ij}^{(o)}=-1\ \text{means preference for }j,\qquad
+d_{ij}^{(o)}=0\ \text{means a tie},\quad o\in\{1,2\}.
 $$
 
-严格一致结果为
+The strictly consistent result is
 
 $$
 a_{ij}=\mathbf1\{d_{ij}^{(1)}=d_{ij}^{(2)}=1\}
@@ -22,9 +22,9 @@ a_{ij}=\mathbf1\{d_{ij}^{(1)}=d_{ij}^{(2)}=1\}
 \qquad a_{ji}=-a_{ij},\qquad a_{ii}=0.
 $$
 
-两次都偏好i才给 $+1$，两次都偏好j才给 $-1$，其余给0。若原始输出用left/right编码，**left、right这组答案才可能表示两次偏好同一项目**；两次都选left在换位后反而冲突。一次并列、一次明确偏好也归0，不做多数覆盖。输出缺漏或不可解析须保留其失败身份，不能仅因最终聚合给0就把它描述成模型明确认为等价。
+Only if both runs prefer i is $+1$ given, only if both prefer j is $-1$ given, and everything else gets 0. If the raw output is coded as left/right, **only the answer pair left, right can mean that both runs preferred the same item**; choosing left both times is in fact a conflict after the swap. One tie plus one clear preference also gets 0, with no majority override. Missing or unparseable outputs must keep their failure identity; they cannot be described as the model explicitly judging the items equivalent just because the final aggregation gives 0.
 
-项目i的归一化Copeland分数为
+The normalized Copeland score of item i is
 
 $$
 C_{M,h}(i)=\frac{1}{N-1}\sum_{j\ne i}
@@ -32,26 +32,26 @@ C_{M,h}(i)=\frac{1}{N-1}\sum_{j\ne i}
 =\frac12+\frac{1}{2(N-1)}\sum_{j\ne i}a_{ij}.
 $$
 
-因此 $0\le C\le1$，对32条的单panel分数是 $1/62$ 的整数倍。按C降序，精确相等的分数留在同一有序组，不按ID或输入位置破同分。如果主结果合并两panel，则明确使用 $\overline C_M(i)=(C_{M,1}(i)+C_{M,2}(i))/2$，并同时保留各panel结果；合并分数网格为 $1/124$。
+So $0\le C\le1$, and for 32 items the single-panel score is an integer multiple of $1/62$. Sort by C in descending order; exactly equal scores stay in the same ordered group, and ties are not broken by ID or input position. If the main result merges the two panels, it explicitly uses $\overline C_M(i)=(C_{M,1}(i)+C_{M,2}(i))/2$ while keeping each panel's result; the merged score grid is $1/124$.
 
-这里的0混合了明确并列、换位冲突和可能的输出失败，不能统一解释成真实无差异。换位一致也不保证正确或传递：三个项目可形成 $i\succ j\succ k\succ i$，此时各自Copeland得分相同。聚合给出有并列的总排序，但没有证明其符合某个潜在真实全序。
+The 0 here mixes explicit ties, swap conflicts and possible output failures, and cannot be interpreted uniformly as true indifference. Swap consistency also does not guarantee correctness or transitivity: three items can form $i\succ j\succ k\succ i$, in which case their Copeland scores are equal. The aggregation gives a total ranking with ties, but does not prove that it matches some latent true total order.
 
-Qin等§3.1采用交换文档顺序后的一致偏好，§3.2用胜1分、并列半分进行all-pair汇总。本文沿用这些操作，保留最终同分；其原文同分时回退到初始排序的做法不在本次公式内。本文另有批量共享上下文的实现限制。[Qin等，NAACL Findings 2024，§§3.1–3.3](https://aclanthology.org/2024.findings-naacl.97.pdf)
+Qin et al. §3.1 uses consistent preferences after swapping the document order, and §3.2 does an all-pair summary with 1 point for a win and half a point for a tie. This document follows these operations and keeps final ties; the paper's practice of falling back to the initial ranking on ties is not part of the formulas here. This document also has the implementation limitation of shared context within batches. [Qin et al., NAACL Findings 2024, §§3.1–3.3](https://aclanthology.org/2024.findings-naacl.97.pdf)
 
-## 2. 含并列的midrank与归一化Borda
+## 2. Midrank with ties and normalized Borda
 
-每个model、panel使用4个预定随机排列，$\ell=1,\ldots,4$，每个排列各用一个fresh agent。一次有效输出是覆盖全部32个ID且各出现一次的有序组 $(G_1,\ldots,G_g)$；组内并列，组间从高到低。
+Each model and panel uses 4 pre-specified random permutations, $\ell=1,\ldots,4$, each with its own fresh agent. A valid output is a sequence of ordered groups $(G_1,\ldots,G_g)$ covering all 32 IDs with each appearing once; items within a group are tied, and groups run from high to low.
 
-若i所在组之前有 $H_i$ 个项目、所在组大小为 $T_i$，则从1开始的midrank及Borda分数定义为
+If there are $H_i$ items before i's group and i's group has size $T_i$, the 1-based midrank and the Borda score are defined as
 
 $$
 r_{M,h,\ell}(i)=H_i+\frac{T_i+1}{2},\qquad
 b_{M,h,\ell}(i)=\frac{N-r_{M,h,\ell}(i)}{N-1}.
 $$
 
-这一分数等于“排在i后面的项目数，加上与i同组的其他项目数的一半”，再除以 $N-1$。因此单次无并列第一名得1、最后一名得0，全部并列时各得1/2。它与上一节胜/半平局的计分尺度一致，但输入是一次完整有序分组，而非另行生成的成对判断。
+This score equals "the number of items ranked after i, plus half the number of other items in i's group", divided by $N-1$. So in a single run without ties the first item gets 1 and the last gets 0, and when everything is tied each gets 1/2. It is on the same scale as the win/half-tie scoring in the previous section, but its input is one complete ordered grouping rather than separately generated pairwise judgments.
 
-panel内及两个panel的等权聚合为
+The equal-weight aggregation within a panel and over the two panels is
 
 $$
 B_{M,h}(i)=\frac14\sum_{\ell=1}^4b_{M,h,\ell}(i),\qquad
@@ -59,53 +59,53 @@ B_{M,h}(i)=\frac14\sum_{\ell=1}^4b_{M,h,\ell}(i),\qquad
 =\frac18\sum_{h=1}^2\sum_{\ell=1}^4b_{M,h,\ell}(i).
 $$
 
-全8次等权平均不是挑一个最支持结论的排列。单panel分数网格为 $1/248$，8次平均为 $1/496$；可保留整数分子，先按精确值形成并列组，再为显示四舍五入。不能先截断小数后造出同分，或用浮点误差打散精确同分。
+The equal-weight average over all 8 runs is not picking the permutation that best supports a conclusion. The single-panel score grid is $1/248$ and the 8-run average $1/496$; integer numerators can be kept, tie groups formed first by exact values, and rounding applied only for display. One cannot create ties by truncating decimals first, or break exact ties through floating-point error.
 
-Tang等§2.2支持固定任务、打乱输入并汇总输出排序的思路；该文具体使用Kendall距离下的Kemeny–Young中心排序，并在特定噪声条件下讨论一致性。**这里采用的是midrank Borda均值，不是该文的Kemeny算法；其定理不能直接移植到本轮8次含并列输出。** [Tang等，NAACL 2024，§§2.2–2.3](https://aclanthology.org/2024.naacl-long.129.pdf)
+Tang et al. §2.2 supports the idea of fixing the task, shuffling the input and aggregating the output rankings; that paper specifically uses the Kemeny–Young central ranking under Kendall distance, and discusses consistency under particular noise conditions. **What is used here is the midrank Borda mean, not that paper's Kemeny algorithm; its theorems cannot be transplanted directly to this round's 8 outputs with ties.** [Tang et al., NAACL 2024, §§2.2–2.3](https://aclanthology.org/2024.naacl-long.129.pdf)
 
-## 3. 有限集合的尾部与加宽量
+## 3. Tails and widening quantities on a finite set
 
-下式适用于任一已明确的方法及panel聚合方式。对其分数S，按不同分数形成降序组 $G_1^S,\ldots,G_g^S$，定义完整组边界
+The formulas below apply to any explicitly specified method and panel aggregation. For its score S, form descending groups $G_1^S,\ldots,G_g^S$ by distinct score values, and define the complete-group boundaries
 
 $$
 T_a(S)=\bigcup_{j=1}^{a}G_j^S,\qquad
 K_a(S)=|T_a(S)|.
 $$
 
-取参考排序的某个完整边界 $A_k$，$|A_k|=k$，候选排序完整边界记为 $B_m$。主曲线在这些实际可分辨的集合上计算
+Take a complete boundary $A_k$ of the reference ranking, with $|A_k|=k$, and write a complete boundary of the candidate ranking as $B_m$. The main curve is computed on these actually distinguishable sets:
 
 $$
 \widehat R(k,m)=\frac{|A_k\cap B_m|}{k},\qquad
-\widehat q_\gamma(k/N)=\frac1N\min\{m:\ B_m\text{是完整组边界},\ |A_k\cap B_m|\ge\lceil\gamma k\rceil\}.
+\widehat q_\gamma(k/N)=\frac1N\min\{m:\ B_m\text{ is a complete group boundary},\ |A_k\cap B_m|\ge\lceil\gamma k\rceil\}.
 $$
 
-相对于实际参考人数的放行倍数为最小m除以k，正端与负端分别计算；负端用分数升序的完整组。参考A是选定模型排序，不自动是真实价值标签，故这是**对参考名单的召回**。
+The widening factor relative to the actual reference count is the minimum m divided by k, computed separately for the positive and negative tails; the negative tail uses complete groups in ascending score order. The reference A is the selected model's ranking and is not automatically a true value label, so this is **recall of the reference list**.
 
-执行协议另固定名义比例p：先取floor(Np)名，再把边界整个同分组纳入，形成实际人数k。机器结果同时保存m/k（`B_over_actual_A`）与m/(Np)（`q90_over_nominal_p`）；**主通过条件用后者q90/p**，不混换分母。N=128时p=10%、20%分别先取12、25名，Np分别为12.8、25.6，二者并不相等；同分扩张以floor(Np)为基数。90%召回要求ceil(0.9k)条，例如k=12需11条，k=25需23条。阶段1的N=32、p=25%恰有Np=8，因此该区分不改变其已报告数值。
+The execution protocol also fixes a nominal fraction p: first take floor(Np) items, then include the whole tie group at the boundary, giving the actual count k. The machine results save both m/k (`B_over_actual_A`) and m/(Np) (`q90_over_nominal_p`); **the main pass condition uses the latter, q90/p**, and the denominators are not mixed. With N=128, p=10% and 20% first take 12 and 25 items, while Np is 12.8 and 25.6, so the two are not equal; tie expansion uses floor(Np) as its base. 90% recall requires ceil(0.9k) items; for example, k=12 needs 11 and k=25 needs 23. In stage 1, N=32 and p=25% give exactly Np=8, so this distinction does not change the values already reported.
 
-如需固定k或m落在并列组内，应保留歧义。令 $\mathcal T_k(S)$ 包含所有合法top-k集合：严格高于边界分数的项目必须入选，剩余名额从边界并列组任选。定义
+If a fixed k or m falls inside a tie group, the ambiguity should be kept. Let $\mathcal T_k(S)$ contain all admissible top-k sets: items strictly above the boundary score must be selected, and the remaining slots are filled by any choice from the boundary tie group. Define
 
 $$
 R_-(k,m)=\min_{U\in\mathcal T_k(S_A),\ V\in\mathcal T_m(S_B)}\frac{|U\cap V|}{k},\qquad
 R_+(k,m)=\max_{U\in\mathcal T_k(S_A),\ V\in\mathcal T_m(S_B)}\frac{|U\cap V|}{k}.
 $$
 
-这是所有允许破并列方式的精确有限集合范围，不是置信区间。相应可报告 $q_- =\min\{m:R_+(k,m)\ge\gamma\}/N$ 与 $q_+ =\min\{m:R_-(k,m)\ge\gamma\}/N$，分别表达存在某种合法边界选择即可达到、以及所有合法边界选择都达到的放行量。不能只展示最有利的破并列结果。
+This is the exact finite-set range over all admissible ways of breaking ties, not a confidence interval. Correspondingly one can report $q_- =\min\{m:R_+(k,m)\ge\gamma\}/N$ and $q_+ =\min\{m:R_-(k,m)\ge\gamma\}/N$, which express the pass-through amount reachable by at least one admissible boundary choice, and the amount reached by every admissible boundary choice, respectively. One cannot show only the most favorable tie-breaking result.
 
-N=32时最小非空比例是 $1/32=3.125\%$，不能精确观察1%或2%尾部。k=4是12.5%尾部，召回步长25个百分点；k=8是25%尾部，步长12.5个百分点，90%目标实际要求8条全找到。曲线应列出k、m及实际比例，不能靠插值制造更细的尾部证据。
+With N=32 the smallest non-empty fraction is $1/32=3.125\%$, so a 1% or 2% tail cannot be observed exactly. k=4 is a 12.5% tail with a recall step of 25 percentage points; k=8 is a 25% tail with a step of 12.5 percentage points, and the 90% target in fact requires finding all 8. The curve should list k, m and the actual fraction; finer tail evidence cannot be created by interpolation.
 
-## 4. 调用量、依赖与能回答的问题
+## 4. Call counts, dependence, and the questions that can be answered
 
-| 组成 | 每模型 | 两模型合计 |
+| Component | Per model | Both models combined |
 |---|---:|---:|
-| 成对无序对数量 | 每panel 496对 | 同一32条的同一496对 |
-| 成对fresh批次调用 | 2 panels × 2 orientations × 4批 = 16次 | 32次 |
-| 成对原始判断数量 | 496 × 2 × 2 = 1984个 | 3968个 |
-| 多排序fresh调用 | 2 panels × 4排列 = 8次 | 16次 |
-| 评分agent调用总计 | 24次 | 48次 |
+| Number of unordered pairs | 496 pairs per panel | The same 496 pairs of the same 32 items |
+| Pairwise fresh batch calls | 2 panels × 2 orientations × 4 batches = 16 | 32 |
+| Number of raw pairwise judgments | 496 × 2 × 2 = 1984 | 3968 |
+| Multi-ranking fresh calls | 2 panels × 4 permutations = 8 | 16 |
+| Total scoring agent calls | 24 | 48 |
 
-该数量另有2次未产生输出的整批可执行性尝试（Luna未完成，Sol被停止），不纳入评分数据。没有发生3968次独立agent调用，也没有3968条独立金融观测。所有成对边共享项目，同一批次还共享上下文；所有排序反复使用同一个32条池。随机排列与fresh会话增加的是排序测量的重复，未增加独立文本样本量。改变候选池还可能改变同一文本的得分与名次，因此这些分数不是已识别的、脱离候选集不变的单项属性。
+On top of this count there were 2 whole-batch feasibility attempts that produced no output (Luna did not finish, Sol was stopped); they are not included in the scoring data. There were not 3968 independent agent calls, nor 3968 independent financial observations. All pairwise edges share items, and the same batch also shares context; all rankings reuse the same 32-item pool. Random permutations and fresh sessions add repeats of the ranking measurement, not independent text samples. Changing the candidate pool may also change the score and rank of the same text, so these scores are not identified single-item attributes that are invariant to the candidate set.
 
-两个panel可显示本轮重复的差异、重合范围与并列比例；它们不能直接构成置信区间。即使输入排列分别随机生成，新会话也不保证模型误差独立。每次改变输入顺序时还可能改变生成随机性、比较上下文及整批推断路径，所以输出差异是综合重复敏感性，未单独识别纯位置的因果效应。严格换位规则保留一致偏好，却不证明这些因素已经消失。
+The two panels can show the difference between this round's repeats, the overlap range and the tie fraction; they cannot directly form a confidence interval. Even when the input permutations are generated randomly and separately, new sessions do not guarantee independent model errors. Each change of input order may also change generation randomness, the comparison context and the inference path of the whole batch, so output differences are a combined repeat sensitivity, and the pure causal effect of position is not separately identified. The strict swap rule keeps consistent preferences but does not prove that these factors have disappeared.
 
-本轮能比较成对聚合与多排序均值的可分辨率、正负端名单重合，以及跨模型差异是否伴随同模型panel波动。两个配置是否真有成本高低之分须由实际配置及成本事实决定。固定32条及有限次重复不识别 $p\to0$ 的尾部规律，不估结构α，也不把局部log–log斜率当作条件极值参数。
+This round can compare the resolution of pairwise aggregation and of the multi-ranking mean, the list overlap at the positive and negative tails, and whether cross-model differences come together with same-model panel fluctuation. Whether the two configurations really differ in cost must be decided by the actual configuration and cost facts. The fixed 32 items and a finite number of repeats do not identify a tail law as $p\to0$, do not estimate the structural α, and do not treat a local log–log slope as a conditional-extremes parameter.

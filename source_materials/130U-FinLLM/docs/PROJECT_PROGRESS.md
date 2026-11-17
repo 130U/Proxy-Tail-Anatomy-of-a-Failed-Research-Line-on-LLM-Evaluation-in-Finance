@@ -1,28 +1,28 @@
-# 项目进度与统计口径
+# Project progress and how it is counted
 
-2026-10-30。以下数字衡量项目工作和原计划的训练处理量，不是模型的金融预测能力或准确率。
+2026-10-30. The numbers below measure project work and the training processing volume of the original plan. They are not the model's financial prediction ability or accuracy.
 
-## 原计划预训练预算
+## Original pretraining budget
 
-| 阶段 | 已处理有效 tokens | 原计划 | 按模型路径计算 |
+| Stage | Effective tokens processed | Original plan | Computed along the model path |
 |---|---:|---:|---:|
-| 通用预训练：seed + expansion | 4,914,941 + 19,988,195 = 24,903,136 | 100,000,000 | 24.9% |
-| 金融领域阶段：80/20 混合 | 1,211,960 | 25,000,000 | 4.85% |
-| 合计 | 26,115,096 | 125,000,000 | 20.9% |
+| General pretraining: seed + expansion | 4,914,941 + 19,988,195 = 24,903,136 | 100,000,000 | 24.9% |
+| Financial domain stage: 80/20 mix | 1,211,960 | 25,000,000 | 4.85% |
+| Total | 26,115,096 | 125,000,000 | 20.9% |
 
-这里把seed与expansion合并作为整条通用训练路径；若只比较expansion自身的100M配置上限，则为19.99%。领域阶段的1,211,960是金融／通用混合数据的有效处理位置，不是全部来自金融的独立文本。数字记录累计处理量，不能当作去重语料大小。领域阶段与Drive备份的证据为用户提供的Colab输出，见[领域记录](../reports/colab_t4_domain_20261030.json)。
+Here seed and expansion are combined as the whole general training path; comparing only against the 100M configuration cap of expansion itself gives 19.99%. The 1,211,960 of the domain stage are effective processed positions of finance / general mixed data, not independent text that all comes from finance. The numbers record cumulative processing and cannot be taken as a deduplicated corpus size. The evidence for the domain stage and the Drive backup is the Colab output provided by the user; see the [domain record](../reports/colab_t4_domain_20261030.json).
 
-## 整体项目粗估
+## Rough estimate for the whole project
 
-按下列八个阶段人为等权粗略估算约**35%**：架构与词表、训练工具两项记完成；通用预训练记25%、金融领域训练记5%、审核与资产数据准备记50%；真实SFT、DPO、校准与独立评估各记0%。计算为`(1 + 1 + 0.25 + 0.05 + 0.5) / 8 ≈ 35%`。这只是项目规划的粗粒度沟通方式，各阶段工作量并不相同，不是科学测量，不能表示项目离可用或能力达标只差65%。预算会随实验效果和资源约束调整。
+A rough estimate that gives the following eight stages equal weight by convention comes to about **35%**: architecture and vocabulary, and training tools, are counted as complete; general pretraining is counted as 25%, financial domain training as 5%, review and asset data preparation as 50%; real SFT, DPO, calibration and independent evaluation each as 0%. The calculation is `(1 + 1 + 0.25 + 0.05 + 0.5) / 8 ≈ 35%`. This is only a coarse way to communicate project planning. The stages differ in workload; this is not a scientific measurement and does not mean the project is only 65% away from being usable or from reaching its capability targets. Budgets will be adjusted according to experimental results and resource constraints.
 
-| 阶段 | 当前情况 |
+| Stage | Current status |
 |---|---|
-| 模型、词表、训练工具 | 24.26M随机初始化模型、8K词表、训练与断点工具已实现；工程链路已测试 |
-| 通用预训练 | 通用路径约24.9M有效tokens；仍未达到原100M处理预算 |
-| 金融继续预训练 | 已完成1.212M有效tokens有界试验；原25M预算未完成 |
-| 标注及资产数据 | 2000条标题中1993条按用户确认已审，其中114条排除、1879条三分类候选；7条待查；资产身份与事件分组未验收 |
-| SFT与DPO | 工程路径存在；真实SFT尚未运行，DPO偏好对尚未审核和训练 |
-| 校准及任务评估 | 真实任务校准、独立测试、基线比较与X短文本验证尚未完成 |
+| Model, vocabulary, training tools | The 24.26M randomly initialized model, the 8K vocabulary, and training and checkpoint tools are implemented; the engineering chain has been tested |
+| General pretraining | About 24.9M effective tokens on the general path; still short of the original 100M processing budget |
+| Financial continued pretraining | A bounded trial of 1.212M effective tokens is complete; the original 25M budget is not |
+| Annotation and asset data | Of the 2000 headlines, 1993 reviewed according to the user's confirmation, of which 114 excluded and 1879 three-class candidates; 7 pending; asset identity and event grouping not yet accepted |
+| SFT and DPO | The engineering path exists; real SFT has not been run; DPO preference pairs have not been reviewed or trained |
+| Calibration and task evaluation | Real task calibration, independent testing, baseline comparison and validation on short X texts are not done |
 
-目前金融验证和保留集的loss是下一token预测损失，不能换算为看多／看空准确率。后续先使用已审结果核对资产类型、证券身份、事件分组和数据权限，固定分区，再验证领域母检查点并开始真实SFT。
+The current financial validation and retention-set losses are next-token prediction losses and cannot be converted into bullish/bearish accuracy. Next, use the reviewed results to check asset type, security identity, event grouping and data permissions, fix the partitions, then verify the domain parent checkpoint and start real SFT.

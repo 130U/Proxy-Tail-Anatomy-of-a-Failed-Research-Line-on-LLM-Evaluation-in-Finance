@@ -1,12 +1,12 @@
-# 第八轮完整比较表
+# Round eight complete comparison table
 
-人工数学构造，alpha=1/20，单位审计成本；44行精确比较与4行仅解析界分开。程序类与研究性质见[协议](LOCALIZATION_PROTOCOL.md)，解释见[第八轮报告](../reports/2026-11-16-round8.md)。
+Hand-made mathematical constructions, alpha=1/20, unit audit cost; the 44 rows of exact comparisons are kept separate from the 4 rows with analytic bounds only. The procedure classes and the nature of the research are in the [protocol](LOCALIZATION_PROTOCOL.md); the interpretation is in the [round eight report](../reports/2026-11-16-round8.md).
 
-当前JSON SHA256：0e990e8ef2790e3b6edde983f399efdd5e667c21bea189fe642f925dd84b7c22
+Current JSON SHA256: 0e990e8ef2790e3b6edde983f399efdd5e667c21bea189fe642f925dd84b7c22
 
-## 原阈值族：20行
+## Original threshold family: 20 rows
 
-| 案例 | Direct | Box | Total K | 事前最优简单组合 | Direct相对组合节省 |
+| Case | Direct | Box | Total K | Best ex-ante simple combination | Direct saving relative to the combination |
 |---|---:|---:|---:|---:|---:|
 | threshold-r2-N2 | 4 | 4 | 5 | 4 | 0 |
 | threshold-r2-N5 | 10 | 10 | 12 | 10 | 0 |
@@ -29,9 +29,9 @@
 | threshold-r6-N10 | 44 | 60 | 44 | 44 | 0 |
 | threshold-r6-N20 | 88 | 114 | 88 | 88 | 0 |
 
-## 全层合取：8行
+## All-strata conjunction: 8 rows
 
-| 案例 | Direct | Box | Total K | 事前最优简单组合 | Direct相对组合节省 |
+| Case | Direct | Box | Total K | Best ex-ante simple combination | Direct saving relative to the combination |
 |---|---:|---:|---:|---:|---:|
 | and-d2-N2 | 2 | 2 | 3 | 2 | 0 |
 | and-d3-N2 | 2 | 2 | 4 | 2 | 0 |
@@ -42,9 +42,9 @@
 | and-d12-N2 | 2 | 2 | 9 | 2 | 0 |
 | and-d20-N2 | 2 | 2 | 13 | 2 | 0 |
 
-## Star：16行
+## Star: 16 rows
 
-| 案例 | Direct | Box | Total K | 事前最优简单组合 | Direct相对组合节省 |
+| Case | Direct | Box | Total K | Best ex-ante simple combination | Direct saving relative to the combination |
 |---|---:|---:|---:|---:|---:|
 | star-L1-N2 | 2 | 2 | 3 | 2 | 0 |
 | star-L1-N5 | 5 | 5 | 8 | 5 | 0 |
@@ -63,15 +63,15 @@
 | star-L10-N10 | 10 | 10 | 88 | 10 | 0 |
 | star-L10-N20 | 19 | 19 | 176 | 19 | 0 |
 
-## 尖锐常数构造：4行解析界
+## Sharp-constant construction: 4 rows of analytic bounds
 
-以下区间是最优成本的已证上下界，未运行高维全局最优搜索。组合基线在四行均为Total K；节省下界用直接可行上界与组合成本下界计算。
+The intervals below are proven lower and upper bounds on the optimal cost; no high-dimensional global optimum search was run. The combination baseline is Total K in all four rows; the lower bound on the saving is computed from the direct feasible upper bound and the lower bound on the combination cost.
 
-| N | r=N² | Direct最优成本范围 | 组合最优成本范围 | Box成本 | 相对组合的节省下界 |
+| N | r=N² | Direct optimal cost range | Combination optimal cost range | Box cost | Lower bound on saving relative to the combination |
 |---:|---:|---:|---:|---:|---:|
 | 4 | 16 | [16,26] | [28,31] | 64 | 1/14 |
 | 8 | 64 | [64,86] | [120,127] | 512 | 17/60 |
 | 16 | 256 | [256,302] | [496,511] | 4096 | 97/248 |
 | 32 | 1024 | [1024,1118] | [2016,2047] | 31744 | 449/1008 |
 
-原N=r²序列中比值趋于1，和这里r=N²的比值趋于2是不同尺度。更广的全总体随机抽样可更便宜，单点核对见[pooled_scope_check.json](pooled_scope_check.json)；它不在本表固定配额类内。
+In the original N=r² sequence the ratio tends to 1, while here, with r=N², the ratio tends to 2; these are different scales. Broader whole-population random sampling can be cheaper; a single-point check is in [pooled_scope_check.json](pooled_scope_check.json); it is outside the fixed-quota class of this table.

@@ -1,161 +1,161 @@
-# 给 Codex 的任务说明：130U-FinLLM 重做
+# Task brief for Codex: redoing 130U-FinLLM
 
-致：Codex（博士生）
-自：导师
-抄送：Theodore（PI，项目所有者）
-日期：2026-11-15 · 第 1 轮
-
----
-
-## 1. 一句话
-
-把 130U-FinLLM 从"一个从零训练的 24M 金融情感分类器"，重做成"一个小到可以被证明的金融语言模型"。
-
-研究贡献是关于模型的**可检验的证书**：它可能知道什么（信息集），它对文本和数字如何响应（敏感度）。实验只做 T4 级别的最小验证。
+To: Codex (PhD student)
+From: advisor
+Cc: Theodore (PI, project owner)
+Date: 2026-11-15 · Round 1
 
 ---
 
-## 2. 我们要解决的问题
+## 1. In one sentence
 
-### 2.1 为什么要重做
+Redo 130U-FinLLM from "a 24M financial sentiment classifier trained from scratch" into "a financial language model small enough that things can be proven about it".
 
-现在的项目有四个问题。细节和数字在 `02_PROJECT_SNAPSHOT.md`。
-
-1. **公开证据撑不起研究结论。** 唯一可验证的结果是 24M 模型在 101 条开发集标题上的 macro-F1 0.655。同一开发集上，TF-IDF + 逻辑回归是 0.609。开发集里 bearish 只有 10 条、bullish 只有 15 条，一条样本就能让 F1 变几个点。这个开发集还被用来选型，没有独立测试集。
-2. **任务选在最饱和的赛道。** 三分类标题情感是 FinNLP 里最成熟的任务。已有结果表明，开源 8B 模型只用 5% 的训练数据就能超过 FinBERT。
-3. **两项"核心设计"没有被检验。** Semantic permissions 没有消融实验。Objective-preserving scaling 是正确性卫生，不是研究贡献。
-4. **根本问题：没有回答"为什么要从零训练"。** 从零训练一个小模型，去做开源大模型做得更好的事，这就是玩具项目的定义。
-
-### 2.2 研究问题
-
-**总问题：** 对一个从零训练的小型金融语言模型，我们能证明什么？什么样的数据和架构设计能让这些证明不是空的？
-
-拆成三个子问题：
-
-- **RQ1 信息集。** 能否给出"模型在 t 时刻不包含 t 之后信息"的可检验证书？在残余时间戳错误下，能否给出"无泄漏回测统计量"的被证明区间？
-- **RQ2 敏感度。** 能否让模型对实体身份、货币单位、报告尺度精确不变，对指定的数值可认证地单调，并给出输出对数值敏感度的被证明上界（我们叫它"模型的 Greeks"）？
-- **RQ3 部署风险。** 一批新样本按事件成簇、簇内依赖未知时，给定校准后的逐条错误概率，错误数的最坏情形尾部风险是多少？
-
-### 2.3 为什么选这个问题
-
-- **只有从零训练才能做。** 信息集、架构约束、数字表示，都必须在训练前决定，无法加装到现成模型上。小规模从缺点变成前提：证书在小模型上才算得动。
-- **和 Theodore 的其他研究是同一种风格。** 他的其他工作是衍生品定价的 certified bounds（算术亚式期权的证明型价格区间、rough Heston 的联合定价误差证书），以及 Expected Shortfall 在依赖压力下的临界预算。新项目要能直接复用这套方法：定义一个量，证明一个界，给出可执行的证书，在真实数据上说明这个界不是空的。
-- **时机合适。** Point-in-time 语言模型是 2025–2026 年金融学界的热点。造这类模型的组很多；给出证明的，据我们目前的检索，还没有看到。这一点需要你核实。
-
-### 2.4 本轮（第 1 轮）要解决的具体问题
-
-1. **方向是否新颖？** 用文献题 Q1–Q32 去确认或推翻导师的新颖性假设。
-2. **现状到底是什么水平？** 用 Phase 0 的评测地基，把现有结果重新量化，带上置信区间和基线。
-3. **两条主线的证书在现实参数下是不是空的？** 用推导题和 Phase 1 的数值可行性分析来回答。
-
-本轮结束时，我们要有足够的材料过决策门 G1，选定旗舰方向（见 `01_ADVISOR_MEMO.md` 第 8 节）。
-
-### 2.5 项目终态（成功的样子）
-
-1. 至少一个**非空**的证书。它在真实数据上算出来，附带可执行的检查器。
-2. 一篇技术报告（arXiv 风格），核心是定理、证书和最小实验。
-3. 仓库重组为 `theory/ certify/ pit/ synth/ models/ experiments/ legacy/`。
-4. 旧的 24M Trial 保留，移到 `legacy/` 并如实标注，不删除。
+The research contribution is **testable certificates** about the model: what it can possibly know (its information set) and how it responds to text and numbers (its sensitivity). Experiments are only minimal T4-level checks.
 
 ---
 
-## 3. 你的工作方式
+## 2. The problem we want to solve
 
-### 3.1 三类任务
+### 2.1 Why redo it
 
-三类任务彼此独立，可以同时开多个 Codex 任务并行做。
+The current project has four problems. The details and numbers are in `02_PROJECT_SNAPSHOT.md`.
 
-| 类型 | 编号 | 内容 | 产出位置 |
+1. **The public evidence cannot support research conclusions.** The only verifiable result is a macro-F1 of 0.655 for the 24M model on 101 dev-set headlines. On the same dev set, TF-IDF + logistic regression gets 0.609. The dev set has only 10 bearish and 15 bullish items, so a single sample can move F1 by several points. This dev set was also used for model selection, and there is no independent test set.
+2. **The task is in the most saturated track.** Three-class headline sentiment is the most mature task in FinNLP. Existing results show that an open-source 8B model beats FinBERT using only 5% of the training data.
+3. **Two "core designs" have not been tested.** Semantic permissions have no ablation. Objective-preserving scaling is correctness hygiene, not a research contribution.
+4. **The fundamental problem: there is no answer to "why train from scratch".** Training a small model from scratch to do what open-source large models do better is the definition of a toy project.
+
+### 2.2 Research questions
+
+**Overall question:** for a small financial language model trained from scratch, what can we prove? What data and architecture designs make these proofs non-vacuous?
+
+It splits into three sub-questions:
+
+- **RQ1 Information set.** Can we give a testable certificate that "the model at time t contains no information from after t"? Under residual timestamp errors, can we give a proven interval for a "leakage-free backtest statistic"?
+- **RQ2 Sensitivity.** Can we make the model exactly invariant to entity identity, currency unit and reporting scale, certifiably monotone in specified numbers, and give a proven upper bound on the sensitivity of the output to numbers (we call these "the model's Greeks")?
+- **RQ3 Deployment risk.** When a batch of new samples is clustered by event and the within-cluster dependence is unknown, given calibrated per-item error probabilities, what is the worst-case tail risk of the number of errors?
+
+### 2.3 Why choose this problem
+
+- **Only training from scratch makes it possible.** The information set, architectural constraints and numeric representation must all be decided before training and cannot be bolted onto an existing model. Small scale turns from a weakness into a precondition: certificates are only computable on small models.
+- **It is the same style as Theodore's other research.** That other work is certified bounds for derivative pricing (proof-based price intervals for arithmetic Asian options, a joint pricing-error certificate for rough Heston) and critical budgets for Expected Shortfall under dependence stress. The new project should be able to reuse this method directly: define a quantity, prove a bound, give an executable certificate, and show on real data that the bound is non-vacuous.
+- **The timing is right.** Point-in-time language models are a hot topic in finance research in 2025–2026. Many groups build such models; as far as our searches so far show, none has given proofs. You need to verify this.
+
+### 2.4 Specific problems for this round (round 1)
+
+1. **Is the direction novel?** Use literature questions Q1–Q32 to confirm or overturn the advisor's novelty hypotheses.
+2. **What level is the current state really at?** Use the Phase 0 evaluation foundation to re-quantify the existing results, with confidence intervals and baselines.
+3. **Are the certificates of the two main lines vacuous under realistic parameters?** Answer this with the derivation questions and the Phase 1 numerical feasibility analysis.
+
+At the end of this round we need enough material to pass decision gate G1 and choose the flagship direction (see section 8 of `01_ADVISOR_MEMO.md`).
+
+### 2.5 Final state of the project (what success looks like)
+
+1. At least one **non-vacuous** certificate, computed on real data, with an executable checker.
+2. A technical report (arXiv style) whose core is theorems, certificates and minimal experiments.
+3. The repository reorganized into `theory/ certify/ pit/ synth/ models/ experiments/ legacy/`.
+4. The old 24M Trial kept: moved to `legacy/` and labeled truthfully, not deleted.
+
+---
+
+## 3. How you work
+
+### 3.1 Three types of tasks
+
+The three types of tasks are independent of each other; you can open several Codex tasks and do them in parallel.
+
+| Type | IDs | Content | Output location |
 |---|---|---|---|
-| 文献题 | Q1–Q32 | 调研并判断新颖性 | `research/answers/Qxx.md` |
-| 推导题 | T0–T3（见 `04_THEORY_NOTES.md`） | 把理论草稿里的命题写严谨，证明或证伪 | `research/theory/Txx.md`（或 `.tex`） |
-| 工作包 | WP0.x–WP3.x（见 `06_WORK_PACKAGES.md`） | 仓库内的代码、数据管线、最小实验 | 分支上的代码 + `research/reports/` |
+| Literature questions | Q1–Q32 | Survey and judge novelty | `research/answers/Qxx.md` |
+| Derivation questions | T0–T3 (see `04_THEORY_NOTES.md`) | Make the propositions in the theory draft rigorous; prove or disprove them | `research/theory/Txx.md` (or `.tex`) |
+| Work packages | WP0.x–WP3.x (see `06_WORK_PACKAGES.md`) | Code, data pipelines and minimal experiments inside the repository | Code on the branch + `research/reports/` |
 
-### 3.2 每个任务的开始和结束
+### 3.2 Start and end of each task
 
-- **开始时**，按顺序读：`AGENTS.md` → 本文件 → `01_ADVISOR_MEMO.md` → `02_PROJECT_SNAPSHOT.md` → 与任务相关的文件。
-- **结束时**，按 `07_REPORTING_PROTOCOL.md` 的模板写输出，并在 `research/INDEX.md` 加一行。
+- **At the start**, read in this order: `AGENTS.md` → this file → `01_ADVISOR_MEMO.md` → `02_PROJECT_SNAPSHOT.md` → the files related to the task.
+- **At the end**, write the output using the templates in `07_REPORTING_PROTOCOL.md`, and add one line to `research/INDEX.md`.
 
-### 3.3 第 1 轮的交付
+### 3.3 Round 1 deliverables
 
-下面四项可以并行。如果只有一个 Codex 会话，就按这个顺序做：
+The four items below can run in parallel. If there is only one Codex session, do them in this order:
 
-1. **Phase 0 的 6 个工作包。** 这是地基，不管最后选哪条主线都要做。
-2. **推导题** T1.2、T1.3、T1.4、T1.5、T2.2、T2.3、T3.1。这些不需要联网。
-3. **文献题 Q1–Q32。** 需要联网。
-4. **一份第 1 轮进展报告。**
+1. **The 6 work packages of Phase 0.** This is the foundation; it has to be done whichever main line is chosen in the end.
+2. **Derivation questions** T1.2, T1.3, T1.4, T1.5, T2.2, T2.3, T3.1. These do not need internet access.
+3. **Literature questions Q1–Q32.** These need internet access.
+4. **One round 1 progress report.**
 
 ---
 
-## 4. 硬规则
+## 4. Hard rules
 
-### 4.1 范围
+### 4.1 Scope
 
-- 只在 `github.com/130U/130U-FinLLM` 仓库工作。
-- 不修改 `theodoreoy.com` 网站。
-- 不碰 `130U/agent-evaluation-methodology`，它留到以后再做。
+- Work only in the `github.com/130U/130U-FinLLM` repository.
+- Do not modify the `theodoreoy.com` website.
+- Do not touch `130U/agent-evaluation-methodology`; it is left for later.
 
 ### 4.2 Git
 
-- 在 `research/certifiable` 分支或以它为基的分支上工作。
-- 不 push 到 `main`，不 force push，不改写历史，不删除旧文件。旧文件只移动，并在移动记录里说明。
-- 合并到 `main`、修改 README 首屏、对外发布，都需要 Theodore 批准。
+- Work on the `research/certifiable` branch or on a branch based on it.
+- Do not push to `main`, do not force push, do not rewrite history, do not delete old files. Old files are only moved, and the move is explained in the move record.
+- Merging into `main`, changing the first screen of the README and publishing externally all need Theodore's approval.
 
-### 4.3 算力
+### 4.3 Compute
 
-- 假设**没有 GPU**。每个实验都要能在 CPU 上做 smoke test，完整运行要能在单张 T4（16 GB）上几小时内跑完。
-- 每个实验开跑前，先在实验记录里写算力预算估计（显存、时间、token 数）。
-- 如果某个方向不加 GPU 就做不下去，就停下来，写出最小 GPU 需求交回。不要缩小问题去硬凑。
+- Assume **there is no GPU**. Every experiment must be smoke-testable on CPU, and a full run must finish within a few hours on a single T4 (16 GB).
+- Before starting each experiment, write a compute budget estimate (GPU memory, time, token count) in the experiment record.
+- If a direction cannot proceed without adding a GPU, stop and report back the minimal GPU requirement. Do not shrink the problem to force a fit.
 
-### 4.4 诚实
+### 4.4 Honesty
 
-- 不编造引用、数字或实验结果。
-- **没有联网能力时，不要回答文献题。** 只做推导题和工作包，并在报告里说明没有联网。
-- 每个数字都标注来源层级：`全文` / `摘要` / `二手` / `导师记忆` / `我们的实验`。
-- 区分三种陈述：导师的假设、文献的结论、我们自己的结果。写作时不要混用。
+- Do not fabricate citations, numbers or experimental results.
+- **Without internet access, do not answer literature questions.** Do only the derivation questions and work packages, and state in the report that there was no internet access.
+- Label every number with its source tier: `full text` / `abstract` / `secondary` / `advisor memory` / `our experiment`.
+- Distinguish three kinds of statements: the advisor's hypotheses, conclusions from the literature, and our own results. Do not mix them when writing.
 
-### 4.5 数据与外部服务
+### 4.5 Data and external services
 
-- 不把私有的 headline、标签、checkpoint、权重提交到公开仓库。
-- 访问 SEC EDGAR 需要在 User-Agent 里写联系方式。用 Theodore 提供的值，不要自己编，也不要使用他没同意过的邮箱。没有提供就先停在这一步，写进"需要 PI 决定"。
-- 遵守数据源的许可证和访问频率限制。
+- Do not commit private headlines, labels, checkpoints or weights to the public repository.
+- Accessing SEC EDGAR requires contact information in the User-Agent. Use the value Theodore provides; do not make one up, and do not use an email address Theodore has not agreed to. If none is provided, stop at this step and write it into "Needs PI decision".
+- Respect the data sources' licenses and rate limits.
 
-### 4.6 内容
+### 4.6 Content
 
-- 不给投资建议。回测在本项目里只是一个统计量，不是交易策略。
-
----
-
-## 5. 工作重心（摘要）
-
-完整的逻辑在 `01_ADVISOR_MEMO.md`。这里只列四条原则：
-
-1. **先地基，后主线。** Phase 0 没完成前，不跑任何主线实验。文献题和推导题不受这条限制。
-2. **先合成世界，后真实数据。** 每个证书先在真值已知的合成世界里验证两件事：证书确实成立，而且不是空的。
-3. **先找否决证据，后投入。** 每条主线先去找能杀死它的证据：已经有人做过了，或者界在现实参数下是空的。
-4. **理论约 60%，实验约 40%。** 实验只用来检验定理的前提，或者展示界有多紧。
+- Do not give investment advice. In this project a backtest is only a statistic, not a trading strategy.
 
 ---
 
-## 6. 遇到这些情况怎么办
+## 5. Work focus (summary)
 
-| 情况 | 你该做的 |
+The full logic is in `01_ADVISOR_MEMO.md`. Only four principles are listed here:
+
+1. **Foundation first, main lines later.** Until Phase 0 is complete, run no main-line experiments. Literature and derivation questions are not subject to this rule.
+2. **Synthetic world first, real data later.** Every certificate is first checked for two things in a synthetic world where the ground truth is known: the certificate really holds, and it is not vacuous.
+3. **Look for kill evidence first, invest later.** For each main line, first look for evidence that could kill it: someone has already done it, or the bound is vacuous under realistic parameters.
+4. **About 60% theory, about 40% experiments.** Experiments are only used to test the premises of theorems or to show how tight a bound is.
+
+---
+
+## 6. What to do in these situations
+
+| Situation | What you should do |
 |---|---|
-| 发现某方向已被别人做过 | 停止该方向的工程投入。写一页"已有工作 vs 我们的差异"交回导师。 |
-| 界算出来是空的 | 不要调参硬凑。报告是哪个环节最弱导致的。这本身就是结果。 |
-| 需要 GPU 才能继续 | 停下来，写出最小 GPU 需求（显存、小时数）交回。 |
-| 仓库现有声明与证据不符 | 记录到 `research/claims_audit.md`。不要直接改 README。 |
-| 需要 Theodore 的私有数据或决定 | 写进进展报告的"需要 PI 决定"一节，继续做不依赖它的部分。 |
-| 导师的假设或公式有错 | 直接指出并给出修正。这是你被期待做的事，不是冒犯。 |
-| 两个任务的结论互相矛盾 | 两个都报告，不要自己挑一个。 |
+| You find that a direction has already been done by others | Stop engineering investment in that direction. Write a one-page "prior work vs. our difference" and send it back to the advisor. |
+| The computed bound is vacuous | Do not tune parameters to force it. Report which link is weakest and causes it. That is a result in itself. |
+| A GPU is needed to continue | Stop, and report back the minimal GPU requirement (memory, hours). |
+| Existing claims in the repository do not match the evidence | Record it in `research/claims_audit.md`. Do not edit the README directly. |
+| Theodore's private data or a decision is needed | Write it into the "Needs PI decision" section of the progress report, and continue with the parts that do not depend on it. |
+| The advisor's hypothesis or formula is wrong | Point it out directly and give a correction. This is what you are expected to do; it is not an offense. |
+| The conclusions of two tasks contradict each other | Report both; do not pick one yourself. |
 
 ---
 
-## 7. 输出目录
+## 7. Output directory
 
 ```
 research/
-  INDEX.md                 # 每个产出一行：日期、编号、文件、一句话结论
+  INDEX.md                 # one line per output: date, ID, file, one-sentence conclusion
   answers/Q01.md ... Q32.md
   theory/T1_2.md ...
   experiments/<id>/record.md
@@ -165,9 +165,9 @@ research/
 
 ---
 
-## 8. 如果只开一个会话，第一步做什么
+## 8. If only one session is open, what to do first
 
-1. 从 `main` 建分支 `research/certifiable`。
-2. 建 `research/` 目录和 `research/INDEX.md`。
-3. 做 WP0.6（声明审计）和 WP0.1（评测地基）。WP0.6 让你读懂整个仓库；WP0.1 会重新量化当前结果，后面所有比较都依赖它。
-4. 然后做推导题 T1.4（审计分辨率极限）。它最短，而且决定了 P1 主线是否值得做下去。
+1. Create the branch `research/certifiable` from `main`.
+2. Create the `research/` directory and `research/INDEX.md`.
+3. Do WP0.6 (claims audit) and WP0.1 (evaluation foundation). WP0.6 lets you understand the whole repository; WP0.1 re-quantifies the current results, and all later comparisons depend on it.
+4. Then do derivation question T1.4 (the audit resolution limit). It is the shortest, and it decides whether the P1 main line is worth continuing.

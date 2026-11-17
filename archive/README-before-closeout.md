@@ -1,25 +1,25 @@
-# Proxy Tail：探索链路图
+# Proxy Tail: exploration map
 
-更新：2026-11-17（T1g 之后）。本页是整个项目的地图：做过什么、为什么做、得到什么、还没做什么。
+Updated: 2026-11-17 (after T1g). This page is the map of the whole project: what was done, why it was done, what came of it, and what has not been done yet.
 
-**当前目标：** 一篇 ACL 短文。初稿：[paper/finqa_short_v0.md](finqa_short_paper_draft_v0.md)。
+**Current goal:** an ACL short paper. Draft: [paper/finqa_short_v0.md](finqa_short_paper_draft_v0.md).
 
-**一句话：** 模型在 FinQA 上已经到顶，剩下的"错误"几乎都出在基准一侧；即使把标准答案全改对，财报数字的舍入精度也定不了约十分之一的题的答案。
+**In one sentence:** models have reached the ceiling on FinQA, and the remaining "errors" are almost all on the benchmark side; even if every gold answer were corrected, the rounding precision of filing figures cannot determine the answer for about one in ten questions.
 
-## 图例
+## Legend
 
-颜色只表示**研究价值**，不表示做没做完。
+Colours indicate only **research value**, not whether something is finished.
 
-| 标记 | 含义 |
+| Marker | Meaning |
 |---|---|
-| 🟢 | **可以出文章的成果。** 两个条件都满足：查新确认没人做过；证据完整。有一个 🟢，文章就成立 |
-| 🟡 | **值得探索的候选。** 目前只是"导师没检索到有人做过"，或者证据还不完整 |
-| ⚪ | **不再重点研究。** 两种情况：方向已关闭；或者是必经的一步，但别人已有相似的观点 |
-| 🔴 | 还没做的任务 |
+| 🟢 | **A result that can become a paper.** Both conditions hold: the novelty check confirms that no one has done it, and the evidence is complete. A single 🟢 is enough for the paper to stand |
+| 🟡 | **A candidate worth exploring.** So far this only means "the advisor found no one who has done it", or the evidence is not yet complete |
+| ⚪ | **No longer a focus.** Two cases: the direction is closed; or it is a necessary step, but others already hold a similar view |
+| 🔴 | A task not yet done |
 
-**现在没有 🟢，也没有 🟡。** T1g 的结论：唯一保留的候选（舍入定律）在第二个数据集上成立，但找不到它造成后果的场合。它降为 ⚪：一条已经核实的基准精度注记。
+**There is currently no 🟢 and no 🟡.** The T1g conclusion: the only remaining candidate (the rounding law) holds on a second dataset, but no setting can be found where it has consequences. It is downgraded to ⚪: a verified note on benchmark precision.
 
-## 链路图
+## Map
 
 ```mermaid
 flowchart TD
@@ -28,35 +28,35 @@ flowchart TD
     classDef gold fill:#d4a72c,color:#000,stroke:#9a6700
     classDef closed fill:#8c959f,color:#fff,stroke:#6e7781
 
-    H0["九轮'可认证模型'研究<br/>结论：审计数学是标准工具"]:::closed
-    H1["便宜模型在尾部漏掉什么<br/>结论：已有先例，实验无法判断"]:::closed
-    T2["T2 模型对数字大小的响应<br/>已有先例"]:::closed
-    T3["T3 模型怎样合并好坏消息<br/>结论：按相加合并"]:::closed
+    H0["Nine rounds of 'certifiable model' research<br/>Conclusion: the audit mathematics is a standard tool"]:::closed
+    H1["What does a cheap model miss in the tail<br/>Conclusion: prior work exists, experiment inconclusive"]:::closed
+    T2["T2 Model response to the size of a number<br/>Prior work exists"]:::closed
+    T3["T3 How models combine good and bad news<br/>Conclusion: combined additively"]:::closed
 
-    T1["T1 财报舍入精度定不了多少题<br/>196/1147 = 17.1%"]:::closed
-    T1a["T1a 写成定律并零参数检验<br/>5337 题无一判错"]:::closed
-    T1b["T1b 否决检验：加上文档其他信息<br/>只救回 1 题"]:::closed
-    T1c["T1c 对模型判分有没有影响<br/>没有"]:::closed
-    T1d["T1d 模型知不知道答案有几位可信<br/>提醒后 98% 正确"]:::closed
-    REV["两个 AI 独立复核语义<br/>139 → 123"]:::closed
+    T1["T1 How many questions filing rounding precision leaves undetermined<br/>196/1147 = 17.1%"]:::closed
+    T1a["T1a Write it as a law and test with zero parameters<br/>No misclassification on 5337 questions"]:::closed
+    T1b["T1b Veto test: add the document's other information<br/>Rescues only 1 question"]:::closed
+    T1c["T1c Any effect on model scoring<br/>None"]:::closed
+    T1d["T1d Does the model know how many digits of its answer are reliable<br/>98% correct after a reminder"]:::closed
+    REV["Two AIs independently review semantics<br/>139 → 123"]:::closed
 
-    G1["定律 + 精确计数<br/>10.7% 的题文档定不了答案"]:::closed
-    G2["文档内的冗余信息救不回来"]:::closed
-    G3["不问时打印的位数与真实精度无关<br/>一问就会"]:::closed
-    G4["四次运行判错的是同一批题<br/>63 道全错，316 道全对"]:::closed
-    G5["两个标准字段自相矛盾<br/>6.4% 的题"]:::closed
+    G1["Law + exact count<br/>For 10.7% of questions the document cannot determine the answer"]:::closed
+    G2["Redundant information in the document cannot rescue them"]:::closed
+    G3["Unprompted, printed digits are unrelated to true precision<br/>Asked, the model gets it right"]:::closed
+    G4["Four runs reject the same set of questions<br/>63 wrong in all runs, 316 right in all runs"]:::closed
+    G5["The two gold fields contradict each other<br/>6.4% of questions"]:::closed
 
-    T1e1["T1e-1 其余 755 道测试题<br/>暂缓"]:::closed
-    T1e2["T1e-2 全部判错按清单归因<br/>暂缓"]:::closed
-    T1e3["T1e-3 独立复现机械检查<br/>暂缓"]:::closed
-    Ga["T1g-1 印出的变化 对 重算的变化<br/>差额 0/982 不一致，无后果"]:::closed
-    Gb["T1g-2 比较题<br/>只有 25 道，2 道可翻转"]:::closed
-    Gc["T1g-3 TAT-QA 先预测再计算<br/>预测 24.5%，实测 20.5%，规则成立"]:::closed
-    Gd["T1g-4 同一个量两种精度<br/>154 对，罕见"]:::closed
-    T1f["T1f 查新<br/>只有第 1 条保留"]:::closed
-    X1["换一家的模型验证<br/>Google 等"]:::todo
-    X2["人工抽查 20 个归因"]:::todo
-    P["写成短的技术注记，或到此为止<br/>待定"]:::todo
+    T1e1["T1e-1 The remaining 755 test questions<br/>On hold"]:::closed
+    T1e2["T1e-2 Attribute all rejections against a checklist<br/>On hold"]:::closed
+    T1e3["T1e-3 Independently reproduce the mechanical check<br/>On hold"]:::closed
+    Ga["T1g-1 Printed change vs recomputed change<br/>Differences 0/982 inconsistent, no consequence"]:::closed
+    Gb["T1g-2 Comparison questions<br/>Only 25, 2 can flip"]:::closed
+    Gc["T1g-3 TAT-QA: predict first, then compute<br/>Predicted 24.5%, observed 20.5%, rule holds"]:::closed
+    Gd["T1g-4 Same quantity at two precisions<br/>154 pairs, rare"]:::closed
+    T1f["T1f Novelty check<br/>Only item 1 remains"]:::closed
+    X1["Validate with another provider's model<br/>Google etc."]:::todo
+    X2["Manually spot-check 20 attributions"]:::todo
+    P["Write a short technical note, or stop here<br/>To be decided"]:::todo
 
     H0 --> H1 --> T1
     H1 --> T2
@@ -65,15 +65,15 @@ flowchart TD
     T1 --> T1b --> G2
     T1 --> T1c
     T1b --> REV --> G1
-    T1c -->|"负结果：换个问法"| T1d --> G3
-    T1c -->|"副产品：68 个判错的归因"| G4
-    T1d -->|"导师复算逐题表"| G4
+    T1c -->|"Negative result: ask a different question"| T1d --> G3
+    T1c -->|"By-product: attribution of 68 rejections"| G4
+    T1d -->|"Advisor recomputes the per-question table"| G4
     G4 --> G5
     G4 --> T1e1 --> T1e2
     G5 --> T1e3
-    G1 -->|"弱点：不影响判分。去找后果"| Ga
+    G1 -->|"Weakness: does not affect scoring. Look for consequences"| Ga
     G1 --> Gb
-    G1 -->|"只有一个基准"| Gc
+    G1 -->|"Only one benchmark"| Gc
     G1 --> Gd
     G1 & G2 & G3 & G4 & G5 --> T1f
     G4 --> X1
@@ -81,63 +81,63 @@ flowchart TD
     Ga & Gb & Gc & Gd --> P
 ```
 
-## 每一步的目的和结果
+## What each step was for and what it produced
 
-### 主线
+### Main line
 
-第一列是研究价值：⚪ 表示这一步已走完，它本身不是卖点（必经之路或已有相似观点）；它产出的候选 insight 另见下一张表。
+The first column is research value: ⚪ means the step is finished and is not itself a selling point (a necessary step, or others hold a similar view); the candidate insights it produced are listed in the next table.
 
-| | 步骤 | 为什么做 | 结果 | 材料 |
+| | Step | Why it was done | Result | Materials |
 |---|---|---|---|---|
-| ⚪ | **T1** 舍入精度 | 基准把表里的数字当精确值，但财报数字是舍入过的。想知道有多少题的答案因此定不下来 | 测试集 196/1,147 道（17.1%）存在符合显示精度、却让答案超出 1% 容差的输入 | 分支 `task/t1` |
-| ⚪ | **T1a** 定律 | 一个计数不够，需要一条能事先预测的规则 | 两数须相差约 100 个末位单位，增长率才精确到 1%。不带拟合参数，5,337 题无一判错。先验预测 41.5%，实测 40.5% | 分支 `task/t1a` |
-| ⚪ | **T1b** 否决检验 | 文档里还有重复披露和加总关系，可能把答案重新确定下来。如果能，T1 就不成立 | 511 条加总关系和 21 处重复披露只救回 1 道题。语义有问题的题剔除后剩 139 道 | 分支 `task/t1b` |
-| ⚪ | **T1c** 对判分的影响 | 如果不影响模型评测，T1 只是一条注记 | **负结果。** 标准答案和模型用的是同一批显示数字，判分不受影响。副产品：68 个判错里大部分看起来不是模型的错 | 分支 `task/t1c` |
-| ⚪ | **T1d** 模型知不知道精度 | T1c 是负结果，换一个现有基准测不了的问题：模型能否说出自己的答案有几位可信 | 提醒"数字是舍入过的"之后，98.4% 的回答给出正确区间；教规则没有额外帮助。第二个 AI 复核后 139 → 123 | 学生本地 `proxy-tail-t1d`，尚未推送 |
-| ⚪ | **T1e** 做到整个测试集 | 原本为第 4、5 条候选准备。查新后这两条已有先例 | 暂缓。其中 TAT-QA 那一部分并入 T1g | [任务](../tasks/T1e_full_test.md) |
-| ⚪ | **T1g** 舍入精度在哪里造成后果 | 唯一保留的候选不影响现有判分。要找一个它造成看得见后果的场合，并在第二个数据集上检验规则 | **没找到后果。** 印出的差额与重算值 0/982 不一致（独立舍入模型预测 25%）；受影响的题 FinQA 0.15%、TAT-QA 0.35%；比较算出来的量的题只有 25 道。规则在 TAT-QA 上成立：预测 24.5%，实测 20.5%，一阶规则 100% 一致 | 学生本地 `proxy-tail-t1g`，分支 `task/t1g` 尚未推送 |
-| ⚪ | **T1f** 查新 | 🟡 只是"我没检索到"，需要另一个模型认真查一遍 | 第 1 条保留，第 2–5 条已有先例 | 分支 `task/t1f` |
-| 🔴 | 换一家的模型 | 现在所有运行都来自 OpenAI。别家的模型如果也在同一批题上被判错，证据强得多 | 未做，等 Google 等的 token | T1e 可选项 |
-| 🔴 | 人工抽查 20 个归因 | 归因全是 AI 做的，审稿人一定会问 | 未做，约 20 分钟 | T1e 可选项 |
-| 🔴 | 短文定稿 | — | 初稿已写，带 † 的数字等 T1e | [初稿](finqa_short_paper_draft_v0.md) |
+| ⚪ | **T1** Rounding precision | The benchmark treats the numbers in the tables as exact, but filing figures are rounded. We wanted to know for how many questions this leaves the answer undetermined | On the test set, 196/1,147 questions (17.1%) have inputs that are consistent with the displayed precision yet push the answer outside the 1% tolerance | Branch `task/t1` |
+| ⚪ | **T1a** Law | A count is not enough; we need a rule that predicts in advance | Two figures must differ by about 100 last-digit units for the growth rate to be exact to 1%. With no fitted parameters, no misclassification on 5,337 questions. A priori prediction 41.5%, observed 40.5% | Branch `task/t1a` |
+| ⚪ | **T1b** Veto test | The document also contains duplicate disclosures and sum relations, which might pin the answer down again. If they do, T1 does not hold | 511 sum relations and 21 duplicate disclosures rescue only 1 question. After removing questions with semantic problems, 139 remain | Branch `task/t1b` |
+| ⚪ | **T1c** Effect on scoring | If it does not affect model evaluation, T1 is only a note | **Negative result.** The gold answer and the model use the same displayed figures, so scoring is unaffected. By-product: most of the 68 rejections do not look like the model's fault | Branch `task/t1c` |
+| ⚪ | **T1d** Does the model know the precision | T1c was a negative result, so ask a question that existing benchmarks cannot measure: can the model say how many digits of its answer are reliable | After a reminder that "the figures are rounded", 98.4% of answers give the correct interval; teaching the rule gives no extra help. After review by a second AI, 139 → 123 | Student local `proxy-tail-t1d`, not yet pushed |
+| ⚪ | **T1e** Extend to the whole test set | Originally prepared for candidates 4 and 5. After the novelty check, both have prior work | On hold. Its TAT-QA part was merged into T1g | [Task](../tasks/T1e_full_test.md) |
+| ⚪ | **T1g** Where rounding precision has consequences | The only remaining candidate does not affect current scoring. Find a setting where it has visible consequences, and test the rule on a second dataset | **No consequence found.** Printed differences vs recomputed values: 0/982 inconsistent (the independent-rounding model predicted 25%); affected questions: FinQA 0.15%, TAT-QA 0.35%; only 25 questions compare computed quantities. The rule holds on TAT-QA: predicted 24.5%, observed 20.5%, first-order rule 100% consistent | Student local `proxy-tail-t1g`, branch `task/t1g` not yet pushed |
+| ⚪ | **T1f** Novelty check | 🟡 only means "I found nothing"; another model needs to search carefully | Item 1 remains; items 2–5 have prior work | Branch `task/t1f` |
+| 🔴 | Another provider's model | All runs so far come from OpenAI. If other providers' models are also marked wrong on the same questions, the evidence is much stronger | Not done; waiting for tokens from Google etc. | T1e optional item |
+| 🔴 | Manual spot-check of 20 attributions | All attributions were made by AI; reviewers will certainly ask | Not done, about 20 minutes | T1e optional item |
+| 🔴 | Final short paper | — | Draft written; numbers marked † wait for T1e | [Draft](finqa_short_paper_draft_v0.md) |
 
-### 候选 insight：T1f 查新之后的状态
+### Candidate insights: status after the T1f novelty check
 
-| | 内容 | 证据 | 别人已有的相似观点 | 升为 🟢 还差什么 |
+| | Content | Evidence | Similar views others already hold | What is still missing to become 🟢 |
 |---|---|---|---|---|
-| ⚪1 | **舍入定律在基准上的检验和精确计数。** 至少 10.7% 的测试题，财报本身定不了 1% 以内的答案；增长率题里 40% | T1、T1a、T1b、T1g | T1f 未见同样的测量。但"舍入的标签对应一个集合"已有 2026 年 11 月的工作（arXiv 2611.02461，用于训练） | **降为注记。** 规则在两个数据集上成立，但不影响判分、文档里看不到矛盾、比较题几乎不受影响、模型一问就会 |
-| ⚪2 | **文档内的冗余信息救不回来。** | T1b：只救回 1/196 | **已有先例。** XBRL 规范 §5.5 用重复披露取交集；Dandekar（2010）、Salazar-González（2005）用加总约束加线性规划还原舍入前的值 | 不单独成点。"FinQA 里只救回 1/196"作为第 1 条的稳健性证据 |
-| ⚪3 | **模型知道精度但不主动用。** 不问时打印的位数与真实精度的相关为 0.02；提醒一句后区间 98% 正确 | T1d | **已有先例。** 化学有效数字题提示前后对比（2024）；Gauging Overprecision in LLMs（2025）在 FinQA 上评测过数值区间 | 不单独成点。并入第 1 条，作为行为结果 |
-| ⚪4 | **判错的是同一批题。** 四次运行都在 81%–83%，63 道四次全错，316 道全对，只有 13 道不一致；两次复核把 68 个判错里的 55 个归到基准一侧，0 个归为明确的模型错误 | T1c、T1d，导师复算 | **已有先例。** FinanceReasoning（ACL 2025）修订的是 CodeFinQA 的 795 题；T1f 称 FINESSE-Bench（2026）统计过多模型共同判错（导师只核实到该文存在，并报告别家模型在 FinQA 上也是 0.79–0.83） | 不单独成点。作为评测背景。55/68 的逐题归因是新增的审计，但"同一批题"本身不新 |
-| ⚪5 | **两个标准字段自相矛盾。** 人工写的答案与程序算出的值在 6.4% 的题上矛盾；有 12 个判错案例里模型等于前者、不等于后者 | 导师在全部 8,281 道题上的机械检查 | **已有先例。** EnvCommons/FinQA 的 PR #4（2026-10 合并）已比较两个字段并据此筛题；FinQAPT（2024）更早提到 | 不单独成点。作为背景引用 |
+| ⚪1 | **Test and exact count of the rounding law on a benchmark.** For at least 10.7% of test questions, the filing itself cannot determine the answer to within 1%; for growth-rate questions, 40% | T1, T1a, T1b, T1g | T1f found no identical measurement. But "a rounded label corresponds to a set" already appears in November 2026 work (arXiv 2611.02461, used for training) | **Downgraded to a note.** The rule holds on two datasets, but it does not affect scoring, no contradiction is visible in the documents, comparison questions are almost unaffected, and the model gets it right as soon as it is asked |
+| ⚪2 | **Redundant information in the document cannot rescue them.** | T1b: only 1/196 rescued | **Prior work exists.** The XBRL specification §5.5 intersects duplicate disclosures; Dandekar (2010) and Salazar-González (2005) use sum constraints plus linear programming to recover pre-rounding values | Not a separate point. "Only 1/196 rescued in FinQA" serves as robustness evidence for item 1 |
+| ⚪3 | **The model knows the precision but does not use it unprompted.** Unprompted, the correlation between printed digits and true precision is 0.02; after one reminder, 98% of intervals are correct | T1d | **Prior work exists.** A before/after-prompt comparison on chemistry significant-figure questions (2024); Gauging Overprecision in LLMs (2025) evaluated numeric intervals on FinQA | Not a separate point. Merged into item 1 as a behavioural result |
+| ⚪4 | **The rejections fall on the same questions.** All four runs are at 81%–83%; 63 questions are wrong in all four, 316 right in all four, and only 13 are inconsistent; two reviews attribute 55 of the 68 rejections to the benchmark side and 0 to a definite model error | T1c, T1d, advisor recomputation | **Prior work exists.** FinanceReasoning (ACL 2025) revised 795 CodeFinQA questions; T1f says FINESSE-Bench (2026) counted rejections shared across many models (the advisor only verified that the paper exists, and it reports that other providers' models also score 0.79–0.83 on FinQA) | Not a separate point. Serves as evaluation background. The per-question attribution of 55/68 is a new audit, but "the same questions" itself is not new |
+| ⚪5 | **The two gold fields contradict each other.** The human-written answer and the value computed by the program contradict each other on 6.4% of questions; in 12 rejection cases the model equals the former but not the latter | The advisor's mechanical check over all 8,281 questions | **Prior work exists.** PR #4 of EnvCommons/FinQA (merged 2026-10) already compared the two fields and filtered questions by them; FinQAPT (2024) mentioned it earlier | Not a separate point. Cited as background |
 
-### 必经之路，但别人已有相似观点（⚪）
+### Necessary steps on which others already hold similar views (⚪)
 
-- 舍入规则背后的数学：相近的数相减会丢有效数字，教科书内容。
-- "金融问答数据集有标注错误"：已知。
-- T1c 的负结果：如实写进文章，但不是卖点。
+- The mathematics behind the rounding rule: subtracting nearby numbers loses significant digits; textbook material.
+- "Financial QA datasets have annotation errors": known.
+- The negative result of T1c: reported as it is in the paper, but not a selling point.
 
-### 已关闭的方向
+### Closed directions
 
-| | 方向 | 为什么关闭 |
+| | Direction | Why it was closed |
 |---|---|---|
-| ⚪ | 九轮"可认证的金融语言模型" | 证书框架本身不产生有意思的结论；审计设计的数学是标准工具的组合。历史材料在 `research/` |
-| ⚪ | 便宜模型在尾部漏掉什么 | 加宽定律、copula 建模级联、带召回约束的代理筛选都已有先例；agent 实验按预定规则判为"无法判断"。旧首页：[research/README_tail_screening_2026-11-16.md](README-2026-11-16-tail-screening.md) |
-| ⚪ | T2 模型对数字大小的响应 | 已有先例 |
-| ⚪ | T3 模型怎样合并好坏消息 | 结论是"按相加合并"，没有可继续的现象。分支 `task/t3` |
-| ⚪ | T4 便宜与贵模型的头部重合 | 尾部方向关闭后不再需要 |
+| ⚪ | Nine rounds of "certifiable financial language models" | The certificate framework itself yields no interesting conclusions; the mathematics of the audit design is a combination of standard tools. Historical materials are in `research/` |
+| ⚪ | What does a cheap model miss in the tail | The widening law, copula modelling of cascades, and recall-constrained proxy screening all have prior work; the agent experiment was judged "inconclusive" under the pre-registered rules. Old homepage: [research/README_tail_screening_2026-11-16.md](README-2026-11-16-tail-screening.md) |
+| ⚪ | T2 Model response to the size of a number | Prior work exists |
+| ⚪ | T3 How models combine good and bad news | The conclusion is "combined additively"; there is no phenomenon to pursue further. Branch `task/t3` |
+| ⚪ | T4 Top-list overlap between cheap and expensive models | No longer needed after the tail direction was closed |
 
-## 现在的处境
+## Where things stand
 
-1. **这条线能得到的东西已经拿到了。** 一条不带拟合参数、在两个数据集上验证过的规则，加一组如实记录的负结果。分量是一篇短的技术注记，不是顶会文章。
-2. **一个被真实数据否定的假设。** 导师之前用"各数字独立舍入"推算，四分之一的印出差额应该对不上。实测是 0/982，已有的 511 条加总关系里也只有 7 条有残差。财报表格在显示精度上是自洽的，独立舍入的概率模型不能用来估计真实发生率。初稿里所有基于这个模型的期望数都要删掉。
-3. **下一步待定：** 把这条线写成短注记收尾，然后另找题目；或者直接另找题目。
+1. **This line has yielded what it can.** A rule with no fitted parameters, validated on two datasets, plus a set of honestly recorded negative results. Its weight is that of a short technical note, not a top-conference paper.
+2. **A hypothesis refuted by real data.** The advisor had earlier estimated, assuming that "each figure is rounded independently", that a quarter of the printed differences should fail to match. The observed value is 0/982, and of the existing 511 sum relations only 7 have residuals. Filing tables are self-consistent at the displayed precision, and a probability model of independent rounding cannot be used to estimate the real incidence. Every expected count in the draft that is based on this model must be deleted.
+3. **Next step to be decided:** write this line up as a short note and close it, then find another topic; or find another topic directly.
 
-## 目录
+## Contents
 
-| 内容 | 位置 |
+| Content | Location |
 |---|---|
-| 任务文件 | [tasks/](../tasks/README.md) |
-| 短文初稿 | [paper/finqa_short_v0.md](finqa_short_paper_draft_v0.md) |
-| 各轮结果 | 分支 `task/t1`、`task/t1a`、`task/t1b`、`task/t1c`、`task/t3` |
-| 历史研究 | [research/](../research/README.md) |
+| Task files | [tasks/](../tasks/README.md) |
+| Short-paper draft | [paper/finqa_short_v0.md](finqa_short_paper_draft_v0.md) |
+| Results of each round | Branches `task/t1`, `task/t1a`, `task/t1b`, `task/t1c`, `task/t3` |
+| Historical research | [research/](../research/README.md) |

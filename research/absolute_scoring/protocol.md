@@ -1,45 +1,45 @@
-# 绝对评分复现与压力测试：输出前冻结协议
+# Absolute-scoring replication and stress test: protocol frozen before output
 
-2026-11-16。用户已明确选择“按复现与压力测试继续评分”，覆盖上一阶段暂缓建议。文献归属见 PRECHECK_FOR_FABLE.md；不再以原创公式为目标。执行采用 Research Methodology 的来源与解释边界，以及“学术研究-用子代理执行并审查分析”的独立上下文、固定配置和真实输出原则；依用户要求不增加多层审查或打包流程。
+2026-11-16. The user explicitly chose "continue scoring as a replication and stress test", overriding the previous stage's recommendation to hold off. For literature attribution see PRECHECK_FOR_FABLE.md; an original formula is no longer the goal. Execution follows the source and interpretation limits of Research Methodology, and the principles of independent context, fixed configuration and real outputs from "Academic research - execute with subagents and review the analysis"; at the user's request, no extra layers of review or packaging process are added.
 
-研究目标是描述一个固定模型在指定金融标题量表上的重测、平均与批次敏感性。主问题为 p=10% 的双端自我重合，另完整报告 p=5%、20%；重复均值 m=1、2、4。候选解释包括尺度非线性、整数并列、非交换协方差、非高斯依赖和批次/顺序敏感性。当前设计不能唯一识别这些机制，也不直接测正确性、跨模型召回或投资收益。
+The research goal is to describe the retest, averaging and batch sensitivity of one fixed model on a specified financial-headline scale. The main question is two-tail self-overlap at p=10%; p=5% and 20% are also reported in full; repeated means use m=1, 2, 4. Candidate explanations include scale nonlinearity, integer ties, non-exchangeable covariance, non-Gaussian dependence and batch/order sensitivity. The current design cannot uniquely identify these mechanisms, and it does not directly measure correctness, cross-model recall or investment returns.
 
-## 样本与来源
+## Sample and source
 
-从本地已保存的 SEntFiN 测试划分 2,107 个实体标题、1,570 个词法族中，排除旧三次实验全部 288 族；从剩余 1,282 族均匀抽 1,000 族，每族均匀取一条。不得按标签或已有预测选样。读取程序仅将 ID、族 ID、来源 ID 和输入文本用于抽样和构造输入；不访问预测文件，不按标签筛选。此前划分的生成方法属于历史来源条件，不把本次样本称为全语料无条件随机样本。
+From the locally saved SEntFiN test split of 2,107 entity headlines in 1,570 lexical families, exclude all 288 families used in the three earlier experiments; draw 1,000 families uniformly from the remaining 1,282 families, and take one item uniformly within each family. The sample must not be selected by label or by existing predictions. The reading program uses only the ID, family ID, source ID and input text for sampling and building inputs; it does not access prediction files and does not filter by label. The method used to generate the earlier split is a historical source condition, so this sample is not called an unconditional random sample of the whole corpus.
 
-SEntFiN 作者来源为 https://github.com/pyRis/SEntFiN ，保存版本 eba43610fe3cb57a3e5773cd6c037da1f8992ad5；采用已有 MIT 许可及本地研究范围。许可原文见 source_materials/source_audit/data/raw/candidates/sentfin/LICENSE。本轮不新增发布标题原文，也不把作者许可表述为已独立核实所有上游出版方权利。旧族划分只能减少词法近重复，不能证明事件独立或模型未预训练见过文本。
+The SEntFiN author source is https://github.com/pyRis/SEntFiN , saved version eba43610fe3cb57a3e5773cd6c037da1f8992ad5; it is used under the existing MIT license and the local research scope. The license text is at source_materials/source_audit/data/raw/candidates/sentfin/LICENSE. This round publishes no new original headline text, and does not present the authors' license as an independent verification of the rights of all upstream publishers. The old family split can only reduce lexical near-duplicates; it cannot prove that events are independent or that the model never saw the text in pretraining.
 
-族抽样 seed=2026111601，族内 seed=2026111602，对照 seed=2026111603；八轮排列分别用 2026111611 至 2026111618。均为 Python random.Random，先排序族/原 ID 再抽取。新 ID 为 A0001..A1000。sample.csv 保存 ID 对应关系，batches.csv 保存批次及次序，均不含标题。输入放在仓库外相邻的 proxy-tail-absolute-inputs/。合成锚点不是数据标题。
+Family sampling seed=2026111601, within-family seed=2026111602, control seed=2026111603; the eight round permutations use 2026111611 to 2026111618. All are Python random.Random, sorting families/original IDs first and then drawing. The new IDs are A0001..A1000. sample.csv stores the ID mapping and batches.csv stores the batches and order; neither contains headlines. The inputs are placed in the adjacent directory proxy-tail-absolute-inputs/ outside the repository. The synthetic anchors are not data headlines.
 
-## 评分及执行
+## Scoring and execution
 
-固定配置为工具可选模型 gpt-6-sol，reasoning_effort=low。每个调用 spawn 新 agent，fork_turns=none；评分 agent 不看协议、文献、别的输出或已有标签，只读指定 input.txt 并保存 JSON 分数。未能控制温度、随机种子、底层精确快照或服务内部状态，故不能把新上下文当作独立误差的证明。模型配置选择在新分数产生之前完成，与旧 Sol 排序分支保持模型家族一致，但本次评分方式及 reasoning 设置单独报告。
+The fixed configuration is the tool-selectable model gpt-6-sol with reasoning_effort=low. Each call spawns a new agent with fork_turns=none. The scoring agent does not see the protocol, the literature, other outputs or existing labels; it reads only the specified input.txt and saves JSON scores. Temperature, random seed, the exact underlying snapshot and the service's internal state could not be controlled, so a new context cannot be treated as proof of independent errors. The model configuration was chosen before any new scores were produced, keeping the same model family as the earlier Sol ranking branch, but this round's scoring method and reasoning setting are reported separately.
 
-prompt.txt 全文逐字固定；input.txt 为提示加 40 条 ID/实体/标题。提示要求绝对评分而非互比、排序。任务包输入与返回文件用同一固定路径规则。对照重复读取完全相同的 input.txt，使用同样的 agent 指令；会话/任务标识由宿主生成，仍可能不同。评分代理只输出 ID/整数分数，不保存内部推理。
+The full text of prompt.txt is fixed verbatim; input.txt is the prompt plus 40 ID/entity/headline entries. The prompt asks for absolute scoring, not comparison or ranking. Task package inputs and returned files follow the same fixed path rule. Control repeats read exactly the same input.txt and use the same agent instructions; session/task identifiers are generated by the host and may still differ. Scoring agents output only ID/integer scores and do not save internal reasoning.
 
-主实验八轮，每轮重新打乱 1,000 条的成员与顺序，25 个 40 条批次，共 200 次调用。100 个对照 ID 从该 1,000 条均匀抽取；复用其第一轮所属的完整批次，再打 C1、C2 各一次，最多 50 次调用。C1 安排在主第 2 轮之后，C2 在第 6 轮之后，避免对照全在同一时间段。非对照成员伴随分数保留，但不进入主八轮或控制目标统计。
+The main experiment has eight rounds; each round reshuffles the membership and order of the 1,000 items into 25 batches of 40, for 200 calls in total. The 100 control IDs are drawn uniformly from these 1,000 items; the complete batches they belonged to in round one are reused and scored once more as C1 and once more as C2, at most 50 calls. C1 is scheduled after main round 2 and C2 after round 6, so that the controls do not all fall in the same time window. Companion scores for non-control members are kept but do not enter the main eight rounds or the control-target statistics.
 
-各调用记录实际模型参数、任务 ID、开始/结束时间和输出路径。失败、无输出、解析错误另记；只允许在输出缺失或格式无效时原输入重试，不因分数不理想重试。有效 JSON 必须恰好覆盖本批 40 ID，整数且在 0..100；不修改有效分数。全部八轮按原尺度完成，出现并列门失败也不改提示重来。
+Each call records the actual model parameters, task ID, start/end time and output path. Failures, missing outputs and parse errors are recorded separately; a retry on the original input is allowed only when the output is missing or the format is invalid, never because the scores look unfavorable. Valid JSON must cover exactly the 40 IDs of the batch, with integers in 0..100; valid scores are not modified. All eight rounds are completed on the original scale; even if the ties gate fails, the prompt is not changed and rerun.
 
-## 固定分析
+## Fixed analysis
 
-每轮中秩映射 z=Phi^{-1}((rank−0.5)/1000)，计算八轮全部 28 对 Pearson，主 r 为算术均值，另报告范围。r 不可定义或不在正信度基准适用范围时如实标注，不强制裁剪。m=1 比第 1 与第 5 轮；m=2 比第 1–2 与第 5–6 轮原分数均值；m=4 比第 1–4 与第 5–8 轮均值，用整数和保持真并列。
+In each round, midranks are mapped to z=Phi^{-1}((rank−0.5)/1000); Pearson correlations are computed for all 28 pairs of the eight rounds, the main r is their arithmetic mean, and the range is also reported. If r is undefined or outside the range where the positive reliability baseline applies, this is reported as is and not force-clipped. m=1 compares rounds 1 and 5; m=2 compares the means of the raw scores of rounds 1–2 and 5–6; m=4 compares the means of rounds 1–4 and 5–8, using integer sums to keep true ties.
 
-各 p 的名义 k=Np；上下两端保留第 k 名所在的整个同分组。交集同时除以两份名单各自实际大小，保留两个参考方向。90% 召回至少取 ceil(0.9×参考实际人数)；候选名单只能在完整分数组处截断，取达到目标的最小人数，除以名义 k 得放行倍数，允许小于 1。每轮分值种数、边界分数、整个边界组人数和实际名单人数均保存。
+For each p the nominal count is k=Np; both the upper and the lower tail keep the whole tie group that contains the k-th item. The intersection is divided by each of the two lists' actual sizes, keeping both reference directions. 90% recall takes at least ceil(0.9×reference actual size); the candidate list may be cut only at complete score groups, taking the smallest count that reaches the target, and dividing by the nominal k gives the widening factor, which may be below 1. For each round, the number of distinct score values, the boundary score, the size of the whole boundary group and the actual list size are all saved.
 
-无调参基准 r_m=m*r/(1+(m−1)*r)，通过一维二元正态尾积分计算重合和 q90/p。r 来自相同八轮，所以是固定公式内部检验而非独立留出预测。原尺度平均和秩正态信度不交换，基准失配不能直接归因于尾部机制。
+The untuned baseline is r_m=m*r/(1+(m−1)*r); overlap and q90/p are computed through a one-dimensional bivariate normal tail integral. r comes from the same eight rounds, so this is an internal test of a fixed formula, not an independent held-out prediction. Averaging on the original scale and rank-normal reliability do not commute, so a baseline mismatch cannot be attributed directly to a tail mechanism.
 
-标题配对 bootstrap 5,000 次，seed=2026111605；每次抽 N 条并携带全部八轮分数，重复 ID 按重数保留。重算名单、r、预测和实测减预测差；给 percentile 95% 区间。为计算效率，可在预先固定的相关网格上数值积分后插值，但须报告独立数值检验误差，不得对实测调网格或调参数。区间逐项成立，不宣称同时覆盖，也不声称包含重新生成批次或共享上下文的全部不确定性。
+Headline-paired bootstrap with 5,000 draws, seed=2026111605; each draw takes N items carrying all eight rounds of scores, and repeated IDs are kept with their multiplicity. The lists, r, the prediction and the observed-minus-predicted difference are recomputed; percentile 95% intervals are given. For computational efficiency, numerical integration may be done on a pre-fixed correlation grid followed by interpolation, but the independent numerical check error must be reported, and the grid or parameters must not be tuned to the observations. The intervals hold item by item; they are not claimed to have simultaneous coverage, nor to include all the uncertainty from regenerating batches or from shared context.
 
-对照仅在相同 100 ID 上比较 C1/C2 正态秩相关与主八轮 28 对均值，另给主第 1 轮与两次对照的相关作敏感性描述。100 条配对重采样 seed=2026111606，5,000 次；主报告相关差及区间，不将其直接称为批次噪声占比。
+The controls compare, only on the same 100 IDs, the C1/C2 normal-rank correlation with the mean of the 28 pairs from the main eight rounds; the correlations between main round 1 and the two controls are also given as a sensitivity description. 100-item paired resampling with seed=2026111606, 5,000 draws; the main report gives the correlation difference and its interval, and does not call it directly the batch share of noise.
 
-## 结论规则
+## Decision rules
 
-先检查可解释性：任一主 p=10% 单轮或均分边界的整个同分组超过名义 100 人的 20%，整体主要结论标“无法判断”；5%/20%各自单列同样门。保留全部描述数值，不用高重合掩盖低分辨率。不用旧实验的额外扩张比例替代这一门。
+First check interpretability: if the whole tie group at any main p=10% single-round or mean-score boundary exceeds 20% of the nominal 100, the overall main conclusion is marked "inconclusive"; 5% and 20% each have the same gate listed separately. All descriptive numbers are kept, and high overlap is not used to hide low resolution. The old experiment's extra-expansion fraction does not replace this gate.
 
-通过该门后，两端两个方向单次 10% 重合的区间下限均超过 90%，支持“当前协议已高度稳定”。“值得继续”的证据要求至少一端两个方向单次 10% 重合区间上限低于 75%，且该端 m=2、4 同向公式偏差均超过 5 个百分点并且区间排除零，或上下尾重合差在 m=2、4 均超过 5 个百分点且区间排除零。批次相关差作为机制线索，不凭差值单独判“占噪声大头”。这组更明确的工作规则是本次评分前的操作化选择，不是 TASK 原文给定的显著性定理。
+After passing that gate, if the interval lower bounds of the single-score 10% overlap in both directions for both tails all exceed 90%, this supports "the current protocol is already highly stable". Evidence for "worth continuing" requires that, for at least one tail, the interval upper bounds of the single-score 10% overlap in both directions are below 75%, and that for that tail the formula deviations at m=2 and 4 both exceed 5 percentage points in the same direction with intervals excluding zero, or that the upper-minus-lower-tail overlap difference exceeds 5 percentage points at both m=2 and 4 with intervals excluding zero. The batch correlation difference serves as a mechanism clue; "the largest share of noise" is not judged from the difference alone. This more explicit set of working rules is an operational choice made before this round of scoring, not a significance theorem given in the original TASK text.
 
-公式实用吻合的工作容忍为重合误差 ±5 个百分点、放行倍数误差 ±0.25；只有全部预定可解释点的逐项差值区间都落在这些范围且双端重合差区间落在 ±5 个百分点，才描述为“本设计下支持实用吻合”。否则不以未显著拒绝当作等价证明；不够精确、边界失格或规则未覆盖均标无法判断并给出原因。若 m=1/2/4 没有满足 90% 稳定性，写“测试范围内未达到”，不外推所需重复数。
+The working tolerances for a practical fit of the formula are ±5 percentage points of overlap error and ±0.25 of widening-factor error. Only if the item-wise difference intervals for all pre-specified interpretable points fall within these ranges, and the two-tail overlap difference intervals fall within ±5 percentage points, is the result described as "supports a practical fit under this design". Otherwise, failing to reject significantly is not taken as proof of equivalence; insufficient precision, boundary failure or a case not covered by the rules is marked inconclusive with the reason given. If m=1/2/4 does not reach 90% stability, write "not reached within the tested range", and do not extrapolate the number of repeats needed.
 
-交付全部 ID 分数、精确提示、批次次序、分析代码、一张六面板图和一页结论，并追加到 GitHub。保留上阶段文献门报告的历史身份，通过新结果说明用户已选择继续。
+Deliver all ID scores, the exact prompt, the batch order, the analysis code, one six-panel figure and a one-page summary, and append them to GitHub. Keep the historical identity of the previous stage's literature gate report, and use the new results to state that the user chose to continue.

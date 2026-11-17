@@ -12,8 +12,8 @@ T1 = WORKSPACE / 'proxy-tail/research/t1_rounding'
 
 def main():
     task = (ROOT / 'TASK.md').read_text(encoding='utf8')
-    b = re.search(r'### 提示 B\s*```\s*\n(.*?)\n```', task, re.S).group(1) + '\n'
-    rule = re.search(r'### 提示 C.*?```\s*\n(.*?)\n```', task, re.S).group(1)
+    b = re.search(r'### Prompt B\s*```\s*\n(.*?)\n```', task, re.S).group(1) + '\n'
+    rule = re.search(r'### Prompt C.*?```\s*\n(.*?)\n```', task, re.S).group(1)
     paragraph = 'Figures in the document are rounded to the precision shown: a displayed figure may stand for any value that rounds to it. Counts, years, dates and contractual terms are exact.'
     assert b.count(paragraph) == 1
     c = b.replace(paragraph, paragraph + '\n\n' + rule)

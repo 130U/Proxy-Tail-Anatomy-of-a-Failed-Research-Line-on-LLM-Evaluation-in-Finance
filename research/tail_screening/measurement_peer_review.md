@@ -1,60 +1,60 @@
-# 成对比较与多次排序聚合：独立内部复核
+# Pairwise comparison and multi-ranking aggregation: independent internal review
 
-2026-11-16。复核者为另一独立执行上下文中的AI agent，不是Fable本人，也不是外部真人同行评审。未进行模型评分、训练、联网或修改原始结果。工作范围是测量代码、原始输入/输出、数字与解释一致性，不包含重新完成整套文献检索或为理论原创性背书。
+2026-11-16. The reviewer is an AI agent in another independent execution context; it is not Fable, and not an outside human peer reviewer. No model scoring, training, network access or modification of the raw results was done. The scope of the work is the consistency of the measurement code, the raw inputs/outputs, the numbers and the interpretation; it does not include redoing the full literature search or vouching for the originality of the theory.
 
-**结论：未发现会改变本轮通过/停止决定的计算错误。阶段1只有Sol四次排序聚合单模型通过；新128条确认中该候选七项通过、一项未过，按冻结规则不应进入512条。这个失败靠近工作阈值，不应夸大成严重失稳或总体不可用。**
+**Conclusion: no calculation error was found that would change this round's pass/stop decision. In stage 1, only Sol four-run ranking aggregation passed, as a single model; in the new 128-item confirmation this candidate passed seven items and failed one, so under the frozen rules it should not move to 512 items. This failure is close to the working threshold and should not be exaggerated into severe instability or overall unusability.**
 
-## 独立重算怎样进行
+## How the independent recomputation was done
 
-复核代码[review_measurements.py](review_measurements.py)不导入原分析程序。它从原始有序分组重新计算负的两倍midrank之和，其排序与原Borda整数分子一致；从原始pair左右端点及L/R/T判断重新还原项目偏好，只有两次相同偏好才记胜负，其他非U情况记半平局。
+The review code [review_measurements.py](review_measurements.py) does not import the original analysis programs. It recomputes, from the raw ordered groups, the negative of the sum of twice the midranks, whose ordering matches the original integer Borda numerators; from the raw pair left/right endpoints and the L/R/T judgments it reconstructs the item preferences, records a win/loss only when the two preferences agree, and records a half tie in other non-U cases.
 
-最小90%放行量另用遍历法计算：遍历候选排序的每一个完整分数组边界，显式形成名单，取召回达到ceil(0.9×目标实际人数)的最小集合。它与原程序使用目标子集分位点的捷径独立实现。两种方法在阶段1两种方法、两模型、两个方向、两个尾部比例的32行，以及阶段2的m=1/2/4、两个方向、三个比例、两端共36行上均一致。核对人数、交集、召回、放行倍数及同分扩张；stage2相关系数也一致。
+The minimum 90% pass-through amount is computed separately by enumeration: it goes through every complete score-group boundary of the candidate ranking, forms the list explicitly, and takes the smallest set whose recall reaches ceil(0.9×actual target count). This is implemented independently of the original program's shortcut of using a quantile within the target subset. The two approaches agree on the 32 rows of stage 1 (two methods, two models, two directions, two tail fractions), and on the 36 rows of stage 2 (m=1/2/4, two directions, three fractions, both tails). Counts, intersections, recall, widening factors and tie expansion were checked; the stage 2 correlation coefficients also agree.
 
-另从私有映射实际计算了开发128族、阶段1的32族、阶段2的128族，三个集合两两交集均为零；stage2八份输入ID—文本映射相同，提示与stage1逐字节一致。它证明保存材料中的抽样隔离，不能证明LLM预训练未见过这些标题，也不能将词法族等同于完整事件独立。
+In addition, from the private mapping, the 128 development families, the 32 stage 1 families and the 128 stage 2 families were actually computed, and all pairwise intersections of the three sets are zero; the ID–text mappings of the eight stage 2 inputs are identical, and the prompt is byte-for-byte identical to stage 1. This proves sampling isolation in the saved materials; it cannot prove that LLM pretraining never saw these headlines, nor equate lexical families with fully independent events.
 
-在现有环境实际运行复核脚本，退出码0、全部assert通过，耗时约2.7秒。只读取保存数据并输出检查摘要，没有覆盖报告或机器结果。复算命令：
+The review script was actually run in the existing environment: exit code 0, all asserts passed, about 2.7 seconds. It only reads saved data and outputs a check summary; it did not overwrite reports or machine results. Recomputation command:
 
 ```powershell
 & '..\130U-FinLLM\.venv\Scripts\python.exe' 'research/tail_screening/review_measurements.py'
 ```
 
-## 第一阶段的结果核对
+## Check of the stage 1 results
 
-| 方法/模型 | 独立计算秩相关 | 最差同预算召回 | 最大q90/p | 单模型工作门 |
+| Method/model | Independently computed rank correlation | Worst equal-budget recall | Maximum q90/p | Single-model working gate |
 |---|---:|---:|---:|---|
-| 成对/Luna | 0.825016 | 0.625 | 2.25 | 未过 |
-| 成对/Sol | 0.919584 | 0.875 | 1.875 | 未过 |
-| 四次聚合/Luna | 0.865328 | 0.875 | 2.75 | 未过 |
-| 四次聚合/Sol | 0.987358 | 1.000 | 1.00 | 通过 |
+| Pairwise/Luna | 0.825016 | 0.625 | 2.25 | Failed |
+| Pairwise/Sol | 0.919584 | 0.875 | 1.875 | Failed |
+| Four-run aggregation/Luna | 0.865328 | 0.875 | 2.75 | Failed |
+| Four-run aggregation/Sol | 0.987358 | 1.000 | 1.00 | Passed |
 
-与[第一阶段结论](stage1_conclusion.md)及[正式JSON](methods_stage1_all.json)相符。成对Luna两panel换位不一致数248、230，严格相反131、113；Sol为56、63及14、8，均重算一致。Luna严格三边循环8/508及7/543、Sol为0/1964及0/2125，也与保存结果相同。
+This matches the [stage 1 conclusion](stage1_conclusion.md) and the [formal JSON](methods_stage1_all.json). For pairwise Luna, the swap disagreement counts of the two panels are 248 and 230, with 131 and 113 strictly opposite; for Sol they are 56 and 63, and 14 and 8; all recompute identically. Luna's strict three-edge cycles 8/508 and 7/543, and Sol's 0/1964 and 0/2125, also match the saved results.
 
-形式计数应为48个正式评分调用，其中32个pair批次、16个列表；3,968是pair判断数，不是独立调用数或独立文本样本数。另2个整批496对尝试未产生输出，不得记为完成的评分数据。协议已保留原计划24次与实际48次的时间顺序说明，最新结论按实际数量报告正确。
+The formal count should be 48 formal scoring calls, of which 32 are pair batches and 16 are lists; 3,968 is the number of pair judgments, not the number of independent calls or independent text samples. The other 2 whole-batch attempts with 496 pairs produced no output and must not be counted as completed scoring data. The protocol keeps the chronological explanation of the originally planned 24 calls versus the actual 48, and the latest conclusion correctly reports the actual count.
 
-## 新128条确认的关键边界
+## Key boundary in the new 128-item confirmation
 
-四次聚合两个panel的Spearman为0.992865，但不能替代尾部名单检查。下尾10%、panel1作参考时，名义人数floor(128×0.1)=12，参考边界同分使实际A为14条；候选同预算名单为12条，两者交集11条。因此同预算召回为11/14=78.5714%，低于预设80%。
+The Spearman between the two four-run aggregation panels is 0.992865, but this cannot replace checking the tail lists. For the lower 10% tail with panel 1 as reference, the nominal count is floor(128×0.1)=12, and ties at the reference boundary make the actual A 14 items; the candidate's equal-budget list has 12 items, and the intersection is 11. So the equal-budget recall is 11/14=78.5714%, below the pre-set 80%.
 
-该参考名单要达到90%需至少13条；候选放行16条时实际找回全部14条，q90/p=16/12.8=1.25。这里满足放行倍数条件和16.7%的同分扩张条件，**只失败在同预算召回**。反向比较为11/12=91.7%，不能挑选反方向覆盖失败项。
+For this reference list to reach 90% needs at least 13 items; when the candidate passes 16 items it actually recovers all 14, and q90/p=16/12.8=1.25. Here the widening-factor condition and the tie-expansion condition (16.7%) are met; **it fails only on equal-budget recall**. The reverse comparison gives 11/12=91.7%, and the reverse direction cannot be picked to cover the failing item.
 
-八个方向×尾部×比例组合中其余七项通过，所有主组合的最大q90/p仅1.25，最大边界扩张16.7%。[stage2报告](stage2_report.md)与[正式JSON](validation_stage2.json)准确保留了这些事实。
+Of the eight direction × tail × fraction combinations, the other seven pass; over all main combinations the maximum q90/p is only 1.25 and the maximum boundary expansion 16.7%. The [stage 2 report](stage2_report.md) and the [formal JSON](validation_stage2.json) keep these facts accurately.
 
-## 科学限制与非错误争议
+## Scientific limitations and disputes that are not errors
 
-**工作门不是统计检验。** 78.6%略低于80%是预设决策边界的事实，不是证明总体召回显著低于80%。不能因接近就事后改为通过，也不能夸大为强反证。用新方法、更多重复或另一门槛继续研究，需要新协议与新数据，不能重标这次确认。
+**The working gate is not a statistical test.** 78.6% being slightly below 80% is a fact about a pre-set decision boundary, not proof that population recall is significantly below 80%. It cannot be changed to a pass after the fact because it is close, nor exaggerated into strong counterevidence. Continuing the research with a new method, more repeats or a different threshold needs a new protocol and new data, and cannot relabel this confirmation.
 
-**“同预算”是同名义p。** 双方分别保留完整边界同分后，实际人数可能不同。原代码与报告都另列了实际人数，口径一致；但是它不是严格相同实际人数的集合比较。q90/p的分母是Np，不是floor(Np)，因此128条时会出现小于1的倍数，这与90%而非100%目标及离散取整相容。若Fable更喜欢严格top-k的不确定边界范围，那是另一统计对象，不是当前程序错误。
+**"Equal budget" means the same nominal p.** After each side keeps its complete boundary ties, the actual counts can differ. The original code and report both list the actual counts separately, and the convention is consistent; but it is not a set comparison at strictly identical actual counts. The denominator of q90/p is Np, not floor(Np), so with 128 items factors below 1 can appear; this is compatible with a 90% rather than 100% target and with discrete rounding. If Fable prefers uncertain boundary ranges for strict top-k, that is a different statistical object, not an error in the current program.
 
-**更大样本与更严格尾部同时改变。** 阶段1主p为25%，阶段2主p为10%/20%，而且更换了候选池。不能把确认未过因果归为“样本越大越不稳定”。准确陈述是“该候选未通过全新128条与更严格尾部比例下的确认门”。
+**A larger sample and a stricter tail changed at the same time.** The main p was 25% in stage 1 and 10%/20% in stage 2, and the candidate pool was also changed. The failed confirmation cannot be attributed causally to "the larger the sample, the less stable". The accurate statement is "this candidate failed the confirmation gate on 128 completely new items at stricter tail fractions".
 
-**先看结果再选分支已如实披露。** 原双模型门失败后，因用户要求继续通过支路而选择Sol单模型验证。这不是原双模型方案成功，也不是完全事前的候选选择；独立新数据确认可以评价选中候选，但不能抹去选择过程。
+**Choosing the branch after seeing the results has been disclosed honestly.** After the original two-model gate failed, the Sol single-model validation was chosen because the user asked to continue with the passing branch. This is not a success of the original two-model plan, nor a fully pre-specified candidate selection; confirmation on independent new data can evaluate the selected candidate, but it cannot erase the selection process.
 
-**低分辨率被缓解，不等于已有固定连续分数。** 聚合分数依赖候选池、提示与多次生成；等级数提高、整体相关提高不证明存在脱离列表的稳定文档分数。重复调用不增加独立金融观测，误差不保证独立；换序波动也没有单独识别纯位置效应。当前结果既不估计渐近α，也不测投资收益。
+**Low resolution being mitigated does not mean a fixed continuous score exists.** The aggregated scores depend on the candidate pool, the prompt and multiple generations; a higher number of levels and a higher overall correlation do not prove that a stable document score exists independently of the list. Repeated calls do not add independent financial observations, and errors are not guaranteed to be independent; reordering fluctuation also does not separately identify a pure position effect. The current results neither estimate the asymptotic α nor measure investment returns.
 
-## 对交付结论的建议
+## Recommendation on the deliverable's conclusion
 
-交付应同时给出“聚合确有改善”和“当前确认门未过”，两者不矛盾。保留成对、直接列表和Luna聚合的失败结果；停止在原冻结规则下扩大到512条。原金融LLM尾部假说仍未被这次测量验证或否定。
+The deliverable should state both "aggregation does improve things" and "the current confirmation gate failed"; the two do not contradict each other. Keep the failure results of pairwise comparison, the direct list and Luna aggregation; stop scaling up to 512 items under the original frozen rules. The original tail hypothesis for financial LLMs has been neither validated nor rejected by this measurement.
 
-已复读更新后的[当前完整报告](FABLE_CURRENT_REPORT.md)：其64次完成评分、另2次无输出尝试、288个不同词法族，以及新128条七项通过/一项略未过的叙述均与本次核对相符；正文保留了新样本与p同时改变、单模型事后选择、同分及重复不确定性的限制。
+The updated [current full report](FABLE_CURRENT_REPORT.md) was reread: its account of 64 completed scorings, 2 more attempts with no output, 288 distinct lexical families, and seven items passed / one narrowly failed on the new 128 items all match this check; the full text keeps the limitations that the new sample and p changed at the same time, that the single model was selected after the fact, and the uncertainty from ties and repeats.
 
-本复核支持统计实现与当前有限样本决定，不证明方法普遍有效/无效、不证明两模型具有稳定双尾差异，也不替代Fable对题目经济含义及理论贡献的判断。
+This review supports the statistical implementation and the current finite-sample decision. It does not prove that the method is generally valid or invalid, does not prove that the two models have a stable two-tail difference, and does not replace Fable's judgment on the economic meaning of the question and its theoretical contribution.
