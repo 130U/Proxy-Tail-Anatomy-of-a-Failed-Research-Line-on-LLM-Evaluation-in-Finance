@@ -5,3 +5,6 @@
 *.zip binary
 *.joblib binary
 *.pkl binary
+
+# GitHub language statistics: the source snapshots are third-party material, not project code.
+source_materials/** linguist-vendored
