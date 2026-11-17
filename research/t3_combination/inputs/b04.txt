@@ -16,152 +16,152 @@ Return exactly one JSON object mapping every supplied ID to its integer score. I
 Items to score:
 [
   {
-    "id": "N10",
+    "id": "I0011",
     "entity": "Virello Industries",
     "headline": "Virello Industries discovers fraud causing unrecoverable losses equal to 60% of its assets."
   },
   {
-    "id": "P07",
+    "id": "I0021",
     "entity": "Virello Industries",
     "headline": "Virello Industries secures its first license to sell into a major new overseas market."
   },
   {
-    "id": "Z10",
+    "id": "I0005",
     "entity": "Virello Industries",
     "headline": "Virello Industries publishes the agenda for its scheduled annual meeting."
   },
   {
-    "id": "P10",
+    "id": "I0019",
     "entity": "Virello Industries",
     "headline": "Virello Industries repays all overdue debt and eliminates an imminent default risk."
   },
   {
-    "id": "N09",
+    "id": "I0029",
     "entity": "Virello Industries",
     "headline": "Virello Industries faces an indefinite regulatory ban on its flagship product."
   },
   {
-    "id": "P08",
+    "id": "I0012",
     "entity": "Virello Industries",
     "headline": "Virello Industries wins an appeal canceling a fine equal to 30% of last year's profit."
   },
   {
-    "id": "N07",
+    "id": "I0015",
     "entity": "Virello Industries",
     "headline": "Virello Industries loses a major customer accounting for 30% of annual revenue."
   },
   {
-    "id": "P06",
+    "id": "I0016",
     "entity": "Virello Industries",
     "headline": "Virello Industries reports a 25% increase in export orders."
   },
   {
-    "id": "P09",
+    "id": "I0024",
     "entity": "Virello Industries",
     "headline": "Virello Industries wins a patent expected to double revenue at its specialty materials division."
   },
   {
-    "id": "P04",
+    "id": "I0026",
     "entity": "Virello Industries",
     "headline": "Virello Industries reports a 10% increase in quarterly operating profit."
   },
   {
-    "id": "Z05",
+    "id": "I0006",
     "entity": "Virello Industries",
     "headline": "Virello Industries lists the names of its existing business divisions."
   },
   {
-    "id": "N03",
+    "id": "I0023",
     "entity": "Virello Industries",
     "headline": "Virello Industries incurs warranty repair costs equal to 5% of last year's profit."
   },
   {
-    "id": "P05",
+    "id": "I0018",
     "entity": "Virello Industries",
     "headline": "Virello Industries raises its full-year free cash flow forecast by 15%."
   },
   {
-    "id": "Z07",
+    "id": "I0030",
     "entity": "Virello Industries",
     "headline": "Virello Industries posts a calendar of routine public holidays."
   },
   {
-    "id": "Z09",
+    "id": "I0014",
     "entity": "Virello Industries",
     "headline": "Virello Industries states that its ordinary shares use the ticker VIRI."
   },
   {
-    "id": "N01",
+    "id": "I0002",
     "entity": "Virello Industries",
     "headline": "Virello Industries incurs an unexpected filing fee equal to 0.2% of annual revenue."
   },
   {
-    "id": "N04",
+    "id": "I0009",
     "entity": "Virello Industries",
     "headline": "Virello Industries loses a distribution agreement accounting for 10% of retail sales."
   },
   {
-    "id": "P02",
+    "id": "I0022",
     "entity": "Virello Industries",
     "headline": "Virello Industries reports a 2% increase in recurring maintenance revenue."
   },
   {
-    "id": "N08",
+    "id": "I0003",
     "entity": "Virello Industries",
     "headline": "Virello Industries halts its largest factory for six months after a major fire."
   },
   {
-    "id": "Z06",
+    "id": "I0001",
     "entity": "Virello Industries",
     "headline": "Virello Industries states that its headquarters is located in Westbridge."
   },
   {
-    "id": "Z02",
+    "id": "I0013",
     "entity": "Virello Industries",
     "headline": "Virello Industries lists its registered office address on its website."
   },
   {
-    "id": "P03",
+    "id": "I0008",
     "entity": "Virello Industries",
     "headline": "Virello Industries reduces annual logistics costs by 5% through improved routing."
   },
   {
-    "id": "N05",
+    "id": "I0025",
     "entity": "Virello Industries",
     "headline": "Virello Industries cuts production at a domestic plant by 15% because of weak demand."
   },
   {
-    "id": "N06",
+    "id": "I0027",
     "entity": "Virello Industries",
     "headline": "Virello Industries announces a product recall costing 25% of last year's profit."
   },
   {
-    "id": "N02",
+    "id": "I0010",
     "entity": "Virello Industries",
     "headline": "Virello Industries loses one day's online sales during a website outage."
   },
   {
-    "id": "Z04",
+    "id": "I0004",
     "entity": "Virello Industries",
     "headline": "Virello Industries states that its fiscal year ends on December 31."
   },
   {
-    "id": "Z03",
+    "id": "I0020",
     "entity": "Virello Industries",
     "headline": "Virello Industries publishes the date of its next earnings call."
   },
   {
-    "id": "P01",
+    "id": "I0017",
     "entity": "Virello Industries",
     "headline": "Virello Industries wins a small supply contract worth 0.2% of annual revenue."
   },
   {
-    "id": "Z08",
+    "id": "I0007",
     "entity": "Virello Industries",
     "headline": "Virello Industries lists the telephone number of its investor relations office."
   },
   {
-    "id": "Z01",
+    "id": "I0028",
     "entity": "Virello Industries",
     "headline": "Virello Industries schedules its annual shareholder meeting for June 18."
   }

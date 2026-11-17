@@ -59,6 +59,10 @@ def main():
         raise RuntimeError("Scores already exist: refuse to overwrite frozen materials")
     atoms = [dict(atom_id=f"{p}{i:02d}", polarity=p, headline=f"{ENTITY} {fact}.")
              for p, facts in FACTS.items() for i, fact in enumerate(facts, 1)]
+    opaque_ids = [f"I{i:04d}" for i in range(1, 31)]
+    random.Random(2026111622).shuffle(opaque_ids)
+    for atom, opaque_id in zip(atoms, opaque_ids):
+        atom["atom_id"] = opaque_id
     by_id = {a["atom_id"]: a for a in atoms}
     groups = {p: [a["atom_id"] for a in atoms if a["polarity"] == p] for p in FACTS}
     pairs = [("PN", a, b) for a, b in itertools.product(groups["P"], groups["N"])]
