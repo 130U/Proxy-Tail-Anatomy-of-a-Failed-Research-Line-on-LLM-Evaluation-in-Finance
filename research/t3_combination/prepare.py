@@ -74,7 +74,7 @@ def main():
     write_csv("atoms.csv", atoms, ["atom_id", "polarity", "headline"])
     write_csv("items.csv", items, ["item_id", "kind", "first", "second", "headline"])
     prompt = (ROOT.parent / "absolute_scoring" / "prompt.txt").read_text(encoding="utf-8")
-    (ROOT / "prompt.txt").write_text(prompt, encoding="utf-8")
+    (ROOT / "prompt.txt").write_text(prompt, encoding="utf-8", newline="\n")
     (ROOT / "inputs").mkdir(exist_ok=True)
     (ROOT / "raw").mkdir(exist_ok=True)
     schedule = []
@@ -88,8 +88,8 @@ def main():
                 chosen = shuffled[start:start+40]
                 schedule.append(dict(call_id=call_id, phase=phase, round=repeat, item_ids=chosen))
                 payload = [{"id": i, "entity": ENTITY, "headline": item_map[i]["headline"]} for i in chosen]
-                (ROOT / "inputs" / f"{call_id}.txt").write_text(prompt + "\nItems to score:\n" + json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    (ROOT / "schedule.json").write_text(json.dumps(schedule, indent=2) + "\n", encoding="utf-8")
+                (ROOT / "inputs" / f"{call_id}.txt").write_text(prompt + "\nItems to score:\n" + json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    (ROOT / "schedule.json").write_text(json.dumps(schedule, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"atoms": len(atoms), "unordered_pairs": len(pairs), "ordered_pairs": len(combos), "calls": len(schedule), "scores": sum(len(x["item_ids"]) for x in schedule)}))
 
 
