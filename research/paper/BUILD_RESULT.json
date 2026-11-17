@@ -1,6 +1,6 @@
 {
   "mode": "render",
-  "source": "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\paper\\manuscript.md",
+  "source": "<workspace>\\130U-FinLLM-certifiable\\research\\paper\\manuscript.md",
   "source_sha256": "a9cd81ab194e54bb583dab69cbc7f3440745468b2f701ee6146e66c02d844ce0",
   "renderer": "Chromium native MathML via local Playwright; not a LaTeX compiler",
   "display_formulas": 19,
@@ -68,7 +68,7 @@
     "bodyWidth": 642.515625
   },
   "browser": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  "output": "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\paper\\output\\pdf\\audit_budgets_working_report.pdf",
+  "output": "<workspace>\\130U-FinLLM-certifiable\\research\\paper\\output\\pdf\\audit_budgets_working_report.pdf",
   "output_sha256": "dabaf18262c037aabd8d3c2a67047bfc16f0047ad1b0f6e34789efd782b3f1f8",
   "elapsed_seconds": 1.4061,
   "pages": 10,

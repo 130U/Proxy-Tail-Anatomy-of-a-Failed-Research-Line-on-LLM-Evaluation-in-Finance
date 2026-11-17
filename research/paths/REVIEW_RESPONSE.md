@@ -40,7 +40,7 @@
 
 初审新增 [review_checks.py](review_checks.py) 与 [JSON](review_checks.json)：1,008个R1有理可达性例、1,024个D1分层漏检概率例均通过；这些是有限数学检查，没有R2 LP执行、训练或历史审计。既有36项集成测试见 [第二轮复现日志](../reproduction_log.json)，本轮不重复计为新增实验。
 
-作者修订后的限定增量复核另附在原审查末尾，文件身份最终由 [交接manifest](../HANDOFF_MANIFEST.json) 固定。I01–I07作为报告质量问题已有明确回应；其中的来源、语义、样本、先例与非空性门仍作为研究问题开放，不能将“已回应”改写为“已解决”。
+作者修订后的限定增量复核另附在原审查末尾，文件身份最终由 [交接manifest](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json) 固定。I01–I07作为报告质量问题已有明确回应；其中的来源、语义、样本、先例与非空性门仍作为研究问题开放，不能将“已回应”改写为“已解决”。
 
 ## 给用户所指资深助手
 

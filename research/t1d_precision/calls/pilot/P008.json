@@ -47,10 +47,10 @@
     "--sandbox",
     "read-only",
     "--cd",
-    "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\proxy-tail-t1d\\research\\t1d_precision\\.runtime",
+    "<workspace>\\proxy-tail-t1d\\research\\t1d_precision\\.runtime",
     "--json",
     "-o",
-    "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\proxy-tail-t1d\\research\\t1d_precision\\raw\\pilot\\P008.txt",
+    "<workspace>\\proxy-tail-t1d\\research\\t1d_precision\\raw\\pilot\\P008.txt",
     "-"
   ],
   "returncode": 0,

@@ -1,6 +1,6 @@
 # 复算绝对评分实验
 
-这是用户在文献门之后授权继续的复现与压力测试。问题、范围和预先判断规则见 [protocol.md](protocol.md)，题目见 [TASK.md](../../TASK.md)。[progress.md](progress.md) 记录采集状态；不要把冻结的计划数量当成已完成数量。分析器要求所有预定原始文件到齐才计算正式结果。
+这是用户在文献门之后授权继续的复现与压力测试。问题、范围和预先判断规则见 [protocol.md](protocol.md)，题目见 [TASK.md](../../tasks/absolute_scoring.md)。[progress.md](progress.md) 记录采集状态；不要把冻结的计划数量当成已完成数量。分析器要求所有预定原始文件到齐才计算正式结果。
 
 在仓库根目录，使用 Python 3.12 及根目录 [requirements-analysis.txt](../../requirements-analysis.txt) 中记录的数值依赖，运行：
 

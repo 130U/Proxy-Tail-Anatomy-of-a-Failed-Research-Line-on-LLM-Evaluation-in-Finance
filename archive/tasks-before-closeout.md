@@ -4,10 +4,10 @@
 
 | 编号 | 题目 | 需要 agent 打分吗 | 产出目录 |
 |---|---|---|---|
-| [T1](T1_rounding.md) | 财报的舍入精度决定不了多少道题的答案 | 不需要 | `research/t1_rounding/` |
-| [T2](T2_magnitude.md) | 模型对数字大小的响应曲线 | 需要 | `research/t2_magnitude/` |
-| [T3](T3_combination.md) | 模型怎样合并一好一坏两条消息 | 需要 | `research/t3_combination/` |
-| [T4](T4_cross_model.md) | 便宜模型与贵模型的头部重合（补完原问题） | 需要 | `research/t4_cross_model/` |
+| [T1](../tasks/T1_rounding.md) | 财报的舍入精度决定不了多少道题的答案 | 不需要 | `research/t1_rounding/` |
+| [T2](../tasks/T2_magnitude.md) | 模型对数字大小的响应曲线 | 需要 | `research/t2_magnitude/` |
+| [T3](../tasks/T3_combination.md) | 模型怎样合并一好一坏两条消息 | 需要 | `research/t3_combination/` |
+| [T4](../tasks/T4_cross_model.md) | 便宜模型与贵模型的头部重合（补完原问题） | 需要 | `research/t4_cross_model/` |
 
 ## 第二批（2026-11-16）：只推进 T1
 
@@ -17,9 +17,9 @@ T1 通过了查重和导师的独立复核，是目前唯一值得投入的方�
 
 | 编号 | 题目 | 需要 agent 吗 | 产出目录 |
 |---|---|---|---|
-| [T1a](T1a_law.md) | 把现象写成一条定律，并用零参数预测检验 | 不需要 | `research/t1a_law/` |
-| [T1b](T1b_tighten.md) | 加上文档里的其他信息之后，结论还剩多少 | 不需要 | `research/t1b_tighten/` |
-| [T1c](T1c_models.md) | 这件事对模型的评测有没有实际影响 | 需要 | `research/t1c_models/` |
+| [T1a](../tasks/T1a_law.md) | 把现象写成一条定律，并用零参数预测检验 | 不需要 | `research/t1a_law/` |
+| [T1b](../tasks/T1b_tighten.md) | 加上文档里的其他信息之后，结论还剩多少 | 不需要 | `research/t1b_tighten/` |
+| [T1c](../tasks/T1c_models.md) | 这件事对模型的评测有没有实际影响 | 需要 | `research/t1c_models/` |
 
 ## 第三批（2026-11-17）：最后一轮
 
@@ -27,16 +27,16 @@ T1a 和 T1b 通过，T1c 的结论是"不影响现有判分"。导师已用逐�
 
 | 编号 | 题目 | 需要 agent 吗 | 产出目录 |
 |---|---|---|---|
-| [T1d](T1d_precision.md) | 模型知不知道自己的答案有几位是可信的；另一个 AI 重做语义复核 | 需要 | `research/t1d_precision/` |
+| [T1d](../tasks/T1d_precision.md) | 模型知不知道自己的答案有几位是可信的；另一个 AI 重做语义复核 | 需要 | `research/t1d_precision/` |
 
 ## 第四批（2026-11-17）：把样本上的结论做到整个测试集
 
-T1d 的结论是"模型本来就知道"。导师复算时另外发现：四次运行被判错的几乎是同一批题，复核认为这些判错绝大部分出在基准一侧。短文初稿见 [`paper/finqa_short_v0.md`](../paper/finqa_short_v0.md)。
+T1d 的结论是"模型本来就知道"。导师复算时另外发现：四次运行被判错的几乎是同一批题，复核认为这些判错绝大部分出在基准一侧。短文初稿见 [`paper/finqa_short_v0.md`](finqa_short_paper_draft_v0.md)。
 
 | 编号 | 题目 | 需要 agent 吗 | 产出目录 |
 |---|---|---|---|
-| [T1e](T1e_full_test.md) | 其余 755 道测试题、全部判错的归因、两个标准字段的机械核对、第二个数据集上的舍入审计 | 部分需要 | `research/t1e_full_test/` |
-| [T1f](T1f_novelty.md) | 对首页五个候选 insight 查新 | 不需要（需联网） | `research/t1f_novelty/` |
+| [T1e](../tasks/T1e_full_test.md) | 其余 755 道测试题、全部判错的归因、两个标准字段的机械核对、第二个数据集上的舍入审计 | 部分需要 | `research/t1e_full_test/` |
+| [T1f](../tasks/T1f_novelty.md) | 对首页五个候选 insight 查新 | 不需要（需联网） | `research/t1f_novelty/` |
 
 ## 第五批（2026-11-17）：查新之后
 
@@ -44,7 +44,7 @@ T1f 查新的结论：五条候选里只有"舍入定律与精确计数"没有�
 
 | 编号 | 题目 | 需要 agent 吗 | 产出目录 |
 |---|---|---|---|
-| [T1g](T1g_consequence.md) | 舍入精度在哪里真正造成后果；在 TAT-QA 上先预测再检验 | 前四部分不需要 | `research/t1g_consequence/` |
+| [T1g](../tasks/T1g_consequence.md) | 舍入精度在哪里真正造成后果；在 TAT-QA 上先预测再检验 | 前四部分不需要 | `research/t1g_consequence/` |
 
 ## 共同规则
 

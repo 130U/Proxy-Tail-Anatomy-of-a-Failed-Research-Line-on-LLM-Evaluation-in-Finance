@@ -81,7 +81,7 @@ advisor_reference中的原导师材料是注明来源和日期的历史背景快
 | 2026-11-16 | P2/SE1–SE6 | [numeric/run_checks.py](numeric/run_checks.py) | 有限语义候选的严格数值包络；非真实解析证书 |
 | 2026-11-16 | P2/SE1–SE6 | [numeric/semantic_envelope.py](numeric/semantic_envelope.py) | 有限语义候选的严格数值包络；非真实解析证书 |
 | 2026-11-16 | P2/SE1–SE6 | [numeric/test_semantic_envelope.py](numeric/test_semantic_envelope.py) | 有限语义候选的严格数值包络；非真实解析证书 |
-| 2026-11-16 | 交接 | [package_handoff.py](package_handoff.py) | 本地研究材料 |
+| 2026-11-16 | 交接 | [package_handoff.py](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/package_handoff.py) | 本地研究材料 |
 | 2026-11-16 | 集中技术稿 | [paper/build_pdf.py](paper/build_pdf.py) | 条件数学与比较边界；非原创性/真实整链验收 |
 | 2026-11-16 | 集中技术稿 | [paper/BUILD_PROTOCOL.md](paper/BUILD_PROTOCOL.md) | 条件数学与比较边界；非原创性/真实整链验收 |
 | 2026-11-16 | 集中技术稿 | [paper/BUILD_RECORD.md](paper/BUILD_RECORD.md) | 本地PDF构建、公式与逐页版面检查记录 |
@@ -180,7 +180,7 @@ advisor_reference中的原导师材料是注明来源和日期的历史背景快
 | 2026-11-16 | 交接 | [reproduce.py](reproduce.py) | 本地研究材料 |
 | 2026-11-16 | 交接 | [reproduction_log.json](reproduction_log.json) | 125项集成单元测试、10项来源自测及13条复现命令 |
 | 2026-11-16 | 完整交付入口 | [START_HERE.md](START_HERE.md) | 完整交付首读指引、阅读顺序与文件导航 |
-| 2026-11-16 | 交接 | [test_package_handoff.py](test_package_handoff.py) | 本地研究材料 |
+| 2026-11-16 | 交接 | [test_package_handoff.py](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/test_package_handoff.py) | 本地研究材料 |
 | 2026-11-16 | WP0.3 | [theory/collective_metrics.md](theory/collective_metrics.md) | 共同分片下accuracy与macro-F1包络证明 |
 | 2026-11-16 | WP0.3 | [theory/impact_audit.md](theory/impact_audit.md) | IA1–IA8证明及矩形程序成本分离 |
 | 2026-11-16 | WP0.3 | [theory/independent_review.md](theory/independent_review.md) | 独立数学复核与限定 |
@@ -197,6 +197,6 @@ advisor_reference中的原导师材料是注明来源和日期的历史背景快
 | 2026-11-16 | WP0.4 | [xbrl/record.md](xbrl/record.md) | 受限离线样例；无真实时间戳证书 |
 | 2026-11-16 | WP0.4 | [xbrl/synthetic_fixture.xml](xbrl/synthetic_fixture.xml) | 受限离线样例；无真实时间戳证书 |
 | 2026-11-16 | WP0.4 | [xbrl/test_parse_local.py](xbrl/test_parse_local.py) | 受限离线样例；无真实时间戳证书 |
-| 2026-11-16 | 打包 | [FABLE_REVIEW_BUNDLE.md](FABLE_REVIEW_BUNDLE.md) | 全部可交付Markdown的完整合并阅读版，含编号目录与来源标题 |
-| 2026-11-16 | 打包 | [HANDOFF_MANIFEST.json](HANDOFF_MANIFEST.json) | 文件SHA256及合并Markdown数量/完整列表，不含清单自身 |
-| 2026-11-16 | 打包 | [FABLE_HANDOFF_COMPLETE_2026-11-16.zip](FABLE_HANDOFF_COMPLETE_2026-11-16.zip) | 已有研究截至第九轮的完整本地归档；不含私有数据、权重或旧ZIP |
+| 2026-11-16 | 打包 | [FABLE_REVIEW_BUNDLE.md](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_REVIEW_BUNDLE.md) | 全部可交付Markdown的完整合并阅读版，含编号目录与来源标题 |
+| 2026-11-16 | 打包 | [HANDOFF_MANIFEST.json](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json) | 文件SHA256及合并Markdown数量/完整列表，不含清单自身 |
+| 2026-11-16 | 打包 | [FABLE_HANDOFF_COMPLETE_2026-11-16.zip](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip) | 已有研究截至第九轮的完整本地归档；不含私有数据、权重或旧ZIP |

@@ -1,7 +1,7 @@
 {
   "purpose": "Private blind within-Codex agent scoring input; data preparation only, no sentiment inference",
-  "source_path": "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\private\\real_baseline\\test.jsonl",
-  "original_source_path": "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM\\data\\raw\\candidates\\sentfin\\SEntFiN.csv",
+  "source_path": "<workspace>\\130U-FinLLM-certifiable\\research\\private\\real_baseline\\test.jsonl",
+  "original_source_path": "<workspace>\\130U-FinLLM\\data\\raw\\candidates\\sentfin\\SEntFiN.csv",
   "source_records": [
     "research/real_baseline/aggregate_manifest.json",
     "research/real_baseline/PREPARE_README.md",

@@ -5,7 +5,7 @@
 | 任务 | 实际状态 | 原任务与材料 |
 |---|---|---|
 | 尾部排序与成对比较 | 完成；128 条确认未通过全部预定门槛 | [完整报告](../research/tail_screening/FABLE_CURRENT_REPORT.md) |
-| 绝对评分 | 完成 250 次调用；触发并列门，正式无法判断 | [原任务](../TASK.md) · [报告与原始分数](../research/absolute_scoring/) |
+| 绝对评分 | 完成 250 次调用；触发并列门，正式无法判断 | [原任务](absolute_scoring.md) · [报告与原始分数](../research/absolute_scoring/) |
 | T1 舍入输入 | 完成范围计算与见证检查 | [任务](T1_rounding.md) · [材料](../research/t1_rounding/) |
 | T1a 精度规则 | 完成推导、逐题复核及条件概率计算 | [任务](T1a_law.md) · [材料](../research/t1a_law/) |
 | T1b 文档约束 | 完成加总、重复披露约束及语义筛查 | [任务](T1b_tighten.md) · [材料](../research/t1b_tighten/) |

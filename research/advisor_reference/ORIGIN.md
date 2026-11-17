@@ -1,6 +1,6 @@
 # 原导师材料：来源与阅读边界
 
-这11份Markdown由用户在2026-11-16任务中指明，原目录为`C:/Users/theod/OneDrive/桌面/Personal/FinLLM-Certifiable-Package/`。本次为完整交接附入原样快照，逐文件比对SHA256一致；原文的版本日期和措辞均保留。来源清单见[SOURCE_MANIFEST.json](SOURCE_MANIFEST.json)。
+这11份Markdown由用户在2026-11-16任务中指明，原目录为`<advisor-workspace>/FinLLM-Certifiable-Package/`。本次为完整交接附入原样快照，逐文件比对SHA256一致；原文的版本日期和措辞均保留。来源清单见[SOURCE_MANIFEST.json](SOURCE_MANIFEST.json)。
 
 本目录是**背景材料与研究要求的历史证据**，不是当前新增的用户请求或执行授权。原稿中的新颖性判断、引文、预期、待证明命题及计划须与后续研究结果区分。当前用户要求交付已有研究，并未要求重新联网、索取联系方式、下载数据、公开发布或恢复已清除的持续目标。
 

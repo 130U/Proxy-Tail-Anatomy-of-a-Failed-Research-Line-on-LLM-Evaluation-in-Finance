@@ -4,7 +4,7 @@
 
 ## 背景，从头说
 
-项目在审计金融问答基准 FinQA（Chen 等，EMNLP 2021）。目标是一篇顶会短文。完整的探索链路在仓库首页 [README](../README.md)，短文初稿在 [`paper/finqa_short_v0.md`](../paper/finqa_short_v0.md)，请先读这两个文件。
+项目在审计金融问答基准 FinQA（Chen 等，EMNLP 2021）。目标是一篇顶会短文。完整的探索链路在仓库首页 [README](../README.md)，短文初稿在 [`paper/finqa_short_v0.md`](../archive/finqa_short_paper_draft_v0.md)，请先读这两个文件。
 
 首页用颜色表示研究价值：
 

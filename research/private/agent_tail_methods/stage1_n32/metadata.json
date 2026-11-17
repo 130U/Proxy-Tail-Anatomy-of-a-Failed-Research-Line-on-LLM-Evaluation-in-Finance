@@ -1,7 +1,7 @@
 {
   "purpose": "Blind inputs for within-Codex ranking aggregation and pairwise comparison; preparation only",
-  "source_path": "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\private\\real_baseline\\test.jsonl",
-  "excluded_pilot_metadata_path": "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\private\\agent_tail_pilot\\metadata.json",
+  "source_path": "<workspace>\\130U-FinLLM-certifiable\\research\\private\\real_baseline\\test.jsonl",
+  "excluded_pilot_metadata_path": "<workspace>\\130U-FinLLM-certifiable\\research\\private\\agent_tail_pilot\\metadata.json",
   "text_field": "Unmodified input_text: [ENTITY] target newline [TITLE] headline",
   "sampling": "Uniform 32-family sample without replacement after excluding all earlier 128 families; one uniform member per selected family, sorted by original ID before drawing",
   "population_samples": 2107,

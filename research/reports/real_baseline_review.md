@@ -6,7 +6,7 @@
 
 ## 审查范围与证据边界
 
-实际读取了 [PROTOCOL](../real_baseline/PROTOCOL.md)、[DESIGN_REVIEW](../real_baseline/DESIGN_REVIEW.md)、prepare/train/bootstrap 三套代码及构造测试、[评估实现](../evaluation/evaluate.py)及测试、[打包代码](../package_handoff.py)及测试，以及匿名 [准备清单](../real_baseline/aggregate_manifest.json)和[训练汇总](../experiments/real_baseline/baseline_summary.json)。也查阅了本机 threadpoolctl 实现，核对线程枚举 fallback 的行为。
+实际读取了 [PROTOCOL](../real_baseline/PROTOCOL.md)、[DESIGN_REVIEW](../real_baseline/DESIGN_REVIEW.md)、prepare/train/bootstrap 三套代码及构造测试、[评估实现](../evaluation/evaluate.py)及测试、[打包代码](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/package_handoff.py)及测试，以及匿名 [准备清单](../real_baseline/aggregate_manifest.json)和[训练汇总](../experiments/real_baseline/baseline_summary.json)。也查阅了本机 threadpoolctl 实现，核对线程枚举 fallback 的行为。
 
 没有读取原始 CSV、`research/private/` 下的新闻文本、逐行标签、分区、预测或模型权重；没有人工重标标签，没有检查实际语义事件成员，没有重新训练真实模型。构造测试中的人工字符串与标签不属于真实私有语料。真实数据处理的字节验证和行级不变量由所审代码执行并记录；本审查独立检查代码、公开汇总的内部一致性及公开文件哈希，不能将其写成审查员逐条复核了真实数据。
 

@@ -12,7 +12,7 @@
 
 ## 输入范围、规则和执行记录
 
-所有下列旧文件相对路径都以 `C:/Users/theod/OneDrive/文档/ChatGPT/个人简历优化/130U-FinLLM` 为根。执行前检查旧仓库及各级祖先、涉及的 data/docs/runs 子目录，未发现适用的 AGENTS.md；导师包中的研究规范已另读，但未把其中训练／联网命令作为本轮操作指令。
+所有下列旧文件相对路径都以 `<workspace>/130U-FinLLM` 为根。执行前检查旧仓库及各级祖先、涉及的 data/docs/runs 子目录，未发现适用的 AGENTS.md；导师包中的研究规范已另读，但未把其中训练／联网命令作为本轮操作指令。
 
 FOMC 输入为 `data/raw/expansion_v1/corpora/finance_candidate.jsonl`、同目录 `manifest.json`、10 份选中纪要 HTML 和 8 份对应 discovery HTML 快照。JSONL 实际 120 条、6,977,681 字节，与 manifest 一致；其 SHA256 为 `5a9b357c4b979b5e85dc7622e28c5793068baeb67a48abbd218e81e7d8219a0a`。公布日期分布为 2011-02-16 至 2025-12-30；来源记录声明抓取时间为 `2026-10-11T10:39:20.795698+00:00`。这些数值来自本轮文件核验，不是外部实时查询。
 

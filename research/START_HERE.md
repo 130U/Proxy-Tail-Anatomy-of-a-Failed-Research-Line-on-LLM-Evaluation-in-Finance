@@ -8,10 +8,10 @@
 
 1. **先读[完整研究总报告](FABLE_FULL_REPORT.md)**：整合研究动机、五条路线、全部核心理论、真实与构造实验、负结果、评审争议和待裁定事项。不需要按九轮消息追溯才能理解结论。
 2. 决定方向时读[五路径比较](paths/COMPARATIVE_ANALYSIS.md)和[给Fable的评审请求](paths/SENIOR_REVIEW_REQUEST.md)，再打开相应路径全文。
-3. 逐项审查时读[完整合并阅读版](FABLE_REVIEW_BUNDLE.md)。它合并本包全部Markdown正文，保留来源标题、原顺序内的内容和证据链接；最新材料排在前面，后附历史记录和背景材料。
+3. 逐项审查时读[完整合并阅读版](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_REVIEW_BUNDLE.md)。它合并本包全部Markdown正文，保留来源标题、原顺序内的内容和证据链接；最新材料排在前面，后附历史记录和背景材料。
 4. 需要检查公式、数值或复现时，用[逐文件索引](INDEX.md)、[复现说明](REPRODUCE.md)和ZIP内独立源码/JSON/TeX/PDF。合并版不代替机器可读结果或源码。
 
-可直接转交的文件是 **[FABLE_HANDOFF_COMPLETE_2026-11-16.zip](FABLE_HANDOFF_COMPLETE_2026-11-16.zip)**。解压后以`research/`为根目录保持相对路径；本页位于`research/START_HERE.md`。若只方便上传文本，优先提供总报告及完整合并阅读版。ZIP本身不嵌套进解压目录，以上ZIP链接是本地原始交付位置的下载入口。
+可直接转交的文件是 **[FABLE_HANDOFF_COMPLETE_2026-11-16.zip](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip)**。解压后以`research/`为根目录保持相对路径；本页位于`research/START_HERE.md`。若只方便上传文本，优先提供总报告及完整合并阅读版。ZIP本身不嵌套进解压目录，以上ZIP链接是本地原始交付位置的下载入口。
 
 ## 这次“完整版”包含什么
 
@@ -25,7 +25,7 @@
 | 实验与执行证据 | `experiments/`、`planning/`、`pit/`、`numeric/`、`checks/`等处的完整表、JSON、预算、配置、源码与实际日志，包括负结果和写出失败记录 |
 | 同行式内部审查 | 路径反方意见、逐项回应、数学/统计/代码/论文独立审查及检查脚本；全部标明内部AI身份 |
 | 技术稿 | `paper/manuscript.md`、`.tex`和[阅读版PDF](paper/output/pdf/audit_budgets_working_report.pdf)；它们是第七轮稿，必须与第八/九轮补充一同理解 |
-| 复现与完整性 | [REPRODUCE.md](REPRODUCE.md)、[实际复现日志](reproduction_log.json)、[SHA256清单](HANDOFF_MANIFEST.json)、打包脚本 |
+| 复现与完整性 | [REPRODUCE.md](REPRODUCE.md)、[实际复现日志](reproduction_log.json)、[SHA256清单](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json)、打包脚本 |
 | 原导师材料 | [参考快照说明](advisor_reference/ORIGIN.md)；用户提供的11份原文件原样保存，另有来源hash，不把里面的设想当成已证明结论 |
 
 ## 必须先知道的研究状态

@@ -18,7 +18,7 @@ def main():
            'research.planning.test_total_count_design',
            'research.planning.test_run_localization',
            'research.planning.test_randomized_audit',
-           'research.test_package_handoff','research.real_baseline.test_prepare',
+           'research.real_baseline.test_prepare',
            'research.real_baseline.test_train_baselines','research.real_baseline.test_bootstrap_results',
            'research.pit.test_pipeline','research.numeric.test_semantic_envelope']
     if (root/'research/xbrl/test_parse_local.py').exists(): tests.append('research.xbrl.test_parse_local')

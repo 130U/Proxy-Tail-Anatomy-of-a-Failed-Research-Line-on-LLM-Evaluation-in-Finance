@@ -1,12 +1,12 @@
 {
   "stage": "stage2_n128_sol",
   "selected_branch": "Sol plus four-ranking Borda aggregation per panel",
-  "source_path": "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\private\\real_baseline\\test.jsonl",
+  "source_path": "<workspace>\\130U-FinLLM-certifiable\\research\\private\\real_baseline\\test.jsonl",
   "excluded_metadata_paths": [
-    "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\private\\agent_tail_pilot\\metadata.json",
-    "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\private\\agent_tail_methods\\stage1_n32\\metadata.json"
+    "<workspace>\\130U-FinLLM-certifiable\\research\\private\\agent_tail_pilot\\metadata.json",
+    "<workspace>\\130U-FinLLM-certifiable\\research\\private\\agent_tail_methods\\stage1_n32\\metadata.json"
   ],
-  "instruction_source_path": "C:\\Users\\theod\\OneDrive\\文档\\ChatGPT\\个人简历优化\\130U-FinLLM-certifiable\\research\\private\\agent_tail_methods\\stage1_n32\\rank_instructions.txt",
+  "instruction_source_path": "<workspace>\\130U-FinLLM-certifiable\\research\\private\\agent_tail_methods\\stage1_n32\\rank_instructions.txt",
   "instructions_copied_byte_for_byte": true,
   "sampling": "Uniformly choose 128 different eligible families without replacement from sorted family IDs, then uniformly choose one sorted-ID member per family using a separate fixed stream",
   "population_samples": 2107,

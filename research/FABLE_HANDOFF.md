@@ -6,7 +6,7 @@
 
 **第七轮优先入口：** [决策短笺](paper/FABLE_DECISION_NOTE.md) → [英文技术稿](paper/manuscript.md) / [阅读版PDF](paper/output/pdf/audit_budgets_working_report.pdf) → [独立论文审查](reports/paper_review.md)。核心新发现是：简单总污染数门已达到主例88对114及Ω(r)矩形分离；一般非矩形计数区域又能复现直接风险，故这些结果不能证明位置建模必要。位置收益另有审查后探索构造38对固定总数门48，仍非先例/真实有效性证据。[第七轮报告](reports/2026-11-16-round7.md)和[构建记录](paper/BUILD_RECORD.md)说明范围；LaTeX稿未编译，PDF由本地MathML排版。未将稿件整理当成原创性、G0/G1或项目终态通过。
 
-研究日期：2026-11-15；交付更新：2026-11-16。用户已确认所指资深助手就是 **Fable**。已有五条路径的深度分析、独立反方审查与回应，并加入真实来源任务从头基线、PIT构造及历史性解释修正。**请先读 [路径比较与投入建议](paths/COMPARATIVE_ANALYSIS.md)**，再看所关注路径全文；[INDEX](INDEX.md) 登记所有代码、证明与记录。`FABLE_REVIEW_BUNDLE.md` 是合并阅读版，[2026-11-16归档](FABLE_HANDOFF_COMPLETE_2026-11-16.zip) 含源码和哈希清单，排除私有数据和权重。尚未对外发送。
+研究日期：2026-11-15；交付更新：2026-11-16。用户已确认所指资深助手就是 **Fable**。已有五条路径的深度分析、独立反方审查与回应，并加入真实来源任务从头基线、PIT构造及历史性解释修正。**请先读 [路径比较与投入建议](paths/COMPARATIVE_ANALYSIS.md)**，再看所关注路径全文；[INDEX](INDEX.md) 登记所有代码、证明与记录。`FABLE_REVIEW_BUNDLE.md` 是合并阅读版，[2026-11-16归档](https://github.com/130U/proxy-tail/blob/closeout-2026-11-17/research/FABLE_HANDOFF_COMPLETE_2026-11-16.zip) 含源码和哈希清单，排除私有数据和权重。尚未对外发送。
 
 **建议先做P1的审计成本—统计量宽度问题，并同时检验P2是否有非冗余任务；完整旗舰尚未选定。** 五份报告对应四个研究家族：03是01的数学分支；02与05共享解析风险。每篇都有目标量、先例边界、候选命题、最强简单基线、本地数据条件、预算估计与否决规则。
 
