@@ -1,52 +1,132 @@
-# Proxy Tail
+# Proxy Tail：探索链路图
 
-**What does a cheap model miss in the tail? / 便宜模型在尾部漏掉什么？**
+更新：2026-11-17。本页是整个项目的地图：做过什么、为什么做、得到什么、还没做什么。
 
-研究问题：用便宜模型筛选金融文本，要留住参考模型最极端的固定份额，名单需要放大多少？参考模型是一份比较排序，不是客观真值。
+**当前目标：** 一篇 ACL 短文。初稿：[paper/finqa_short_v0.md](paper/finqa_short_v0.md)。
 
-本仓库保存截至2026-11-16的完整研究：理论推导与反例、四支文献排重、词法基线、实际agent实验、失败路径、原始输入/输出、分析代码、内部复核，以及此前五条候选路径与九轮历史研究。当前研究没有训练模型或调用外部付费模型API；历史词法模型产物保留用于复算。
+**一句话：** 模型在 FinQA 上已经到顶，剩下的"错误"几乎都出在基准一侧；即使把标准答案全改对，财报数字的舍入精度也定不了约十分之一的题的答案。
 
-## 先读这些结果
+## 图例
 
-- **最新实验已完成（2026-11-16）：** [绝对评分 TASK](TASK.md) 的 1,000 条 × 八轮及两组同批对照全部执行，共 250 次评分调用、10,000 个原始分数。[给 Fable 的一页结论](research/absolute_scoring/FABLE_ONE_PAGE.md) · [完整报告](research/absolute_scoring/FABLE_REPORT.md) · [六面板图](research/absolute_scoring/results/stability.png) · [复算说明](research/absolute_scoring/REPRODUCE.md)。四次平均的 10% 双尾重合点估计约 90%–92%；**正式判定为无法判断**，因为第六、七轮正面边界同分 22 人超过预定 20 人门槛。原始分数、区间、失败原因及调度恢复细节全部保留。下列旧数字属于此前的排序与成对比较实验。
-- [给Fable的一页结论](research/tail_screening/FABLE_ONE_PAGE.md) / [PDF](research/tail_screening/output/pdf/FABLE_ONE_PAGE.pdf)
-- [当前完整报告](research/tail_screening/FABLE_CURRENT_REPORT.md) / [6页PDF](research/tail_screening/output/pdf/FABLE_CURRENT_REPORT.pdf)
-- [全部交付材料入口](research/FABLE_DELIVERY_README.md)
-- [原始完整交付ZIP](research/FABLE_FULL_DELIVERY_2026-11-16.zip)：此前已交付的371文件快照；仓库另补充来源材料与路径适配。
+| 标记 | 含义 |
+|---|---|
+| 🟢 | 已完成，导师已用逐题记录复算 |
+| 🔴 | 未完成，或新加的任务 |
+| 🟡 | 候选 insight：检索层面没看到有人做过，**尚待查新确认** |
+| ⚪ | 已关闭的方向（已有先例，或结果不值得继续） |
 
-**已执行64次评分agent任务，覆盖三批共288个不同词法族。** 另有两次496对整批尝试没有产生输出，已保留记录。重复评分不是新的独立金融样本。
+## 链路图
 
-| 测量路线 | 全新32条第一阶段 | 后续 |
+```mermaid
+flowchart TD
+    classDef done fill:#2da44e,color:#fff,stroke:#1a7f37
+    classDef todo fill:#cf222e,color:#fff,stroke:#a40e26
+    classDef gold fill:#d4a72c,color:#000,stroke:#9a6700
+    classDef closed fill:#8c959f,color:#fff,stroke:#6e7781
+
+    H0["九轮'可认证模型'研究<br/>结论：审计数学是标准工具"]:::closed
+    H1["便宜模型在尾部漏掉什么<br/>结论：已有先例，实验无法判断"]:::closed
+    T2["T2 模型对数字大小的响应<br/>已有先例"]:::closed
+    T3["T3 模型怎样合并好坏消息<br/>结论：按相加合并"]:::closed
+
+    T1["T1 财报舍入精度定不了多少题<br/>196/1147 = 17.1%"]:::done
+    T1a["T1a 写成定律并零参数检验<br/>5337 题无一判错"]:::done
+    T1b["T1b 否决检验：加上文档其他信息<br/>只救回 1 题"]:::done
+    T1c["T1c 对模型判分有没有影响<br/>没有"]:::done
+    T1d["T1d 模型知不知道答案有几位可信<br/>提醒后 98% 正确"]:::done
+    REV["两个 AI 独立复核语义<br/>139 → 123"]:::done
+
+    G1["定律 + 精确计数<br/>10.7% 的题文档定不了答案"]:::gold
+    G2["文档内的冗余信息救不回来"]:::gold
+    G3["不问时打印的位数与真实精度无关<br/>一问就会"]:::gold
+    G4["四次运行判错的是同一批题<br/>63 道全错，316 道全对"]:::gold
+    G5["两个标准字段自相矛盾<br/>6.4% 的题"]:::gold
+
+    T1e1["T1e-1 其余 755 道测试题<br/>两个模型"]:::todo
+    T1e2["T1e-2 全部判错按清单归因"]:::todo
+    T1e3["T1e-3 独立复现机械检查"]:::todo
+    T1e4["T1e-4 在 TAT-QA 上重做舍入审计"]:::todo
+    T1f["T1f 对五个候选 insight 查新"]:::todo
+    X1["换一家的模型验证<br/>Google 等"]:::todo
+    X2["人工抽查 20 个归因"]:::todo
+    P["短文定稿"]:::todo
+
+    H0 --> H1 --> T1
+    H1 --> T2
+    H1 --> T3
+    T1 --> T1a --> G1
+    T1 --> T1b --> G2
+    T1 --> T1c
+    T1b --> REV --> G1
+    T1c -->|"负结果：换个问法"| T1d --> G3
+    T1c -->|"副产品：68 个判错的归因"| G4
+    T1d -->|"导师复算逐题表"| G4
+    G4 --> G5
+    G4 --> T1e1 --> T1e2
+    G5 --> T1e3
+    G1 --> T1e4
+    G1 & G2 & G3 & G4 & G5 --> T1f
+    G4 --> X1
+    T1e2 --> X2
+    T1e1 & T1e2 & T1e3 & T1e4 & T1f --> P
+```
+
+## 每一步的目的和结果
+
+### 主线
+
+| | 步骤 | 为什么做 | 结果 | 材料 |
+|---|---|---|---|---|
+| 🟢 | **T1** 舍入精度 | 基准把表里的数字当精确值，但财报数字是舍入过的。想知道有多少题的答案因此定不下来 | 测试集 196/1,147 道（17.1%）存在符合显示精度、却让答案超出 1% 容差的输入 | 分支 `task/t1` |
+| 🟢 | **T1a** 定律 | 一个计数不够，需要一条能事先预测的规则 | 两数须相差约 100 个末位单位，增长率才精确到 1%。不带拟合参数，5,337 题无一判错。先验预测 41.5%，实测 40.5% | 分支 `task/t1a` |
+| 🟢 | **T1b** 否决检验 | 文档里还有重复披露和加总关系，可能把答案重新确定下来。如果能，T1 就不成立 | 511 条加总关系和 21 处重复披露只救回 1 道题。语义有问题的题剔除后剩 139 道 | 分支 `task/t1b` |
+| 🟢 | **T1c** 对判分的影响 | 如果不影响模型评测，T1 只是一条注记 | **负结果。** 标准答案和模型用的是同一批显示数字，判分不受影响。副产品：68 个判错里大部分看起来不是模型的错 | 分支 `task/t1c` |
+| 🟢 | **T1d** 模型知不知道精度 | T1c 是负结果，换一个现有基准测不了的问题：模型能否说出自己的答案有几位可信 | 提醒"数字是舍入过的"之后，98.4% 的回答给出正确区间；教规则没有额外帮助。第二个 AI 复核后 139 → 123 | 学生本地 `proxy-tail-t1d`，尚未推送 |
+| 🔴 | **T1e** 做到整个测试集 | 下面的 🟡4 目前只在 392 道分层样本上成立，审稿人不会接受 | 未做 | [任务](tasks/T1e_full_test.md) |
+| 🔴 | **T1f** 查新 | 🟡 只是"我没检索到"，需要另一个模型认真查一遍 | 未做 | [任务](tasks/T1f_novelty.md) |
+| 🔴 | 换一家的模型 | 现在所有运行都来自 OpenAI。别家的模型如果也在同一批题上被判错，证据强得多 | 未做，等 Google 等的 token | T1e 可选项 |
+| 🔴 | 人工抽查 20 个归因 | 归因全是 AI 做的，审稿人一定会问 | 未做，约 20 分钟 | T1e 可选项 |
+| 🔴 | 短文定稿 | — | 初稿已写，带 † 的数字等 T1e | [初稿](paper/finqa_short_v0.md) |
+
+### 候选 insight（🟡，待查新）
+
+| | 内容 | 证据 | 我对新颖性的判断 |
+|---|---|---|---|
+| 🟡1 | **舍入定律在基准上的检验和精确计数。** 至少 10.7% 的测试题，财报本身定不了 1% 以内的答案；增长率题里 40% | T1、T1a、T1b、两次语义复核 | 数学是旧的。在金融问答基准上做这个测量，没检索到 |
+| 🟡2 | **文档内的冗余信息救不回来。** | T1b：只救回 1/196 | 没检索到 |
+| 🟡3 | **模型知道精度但不主动用。** 不问时打印的位数与真实精度的相关为 0.02；提醒一句后区间 98% 正确 | T1d | 没检索到用精确区间做真值的测量 |
+| 🟡4 | **判错的是同一批题。** 四次运行都在 81%–83%，63 道四次全错，316 道全对，只有 13 道不一致；两次复核把 68 个判错里的 55 个归到基准一侧，0 个归为明确的模型错误 | T1c、T1d，导师复算 | "数据集有噪声"已有人做（FinanceReasoning，ACL 2025）。逐题层面"换模型也是同一批题"没检索到。**只在 392 道样本上成立** |
+| 🟡5 | **两个标准字段自相矛盾。** 人工写的答案与程序算出的值在 6.4% 的题上矛盾；有 12 个判错案例里模型等于前者、不等于后者 | 导师在全部 8,281 道题上的机械检查 | 没检索到，但这类检查很容易做，被人做过的可能性不小 |
+
+### 不算 insight 的东西
+
+- 舍入规则背后的数学：相近的数相减会丢有效数字，教科书内容。
+- "金融问答数据集有标注错误"：已知。
+- T1c 的负结果：如实写进文章，但不是卖点。
+
+### 已关闭的方向
+
+| | 方向 | 为什么关闭 |
 |---|---|---|
-| 成对比较 | Luna、Sol均未通过 | 保留3,968个判断及失败原因 |
-| 四次排序聚合 | Luna未通过，Sol单模型通过 | Sol扩大到全新128条 |
-| Sol四次聚合确认 | 128条上八项主检查七项通过 | 负面10%一个方向召回11/14=78.6%，略低于80%；按冻结规则不进入512条 |
+| ⚪ | 九轮"可认证的金融语言模型" | 证书框架本身不产生有意思的结论；审计设计的数学是标准工具的组合。历史材料在 `research/` |
+| ⚪ | 便宜模型在尾部漏掉什么 | 加宽定律、copula 建模级联、带召回约束的代理筛选都已有先例；agent 实验按预定规则判为"无法判断"。旧首页：[research/README_tail_screening_2026-11-16.md](research/README_tail_screening_2026-11-16.md) |
+| ⚪ | T2 模型对数字大小的响应 | 已有先例 |
+| ⚪ | T3 模型怎样合并好坏消息 | 结论是"按相加合并"，没有可继续的现象。分支 `task/t3` |
+| ⚪ | T4 便宜与贵模型的头部重合 | 尾部方向关闭后不再需要 |
 
-确认集总体Spearman为0.9929，最大90%召回放行倍数1.25，最大边界同分扩张16.7%。聚合有改善，但接近门槛的未通过不能改判成功，也不证明总体显著失效或原尾部假说错误。独立实现已复算关键结果一致。[第一阶段](research/tail_screening/stage1_conclusion.md) · [128条确认](research/tail_screening/stage2_report.md) · [内部AI复核](research/tail_screening/measurement_peer_review.md)
+## 现在最不确定的三件事
 
-![新128条确认的聚合稳定性](research/tail_screening/validation_stage2.png)
+欢迎直接在这三点上提意见。
 
-## 数学与新颖性边界
+1. **🟡4 能不能撑到整个测试集。** 如果 755 道新题上出现相当数量的明确模型错误，"模型已到顶"这个主结论要改。
+2. **哪个 🟡 是文章的中心。** 🟡4 更有分量但新颖性只有一部分；🟡1 最新但 T1c 说明它不影响判分。初稿现在是用 🟡4 开头、🟡1 做中心。
+3. **只有一个基准。** T1e-4 在 TAT-QA 上重做舍入审计，是为了回应这一点。
 
-令qγ(p)为留住参考最高p比例中份额γ所需的代理放行比例。明确条件下的Laplace条件极值假设给出 **qγ(p)=p^{α+o(1)}**，一般不能直接写成C p^α；**α=1仍可能有发散放行倍数**。正相关高斯的α=ρ²已有先例，ρ指正态分数相关。多级α相乘还需联合或Markov条件。
-
-Copula建模LLM级联、极端预测的尾依赖、召回约束代理筛选均已有研究。本仓库没有声称已建立新的LLM尾部定律、估计渐近α或验证投资价值。[完整推导](research/tail_screening/theory.md) · [文献排重](research/tail_screening/literature.md)
-
-最初首页原文完整保存在[初始研究说明](research/advisor_reference/proxy_tail_initial_README.md)，其猜想与计划按当时状态阅读。
-
-## 原始细节与历史材料
+## 目录
 
 | 内容 | 位置 |
 |---|---|
-| 冻结协议、聚合公式及复算 | [方法协议](research/tail_screening/methods_protocol.md)、[聚合定义](research/tail_screening/aggregation_math.md)、[复算说明](REPRODUCE.md) |
-| 旧128条开发：两版提示与八份原始评分 | [agent_tail_pilot](research/private/agent_tail_pilot/) |
-| 新32条：完整pair和rank输入、原始判断、映射及种子 | [stage1_n32](research/private/agent_tail_methods/stage1_n32/) |
-| 新128条：八份输入与八份原始排序 | [stage2_n128_sol](research/private/agent_tail_methods/stage2_n128_sol/) |
-| 来源样本、划分、保存的词法模型及逐条预测 | [real_baseline](research/private/real_baseline/) |
-| 此前五条候选路径及九轮历史研究 | [五路径比较](research/paths/COMPARATIVE_ANALYSIS.md)、[历史总报告](research/FABLE_FULL_REPORT.md)、[逐文件索引](research/INDEX.md) |
-| 原导师材料、决策与审查 | [advisor_reference](research/advisor_reference/)、[reports](research/reports/) |
-| 审计引用的旧项目、数据许可与来源快照 | [source_materials](source_materials/README.md) |
-
-`private`是先前本地目录名；本次按项目所有者要求纳入此私有仓库。旧元数据中的本机绝对路径只记录来源，不是凭据。各阶段报告、ZIP和清单保持历史身份，不把未执行计划改写成成果。
-
-材料供Theodore转交Fable。内部AI复核不等于Fable本人或外部真人审稿。
+| 任务文件 | [tasks/](tasks/README.md) |
+| 短文初稿 | [paper/finqa_short_v0.md](paper/finqa_short_v0.md) |
+| 各轮结果 | 分支 `task/t1`、`task/t1a`、`task/t1b`、`task/t1c`、`task/t3` |
+| 历史研究 | [research/](research/README.md) |
