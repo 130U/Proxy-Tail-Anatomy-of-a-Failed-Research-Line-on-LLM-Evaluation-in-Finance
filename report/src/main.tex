@@ -310,7 +310,7 @@ Advisors, reviewers and funders & Pre-registration, committed predictions and fa
 
 \paragraph{A Verified Benchmark-Precision Note.} For financial QA with displayed inputs and a 1\% tolerance, a zero-parameter first-order rule predicts which questions the displayed precision cannot determine. On FinQA, 123 of 1,147 test questions (10.7\%) remain undetermined after duplicate disclosures, sum constraints and two independent AI semantic reviews (139 under the first review alone). On growth-rate questions the rule's prior prediction was 41.5\% against 40.5\% measured. Out of sample on TAT-QA, the frozen prediction was 24.5\% and the measurement 20.5\% (5,261 questions, 76\% of the arithmetic questions). Among the undetermined questions the sign of the answer is always determined; only its size is not.
 
-\paragraph{A Negative Result about Consequences.} This indeterminacy changes almost no official score (0.15\% of FinQA and 0.35\% of TAT-QA scored items, all explained by output digits). Filings are self-consistent at their displayed precision (0 of 982 printed differences inconsistent; 504 of 511 sum relations with zero residual), so independent-rounding probability models should not be used to estimate real rates.
+\paragraph{A Negative Result about Consequences.} This indeterminacy changes no official score: the few scores that precision touches (0.15\% of FinQA and 0.35\% of TAT-QA scored items) are all explained by output digits. Filings are self-consistent at their displayed precision (0 of 982 printed differences inconsistent; 504 of 511 sum relations with zero residual), so independent-rounding probability models should not be used to estimate real rates.
 
 \paragraph{Measurement Facts for LLM Scoring.} One model scoring financial headlines on a 0--100 scale has single-run reliability 0.975; its top-10\% list overlaps 84--87\% with an independent run and 91--92\% after averaging four runs, close to the Spearman--Brown prediction; same-batch scores are slightly more correlated than cross-batch scores. Ranking-based measurements of the same model were less stable in the tails.
 
@@ -383,7 +383,7 @@ The research was directed by an LLM advisor (Claude) and executed by LLM agents 
 
 \section*{Data and Code}
 
-All task briefs, prompts, raw model outputs, analysis code, pre-registered protocols and reviews are available at \url{\repourl}. The state of the repository at closeout, before translation into English, is preserved under the repository's closeout tag.
+All task briefs, prompts, raw model outputs, analysis code, pre-registered protocols and reviews are available at \url{\repourl}. The state of the repository at closeout, in its original language, is preserved at commit \href{\repourl/tree/e4b7bc061976bcdd2f48c437172b034351ac7e77}{\texttt{e4b7bc0}}.
 
 \bibliography{references}
 

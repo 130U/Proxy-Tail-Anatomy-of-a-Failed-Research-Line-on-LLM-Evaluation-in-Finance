@@ -3,11 +3,12 @@
 Material from the earlier project that the Stage A reports and recomputations refer to. Virtual
 environments, account settings and unrelated personal files were not copied.
 
-**`130U-FinLLM/`** is a snapshot of [130U/130U-FinLLM](https://github.com/130U/130U-FinLLM) at commit
-`8e4dd0b33c95ac2ac1a6015eba6f2dfafe5c1254`, the version used for the claims audit, together with
-locally saved source data and supplementary files. It is a source snapshot, not a full Git history.
-Every original text listed in [`research/claims_sources.json`](../research/claims_sources.json) was
-checked byte for byte against it (before translation).
+**`130U-FinLLM/`** is a snapshot of the author's earlier financial language-model project,
+[130U/RESEARCH-Financial-Large-Language-Model](https://github.com/130U/RESEARCH-Financial-Large-Language-Model),
+as used for the claims audit, together with locally saved source data and supplementary files. It is
+a source snapshot, not a full Git history. Every original text listed in
+[`research/claims_sources.json`](../research/claims_sources.json) was checked byte for byte against it
+in the original language.
 
 **`source_audit/`** holds the local versions actually read by the historical FOMC and rights review,
 because four documents differ from the claims-audit version. It contains the 120 FOMC minutes as

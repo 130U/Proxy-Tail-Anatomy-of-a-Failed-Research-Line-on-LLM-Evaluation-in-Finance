@@ -51,12 +51,11 @@ The second command rewrites the derived audit JSON (its time fields will change)
 
 - **Paths.** Some T1-series scripts default to sibling working directories that existed on the
   student's machine (for example `proxy-tail-t1a/`). Pass the documented `--t1-dir`-style arguments,
-  or point them at the matching folder under `research/`. Absolute paths in run records were
-  replaced by placeholders such as `<workspace>`.
-- **Hashes.** Several records pin other files by SHA-256 (protocols, proof notes, prompts). These
-  hashes refer to the original Chinese bytes. After translation, checks that verify them fail; run
-  those checks on the tag `closeout-2026-11-17`.
+  or point them at the matching folder under `research/`. Run records show local paths as
+  placeholders such as `<workspace>`.
+- **Hashes.** Several records pin other files by SHA-256 (protocols, proof notes, prompts). The
+  hashes refer to the original-language files; run those checks on commit
+  [`e4b7bc0`](https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/tree/e4b7bc061976bcdd2f48c437172b034351ac7e77).
 - **Data.** FinQA and TAT-QA are downloaded by `research/t1_rounding/download_inputs.py` and the T1g
   scripts; they are not stored in the repository.
-- **Figures.** Reading-copy PDFs of the Chinese reports were removed together with their renderer;
-  the Markdown files are the source.
+- **Reports.** The Markdown files are the source of the stage reports.

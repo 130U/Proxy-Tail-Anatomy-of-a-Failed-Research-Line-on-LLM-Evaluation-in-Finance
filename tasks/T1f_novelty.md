@@ -4,7 +4,7 @@ Branch `task/t1f`, directory `research/t1f_novelty/`. Needs internet searches. T
 
 ## Background, from the start
 
-The project is auditing the financial QA benchmark FinQA (Chen et al., EMNLP 2021). The goal is a short paper at a top conference. The full exploration map is on the repository homepage [README](../README.md), and the short-paper draft is at [`paper/finqa_short_v0.md`](../archive/finqa_short_paper_draft_v0.md); read these two files first.
+The project is auditing the financial QA benchmark FinQA (Chen et al., EMNLP 2021). The goal is a short paper at a top conference. The full exploration map is on the repository homepage [README](../archive/README-before-closeout.md), and the short-paper draft is at [`paper/finqa_short_v0.md`](../archive/finqa_short_paper_draft_v0.md); read these two files first.
 
 The homepage uses colours to show research value:
 

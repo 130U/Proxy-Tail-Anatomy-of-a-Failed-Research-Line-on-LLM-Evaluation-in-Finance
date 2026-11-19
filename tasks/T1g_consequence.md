@@ -4,7 +4,7 @@ Branch `task/t1g`, directory `research/t1g_consequence/`. Only read the results 
 
 ## Background, from the start
 
-The project is auditing financial QA benchmarks. The full exploration map is on the repository homepage [README](../README.md); read it first. So far only one item stands:
+The project is auditing financial QA benchmarks. The full exploration map is on the repository homepage [README](../archive/README-before-closeout.md); read it first. So far only one item stands:
 
 > The numbers in filings are rounded. Treating each input as "displayed value ± half a last-digit unit" and computing the exact range of the gold solution, for at least 10.7% of FinQA test questions the answer cannot be determined to 1%. A rule with no fitted parameters predicts which questions this applies to: two numbers must differ by at least about 100 last-digit units for the growth rate to be exact to 1%.
 

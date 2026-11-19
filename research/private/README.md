@@ -1,4 +1,4 @@
-# The `private/` Folder (Historical Name)
+# The `private/` Folder
 
 The name comes from the student's local workspace, where row-level files were kept out of shared
 bundles. Nothing here is confidential; the folder is public with the rest of the repository.

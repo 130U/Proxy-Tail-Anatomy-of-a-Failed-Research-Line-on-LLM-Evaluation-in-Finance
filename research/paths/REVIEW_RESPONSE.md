@@ -40,7 +40,7 @@ What is shared: do P1's narrow mathematical question and the source gate first; 
 
 The first review added [review_checks.py](review_checks.py) and its [JSON](review_checks.json): 1,008 R1 rational attainability cases and 1,024 D1 stratified miss-probability cases all passed. These are finite mathematical checks; there was no R2 LP run, training, or historical audit. The existing 36 integration tests are in the [round 2 reproduction log](../reproduction_log.json), and are not counted again as new experiments in this round.
 
-The limited incremental review after the authors' revisions is appended at the end of the original review, and the file identities are finally fixed by the [handoff manifest](https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/closeout-2026-11-17/research/HANDOFF_MANIFEST.json). I01–I07, as report-quality issues, have explicit responses; the source, semantic, sample, precedent, and non-vacuity gates within them stay open as research questions, and "responded to" cannot be rewritten as "resolved".
+The limited incremental review after the authors' revisions is appended at the end of the original review, and the file identities are finally fixed by the [handoff manifest](https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/e4b7bc061976bcdd2f48c437172b034351ac7e77/research/HANDOFF_MANIFEST.json). I01–I07, as report-quality issues, have explicit responses; the source, semantic, sample, precedent, and non-vacuity gates within them stay open as research questions, and "responded to" cannot be rewritten as "resolved".
 
 ## To the senior assistant the user referred to
 

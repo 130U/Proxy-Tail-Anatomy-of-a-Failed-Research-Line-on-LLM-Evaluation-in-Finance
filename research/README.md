@@ -21,19 +21,20 @@ tool and the strongest simple baselines matched the elaborate designs.
 |---|---|
 | [advisor_reference/](advisor_reference/) | The advisor's original brief, memo, literature map, research questions, work packages and decision log |
 | [paths/](paths/) | The five research paths, their comparison, decision criteria and internal reviews |
-| [theory/](theory/) | Proof notes: certificate basics, collective metrics, impact audits, localization value, randomized audits, point-in-time non-interference, semantic envelopes |
+| [theory/](theory/) | Proof notes: certificate basics, collective metrics, impact audits, localisation value, randomised audits, point-in-time non-interference, semantic envelopes |
 | [reports/](reports/) | Round-by-round reports (rounds 1–9) and topic reviews |
 | [literature/](literature/), [answers/](answers/) | Literature ledger, status of the 32 research questions, and written answers to seven of them |
-| [planning/](planning/) | Audit-design computations: threshold, localization and randomization tables |
+| [planning/](planning/) | Audit-design computations: threshold, localisation and randomisation tables |
 | [real_baseline/](real_baseline/), [experiments/](experiments/) | The SEntFiN entity-sentiment baseline (protocol, preparation, reviews) and experiment outputs |
 | [local/](local/), [certificates/](certificates/), [checks/](checks/), [evaluation/](evaluation/) | Synthetic foundation experiments, the collective-metric checker, theory checks, reconstruction of the older model's metrics |
 | [numeric/](numeric/), [pit/](pit/), [xbrl/](xbrl/), [data/](data/) | Numeric-envelope checks, point-in-time pipeline checks, a restricted local XBRL parser, the FOMC source audit and compute budget |
 | [paper/](paper/) | The English working report from round 7 and its build records |
-| [claims_audit.md](claims_audit.md), [claims_sources.json](claims_sources.json) | Audit of 46 public claims of the earlier 130U-FinLLM project |
+| [claims_audit.md](claims_audit.md), [claims_sources.json](claims_sources.json) | Audit of 46 public claims of the author's earlier financial language-model project |
 | [FABLE_HANDOFF.md](FABLE_HANDOFF.md), [REPRODUCE.md](REPRODUCE.md), [reproduce.py](reproduce.py), [reproduction_log.json](reproduction_log.json) | Handoff notes and the offline reproduction runner for Stage A |
 
-The Stage A workspace was created from commit `8e4dd0b` of
-[130U/130U-FinLLM](https://github.com/130U/130U-FinLLM). Its material treated the advisor's plan as a
+The Stage A workspace was created from the author's earlier financial language-model project,
+[130U/RESEARCH-Financial-Large-Language-Model](https://github.com/130U/RESEARCH-Financial-Large-Language-Model).
+Its material treated the advisor's plan as a
 proposal to be checked, not as established results. The student worked offline after the first
 round, so no SEC data were downloaded. All scripts run offline and download nothing.
 
@@ -91,5 +92,5 @@ T1e (extending to the full test set) was planned and not run; its brief is in
 - "Pass", "fail", "continue", "stop" and "inconclusive" refer to gates written down before the data
   were seen. Gates were never moved after the fact.
 - Numbers marked as AI review or AI adjudication come from AI models, not human annotators.
-- Some files record SHA-256 hashes of other files. They refer to the original (Chinese) bytes, which
-  are preserved under the repository's closeout tag (`closeout-2026-11-17`).
+- Some files record SHA-256 hashes of other files. They refer to the original-language files, kept at
+  commit [`e4b7bc0`](https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/tree/e4b7bc061976bcdd2f48c437172b034351ac7e77).
