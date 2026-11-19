@@ -222,7 +222,7 @@ Antichains can be exponentially large. After their construction, a straightforwa
 
 minimizing $`\sum_{i=1}^{r-1}a_i+ra_r`$. The corresponding allocation consists of the displayed prefix followed by $`r-1`$ additional copies of $`a_r`$.
 
-**Proof.** Symmetry permits sorting any allocation increasingly. Its worst miss probability uses the first $`r`$ entries, whose miss factors are largest. Lower every subsequent entry to the $r$th entry. The largest $`r`$ factors and feasibility remain unchanged, while cost weakly decreases. Hence an optimum has the claimed form, and every enumerated form is a legal design. There are $`\binom{N+r}{r}`$ such tuples. End of proof.
+**Proof.** Symmetry permits sorting any allocation increasingly. Its worst miss probability uses the first $`r`$ entries, whose miss factors are largest. Lower every subsequent entry to the $`r`$th entry. The largest $`r`$ factors and feasibility remain unchanged, while cost weakly decreases. Hence an optimum has the claimed form, and every enumerated form is a legal design. There are $`\binom{N+r}{r}`$ such tuples. End of proof.
 
 All audit probabilities, costs, and interval comparisons in these experiments use exact rational or integer arithmetic. The balanced formula involving a root is implemented by integer inequalities rather than floating-point rounding. Equal costs and equal stratum sizes are essential for the symmetry reduction.
 

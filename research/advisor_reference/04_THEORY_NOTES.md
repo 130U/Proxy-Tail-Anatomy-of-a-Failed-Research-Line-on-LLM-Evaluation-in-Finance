@@ -210,9 +210,9 @@ S(F_{\text{clean}})\in\big[S_{\text{low}}(K_u),\ S_{\text{high}}(K_u)\big].
 
 | Permission type | Specification |
 |---|---|
-| INV$(\eta)$: distribution-preserving | $`\mathrm{TV}\big(q(\cdot\mid x),q(\cdot\mid gx)\big)\le\eta`$ |
+| INV$`(\eta)`$: distribution-preserving | $`\mathrm{TV}\big(q(\cdot\mid x),q(\cdot\mid gx)\big)\le\eta`$ |
 | LBL: label-preserving | $`\arg\max q(\cdot\mid gx)=\arg\max q(\cdot\mid x)`$ |
-| REL$(a\to b,\gamma)$: relabel | $`D(x,gx)\ge\gamma`$, where $`D`$ is the log-odds difference defined in the repository |
+| REL$`(a\to b,\gamma)`$: relabel | $`D(x,gx)\ge\gamma`$, where $`D`$ is the log-odds difference defined in the repository |
 | **UP (new)** | $`q(\cdot\mid gx)\succeq_{\text{FOSD}} q(\cdot\mid x)`$, i.e. for all $`i`$, $`\sum_{j\ge i}q(j\mid gx)\ge\sum_{j\ge i}q(j\mid x)`$ |
 | FREE | No constraint |
 
