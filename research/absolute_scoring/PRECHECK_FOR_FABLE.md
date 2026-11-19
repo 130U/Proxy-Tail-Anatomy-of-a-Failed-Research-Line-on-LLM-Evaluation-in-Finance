@@ -2,7 +2,7 @@
 
 Later decision: the user chose "continue scoring as a replication and stress test", and all 250 scoring calls have now been completed. The original judgment from the literature-gate stage and the zero-scoring status at that time are kept below. For the final results see the [one-page summary](FABLE_ONE_PAGE.md) and the [full report](FABLE_REPORT.md); the basis for execution is the [frozen protocol](protocol.md).
 
-2026-11-16. Based on [the fixed version of TASK.md](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/41886de0da24517d4e8afb4341c4c1d7953a6ec8/TASK.md). In this round, three AI research branches separately checked the LLM literature, the reliability mathematics and the execution design. This is material for Fable, not a review that Fable has already given.
+2026-11-16. Based on [the fixed version of TASK.md](https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/41886de0da24517d4e8afb4341c4c1d7953a6ec8/TASK.md). In this round, three AI research branches separately checked the LLM literature, the reliability mathematics and the execution design. This is material for Fable, not a review that Fable has already given.
 
 **Conclusion: the mathematical skeleton of the new question and several key measurements already have direct prior work; we have not confirmed that any one paper has done the full combination of experiments in this question. We recommend handing this finding to Fable first, and only then deciding whether to spend about 200–250 scoring calls.** There is currently no evidence for listing this formula, or "an LLM's own top list is unstable", as a new contribution. If the work continues, the reasonable framing is a replication of a known baseline under a specific scoring protocol, plus a test of its failure mechanisms.
 
@@ -24,15 +24,15 @@ The following are mathematical consequences drawn during this check. They do not
 
 Under the parallel measurement model S_j=T+ε_j, with errors uncorrelated with T, equal error variances across rounds and errors mutually uncorrelated, the correlation between two disjoint m-round means is
 
-\[
+```math
 r_m=\frac{mr}{1+(m-1)r}.
-\]
+```
 
 If the two standardized means are jointly normal, the threshold flip rate F can be obtained by integration from r_m. For two sets with the same marginal selection fraction p, the top-list self-overlap H satisfies
 
-\[
+```math
 H=1-\frac{F}{2p}.
-\]
+```
 
 The second formula is only a set identity. Rewriting an existing reliability formula and a Gaussian threshold model as top-list overlap is not enough to make a new theorem. When ties make the two lists different in size, this equal-size formula also cannot be applied directly.
 

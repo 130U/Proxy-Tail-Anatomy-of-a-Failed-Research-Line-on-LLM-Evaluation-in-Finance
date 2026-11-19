@@ -28,153 +28,182 @@ The available local review inspected the full texts recorded under L02--L04 and 
 ## 3. Model, audit, and comparator assumptions
 
 Let a finite set of document versions be partitioned into disjoint strata:
-$$
-W=\bigsqcup_{h=1}^{d}W_h,\qquad |W_h|=N_h\ge1.
-$$
-The unknown contamination set is a fixed subset $C^*\subseteq W$. Before sampling, choose integers $0\le n_h\le N_h$. Independently across strata, sample $n_h$ documents uniformly without replacement. Every sampled document must be correctly classified as contaminated or clean. An unresolvable historical version is not a verified clean observation. Costs are fixed positive values $c_h$ per audited document, giving total cost $\sum_h c_hn_h$.
 
-There are $m$ prediction heads and $J\ge1$ fixed evaluation points. For $K\ge2$ classes numbered $0,\ldots,K-1$, the observed vote matrix is $V\in\{0,\ldots,K-1\}^{J\times m}$ and the fixed truth vector is $y$. Equal-weight plurality selects the smallest class index on a tie. Each document $i$ has a declared influence set $H_i\subseteq\{1,\ldots,m\}$, and
-$$
-B(C)=\bigcup_{i\in C}H_i.
-$$
+```math
+W=\bigsqcup_{h=1}^{d}W_h,\qquad \left\vert W_h\right\vert=N_h\ge1. \qquad (3.1)
+```
 
-The essential structural assumption is simultaneous: for every allowed deletion set $C$, rerunning the fixed procedure with fixed randomness leaves all heads outside $B(C)$ unchanged. Single-document ablations cannot establish it. For example, an output equal to the OR of two present-document indicators survives either single deletion but changes after both deletions.
+The unknown contamination set is a fixed subset $`C^*\subseteq W`$. Before sampling, choose integers $`0\le n_h\le N_h`$. Independently across strata, sample $`n_h`$ documents uniformly without replacement. Every sampled document must be correctly classified as contaminated or clean. An unresolvable historical version is not a verified clean observation. Costs are fixed positive values $`c_h`$ per audited document, giving total cost $`\sum_h c_hn_h`$.
 
-A sufficient construction is a fixed directed acyclic dependency graph. Inputs corresponding to deleted documents may change; every other node is a fixed function of its parents and fixed external randomness. Topological induction shows that nodes not reachable from the changed inputs retain their values. Thus $H_i$ may contain all heads reachable from document $i$. Shared tokenizers, normalization, model selection, and mutable partition identities must appear in this graph. A contaminated shared encoder may affect every head.
+There are $`m`$ prediction heads and $`J\ge1`$ fixed evaluation points. For $`K\ge2`$ classes numbered $`0,\ldots,K-1`$, the observed vote matrix is $`V\in\{0,\ldots,K-1\}^{J\times m}`$ and the fixed truth vector is $`y`$. Equal-weight plurality selects the smallest class index on a tie. Each document $`i`$ has a declared influence set $`H_i\subseteq\{1,\ldots,m\}`$, and
 
-For certification, allow every head in $B$ to output arbitrary classes independently at each evaluation point, including retaining its original output. Heads outside $B$ remain fixed. This relaxation contains the actual clean comparator under the structural assumption. It may admit prediction tables that no retrained model can realize, including inconsistent outputs on duplicate inputs.
+```math
+B(C)=\bigcup_{i\in C}H_i. \qquad (3.2)
+```
 
-Let $\mathcal Z(B)$ be this finite prediction set and let $S:\mathcal Z\to[0,1]$ be a fixed statistic. Define
-$$
-A(B)=\left[\min_{z\in\mathcal Z(B)}S(z),\ \max_{z\in\mathcal Z(B)}S(z)\right].
-$$
-Freeze a target closed interval $I=[\ell,u]$, an audit error level $\alpha\in(0,1)$, the data identities, votes, labels, influences, and costs before auditing. They may depend on information available before sampling, provided the stated sampling distribution remains valid conditional on that information.
+The essential structural assumption is simultaneous: for every allowed deletion set $`C`$, rerunning the fixed procedure with fixed randomness leaves all heads outside $`B(C)`$ unchanged. Single-document ablations cannot establish it. For example, an output equal to the OR of two present-document indicators survives either single deletion but changes after both deletions.
+
+A sufficient construction is a fixed directed acyclic dependency graph. Inputs corresponding to deleted documents may change; every other node is a fixed function of its parents and fixed external randomness. Topological induction shows that nodes not reachable from the changed inputs retain their values. Thus $`H_i`$ may contain all heads reachable from document $`i`$. Shared tokenizers, normalization, model selection, and mutable partition identities must appear in this graph. A contaminated shared encoder may affect every head.
+
+For certification, allow every head in $`B`$ to output arbitrary classes independently at each evaluation point, including retaining its original output. Heads outside $`B`$ remain fixed. This relaxation contains the actual clean comparator under the structural assumption. It may admit prediction tables that no retrained model can realize, including inconsistent outputs on duplicate inputs.
+
+Let $`𝒵(B)`$ be this finite prediction set and let $`S:𝒵\to[0,1]`$ be a fixed statistic. Define
+
+```math
+A(B)=\left[\min_{z\in 𝒵(B)}S(z),\ \max_{z\in 𝒵(B)}S(z)\right]. \qquad (3.3)
+```
+
+Freeze a target closed interval $`I=[\ell,u]`$, an audit error level $`\alpha\in(0,1)`$, the data identities, votes, labels, influences, and costs before auditing. They may depend on information available before sampling, provided the stated sampling distribution remains valid conditional on that information.
 
 ## 4. Exact statistic envelopes and harmful configurations
 
-For a fixed affected set $B$, let $b=|B|$ and let $u_{jk}(B)$ count unchanged votes for class $k$ at point $j$. The reachable classes are exactly
-$$
-R_j(B)=\left\{k:\ u_{jk}(B)+b\ge u_{ja}(B)+\mathbf1\{a<k\}
-\quad\text{for every }a\ne k\right\}.
-$$
+For a fixed affected set $`B`$, let $`b=\left\vert B\right\vert`$ and let $`u_{jk}(B)`$ count unchanged votes for class $`k`$ at point $`j`$. The reachable classes are exactly
 
-To prove necessity, a candidate winner receives at most $u_{jk}+b$ votes, while a rival receives at least its unchanged count. A lower-index rival requires a strict integer advantage. For sufficiency, assign every affected vote to the candidate winner. Across points, the relaxation permits these assignments simultaneously.
+```math
+R_j(B)=\left\{k:\ u_{jk}(B)+b\ge u_{ja}(B)+𝟏\{a\lt k\}
+\quad\text{for every }a\ne k\right\}. \qquad (4.1)
+```
+
+To prove necessity, a candidate winner receives at most $`u_{jk}+b`$ votes, while a rival receives at least its unchanged count. A lower-index rival requires a strict integer advantage. For sufficiency, assign every affected vote to the candidate winner. Across points, the relaxation permits these assignments simultaneously.
 
 Consequently, fixed-set accuracy has exact endpoints
-$$
-L_{\rm acc}(B)=\frac1J\sum_j\mathbf1\{R_j(B)=\{y_j\}\},\qquad
-U_{\rm acc}(B)=\frac1J\sum_j\mathbf1\{y_j\in R_j(B)\}.
-$$
+
+```math
+L_{\rm acc}(B)=\frac1J\sum_j𝟏\{R_j(B)=\{y_j\}\},\qquad
+U_{\rm acc}(B)=\frac1J\sum_j𝟏\{y_j\in R_j(B)\}. \qquad (4.2)
+```
+
 Each point can attain its worst or best correctness value simultaneously. This argument is specific to an additive statistic. Macro-F1 requires joint confusion-count optimization or a separately proved outer bound; summing individually optimal class contributions need not be jointly attainable.
 
 Define the harmful configuration family
-$$
-\mathcal H_I=\{C\subseteq W:A(B(C))\not\subseteq I\}.
-$$
-It is upward closed. Indeed, enlarging $C$ enlarges $B(C)$, and newly affected heads can retain their old votes. The feasible prediction set therefore expands. Any previously feasible statistic outside $I$ remains feasible.
+
+```math
+ℋ_I=\{C\subseteq W:A(B(C))\not\subseteq I\}. \qquad (4.3)
+```
+
+It is upward closed. Indeed, enlarging $`C`$ enlarges $`B(C)`$, and newly affected heads can retain their old votes. The feasible prediction set therefore expands. Any previously feasible statistic outside $`I`$ remains feasible.
 
 A sound but nonmonotone numerical outer envelope does not automatically support this pruning argument. One must use a proven monotone envelope, take its monotone hull, or avoid monotonicity-based pruning. Throughout the exact results, harmfulness refers to the stated relaxed output set, not an unverified claim about all actual retraining outcomes.
 
 ## 5. Direct zero-finding certification and antichain reduction
 
-Write $q_h(C)=|C\cap W_h|$ and adopt $\binom ab=0$ when $b>a$. Define
-$$
+Write $`q_h(C)=\left\vert C\cap W_h\right\vert`$ and adopt $`\binom ab=0`$ when $`b>a`$. Define
+
+```math
 p_h(q;n_h)=\frac{\binom{N_h-q}{n_h}}{\binom{N_h}{n_h}},
 \qquad
-p_n(q)=\prod_{h=1}^{d}p_h(q_h;n_h).
-$$
-The probability of finding no contaminated document is exactly $p_n(q(C))$. The numerator counts samples avoiding contamination; independence gives the product. This probability is nonincreasing in each contamination count and each sample size.
+p_n(q)=\prod_{h=1}^{d}p_h(q_h;n_h). \qquad (5.1)
+```
 
-**Theorem 1: exact harmful-profile risk.** Let $\mathcal M_I$ be the inclusion-minimal elements of $\mathcal H_I$. Form their count vectors, remove duplicates, and retain only the coordinatewise minimal vectors, denoted $Q_{\min}$. Then
-$$
-R_I(n):=\max_{C\in\mathcal H_I}p_n(q(C))
-=\max_{M\in\mathcal M_I}p_n(q(M))
-=\max_{q\in Q_{\min}}p_n(q).
-$$
-The maximum over an empty harmful family is zero. If $R_I(n)\le\alpha$, the procedure reporting $I$ after jointly observing zero findings, and otherwise reporting $[0,1]$, covers the actual clean-comparator statistic with probability at least $1-\alpha$.
+The probability of finding no contaminated document is exactly $`p_n(q(C))`$. The numerator counts samples avoiding contamination; independence gives the product. This probability is nonincreasing in each contamination count and each sample size.
+
+**Theorem 1: exact harmful-profile risk.** Let $`ℳ_I`$ be the inclusion-minimal elements of $`ℋ_I`$. Form their count vectors, remove duplicates, and retain only the coordinatewise minimal vectors, denoted $`Q_{\min}`$. Then
+
+```math
+R_I(n):=\max_{C\in ℋ_I}p_n(q(C))
+=\max_{M\in ℳ_I}p_n(q(M))
+=\max_{q\in Q_{\min}}p_n(q). \qquad (5.2)
+```
+
+The maximum over an empty harmful family is zero. If $`R_I(n)\le\alpha`$, the procedure reporting $`I`$ after jointly observing zero findings, and otherwise reporting $`[0,1]`$, covers the actual clean-comparator statistic with probability at least $`1-\alpha`$.
 
 **Proof.** Every harmful finite set contains an inclusion-minimal harmful subset. Its count vector is coordinatewise no larger, hence its miss probability is no smaller. Conversely, minimal harmful sets are members of the original family. This proves the first reduction. Every vector in the finite count family dominates a coordinatewise minimal vector; the same probability monotonicity proves the second.
 
-Fix the actual contamination set. If its clean statistic lies outside $I$, the structural relaxation implies that this set belongs to $\mathcal H_I$. Incorrect reporting then requires the all-zero event, whose probability is at most $R_I(n)$. Otherwise neither possible reported interval misses the statistic. The statement holds for every fixed contamination set. This is unconditional coverage over audit sampling, not a posterior probability given observed zero findings. End of proof.
+Fix the actual contamination set. If its clean statistic lies outside $`I`$, the structural relaxation implies that this set belongs to $`ℋ_I`$. Incorrect reporting then requires the all-zero event, whose probability is at most $`R_I(n)`$. Otherwise neither possible reported interval misses the statistic. The statement holds for every fixed contamination set. This is unconditional coverage over audit sampling, not a posterior probability given observed zero findings. End of proof.
 
 The reduction of the maximum itself only needs finiteness and probability monotonicity. Upward closure additionally permits identifying minimal harmful sets by checking their single-element deletions. A count vector records that at least one harmful location configuration has those counts; it does not assert that every arrangement with those counts is harmful.
 
-If every document in a stratum has the same influence set, only contamination presence in that stratum matters. A minimal harmful configuration then contains at most one document per stratum. Enumerating $2^d$ presence patterns replaces enumerating $2^{|W|}$ document subsets. If the empty configuration is harmful, no design can pass for $\alpha<1$: its zero-finding probability is one.
+If every document in a stratum has the same influence set, only contamination presence in that stratum matters. A minimal harmful configuration then contains at most one document per stratum. Enumerating $`2^d`$ presence patterns replaces enumerating $`2^{\left\vert W\right\vert}`$ document subsets. If the empty configuration is harmful, no design can pass for $`\alpha<1`$: its zero-finding probability is one.
 
 ## 6. The strongest joint-zero rectangular comparator
 
 A rectangular procedure has an additional obligation. On the all-zero event it reports a count box
-$$
-[0,b]=\{q:0\le q_h\le b_h\},\qquad b_h\in\{0,\ldots,N_h\},
-$$
-and otherwise reports the full count space. The box is safe when every document configuration with counts in it has its statistic envelope inside $I$. By Theorem 1, safety is equivalent to the absence of $q\in Q_{\min}$ satisfying $q\le b$.
+
+```math
+[0,b]=\{q:0\le q_h\le b_h\},\qquad b_h\in\{0,\ldots,N_h\}, \qquad (6.1)
+```
+
+and otherwise reports the full count space. The box is safe when every document configuration with counts in it has its statistic envelope inside $`I`$. By Theorem 1, safety is equivalent to the absence of $`q\in Q_{\min}`$ satisfying $`q\le b`$.
 
 **Theorem 2: exact box risk.** The worst probability that the reported box excludes the true count vector is
-$$
-R_{\rm box}(n,b)=\max_{h:b_h<N_h}p_h(b_h+1;n_h),
-$$
+
+```math
+R_{\rm box}(n,b)=\max_{h:b_h\lt N_h}p_h(b_h+1;n_h), \qquad (6.2)
+```
+
 with value zero if the index set is empty.
 
-**Proof.** Any count vector outside the box exceeds at least one coordinate bound. Its all-zero probability is at most the miss probability for $b_h+1$ contaminated documents in that coordinate, and hence at most the displayed maximum. Conversely, choose a maximizing coordinate, place exactly $b_h+1$ contaminated documents there, and place none elsewhere. This configuration attains that probability and lies outside the box. It need not be harmful for the final statistic, because the comparator promises coverage of the count box itself. End of proof.
+**Proof.** Any count vector outside the box exceeds at least one coordinate bound. Its all-zero probability is at most the miss probability for $`b_h+1`$ contaminated documents in that coordinate, and hence at most the displayed maximum. Conversely, choose a maximizing coordinate, place exactly $`b_h+1`$ contaminated documents there, and place none elsewhere. This configuration attains that probability and lies outside the box. It need not be harmful for the final statistic, because the comparator promises coverage of the count box itself. End of proof.
 
-The strongest comparator in this class optimizes both a safe $b$ and the fixed allocation $n$, subject to $R_{\rm box}\le\alpha$. Using a Bonferroni sum instead would impose an unnecessarily weak baseline. Optimizing a continuous allocation of individual error budgets does not remove that difference: it still requires the sum of the individual risks to be at most $\alpha$.
+The strongest comparator in this class optimizes both a safe $`b`$ and the fixed allocation $`n`$, subject to $`R_{\rm box}\le\alpha`$. Using a Bonferroni sum instead would impose an unnecessarily weak baseline. Optimizing a continuous allocation of individual error budgets does not remove that difference: it still requires the sum of the individual risks to be at most $`\alpha`$.
 
-Every safe box places all harmful configurations outside it. Therefore $R_I(n)\le R_{\rm box}(n,b)$, and the optimal direct cost cannot exceed the optimal box cost. If a proposed rectangle method abandons coverage of its intermediate box and calibrates only the final interval, it belongs to the broader direct-testing contract. The theorem does not claim superiority over that larger class.
+Every safe box places all harmful configurations outside it. Therefore $`R_I(n)\le R_{\rm box}(n,b)`$, and the optimal direct cost cannot exceed the optimal box cost. If a proposed rectangle method abandons coverage of its intermediate box and calibrates only the final interval, it belongs to the broader direct-testing contract. The theorem does not claim superiority over that larger class.
 
 **Proposition: general count sets reproduce direct testing.** Define the safe downset
-$$
-D=\left\{q\in\prod_h\{0,\ldots,N_h\}:\ \text{no }a\in Q_{\min}\text{ satisfies }a\le q\right\}.
-$$
-Reporting $D$ on zero findings and the full count space otherwise has exact count-coverage error $R_I(n)$.
 
-**Proof.** For counts in $D$, every location configuration is safe, by Theorem 1. Outside $D$, a minimal harmful profile $a$ satisfies $a\le q$. Extend a realizing harmful set within each stratum until its counts equal $q$; upward closure preserves harmfulness. Thus every outside vector is realized by a harmful configuration, and the worst count-coverage error is $\max_{q\notin D}p_n(q)=R_I(n)$. End of proof.
+```math
+D=\left\{q\in\prod_h\{0,\ldots,N_h\}:\ \text{no }a\in Q_{\min}\text{ satisfies }a\le q\right\}. \qquad (6.3)
+```
+
+Reporting $`D`$ on zero findings and the full count space otherwise has exact count-coverage error $`R_I(n)`$.
+
+**Proof.** For counts in $`D`$, every location configuration is safe, by Theorem 1. Outside $`D`$, a minimal harmful profile $`a`$ satisfies $`a\le q`$. Extend a realizing harmful set within each stratum until its counts equal $`q`$; upward closure preserves harmfulness. Thus every outside vector is realized by a harmful configuration, and the worst count-coverage error is $`\max_{q\notin D}p_n(q)=R_I(n)`$. End of proof.
 
 The distinction is therefore a restriction to a single predetermined safe rectangle, not superiority over general count-confidence sets. The downset can still require exponential representation or optimization.
 
 ## 7. A threshold family with a growing cost separation
 
-Take $r\ge2$, $d=m=2r-1$, and $N$ documents in every stratum. Every document in stratum $h$ affects only head $h$. At every evaluation point all heads initially predict its true class. Any number of evaluation points is allowed; the executed construction uses one point with label zero. Costs equal one and $I=[9/10,1]$.
+Take $`r\ge2`$, $`d=m=2r-1`$, and $`N`$ documents in every stratum. Every document in stratum $`h`$ affects only head $`h`$. At every evaluation point all heads initially predict its true class. Any number of evaluation points is allowed; the executed construction uses one point with label zero. Costs equal one and $`I=[9/10,1]`$.
 
-**Theorem 3: threshold structure and costs.** A configuration is harmful exactly when at least $r$ strata contain contamination. Thus
-$$
-R_I(n)=\max_{|T|=r}\prod_{h\in T}(1-n_h/N).
-$$
+**Theorem 3: threshold structure and costs.** A configuration is harmful exactly when at least $`r`$ strata contain contamination. Thus
+
+```math
+R_I(n)=\max_{\left\vert T\right\vert=r}\prod_{h\in T}(1-n_h/N). \qquad (7.1)
+```
+
 A balanced allocation is feasible with
-$$
-n_h=n_\star=\left\lceil N(1-\alpha^{1/r})\right\rceil.
-$$
+
+```math
+n_h=n_\star=\left\lceil N(1-\alpha^{1/r})\right\rceil. \qquad (7.2)
+```
+
 The exact optimal joint-zero safe-box cost is
-$$
-C_{\rm box}^*=r\left\lceil N(1-\alpha)\right\rceil.
-$$
 
-**Proof.** With at most $r-1$ affected heads, at least $r$ unchanged heads still vote correctly, so every point remains correct. With at least $r$ affected heads, their votes can all become an incorrect class, or remain unchanged. Accuracy therefore ranges from zero to one. Minimal harmful profiles contain one contaminated document in each of exactly $r$ strata, yielding the risk formula and balanced feasibility.
+```math
+C_{\rm box}^*=r\left\lceil N(1-\alpha)\right\rceil. \qquad (7.3)
+```
 
-A safe box can allow a positive contamination bound in at most $r-1$ strata. At least $r$ coordinates must therefore have bound zero. Theorem 2 requires each such coordinate to satisfy $1-n_h/N\le\alpha$, giving the stated cost lower bound. It is attained by imposing bound zero and auditing the required amount in exactly $r$ strata, while assigning bound $N$ and no sampling to the rest. End of proof.
+**Proof.** With at most $`r-1`$ affected heads, at least $`r`$ unchanged heads still vote correctly, so every point remains correct. With at least $`r`$ affected heads, their votes can all become an incorrect class, or remain unchanged. Accuracy therefore ranges from zero to one. Minimal harmful profiles contain one contaminated document in each of exactly $`r`$ strata, yielding the risk formula and balanced feasibility.
 
-For comparison, the optimal Bonferroni-box cost is $rN-\lfloor N\alpha\rfloor$. The zero-bound coordinates must have total sampling at least $N(r-\alpha)$. Auditing $r-1$ of them completely and the last to $N-\lfloor N\alpha\rfloor$ attains the integer lower bound. Our main comparison nevertheless uses the stronger maximum-risk box.
+A safe box can allow a positive contamination bound in at most $`r-1`$ strata. At least $`r`$ coordinates must therefore have bound zero. Theorem 2 requires each such coordinate to satisfy $`1-n_h/N\le\alpha`$, giving the stated cost lower bound. It is attained by imposing bound zero and auditing the required amount in exactly $`r`$ strata, while assigning bound $`N`$ and no sampling to the rest. End of proof.
 
-Fix $\alpha$ and let $a=\log(1/\alpha)$ and $N=r^2$. Since $1-e^{-a/r}\le a/r$,
-$$
-0<C_I^*\le (2r-1)(Na/r+1)\le2Na+2r,\qquad
-C_{\rm box}^*\ge rN(1-\alpha).
-$$
+For comparison, the optimal Bonferroni-box cost is $`rN-\lfloor N\alpha\rfloor`$. The zero-bound coordinates must have total sampling at least $`N(r-\alpha)`$. Auditing $`r-1`$ of them completely and the last to $`N-\lfloor N\alpha\rfloor`$ attains the integer lower bound. Our main comparison nevertheless uses the stronger maximum-risk box.
+
+Fix $`\alpha`$ and let $`a=\log(1/\alpha)`$ and $`N=r^2`$. Since $`1-e^{-a/r}\le a/r`$,
+
+```math
+0\lt C_I^*\le (2r-1)(Na/r+1)\le2Na+2r,\qquad
+C_{\rm box}^*\ge rN(1-\alpha). \qquad (7.4)
+```
+
 Consequently,
-$$
+
+```math
 \frac{C_{\rm box}^*}{C_I^*}\ge
-\frac{rN(1-\alpha)}{2Na+2r}=\Omega(r).
-$$
-This is a separation caused by the intermediate box-coverage obligation. It is not a lower bound against all auditing procedures, and the total population grows as $(2r-1)r^2$.
+\frac{rN(1-\alpha)}{2Na+2r}=\Omega(r). \qquad (7.5)
+```
 
-**Proposition: a simple total-count certificate attains balanced risk.** Under balanced sampling $n_h=n$, the confidence set $\sum_hq_h\le r-1$ is safe and has exact zero-finding error $(1-n/N)^r$.
+This is a separation caused by the intermediate box-coverage obligation. It is not a lower bound against all auditing procedures, and the total population grows as $`(2r-1)r^2`$.
 
-**Proof.** Its configurations activate at most $r-1$ heads, establishing safety. A stratum miss probability is the product of $q$ factors $(N-n-j)/(N-j)$, each at most $1-n/N$, or is zero if too many documents are contaminated. Total contamination at least $r$ therefore gives product risk at most $(1-n/N)^r$. One contaminated document in each of $r$ different strata attains equality. End of proof.
+**Proposition: a simple total-count certificate attains balanced risk.** Under balanced sampling $`n_h=n`$, the confidence set $`\sum_hq_h\le r-1`$ is safe and has exact zero-finding error $`(1-n/N)^r`$.
+
+**Proof.** Its configurations activate at most $`r-1`$ heads, establishing safety. A stratum miss probability is the product of $`q`$ factors $`(N-n-j)/(N-j)`$, each at most $`1-n/N`$, or is zero if too many documents are contaminated. Total contamination at least $`r`$ therefore gives product risk at most $`(1-n/N)^r`$. One contaminated document in each of $`r`$ different strata attains equality. End of proof.
 
 Thus the balanced 88-versus-114 example and the asymptotic separation are already achieved by a simple nonrectangular total-count gate. They do not establish that location-aware optimization is necessary.
 
-There need not be a strict saving. In a two-stratum construction harmful only when both strata contain contamination, risk is $(1-n_1/N)(1-n_2/N)$. For total sampling $s\le N$, this equals $1-s/N+n_1n_2/N^2\ge1-s/N$. Concentrating the samples in one stratum attains the minimum. Both direct and box optima equal $\lceil N(1-\alpha)\rceil$.
+There need not be a strict saving. In a two-stratum construction harmful only when both strata contain contamination, risk is $`(1-n_1/N)(1-n_2/N)`$. For total sampling $`s\le N`$, this equals $`1-s/N+n_1n_2/N^2\ge1-s/N`$. Concentrating the samples in one stratum attains the minimum. Both direct and box optima equal $`\lceil N(1-\alpha)\rceil`$.
 
-**A separate location-sensitive comparison.** For $r=2,N=20,d=3,\alpha=1/20$, allocation $(0,19,19)$ is directly feasible at cost 38: its largest product over two contaminated strata is $1/20$. Every fixed design certifying total contamination at most one costs at least 48. If any stratum samples at most 15, two contaminations there have miss probability at least $20/380>1/20$. Each stratum must therefore sample at least 16. Sampling 16 everywhere attains cost 48: two contaminations in one stratum have probability $12/380$, while one in each of two strata has probability $1/25$. Higher counts only reduce miss probability.
+**A separate location-sensitive comparison.** For $`r=2,N=20,d=3,\alpha=1/20`$, allocation $`(0,19,19)`$ is directly feasible at cost 38: its largest product over two contaminated strata is $`1/20`$. Every fixed design certifying total contamination at most one costs at least 48. If any stratum samples at most 15, two contaminations there have miss probability at least $`20/380>1/20`$. Each stratum must therefore sample at least 16. Sampling 16 everywhere attains cost 48: two contaminations in one stratum have probability $`12/380`$, while one in each of two strata has probability $`1/25`$. Higher counts only reduce miss probability.
 
 This analytical comparison was added after review, not preregistered as a new experiment. It isolates a location advantage over this specific total-count gate, while general count sets remain equivalent to direct testing. It is not an originality claim or evidence that the original empirical decision threshold passed.
 
@@ -182,22 +211,24 @@ This analytical comparison was added after review, not preregistered as a new ex
 
 For a general finite instance, enumerate all fixed integer allocations and retain those satisfying Theorem 1. Taking their least cost gives the global minimum within this specified design class. Exhaustiveness proves optimality; an interrupted search gives only a feasible upper bound when a certified allocation has been found. Finding nothing before interruption is not proof of infeasibility.
 
-Antichains can be exponentially large. After their construction, a straightforward risk scan costs on the order of $d|Q_{\min}|\prod_h(N_h+1)$ operations, apart from exact-integer arithmetic costs. Influence-oracle calls and Pareto filtering also require accounting. The implementation imposes explicit configuration, state, and allocation budgets and refuses unsupported computations.
+Antichains can be exponentially large. After their construction, a straightforward risk scan costs on the order of $`d\left\vert Q_{\min}\right\vert\prod_h(N_h+1)`$ operations, apart from exact-integer arithmetic costs. Influence-oracle calls and Pareto filtering also require accounting. The implementation imposes explicit configuration, state, and allocation budgets and refuses unsupported computations.
 
 **Theorem 4: symmetric exact search.** In the threshold family, it suffices to enumerate
-$$
-0\le a_1\le\cdots\le a_r\le N,\qquad
-\prod_{i=1}^{r}(N-a_i)\le\alpha N^r,
-$$
-minimizing $\sum_{i=1}^{r-1}a_i+ra_r$. The corresponding allocation consists of the displayed prefix followed by $r-1$ additional copies of $a_r$.
 
-**Proof.** Symmetry permits sorting any allocation increasingly. Its worst miss probability uses the first $r$ entries, whose miss factors are largest. Lower every subsequent entry to the $r$th entry. The largest $r$ factors and feasibility remain unchanged, while cost weakly decreases. Hence an optimum has the claimed form, and every enumerated form is a legal design. There are $\binom{N+r}{r}$ such tuples. End of proof.
+```math
+0\le a_1\le\cdots\le a_r\le N,\qquad
+\prod_{i=1}^{r}(N-a_i)\le\alpha N^r, \qquad (8.1)
+```
+
+minimizing $`\sum_{i=1}^{r-1}a_i+ra_r`$. The corresponding allocation consists of the displayed prefix followed by $`r-1`$ additional copies of $`a_r`$.
+
+**Proof.** Symmetry permits sorting any allocation increasingly. Its worst miss probability uses the first $`r`$ entries, whose miss factors are largest. Lower every subsequent entry to the $r$th entry. The largest $`r`$ factors and feasibility remain unchanged, while cost weakly decreases. Hence an optimum has the claimed form, and every enumerated form is a legal design. There are $`\binom{N+r}{r}`$ such tuples. End of proof.
 
 All audit probabilities, costs, and interval comparisons in these experiments use exact rational or integer arithmetic. The balanced formula involving a root is implemented by integer inequalities rather than floating-point rounding. Equal costs and equal stratum sizes are essential for the symmetry reduction.
 
 ## 9. Constructed evidence and separate real-text context
 
-The frozen mathematical grid contains all twenty combinations of $r\in\{2,3,4,5,6\}$ and $N\in\{2,5,10,20\}$, with $\alpha=1/20$ and the interval in Section 7. Its complete results are stored in [threshold_results.json](../planning/threshold_results.json). These are artificial vote structures; no document audit or trained language model generated them.
+The frozen mathematical grid contains all twenty combinations of $`r\in\{2,3,4,5,6\}`$ and $`N\in\{2,5,10,20\}`$, with $`\alpha=1/20`$ and the interval in Section 7. Its complete results are stored in [threshold_results.json](../planning/threshold_results.json). These are artificial vote structures; no document audit or trained language model generated them.
 
 | Threshold example: r=6, N=20 | Audit count | Qualification |
 |---|---:|---|
@@ -205,7 +236,7 @@ The frozen mathematical grid contains all twenty combinations of $r\in\{2,3,4,5,
 | Joint-zero rectangle | 114 | Exact optimum for box coverage |
 | Balanced total-count gate | 88 | Feasible; matches direct optimum |
 
-For this threshold case, eight samples in each of eleven strata give risk $(3/5)^6=0.046656$. Exact optimization confirms cost 88; the stronger box costs 114 and the Bonferroni box 119. Across the entire grid, nine cases show strict savings and eleven show none. The maximum saving is $4/15$, occurring at $r=6$ with $N=5,10$. The grid median is zero. Accordingly, the full frozen family did not meet the proposed median-saving threshold of 20 percent. Selecting only the favorable value of $r$ afterward would not satisfy that rule.
+For this threshold case, eight samples in each of eleven strata give risk $`(3/5)^6=0.046656`$. Exact optimization confirms cost 88; the stronger box costs 114 and the Bonferroni box 119. Across the entire grid, nine cases show strict savings and eleven show none. The maximum saving is $`4/15`$, occurring at $`r=6`$ with $`N=5,10`$. The grid median is zero. Accordingly, the full frozen family did not meet the proposed median-saving threshold of 20 percent. Selecting only the favorable value of $`r`$ afterward would not satisfy that rule.
 
 A separate, newly trained SEntFiN experiment concerns source-native entity sentiment, with negative, neutral, and positive labels. It uses a non-temporal lexical-component split and development-only selection of regularization. Its 2,107 test entity rows form 1,570 lexical components.
 
@@ -215,7 +246,7 @@ A separate, newly trained SEntFiN experiment concerns source-native entity senti
 | Character TF-IDF and logistic regression | 0.7548 | Prespecified comparison |
 | Entity-only logistic regression | 0.5336 | Diagnostic |
 
-The prespecified character-minus-word difference is $-0.03723$, with a nominal 95 percent paired lexical-cluster bootstrap interval approximately $[-0.05306,-0.02156]$, using 10,000 draws. This is conditional approximate uncertainty for fixed training and development choices, not a certificate. Lexical components need not be independent semantic events. Entity-only performance cannot be divided by full-model performance to obtain an explained proportion. These results are not directly comparable to the old 0.6549 score, do not replace absent FinBERT or zero-shot LLM comparisons, and do not validate any audit theorem. Their purpose is to establish a reproducible simple-model starting point and sharpen the burden of proving that more complex language components are necessary.
+The prespecified character-minus-word difference is $`-0.03723`$, with a nominal 95 percent paired lexical-cluster bootstrap interval approximately $`[-0.05306,-0.02156]`$, using 10,000 draws. This is conditional approximate uncertainty for fixed training and development choices, not a certificate. Lexical components need not be independent semantic events. Entity-only performance cannot be divided by full-model performance to obtain an explained proportion. These results are not directly comparable to the old 0.6549 score, do not replace absent FinBERT or zero-shot LLM comparisons, and do not validate any audit theorem. Their purpose is to establish a reproducible simple-model starting point and sharpen the burden of proving that more complex language components are necessary.
 
 ## 10. Limitations and research decisions
 
@@ -227,35 +258,39 @@ The manuscript is therefore a working technical report, not the completed resear
 
 ## Appendix A. Historical non-interference is a separate obligation
 
-Represent a finite version log by immutable events with knowledge times. The historical projection $H_t(L)$ retains only events known by cutoff $t$ and orders them canonically. For fixed external configuration and seed, a pipeline $F$ is historically non-interfering exactly when
-$$
-H_t(L)=H_t(L')\ \Longrightarrow\ F(L)=F(L').
-$$
-This is equivalent to a factorization $F=G\circ H_t$: define $G$ by the common output on each history fiber. On countable canonical byte histories the measurable factor is straightforward. In general measurable spaces, a set-theoretic factor alone does not ensure a measurable one.
+Represent a finite version log by immutable events with knowledge times. The historical projection $`H_t(L)`$ retains only events known by cutoff $`t`$ and orders them canonically. For fixed external configuration and seed, a pipeline $`F`$ is historically non-interfering exactly when
+
+```math
+H_t(L)=H_t(L')\ \Longrightarrow\ F(L)=F(L'). \qquad (A.1)
+```
+
+This is equivalent to a factorization $`F=G\circ H_t`$: define $`G`$ by the common output on each history fiber. On countable canonical byte histories the measurable factor is straightforward. In general measurable spaces, a set-theoretic factor alone does not ensure a measurable one.
 
 Future-append invariance implies this property only when equal-history logs are connected by legal future extensions and deletions, for example through a legal historical prefix. Versions must be projected by knowledge time before selecting the latest visible version. A future correction can retain an old event date; selecting the global latest version first can either import the correction or discard a formerly available version.
 
 All shared choices must factor through the history: vocabulary, deduplication, sampling, validation, hyperparameters, and core roles. Stable artifacts cannot include the final whole-log hash or future document count. Those belong in a separate audit envelope that does not feed model decisions.
 
-Even perfect record non-interference does not authenticate knowledge times. The same observed log can be compatible with a genuinely early document or an incorrectly backdated future document, producing clean-comparator statistics zero and one under a fixed comparison rule. Any closed interval uniformly covering both compatible worlds must contain $[0,1]$. Mathematical measurability is also insufficient by itself: a retrospectively fixed checkpoint is a constant random variable. Historical constructibility requires a prospectively specified procedure and a truthful, replayable provenance contract. External randomness must not introduce future information conditional on the historical information set; marginal independence from future data alone is insufficient.
+Even perfect record non-interference does not authenticate knowledge times. The same observed log can be compatible with a genuinely early document or an incorrectly backdated future document, producing clean-comparator statistics zero and one under a fixed comparison rule. Any closed interval uniformly covering both compatible worlds must contain $`[0,1]`$. Mathematical measurability is also insufficient by itself: a retrospectively fixed checkpoint is a constant random variable. Historical constructibility requires a prospectively specified procedure and a truthful, replayable provenance contract. External randomness must not introduce future information conditional on the historical information set; marginal independence from future data alone is insufficient.
 
 ## Appendix B. Semantic envelopes bound a different weak link
 
-A numeric text branch fixes the task, context, direction, and ordered-logit thresholds. For independent intervals in $x$ and positive baseline $b$, the exact range of $g=x/b-1$ is obtained from four corners. An affine latent score then has an exact interval $[L,U]$. All branches must share the same output target and class meanings.
+A numeric text branch fixes the task, context, direction, and ordered-logit thresholds. For independent intervals in $`x`$ and positive baseline $`b`$, the exact range of $`g=x/b-1`$ is obtained from four corners. An affine latent score then has an exact interval $`[L,U]`$. All branches must share the same output target and class meanings.
 
-For middle ordered-logit class $i$,
-$$
-q_i(\eta)=\sigma(\theta_i-\eta)-\sigma(\theta_{i-1}-\eta).
-$$
-Its minimum on $[L,U]$ is the smaller endpoint value. Its maximum occurs at the projection of $(\theta_{i-1}+\theta_i)/2$ onto the interval. To verify this, write the derivative as the difference of sigmoid derivatives at the two thresholds; that derivative kernel is even and decreases with distance from zero. The class probability increases up to the midpoint and decreases afterward. Endpoint-only evaluation would miss its maximum.
+For middle ordered-logit class $`i`$,
 
-Taking each coordinate's minimum and maximum across branches gives the smallest covering coordinate box, although its corners need not be jointly attainable. If a scalar candidate range has diameter $D$, every all-candidate interval has width at least $D$, and the minimax absolute error of a point report is $D/2$. On frozen tasks with weights $w_i$, the largest possible robust acceptance mass at width limit $w$ is $\sum_iw_i\mathbf1\{D_i\le w\}$. This is relative to the specified candidate sets, not proof that extra branches emitted by a parser reflect intrinsic textual ambiguity.
+```math
+q_i(\eta)=\sigma(\theta_i-\eta)-\sigma(\theta_{i-1}-\eta). \qquad (B.1)
+```
 
-When the target is exactly $\operatorname{sign}(x-b)$ and all branches agree, a symbolic rule solves the downstream task completely. Learning an ordered head is then unnecessary. With a fixed accepted set, sound numeric propagation gives output failure risk at most the conditional parse-set miss rate. An unconditional miss bound $\varepsilon$ only yields a conditional bound $\min(1,\varepsilon/P(A))$. Audit confidence error $\alpha$ is a different quantity. These observations identify the semantic coverage obligation; they do not supply natural-text gold labels or calibrate model probabilities.
+Its minimum on $`[L,U]`$ is the smaller endpoint value. Its maximum occurs at the projection of $`(\theta_{i-1}+\theta_i)/2`$ onto the interval. To verify this, write the derivative as the difference of sigmoid derivatives at the two thresholds; that derivative kernel is even and decreases with distance from zero. The class probability increases up to the midpoint and decreases afterward. Endpoint-only evaluation would miss its maximum.
+
+Taking each coordinate's minimum and maximum across branches gives the smallest covering coordinate box, although its corners need not be jointly attainable. If a scalar candidate range has diameter $`D`$, every all-candidate interval has width at least $`D`$, and the minimax absolute error of a point report is $`D/2`$. On frozen tasks with weights $`w_i`$, the largest possible robust acceptance mass at width limit $`w`$ is $`\sum_iw_i𝟏\{D_i\le w\}`$. This is relative to the specified candidate sets, not proof that extra branches emitted by a parser reflect intrinsic textual ambiguity.
+
+When the target is exactly $`\mathrm{sign}(x-b)`$ and all branches agree, a symbolic rule solves the downstream task completely. Learning an ordered head is then unnecessary. With a fixed accepted set, sound numeric propagation gives output failure risk at most the conditional parse-set miss rate. An unconditional miss bound $`\varepsilon`$ only yields a conditional bound $`\min(1,\varepsilon/P(A))`$. Audit confidence error $`\alpha`$ is a different quantity. These observations identify the semantic coverage obligation; they do not supply natural-text gold labels or calibrate model probabilities.
 
 ## Appendix C. Complete frozen threshold grid
 
-All rows use $\alpha=1/20$, $d=2r-1$, and unit costs. Direct and Box columns are exact optima in their respective fixed-allocation classes. Balanced is the least-cost balanced design; by Section 7 it also certifies total contamination at most $r-1$. It is not claimed to optimize arbitrary unbalanced total-count designs. Saving is $(\text{Box}-\text{Direct})/\text{Box}$. The balanced total-count interpretation was made explicit during review; the allocations themselves are from the frozen twenty-case experiment.
+All rows use $`\alpha=1/20`$, $`d=2r-1`$, and unit costs. Direct and Box columns are exact optima in their respective fixed-allocation classes. Balanced is the least-cost balanced design; by Section 7 it also certifies total contamination at most $`r-1`$. It is not claimed to optimize arbitrary unbalanced total-count designs. Saving is $`(\text{Box}-\text{Direct})/\text{Box}`$. The balanced total-count interpretation was made explicit during review; the allocations themselves are from the frozen twenty-case experiment.
 
 | r | N | Direct | Box | Balanced | Saving |
 |---:|---:|---:|---:|---:|---:|

@@ -116,15 +116,15 @@ Consistent duplicate disclosures should be converted to a common unit and then i
 
 Let (g(a,b)=b/a-1), with input half-widths (h_a,h_b) and (|a|>h_a). The exact range is given by the minimum/maximum of the four endpoint ratios (b'/a'-1). The maximum absolute deviation is
 
-\[
-R=\frac{|a|h_b+|b|h_a}{|a|(|a|-h_a)}.
-\]
+```math
+R=\frac{\left\vert a\right\vert h_b+\left\vert b\right\vert h_a}{\left\vert a\right\vert(\left\vert a\right\vert-h_a)}.
+```
 
 The first-order approximation is
 
-\[
-R_1=\frac{|a|h_b+|b|h_a}{a^2},\qquad R/R_1=\frac{|a|}{|a|-h_a}.
-\]
+```math
+R_1=\frac{\left\vert a\right\vert h_b+\left\vert b\right\vert h_a}{a^2},\qquad R/R_1=\frac{\left\vert a\right\vert}{\left\vert a\right\vert-h_a}.
+```
 
 When the full rounding unit is the same (u) for both inputs, (h_a=h_b=u/2), so the first-order expression in the original task must be multiplied by **1/2**. The first-order sensitivity of the relative output is ((|a|h_b+|b|h_a)/(|a|\,|b-a|)), which shows that relative error is amplified near zero growth. Proofs, the negative-value cases and the boundary where the denominator crosses zero are in [math_review.md](math_review.md). These are concrete derivations with existing error-propagation methods, not claims of new theorems.
 

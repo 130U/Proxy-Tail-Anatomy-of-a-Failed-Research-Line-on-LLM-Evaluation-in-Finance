@@ -16,22 +16,22 @@ This is a targeted quick check with explicit limits for this round; **it does no
 
 There is also an important mathematical correspondence here (the following is an inference from this analysis, not a claim that the authors used this question's terms). In the parallel measurement model
 
-\[
+```math
 X_{ij}=T_i+\epsilon_{ij},\qquad
-r=\frac{\operatorname{Var}(T)}{\operatorname{Var}(T)+\operatorname{Var}(\epsilon)},
-\]
+r=\frac{\mathrm{Var}(T)}{\mathrm{Var}(T)+\mathrm{Var}(\epsilon)},
+```
 
 the correlation between two conditionally independent, homoscedastic m-score means is
 
-\[
+```math
 r_m=\frac{mr}{1+(m-1)r}.
-\]
+```
 
 If the standardized means are jointly normal, let h=Φ⁻¹(1−p); for the same marginal fraction p, the flip probability F and the top-list overlap H satisfy
 
-\[
+```math
 H=\frac{P(Z_1>h,Z_2>h)}p=1-\frac{F}{2p}.
-\]
+```
 
 So under these assumptions, "SB followed by Gaussian top-list overlap" is a direct combination of existing random-effects/threshold models, and a new law cannot be claimed just by rewriting it in top-list language. Whether exactly the same top-list measurement already exists is a separate question.
 
@@ -46,7 +46,7 @@ It studies behaviorally anchored scales, examples, single-candidate/nine-candida
 ### 3. Apartsin and Aperstein: CoEval (2026)
 
 [Original PDF, arXiv:2606.03650](https://arxiv.org/pdf/2606.03650). Read §3.4, the panel-size results in §5, and Appendix A. The paper explicitly uses the mean inter-judge correlation and
-\(R_k=k\bar r/[1+(k-1)\bar r]\), and reports that ICC agrees with the SB prediction.
+$`R_k=k\bar r/[1+(k-1)\bar r]`$, and reports that ICC agrees with the SB prediction.
 
 **Degree of overlap: a direct precedent for the formula, but a different object.** It mainly examines different judge compositions and model leaderboards, not headline top lists from repeated scoring by the same model. The numerical agreement between its same-panel ICC and SB also cannot replace this question's use of single-score correlation to predict top-list results that were not used for tuning.
 

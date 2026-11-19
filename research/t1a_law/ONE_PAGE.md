@@ -4,14 +4,16 @@
 
 **Replication succeeded.** The original "Δ<100" rule of thumb is correct on 1,394 of 1,425 questions, i.e. **97.8246%**. The four bins 60–100, 100–150, 150–300 and ≥300 have 99/99, 16/83, 6/144 and 7/646 out of tolerance, respectively, matching the advisor's review. The 1,425 questions are defined as: two bound inputs, growth category, decided by T1; this is not the same as all strict growth-rate programs.
 
-**The exact rule must keep the size of the growth.** For same-sign inputs with the same last-digit unit, a denominator that does not touch zero, and a non-zero growth rate, let $g=(b-a)/a$ and $\Delta=|b-a|/d$. Then the maximum relative error about the center is exactly
+**The exact rule must keep the size of the growth.** For same-sign inputs with the same last-digit unit, a denominator that does not touch zero, and a non-zero growth rate, let $`g=(b-a)/a`$ and $`\Delta=\left\vert b-a\right\vert/d`$. Then the maximum relative error about the center is exactly
 
-$$R=\frac{1+g/2}{\Delta-|g|/2},\qquad
-R\le\tau\iff\Delta\ge\frac{1+g/2}{\tau}+\frac{|g|}{2}.$$
+```math
+R=\frac{1+g/2}{\Delta-\left\vert g\right\vert/2},\qquad
+R\le\tau\iff\Delta\ge\frac{1+g/2}{\tau}+\frac{\left\vert g\right\vert}{2}.
+```
 
 So "100 units" is a small-growth approximation, not an unconditional theorem. Of the original 31 misclassifications, 24 omit the finite-growth correction, 5 did not put the inputs in a common unit, and 2 are not actually two-number growth rates. On the 1,427 standard growth-rate questions after unit harmonization, the rule of thumb agrees **97.97%** of the time. The significant-digit budget also depends on the leading digits (mantissa): the same number of input digits and the same growth rate can differ by nearly one digit of precision. The complete necessary and sufficient condition is in [Proofs §5](PROOFS.md).
 
-**The zero-parameter rule for all operations passes.** First-order radius $R_1=\sum_i|\partial_i f|h_i$; out of tolerance is predicted by $|f(x)-y|+R_1>\tau|y|$, with no fitted parameters. The positive class is "out of tolerance"; the table below compares against independently recertified exact ranges:
+**The zero-parameter rule for all operations passes.** First-order radius $`R_1=\sum_i\left\vert\partial_i f\right\vert h_i`$; out of tolerance is predicted by $`\left\vert f(x)-y\right\vert+R_1>\tau\left\vert y\right\vert`$, with no fitted parameters. The positive class is "out of tolerance"; the table below compares against independently recertified exact ranges:
 
 | Operation | Questions | True positive | True negative | False positive / false negative | Agreement |
 |---|---:|---:|---:|---:|---:|

@@ -229,7 +229,7 @@ For the last two categories, give suggested rewording.
 1. Train a small backbone on the trusted core (for example 4 layers, d=256), or directly use a scaled-down version of the 24M architecture.
 2. Freeze the backbone and train a linear head or small MLP on each of the m shards of the suspect window, with a deterministic algorithm (CPU).
 3. Verify determinism: repeated training on the same shard gives bitwise-identical results.
-4. Plant k contaminated documents and compute $[S_{\text{low}}, S_{\text{high}}]$; also train a "contamination-free" version as ground truth, and check whether the ground truth falls inside the interval.
+4. Plant k contaminated documents and compute $`[S_{\text{low}}, S_{\text{high}}]`$; also train a "contamination-free" version as ground truth, and check whether the ground truth falls inside the interval.
 5. Scan m ∈ {11, 31, 101, 301} and k ∈ {0, 1, 3, 10, 30}, and report: interval width, the fraction of certified predictions, the accuracy cost.
 6. Optional: compute a tighter collective certificate with ILP and compare it with the naive bound.
 

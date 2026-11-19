@@ -57,47 +57,47 @@ Before formally attributing anything to input rounding, first check whether the 
 
 Let g(a,b)=(b−a)/a=b/a−1, a≠0. The true inputs are a+δa and b+δb, with |δa|≤h_a, |δb|≤h_b and h_a<|a|. Putting over a common denominator directly gives
 
-\[
+```math
 g(a+\delta a,b+\delta b)-g(a,b)
 =\frac{a\delta b-b\delta a}{a(a+\delta a)}.
-\]
+```
 
 On an independent rectangular box, the exact worst-case absolute deviation is
 
-\[
-E_{\max}=\frac{|a|h_b+|b|h_a}{|a|(|a|-h_a)}.
-\]
+```math
+E_{\max}=\frac{\left\vert a\right\vert h_b+\left\vert b\right\vert h_a}{\left\vert a\right\vert(\left\vert a\right\vert-h_a)}.
+```
 
 Proof: the triangle inequality and |a+δa|≥|a|−h_a give the upper bound. Take δa=−sign(a)h_a to minimize the absolute value of the denominator; when b≠0 take δb=sign(b)h_b, so that the two numerator terms point in the same direction and the bound is attained; when b=0 choose either δb=±h_b. If the source rounding excludes the endpoints, this is an attainable supremum that interior points approach.
 
 The first-order term is
 
-\[
-E_{\mathrm{first}}=\frac{|a|h_b+|b|h_a}{a^2},\qquad
-E_{\max}=\frac{E_{\mathrm{first}}}{1-h_a/|a|}.
-\]
+```math
+E_{\mathrm{first}}=\frac{\left\vert a\right\vert h_b+\left\vert b\right\vert h_a}{a^2},\qquad
+E_{\max}=\frac{E_{\mathrm{first}}}{1-h_a/\left\vert a\right\vert}.
+```
 
 When the two inputs have the same **full rounding unit** u, h_a=h_b=u/2, and therefore
 
-\[
-E_{\mathrm{first}}=\frac{u}{2}\frac{|a|+|b|}{a^2}.
-\]
+```math
+E_{\mathrm{first}}=\frac{u}{2}\frac{\left\vert a\right\vert+\left\vert b\right\vert}{a^2}.
+```
 
 If "rounding unit" in the task's expression means the full last-digit unit, the expression is missing a factor of 1/2; if it was meant as the half-width, it is correct. The expression is the absolute sensitivity times the perturbation size, not a dimensionless relative condition number. The first-order error relative to the growth rate itself, with equal half-widths, is
 
-\[
-\frac{E_{\mathrm{first}}}{|g|}
-=h\frac{|a|+|b|}{|a|\,|b-a|},\quad b\ne a.
-\]
+```math
+\frac{E_{\mathrm{first}}}{\left\vert g\right\vert}
+=h\frac{\left\vert a\right\vert+\left\vert b\right\vert}{\left\vert a\right\vert\,\left\vert b-a\right\vert},\quad b\ne a.
+```
 
 If each input is constrained by a relative error ε, the componentwise relative condition number is 2|b|/|b−a|. When growth is close to zero, relative-tolerance failures can be very numerous even if the absolute error is small; the absolute width in percentage points must be reported as well.
 
 The full reachable interval is given by the minimum and maximum of the four vertex values `(b±h_b)/(a±h_a)−1`. Proof: for fixed a the function is monotone in b; for fixed b its derivative with respect to a is −b/a², which does not change sign; the denominator interval does not pass through zero, so the extrema move to the vertices coordinate by coordinate. When a>h_a and b−h_b≥0 this simplifies to
 
-\[
+```math
 g_{\min}=\frac{b-h_b}{a+h_a}-1,\qquad
 g_{\max}=\frac{b+h_b}{a-h_a}-1.
-\]
+```
 
 Hand-made example (not a data result): a=100, b=110, h_a=h_b=0.5. The displayed growth rate is 10%, and the true growth range is [6/67,22/199]≈[8.9552%,11.0553%]. The example shows the amplification when the difference is small relative to the scale of the values; it provides no evidence about frequency in FinQA. The formula passed checks on 80 exact-rational settings with positive, negative and zero b, with 441 interior points each; this is only an algebraic check, and the proof still rests on the argument above.
 
@@ -124,9 +124,9 @@ Fixing the old center and only dividing the half-width by 1,000 is an explicit a
 
 Let N be the pre-defined total number of target numeric questions, W the number of questions with an in-model witness, S the number already certified safe, and U=N−W−S (including unparsed, unsupported or uncertified). If the model and the mapping are both correct, the non-robust fraction satisfies
 
-\[
+```math
 W/N\le p\le 1-S/N.
-\]
+```
 
 Both the fraction on the parsed subset and the bounds over the whole set should be given; reporting only the fraction on successfully parsed questions may have selection bias. An in-model witness is still not an unconditional certificate at the level of document semantics. Subgroups are classified by program structure fixed in advance, with denominators given; multi-label groups may overlap, but must not be dressed up as a mutually exclusive decomposition. For input precision, besides "significant digits" it is advisable to report h/|x|, because cancellation error is also determined by |b−a|.
 

@@ -30,20 +30,20 @@ But the EPS case **cannot serve as evidence that "the whole document cannot dete
 
 ## The rule for comparing two growth rates
 
-Let \(g_i=b_i/a_i-1\), with \(a_i>h_{a_i}>0\), \(b_i>0\), and input half-widths \(h_{a_i},h_{b_i}\). The exact upper and lower one-sided deviations around the center are
+Let $`g_i=b_i/a_i-1`$, with $`a_i>h_{a_i}>0`$, $`b_i>0`$, and input half-widths $`h_{a_i},h_{b_i}`$. The exact upper and lower one-sided deviations around the center are
 
-\[
+```math
 e_i^+=\frac{h_{b_i}+(1+g_i)h_{a_i}}{a_i-h_{a_i}},\qquad
 e_i^-=\frac{h_{b_i}+(1+g_i)h_{a_i}}{a_i+h_{a_i}}.
-\]
+```
 
-If at the center \(g_1>g_2\), and the two sets of inputs are independent, then the strict order holds on the whole closed box if and only if
+If at the center $`g_1>g_2`$, and the two sets of inputs are independent, then the strict order holds on the whole closed box if and only if
 
-\[
+```math
 g_1-g_2>e_1^-+e_2^+.
-\]
+```
 
-The first-order version approximates the denominator by \(a_i\), that is, it compares the growth-rate difference with the sum of half-widths weighted by the absolute values of the two sets of derivatives. If the two expressions share inputs, the joint function \(D=g_1-g_2\) must be analyzed; it is not enough to check whether the two marginal intervals intersect. For example, the intervals of \(A=x\) and \(B=x+0.1\) can intersect, but the order never flips.
+The first-order version approximates the denominator by $`a_i`$, that is, it compares the growth-rate difference with the sum of half-widths weighted by the absolute values of the two sets of derivatives. If the two expressions share inputs, the joint function $`D=g_1-g_2`$ must be analyzed; it is not enough to check whether the two marginal intervals intersect. For example, the intervals of $`A=x`$ and $`B=x+0.1`$ can intersect, but the order never flips.
 
 In this set, 3 questions with 4 pairs of comparisons truly compare two growth expressions: FinQA's agriculture/automotive growth, TAT-QA's EPS difference, and US/Europe/Asia revenue growth. The exact rule agrees with the joint-range decision **4/4**; all computed comparisons produce 35 joint difference functions, and the first-order decision agrees **35/35**. The sample is very small; this is not a general accuracy guarantee. The plot data are in `part2_growth_plot.csv`; the EPS point is still the result on the "standard-solution input box" and must carry the note that the full text can recover it.
 

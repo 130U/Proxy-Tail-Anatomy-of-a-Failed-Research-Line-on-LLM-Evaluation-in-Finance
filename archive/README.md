@@ -30,7 +30,7 @@ includes commit `0c68d8a`, which holds the TAT-QA prediction made before any TAT
 
 ## The Closeout Tag
 
-The tag [`closeout-2026-11-17`](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/tree/closeout-2026-11-17) points at
+The tag [`closeout-2026-11-17`](https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/tree/closeout-2026-11-17) points at
 the state of the repository at closeout, before the English release. It still contains the
 documents in their original Chinese, the delivery ZIP packages, the concatenated review bundle, the
 reading-copy PDFs, and older README variants from each branch.

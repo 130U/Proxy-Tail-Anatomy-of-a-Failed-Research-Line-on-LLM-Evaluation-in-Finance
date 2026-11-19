@@ -64,10 +64,10 @@ The training algorithm M satisfies (ε,δ)-DP with respect to adding or removing
 
 Write a=kε and b=δΣ_{j=0}^{k−1}e^{jε} (b=0 when k=0). Then
 
-\[
-|E S(M(D))-E S(M(D'))|
+```math
+\left\vert E S(M(D))-E S(M(D'))\right\vert
 \le \min\{1,(e^a-1+2b)/(e^a+1)\}.
-\]
+```
 
 A looser but valid bound is min{1,e^a−1+b}, and b≤k e^{(k−1)ε}δ (k≥1). When ε=0, b=kδ. The original draft's δ upper bound has the right direction but omits the truncation at 1; it is not the tightest TV bound.
 
@@ -75,9 +75,9 @@ A looser but valid bound is min{1,e^a−1+b}, and b≤k e^{(k−1)ε}δ (k≥1).
 
 Iterating the DP inequality along k adjacency edges gives P(A)≤e^a Q(A)+b, and the reverse also holds. Let A be such that d=P(A)−Q(A)≥0, and q=Q(A). Applying the forward bound to A and the reverse bound to Aᶜ gives
 
-\[
+```math
 d\le(e^a-1)q+b,\qquad e^a d\le(e^a-1)(1-q)+b.
-\]
+```
 
 Adding the two gives (e^a+1)d≤e^a−1+2b. Swapping P,Q and taking the supremum over events gives the TV bound; the layer-cake representation E S=∫₀¹P(S>u)du for S∈[0,1] gives the bound in expectation.
 
@@ -102,9 +102,9 @@ Requiring this bound to be ≤0.05 is equivalent to kμ≤2Φ⁻¹(0.525)≈0.12
 
 Write n_c(z) for the vote count of class c, and a for the observed winner. When at most b heads change arbitrarily, the vote margin between the winner and a competitor c decreases by at most 2b. Hence if, for all c≠a,
 
-\[
-n_a-n_c\ge 2b+\mathbf1\{c<a\},
-\]
+```math
+n_a-n_c\ge 2b+𝟏\{c\lt a\},
+```
 
 then after the change the margin is still at least 1 against competitors with smaller index and at least 0 against those with larger index, and a still wins. This is a sufficient condition for arbitrary changes in shard outputs and does not require the hash to distribute uniformly. An empty shard also needs a fixed default classifier.
 
@@ -112,10 +112,10 @@ then after the change the margin is still at least 1 against competitors with sm
 
 Fix J evaluation points and pre-specified s_j:{1,…,K}→[0,1]. Let R_j(b) be the set of all winning labels reachable with at most b vote changes. If an approximate set is computed, it must be an outer envelope and must not miss any truly reachable label. Define
 
-\[
+```math
 L(b)=J^{-1}\sum_j\min_{c\in R_j(b)}s_j(c),\quad
 U(b)=J^{-1}\sum_j\max_{c\in R_j(b)}s_j(c).
-\]
+```
 
 Any common change of at most b shards puts each point's label in R_j(b), and summing term by term gives L≤S≤U. Optimizing each point separately relaxes the restriction to "a common set of affected shards", so it can be conservative but cannot fail in the other direction. Optimizing over common shards must also allow the output vectors of these shards across different test points; assigning outputs independently is a further relaxation of training realizability.
 
@@ -127,11 +127,11 @@ Any common change of at most b shards puts each point's label in R_j(b), and sum
 
 Fix N suspicious documents, with true contamination count K*∈{0,…,N}. The audit size n∈{0,…,N} is fixed before sampling; n IDs are drawn uniformly without replacement; audit decisions are correct with no misses. Observe X=x. Define
 
-\[
+```math
 F_K(x)=\sum_{j=\max(0,n-N+K)}^{\min(x,n,K)}
 \frac{\binom Kj\binom{N-K}{n-j}}{\binom Nn},\qquad
 K_u(x)=\max\{K\in\{0,…,N\}:F_K(x)>\alpha\},
-\]
+```
 
 where 0<α<1 and an empty sum is 0. When n=0, K_u=N; when n=N, K_u=x. Then for every fixed K*, P_{K*}(K*≤K_u(X))≥1−α.
 
@@ -141,11 +141,11 @@ where 0<α<1 and an empty sum is 0. When n=0, K_u=N; when n=N, K_u=x. Then for e
 
 When x=0 and n>0:
 
-\[
+```math
 F_K(0)=\binom{N-K}{n}/\binom Nn
 =\prod_{i=0}^{n-1}(1-K/(N-i))
 \le(1-K/N)^n\le e^{-nK/N}.
-\]
+```
 
 So the retained K is strictly less than N(1−α^{1/n}), and also strictly less than N log(1/α)/n. These are conservative analytic upper bounds, not exact finite-population values. When n/N is small and K/N is small, K_u≈N log(1/α)/n; for α=0.05 the coefficient is log20≈2.9957. This is **the scale of the upper bound on contamination counts that still cannot be ruled out after zero findings**, not a lower bound on a contamination count shown to exist, and not a lower bound that applies to every audit design.
 
@@ -163,10 +163,10 @@ Hence, for small sampling fractions, the design for a strict-majority certificat
 
 A practical design should first obtain from the observed vote margins the integer contamination budget a point can tolerate, B_j=⌊min_{c≠a_j}(n_{a_j}−n_c−1{c<a_j})/2⌋, and then solve for the audit size. If B∈{0,…,N−1} is fixed, monotonicity gives the exact equivalence:
 
-\[
+```math
 K_u(0)\le B\quad\Longleftrightarrow\quad
 \frac{\binom{N-(B+1)}n}{\binom Nn}\le\alpha.
-\]
+```
 
 A binomial coefficient is 0 when its upper index is less than n. Hence n_min is the smallest integer n for which the right-hand side holds, not a rounded value of the continuous rule-of-three formula. When B≥N, this budget gate is passed without any audit; a negative budget cannot be certified. If the model and vote margins are fixed before the audit and one wants to certify at least a fraction q∈(0,1] of the J predictions, let r=ceil(qJ) and take the r-th largest B_j as the budget gate. Satisfying K_u≤ this gate certifies at least r points. If the shard models or the population are modified based on the audit result, the audit coverage and the certificate's scope must be re-examined.
 
@@ -182,9 +182,9 @@ Fix source strata h in advance and take a simple random sample within each strat
 
 An explicit zero-finding sequential procedure: to test H₀:K≥K₀, audit without replacement in random order, and let
 
-\[
-E_n=\mathbf1\{X_n=0\}/F_{K_0,n}(0),\quad 0\le n\le N-K_0.
-\]
+```math
+E_n=𝟏\{X_n=0\}/F_{K_0,n}(0),\quad 0\le n\le N-K_0.
+```
 
 On the zero-finding path, the conditional probability that the next draw is error-free is (N−K−n)/(N−n), which does not exceed that probability under K₀; once an error is found, E is 0 forever. Hence E_n is a nonnegative supermartingale under H₀, starting at 1, and the probability that it crosses 1/α is ≤α (stop at the first crossing and use the expectation inequality for supermartingales with bounded stopping). For K₀=N, the event that all subsequent draws are zero is impossible under H₀ and is handled directly and separately.
 
@@ -206,9 +206,9 @@ This example allows valid early rejection, but it does not automatically improve
 
 F_del is the comparator obtained by deleting all true contamination from the observed corpus and retraining with the algorithm and seeds unchanged. Over the audit randomness, with probability at least 1−α,
 
-\[
+```math
 S(F_{del})\in[L(K_u),U(K_u)].
-\]
+```
 
 On the event K*≤K_u, deleting K* documents touches at most K* shards; the other shards have the same inputs, shared parameters, and randomness, and their outputs are bit-for-bit identical. T1.3 is valid for any such change, so the interval contains S(F_del). T1.4 guarantees the event has probability at least 1−α. Premises A1–A2 guarantee that the comparator has the specified point-in-time property; they cannot be omitted while still calling the comparator leak-free.
 
@@ -236,12 +236,12 @@ Numerical features g∈R^d, fixed context c. For each c, h(·,c) is λ-Lipschitz
 
 If g'_r≥g_r for r∈M and g'_r=g_r for r∉M, then η(g',c)≥η(g,c), so q(g',c) is no lower than q(g,c) in FOSD. For r∈M, at points where the derivative exists (almost everywhere):
 
-\[
+```math
 0\le\partial_r\eta\le2\lambda;
 \quad0\le\partial_r q_K\le\lambda/2;
 \quad-\lambda/2\le\partial_r q_1\le0;
-\quad|\partial_r q_i|\le\lambda/2\ (1<i<K).
-\]
+\quad\left\vert\partial_r q_i\right\vert\le\lambda/2\ (1\lt i\lt K).
+```
 
 At all points there is still the finite-increment bound |q_i(g',c)−q_i(g,c)|≤(λ/2)||g'−g||₁. Without the residual term the bound is (λ/4)||g'−g||₁, but the direction is not guaranteed.
 

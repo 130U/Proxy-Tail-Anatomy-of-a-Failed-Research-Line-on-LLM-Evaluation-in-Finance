@@ -1,9 +1,12 @@
+<p align="center"><img src="assets/cover.webp" alt="Proxy Tail: anatomy of a failed research line on LLM evaluation in finance" width="100%"></p>
+
 # Proxy Tail: Anatomy of a Failed Research Line on LLM Evaluation in Finance
 
-**Letao (Theodore) Ouyang** · Independent Researcher
+**Letao (Theodore) Ouyang** · Independent research · 2026
 
-📄 **[Read the Report (PDF)](report/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance.pdf)** ·
-ACL format · LaTeX source in [`report/src`](report/src/)
+[Read the report](report/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance.pdf) · [LaTeX source](report/src/) · [Research record](research/README.md) · [Task briefs](tasks/) · [Reproduce](REPRODUCE.md)
+
+**Why did five stages of careful experiments end without a paper, and how early could each stage have been closed?**
 
 This repository documents a research program on LLM evaluation in finance that was designed to
 produce a paper at a top NLP venue and did not. It passed through five stages and four pivots and
@@ -131,7 +134,7 @@ inside a quoted TAT-QA question became an ASCII comma. Local absolute paths in r
 replaced by placeholders such as `<workspace>`. Delivery bundles that duplicated other files (ZIP
 packages, a concatenated review bundle, reading-copy PDFs) were removed. The state at closeout, in
 the original language and with every removed file, is preserved under the repository's
-[closeout tag](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/tree/closeout-2026-11-17).
+[closeout tag](https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/tree/closeout-2026-11-17).
 
 Some old records pin other files by SHA-256. Those hashes refer to the original bytes; checks that
 verify them will fail on translated files and should be run against the closeout tag.
@@ -154,6 +157,6 @@ project's own code and text.
   author      = {Ouyang, Letao (Theodore)},
   year        = {2026},
   institution = {Independent Researcher},
-  url         = {https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance}
+  url         = {https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance}
 }
 ```

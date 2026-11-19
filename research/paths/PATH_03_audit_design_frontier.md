@@ -45,10 +45,10 @@ Its relation to training from scratch is experimental control: to know clearly i
 
 Fix N suspect versions, audit n of them uniformly without replacement, and find zero mislabels. α is fixed in advance and audit judgments are correct. If the certificate can tolerate at most B contaminated documents, 0≤B<N, then
 
-\[
+```math
 K_u(0)\le B\iff
 \frac{\binom{N-(B+1)}n}{\binom Nn}\le\alpha.
-\]
+```
 
 The right-hand side is monotone in n, which gives the exact minimum integer sample size. For pointwise vote stability, B can be obtained from order statistics of the per-point vote-margin radii; but the stable-prediction fraction is not accuracy, nor is it the macro-F1 interval width. If the target becomes a width w, the tolerable budget B(w) must be redefined using the actual envelope function.
 
@@ -64,19 +64,19 @@ This is a fully provable research interface, used to state what we want to compa
 
 Before the audit, fix the interval to be reported, I=[ℓ,u], and define the set of bad configurations
 
-\[
-\mathcal H_I=\{C:A(C)\not\subseteq I\}.
-\]
+```math
+ℋ_I=\{C:A(C)\not\subseteq I\}.
+```
 
 Each stratum's sample size is a fixed integer 0≤n_h≤N_h. If the bad-configuration set is empty, its maximum miss probability is taken to be 0 by convention; the relaxed model has then already determined that all configurations fall in I, and no audit is needed. All actual contamination influence must still be enclosed by A(C); unmodeled historical selection leakage or changes in shared state cannot be repaired by this test.
 
 If
 
-\[
-\sup_{C\in\mathcal H_I}
-\prod_h\frac{\binom{N_h-|C\cap W_h|}{n_h}}
+```math
+\sup_{C\in ℋ_I}
+\prod_h\frac{\binom{N_h-\left\vert C\cap W_h\right\vert}{n_h}}
 {\binom{N_h}{n_h}}\le\alpha,
-\]
+```
 
 then the following procedure covers S(F_del) with probability at least 1−α: report I when every stratum's audit has zero findings; otherwise report the full range of the statistic or explicitly abstain.
 
@@ -92,9 +92,9 @@ then the following procedure covers S(F_del) with probability at least 1−α: r
 
 Let the true contamination configuration C* be fixed, and let the audit produce a sequence of simultaneous confidence sets G_t satisfying
 
-\[
+```math
 \Pr\{\forall t,\ C^*\in G_t\}\ge1-\alpha.
-\]
+```
 
 At each time compute L_t=inf_{C∈G_t}inf A(C) and U_t=sup_{C∈G_t}sup A(C). If the computations of G_t and A(C) are both reliable, then for any data-dependent stopping time τ, with probability at least 1−α, S(F_del)∈[L_τ,U_τ]; the proof is containment at each time on the same simultaneous coverage event, followed by choosing τ. The stopping rule can be set to U_t−L_t≤w or budget exhaustion.
 

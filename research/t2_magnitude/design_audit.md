@@ -14,7 +14,7 @@
 
 | Priority | Source read | Use / boundary |
 |---|---|---|
-| 1 | [T2 original task](https://github.com/130U/Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/main/tasks/T2_magnitude.md), read through the connector on 2026-11-16; the service returned a modification time of 2026-11-17T02:15:10Z | A/B/C design and the original decision rule; the examples in the text are not treated as a frozen complete protocol |
+| 1 | [T2 original task](https://github.com/130U/RESEARCH-Proxy-Tail-Anatomy-of-a-Failed-Research-Line-on-LLM-Evaluation-in-Finance/blob/main/tasks/T2_magnitude.md), read through the connector on 2026-11-16; the service returned a modification time of 2026-11-17T02:15:10Z | A/B/C design and the original decision rule; the examples in the text are not treated as a frozen complete protocol |
 | 1 | [One-page summary of the previous experiment](../absolute_scoring/FABLE_ONE_PAGE.md) | The same project observed batch sensitivity and boundary problems with discrete scores; cannot be extrapolated directly to T2 |
 | 1 | [Frozen protocol of the previous experiment](../absolute_scoring/protocol.md) | Existing conventions: fixed model, prompt, fresh context, raw outputs, failure records |
 | 3 | [Design review of the previous experiment](../absolute_scoring/design_review.md) | Local internal analysis, not an independent external source |

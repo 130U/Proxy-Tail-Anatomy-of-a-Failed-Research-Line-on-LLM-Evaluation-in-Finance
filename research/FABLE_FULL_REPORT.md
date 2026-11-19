@@ -74,9 +74,9 @@ LV proves that the worst-case miss probability of the strongest fixed total-coun
 
 RA removes the fixed per-stratum quotas. There are d strata of N documents each; the bad set is fixed before randomization; badness means exactly that at least r strata are damaged. Exactly m distinct documents are drawn under any distribution; **if all findings are zero the pre-specified I must be reported, and if anything is found the full range is reported**. Otherwise, never issuing a certificate makes the minimum error risk degenerate to 0. Writing q=floor(m/N) and t=m−qN, for m<dN the exact optimal worst-case risk is
 
-$$
+```math
 V(m)=\frac{\binom{d-q-1}{r}+(1-t/N)\binom{d-q-1}{r-1}}{\binom dr}.
-$$
+```
 
 The full census is listed separately, with value 0. Taking a census of q random strata and then sampling t documents in another random stratum attains the lower bound. A uniformly random minimal bad set gives the lower bound for any design, and quota compression plus random permutation prove that it is attained; this is not merely finding one good scheme. Within the same class of arbitrary randomized designs, the optimal risk of the total-count gate is C(dN−m,r)/C(dN,r), attained by uniform sampling without replacement over the whole population. Adaptivity under binary feedback, a hard budget and the all-zero must-certify rule cannot beat this value; an expected budget must constrain the clean world or all ground truths, not only the bad world. If r-of-d is only a conservative outer envelope of the actual model, the optimality also holds only for that threat family. [Complete RA proof](theory/randomized_audit.md)
 

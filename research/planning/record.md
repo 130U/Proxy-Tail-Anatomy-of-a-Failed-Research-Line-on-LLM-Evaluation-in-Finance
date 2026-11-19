@@ -14,18 +14,18 @@ Fix N suspect documents and an error-probability budget alpha, audit n documents
 
 For a non-negative integer B<N, the hypergeometric CDF is non-increasing in K, so
 
-\[
+```math
 K_u(0)\le B \iff
 \frac{\binom{N-(B+1)}{n}}{\binom Nn}\le\alpha.
-\]
+```
 
 The right-hand side is non-increasing in n, and binary search returns the first integer for which it holds. The upper end of the search, N−B, makes the zero-finding probability 0. If B≥N then n=0; negative B, non-integer B/N or invalid alpha are rejected. Integer comb and Fraction are used, with no floating-point approximation of probabilities; when K=B+1<n, the equivalent form `comb(N-n,K)/comb(N,K)` is used to reduce binomial-coefficient computation. The coverage output calls the existing `audit_upper` again and checks both that n passes and that n−1 does not.
 
 For the j-th point, let a_j be the winner under the smallest-index tie rule, and define
 
-\[
-r_j=\left\lfloor\frac{\min_{d\ne a_j}(n_{a_j}-n_d-\mathbf1\{d<a_j\})}{2}\right\rfloor.
-\]
+```math
+r_j=\left\lfloor\frac{\min_{d\ne a_j}(n_{a_j}-n_d-𝟏\{d\lt a_j\})}{2}\right\rfloor.
+```
 
 The point satisfies the vote-margin certificate if and only if the given integer shard budget is at most r_j. To certify a fraction q∈(0,1], let r=ceil(qJ), take B as the r-th of all r_j sorted in descending order, and then find the minimum n. Coverage levels are discrete in r/J and are not forcibly interpolated; plateau segments are kept in the output.
 

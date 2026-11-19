@@ -31,10 +31,10 @@ Chat Completions can use `reasoning_effort="none"`, `logprobs=true`, `top_logpro
 
 If **the same request and the same output position** return valid candidate logprobs for both labels, define
 
-\[
-D(x)=\log P(A\mid x)-\log P(B\mid x),\qquad
+```math
+D(x)=\log\,P(A\mid x)-\log\,P(B\mid x),\qquad
 p_{AB}(x)=\frac{1}{1+\exp[-D(x)]}.
-\]
+```
 
 We suggest ranking directly by `D`, to avoid extra floating-point saturation when the sigmoid is close to 1. `p_AB` is only the normalized share of the model output between these two labels, not a calibrated true event probability; non-label outputs must also be watched. If the application needs several tokens to represent the same label, sum over the known candidate set and restate the truncation issue; one cannot take only the most favorable spelling.
 

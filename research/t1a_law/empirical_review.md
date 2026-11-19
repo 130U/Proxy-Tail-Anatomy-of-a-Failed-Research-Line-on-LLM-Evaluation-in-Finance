@@ -40,9 +40,9 @@ After conversion according to the original program, the 5 unit cases have Δ of 
 
 Let `a=100,b=300,h_a=h_b=0.5`; the growth-rate center and the gold are both 2. The first-order radius is 0.02, exactly equal to the 1% tolerance, so the first-order rule predicts inside. Yet the true maximum is
 
-\[
+```math
 \frac{300.5}{99.5}-1=\frac{402}{199}\approx2.0201005>2.02,
-\]
+```
 
 so the true decision is outside. A 100% agreement on the data cannot replace the remainder or the exact endpoints; in particular, this approximate rule cannot be advertised as a certifier for arbitrary future financial programs.
 

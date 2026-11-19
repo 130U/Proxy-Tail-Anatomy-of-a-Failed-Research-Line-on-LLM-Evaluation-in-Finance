@@ -51,9 +51,9 @@ The following conditions cannot be omitted implicitly:
 
 **Candidate main theorem P1-A (a conditional combination of existing components, not listed as original).** Assume the conditions above hold. Let K*=|C_t∩W|, and let audit inversion give P(K*≤K_u)≥1−α. For every common subset B that can affect at most min(K_u,m) heads, compute a safe envelope of the fixed test-set statistic S and take the outer extremes. Then
 
-\[
+```math
 \Pr\{S(F_{del})\in[L(K_u),U(K_u)]\}\ge1-\alpha.
-\]
+```
 
 Proof sketch: on the event K*≤K_u, the whole computation for unaffected shards is the same; the clean prediction vector belongs to the set of vectors allowed by the certificate optimization; the interval holds for each element of that set. Accuracy and macro-F1 are both derived from the same event, so reporting them together does not pay two separate α. The envelope is an outer relaxation that allows arbitrary cross-point outputs for any affected head, so solving that relaxation exactly is not the same as describing the real retraining exactly.
 

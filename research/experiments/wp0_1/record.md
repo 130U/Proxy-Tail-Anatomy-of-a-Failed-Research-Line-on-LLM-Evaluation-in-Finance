@@ -20,9 +20,9 @@ The pre-run budget is in [budget.md](budget.md). The input is the public summary
 
 The class order is bearish / neutral / bullish, the true class supports are `(10,76,15)`, and the diagonal is `(5,62,12)`. From the four-decimal precision values, within integer denominators of at most 101, the corresponding prediction counts are uniquely `(11,66,24)`. All consistent matrices can be written as
 
-\[
+```math
 C(a)=\begin{pmatrix}5&a&5-a\\7-a&62&7+a\\a-1&4-a&12\end{pmatrix},\quad a\in\{1,2,3,4\}.
-\]
+```
 
 Non-negativity gives `1 <= a <= 4`, so no other matrix is missed. The four have the same accuracy and the same per-class P/R/F1, but different joint structure of misclassifications. Each matrix is expanded into an empirical joint distribution, from which 101 truth–prediction pairs are drawn with replacement; multinomial sampling is exactly equivalent to the row bootstrap. For each sample the fixed three-class macro-F1 is computed, with the F1 of a missing class counted as 0 following the existing evaluation convention, and the 2.5% and 97.5% quantiles are taken.
 

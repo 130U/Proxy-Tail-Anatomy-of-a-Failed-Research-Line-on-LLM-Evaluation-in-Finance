@@ -37,25 +37,25 @@ Mathematical issues use S0–S3: S0 means the main conclusion does not hold, S1 
 
 Follow IA7: d=2r−1 strata, N documents per stratum, a fixed n audited per stratum, independent across strata. Write K=Σ_h q_h. On zero findings, output the count region
 
-\[
+```math
 D_K=\{q:K\le r-1\}.
-\]
+```
 
 This region is safe because when the total contamination count is at most r−1, the number of contaminated strata is also at most r−1. It does not use any judgement about which strata the contamination falls in.
 
 For each stratum, if q≤N−n, then
 
-\[
+```math
 p_h(q;n)=\prod_{j=0}^{q-1}\frac{N-n-j}{N-j}
 \le\left(1-\frac nN\right)^q.
-\]
+```
 
 If q>N−n, the left side is 0 and the upper bound still holds; for q=0 both sides are 1. So any true configuration with K≥r satisfies
 
-\[
+```math
 p_n(q)\le\left(1-\frac nN\right)^K
 \le\left(1-\frac nN\right)^r.
-\]
+```
 
 Placing one contamination in each of any r different strata attains the last bound. So the exact worst-case miss risk of the total-K gate is exactly `(1−n/N)^r`, identical to IA7's direct balanced scheme. This is the same fixed stratified sampling mechanism, not a covert switch to uniform sampling over the whole population.
 
@@ -65,9 +65,9 @@ So for r=6, N=20, n=8, the total-K gate likewise gets risk `729/15625` with 88 a
 
 Allow unequal fixed quotas, and take r=2, N=20, d=3, alpha=1/20. The total K≤1 gate must rule out every true configuration that places two contaminations in a single stratum. So every h must satisfy
 
-\[
+```math
 \frac{(20-n_h)(19-n_h)}{20\cdot19}\le\frac1{20}.
-\]
+```
 
 At n_h=15 the probability is `1/19>1/20`, and at n_h=16 it is `3/95<1/20`, so each stratum must audit at least 16 documents and the total cost is at least 48. Under quotas (16,16,16), the risks of the two kinds of K=2 configuration are `3/95` (same stratum) and `1/25` (different strata), both within the target; K>2 is no more dangerous by monotonicity. So 48 is the exact optimal cost of **this specific gate, fixed stratified zero-finding reporting total K≤1**, and the unique minimal quota is (16,16,16). It is not a lower bound for all non-rectangular counting methods.
 
@@ -89,9 +89,9 @@ These three items support the finite inputs and the identification of the newly 
 
 Let the legal count grid be `Qgrid=∏_h{0,…,N_h}`, and define
 
-\[
+```math
 D=\{q\in Qgrid:\text{there is no }a\in Q_{\min}\text{ with }a\le q\}.
-\]
+```
 
 **Count-coverage equivalence.** If D is reported on zero findings and the full grid on any other result, the worst-case count miscoverage risk is `max_{q∉D}p_n(q)`. Each q outside the box dominates some a, and monotonicity gives `p_n(q)≤p_n(a)`; each a is itself outside D and is realized by some real document configuration, so the lower bound is also attained. So the risk is exactly `max_a p_n(a)=R_I(n)`. This step uses only the monotonicity of the miss probability and the realizability of a.
 

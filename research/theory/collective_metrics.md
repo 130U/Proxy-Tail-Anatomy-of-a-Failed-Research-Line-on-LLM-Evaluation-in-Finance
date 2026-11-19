@@ -16,16 +16,16 @@ The test examples, true labels, per-class supports, and the denominator J are fi
 
 Let b=|B|, and let the unmodified vote counts be
 
-\[
+```math
 u_{jc}(B)=\#\{h\notin B:V_{jh}=c\}.
-\]
+```
 
 Define
 
-\[
+```math
 R_j(B)=\left\{c:\ \forall d\ne c,\quad
-u_{jc}(B)+b\ge u_{jd}(B)+\mathbf1\{d<c\}\right\}.
-\]
+u_{jc}(B)+b\ge u_{jd}(B)+𝟏\{d\lt c\}\right\}.
+```
 
 **Proposition CM1.** R_j(B) is exactly the set of winning classes reachable at the j-th point under the threat model with B fixed, and every vector (c₁,…,c_J)∈∏_jR_j(B) can be realized simultaneously.
 
@@ -47,26 +47,26 @@ This reduction relies on the "at most affected" meaning. If another threat model
 
 For fixed B, define
 
-\[
-L_{\rm acc}(B)=\frac1J\sum_{j=1}^J\mathbf1\{R_j(B)=\{y_j\}\},\qquad
-U_{\rm acc}(B)=\frac1J\sum_{j=1}^J\mathbf1\{y_j\in R_j(B)\}.
-\]
+```math
+L_{\rm acc}(B)=\frac1J\sum_{j=1}^J𝟏\{R_j(B)=\{y_j\}\},\qquad
+U_{\rm acc}(B)=\frac1J\sum_{j=1}^J𝟏\{y_j\in R_j(B)\}.
+```
 
 **Proposition CM3.** These two numbers are the exact minimum and maximum of accuracy for fixed B. The exact extremes under the full threat model are
 
-\[
-L_{\rm acc}^{\rm coll}=\min_{|B|=b_{\max}}L_{\rm acc}(B),\qquad
-U_{\rm acc}^{\rm coll}=\max_{|B|=b_{\max}}U_{\rm acc}(B).
-\]
+```math
+L_{\rm acc}^{\rm coll}=\min_{\left\vert B\right\vert=b_{\max}}L_{\rm acc}(B),\qquad
+U_{\rm acc}^{\rm coll}=\max_{\left\vert B\right\vert=b_{\max}}U_{\rm acc}(B).
+```
 
 **Proof.** At each point, the worst-case prediction is guaranteed correct only when the reachable set is exactly the singleton of the true label; whenever the true label is reachable, a correct prediction exists. CM1 guarantees that these worst/best labels can be chosen simultaneously across points. Taking extremes over the finitely many B and applying CM2 gives the exact extremes under the full threat model. ∎
 
 For the usual pointwise relaxation, let R_j^union=∪_{|B|≤b_max}R_j(B) and let each point choose its label independently from this union. Because it allows different points to use different B, this feasible region contains the collective feasible region, so
 
-\[
+```math
 L_{\rm acc}^{\rm union}\le L_{\rm acc}^{\rm coll}\le
 U_{\rm acc}^{\rm coll}\le U_{\rm acc}^{\rm union}.
-\]
+```
 
 The tightening can be strict; see Section 7. Accuracy is additive over points, which is exactly why CM3 decomposes exactly; macro-F1 below cannot be treated this way.
 
@@ -74,14 +74,14 @@ The tightening can be strict; see Section 7. Accuracy is additive over points, w
 
 Fix a class c, and let a_c=Σ_j1{y_j=c} be the fixed actual support. For a candidate prediction vector z, the true positives and false positives are
 
-\[
-t_c=\sum_j\mathbf1\{y_j=c,z_j=c\},\qquad
-f_c=\sum_j\mathbf1\{y_j\ne c,z_j=c\}.
-\]
+```math
+t_c=\sum_j𝟏\{y_j=c,z_j=c\},\qquad
+f_c=\sum_j𝟏\{y_j\ne c,z_j=c\}.
+```
 
 We use the fixed-K-class macro average with the `zero_division=0` convention:
 
-\[
+```math
 F_c(t_c,f_c)=
 \begin{cases}
 2t_c/(a_c+t_c+f_c),&a_c+t_c+f_c>0,\\
@@ -89,35 +89,35 @@ F_c(t_c,f_c)=
 \end{cases}
 \quad
 F_{\rm macro}=K^{-1}\sum_cF_c.
-\]
+```
 
 When a_c=0, t_c must be 0 and the class F1 is identically 0, including the case where the class is never predicted. Classes without support are not removed from K here. Automatic label inference in different libraries may use different denominators, so the fixed class list must be passed explicitly and the zero-denominator convention must be set.
 
 For the reachable sets with B fixed, define the integer endpoints
 
-\[
+```math
 \begin{aligned}
 t_c^{\min}(B)&=\#\{j:y_j=c,\ R_j(B)=\{c\}\},\\
 t_c^{\max}(B)&=\#\{j:y_j=c,\ c\in R_j(B)\},\\
 f_c^{\min}(B)&=\#\{j:y_j\ne c,\ R_j(B)=\{c\}\},\\
 f_c^{\max}(B)&=\#\{j:y_j\ne c,\ c\in R_j(B)\}.
 \end{aligned}
-\]
+```
 
 Let
 
-\[
+```math
 \ell_c(B)=F_c(t_c^{\min},f_c^{\max}),\qquad
 u_c(B)=F_c(t_c^{\max},f_c^{\min}),
-\]
+```
 
 and average over classes to obtain L_macro^comp(B)=K⁻¹Σ_cℓ_c(B) and U_macro^comp(B)=K⁻¹Σ_cu_c(B).
 
 **Proposition CM4.** For every reachable prediction vector with B fixed,
 
-\[
+```math
 L_{\rm macro}^{\rm comp}(B)\le F_{\rm macro}\le U_{\rm macro}^{\rm comp}(B).
-\]
+```
 
 Taking the smallest lower bound and the largest upper bound over all |B|=b_max still gives a safe envelope for the full threat model, but in general not the exact extremes.
 
@@ -133,16 +133,16 @@ If the same componentwise bounds are computed with R_j^union instead, set inclus
 
 Fix B, and let C∈N^{K×K} be the confusion count matrix, with rows indexed by the true label and columns by the predicted label. Initialize D₀={zero matrix}. Process the points one at a time:
 
-\[
+```math
 D_j=\{C+E_{y_j,c}:C\in D_{j-1},\ c\in R_j(B)\},
-\]
+```
 
 where E_rc is 1 only at position (r,c); identical count matrices are deduplicated. Finally, for every C∈D_J compute
 
-\[
+```math
 F_{\rm macro}(C)=\frac1K\sum_c
 \frac{2C_{cc}}{a_c+\sum_rC_{rc}},
-\]
+```
 
 with terms whose denominator is zero set to 0, and take the minimum and maximum.
 
@@ -194,13 +194,13 @@ A further zero-support check: keep only rows 1 and 2 of the table above, i.e. y=
 
 Let K=3, m=5, k=1, y=(0,1,2):
 
-\[
+```math
 V=\begin{pmatrix}
 1&1&1&2&2\\
 1&1&1&1&1\\
 2&2&2&2&2
 \end{pmatrix}.
-\]
+```
 
 Changing any one of the first three heads gives reachable sets ({1,2},{1},{2}); changing either of the last two heads gives ({1},{1},{2}). So the first point is always wrong and the other two are always right, and accuracy is identically 2/3.
 

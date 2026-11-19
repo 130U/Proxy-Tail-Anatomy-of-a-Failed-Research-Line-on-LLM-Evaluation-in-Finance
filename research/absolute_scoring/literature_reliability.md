@@ -35,28 +35,28 @@ The derivation below is for checking the task; it makes no new theorem claim. Th
 
 Let the score of a random headline in round j be S_j=T+ε_j. If Var(T)=τ², the errors are uncorrelated with T, and the errors in each round have mean zero, variance σ² and are mutually uncorrelated, then the single-score correlation is r=τ²/(τ²+σ²). The correlation between two disjoint m-round means is
 
-\[
-\operatorname{Corr}(\bar S_{1:m},\bar S_{m+1:2m})
+```math
+\mathrm{Corr}(\bar S_{1:m},\bar S_{m+1:2m})
 =\frac{\tau^2}{\tau^2+\sigma^2/m}
 =\frac{mr}{1+(m-1)r}.
-\]
+```
 
 This formula does not need normality. More generally, if every repeat has variance v and every pair of distinct repeats has covariance κ, the same identity holds with r=κ/v. So one cannot say in general that "heteroscedasticity or correlated errors necessarily break the formula": conditional heteroscedasticity can still preserve these unconditional moments, and a bias permanently shared across repeats can be absorbed into the stable component. The latter makes self-consistency very high, but says nothing about accuracy relative to the truth.
 
 If the within-group covariance is κ_W, the between-group covariance is κ_B, and each round has variance v, the correlation between the two m-round means is
 
-\[
+```math
 \frac{m\kappa_B}{v+(m-1)\kappa_W}.
-\]
+```
 
 A single average of all 28 correlations cannot identify this expression in general. Non-exchangeable structure caused by sessions, time drift, shared batches and so on must be judged from the design and the data; independence cannot be claimed just because "a new session was opened".
 
 Second step: let X, Y be standard bivariate normal with correlation ρ; let z_p=Φ⁻¹(1−p), and write
 
-\[
+```math
 J_\rho(p,q)=\int_{z_p}^{\infty}\phi(x)
 \bar\Phi\!\left(\frac{z_q-\rho x}{\sqrt{1-\rho^2}}\right)dx.
-\]
+```
 
 Under a continuous distribution, the equal-fraction top-list overlap is O_ρ(p)=J_ρ(p,p)/p. The pass-through fraction needed for a fixed recall γ is q_γ(p)=inf{q:J_ρ(p,q)≥γp}, and the widening factor is q_γ/p. The positive and negative tails are the same under this model; an asymmetry between the upper and lower tails would reject this common Gaussian baseline, but on its own it cannot determine which mechanism causes it.
 
@@ -64,9 +64,9 @@ The boundaries can be checked: at ρ=0, O=p and q_γ=γ; at ρ=1, O=1 and q_γ=�
 
 Let F be the symmetric-difference fraction of two equal-size sets with population fraction p; then the identity is
 
-\[
+```math
 O=1-\frac{F}{2p}.
-\]
+```
 
 **This step is a set identity transformation given by this report; it does not claim that the LLM papers above have measured top-p curves.** Combining it with the normal flip formula and the moment identity for means gives the curve the task intends to use. So rewriting it as overlap or switching to fixed quantiles cannot be treated as a new theory. If the two sets differ in size because of ties, their actual sizes must be used; this equal-size formula cannot be applied directly.
 
